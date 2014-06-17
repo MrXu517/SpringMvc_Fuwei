@@ -13,23 +13,23 @@ public class User implements Serializable {
 	 */
 	private static final long serialVersionUID = -1173628226284035541L;
 
-	private String name;
+	private String name;//用户名
 
-	private Integer role;
+	private Integer role;//角色
 
-	private Boolean inUse;
+	private Boolean inUse;//是否启用
 
-	private Date created_at;
+	private Date created_at;//创建时间
 
-	private Date updated_at;
+	private Date updated_at;//最近更新时间
 
-	private String tel;
+	private String tel;//手机
 
-	private String email;
+	private String email;//邮箱
 
-	private String qq;
+	private String qq;//QQ
 
-	private String chineseName;
+	private String chineseName;//中文名称
 
 
 
