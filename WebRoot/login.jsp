@@ -18,42 +18,43 @@
 	</head>
 
 	<body>
-		<div class="container-fluid">
-			<div class="row-fluid">
+		<div class="container">
+			<div class="row">
 				<div class="col-md-12">
 					<div class="page-header">
 						<h1>
-							页标题范例
-							<small>此处编写页标题</small>
+							桐庐富伟针织厂管理系统
+							<small></small>
 						</h1>
 					</div>
 					<div class="row-fluid">
 						<div class="col-md-6">
 						</div>
 						<div class="col-md-6">
-
-
-							<form class="form-horizontal" role="form">
+							<div class="panel panel-default">
+<div class="panel-heading"><h3 class="panel-title">Panel title</h3></div>
+  <div class="panel-body">
+    <form class="form-horizontal" role="form">
 								<div class="form-group">
-									<label for="inputEmail3" class="col-sm-2 control-label">
-										Email
+									<label for="username" class="col-sm-2 control-label">
+										用户名
 									</label>
-									<div class="col-sm-10">
-										<input type="email" class="form-control" id="inputEmail3"
-											placeholder="Email">
+									<div class="col-sm-6">
+										<input type="text" class="form-control" id="username"
+											placeholder="请输入用户名">
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="inputPassword3" class="col-sm-2 control-label">
-										Password
+									<label for="password" class="col-sm-2 control-label">
+										密码
 									</label>
-									<div class="col-sm-10">
+									<div class="col-sm-6">
 										<input type="password" class="form-control"
-											id="inputPassword3" placeholder="Password">
+											id="password" placeholder="请输入密码">
 									</div>
 								</div>
 								<div class="form-group">
-									<div class="col-sm-offset-2 col-sm-10">
+									<div class="col-sm-offset-2 col-sm-6">
 										<div class="checkbox">
 											<label>
 												<input type="checkbox">
@@ -63,18 +64,26 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<div class="col-sm-offset-2 col-sm-10">
-										<button type="submit" class="btn btn-default">
-											Sign in
+									<div class="col-sm-offset-2 col-sm-6">
+										<button type="submit" class="btn btn-primary btn-lg btn-block">
+											登录
 										</button>
 									</div>
 								</div>
 							</form>
 
+  </div>
+
+</div>
+
+							
 
 						</div>
 					</div>
 				</div>
+			</div>
+			<div class="row">
+				<p class="text-right">copy 2014 桐庐富伟针织厂</p>
 			</div>
 		</div>
 
