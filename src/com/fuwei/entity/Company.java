@@ -17,7 +17,7 @@ public class Company implements Serializable {
 	@IdentityId
 	private int id;// 客户ID
 
-	private String companyNumber;// 客户号
+	private String companyNumber;// 客户编号
 
 	// private String companyName;
 

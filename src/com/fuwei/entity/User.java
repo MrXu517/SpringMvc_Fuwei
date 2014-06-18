@@ -3,6 +3,7 @@ package com.fuwei.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
 
 @Table("tb_user")
@@ -12,10 +13,13 @@ public class User implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -1173628226284035541L;
-
-	private String name;//用户名
-
-	private Integer role;//角色
+	@IdentityId
+	private int id;
+	private String username ; //用户名（登录时使用）
+	private String name;//姓名,一般是中文名称
+	private String help_code;//拼音简称
+	
+	private Integer roleId;//角色（决定有哪些权限）
 
 	private Boolean inUse;//是否启用
 
@@ -29,9 +33,14 @@ public class User implements Serializable {
 
 	private String qq;//QQ
 
-	private String chineseName;//中文名称
 
+	public int getId() {
+		return id;
+	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getTel() {
 		return tel;
@@ -65,13 +74,7 @@ public class User implements Serializable {
 		this.name = name;
 	}
 
-	public Integer getRole() {
-		return role;
-	}
-
-	public void setRole(Integer role) {
-		this.role = role;
-	}
+	
 
 	public Boolean getInUse() {
 		return inUse;
@@ -97,12 +100,29 @@ public class User implements Serializable {
 		this.updated_at = updated_at;
 	}
 
-	public String getChineseName() {
-		return chineseName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setChineseName(String chineseName) {
-		this.chineseName = chineseName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
+
+	public String getHelp_code() {
+		return help_code;
+	}
+
+	public void setHelp_code(String help_code) {
+		this.help_code = help_code;
+	}
+
+	public Integer getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
+	}
+
 
 }
