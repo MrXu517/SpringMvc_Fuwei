@@ -7,8 +7,7 @@
 		<!-- 为了让IE浏览器运行最新的渲染模式 -->
 		<link href="css/plugins/bootstrap.min.css" rel="stylesheet"
 			type="text/css" />
-		<link href="css/plugins/login-cleaned.css" rel="stylesheet"
-			type="text/css" />
+		<link href="css/login.css" rel="stylesheet" type="text/css" />
 		<link href="css/plugins/font-awesome.min.css" rel="stylesheet"
 			type="text/css" />
 		<script src="js/plugins/jquery-1.10.2.min.js"></script>
@@ -18,75 +17,85 @@
 	</head>
 
 	<body>
+		<div class="wraper">
+			<header role="banner" id="top"
+				class="navbar navbar-static-top bs-docs-nav">
+			<div class="container">
+				<h2>
+					<i class="fa fa-leaf"></i>桐庐富伟针织厂管理系统
+					<small></small>
+				</h2>
+			</div>
+			</header>
+		</div>
 		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-					<div class="page-header">
-						<h1>
-							桐庐富伟针织厂管理系统
-							<small></small>
-						</h1>
-					</div>
-					<div class="row-fluid">
-						<div class="col-md-6">
-						</div>
-						<div class="col-md-6">
-							<div class="panel panel-default">
-<div class="panel-heading"><h3 class="panel-title">Panel title</h3></div>
-  <div class="panel-body">
-    <form class="form-horizontal" role="form">
+
+			<div class="row body">
+
+				<div class="col-md-6 col-md-offset-3">
+
+					<div class="panel panel-default">
+
+						<div class="panel-body">
+							<form class="" role="form">
 								<div class="form-group">
-									<label for="username" class="col-sm-2 control-label">
+									<span class="error"></span>
+								</div>
+								<div class="form-group">
+									<label for="username">
 										用户名
 									</label>
-									<div class="col-sm-6">
-										<input type="text" class="form-control" id="username"
-											placeholder="请输入用户名">
-									</div>
+
+									<input type="text" class="form-control" id="username"
+										placeholder="请输入用户名">
+
 								</div>
 								<div class="form-group">
-									<label for="password" class="col-sm-2 control-label">
+									<label for="password">
 										密码
 									</label>
-									<div class="col-sm-6">
-										<input type="password" class="form-control"
-											id="password" placeholder="请输入密码">
-									</div>
+									<input type="password" class="form-control" id="password"
+										placeholder="请输入密码">
+
 								</div>
 								<div class="form-group">
-									<div class="col-sm-offset-2 col-sm-6">
-										<div class="checkbox">
-											<label>
-												<input type="checkbox">
-												Remember me
-											</label>
-										</div>
+									<div class="checkbox">
+										<label>
+											<input type="checkbox">
+											Remember me
+										</label>
 									</div>
+
 								</div>
 								<div class="form-group">
-									<div class="col-sm-offset-2 col-sm-6">
-										<button type="submit" class="btn btn-primary btn-lg btn-block">
-											登录
-										</button>
-									</div>
+									<button id="loginbtn" type="submit" class="btn btn-lg btn-block btn-success">
+										登录
+									</button>
 								</div>
 							</form>
 
-  </div>
+						</div>
+						<div class="panel-footer">
 
-</div>
 
-							
+							<abbr title="忘记密码？请联系管理员">忘记密码？</abbr>
 
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="row">
-				<p class="text-right">copy 2014 桐庐富伟针织厂</p>
+
+
 			</div>
 		</div>
 
+		</div>
+		<div class="container">
+			<div class="row">
+				<p class="text-right">
+					copy 2014 桐庐富伟针织厂
+				</p>
+			</div>
+		</div>
 	</body>
 
 </html>

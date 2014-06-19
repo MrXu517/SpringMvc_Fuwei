@@ -1,0 +1,22 @@
+body{
+	font-family: 'microsoft yahei';
+}
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+	font-family: 'microsoft yahei';
+}
+header h2 i{
+	margin-right:10px;
+}
+.body{
+	min-height:500px;
+}
+#top{
+	background: #3196e5;
+background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #3196e5), color-stop(100%, #935cc6));
+background: -webkit-linear-gradient(-80deg, #3196e5 31%, #935cc6 100%);
+color: #fff;
+}
+#loginbtn{
+	background-color: #49d5a2;
+border-color: #34d097;
+}
