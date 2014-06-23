@@ -1,5 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
+<% %>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta charset="utf-8">
@@ -136,14 +137,27 @@
                 data: formdata,
             })
                 .done(function(result) {
-                    alert(result);
+                	if(result.success){
+                		window.location = "user/index";
+                	}else{
+                		showError(result.message);
+                	}
                 })
                 .fail(function(result) {
-                    alert("登录失败:" + result.responseText);
+                    showError("请求服务器过程中出错:" + result.responseText);
                 })
                 .always(function() {});
 		return false;
 	});
+	
+	function showError(message){
+//		$("#loginform .alert-danger").show();
+		$("#loginform .error").text(message);
+	}
+	function hideError(){
+//		$("#loginform .alert-danger").hide();
+		$("#loginform .error").text("");
+	}
 </script>
 	</body>
 

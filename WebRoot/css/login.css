@@ -32,3 +32,6 @@ header h2 i {
 	background: url(images/login_common_6.png) no-repeat;
 	height: 400px;
 }
+span.error{
+	color: #b94a48;
+}

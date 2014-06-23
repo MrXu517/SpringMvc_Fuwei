@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-module
   type="WEB"
-  name="SpringMvc_Fuwei"
+  name="Fuwei"
   id="myeclipse.1402561948655"
   context-root="/MySpringMvc"
   j2ee-spec="1.4"
-  archive="SpringMvc_Fuwei.war">
+  archive="Fuwei.war">
   <attributes>
     <attribute name="webrootdir" value="WebRoot" />
   </attributes>

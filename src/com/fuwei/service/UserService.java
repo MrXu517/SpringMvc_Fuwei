@@ -21,8 +21,7 @@ public class UserService extends BaseService {
 				throw new Exception("用户名错误");
 			}else if(!user.getInUse()){
 				throw new Exception("用户已注销");
-			}
-			else if(!(user.getPassword().equals(pwd))){
+			}else if(!(user.getPassword().equals(pwd))){
 				throw new Exception("密码错误，请重新登录");
 			}
 			return user;
