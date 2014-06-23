@@ -35,7 +35,18 @@ public class User implements Serializable {
 
 	private String password;
 	
+	//2014-6-24晚添加  是否被锁定字段，表明当前用户是否权限已修改。 重新登录后，则字段归false
+	private Boolean locked;
 	
+	
+	public Boolean getLocked() {
+		return locked;
+	}
+
+	public void setLocked(Boolean locked) {
+		this.locked = locked;
+	}
+
 	public String getPassword() {
 		return password;
 	}

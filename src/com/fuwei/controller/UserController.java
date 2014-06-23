@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.fuwei.commons.LoginedUser;
+import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.constant.Constants;
 import com.fuwei.entity.Module;
@@ -64,6 +65,13 @@ public class UserController extends BaseController {
 			}
 			loginUser.setModulelist(moduleList);
 			loginUser.setRole(role);
+			//登录成功，若该用户的locked为true,则改为false，且从缓存列表中删除
+			if(user.getLocked()){
+				userService.unlock(user.getId());		
+				//从缓存列表中删除
+				SystemCache.removeRelogin(user.getId());
+			}
+			//登录成功，若该用户的locked为true,则改为false
 			session.setAttribute(Constants.LOGIN_SESSION_NAME, loginUser);
 			return this.returnSuccess();
 		} catch (Exception e) {

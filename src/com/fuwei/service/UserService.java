@@ -1,5 +1,7 @@
 package com.fuwei.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -25,6 +27,39 @@ public class UserService extends BaseService {
 				throw new Exception("密码错误，请重新登录");
 			}
 			return user;
+		}catch(Exception e){
+			throw e;
+		}
+	}
+	//锁定用户
+	public int lock(int id) throws Exception{
+		try{
+			return dao.update("UPDATE tb_user SET locked = true WHERE  id = ?", id);
+		}catch(Exception e){
+			throw e;
+		}
+	}
+	//解锁用户
+	public int unlock(int id) throws Exception{
+		try{
+			return dao.update("UPDATE tb_user SET locked = false WHERE  id = ?", id);
+		}catch(Exception e){
+			throw e;
+		}
+	}
+	
+	//锁定用户
+	public int lock(int[] ids) throws Exception{
+		try{
+			return dao.update("UPDATE tb_user SET locked = true WHERE  id in ( ? )", ids);
+		}catch(Exception e){
+			throw e;
+		}
+	}
+	//解锁用户
+	public int unlock(int[] ids) throws Exception{
+		try{
+			return dao.update("UPDATE tb_user SET locked = false WHERE  id in ( ? )", ids);
 		}catch(Exception e){
 			throw e;
 		}

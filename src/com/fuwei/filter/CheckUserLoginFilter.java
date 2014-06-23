@@ -60,6 +60,11 @@ public class CheckUserLoginFilter implements Filter {
 				redirectTo(request, response, LOGIN_URL);
 				return;
 			}else{
+				
+				//若该用户已登录，则判断该用户的权限是否已改变（用户角色的权限是否已改变）
+				
+				//若该用户已登录，则判断该用户的权限是否已改变（用户角色的权限是否已改变）
+				
 				chain.doFilter(servletRequest, servletResponse);
 			}
 		}else{
