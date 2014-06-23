@@ -33,6 +33,16 @@ public class User implements Serializable {
 
 	private String qq;//QQ
 
+	private String password;
+	
+	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	public int getId() {
 		return id;
