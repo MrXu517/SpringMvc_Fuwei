@@ -4,24 +4,37 @@
 <%@page import="com.fuwei.entity.User"%>
 <%@page import="com.fuwei.entity.Module"%>
 <%@page import="com.fuwei.commons.SystemContextUtils"%>
-
 <%
-	LoginedUser loginedUser = SystemContextUtils.getCurrentUser(session);
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://"
+			+ request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+%>
+<%
+	LoginedUser loginedUser = SystemContextUtils
+			.getCurrentUser(session);
 	User user = loginedUser.getLoginedUser();
 	List<Module> moduleList = loginedUser.getModulelist();
 %>
 <html>
 
 	<head>
-		<meta charset="utf-8" />
+		<base href="<%=basePath%>">
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!-- 为了让IE浏览器运行最新的渲染模式 -->
+		<link href="css/plugins/bootstrap.min.css" rel="stylesheet"
+			type="text/css" />
+		<link href="css/plugins/font-awesome.min.css" rel="stylesheet"
+			type="text/css" />
+		<script src="js/plugins/jquery-1.10.2.min.js"></script>
 
-		<link href="css/global.css" rel="stylesheet" type="text/css" />
-		<link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-		<!--web字体-->
-		<link href="css/index.css" rel="stylesheet" type="text/css" />
-		<script src="js/common.js" type="text/javascript"></script>
-		<script src="js/index.js" type="text/javascript"></script>
-		
+		<script src="js/plugins/bootstrap.min.js" type="text/javascript"></script>
+
+		<link href="css/common/head.css" rel="stylesheet" type="text/css" />
+
+		<script src="js/user/index.js" type="text/javascript"></script>
+
 	</head>
 
 	<div style="display: none;" class="background"></div>
@@ -31,16 +44,14 @@
 	<div id="header">
 		<div class="logo">
 			<a href="index.jsp"><small> <i class="fa fa-leaf"></i>
-					桐庐富伟针织厂管理系统 </small>
-			</a>
+					桐庐富伟针织厂管理系统 </small> </a>
 		</div>
-		<div class="nav">
-			<ul class="head-nav">
+		<div class="headnav">
+			<!-- <ul class="head-nav">
 				<li class="user">
 					<a data-toggle="dropdown" href="#" class="dropdown-toggle"> <span
-						class="fa fa-user"></span> <!--  <img class="nav-user-photo " src="img/user.jpg" alt="Jason's Photo">
-                         --> <span class="user-info"> <span
-							id="login_user_name"><%=user.getName() %></span> </span> <i
+						class="fa fa-user"></span>  <span class="user-info"> <span
+							id="login_user_name"><%=user.getName()%></span> </span> <i
 						class="fa fa-caret-down"></i> </a>
 					<ul class="user-nav dropdown">
 						<li>
@@ -52,7 +63,32 @@
 						</li>
 					</ul>
 				</li>
-			</ul>
+			</ul>-->
+			<div class="btn-group">
+				<button type="button" class="btn btn-success">
+					Action
+				</button>
+				<button type="button" class="btn btn-success dropdown-toggle"
+					data-toggle="dropdown">
+					<span class="caret"></span>
+					<span class="sr-only">Toggle Dropdown</span>
+				</button>
+				<ul class="dropdown-menu" role="menu">
+					<li>
+						<a href="#">Action</a>
+					</li>
+					<li>
+						<a href="#">Another action</a>
+					</li>
+					<li>
+						<a href="#">Something else here</a>
+					</li>
+					<li class="divider"></li>
+					<li>
+						<a href="#">Separated link</a>
+					</li>
+				</ul>
+			</div>
 		</div>
 	</div>
 	<!--    <div id="mainContainer"> -->
@@ -63,11 +99,13 @@
 					<a href="index.jsp"><i class="fa fa-home"></i>首页</a>
 				</li>
 				<li class="li_dropdown">
-					<a href="#"><i class="fa fa-desktop"></i>样品系统<i class="fa fa-angle-down"></i></a>
+					<a href="#"><i class="fa fa-desktop"></i>样品系统<i
+						class="fa fa-angle-down"></i>
+					</a>
 					<ul class="submenu">
 						<%
-				//if(user.getAuthority() == FuweiSystemData.AUTHORITY_GENERAL){
-				 %>
+							//if(user.getAuthority() == FuweiSystemData.AUTHORITY_GENERAL){
+						%>
 						<li>
 							<a href="searchSample.do"><i class="fa fa-dashboard"></i>样品管理</a>
 						</li>
@@ -81,8 +119,8 @@
 							<a href="print.jsp"><i class="fa fa-print"></i>快递单打印</a>
 						</li>
 						<%
-				//}else{
-				 %>
+							//}else{
+						%>
 						<li>
 							<a href="searchSample.do"><i class="fa fa-dashboard"></i>样品管理</a>
 						</li>
@@ -103,7 +141,9 @@
 				</li>
 
 				<li class="li_dropdown">
-					<a href="#"><i class="fa fa-paperclip"></i>订单系统<i class="fa fa-angle-down"></i></a>
+					<a href="#"><i class="fa fa-paperclip"></i>订单系统<i
+						class="fa fa-angle-down"></i>
+					</a>
 					<ul class="submenu">
 						<li>
 							<a href="addOrder.jsp"><i class="fa fa-plus"></i>创建订单</a>
@@ -123,8 +163,8 @@
 					<a href="systeminfos.jsp"><i class="fa fa-list-alt"></i>系统信息管理</a>
 				</li>
 				<%
-				//}
-				 %>
+					//}
+				%>
 			</ul>
 		</div>
 
