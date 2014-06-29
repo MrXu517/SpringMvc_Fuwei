@@ -5,12 +5,6 @@
 <%@page import="com.fuwei.entity.Module"%>
 <%@page import="com.fuwei.commons.SystemContextUtils"%>
 <%
-	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
-%>
-<%
 	LoginedUser loginedUser = SystemContextUtils
 			.getCurrentUser(session);
 	User user = loginedUser.getLoginedUser();
@@ -19,7 +13,7 @@
 <html>
 
 	<head>
-		<base href="<%=basePath%>">
+		
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<!-- 为了让IE浏览器运行最新的渲染模式 -->
@@ -142,7 +136,7 @@
 						<a href="print.jsp"><i class="fa fa-print"></i>快递单打印</a>
 					</li>
 					<li>
-						<a href="systeminfos.jsp"><i class="fa fa-list-alt"></i>系统信息管理</a>
+						<a href="systeminfo/index"><i class="fa fa-list-alt"></i>系统信息管理</a>
 					</li>
 					<%
 						//}
