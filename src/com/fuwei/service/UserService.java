@@ -66,7 +66,7 @@ public class UserService extends BaseService {
 	}
 	
 	//添加用户
-	public int insert(User user)throws Exception{
+	public int add(User user)throws Exception{
 		try{
 			return this.insert(user);
 		}catch(Exception e){

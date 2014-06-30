@@ -7,12 +7,12 @@ import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
 
 @Table("tb_company")
-public class Company implements Serializable {
+public class Company {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -9156548874699186044L;
+	
 
 	@IdentityId
 	private int id;// 客户ID
@@ -33,9 +33,11 @@ public class Company implements Serializable {
 
 	private String country;// 国家
 
-	private String shortname;// 公司简称
+//	private String shortname;// 公司简称
 
 	private String fullname;// 公司全称
+	
+	private String help_code;//拼音简称
 
 	public int getId() {
 		return id;
@@ -101,13 +103,13 @@ public class Company implements Serializable {
 		this.country = country;
 	}
 
-	public String getShortname() {
-		return shortname;
-	}
-
-	public void setShortname(String shortname) {
-		this.shortname = shortname;
-	}
+//	public String getShortname() {
+//		return shortname;
+//	}
+//
+//	public void setShortname(String shortname) {
+//		this.shortname = shortname;
+//	}
 
 	public String getFullname() {
 		return fullname;
@@ -115,6 +117,14 @@ public class Company implements Serializable {
 
 	public void setFullname(String fullname) {
 		this.fullname = fullname;
+	}
+
+	public String getHelp_code() {
+		return help_code;
+	}
+
+	public void setHelp_code(String help_code) {
+		this.help_code = help_code;
 	}
 
 }

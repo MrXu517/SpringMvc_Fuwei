@@ -64,11 +64,11 @@
 											<div class="panel-body">
 												<form class="form-horizontal" role="form">
 													<div class="form-group">
-														<label for="inputEmail3" class="col-sm-3 control-label">
+														<label for="shortname" class="col-sm-3 control-label">
 															中文名称
 														</label>
 														<div class="col-sm-8">
-															<input type="email" class="form-control" id="inputEmail3"
+															<input type="text" class="form-control" id="shortname" name="shortname"
 																placeholder="中文名称">
 														</div>
 														<div class="col-sm-1"></div>
@@ -84,32 +84,32 @@
 														<div class="col-sm-1"></div>
 													</div>
 													<div class="form-group">
-														<label for="inputPassword3" class="col-sm-3 control-label">
+														<label for="address" class="col-sm-3 control-label">
 															公司地址
 														</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control"
-																id="inputPassword3" placeholder="公司地址">
+																name="address" id="address" placeholder="公司地址">
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
 													<div class="form-group">
-														<label for="inputPassword3" class="col-sm-3 control-label">
+														<label for="fullname" class="col-sm-3 control-label">
 															公司全称
 														</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control"
-																id="inputPassword3" placeholder="公司全称">
+																name="fullname" id="fullname" placeholder="公司全称">
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
 													<div class="form-group">
-														<label for="inputPassword3" class="col-sm-3 control-label">
+														<label for="city" class="col-sm-3 control-label">
 															所在城市
 														</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control"
-																id="inputPassword3" placeholder="所在城市">
+																name="city" id="city" placeholder="所在城市">
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -141,6 +141,7 @@
 
 											<!-- Table -->
 											<table class="table table-responsive">
+												<thead>
 												<tr>
 													<th>
 														序号
@@ -151,7 +152,11 @@
 													<th>
 														简称
 													</th>
-												</tr>
+												</tr></thead>
+												<tbody>
+										<%
+										 %>	
+										</tbody>
 											</table>
 										</div>
 									</div>
