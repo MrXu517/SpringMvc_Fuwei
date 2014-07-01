@@ -7,19 +7,19 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fuwei.entity.Company;
+import com.fuwei.entity.Salesman;
 
 @Component
-public class CompanyService extends BaseService {
+public class SalesmanService extends BaseService  {
 	@Autowired
 	JdbcTemplate jdbc;
 
 	// 获取公司列表
-	public List<Company> getList() throws Exception {
+	public List<Salesman> getList() throws Exception {
 		try {
-			List<Company> companyList = dao.queryForBeanList(
-					"SELECT * FROM tb_company", Company.class);
-			return companyList;
+			List<Salesman> salesmanList = dao.queryForBeanList(
+					"SELECT * FROM tb_salesman", Salesman.class);
+			return salesmanList;
 		} catch (Exception e) {
 			throw e;
 		}
@@ -27,9 +27,9 @@ public class CompanyService extends BaseService {
 
 	// 添加公司
 	@Transactional
-	public int add(Company company) throws Exception {
+	public int add(Salesman salesman) throws Exception {
 		try{
-			return this.insert(company);
+			return this.insert(salesman);
 		}catch(Exception e){
 			throw e;
 		}
@@ -38,16 +38,16 @@ public class CompanyService extends BaseService {
 	// 删除公司
 	public int remove(int id) throws Exception {
 		try{
-			return dao.update("delete form tb_company WHERE  id = ?", id);
+			return dao.update("delete form tb_salesman WHERE  id = ?", id);
 		}catch(Exception e){
 			throw e;
 		}
 	}
 
 	// 编辑公司
-	public int update(Company company) throws Exception {
+	public int update(Salesman salesman) throws Exception {
 		try{
-			return this.update(company, "id", null);
+			return this.update(salesman, "id", null);
 		}catch(Exception e){
 			throw e;
 		}

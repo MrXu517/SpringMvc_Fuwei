@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import org.springframework.stereotype.Component;
 
+import com.fuwei.entity.Company;
 import com.fuwei.entity.User;
 
 @Component
@@ -98,6 +99,16 @@ public class UserService extends BaseService {
 		}catch(Exception e){
 			throw e;
 		}
-		
+	}
+	
+	// 获取用户列表
+	public List<User> getList() throws Exception {
+		try {
+			List<User> userList = dao.queryForBeanList(
+					"SELECT * FROM tb_user", User.class);
+			return userList;
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 }

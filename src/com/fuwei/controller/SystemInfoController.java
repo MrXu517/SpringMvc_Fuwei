@@ -3,6 +3,7 @@ package com.fuwei.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -26,7 +27,11 @@ public class SystemInfoController extends BaseController {
 	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView Index (HttpSession session,HttpServletResponse response) throws Exception {
+	public ModelAndView Index (HttpSession session,HttpServletRequest request,HttpServletResponse response) throws Exception {
+		request.setAttribute("companylist", SystemCache.companylist);
+		request.setAttribute("gongxulist", SystemCache.gongxulist);
+		request.setAttribute("salesmanlist", SystemCache.salesmanlist);
+		request.setAttribute("userlist", SystemCache.userlist);
 		return new ModelAndView("systeminfo/index");
 		
 	} 

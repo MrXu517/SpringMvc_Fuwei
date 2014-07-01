@@ -1,10 +1,21 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
+<%@page import="com.fuwei.entity.Company"%>
+<%@page import="com.fuwei.entity.Salesman"%>
+<%@page import="com.fuwei.entity.GongXu"%>
+<%@page import="com.fuwei.entity.User"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
+	List<Company> companylist = (List<Company>) request
+			.getAttribute("companylist");
+	List<Salesman> gongxulist = (List<Salesman>) request
+			.getAttribute("gongxulist");
+	List<GongXu> salesmanlist = (List<GongXu>) request
+			.getAttribute("salesmanlist");
+	List<User> userlist = (List<User>) request.getAttribute("userlist");
 %>
 <!DOCTYPE html>
 <html>
@@ -68,8 +79,8 @@
 															中文名称
 														</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="shortname" name="shortname"
-																placeholder="中文名称">
+															<input type="text" class="form-control" id="shortname"
+																name="shortname" placeholder="中文名称">
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -88,8 +99,8 @@
 															公司地址
 														</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control"
-																name="address" id="address" placeholder="公司地址">
+															<input type="text" class="form-control" name="address"
+																id="address" placeholder="公司地址">
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -98,8 +109,8 @@
 															公司全称
 														</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control"
-																name="fullname" id="fullname" placeholder="公司全称">
+															<input type="text" class="form-control" name="fullname"
+																id="fullname" placeholder="公司全称">
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -108,15 +119,16 @@
 															所在城市
 														</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control"
-																name="city" id="city" placeholder="所在城市">
+															<input type="text" class="form-control" name="city"
+																id="city" placeholder="所在城市">
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
 
 													<div class="form-group">
 														<div class="col-sm-offset-3 col-sm-3">
-															<button type="submit" class="btn btn-primary" data-loading-text="正在添加...">
+															<button type="submit" class="btn btn-primary"
+																data-loading-text="正在添加...">
 																添加公司
 															</button>
 														</div>
@@ -142,21 +154,33 @@
 											<!-- Table -->
 											<table class="table table-responsive">
 												<thead>
-												<tr>
-													<th>
-														序号
-													</th>
-													<th>
-														公司名称
-													</th>
-													<th>
-														简称
-													</th>
-												</tr></thead>
+													<tr>
+														<th>
+															序号
+														</th>
+														<th>
+															公司名称
+														</th>
+														<th>
+															简称
+														</th>
+													</tr>
+												</thead>
 												<tbody>
-										<%
-										 %>	
-										</tbody>
+													<%
+														int c_i = 1;
+														for (Company company : companylist) {
+													%>
+													<tr>
+														<td><%=c_i%></td>
+														<td><%=company.getFullname()%></td>
+														<td><%=company.getHelp_code()%></td>
+													</tr>
+													<%
+														c_i++;
+														}
+													%>
+												</tbody>
 											</table>
 										</div>
 									</div>

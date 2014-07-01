@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fuwei.commons.SystemCache;
 import com.fuwei.entity.Company;
 import com.fuwei.service.CompanyService;
 import com.fuwei.util.DateTool;
@@ -29,6 +30,10 @@ public class CompanyController extends BaseController {
 		company.setCreated_at(DateTool.now());
 		company.setUpdated_at(DateTool.now());
 		int success = companyService.add(company);
+		
+		//更新缓存
+		new SystemCache().initCompanyList();
+		
 		return this.returnSuccess();
 		
 	}

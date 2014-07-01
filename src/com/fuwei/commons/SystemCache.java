@@ -5,25 +5,43 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
 import com.fuwei.entity.Company;
 import com.fuwei.entity.GongXu;
 import com.fuwei.entity.Salesman;
+import com.fuwei.entity.User;
+import com.fuwei.service.CompanyService;
+import com.fuwei.service.GongXuService;
+import com.fuwei.service.SalesmanService;
+import com.fuwei.service.UserService;
 
 public class SystemCache {
+	@Autowired
+	CompanyService companyService;
+	@Autowired
+	UserService userService;
+	@Autowired
+	SalesmanService salesmanService;
+	@Autowired
+	GongXuService gongXuService;
+	
 	//缓存需要重新登录的用户
-	private static Map<Integer,String[]> reloginList = new HashMap<Integer,String[]>();//需要重新登录的user，以及错误信息。
+	public static Map<Integer,String[]> reloginList = new HashMap<Integer,String[]>();//需要重新登录的user，以及错误信息。
 	
 	//缓存公司
-	private static List<Company> companylist = new ArrayList<Company>();
+	public static List<Company> companylist = new ArrayList<Company>();
 	
 	//缓存工艺
-	private static List<GongXu> gongxulist = new ArrayList<GongXu>();
+	public static List<GongXu> gongxulist = new ArrayList<GongXu>();
 	
 	//缓存用户
-	//private static List<User> userlist = new ArrayList<GongXu>();
+	public static List<User> userlist = new ArrayList<User>();
 	
 	//缓存业务员
-	private static List<Salesman> salesmanlist = new ArrayList<Salesman>();
+	public static List<Salesman> salesmanlist = new ArrayList<Salesman>();
 	
 	
 	public static Boolean checkRelogin(Integer user_id){
@@ -60,4 +78,30 @@ public class SystemCache {
 		companylist.remove(company);
 	}
 	
+	public void init() throws Exception{
+		initCompanyList();
+		initSalesmanList();
+		initGongxuList();
+		initUserList();
+	}
+	
+	public void reload() throws Exception{
+		init();
+	}
+	
+	public void initCompanyList() throws Exception{
+		SystemCache.companylist = companyService.getList(); //companylist;
+	}
+	
+	public void initSalesmanList() throws Exception{
+		SystemCache.salesmanlist =  salesmanService.getList();//salesmanlist;
+	}
+	
+	public void initGongxuList() throws Exception{
+		SystemCache.gongxulist = gongXuService.getList(); //gongxulist;
+	}
+	
+	public void initUserList() throws Exception{
+		SystemCache.userlist = userService.getList(); //userlist;
+	}
 }

@@ -160,6 +160,10 @@
 		<listener-class>
 			org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
+	<listener>
+		<listener-class>
+			com.fuwei.commons.ServletContextListenerOverWrite</listener-class>
+	</listener>
 	<!-- 监听  -->
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
