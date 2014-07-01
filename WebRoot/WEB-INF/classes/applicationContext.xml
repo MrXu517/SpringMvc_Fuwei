@@ -73,7 +73,7 @@
 	<!-- 可以用原始的jdbc -->
 	
 	<context:annotation-config />
-	<context:component-scan base-package="com.fuwei.service" />
+	<context:component-scan base-package="com.fuwei.service,com.fuwei.commons" />
 
 	<bean id="dao" class="net.keepsoft.dao.Dao">
 		<property name="jdbcTemplate" ref="jdbcTemplate"></property>

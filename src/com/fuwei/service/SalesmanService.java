@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fuwei.entity.Company;
 import com.fuwei.entity.Salesman;
 
 @Component
@@ -38,7 +39,7 @@ public class SalesmanService extends BaseService  {
 	// 删除公司
 	public int remove(int id) throws Exception {
 		try{
-			return dao.update("delete form tb_salesman WHERE  id = ?", id);
+			return dao.update("delete from tb_salesman WHERE  id = ?", id);
 		}catch(Exception e){
 			throw e;
 		}
@@ -52,5 +53,16 @@ public class SalesmanService extends BaseService  {
 			throw e;
 		}
 
+	}
+	// 获取公司
+	public Salesman get(int id) throws Exception {
+		try {
+			Salesman salesman = dao.queryForBean(
+					"select * from tb_salesman where id = ?", Salesman.class,
+					id);
+			return salesman;
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 }

@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fuwei.entity.Company;
 import com.fuwei.entity.GongXu;
 
 @Component
@@ -25,7 +26,7 @@ public class GongXuService extends BaseService {
 		}
 	}
 
-	// 添加公司
+	// 添加工序
 	@Transactional
 	public int add(GongXu gongxu) throws Exception {
 		try{
@@ -35,16 +36,16 @@ public class GongXuService extends BaseService {
 		}
 	}
 
-	// 删除公司
+	// 删除工序
 	public int remove(int id) throws Exception {
 		try{
-			return dao.update("delete form tb_gongxu WHERE  id = ?", id);
+			return dao.update("delete from tb_gongxu WHERE  id = ?", id);
 		}catch(Exception e){
 			throw e;
 		}
 	}
 
-	// 编辑公司
+	// 编辑工序
 	public int update(GongXu gongxu) throws Exception {
 		try{
 			return this.update(gongxu, "id", null);
@@ -52,5 +53,17 @@ public class GongXuService extends BaseService {
 			throw e;
 		}
 
+	}
+	
+	// 获取工序
+	public GongXu get(int id) throws Exception {
+		try {
+			GongXu gongxu = dao.queryForBean(
+					"select * from tb_gongxu where id = ?", GongXu.class,
+					id);
+			return gongxu;
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.web.context.ContextLoader;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.fuwei.constant.Constants;
 
@@ -40,4 +42,10 @@ public class SystemContextUtils {
 		return false;
 	}
 
+	public static Object getBean(Class _class) {
+		
+        WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
+        return context.getBean(_class);
+
+}
 }

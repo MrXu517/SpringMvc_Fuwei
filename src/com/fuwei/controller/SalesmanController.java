@@ -14,26 +14,28 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fuwei.commons.SystemCache;
 import com.fuwei.entity.Company;
+import com.fuwei.entity.Salesman;
 import com.fuwei.service.CompanyService;
+import com.fuwei.service.SalesmanService;
 import com.fuwei.util.DateTool;
 
-@RequestMapping("/company")
+@RequestMapping("/salesman")
 @Controller
-public class CompanyController extends BaseController {
+public class SalesmanController extends BaseController {
 	
 	@Autowired
-	CompanyService companyService;
+	SalesmanService salesmanService;
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> add(Company company, HttpServletRequest request,
+	public Map<String,Object> add(Salesman salesman, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
-		company.setCreated_at(DateTool.now());
-		company.setUpdated_at(DateTool.now());
-		int success = companyService.add(company);
+		salesman.setCreated_at(DateTool.now());
+		salesman.setUpdated_at(DateTool.now());
+		int success = salesmanService.add(salesman);
 		
 		//更新缓存
-		new SystemCache().initCompanyList();
+		new SystemCache().initSalesmanList();
 		
 		return this.returnSuccess();
 		
@@ -43,10 +45,10 @@ public class CompanyController extends BaseController {
 	@ResponseBody
 	public Map<String,Object> delete(@PathVariable int id, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
-		int success = companyService.remove(id);
+		int success = salesmanService.remove(id);
 		
 		//更新缓存
-		new SystemCache().initCompanyList();
+		new SystemCache().initSalesmanList();
 		
 		return this.returnSuccess();
 		
@@ -54,22 +56,22 @@ public class CompanyController extends BaseController {
 	
 	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public Company get(@PathVariable int id, HttpServletRequest request,
+	public Salesman get(@PathVariable int id, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
-		Company company = companyService.get(id);
-		return company;
+		Salesman salesman = salesmanService.get(id);
+		return salesman;
 		
 	}
 	
 	@RequestMapping(value = "/put", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> update(Company company, HttpServletRequest request,
+	public Map<String,Object> update(Salesman salesman, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
-		company.setUpdated_at(DateTool.now());
-		int success = companyService.update(company);
+		salesman.setUpdated_at(DateTool.now());
+		int success = salesmanService.update(salesman);
 		
 		//更新缓存
-		new SystemCache().initCompanyList();
+		new SystemCache().initSalesmanList();
 		
 		return this.returnSuccess();
 		

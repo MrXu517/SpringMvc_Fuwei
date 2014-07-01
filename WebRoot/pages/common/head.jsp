@@ -21,7 +21,6 @@
 			type="text/css" />
 		<link href="css/plugins/font-awesome.min.css" rel="stylesheet"
 			type="text/css" />
-		<script src="js/plugins/jquery-1.10.2.min.js"></script>
 
 		<script src="js/plugins/bootstrap.min.js" type="text/javascript"></script>
 
@@ -33,7 +32,7 @@
 	</head>
 
 	<div style="display: none;" class="background"></div>
-	<div style="display: none;" id="loading">
+	<div style="display: none;" class="loading">
 		数据加载中，请稍等......
 	</div>
 	<div id="header">

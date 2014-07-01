@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,10 +24,12 @@ import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.constant.Constants;
 import com.fuwei.entity.Module;
 import com.fuwei.entity.Role;
+import com.fuwei.entity.Salesman;
 import com.fuwei.entity.User;
 import com.fuwei.service.ModuleService;
 import com.fuwei.service.RoleService;
 import com.fuwei.service.UserService;
+import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
 
 @RequestMapping("/user")
@@ -90,6 +93,57 @@ public class UserController extends BaseController {
 		} catch (Exception e) {
 			throw e;
 		}
+		
+	}
+	
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> add(User user, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		user.setCreated_at(DateTool.now());
+		user.setUpdated_at(DateTool.now());
+		int success = userService.add(user);
+		
+		//更新缓存
+		new SystemCache().initUserList();
+		
+		return this.returnSuccess();
+		
+	}
+	
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> delete(@PathVariable int id, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		int success = userService.remove(id);
+		
+		//更新缓存
+		new SystemCache().initUserList();
+		
+		return this.returnSuccess();
+		
+	}
+	
+	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public User get(@PathVariable int id, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		User user = userService.get(id);
+		return user;
+		
+	}
+	
+	@RequestMapping(value = "/put", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> update(User user, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		user.setUpdated_at(DateTool.now());
+		int success = userService.update(user);
+		
+		//更新缓存
+		new SystemCache().initUserList();
+		
+		return this.returnSuccess();
 		
 	}
 	

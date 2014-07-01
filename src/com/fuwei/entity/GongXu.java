@@ -12,7 +12,6 @@ public class GongXu implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -6704578104018531898L;
 	
 	@IdentityId
 	private int id;

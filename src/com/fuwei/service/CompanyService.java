@@ -38,7 +38,7 @@ public class CompanyService extends BaseService {
 	// 删除公司
 	public int remove(int id) throws Exception {
 		try{
-			return dao.update("delete form tb_company WHERE  id = ?", id);
+			return dao.update("delete from tb_company WHERE  id = ?", id);
 		}catch(Exception e){
 			throw e;
 		}
@@ -52,5 +52,17 @@ public class CompanyService extends BaseService {
 			throw e;
 		}
 
+	}
+	
+	// 获取公司
+	public Company get(int id) throws Exception {
+		try {
+			Company company = dao.queryForBean(
+					"select * from tb_company where id = ?", Company.class,
+					id);
+			return company;
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 }

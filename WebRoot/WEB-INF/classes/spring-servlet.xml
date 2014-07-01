@@ -19,7 +19,7 @@
 		spring可以自动去扫描base-pack下面或者子包下面的java文件，如果扫描到有@Component
 		@Controller@Service等这些注解的类，则把这些类注册为bean
 	-->
-	<context:component-scan base-package="com.fuwei.controller" />
+	<context:component-scan base-package="com.fuwei.controller,com.fuwei.commons" />
 	
 	<!-- 启动Spring MVC的注解功能，完成请求和注解POJO的映射 -->
 	<bean

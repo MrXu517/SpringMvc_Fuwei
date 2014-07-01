@@ -86,7 +86,7 @@ public class UserService extends BaseService {
 	//删除用户
 	public int remove(int id)throws Exception{
 		try{
-			return dao.update("delete form tb_user WHERE  id = ?", id);
+			return dao.update("delete from tb_user WHERE  id = ?", id);
 		}catch(Exception e){
 			throw e;
 		}
@@ -107,6 +107,18 @@ public class UserService extends BaseService {
 			List<User> userList = dao.queryForBeanList(
 					"SELECT * FROM tb_user", User.class);
 			return userList;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	// 获取用户
+	public User get(int id) throws Exception {
+		try {
+			User user = dao.queryForBean(
+					"select * from tb_user where id = ?", User.class,
+					id);
+			return user;
 		} catch (Exception e) {
 			throw e;
 		}

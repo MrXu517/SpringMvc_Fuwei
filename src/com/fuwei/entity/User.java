@@ -12,7 +12,7 @@ public class User implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -1173628226284035541L;
+
 	@IdentityId
 	private int id;
 	private String username ; //用户名（登录时使用）

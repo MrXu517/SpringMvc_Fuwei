@@ -11,7 +11,7 @@ public class Sample implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 648249632707590498L;
+
 	
 	@IdentityId
 	private int id;

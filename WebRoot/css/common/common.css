@@ -28,3 +28,30 @@
 	width: 100%;
 	margin-left: -15px;
  }
+ .background {
+    background: none repeat scroll 0 0 #8F9092;
+    display: none;
+    height: auto;
+    left: 0;
+    min-height: 100%;
+    opacity: 0.3;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 4000;
+}
+.loading {
+    background: url("../images/loading.gif") no-repeat scroll 10px center #FFFFFF;
+    border: 2px solid #86A5AD;
+    height: 60px;
+    left: 48%;
+    margin: -64px 0 0 -64px;
+    overflow: hidden;
+    padding: 15px 10px 10px 40px;
+    /*position: fixed;*/
+    position: absolute;
+    top: 50%;
+    width: auto;
+    z-index: 4001;
+    display:none;
+}

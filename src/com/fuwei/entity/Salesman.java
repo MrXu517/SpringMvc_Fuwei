@@ -14,7 +14,7 @@ public class Salesman  implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -5179527728585103099L;
+
 	/**
 	 * 
 	 */

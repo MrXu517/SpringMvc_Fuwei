@@ -429,9 +429,8 @@ body{
 	right: 0;
 	left: 0;*/
 	overflow: auto;
-height: 100%;
-margin-top: -45px;
-padding-top: 45px;
-margin-left: 220px;
+	height: 100%;
+	margin-left: 220px;
+	margin-bottom: -45px;
 }
 /*首页布局 -- 结束*/
