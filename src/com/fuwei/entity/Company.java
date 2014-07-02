@@ -33,11 +33,23 @@ public class Company {
 
 	private String country;// 国家
 
-//	private String shortname;// 公司简称
+	private String shortname;// 公司简称
 
 	private String fullname;// 公司全称
 	
 	private String help_code;//拼音简称
+	
+	private Integer created_user;//创建用户
+	
+	
+	
+	public Integer getCreated_user() {
+		return created_user;
+	}
+
+	public void setCreated_user(Integer created_user) {
+		this.created_user = created_user;
+	}
 
 	public int getId() {
 		return id;
@@ -103,13 +115,13 @@ public class Company {
 		this.country = country;
 	}
 
-//	public String getShortname() {
-//		return shortname;
-//	}
-//
-//	public void setShortname(String shortname) {
-//		this.shortname = shortname;
-//	}
+	public String getShortname() {
+		return shortname;
+	}
+
+	public void setShortname(String shortname) {
+		this.shortname = shortname;
+	}
 
 	public String getFullname() {
 		return fullname;

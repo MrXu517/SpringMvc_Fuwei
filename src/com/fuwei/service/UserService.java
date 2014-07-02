@@ -69,6 +69,7 @@ public class UserService extends BaseService {
 	//添加用户
 	public int add(User user)throws Exception{
 		try{
+			user.setPassword("123456");
 			return this.insert(user);
 		}catch(Exception e){
 			throw e;
@@ -95,7 +96,9 @@ public class UserService extends BaseService {
 	//编辑用户
 	public int update(User user)throws Exception{
 		try{
-			return this.update(user,"id",null);
+			return dao.update("UPDATE tb_user SET name=?,username=?,updated_at=?,help_code=?,roleId=?,tel=?,email=?,qq=? WHERE  id = ?",
+					user.getName(),user.getUsername(),user.getUpdated_at(),user.getHelp_code(),user.getRoleId(),user.getTel(),user.getEmail(),user.getQq(),
+					user.getId());
 		}catch(Exception e){
 			throw e;
 		}
@@ -120,6 +123,15 @@ public class UserService extends BaseService {
 					id);
 			return user;
 		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	//启用用户
+	public int enable(int id)throws Exception{
+		try{
+			return dao.update("UPDATE tb_user SET inUse = true WHERE  id = ?", id);
+		}catch(Exception e){
 			throw e;
 		}
 	}

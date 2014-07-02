@@ -165,5 +165,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/xpp3-1.1.3.4.O.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/xpp3_min-1.1.3.4.O.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/xstream-1.4.3.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/pinyin4j-2.5.0.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

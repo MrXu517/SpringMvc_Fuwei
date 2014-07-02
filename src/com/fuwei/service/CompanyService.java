@@ -47,7 +47,11 @@ public class CompanyService extends BaseService {
 	// 编辑公司
 	public int update(Company company) throws Exception {
 		try{
-			return this.update(company, "id", null);
+			return dao.update("UPDATE tb_company SET companyNumber=?,country=?, fullname=?,shortname=?,address=?,city=?,updated_at=?,help_code=? WHERE  id = ?",
+					company.getCompanyNumber(),company.getCountry(),company.getFullname(),company.getShortname(),company.getAddress(),company.getCity(),company.getUpdated_at(),company.getHelp_code(),
+					company.getId());
+			//UPDATE tb_user SET inUse = true WHERE  id = ?
+			//return this.update(company, "id", notField);
 		}catch(Exception e){
 			throw e;
 		}

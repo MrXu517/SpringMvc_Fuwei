@@ -48,7 +48,9 @@ public class GongXuService extends BaseService {
 	// 编辑工序
 	public int update(GongXu gongxu) throws Exception {
 		try{
-			return this.update(gongxu, "id", null);
+			return dao.update("UPDATE tb_gongxu SET name=?,updated_at=? WHERE  id = ?",
+					gongxu.getName(),gongxu.getUpdated_at(),
+					gongxu.getId());
 		}catch(Exception e){
 			throw e;
 		}

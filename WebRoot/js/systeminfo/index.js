@@ -10,14 +10,15 @@ $(document).ready(function(){
         })
             .done(function(result) {
             	if(result.success){
-            		alert("删除成功");
-            		reload();
+            		Common.Tip("删除成功",function(){
+            			reload();
+            		});
             	}else{
-            		alert(result.message);
+            		Common.Error("删除失败：" + result.message);
             	}
             })
             .fail(function(result) {
-                alert("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("请求服务器过程中出错:" + result.responseText);
             })
             .always(function() {
             	
@@ -36,13 +37,13 @@ $(document).ready(function(){
             		//填充到表单中
                 	setUpdateCompany(result);
             	}else{
-            		alert(result.message);
+            		Common.Error("获取公司详情失败：" + result.message);
             	}
             	
             	
             })
             .fail(function(result) {
-                alert("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("请求服务器过程中出错:" + result.responseText);
             })
             .always(function() {
             	
@@ -62,14 +63,15 @@ $(document).ready(function(){
         })
             .done(function(result) {
             	if(result.success){
-            		alert("删除成功");
-            		reload();
+            		Common.Tip("删除成功",function(){
+            			reload();
+            		});
             	}else{
-            		alert(result.message);
+            		Common.Error("删除失败：" +result.message);
             	}
             })
             .fail(function(result) {
-                alert("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("请求服务器过程中出错:" + result.responseText);
             })
             .always(function() {
             	
@@ -88,13 +90,13 @@ $(document).ready(function(){
             		//填充到表单中
                 	setUpdateSalesman(result);
             	}else{
-            		alert(result.message);
+            		Common.Error("获取业务员详情失败：" +result.message);
             	}
             	
             	
             })
             .fail(function(result) {
-                alert("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("请求服务器过程中出错:" + result.responseText);
             })
             .always(function() {
             	
@@ -114,14 +116,15 @@ $(document).ready(function(){
         })
             .done(function(result) {
             	if(result.success){
-            		alert("删除成功");
-            		reload();
+            		Common.Tip("删除成功",function(){
+            			reload();
+            		});
             	}else{
-            		alert(result.message);
+            		Common.Error("删除失败：" +result.message);
             	}
             })
             .fail(function(result) {
-                alert("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("请求服务器过程中出错:" + result.responseText);
             })
             .always(function() {
             	
@@ -140,13 +143,13 @@ $(document).ready(function(){
             		//填充到表单中
                 	setUpdateUser(result);
             	}else{
-            		alert(result.message);
+            		Common.Error("获取用户详情失败：" +result.message);
             	}
             	
             	
             })
             .fail(function(result) {
-                alert("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("请求服务器过程中出错:" + result.responseText);
             })
             .always(function() {
             	
@@ -166,14 +169,15 @@ $(document).ready(function(){
         })
             .done(function(result) {
             	if(result.success){
-            		alert("删除成功");
-            		reload();
+            		Common.Tip("删除成功",function(){
+            			reload();
+            		});
             	}else{
-            		alert(result.message);
+            		Common.Error("删除失败：" + result.message);
             	}
             })
             .fail(function(result) {
-                alert("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("请求服务器过程中出错:" + result.responseText);
             })
             .always(function() {
             	
@@ -192,13 +196,13 @@ $(document).ready(function(){
             		//填充到表单中
                 	setUpdateGongxu(result);
             	}else{
-            		alert(result.message);
+            		Common.Error("获取工序详情失败：" + result.message);
             	}
             	
             	
             })
             .fail(function(result) {
-                alert("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("请求服务器过程中出错:" + result.responseText);
             })
             .always(function() {
             	
@@ -218,6 +222,9 @@ function setAddCompany(){
 	$("#companys .formwidget .panel-title").text("添加公司");
 	$form.unbind("submit");
 	$form.submit(function(){
+		if(!Common.checkform(this)){
+			return false;
+		}
 		$submitBtn.button('loading');
 		var formdata = $(this).serializeJson();
 		delete formdata.id;
@@ -228,14 +235,15 @@ function setAddCompany(){
         })
             .done(function(result) {
             	if(result.success){
-            		alert("添加成功");
-            		reload();
+            		Common.Tip("添加成功",function(){
+            			reload();
+            		});
             	}else{
-            		alert(result.message);
+            		Common.Error("添加失败：" + result.message);
             	}
             })
             .fail(function(result) {
-                alert("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("请求服务器过程中出错:" + result.responseText);
             })
             .always(function() {
             	$submitBtn.button('reset');
@@ -260,6 +268,9 @@ function setUpdateCompany(result){
 	
 	$form.unbind("submit");
 	$form.submit(function(){
+		if(!Common.checkform(this)){
+			return false;
+		}
 		$submitBtn.button('loading');
 		var formdata = $(this).serialize();
 		$.ajax({
@@ -269,14 +280,15 @@ function setUpdateCompany(result){
         })
             .done(function(result) {
             	if(result.success){
-            		alert("修改成功");
-            		reload();
+            		Common.Tip("修改成功",function(){
+            			reload();
+            		});
             	}else{
-            		alert(result.message);
+            		Common.Error("修改失败：" + result.message);
             	}
             })
             .fail(function(result) {
-                alert("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("请求服务器过程中出错:" + result.responseText);
             })
             .always(function() {
             	$submitBtn.button('reset');
@@ -295,6 +307,9 @@ function setAddSalesman(){
 	$("#salesmans .formwidget .panel-title").text("添加业务员");
 	$form.unbind("submit");
 	$form.submit(function(){
+		if(!Common.checkform(this)){
+			return false;
+		}
 		$submitBtn.button('loading');
 		var formdata = $(this).serializeJson();
 		delete formdata.id;
@@ -305,14 +320,15 @@ function setAddSalesman(){
         })
             .done(function(result) {
             	if(result.success){
-            		alert("添加成功");
-            		reload();
+            		Common.Tip("添加成功",function(){
+            			reload();
+            		});
             	}else{
-            		alert(result.message);
+            		Common.Error("添加失败：" + result.message);
             	}
             })
             .fail(function(result) {
-                alert("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("请求服务器过程中出错:" + result.responseText);
             })
             .always(function() {
             	$submitBtn.button('reset');
@@ -337,6 +353,9 @@ function setUpdateSalesman(result){
 	
 	$form.unbind("submit");
 	$form.submit(function(){
+		if(!Common.checkform(this)){
+			return false;
+		}
 		$submitBtn.button('loading');
 		var formdata = $(this).serialize();
 		$.ajax({
@@ -346,14 +365,15 @@ function setUpdateSalesman(result){
         })
             .done(function(result) {
             	if(result.success){
-            		alert("修改成功");
-            		reload();
+            		Common.Tip("修改成功",function(){
+            			reload();
+            		});
             	}else{
-            		alert(result.message);
+            		Common.Error("修改失败：" + result.message);
             	}
             })
             .fail(function(result) {
-                alert("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("请求服务器过程中出错:" + result.responseText);
             })
             .always(function() {
             	$submitBtn.button('reset');
@@ -373,6 +393,9 @@ function setAddUser(){
 	$("#users .formwidget .panel-title").text("添加用户");
 	$form.unbind("submit");
 	$form.submit(function(){
+		if(!Common.checkform(this)){
+			return false;
+		}
 		$submitBtn.button('loading');
 		var formdata = $(this).serializeJson();
 		delete formdata.id;
@@ -383,14 +406,15 @@ function setAddUser(){
         })
             .done(function(result) {
             	if(result.success){
-            		alert("添加成功");
-            		reload();
+            		Common.Tip("添加成功",function(){
+            			reload();
+            		});
             	}else{
-            		alert(result.message);
+            		Common.Error("添加失败：" + result.message);
             	}
             })
             .fail(function(result) {
-                alert("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("请求服务器过程中出错:" + result.responseText);
             })
             .always(function() {
             	$submitBtn.button('reset');
@@ -415,6 +439,9 @@ function setUpdateUser(result){
 	
 	$form.unbind("submit");
 	$form.submit(function(){
+		if(!Common.checkform(this)){
+			return false;
+		}
 		$submitBtn.button('loading');
 		var formdata = $(this).serialize();
 		$.ajax({
@@ -424,14 +451,15 @@ function setUpdateUser(result){
         })
             .done(function(result) {
             	if(result.success){
-            		alert("修改成功");
-            		reload();
+            		Common.Tip("修改成功",function(){
+            			reload();
+            		});
             	}else{
-            		alert(result.message);
+            		Common.Error("修改失败：" + result.message);
             	}
             })
             .fail(function(result) {
-                alert("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("请求服务器过程中出错:" + result.responseText);
             })
             .always(function() {
             	$submitBtn.button('reset');
@@ -450,6 +478,9 @@ function setAddGongxu(){
 	$("#gongxus .formwidget .panel-title").text("添加工序");
 	$form.unbind("submit");
 	$form.submit(function(){
+		if(!Common.checkform(this)){
+			return false;
+		}
 		$submitBtn.button('loading');
 		var formdata = $(this).serializeJson();
 		delete formdata.id;
@@ -460,14 +491,15 @@ function setAddGongxu(){
         })
             .done(function(result) {
             	if(result.success){
-            		alert("添加成功");
-            		reload();
+            		Common.Tip("添加成功",function(){
+            			reload();
+            		});
             	}else{
-            		alert(result.message);
+            		Common.Error("添加失败：" + result.message);
             	}
             })
             .fail(function(result) {
-                alert("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("请求服务器过程中出错:" + result.responseText);
             })
             .always(function() {
             	$submitBtn.button('reset');
@@ -492,6 +524,9 @@ function setUpdateGongxu(result){
 	
 	$form.unbind("submit");
 	$form.submit(function(){
+		if(!Common.checkform(this)){
+			return false;
+		}
 		$submitBtn.button('loading');
 		var formdata = $(this).serialize();
 		$.ajax({
@@ -501,14 +536,15 @@ function setUpdateGongxu(result){
         })
             .done(function(result) {
             	if(result.success){
-            		alert("修改成功");
-            		reload();
+            		Common.Tip("修改成功",function(){
+            			reload();
+            		});
             	}else{
-            		alert(result.message);
+            		Common.Error("修改失败：" + result.message);
             	}
             })
             .fail(function(result) {
-                alert("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("请求服务器过程中出错:" + result.responseText);
             })
             .always(function() {
             	$submitBtn.button('reset');

@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fuwei.commons.SystemCache;
+import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.entity.Company;
 import com.fuwei.entity.Role;
+import com.fuwei.entity.User;
 import com.fuwei.service.CompanyService;
 import com.fuwei.service.RoleService;
 import com.fuwei.util.DateTool;
@@ -28,10 +31,12 @@ public class RoleController extends BaseController {
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> add(Role role, HttpServletRequest request,
+	public Map<String,Object> add(Role role,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
 		role.setCreated_at(DateTool.now());
 		role.setUpdated_at(DateTool.now());
+		role.setCreated_user(user.getId());
 		int success = roleService.add(role);
 		
 		//更新缓存

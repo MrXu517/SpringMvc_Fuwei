@@ -5,6 +5,7 @@
 <%@page import="com.fuwei.entity.GongXu"%>
 <%@page import="com.fuwei.entity.User"%>
 <%@page import="com.fuwei.entity.Role"%>
+<%@page import="com.fuwei.commons.SystemCache"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -37,7 +38,7 @@
 
 	</head>
 	<body>
-		o<%@ include file="../common/head.jsp"%>
+		<%@ include file="../common/head.jsp"%>
 		<div id="Content">
 			<div class="breadcrumbs" id="breadcrumbs">
 				<ul class="breadcrumb">
@@ -87,21 +88,21 @@
 													<input type="hidden" name="id" id="id" />
 													<div class="form-group">
 														<label for="fullname" class="col-sm-3 control-label">
-															公司全称
+															全称
 														</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" name="fullname"
-																id="fullname" placeholder="公司全称">
+															<input type="text" class="form-control require" name="fullname"
+																id="fullname" placeholder="全称">
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
 													<div class="form-group">
-														<label for="inputPassword3" class="col-sm-3 control-label">
-															英文名称
+														<label for="shortname" class="col-sm-3 control-label">
+															简称
 														</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control"
-																id="inputPassword3" placeholder="英文名称">
+															<input type="text" class="form-control require"
+																id="shortname" name="shortname" placeholder="简称">
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -110,7 +111,7 @@
 															公司地址
 														</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" name="address"
+															<input type="text" class="form-control require" name="address"
 																id="address" placeholder="公司地址">
 														</div>
 														<div class="col-sm-1"></div>
@@ -121,7 +122,7 @@
 															所在城市
 														</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" name="city"
+															<input type="text" class="form-control require" name="city"
 																id="city" placeholder="所在城市">
 														</div>
 														<div class="col-sm-1"></div>
@@ -168,6 +169,9 @@
 															简称
 														</th>
 														<th>
+														 拼音
+														</th>
+														<th>
 															操作
 														</th>
 													</tr>
@@ -180,6 +184,7 @@
 													<tr>
 														<td><%=c_i%></td>
 														<td><%=company.getFullname()%></td>
+														<td><%=company.getShortname()%></td>
 														<td><%=company.getHelp_code()%></td>
 														<td>
 															<a class="editcompany" href="#"
@@ -218,7 +223,7 @@
 															公司
 														</label>
 														<div class="col-sm-8">
-															<select class="form-control" name="companyId"
+															<select class="form-control require" name="companyId"
 																id="companyId">
 																<%
 for(Company company : companylist){
@@ -236,27 +241,18 @@ for(Company company : companylist){
 															姓名
 														</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" name="name"
+															<input type="text" class="form-control require" name="name"
 																id="name" placeholder="名称">
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
-													<div class="form-group">
-														<label for="help_code" class="col-sm-3 control-label">
-															简称
-														</label>
-														<div class="col-sm-8">
-															<input type="text" class="form-control" name="help_code"
-																id="help_code" placeholder="简称">
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
+													
 													<div class="form-group">
 														<label for="tel" class="col-sm-3 control-label">
 															电话
 														</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="tel"
+															<input type="text" class="form-control require" id="tel"
 																name="tel" placeholder="电话，手机">
 														</div>
 														<div class="col-sm-1"></div>
@@ -300,7 +296,10 @@ for(Company company : companylist){
 															姓名
 														</th>
 														<th>
-															简称
+															拼音
+														</th>
+														<th style="display:none;">
+															创建人
 														</th>
 														<th>
 															操作
@@ -313,9 +312,10 @@ for(Company company : companylist){
 														for (Salesman salesman : salesmanlist) {
 													%>
 													<tr>
-														<td><%=c_i%></td>
+														<td><%=s_i%></td>
 														<td><%=salesman.getName()%></td>
 														<td><%=salesman.getHelp_code()%></td>
+														<td style="display:none;"><%=SystemCache.getUserName(salesman.getCreated_user()) %></td>
 														<td>
 															<a class="editSalesman" href="#"
 																data-cid="<%=salesman.getId()%>">编辑</a> |
@@ -354,7 +354,7 @@ for(Company company : companylist){
 															角色
 														</label>
 														<div class="col-sm-8">
-															<select class="form-control" id="roleId" name="roleId">
+															<select class="form-control require" id="roleId" name="roleId">
 <%
 for(Role role : rolelist){
  %>
@@ -366,22 +366,22 @@ for(Role role : rolelist){
 														<div class="col-sm-1"></div>
 													</div>
 													<div class="form-group">
-														<label for="name" class="col-sm-3 control-label">
-															姓名
+														<label for="username" class="col-sm-3 control-label">
+															用户名
 														</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" name="name"
-																id="name" placeholder="名称">
+															<input type="text" class="form-control require" name="username"
+																id="username" placeholder="用户名">
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
 													<div class="form-group">
-														<label for="help_code" class="col-sm-3 control-label">
-															简称
+														<label for="name" class="col-sm-3 control-label">
+															姓名
 														</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" name="help_code"
-																id="help_code" placeholder="简称">
+															<input type="text" class="form-control require" name="name"
+																id="name" placeholder="姓名">
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -390,12 +390,31 @@ for(Role role : rolelist){
 															电话
 														</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="tel"
+															<input type="text" class="form-control require" id="tel"
 																name="tel" placeholder="电话，手机">
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
-
+<div class="form-group">
+														<label for="email" class="col-sm-3 control-label">
+															邮箱
+														</label>
+														<div class="col-sm-8">
+															<input type="Email" class="form-control require" id="email"
+																name="email" placeholder="邮箱">
+														</div>
+														<div class="col-sm-1"></div>
+													</div>
+<div class="form-group">
+														<label for="qq" class="col-sm-3 control-label">
+															QQ
+														</label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control require" id="qq"
+																name="qq" placeholder="QQ">
+														</div>
+														<div class="col-sm-1"></div>
+													</div>
 													<div class="form-group">
 														<div class="col-sm-offset-3 col-sm-5">
 															<button type="submit" class="btn btn-primary"
@@ -434,7 +453,7 @@ for(Role role : rolelist){
 															姓名
 														</th>
 														<th>
-															简称
+															拼音
 														</th>
 														<th>
 															操作
@@ -447,14 +466,25 @@ for(Role role : rolelist){
 														for (User i_user : userlist) {
 													%>
 													<tr>
-														<td><%=c_i%></td>
+														<td><%=u_i%></td>
 														<td><%=i_user.getName()%></td>
 														<td><%=i_user.getHelp_code()%></td>
 														<td>
 															<a class="editUser" href="#"
 																data-cid="<%=i_user.getId()%>">编辑</a> |
 															<a class="deleteUser" href="#"
-																data-cid="<%=i_user.getId()%>">删除</a>
+																data-cid="<%=i_user.getId()%>">删除</a> |
+															<%
+															if(i_user.getInUse()){
+															 %>
+															<a class="cancelUser" href="#"
+																data-cid="<%=i_user.getId()%>">注销</a>
+															<%} else{
+															%>
+															<a class="enableUser" href="#"
+																data-cid="<%=i_user.getId()%>">启用</a>
+															<%}
+															%>
 														</td>
 													</tr>
 													<%
@@ -486,7 +516,7 @@ for(Role role : rolelist){
 															名称
 														</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" name="name"
+															<input type="text" class="form-control require" name="name"
 																id="name" placeholder="名称">
 														</div>
 														<div class="col-sm-1"></div>
@@ -540,7 +570,7 @@ for(Role role : rolelist){
 														for (GongXu gongxu : gongxulist) {
 													%>
 													<tr>
-														<td><%=c_i%></td>
+														<td><%=g_i%></td>
 														<td><%=gongxu.getName()%></td>
 														<td>
 															<a class="editGongxu" href="#"

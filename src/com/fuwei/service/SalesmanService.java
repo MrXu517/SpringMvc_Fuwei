@@ -48,7 +48,9 @@ public class SalesmanService extends BaseService  {
 	// 编辑公司
 	public int update(Salesman salesman) throws Exception {
 		try{
-			return this.update(salesman, "id", null);
+			return dao.update("UPDATE tb_salesman SET name=?,companyId=?, tel=?,updated_at=?,help_code=? WHERE  id = ?",
+					salesman.getName(),salesman.getCompanyId(),salesman.getTel(),salesman.getUpdated_at(),salesman.getHelp_code(),
+					salesman.getId());
 		}catch(Exception e){
 			throw e;
 		}

@@ -30,6 +30,7 @@ import com.fuwei.service.ModuleService;
 import com.fuwei.service.RoleService;
 import com.fuwei.service.UserService;
 import com.fuwei.util.DateTool;
+import com.fuwei.util.HanyuPinyinUtil;
 import com.fuwei.util.SerializeTool;
 
 @RequestMapping("/user")
@@ -100,6 +101,8 @@ public class UserController extends BaseController {
 	@ResponseBody
 	public Map<String,Object> add(User user, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
+		user.setHelp_code(HanyuPinyinUtil.getFirstSpellByString(user.getName())) ;
+		user.setInUse(true);
 		user.setCreated_at(DateTool.now());
 		user.setUpdated_at(DateTool.now());
 		int success = userService.add(user);
@@ -137,6 +140,7 @@ public class UserController extends BaseController {
 	@ResponseBody
 	public Map<String,Object> update(User user, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
+		user.setHelp_code(HanyuPinyinUtil.getFirstSpellByString(user.getName())) ;
 		user.setUpdated_at(DateTool.now());
 		int success = userService.update(user);
 		
@@ -147,4 +151,45 @@ public class UserController extends BaseController {
 		
 	}
 	
+	//注销用户
+	@RequestMapping(value = "/cancel/{id}", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> cancel(@PathVariable int id, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		int success = userService.cancel(id);
+		
+		//更新缓存
+		new SystemCache().initUserList();
+		
+		return this.returnSuccess();
+		
+	}
+	
+	//启用用户
+	@RequestMapping(value = "/enable/{id}", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> enable(@PathVariable int id, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		int success = userService.enable(id);
+		
+		//更新缓存
+		new SystemCache().initUserList();
+		
+		return this.returnSuccess();
+		
+	}
+	
+	@RequestMapping(value = "login/cancel", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> cancel(HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		int success = userService.cancel(user.getId());
+		
+		//更新缓存
+		new SystemCache().initUserList();
+		
+		return this.returnSuccess();
+		
+	}
 }

@@ -22,106 +22,161 @@ import com.fuwei.service.SalesmanService;
 import com.fuwei.service.UserService;
 
 public class SystemCache {
-	
+
 	CompanyService companyService;
-	
+
 	UserService userService;
-	
+
 	SalesmanService salesmanService;
-	
+
 	GongXuService gongXuService;
-	
+
 	RoleService roleService;
-	
-	public SystemCache(){
-		companyService = (CompanyService)SystemContextUtils.getBean(CompanyService.class);
-		userService = (UserService)SystemContextUtils.getBean(UserService.class);
-		salesmanService = (SalesmanService)SystemContextUtils.getBean(SalesmanService.class);
-		gongXuService = (GongXuService)SystemContextUtils.getBean(GongXuService.class);
-		roleService = (RoleService)SystemContextUtils.getBean(RoleService.class);
+
+	public SystemCache() {
+		companyService = (CompanyService) SystemContextUtils
+				.getBean(CompanyService.class);
+		userService = (UserService) SystemContextUtils
+				.getBean(UserService.class);
+		salesmanService = (SalesmanService) SystemContextUtils
+				.getBean(SalesmanService.class);
+		gongXuService = (GongXuService) SystemContextUtils
+				.getBean(GongXuService.class);
+		roleService = (RoleService) SystemContextUtils
+				.getBean(RoleService.class);
 	}
-	//缓存需要重新登录的用户
-	public static Map<Integer,String[]> reloginList = new HashMap<Integer,String[]>();//需要重新登录的user，以及错误信息。
-	
-	//缓存公司
+
+	// 缓存需要重新登录的用户
+	public static Map<Integer, String[]> reloginList = new HashMap<Integer, String[]>();// 需要重新登录的user
+																						// ，
+																						// 以及错误信息
+																						// 。
+
+	// 缓存公司
 	public static List<Company> companylist = new ArrayList<Company>();
-	
-	//缓存工艺
+
+	// 缓存工艺
 	public static List<GongXu> gongxulist = new ArrayList<GongXu>();
-	
-	//缓存用户
+
+	// 缓存用户
 	public static List<User> userlist = new ArrayList<User>();
-	
-	//缓存业务员
+
+	// 缓存业务员
 	public static List<Salesman> salesmanlist = new ArrayList<Salesman>();
-	
-	//缓存角色
+
+	// 缓存角色
 	public static List<Role> rolelist = new ArrayList<Role>();
-	
-	
-	public static Boolean checkRelogin(Integer user_id){
+
+	public static Boolean checkRelogin(Integer user_id) {
 		String[] errorcodes = reloginList.get(user_id);
-		if(errorcodes!=null && errorcodes.length>0){
+		if (errorcodes != null && errorcodes.length > 0) {
 			return true;
 		}
 		return false;
 	}
-	
-	public static void pushRelogin(Integer user_id,String error_code){
+
+	public static void pushRelogin(Integer user_id, String error_code) {
 		String[] errorcodes = reloginList.get(user_id);
-		if(errorcodes==null){
-			errorcodes = new String[]{};
+		if (errorcodes == null) {
+			errorcodes = new String[] {};
 		}
 		errorcodes[error_code.length()] = error_code;
 		reloginList.put(user_id, errorcodes);
 	}
-	
-	public static void removeRelogin(Integer user_id){
+
+	public static void removeRelogin(Integer user_id) {
 		String[] errorcodes = reloginList.get(user_id);
-		if(errorcodes!=null && errorcodes.length>0){
+		if (errorcodes != null && errorcodes.length > 0) {
 			reloginList.remove(user_id);
 		}
 	}
 
-	public static void addCompany(Company company){
+	public static void addCompany(Company company) {
 		companylist.add(company);
 	}
-	public static void updateCompany(Company company){
+
+	public static void updateCompany(Company company) {
 		companylist.add(company);
 	}
-	public static void removeCompany(Company company){
+
+	public static void removeCompany(Company company) {
 		companylist.remove(company);
 	}
-	
-	public void init() throws Exception{
+
+	public void init() throws Exception {
 		initCompanyList();
 		initSalesmanList();
 		initGongxuList();
 		initUserList();
 		initRoleList();
 	}
-	
-	public void reload() throws Exception{
+
+	public void reload() throws Exception {
 		init();
 	}
-	
-	public void initCompanyList() throws Exception{
-		SystemCache.companylist = companyService.getList(); //companylist;
+
+	public void initCompanyList() throws Exception {
+		SystemCache.companylist = companyService.getList(); // companylist;
+	}
+
+	public void initSalesmanList() throws Exception {
+		SystemCache.salesmanlist = salesmanService.getList();// salesmanlist;
+	}
+
+	public void initGongxuList() throws Exception {
+		SystemCache.gongxulist = gongXuService.getList(); // gongxulist;
+	}
+
+	public void initUserList() throws Exception {
+		SystemCache.userlist = userService.getList(); // userlist;
+	}
+
+	public void initRoleList() throws Exception {
+		SystemCache.rolelist = roleService.getList(); // userlist;
+	}
+
+	public static String getUserName(int userid) {
+
+		for (int i = 0; i < SystemCache.userlist.size(); ++i) {
+			User temp = SystemCache.userlist.get(i);
+			if (temp.getId() == userid) {
+				return temp.getName();
+			}
+		}
+		return "";
+	}
+
+	public static String getSalesmanName(int userid) {
+
+		for (int i = 0; i < SystemCache.salesmanlist.size(); ++i) {
+			Salesman temp = SystemCache.salesmanlist.get(i);
+			if (temp.getId() == userid) {
+				return temp.getName();
+			}
+		}
+		return "";
+	}
+
+	public static String getCompanyName(int userid) {
+
+		for (int i = 0; i < SystemCache.companylist.size(); ++i) {
+			Company temp = SystemCache.companylist.get(i);
+			if (temp.getId() == userid) {
+				return temp.getFullname();
+			}
+		}
+		return "";
 	}
 	
-	public void initSalesmanList() throws Exception{
-		SystemCache.salesmanlist =  salesmanService.getList();//salesmanlist;
+	public static String getGongxuName(int userid) {
+
+		for (int i = 0; i < SystemCache.gongxulist.size(); ++i) {
+			GongXu temp = SystemCache.gongxulist.get(i);
+			if (temp.getId() == userid) {
+				return temp.getName();
+			}
+		}
+		return "";
 	}
 	
-	public void initGongxuList() throws Exception{
-		SystemCache.gongxulist = gongXuService.getList(); //gongxulist;
-	}
-	
-	public void initUserList() throws Exception{
-		SystemCache.userlist = userService.getList(); //userlist;
-	}
-	
-	public void initRoleList() throws Exception{
-		SystemCache.rolelist = roleService.getList(); //userlist;
-	}
 }

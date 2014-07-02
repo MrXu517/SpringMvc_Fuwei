@@ -13,7 +13,7 @@
 <html>
 
 	<head>
-		
+
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<!-- 为了让IE浏览器运行最新的渲染模式 -->
@@ -34,6 +34,69 @@
 	<div style="display: none;" class="background"></div>
 	<div style="display: none;" class="loading">
 		数据加载中，请稍等......
+	</div>
+
+	<div id="alert">
+		<div id="alert_tip">
+			<div class="modal fade">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">
+								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+							</button>
+							<h4 class="modal-title">
+								桐庐富伟针织厂
+							</h4>
+						</div>
+						<div class="modal-body">
+							<p>
+								One fine body&hellip;
+							</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default"
+								data-dismiss="modal">
+								关闭
+							</button>
+						</div>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal-dialog -->
+			</div>
+			<!-- /.modal -->
+		</div>
+		<div id="alert_error">
+			<div class="modal fade">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">
+								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+							</button>
+							<h4 class="modal-title">
+								桐庐富伟针织厂
+							</h4>
+						</div>
+						<div class="modal-body">
+							<p>
+								One error body&hellip;
+							</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default"
+								data-dismiss="modal">
+								关闭
+							</button>
+						</div>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal-dialog -->
+			</div>
+			<!-- /.modal -->
+		</div>
 	</div>
 	<div id="header">
 		<div class="headnav">

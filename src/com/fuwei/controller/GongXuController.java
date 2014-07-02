@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,13 +14,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fuwei.commons.SystemCache;
+import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.entity.Company;
 import com.fuwei.entity.GongXu;
 import com.fuwei.entity.Salesman;
+import com.fuwei.entity.User;
 import com.fuwei.service.CompanyService;
 import com.fuwei.service.GongXuService;
 import com.fuwei.service.SalesmanService;
 import com.fuwei.util.DateTool;
+import com.fuwei.util.HanyuPinyinUtil;
 
 @RequestMapping("/gongxu")
 @Controller
@@ -30,10 +34,12 @@ public class GongXuController extends BaseController {
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> add(GongXu gongxu, HttpServletRequest request,
+	public Map<String,Object> add(GongXu gongxu,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
 		gongxu.setCreated_at(DateTool.now());
 		gongxu.setUpdated_at(DateTool.now());
+		gongxu.setCreated_user(user.getId());
 		int success = gongxuService.add(gongxu);
 		
 		//更新缓存

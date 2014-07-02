@@ -19,6 +19,19 @@ public class Role implements Serializable {
 	private String decription;//角色描述
 	private Date created_at;// 创建时间
 	private Date updated_at;// 最近更新时间
+	
+	private int created_user;//创建用户
+	
+	
+	
+	public int getCreated_user() {
+		return created_user;
+	}
+
+	public void setCreated_user(int created_user) {
+		this.created_user = created_user;
+	}
+	
 	public int getId() {
 		return id;
 	}
