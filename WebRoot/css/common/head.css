@@ -152,7 +152,7 @@ body{
      right: 5px;
  }
  .left_mini + #Content {
-     left:43px;
+     margin-left: 43px;
  }
 /*导航条*/ /*左边栏的导航*/
 .menubar {
