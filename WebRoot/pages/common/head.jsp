@@ -160,15 +160,7 @@
 							<%
 								//}else{
 							%>
-							<li>
-								<a href="searchSample.do"><i class="fa fa-dashboard"></i>样品管理</a>
-							</li>
-							<li>
-								<a href="addSample.jsp"><i class="fa fa-plus"></i>新增样品</a>
-							</li>
-							<li>
-								<a href="searchUnPricedSample.do"><i class="fa fa-edit"></i>待核价样品</a>
-							</li>
+						
 							<li>
 								<a href="searchTransQuotation.do"><i
 									class="fa fa-shopping-cart"></i>样品车</a>
@@ -200,6 +192,11 @@
 					<li>
 						<a href="systeminfo/index"><i class="fa fa-list-alt"></i>系统信息管理</a>
 					</li>
+					
+					<li>
+						<a href="authority/index"><i class="fa fa-lock"></i>权限设置</a>
+					</li>
+
 					<%
 						//}
 					%>
