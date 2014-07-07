@@ -1,6 +1,7 @@
 package com.fuwei.controller;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
+import com.fuwei.constant.Constants;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
 import com.fuwei.service.SampleService;
@@ -34,7 +36,23 @@ public class SampleController extends BaseController {
 	@Autowired
 	SampleService sampleService;
 	
+	//待核价样品列表
+	@RequestMapping(value="/undetailedindex",method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView undetailedindex(HttpSession session,HttpServletRequest request) throws Exception{
+		List<Sample> samplelist = sampleService.getUnDetailList();
+		request.setAttribute("samplelist", samplelist);
+		return new ModelAndView("sample/undetailedindex");
+	}
 	
+	//样品管理列表
+	@RequestMapping(value="/index",method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView index(HttpSession session,HttpServletRequest request) throws Exception{
+		List<Sample> samplelist = sampleService.getList();
+		request.setAttribute("samplelist", samplelist);
+		return new ModelAndView("sample/index");
+	}
 	
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	@ResponseBody
@@ -50,7 +68,7 @@ public class SampleController extends BaseController {
 	public Map<String,Object> add(Sample sample,@RequestParam("file") CommonsMultipartFile file,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String img = fileUpload(file);
+		String img = fileUpload(request,file);
 		sample.setImg(img);
 		sample.setHelp_code(HanyuPinyinUtil.getFirstSpellByString(sample.getName())) ;
 		sample.setCreated_at(DateTool.now());
@@ -106,12 +124,17 @@ public class SampleController extends BaseController {
      * 采用file.Transto 来保存上传的文件
      */
 	
-    public String fileUpload(CommonsMultipartFile file) throws Exception {
+    public String fileUpload(HttpServletRequest request , CommonsMultipartFile file) throws Exception {
          long  startTime=System.currentTimeMillis();
-        System.out.println("fileName："+file.getOriginalFilename());
-        String path="E:/"+new Date().getTime()+file.getOriginalFilename();
         
-        java.io.File newFile=new java.io.File(path);
+        String path = Constants.UPLOADIMGPATH + new Date().getTime() +file.getOriginalFilename();
+        
+        java.io.File pathFile=new java.io.File(request.getSession().getServletContext().getRealPath("/") + Constants.UPLOADIMGPATH);
+        if(!pathFile.exists()){
+        	pathFile.mkdir();
+        }
+        System.out.println("path："+path);
+        java.io.File newFile=new java.io.File(request.getSession().getServletContext().getRealPath("/")  + path);
         //通过CommonsMultipartFile的方法直接写文件（注意这个时候）
         file.transferTo(newFile);
         long  endTime=System.currentTimeMillis();

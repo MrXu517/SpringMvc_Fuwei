@@ -49,7 +49,7 @@
 						<a href="index.jsp">首页</a>
 					</li>
 					<li class="active">
-						样品管理
+						创建样品
 					</li>
 				</ul>
 			</div>
@@ -89,11 +89,11 @@
 												<div class="col-sm-1"></div>
 											</div>
 											<div class="form-group">
-												<label for="memo" class="col-sm-3 control-label">
+												<label for="file" class="col-sm-3 control-label">
 													图片
 												</label>
 												<div class="col-sm-8">
-													<input type="file" name="pic" id="pic" class="require"
+													<input type="file" name="file" id="file" class="require"
 														placeholder="图片" />
 													
 												</div>

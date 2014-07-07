@@ -146,13 +146,13 @@
 								//if(user.getAuthority() == FuweiSystemData.AUTHORITY_GENERAL){
 							%>
 							<li>
-								<a href="searchSample.do"><i class="fa fa-dashboard"></i>样品管理</a>
+								<a href="sample/index"><i class="fa fa-dashboard"></i>样品管理</a>
 							</li>
 							<li>
 								<a href="sample/add"><i class="fa fa-plus"></i>新增样品</a>
 							</li>
 							<li>
-								<a href="searchUnPricedSample.do"><i class="fa fa-edit"></i>待核价样品</a>
+								<a href="sample/undetailedindex"><i class="fa fa-edit"></i>待核价样品</a>
 							</li>
 							<li>
 								<a href="print.jsp"><i class="fa fa-print"></i>快递单打印</a>

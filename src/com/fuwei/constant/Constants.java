@@ -50,4 +50,6 @@ public class Constants {
 	public static final int ORDER_TYPE_TH = 2;
 
 	public static final int ORDER_TYPE_HH = 3;
+	
+	public static final String UPLOADIMGPATH = "upload/";//上传样品图片的路径
 }

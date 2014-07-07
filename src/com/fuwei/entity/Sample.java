@@ -28,10 +28,10 @@ public class Sample implements Serializable {
 	private Date updated_at;// 最近更新时间
 	
 	
-	private int created_user;//创建用户
+	private Integer created_user;//创建用户
 	
 	
-	private int charge_user;//打样人
+	private Integer charge_user;//打样人
 	
 	private String detail;//报价详情
 	
@@ -135,16 +135,16 @@ public class Sample implements Serializable {
 	public void setCost(double cost) {
 		this.cost = cost;
 	}
-	public int getCreated_user() {
+	public Integer getCreated_user() {
 		return created_user;
 	}
-	public void setCreated_user(int created_user) {
+	public void setCreated_user(Integer created_user) {
 		this.created_user = created_user;
 	}
-	public int getCharge_user() {
+	public Integer getCharge_user() {
 		return charge_user;
 	}
-	public void setCharge_user(int charge_user) {
+	public void setCharge_user(Integer charge_user) {
 		this.charge_user = charge_user;
 	}
 

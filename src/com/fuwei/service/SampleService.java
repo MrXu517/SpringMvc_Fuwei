@@ -17,9 +17,9 @@ public class SampleService extends BaseService{
 	// 获取待核价列表 has_detail = false
 	public List<Sample> getUnDetailList() throws Exception {
 		try {
-			List<Sample> companyList = dao.queryForBeanList(
-					"SELECT * FROM tb_sample WHERE has_detail=false", Sample.class);
-			return companyList;
+			List<Sample> sampleList = dao.queryForBeanList(
+					"SELECT * FROM tb_sample WHERE has_detail=0", Sample.class);
+			return sampleList;
 		} catch (Exception e) {
 			throw e;
 		}
@@ -28,9 +28,9 @@ public class SampleService extends BaseService{
 	// 获取首页的样品列表 has_detail = true
 	public List<Sample> getList() throws Exception {
 		try {
-			List<Sample> companyList = dao.queryForBeanList(
-					"SELECT * FROM tb_sample WHERE has_detail=true", Sample.class);
-			return companyList;
+			List<Sample> sampleList = dao.queryForBeanList(
+					"SELECT * FROM tb_sample WHERE has_detail=1", Sample.class);
+			return sampleList;
 		} catch (Exception e) {
 			throw e;
 		}

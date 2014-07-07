@@ -49,7 +49,7 @@
 						<a href="index.jsp">首页</a>
 					</li>
 					<li class="active">
-						样品管理
+						待核价样品
 					</li>
 				</ul>
 			</div>
@@ -90,6 +90,9 @@
 										<th>
 											创建时间
 										</th>
+										<th>
+											操作
+										</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -111,6 +114,7 @@
 										<td><%=sample.getSize()%></td>
 										<td><%=sample.getCharge_user()%></td>
 										<td><%=sample.getCreated_at()%></td>
+										<td><a href="#">核价</a> | <a href="#">编辑</a> | <a href="#">删除</a></td>
 									</tr>
 									<%
 										}
