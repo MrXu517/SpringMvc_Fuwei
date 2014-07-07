@@ -21,15 +21,15 @@ public class Module implements Serializable{
 	private String decription;//模块描述
 	private boolean inUse;//是否启用
 	
-	private int created_user;//创建用户
+	private Integer created_user;//创建用户
 	
 	
 	
-	public int getCreated_user() {
+	public Integer getCreated_user() {
 		return created_user;
 	}
 
-	public void setCreated_user(int created_user) {
+	public void setCreated_user(Integer created_user) {
 		this.created_user = created_user;
 	}
 	

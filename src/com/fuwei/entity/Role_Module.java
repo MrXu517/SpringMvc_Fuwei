@@ -20,15 +20,15 @@ public class Role_Module implements Serializable {
 	
 	private int moduleId;
 	
-	private int created_user;//创建用户
+	private Integer created_user;//创建用户
 	
 	
 	
-	public int getCreated_user() {
+	public Integer getCreated_user() {
 		return created_user;
 	}
 
-	public void setCreated_user(int created_user) {
+	public void setCreated_user(Integer created_user) {
 		this.created_user = created_user;
 	}
 

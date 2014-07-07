@@ -7,7 +7,7 @@ import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
 
 @Table("tb_company")
-public class Company {
+public class Company implements Serializable {
 
 	/**
 	 * 

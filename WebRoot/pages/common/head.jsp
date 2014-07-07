@@ -149,7 +149,7 @@
 								<a href="searchSample.do"><i class="fa fa-dashboard"></i>样品管理</a>
 							</li>
 							<li>
-								<a href="addSample.jsp"><i class="fa fa-plus"></i>新增样品</a>
+								<a href="sample/add"><i class="fa fa-plus"></i>新增样品</a>
 							</li>
 							<li>
 								<a href="searchUnPricedSample.do"><i class="fa fa-edit"></i>待核价样品</a>

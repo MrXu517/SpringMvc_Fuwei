@@ -80,7 +80,7 @@
 	</bean>
 
 
-	<!-- 上传文件大小 -->
+	<!-- 多部分文件上传 上传文件大小 -->
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="defaultEncoding">
@@ -94,7 +94,6 @@
 		</property>
 	</bean>
 
-
 	<!-- 事务配置 -->
 	<!-- 配置事务管理器 -->
 	<bean id="transactionManager"
@@ -103,13 +102,15 @@
 	</bean>
 
 
+	
+
+	
 	<aop:config>
 		<aop:pointcut id="businessService"
 			expression="execution(* com.fuwei.service.*.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="businessService" />
 	</aop:config>
-
-
+	
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
 			<tx:method name="delete*" rollback-for="Exception" />
@@ -118,7 +119,7 @@
 			<tx:method name="add*" rollback-for="Exception" />
 			<tx:method name="remove*" rollback-for="Exception" />
 		</tx:attributes>
-	</tx:advice>
+	</tx:advice> 
 
 
 </beans>

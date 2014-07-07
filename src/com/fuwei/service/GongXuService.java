@@ -15,7 +15,7 @@ public class GongXuService extends BaseService {
 	@Autowired
 	JdbcTemplate jdbc;
 
-	// 获取公司列表
+	// 获取工序列表
 	public List<GongXu> getList() throws Exception {
 		try {
 			List<GongXu> gongxuList = dao.queryForBeanList(
