@@ -13,6 +13,12 @@
 
 	List<Sample> samplelist = (List<Sample>) request
 			.getAttribute("samplelist");
+	Integer charge_userId = null;
+	try{
+		charge_userId = Integer.valueOf(request.getParameter("charge_user"));
+	}catch(Exception e){
+		charge_userId = -1;
+	}
 	/*List<Company> companylist = (List<Company>) request
 			.getAttribute("companylist");
 	List<Salesman> salesmanlist = (List<Salesman>) request
@@ -59,6 +65,23 @@
 					<div class="row">
 						<div class="col-md-12 tablewidget">
 							<!-- Table -->
+<form class="form-horizontal sampleform" role="form" enctype="multipart/form-data">
+<div class="form-group col-md-2">
+								<select id="charge_user" class="form-control">
+<option value="">未选择</option>
+									<%for(User tempU : userlist){
+										if(charge_userId == tempU.getId()){
+									 %>
+<option value="<%=tempU.getId()%>" selected="selected"><%=tempU.getName() %></option>
+<%
+}else{
+%>
+<option value="<%=tempU.getId()%>"><%=tempU.getName() %></option>
+<%}
+} %>
+								</select>
+							</div>
+</form>
 							<table class="table table-responsive">
 								<thead>
 									<tr>
@@ -114,7 +137,7 @@
 										<td><%=sample.getSize()%></td>
 										<td><%=sample.getCharge_user()%></td>
 										<td><%=sample.getCreated_at()%></td>
-										<td><a href="#">核价</a> | <a href="#">编辑</a> | <a href="#">删除</a></td>
+										<td><a class="calcuteDetail" href="#">核价</a> | <a href="sample/put/<%=sample.getId() %>">编辑</a> | <a data-cid="<%=sample.getId() %>" class="delete" href="#">删除</a></td>
 									</tr>
 									<%
 										}

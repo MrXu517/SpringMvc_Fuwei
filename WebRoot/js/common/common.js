@@ -584,7 +584,7 @@ Common.Error = function(message, callback) {
 	}
 	$dialog.css("padding-top", paddingtop);
 	$model.hide();
-	$model.modal();
+	$model.modal({keyboard:true});
 
 	$model.on('hidden.bs.modal', function(e) {
 		callback(e);
@@ -604,7 +604,7 @@ Common.Tip = function(message, callback) {
 	}
 	$dialog.css("padding-top", paddingtop);
 	$model.hide();
-	$model.modal();
+	$model.modal({keyboard:true});
 
 	$model.on('hidden.bs.modal', function(e) {
 		callback(e);

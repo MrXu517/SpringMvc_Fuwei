@@ -13,15 +13,15 @@ $(document).ready( function() {
 		}
 		$submitBtn.button('loading');
 		$(this).ajaxSubmit( {
-			url :"sample/add",
+			url :"sample/put",
 			type :'POST',
 			success : function(result) {
 				if (result.success) {
-					Common.Tip("添加成功", function() {
-						reload();
+					Common.Tip("修改成功", function() {
+						location.reload();
 					});
 				} else {
-					Common.Error("添加失败：" + result.message);
+					Common.Error("修改失败：" + result.message);
 				}
 				$submitBtn.button('reset');
 			},

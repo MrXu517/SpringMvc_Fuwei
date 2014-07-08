@@ -1,6 +1,9 @@
 package com.fuwei.service;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,10 +18,17 @@ public class SampleService extends BaseService{
 	JdbcTemplate jdbc;
 	
 	// 获取待核价列表 has_detail = false
-	public List<Sample> getUnDetailList() throws Exception {
+	public List<Sample> getUnDetailList(Integer charge_user) throws Exception {
 		try {
-			List<Sample> sampleList = dao.queryForBeanList(
-					"SELECT * FROM tb_sample WHERE has_detail=0", Sample.class);
+			List<Sample> sampleList = new ArrayList<Sample>();
+			if(charge_user == null){
+				sampleList = dao.queryForBeanList(
+						"SELECT * FROM tb_sample WHERE has_detail=0", Sample.class);
+			}
+			else{
+				sampleList = dao.queryForBeanList(
+						"SELECT * FROM tb_sample WHERE has_detail=0 and charge_user=?", Sample.class,charge_user);
+			}
 			return sampleList;
 		} catch (Exception e) {
 			throw e;
@@ -58,7 +68,7 @@ public class SampleService extends BaseService{
 	// 编辑公司
 	public int update(Sample sample) throws Exception {
 		try{
-			return this.update(sample, "id", "created_user,detail,has_detail,created_at");
+			return this.update(sample, "id", "created_user,detail,has_detail,created_at",true);
 		}catch(Exception e){
 			throw e;
 		}

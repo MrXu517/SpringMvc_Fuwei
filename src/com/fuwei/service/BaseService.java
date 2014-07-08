@@ -207,11 +207,12 @@ public class BaseService {
 	 * @param requiredType
 	 * @param primaryKey
 	 * @param notField
+	 * @param nullget 是否不获取值为null的值
 	 * @return map key值： names,params,values分别为字段名，参数（），值 如是修改则 primaryKey：值
 	 * 
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Map getTypeMap(Object requiredType, String primaryKey, String notField) {
+	private Map getTypeMap(Object requiredType, String primaryKey, String notField,Boolean nullget) {
 		Map map = new HashMap();
 		Class<?> cls = requiredType.getClass();
 		String tableName = cls.isAnnotationPresent(Table.class) ? cls.getAnnotation(Table.class).value() : cls
@@ -238,7 +239,9 @@ public class BaseService {
 			}
 
 			Object val = getValue(cls, requiredType, fileName);
-
+			if(nullget & val == null){
+				continue;
+			}
 			if (field.isAnnotationPresent(Column.class)) {
 				boolean nullable = field.getAnnotation(Column.class).nullable();
 				String length = field.getAnnotation(Column.class).length();
@@ -335,7 +338,7 @@ public class BaseService {
 	 */
 	@SuppressWarnings("rawtypes")
 	protected int insert(Object requiredType) {
-		Map map = getTypeMap(requiredType, null, null);
+		Map map = getTypeMap(requiredType, null, null,false);
 		Object[] obj = (Object[]) map.get("values");
 		String sql = "insert into " + map.get("tableName") + "(" + map.get("names") + ") values (" + map.get("params")
 				+ ")";
@@ -353,7 +356,7 @@ public class BaseService {
 	 */
 	@SuppressWarnings("rawtypes")
 	protected Object insert(Object requiredType, String keyColunmName) {
-		Map map = getTypeMap(requiredType, null, null);
+		Map map = getTypeMap(requiredType, null, null,false);
 		Object[] obj = (Object[]) map.get("values");
 		String sql = "insert into " + map.get("tableName") + "(" + map.get("names") + ") values (" + map.get("params")
 				+ ")";
@@ -373,12 +376,32 @@ public class BaseService {
 	 */
 	@SuppressWarnings("rawtypes")
 	protected int update(Object requiredType, String primaryKey, String notField) {
-		Map map = getTypeMap(requiredType, primaryKey, notField);
+		Map map = getTypeMap(requiredType, primaryKey, notField,false);
 		String sql = "update " + map.get("tableName") + " set " + map.get("names") + " where  " + primaryKey + "=?";
 		Object[] obj = (Object[]) map.get("values");
 		return this.dao.update(sql, obj);
 	}
-
+	
+	/**
+	 * 通用更新方法
+	 * 
+	 * @param requiredType
+	 *            实体
+	 * @param primaryKey
+	 *            主键
+	 * @param notField
+	 *            不更新字段 ,c1,c2,c3,
+	 * @param nullget 是否更新值为null的字段，更新则nullget = false,不更新则true           
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	protected int update(Object requiredType, String primaryKey, String notField,Boolean nullget) {
+		Map map = getTypeMap(requiredType, primaryKey, notField,true);
+		String sql = "update " + map.get("tableName") + " set " + map.get("names") + " where  " + primaryKey + "=?";
+		Object[] obj = (Object[]) map.get("values");
+		return this.dao.update(sql, obj);
+	}
+	
 	/**
 	 * 判断数据是否存在
 	 * 

@@ -1,10 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
-<%@page import="com.fuwei.entity.Company"%>
-<%@page import="com.fuwei.entity.Salesman"%>
-<%@page import="com.fuwei.entity.GongXu"%>
-<%@page import="com.fuwei.entity.User"%>
-<%@page import="com.fuwei.entity.Role"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%
 	String path = request.getContextPath();
@@ -65,7 +60,8 @@
 								</div>
 								<div class="panel-body">
 
-									<form class="form-horizontal sampleform" role="form" enctype="multipart/form-data">
+									<form class="form-horizontal sampleform" role="form"
+										enctype="multipart/form-data">
 										<div class="col-md-7">
 											<div class="form-group">
 												<label for="productNumber" class="col-sm-3 control-label">
@@ -94,7 +90,7 @@
 												<div class="col-sm-8">
 													<input type="file" name="file" id="file" class="require"
 														placeholder="图片" />
-													
+
 												</div>
 												<div class="col-sm-1"></div>
 											</div>
@@ -194,30 +190,9 @@
 												<div class="col-sm-1"></div>
 											</div>
 										</div>
-										<div class="col-md-5">
-
-											<table class="table table-responsive">
-												<thead>
-													<tr>
-														<th>
-															序号
-														</th>
-														<th>
-															公司名称
-														</th>
-														<th>
-															简称
-														</th>
-														<th>
-															拼音
-														</th>
-														<th>
-															操作
-														</th>
-													</tr>
-												</thead>
-
-											</table>
+										<div class="col-md-5" style="width: 400px;" id="previewWidget">
+											<a href="#" class="thumbnail"> <img id="previewImg" alt="400 x 100%">
+											</a>
 										</div>
 									</form>
 								</div>

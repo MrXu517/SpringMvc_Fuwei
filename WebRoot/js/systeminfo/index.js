@@ -1,4 +1,8 @@
 $(document).ready(function(){
+	/*设置当前选中的页*/
+	var $a = $("#left li a[href='systeminfo/index']");
+	setActiveLeft($a.parent("li"));
+	/*设置当前选中的页*/
 	
 	//公司 -- 开始
 	setAddCompany();

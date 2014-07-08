@@ -10,11 +10,14 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -39,9 +42,10 @@ public class SampleController extends BaseController {
 	//待核价样品列表
 	@RequestMapping(value="/undetailedindex",method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView undetailedindex(HttpSession session,HttpServletRequest request) throws Exception{
-		List<Sample> samplelist = sampleService.getUnDetailList();
+	public ModelAndView undetailedindex(Integer charge_user ,HttpSession session,HttpServletRequest request) throws Exception{
+		List<Sample> samplelist = sampleService.getUnDetailList(charge_user);
 		request.setAttribute("samplelist", samplelist);
+		request.setAttribute("userlist", SystemCache.userlist);
 		return new ModelAndView("sample/undetailedindex");
 	}
 	
@@ -114,6 +118,17 @@ public class SampleController extends BaseController {
 	@ResponseBody
 	public Map<String,Object> update(Sample sample, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
+		// 转型为MultipartHttpRequest  
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;  
+        // 获得上传的文件（根据前台的name名称得到上传的文件）  
+        MultiValueMap<String, MultipartFile> multiValueMap = multipartRequest.getMultiFileMap();  
+        List<MultipartFile> file = multiValueMap.get("file");  
+        if(file!=null && !file.isEmpty()){  
+        	String img = fileUpload(request,(CommonsMultipartFile)file.get(0));
+    		sample.setImg(img);
+        }  
+	
+		sample.setHelp_code(HanyuPinyinUtil.getFirstSpellByString(sample.getName())) ;
 		sample.setUpdated_at(DateTool.now());
 		int success = sampleService.update(sample);
 		return this.returnSuccess();
