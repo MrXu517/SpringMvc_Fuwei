@@ -36,7 +36,7 @@
 
 		<script src="js/plugins/jquery-1.10.2.min.js"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
-
+		<script src="js/sample/undetailedindex.js" type="text/javascript"></script>
 
 	</head>
 	<body>

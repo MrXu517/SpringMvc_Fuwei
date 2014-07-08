@@ -12,7 +12,6 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	List<User> userlist = (List<User>) request.getAttribute("userlist");
-
 	/*List<Company> companylist = (List<Company>) request
 			.getAttribute("companylist");
 	List<Salesman> salesmanlist = (List<Salesman>) request

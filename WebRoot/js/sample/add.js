@@ -1,4 +1,9 @@
 $(document).ready(function(){
+	/*设置当前选中的页*/
+	var $a = $("#left li a[href='sample/add']");
+	setActiveLeft($a.parent("li"));
+	/*设置当前选中的页*/
+	
 	var $form = $(".sampleform");
 	var $submitBtn = $form.find("[type='submit']");
 	$form.unbind("submit");

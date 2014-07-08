@@ -42,3 +42,9 @@ $(document).ready(function() {
     });
   //下拉框
 });
+
+function setActiveLeft($li){
+	$("#left .menubar li").removeClass("active");
+	$li.addClass("active");
+	$li.closest(".li_dropdown").addClass("show");
+}
