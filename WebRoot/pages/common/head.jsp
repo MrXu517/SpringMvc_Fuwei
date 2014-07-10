@@ -51,7 +51,7 @@
 						</div>
 						<div class="modal-body">
 							<p>
-								One fine body&hellip;
+								提示
 							</p>
 						</div>
 						<div class="modal-footer">
@@ -81,7 +81,7 @@
 						</div>
 						<div class="modal-body">
 							<p>
-								One error body&hellip;
+								发生错误
 							</p>
 						</div>
 						<div class="modal-footer">

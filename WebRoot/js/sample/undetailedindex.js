@@ -36,4 +36,41 @@ $(document).ready(function(){
 		location = location.pathname+"?charge_user="+this.value;
 	});
 	//打样人改变事件
+	
+	//核价按钮 -- 开始
+	$(".calcuteDetail").click(function(){
+		var $model = $('#priceDialog>div.modal');
+		var $dialog = $model.find('.modal-dialog');
+		var paddingtop = 0;
+		$model.show();
+		paddingtop = ($model.height() - $dialog.outerHeight()) / 2;
+		if (paddingtop < 30) {
+			paddingtop = 30;
+		}
+		$dialog.css("padding-top", paddingtop);
+		$model.hide();
+		$model.modal({keyboard:true});
+		return false;
+	});
+	//核价按钮 -- 开始
+	
+	//报价计算器按钮 -- 开始
+	$("#calculateBtn").click(function(){
+		var $model = $('#calculateDialog>div.modal');
+		var $dialog = $model.find('.modal-dialog');
+		var paddingtop = 0;
+		$model.show();
+		paddingtop = ($model.height() - $dialog.outerHeight()) / 2;
+		if (paddingtop < 30) {
+			paddingtop = 30;
+		}
+		$dialog.css("padding-top", paddingtop);
+		$model.hide();
+		$model.modal({keyboard:true});
+		return false;
+	});
+	//报价计算器按钮 -- 结束
+	
+	//报价计算器 -- 开始
+	//报价计算器 -- 结束
 });

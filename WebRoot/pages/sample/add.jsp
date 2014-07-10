@@ -127,7 +127,7 @@
 													克重
 												</label>
 												<div class="col-sm-8">
-													<input type="text" class="form-control require"
+													<input type="text" class="form-control require double"
 														name="weight" id="weight" placeholder="克重">
 												</div>
 												<div class="col-sm-1"></div>
@@ -149,7 +149,7 @@
 													成本
 												</label>
 												<div class="col-sm-8">
-													<input type="text" class="form-control require" name="cost"
+													<input type="text" class="form-control require double" name="cost"
 														id="cost" placeholder="成本">
 												</div>
 												<div class="col-sm-1"></div>

@@ -46,6 +46,7 @@ public class SampleController extends BaseController {
 		List<Sample> samplelist = sampleService.getUnDetailList(charge_user);
 		request.setAttribute("samplelist", samplelist);
 		request.setAttribute("userlist", SystemCache.userlist);
+		request.setAttribute("gongxulist", SystemCache.gongxulist);
 		return new ModelAndView("sample/undetailedindex");
 	}
 	
