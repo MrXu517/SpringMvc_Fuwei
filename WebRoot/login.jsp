@@ -69,7 +69,7 @@
 									</div>
 									<div class="form-group">
 										<button id="loginbtn" type="submit"
-											class="btn btn-lg btn-block btn-success">
+											class="btn btn-lg btn-block btn-primary">
 											登录
 										</button>
 									</div>
