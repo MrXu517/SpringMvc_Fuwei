@@ -1,0 +1,20 @@
+.pageform{
+	display:inline-block;
+	width:150px;
+	vertical-align:top;
+	margin: 0 15px;
+}
+.searchform {
+	display:inline-block;
+	width:400px;
+	vertical-align:top;
+}
+.pagination {
+	margin: 0 !important;
+}
+#start_time,#end_time{
+	
+}
+.searchform label{
+	padding-right:0;
+}

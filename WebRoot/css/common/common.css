@@ -38,7 +38,7 @@
     position: absolute;
     top: 0;
     width: 100%;
-    z-index: 4000;
+    z-index: 99999999999999;
 }
 .loading {
     background: url("../images/loading.gif") no-repeat scroll 10px center #FFFFFF;
@@ -52,6 +52,12 @@
     position: absolute;
     top: 50%;
     width: auto;
-    z-index: 4001;
+    z-index: 999999999999999;
     display:none;
+}
+#alert_error .modal{
+	z-index:99999999999999;
+}
+#alert_tip .modal{
+	z-index:99999999999999;
 }

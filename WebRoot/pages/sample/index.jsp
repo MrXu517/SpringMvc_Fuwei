@@ -35,9 +35,10 @@
 		<meta http-equiv="description" content="富伟桐庐针织厂">
 
 		<script src="js/plugins/jquery-1.10.2.min.js"></script>
+		<script src="<%=basePath %>js/plugins/WdatePicker.js"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
-
-
+		<script src="js/sample/index.js" type="text/javascript"></script>
+		<link href="css/sample/sample.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
 		<%@ include file="../common/head.jsp"%>
@@ -59,6 +60,60 @@
 					<div class="row">
 						<div class="col-md-12 tablewidget">
 							<!-- Table -->
+							<div clas="navbar navbar-default">
+								<ul class="pagination">
+									<li class="disabled">
+										<a href="#">«</a>
+									</li>
+									<li class="">
+										<a href="#">上一页 <span class="sr-only"></span> </a>
+									</li>
+									<li class="active">
+										<a href="#">1 <span class="sr-only"></span> </a>
+									</li>
+									<li class="">
+										<a href="#">下一页 <span class="sr-only"></span> </a>
+									</li>
+									<li class="">
+										<a href="#">»</a>
+									</li>
+								</ul>
+								<form class="form-inline pageform form-horizontal" role="form">
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon">去第</span>
+											<input type="text" name="bj_dsxishu" id="bj_dsxishu"
+												class="double form-control" placeholder="1,2,...">
+
+											<span class="input-group-addon">页</span>
+											<span class="input-group-btn">
+												<button class="btn btn-primary" type="button">
+													Go!
+												</button> </span>
+										</div>
+									</div>
+								</form>
+								<form class="form-horizontal searchform form-inline" role="form">
+<div class="form-group">
+										<label class="col-sm-3 control-label">
+											创建时间
+										</label>
+										
+										<div class="input-group col-md-9">
+											<input type="text" name="start_time" id="start_time"
+												class="date form-control"/>
+											<span class="input-group-addon">到</span>
+											<input type="text" name="end_time" id="end_time"
+												class="date form-control">
+
+											<span class="input-group-btn">
+												<button class="btn btn-primary" type="button">
+													搜索
+												</button> </span>
+										</div>
+									</div>
+								</form>
+							</div>
 							<table class="table table-responsive">
 								<thead>
 									<tr>
@@ -90,6 +145,9 @@
 										<th>
 											创建时间
 										</th>
+										<th>
+											操作
+										</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -101,7 +159,9 @@
 										<td><%=++i%></td>
 										<td
 											style="max-width: 120px; height: 120px; max-height: 120px;">
-											<a target="_blank" class="cellimg" href="<%=sample.getImg()%>"><img style="max-width: 120px; height: 120px; max-height: 120px;"
+											<a target="_blank" class="cellimg"
+												href="<%=sample.getImg()%>"><img
+													style="max-width: 120px; height: 120px; max-height: 120px;"
 													src="<%=sample.getImg()%>"> </a>
 										</td>
 										<td><%=sample.getName()%></td>
@@ -111,6 +171,10 @@
 										<td><%=sample.getSize()%></td>
 										<td><%=sample.getCharge_user()%></td>
 										<td><%=sample.getCreated_at()%></td>
+										<td>
+											<a href="sample/detail/<%=sample.getId()%>">详情</a> |
+											<a href="sample/put/<%=sample.getId()%>">编辑</a>
+										</td>
 									</tr>
 									<%
 										}

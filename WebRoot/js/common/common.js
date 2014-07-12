@@ -587,7 +587,9 @@ Common.Error = function(message, callback) {
 	$model.modal({keyboard:true});
 
 	$model.on('hidden.bs.modal', function(e) {
-		callback(e);
+		if(callback!=undefined){
+			callback(e);
+		}
 	});
 };
 Common.Tip = function(message, callback) {
@@ -607,7 +609,10 @@ Common.Tip = function(message, callback) {
 	$model.modal({keyboard:true});
 
 	$model.on('hidden.bs.modal', function(e) {
-		callback(e);
+		if(callback!=undefined){
+			callback(e);
+		}
+		
 	});
 };
 // 2014-7-2 之后添加

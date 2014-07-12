@@ -17,6 +17,17 @@ public class SampleService extends BaseService{
 	@Autowired
 	JdbcTemplate jdbc;
 	
+	//设置样品的成本与报价详情
+	public int setCost_Detail(int sampleId,double cost,String detail)throws Exception {
+		try{
+			return dao.update("UPDATE tb_sample SET has_detail=1,cost=?, detail=? WHERE  id = ?",
+					cost,detail,sampleId);
+		}catch(Exception e){
+			throw e;
+		}
+
+	}
+	
 	// 获取待核价列表 has_detail = false
 	public List<Sample> getUnDetailList(Integer charge_user) throws Exception {
 		try {

@@ -39,6 +39,23 @@ public class SampleController extends BaseController {
 	@Autowired
 	SampleService sampleService;
 	
+	//核价
+	@RequestMapping(value="/detail/{id}",method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView Detail(@PathVariable Integer id,HttpSession session,HttpServletRequest request) throws Exception{
+		Sample sample = sampleService.get(id);
+		request.setAttribute("sample", sample);
+		return new ModelAndView("sample/detail");
+	}
+	
+	//核价
+	@RequestMapping(value="/setDetail",method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> setDetail(Integer id,Double cost,String detail ,HttpSession session,HttpServletRequest request) throws Exception{
+		sampleService.setCost_Detail(id, cost, detail);
+		return this.returnSuccess();
+	}
+	
 	//待核价样品列表
 	@RequestMapping(value="/undetailedindex",method = RequestMethod.GET)
 	@ResponseBody

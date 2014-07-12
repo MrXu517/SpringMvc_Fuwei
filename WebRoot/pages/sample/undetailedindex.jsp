@@ -69,7 +69,7 @@
 	padding-right: 0;
 }
 
-#gongxuTb input  , #gongxuTb select {
+#gongxuTb input   , #gongxuTb select {
 	height: 30px;
 }
 
@@ -89,6 +89,15 @@
 
 .bj_ifds_span>* {
 	vertical-align: bottom;
+}
+
+.bj_gongxu_add {
+	padding: 3px 6px !important;
+	margin-bottom: 5px !important;
+}
+
+.bj_gongxu_delete {
+	cursor: pointer;
 }
 </style>
 	</head>
@@ -224,6 +233,7 @@
 						</div>
 						<div class="modal-body">
 							<form class="form-horizontal priceform" role="form">
+								<input type="hidden" id="id" name="id" />
 								<div class="row">
 									<div class="form-group col-md-5">
 										<label for="cost" class="col-sm-12">
@@ -246,16 +256,16 @@
 										</div>
 									</div>
 								</div>
-<div class="modal-footer">
-										<button type="submit" class="btn btn-primary"
-												data-loading-text="正在保存...">
-												修改价格
-											</button>
-										<button type="reset" class="btn btn-default"
-												data-dismiss="modal">
-												取消
-											</button>
-									</div>
+								<div class="modal-footer">
+									<button type="submit" class="btn btn-primary"
+										data-loading-text="正在保存...">
+										修改价格
+									</button>
+									<button type="reset" class="btn btn-default"
+										data-dismiss="modal">
+										取消
+									</button>
+								</div>
 							</form>
 						</div>
 
@@ -287,17 +297,6 @@
 											<legend>
 												材料费
 											</legend>
-											<div class="form-group">
-												<label for="size" class="col-sm-3 control-label">
-													尺寸
-												</label>
-												<div class="col-sm-8">
-													<input type="text" class="form-control require" name="size"
-														id="size" placeholder="尺寸">
-												</div>
-												<div class="col-sm-1"></div>
-											</div>
-
 											<div class="form-group">
 												<label class="col-sm-3 control-label">
 													克重
@@ -351,14 +350,17 @@
 												工序费
 											</legend>
 											<div>
-												<span class="bj_gongxu_add"></span>添加工序
+												<button type="button" class="btn btn-primary bj_gongxu_add"
+													data-dismiss="modal">
+													添加工序
+												</button>
 											</div>
 											<div class="panel panel-default">
 												<table class="table-condensed table  table-hover"
 													id="gongxuTb">
 													<thead>
 														<tr>
-															<th style="width: 40%;">
+															<th style="width: 45%;">
 																工序
 															</th>
 															<th style="width: 40%;">
