@@ -154,9 +154,6 @@
 							<li>
 								<a href="sample/undetailedindex"><i class="fa fa-edit"></i>待核价样品</a>
 							</li>
-							<li>
-								<a href="print.jsp"><i class="fa fa-print"></i>快递单打印</a>
-							</li>
 							<%
 								//}else{
 							%>
