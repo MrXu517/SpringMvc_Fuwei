@@ -162,8 +162,8 @@
 							%>
 						
 							<li>
-								<a href="searchTransQuotation.do"><i
-									class="fa fa-shopping-cart"></i>样品车</a>
+								<a href="quote/index"><i
+									class="fa fa-shopping-cart"></i>报价列表</a>
 							</li>
 							<li>
 								<a href="searchQuotationList.do"><i class="fa fa-calendar"></i>报价单列表</a>

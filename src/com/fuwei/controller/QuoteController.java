@@ -1,0 +1,94 @@
+package com.fuwei.controller;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.fuwei.commons.SystemCache;
+import com.fuwei.commons.SystemContextUtils;
+import com.fuwei.entity.Quote;
+import com.fuwei.entity.QuotePrice;
+import com.fuwei.entity.User;
+import com.fuwei.service.QuotePriceService;
+import com.fuwei.service.QuoteService;
+import com.fuwei.util.DateTool;
+import com.fuwei.util.HanyuPinyinUtil;
+
+@RequestMapping("/quote")
+@Controller
+public class QuoteController extends BaseController{
+	@Autowired
+	QuoteService quoteService;
+	@Autowired
+	QuotePriceService quotePriceService;
+	
+	//获取未确认提交报价列表
+	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView index(HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		List<Quote> quotelist = quoteService.getDetailList();
+		request.setAttribute("quotelist", quotelist);
+		return new ModelAndView("quote/index");
+	}
+	
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> add(Integer quotePriceId,HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		QuotePrice quoteprice = quotePriceService.get(quotePriceId);
+		if(quoteprice == null){
+			throw new Exception("没有相关的公司价格");
+		}
+		Quote quote = new Quote();
+		quote.setSampleId(quoteprice.getSampleId());
+		quote.setCreated_at(DateTool.now());
+		quote.setUpdated_at(DateTool.now());
+		quote.setCreated_user(user.getId());
+		quote.setQuotePriceId(quotePriceId);
+		int success = quoteService.add(quote);
+		return this.returnSuccess();
+		
+	}
+	
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> delete(@PathVariable int id, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		int success = quoteService.remove(id);
+		return this.returnSuccess();
+		
+	}
+	
+	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public Quote get(@PathVariable int id, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		Quote quote = quoteService.get(id);
+		return quote;
+		
+	}
+	
+	@RequestMapping(value = "/put", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> update(Quote quote, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		quote.setUpdated_at(DateTool.now());
+		int success = quoteService.update(quote);
+		return this.returnSuccess();
+		
+	}
+}

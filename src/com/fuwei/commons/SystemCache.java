@@ -146,37 +146,104 @@ public class SystemCache {
 		return "";
 	}
 
-	public static String getSalesmanName(int userid) {
+	public static String getSalesmanName(int salesmanid) {
 
 		for (int i = 0; i < SystemCache.salesmanlist.size(); ++i) {
 			Salesman temp = SystemCache.salesmanlist.get(i);
-			if (temp.getId() == userid) {
+			if (temp.getId() == salesmanid) {
 				return temp.getName();
 			}
 		}
 		return "";
 	}
+	
+	public static Salesman getSalesman(int salesmanid) {
 
-	public static String getCompanyName(int userid) {
+		for (int i = 0; i < SystemCache.salesmanlist.size(); ++i) {
+			Salesman temp = SystemCache.salesmanlist.get(i);
+			if (temp.getId() == salesmanid) {
+				return temp;
+			}
+		}
+		return null;
+	}
+	
+	public static String getCompanyName(int companyId) {
 
 		for (int i = 0; i < SystemCache.companylist.size(); ++i) {
 			Company temp = SystemCache.companylist.get(i);
-			if (temp.getId() == userid) {
+			if (temp.getId() == companyId) {
 				return temp.getFullname();
 			}
 		}
 		return "";
 	}
 	
-	public static String getGongxuName(int userid) {
+	public static Company getCompanyById(int companyId) {
+
+		for (int i = 0; i < SystemCache.companylist.size(); ++i) {
+			Company temp = SystemCache.companylist.get(i);
+			if (temp.getId() == companyId) {
+				return temp;
+			}
+		}
+		return null;
+	}
+	
+	public static String getGongxuName(int gongxuId) {
 
 		for (int i = 0; i < SystemCache.gongxulist.size(); ++i) {
 			GongXu temp = SystemCache.gongxulist.get(i);
-			if (temp.getId() == userid) {
+			if (temp.getId() == gongxuId) {
 				return temp.getName();
 			}
 		}
 		return "";
 	}
+	
+	public static List<Salesman> getSalesmanList(int companyId){
+		List<Salesman> salemanlist = new ArrayList<Salesman>();
+		for (int i = 0; i < SystemCache.salesmanlist.size(); ++i) {
+			Salesman temp = SystemCache.salesmanlist.get(i);
+			if (temp.getCompanyId() == companyId) {
+				salemanlist.add(temp);
+			}
+		}
+		return salemanlist;
+	}
+	
+	public static HashMap<Company, List<Salesman>> getCompanySalesmanMap(){
+		HashMap<Company, List<Salesman>> map = new HashMap<Company, List<Salesman>>();
+		for (int i = 0; i < SystemCache.companylist.size(); ++i) {
+			Company temp = SystemCache.companylist.get(i);
+			List<Salesman> templist = new ArrayList<Salesman>();
+			for (int k = 0; k < SystemCache.salesmanlist.size(); ++k) {
+				Salesman s_temp = SystemCache.salesmanlist.get(k);
+				if (s_temp.getCompanyId() == temp.getId()) {
+					templist.add(s_temp);
+				}
+			}
+			map.put(temp, templist);
+		}
+		return map;
+	}
+	
+	
+	public static HashMap<String, List<Salesman>> getCompanySalesmanMap_ID(){
+		HashMap<String, List<Salesman>> map = new HashMap<String, List<Salesman>>();
+		for (int i = 0; i < SystemCache.companylist.size(); ++i) {
+			Company temp = SystemCache.companylist.get(i);
+			List<Salesman> templist = new ArrayList<Salesman>();
+			for (int k = 0; k < SystemCache.salesmanlist.size(); ++k) {
+				Salesman s_temp = SystemCache.salesmanlist.get(k);
+				if (s_temp.getCompanyId() == temp.getId()) {
+					templist.add(s_temp);
+				}
+			}
+			map.put(String.valueOf(temp.getId()), templist);
+		}
+		return map;
+	}
+	
 	
 }

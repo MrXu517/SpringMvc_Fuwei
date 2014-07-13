@@ -2,13 +2,18 @@
 	contentType="text/html; charset=utf-8"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.entity.Sample"%>
+<%@page import="com.fuwei.entity.Company"%>
+<%@page import="com.fuwei.entity.Salesman"%>
+<%@page import="com.fuwei.entity.QuotePrice"%>
+<%@page import="net.sf.json.JSONObject"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	//List<User> userlist = (List<User>) request.getAttribute("userlist");
-	Sample sample = (Sample)request.getAttribute("sample");
+	Sample sample = (Sample) request.getAttribute("sample");
+	List<QuotePrice> quotepricelist = (List<QuotePrice>)request.getAttribute("quotepricelist");
 	/*List<Company> companylist = (List<Company>) request
 			.getAttribute("companylist");
 	List<Salesman> salesmanlist = (List<Salesman>) request
@@ -20,6 +25,11 @@
 	List<Role> rolelist = (List<Role>) request.getAttribute("rolelist");
 	
 	String tabname = (String) request.getParameter("tab");*/
+	HashMap<String, List<Salesman>> companySalesmanMap = SystemCache
+			.getCompanySalesmanMap_ID();
+	JSONObject jObject = new JSONObject();
+	jObject.put("companySalesmanMap", companySalesmanMap);
+	String companySalesmanMap_str = jObject.toString();
 %>
 <!DOCTYPE html>
 <html>
@@ -32,6 +42,8 @@
 
 		<script src="js/plugins/jquery-1.10.2.min.js"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
+		<script src="js/sample/detail.js" type="text/javascript"></script>
+		<link href="css/sample/sample.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
 		<%@ include file="../common/head.jsp"%>
@@ -50,149 +62,248 @@
 			<div class="body">
 
 				<div class="container-fluid">
-					<div class="row">
-						<div class="col-md-12 formwidget">
-							<div class="panel panel-primary">
-								<div class="panel-heading">
-									<h3 class="panel-title">
-										详情
-									</h3>
-								</div>
-								<div class="panel-body">
-
-									<form class="form-horizontal sampleform" role="form"
-										enctype="multipart/form-data">
-										<div class="col-md-7">
-											<div class="form-group">
-												<label for="productNumber" class="col-sm-3 control-label">
-													产品编号
-												</label>
-												<div class="col-sm-8">
-													<input type="text" class="form-control require"
-														name="productNumber" id="productNumber" placeholder="产品编号">
-												</div>
-												<div class="col-sm-1"></div>
-											</div>
-											<div class="form-group">
-												<label for="name" class="col-sm-3 control-label">
-													名称
-												</label>
-												<div class="col-sm-8">
-													<input type="text" class="form-control require" name="name"
-														id="name" placeholder="名称" value="<%=sample.getName() %>">
-												</div>
-												<div class="col-sm-1"></div>
-											</div>
-											<div class="form-group">
-												<label for="file" class="col-sm-3 control-label">
-													图片
-												</label>
-												<div class="col-sm-8">
-													<a href="#" class="thumbnail"> <img id="previewImg" alt="400 x 100%" src="<%=sample.getImg() %>">
-											</a>
-
-												</div>
-												<div class="col-sm-1"></div>
-											</div>
-											<div class="form-group">
-												<label for="charge_user" class="col-sm-3 control-label">
-													打样人
-												</label>
-												<div class="col-sm-8">
-													
-												</div>
-												<div class="col-sm-1"></div>
-											</div>
-											<div class="form-group">
-												<label for="material" class="col-sm-3 control-label">
-													材料
-												</label>
-												<div class="col-sm-8">
-													<input type="text" class="form-control require"
-														id="material" name="material" placeholder="材料">
-												</div>
-												<div class="col-sm-1"></div>
-											</div>
-											<div class="form-group">
-												<label for="weight" class="col-sm-3 control-label">
-													克重
-												</label>
-												<div class="col-sm-8">
-													<input type="text" class="form-control require double"
-														name="weight" id="weight" placeholder="克重">
-												</div>
-												<div class="col-sm-1"></div>
-											</div>
-
-											<div class="form-group">
-												<label for="size" class="col-sm-3 control-label">
-													尺寸
-												</label>
-												<div class="col-sm-8">
-													<input type="text" class="form-control require" name="size"
-														id="size" placeholder="尺寸">
-												</div>
-												<div class="col-sm-1"></div>
-											</div>
-
-											<div class="form-group">
-												<label for="cost" class="col-sm-3 control-label">
-													成本
-												</label>
-												<div class="col-sm-8">
-													<input type="text" class="form-control require double" name="cost"
-														id="cost" placeholder="成本">
-												</div>
-												<div class="col-sm-1"></div>
-											</div>
-											<div class="form-group">
-												<label for="machine" class="col-sm-3 control-label">
-													机织
-												</label>
-												<div class="col-sm-8">
-													<input type="text" class="form-control require"
-														name="machine" id="machine" placeholder="机织">
-												</div>
-												<div class="col-sm-1"></div>
-											</div>
-											<div class="form-group">
-												<label for="memo" class="col-sm-3 control-label">
-													备注
-												</label>
-												<div class="col-sm-8">
-													<input type="text" class="form-control require" name="memo"
-														id="memo" placeholder="备注">
-												</div>
-												<div class="col-sm-1"></div>
-											</div>
-											<div class="form-group">
-												<div class="col-sm-offset-3 col-sm-5">
-													<button type="submit" class="btn btn-primary"
-														data-loading-text="正在保存...">
-														添加样品
-													</button>
-
-												</div>
-												<div class="col-sm-3">
-													<button type="reset" class="btn btn-default">
-														重置表单
-													</button>
-												</div>
-												<div class="col-sm-1"></div>
-											</div>
-										</div>
-									</form>
-								</div>
-
-							</div>
+					<div class="samplehead">
+						<div class="pull-left">
+							<label class="control-label">
+								名称：
+							</label>
+							<span><%=sample.getName()%></span>
+						</div>
+						<div class="pull-left">
+							<label class="control-label">
+								产品编号：
+							</label>
+							<span><%=sample.getProductNumber()%></span>
+						</div>
+						<div class="pull-right">
+							<button type="button" class="btn btn-info">生成样品标签</button>
 						</div>
 
+						<div class="clear"></div>
 
+					</div>
+					<div class="sampleImg">
+
+						<a href="#" class="thumbnail"> <img id="previewImg"
+								alt="400 x 100%" src="<%=sample.getImg()%>"> </a>
+
+					</div>
+					<div class="sampleData">
+						<table class="table table-responsive">
+							<tbody>
+
+								<tr>
+									<td>
+										打样人
+									</td>
+									<td><%=SystemCache.getUserName(sample.getCharge_user())%></td>
+								</tr>
+								<tr>
+									<td>
+										材料
+									</td>
+									<td><%=sample.getMaterial()%></td>
+								</tr>
+								<tr>
+									<td>
+										克重
+									</td>
+									<td><%=sample.getWeight()%>克
+									</td>
+								</tr>
+								<tr>
+									<td>
+										尺寸
+									</td>
+									<td><%=sample.getSize()%></td>
+								</tr>
+								<tr>
+									<td>
+										成本
+									</td>
+									<td>
+										<span class="RMB">￥</span><%=sample.getCost()%></td>
+								</tr>
+								<tr>
+									<td>
+										机织
+									</td>
+									<td><%=sample.getMachine()%></td>
+								</tr>
+								<tr>
+									<td>
+										创建时间
+									</td>
+									<td><%=sample.getCreated_at()%></td>
+								</tr>
+								<tr>
+									<td>
+										最近更新时间
+									</td>
+									<td><%=sample.getUpdated_at()%></td>
+								</tr>
+								<tr>
+									<td>
+										备注
+									</td>
+									<td><%=sample.getMemo()%></td>
+								</tr>
+							</tbody>
+						</table>
+
+					</div>
+					<div class="sampleDetail">
+						<fieldset>
+							<legend>
+								报价详情
+							</legend>
+							<textarea readonly class="form-control" id="detail" name="detail"
+								placeholder="报价详情"><%=sample.getDetail()%></textarea>
+						</fieldset>
+					</div>
+					<div class="clear"></div>
+
+				</div>
+
+				<div class="container-fluid">
+					<div class="panel panel-default">
+						<!-- Default panel contents -->
+						<div class="panel-heading">
+							公司报价
+							<button type="button" class="btn btn-primary" id="addQuoteBtn">
+								新建公司报价
+							</button>
+						</div>
+
+						<!-- Table -->
+						<table class="table">
+							<thead>
+								<tr>
+									<th>
+										序号
+									</th>
+									<th>
+										公司名称
+									</th>
+								
+									<th>
+										业务员
+									</th>
+									<th>
+										报价
+									</th>
+									<th>
+										报价时间
+									</th>
+									<th>
+										备注
+									</th>
+									<th>
+										操作
+									</th>
+								</tr>
+							</thead>
+<tbody>
+<%
+int k = 0;
+for(QuotePrice quotePrice : quotepricelist){
+ %>
+<tr><td><%=++k %></td>
+<td><%= SystemCache.getCompanyName(SystemCache.getSalesman(quotePrice.getSalesmanId()).getCompanyId())   %></td>
+<td><%= SystemCache.getSalesmanName(quotePrice.getSalesmanId()) %></td>
+<td><%=quotePrice.getPrice() %></td>
+<td><%=quotePrice.getCreated_at() %></td>
+<td><%=quotePrice.getMemo() %></td>
+<td><a class="addQuote" href="#" data-cid="<%=quotePrice.getId() %>">添加到报价列表</a> | <a class="printDetail" href="#" data-cid="<%=quotePrice.getId() %>">打印样品详情</a></td>
+</tr>
+<%} %>
+</tbody>
+						</table>
 					</div>
 				</div>
 
 			</div>
-		</div>
 
+
+		</div>
+		<div class="modal fade" id="quoteModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+						</button>
+						<h4 class="modal-title">
+							新建公司报价
+						</h4>
+					</div>
+					<div class="modal-body">
+						<form class="form-horizontal quoteform" role="form">
+							<input type="hidden" id="sampleId" name="sampleId" value="<%=sample.getId()%>"/>
+							<div class="row">
+								<div class="form-group">
+									<label for="companyId" class="col-sm-3 control-label">
+										公司
+									</label>
+									<div class="col-sm-8">
+										<select data='<%=companySalesmanMap_str%>'
+											class="form-control require" name="companyId" id="companyId"
+											placeholder="公司">
+											<%
+												for (Company company : SystemCache.companylist) {
+											%>
+											<option value="<%=company.getId()%>"><%=company.getFullname()%></option>
+											<%
+												}
+											%>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="salesmanId" class="col-sm-3 control-label">
+										业务员
+									</label>
+									<div class="col-sm-8">
+										<select class="form-control require " name="salesmanId"
+											id="salesmanId" placeholder="业务员"></select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">
+										价格
+									</label>
+									<div class="col-sm-8">
+										<input type="text" name="price" id="price"
+											class="double form-control">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">
+										备注
+									</label>
+									<div class="col-sm-8">
+										<input type="text" name="memo" id="memo" class="form-control">
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="btn btn-primary"
+									data-loading-text="正在保存...">
+									新建报价
+								</button>
+								<button type="reset" class="btn btn-default"
+									data-dismiss="modal">
+									取消
+								</button>
+							</div>
+						</form>
+					</div>
+
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
 	</body>
 </html>

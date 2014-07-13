@@ -61,3 +61,11 @@
 #alert_tip .modal{
 	z-index:99999999999999;
 }
+.RMB{
+	font-family:"Microsoft Yahei";
+}
+.clear{
+	clear:both;
+	content:"";
+	display:table;
+}

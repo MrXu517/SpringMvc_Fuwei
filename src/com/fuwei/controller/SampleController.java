@@ -24,8 +24,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.constant.Constants;
+import com.fuwei.entity.QuotePrice;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
+import com.fuwei.service.QuotePriceService;
+import com.fuwei.service.QuoteService;
 import com.fuwei.service.SampleService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.HanyuPinyinUtil;
@@ -38,13 +41,17 @@ public class SampleController extends BaseController {
 	
 	@Autowired
 	SampleService sampleService;
+	@Autowired
+	QuotePriceService quotePriceService;
 	
-	//核价
+	//样品详情
 	@RequestMapping(value="/detail/{id}",method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView Detail(@PathVariable Integer id,HttpSession session,HttpServletRequest request) throws Exception{
 		Sample sample = sampleService.get(id);
 		request.setAttribute("sample", sample);
+		List<QuotePrice> quotepricelist = quotePriceService.getList(id);
+		request.setAttribute("quotepricelist", quotepricelist);
 		return new ModelAndView("sample/detail");
 	}
 	
@@ -96,6 +103,7 @@ public class SampleController extends BaseController {
 		sample.setCreated_at(DateTool.now());
 		sample.setUpdated_at(DateTool.now());
 		sample.setCreated_user(user.getId());
+		sample.setHas_detail(false);
 		int success = sampleService.add(sample);
 		
 		return this.returnSuccess();
