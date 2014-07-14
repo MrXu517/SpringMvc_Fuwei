@@ -1,0 +1,17 @@
+table.table tr.group-head td{
+	border-top:none;
+}
+.tablewidget table thead th{
+	border-bottom:none !important;
+}
+table.table tr.group-body{
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}
+table.table>thead>tr>th, table.table>tbody>tr>th, table.table>tfoot>tr>th, table.table>thead>tr>td, table.table>tbody>tr>td, table.table>tfoot>tr>td{
+	border-color:#ccc;
+}
+table tr.group table tbody{
+	border-bottom: 1px solid #ccc;
+}

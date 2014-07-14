@@ -45,6 +45,7 @@
 	String tabname = (String) request.getParameter("tab");*/
 %>
 <!DOCTYPE html>
+
 <html>
 	<head>
 		<base href="<%=basePath%>">
@@ -137,7 +138,7 @@
 										<div class="input-group">
 											<span class="input-group-addon">去第</span>
 											<input type="text" name="page" id="page"
-												class="int form-control" placeholder="1,2,...">
+												class="int form-control" placeholder="1,2,..." value="<%=pager.getPageNo() %>">
 
 											<span class="input-group-addon">页</span>
 											<span class="input-group-btn">

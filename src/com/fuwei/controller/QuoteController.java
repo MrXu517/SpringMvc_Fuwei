@@ -1,5 +1,7 @@
 package com.fuwei.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +21,7 @@ import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.entity.Quote;
 import com.fuwei.entity.QuotePrice;
+import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
 import com.fuwei.service.QuotePriceService;
 import com.fuwei.service.QuoteService;
@@ -39,7 +42,19 @@ public class QuoteController extends BaseController{
 	public ModelAndView index(HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		List<Quote> quotelist = quoteService.getDetailList();
-		request.setAttribute("quotelist", quotelist);
+		HashMap<Integer, List<Quote>> quoteMap=new HashMap<Integer, List<Quote>>();
+		for (Quote quote : quotelist) {
+			Integer salesmanId = quote.getQuotePrice().getSalesmanId();
+			if(quoteMap.containsKey(salesmanId)){
+				quoteMap.get(salesmanId).add(quote);
+			}else {
+				List<Quote> tList=new ArrayList<Quote>();
+				tList.add(quote);
+				quoteMap.put(salesmanId, tList);
+			}
+		}
+		
+		request.setAttribute("quoteMap", quoteMap);
 		return new ModelAndView("quote/index");
 	}
 	
