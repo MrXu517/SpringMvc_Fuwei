@@ -3,7 +3,16 @@ $(document).ready( function() {
 	var $a = $("#left li a[href='sample/add']");
 	setActiveLeft($a.parent("li"));
 	/* 设置当前选中的页 */
-
+	
+	//重置按钮
+	$("button.reset").click(function(){
+		$form = $(this).closest("form");
+		$form[0].reset();
+		$form.find("input[type!=hidden],select,textarea").attr("value","");
+		$("#previewWidget img").attr("src","");
+	});
+	//重置按钮
+	
 	var $form = $(".sampleform");
 	var $submitBtn = $form.find("[type='submit']");
 	$form.unbind("submit");

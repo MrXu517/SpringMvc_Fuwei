@@ -46,3 +46,6 @@
 .sampleDetail legend{
 	margin-bottom:3px;
 }
+.pagination li.active>a{
+	cursor: pointer !important;
+}

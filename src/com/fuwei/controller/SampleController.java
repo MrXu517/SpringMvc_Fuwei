@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fuwei.commons.Pager;
+import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.constant.Constants;
@@ -32,6 +35,7 @@ import com.fuwei.service.QuoteService;
 import com.fuwei.service.SampleService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.HanyuPinyinUtil;
+import com.fuwei.util.SerializeTool;
 
 
 
@@ -75,11 +79,25 @@ public class SampleController extends BaseController {
 	}
 	
 	//样品管理列表
+	@SuppressWarnings("deprecation")
 	@RequestMapping(value="/index",method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView index(HttpSession session,HttpServletRequest request) throws Exception{
-		List<Sample> samplelist = sampleService.getList();
-		request.setAttribute("samplelist", samplelist);
+	public ModelAndView index(Integer page,String start_time,String end_time,String sortJSON,  HttpSession session,HttpServletRequest request) throws Exception{
+		Date start_time_d = DateTool.parse(start_time);
+		Date end_time_d = DateTool.parse(end_time);
+		Pager pager = new Pager();
+		if(page!=null && page > 0){
+			pager.setPageNo(page);
+		}
+		
+		List<Sort> sortList = null;
+		if(sortJSON!=null){
+			sortList = SerializeTool.deserializeList(sortJSON,Sort.class);
+		}
+		pager = sampleService.getList(pager,start_time_d,end_time_d,sortList);
+		request.setAttribute("start_time", start_time_d);
+		request.setAttribute("end_time", end_time_d);
+		request.setAttribute("pager", pager);
 		return new ModelAndView("sample/index");
 	}
 	

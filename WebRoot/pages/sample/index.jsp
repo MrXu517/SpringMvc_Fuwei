@@ -3,6 +3,8 @@
 <%@page import="com.fuwei.entity.Sample"%>
 <%@page import="com.fuwei.entity.Salesman"%>
 <%@page import="com.fuwei.entity.User"%>
+<%@page import="com.fuwei.commons.Pager"%>
+<%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%
 	String path = request.getContextPath();
@@ -10,9 +12,26 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	List<User> userlist = (List<User>) request.getAttribute("userlist");
+	Pager pager = (Pager) request.getAttribute("pager");
+	if (pager == null) {
+		pager = new Pager();
+	}
+	List<Sample> samplelist = new ArrayList<Sample>();
+	if (pager != null & pager.getResult() != null) {
+		samplelist = (List<Sample>) pager.getResult();
+	}
 
-	List<Sample> samplelist = (List<Sample>) request
-			.getAttribute("samplelist");
+	Date start_time = (Date) request.getAttribute("start_time");
+	String start_time_str = "";
+	if (start_time != null) {
+		start_time_str = DateTool.formatDateYMD(start_time);
+	}
+	Date end_time = (Date) request.getAttribute("end_time");
+	String end_time_str = "";
+	if (end_time != null) {
+		end_time_str = DateTool.formatDateYMD(end_time);
+	}
+
 	/*List<Company> companylist = (List<Company>) request
 			.getAttribute("companylist");
 	List<Salesman> salesmanlist = (List<Salesman>) request
@@ -35,7 +54,7 @@
 		<meta http-equiv="description" content="富伟桐庐针织厂">
 
 		<script src="js/plugins/jquery-1.10.2.min.js"></script>
-		<script src="<%=basePath %>js/plugins/WdatePicker.js"></script>
+		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
 		<script src="js/sample/index.js" type="text/javascript"></script>
 		<link href="css/sample/sample.css" rel="stylesheet" type="text/css" />
@@ -62,52 +81,89 @@
 							<!-- Table -->
 							<div clas="navbar navbar-default">
 								<ul class="pagination">
+									<li>
+										<a href="sample/index?start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
+									</li>
+
+									<%
+										if (pager.getPageNo() > 1) {
+									%>
+									<li class="">
+										<a href="sample/index?start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页 <span
+											class="sr-only"></span> </a>
+									</li>
+									<%
+										} else {
+									%>
 									<li class="disabled">
-										<a href="#">«</a>
+										<a disabled>上一页 <span class="sr-only"></span> </a>
 									</li>
-									<li class="">
-										<a href="#">上一页 <span class="sr-only"></span> </a>
-									</li>
+									<%
+										}
+									%>
+
 									<li class="active">
-										<a href="#">1 <span class="sr-only"></span> </a>
+										<a href="sample/index?start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%><span class="sr-only"></span>
+										</a>
 									</li>
+									<li>
+										<%
+											if (pager.getPageNo() < pager.getTotalPage()) {
+										%>
+									
 									<li class="">
-										<a href="#">下一页 <span class="sr-only"></span> </a>
+										<a href="sample/index?start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页 <span
+											class="sr-only"></span> </a>
 									</li>
-									<li class="">
-										<a href="#">»</a>
+									<%
+										} else {
+									%>
+									<li class="disabled">
+										<a disabled>下一页 <span class="sr-only"></span> </a>
+									</li>
+									<%
+										}
+									%>
+
+									</li>
+									<li>
+										<a href="sample/index?start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
 									</li>
 								</ul>
-								<form class="form-inline pageform form-horizontal" role="form">
+								<form class="form-inline pageform form-horizontal" role="form" action="sample/index?start_time=<%=start_time_str %>&end_time=<%=end_time_str %>">
+									<input type="hidden" name="start_time" id="start_time" value="<%=start_time_str %>">
+<input type="hidden" name="end_time" id="end_time" value="<%=end_time_str %>">
 									<div class="form-group">
 										<div class="input-group">
 											<span class="input-group-addon">去第</span>
-											<input type="text" name="bj_dsxishu" id="bj_dsxishu"
-												class="double form-control" placeholder="1,2,...">
+											<input type="text" name="page" id="page"
+												class="int form-control" placeholder="1,2,...">
 
 											<span class="input-group-addon">页</span>
 											<span class="input-group-btn">
-												<button class="btn btn-primary" type="button">
+												<button class="btn btn-primary" type="submit">
 													Go!
 												</button> </span>
 										</div>
 									</div>
 								</form>
 								<form class="form-horizontal searchform form-inline" role="form">
-<div class="form-group">
+									<input type="hidden" name="page" id="page"
+										value="<%=pager.getPageNo()%>" />
+									<div class="form-group">
 										<label class="col-sm-3 control-label">
 											创建时间
 										</label>
-										
+
 										<div class="input-group col-md-9">
 											<input type="text" name="start_time" id="start_time"
-												class="date form-control"/>
+												class="date form-control" value="<%=start_time_str%>" />
 											<span class="input-group-addon">到</span>
 											<input type="text" name="end_time" id="end_time"
-												class="date form-control">
+												class="date form-control" value="<%=end_time_str%>">
 
 											<span class="input-group-btn">
-												<button class="btn btn-primary" type="button">
+												<button class="btn btn-primary" type="submit">
 													搜索
 												</button> </span>
 										</div>

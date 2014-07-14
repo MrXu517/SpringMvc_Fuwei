@@ -183,7 +183,7 @@
 
 												</div>
 												<div class="col-sm-3">
-													<button type="reset" class="btn btn-default">
+													<button type="reset" class="reset btn btn-default">
 														重置表单
 													</button>
 												</div>

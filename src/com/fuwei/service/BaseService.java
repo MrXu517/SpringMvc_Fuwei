@@ -33,7 +33,25 @@ public class BaseService {
 
 	@Resource(name = "dao")
 	protected Dao dao;
-
+	
+	/**
+	 * 
+	 * @param sql
+	 *            语句中必须要有order by
+	 * @param pager
+	 * @return 返回的Pager.result是个List<T> T是个对象，而不是Map
+	 */
+	protected Pager findPager_T(String sql,Class requiredType, Pager pager, Object... args) {
+		String countSql = SQLHelperFactory.getMqSqlHelper().getCountSQL(sql);
+		String pagedSql = SQLHelperFactory.getMqSqlHelper().getPageSQL(sql, pager.getPageNo(),
+				pager.getPageSize());
+		pager.setTotalCount(this.dao.queryForObject(countSql, Integer.class, args));
+		pager.setResult(this.dao.queryForBeanList(pagedSql, requiredType, args));
+		int totalPageNum = (pager.getTotalCount() + pager.getPageSize() - 1) / pager.getPageSize();
+		pager.setTotalPage(totalPageNum);
+		return pager;
+	}
+	
 	/**
 	 * 
 	 * @param sql
