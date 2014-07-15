@@ -615,5 +615,20 @@ Common.Tip = function(message, callback) {
 		
 	});
 };
+Common.openModal = function($modal){//打开对话框并高度居中
+	var $dialog = $modal.find('.modal-dialog');
+	var paddingtop = 0;
+	$modal.show();
+	paddingtop = ($modal.height() - $dialog.outerHeight()) / 2;
+	if (paddingtop < 30) {
+		paddingtop = 30;
+	}
+	$dialog.css("padding-top", paddingtop);
+	$modal.hide();
+	$modal.modal({keyboard:true});
+}
+Common.closeModal = function($modal){//关闭对话框
+	$modal.modal('hide');
+}
 // 2014-7-2 之后添加
 

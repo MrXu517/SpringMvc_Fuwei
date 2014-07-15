@@ -20,7 +20,6 @@ public class Sample implements Serializable {
 
 	private double cost;//成本
 	private String productNumber;//产品编号
-//	private int developerId;
 	private String machine;//机织
 	private String memo;
 	

@@ -13,14 +13,23 @@ public class QuoteOrder implements Serializable{
 	//private quoteId;//报价ID
 	private String quote_ids;//报价IDs
 	
-	private String excelUrl;
-	private String quotationNumber;
-	
+	private String excelUrl;//excel文件地址
+	private String quotationNumber;//报价单单号
+	//private 
 	private Date created_at;// 创建时间
 	private Date updated_at;// 最近更新时间
 	private int created_user;//创建用户
 	
+	private int salesmanId;//业务员ID
 	
+	
+	
+	public int getSalesmanId() {
+		return salesmanId;
+	}
+	public void setSalesmanId(int salesmanId) {
+		this.salesmanId = salesmanId;
+	}
 	public Date getCreated_at() {
 		return created_at;
 	}

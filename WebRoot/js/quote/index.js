@@ -29,4 +29,35 @@ $(document).ready(function(){
 		return false;
 	});
 	//删除报价 -- 结束
+	
+	//级联选中   
+	//点击父节点：父节点选中，子节点自动全部选中；父节点点击不选中，子节点自动全部不选中
+	$("tr.group-head td>input[type='checkbox']").click(function(){
+		var checked = this.checked;
+		var $tr = $(this).closest("tr");
+		var salesmanId = $tr.attr("sid");
+		changeGroup(salesmanId);//同时只能选中一个group
+		var $group_bodys = $tr.siblings("tr.group-body[sid='"+salesmanId+"']");
+		$group_bodys.find("td>input[type='checkbox']").prop("checked",checked);
+	});
+	//点击子节点：子节点选中，若此时所有节点都选中，则父节点自动选中；子节点不选中，若此时所有节点都不选中，则父节点自动不选中
+	$("tr.group-body td>input[type='checkbox']").click(function(){
+		var $tr = $(this).closest("tr");
+		var salesmanId = $tr.attr("sid");
+		changeGroup(salesmanId);//同时只能选中一个group
+		var $group_bodyTrs = $("tr.group-body[sid='"+salesmanId+"']");//所有子元素
+		var $group_bodyCheckeds = $group_bodyTrs.find("td>input[type='checkbox']:checked");//所有选中的子元素
+		var $group_head = $tr.siblings("tr.group-head[sid='"+salesmanId+"']");
+		if($group_bodyCheckeds.length < $group_bodyTrs.length){//如果有一个没选中，则父节点自动不选中
+			$group_head.find("td>input[type='checkbox']").prop("checked",false);
+		}else{//全部选中，则父节点自动选中
+			$group_head.find("td>input[type='checkbox']").prop("checked",true);
+		}
+	});
+	
+	//同时只能选中一个group
+	function changeGroup(salesmanId){
+		$("tbody tr[sid!='"+salesmanId + "']").find("td>input[type='checkbox']").prop("checked",false);
+	}
+	//级联选中
 });

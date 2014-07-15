@@ -5,6 +5,7 @@ import java.util.Date;
 
 import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
+import net.keepsoft.commons.annotation.Temporary;
 
 @Table("tb_quoteprice")
 public class QuotePrice implements Serializable{
@@ -17,12 +18,20 @@ public class QuotePrice implements Serializable{
 	
 	private Date created_at;// 创建时间
 	private Date updated_at;// 最近更新时间
-	private int created_user;//创建用户
-	
+	private Integer created_user;//创建用户
+	@Temporary
 	private Sample sample = new Sample();
+	@Temporary
+	private int companyId;
 	
 	
 
+	public int getCompanyId() {
+		return companyId;
+	}
+	public void setCompanyId(int companyId) {
+		this.companyId = companyId;
+	}
 	public Sample getSample() {
 		return sample;
 	}
