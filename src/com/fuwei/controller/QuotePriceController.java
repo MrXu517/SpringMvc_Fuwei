@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
+import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.entity.QuotePrice;
 import com.fuwei.entity.User;
@@ -56,6 +57,7 @@ public class QuotePriceController extends BaseController{
 	public QuotePrice get(@PathVariable int id, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		QuotePrice QuotePrice = quotePriceService.get(id);
+		QuotePrice.setCompanyId(SystemCache.getSalesman(QuotePrice.getSalesmanId()).getCompanyId());
 		return QuotePrice;
 		
 	}

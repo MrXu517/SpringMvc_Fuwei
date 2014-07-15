@@ -13,7 +13,8 @@
 			+ path + "/";
 	//List<User> userlist = (List<User>) request.getAttribute("userlist");
 	Sample sample = (Sample) request.getAttribute("sample");
-	List<QuotePrice> quotepricelist = (List<QuotePrice>)request.getAttribute("quotepricelist");
+	List<QuotePrice> quotepricelist = (List<QuotePrice>) request
+			.getAttribute("quotepricelist");
 	/*List<Company> companylist = (List<Company>) request
 			.getAttribute("companylist");
 	List<Salesman> salesmanlist = (List<Salesman>) request
@@ -76,7 +77,9 @@
 							<span><%=sample.getProductNumber()%></span>
 						</div>
 						<div class="pull-right">
-							<button type="button" class="btn btn-info">生成样品标签</button>
+							<button type="button" class="btn btn-info">
+								生成样品标签
+							</button>
 						</div>
 
 						<div class="clear"></div>
@@ -171,7 +174,7 @@
 						<div class="panel-heading">
 							公司报价
 							<button type="button" class="btn btn-primary" id="addQuoteBtn">
-								新建公司报价
+								新建公司价格
 							</button>
 						</div>
 
@@ -185,7 +188,7 @@
 									<th>
 										公司名称
 									</th>
-								
+
 									<th>
 										业务员
 									</th>
@@ -203,21 +206,33 @@
 									</th>
 								</tr>
 							</thead>
-<tbody>
-<%
-int k = 0;
-for(QuotePrice quotePrice : quotepricelist){
- %>
-<tr><td><%=++k %></td>
-<td><%= SystemCache.getCompanyName(SystemCache.getSalesman(quotePrice.getSalesmanId()).getCompanyId())   %></td>
-<td><%= SystemCache.getSalesmanName(quotePrice.getSalesmanId()) %></td>
-<td><%=quotePrice.getPrice() %></td>
-<td><%=quotePrice.getCreated_at() %></td>
-<td><%=quotePrice.getMemo() %></td>
-<td><a class="addQuote" href="#" data-cid="<%=quotePrice.getId() %>">添加到报价列表</a> | <a class="printDetail" href="#" data-cid="<%=quotePrice.getId() %>">打印样品详情</a></td>
-</tr>
-<%} %>
-</tbody>
+							<tbody>
+								<%
+									int k = 0;
+									for (QuotePrice quotePrice : quotepricelist) {
+								%>
+								<tr>
+									<td><%=++k%></td>
+									<td><%=SystemCache.getCompanyName(SystemCache.getSalesman(
+								quotePrice.getSalesmanId()).getCompanyId())%></td>
+									<td><%=SystemCache.getSalesmanName(quotePrice
+								.getSalesmanId())%></td>
+									<td><%=quotePrice.getPrice()%></td>
+									<td><%=quotePrice.getCreated_at()%></td>
+									<td><%=quotePrice.getMemo()%></td>
+									<td>
+										<a class="addQuote" href="#"
+											data-cid="<%=quotePrice.getId()%>">添加到报价列表</a> |
+										<a class="edit" href="#"
+											data-cid="<%=quotePrice.getId()%>">编辑</a> |
+										<a class="printDetail" href="#"
+											data-cid="<%=quotePrice.getId()%>">打印样品详情</a>
+									</td>
+								</tr>
+								<%
+									}
+								%>
+							</tbody>
 						</table>
 					</div>
 				</div>
@@ -234,12 +249,14 @@ for(QuotePrice quotePrice : quotepricelist){
 							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
 						</button>
 						<h4 class="modal-title">
-							新建公司报价
+							新建公司价格
 						</h4>
 					</div>
 					<div class="modal-body">
 						<form class="form-horizontal quoteform" role="form">
-							<input type="hidden" id="sampleId" name="sampleId" value="<%=sample.getId()%>"/>
+							<input type="hidden" name="id" id="id" />
+							<input type="hidden" id="sampleId" name="sampleId"
+								value="<%=sample.getId()%>" />
 							<div class="row">
 								<div class="form-group">
 									<label for="companyId" class="col-sm-3 control-label">
@@ -289,7 +306,7 @@ for(QuotePrice quotePrice : quotepricelist){
 							<div class="modal-footer">
 								<button type="submit" class="btn btn-primary"
 									data-loading-text="正在保存...">
-									新建报价
+									新建价格
 								</button>
 								<button type="reset" class="btn btn-default"
 									data-dismiss="modal">

@@ -93,49 +93,53 @@
 										for (Integer salesmanId : salesmans) {
 											List<Quote> quotelist = quoteMap.get(salesmanId);
 									%>
-<tr class="group-head"><td colspan="10">
-															<input type="checkbox" />
-															<span class="company"><%=SystemCache.getCompanyName(SystemCache.getSalesman(salesmanId).getCompanyId())  %></span>
-<span class="salesman"><%=SystemCache.getSalesmanName(salesmanId) %></span>
-														</td></tr>
-													<%
-														int i = 0;
-															for (Quote quote : quotelist) {
-													%>
-													<tr class="group-body" quoteId="<%=quote.getId()%>">
-														<td width="3%" nowrap="nowrap">
-															<input type="checkbox" />
-														</td>
-														<td width="5%" nowrap="nowrap"><%=++i%></td>
-														<td width="10%" nowrap="nowrap"
-															style="max-width: 120px; height: 120px; max-height: 120px;">
-															<a target="_blank" class="cellimg"
-																href="<%=quote.getSample().getImg()%>"><img
-																	style="max-width: 120px; height: 120px; max-height: 120px;"
-																	src="<%=quote.getSample().getImg()%>"> </a>
-														</td>
-														<td width="5%" nowrap="nowrap"><%=SystemCache.getCompanyName(SystemCache
+									<tr class="group-head" sid="<%=salesmanId %>">
+										<td colspan="10">
+											<input type="checkbox" />
+											<span class="company"><%=SystemCache.getCompanyName(SystemCache.getSalesman(
+								salesmanId).getCompanyId())%></span>
+											<span class="salesman"><%=SystemCache.getSalesmanName(salesmanId)%></span>
+										</td>
+									</tr>
+									<%
+										int i = 0;
+											for (Quote quote : quotelist) {
+									%>
+									<tr class="group-body" quoteId="<%=quote.getId()%>" sid="<%=salesmanId %>">
+										<td width="3%" nowrap="nowrap">
+											<input type="checkbox" />
+										</td>
+										<td width="5%" nowrap="nowrap"><%=++i%></td>
+										<td width="10%" nowrap="nowrap"
+											style="max-width: 120px; height: 120px; max-height: 120px;">
+											<a target="_blank" class="cellimg"
+												href="<%=quote.getSample().getImg()%>"><img
+													style="max-width: 120px; height: 120px; max-height: 120px;"
+													src="<%=quote.getSample().getImg()%>"> </a>
+										</td>
+										<td width="5%" nowrap="nowrap"><%=SystemCache.getCompanyName(SystemCache
 									.getSalesman(
 											quote.getQuotePrice()
 													.getSalesmanId())
 									.getCompanyId())%></td>
-														<td width="5%" nowrap="nowrap"><%=SystemCache.getSalesmanName(quote.getQuotePrice()
+										<td width="5%" nowrap="nowrap"><%=SystemCache.getSalesmanName(quote.getQuotePrice()
 									.getSalesmanId())%></td>
-														<td width="5%" nowrap="nowrap"><%=quote.getSample().getProductNumber()%></td>
-														<td width="5%" nowrap="nowrap">
-															<span class="RMB">￥</span><strong><%=quote.getQuotePrice().getPrice()%></strong></td>
-														<td width="5%" nowrap="nowrap"><%=quote.getSample().getWeight()%>克
-														</td>
-														<td width="10%" nowrap="nowrap"><%=quote.getCreated_at()%></td>
-														<td width="15%" nowrap="nowrap">
-															<a href="sample/detail/<%=quote.getSample().getId()%>">详情</a>
-															|
-															<a href="#" class="delete" data-cid="<%=quote.getId()%>">删除</a>
-														</td>
-													</tr>
-													<%
-														}
-													%>
+										<td width="5%" nowrap="nowrap"><%=quote.getSample().getProductNumber()%></td>
+										<td width="5%" nowrap="nowrap">
+											<span class="RMB">￥</span><strong><%=quote.getQuotePrice().getPrice()%></strong>
+										</td>
+										<td width="5%" nowrap="nowrap"><%=quote.getSample().getWeight()%>克
+										</td>
+										<td width="10%" nowrap="nowrap"><%=quote.getCreated_at()%></td>
+										<td width="15%" nowrap="nowrap">
+											<a href="sample/detail/<%=quote.getSample().getId()%>">详情</a>
+											|
+											<a href="#" class="delete" data-cid="<%=quote.getId()%>">删除</a>
+										</td>
+									</tr>
+									<%
+										}
+									%>
 									<%
 										}
 									%>
