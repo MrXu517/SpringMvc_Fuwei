@@ -2,9 +2,11 @@ package com.fuwei.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
+import net.keepsoft.commons.annotation.Temporary;
 
 @Table("tb_quoteorder")
 public class QuoteOrder implements Serializable{
@@ -21,9 +23,17 @@ public class QuoteOrder implements Serializable{
 	private int created_user;//创建用户
 	
 	private int salesmanId;//业务员ID
+	@Temporary
+	private List<QuoteOrderDetail> detaillist ;
 	
 	
 	
+	public List<QuoteOrderDetail> getDetaillist() {
+		return detaillist;
+	}
+	public void setDetaillist(List<QuoteOrderDetail> detaillist) {
+		this.detaillist = detaillist;
+	}
 	public int getSalesmanId() {
 		return salesmanId;
 	}
