@@ -29,7 +29,22 @@ public class QuoteOrderDetail {
 	private Integer charge_user;//打样人
 	private String detail;//报价详情
 	
+	private String img_s;//中等缩略图
+	private String img_ss;//缩略图
 	
+	
+	public String getImg_s() {
+		return img_s;
+	}
+	public void setImg_s(String img_s) {
+		this.img_s = img_s;
+	}
+	public String getImg_ss() {
+		return img_ss;
+	}
+	public void setImg_ss(String img_ss) {
+		this.img_ss = img_ss;
+	}
 	public String getCproductN() {
 		return cproductN;
 	}

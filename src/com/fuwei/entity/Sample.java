@@ -38,11 +38,27 @@ public class Sample implements Serializable {
 	
 	private String help_code;//名称的拼音
 	
+	private String img_s;//中等缩略图
+	private String img_ss;//缩略图
+	
+	
 	public String getHelp_code() {
 		return help_code;
 	}
 	public void setHelp_code(String help_code) {
 		this.help_code = help_code;
+	}
+	public String getImg_s() {
+		return img_s;
+	}
+	public void setImg_s(String img_s) {
+		this.img_s = img_s;
+	}
+	public String getImg_ss() {
+		return img_ss;
+	}
+	public void setImg_ss(String img_ss) {
+		this.img_ss = img_ss;
 	}
 	public String getName() {
 		return name;

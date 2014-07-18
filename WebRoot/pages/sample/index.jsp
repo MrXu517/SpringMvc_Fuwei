@@ -219,7 +219,7 @@
 											<a target="_blank" class="cellimg"
 												href="<%=sample.getImg()%>"><img
 													style="max-width: 120px; height: 120px; max-height: 120px;"
-													src="<%=sample.getImg()%>"> </a>
+													src="<%=sample.getImg_ss()%>"> </a>
 										</td>
 										<td><%=sample.getName()%></td>
 										<td><%=sample.getProductNumber()%></td>

@@ -33,6 +33,7 @@ import com.fuwei.entity.User;
 import com.fuwei.service.QuotePriceService;
 import com.fuwei.service.QuoteService;
 import com.fuwei.service.SampleService;
+import com.fuwei.util.CompressUtil;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.HanyuPinyinUtil;
 import com.fuwei.util.SerializeTool;
@@ -115,8 +116,16 @@ public class SampleController extends BaseController {
 	public Map<String,Object> add(Sample sample,@RequestParam("file") CommonsMultipartFile file,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String img = fileUpload(request,file);
+		String fileName = fileUpload(request,file);
+    	String img = Constants.UPLOADIMGPATH + fileName;
 		sample.setImg(img);
+		//中等缩略图：样品详情
+		CompressUtil.compressPic(SystemContextUtils.getAppPath(request) + Constants.UPLOADIMGPATH, SystemContextUtils.getAppPath(request)+ Constants.UPLOADIMGPATH_S, fileName, fileName, 350, 350);
+		//缩略图：列表
+		String ss_filename = CompressUtil.compressPic(SystemContextUtils.getAppPath(request) + Constants.UPLOADIMGPATH, SystemContextUtils.getAppPath(request)+ Constants.UPLOADIMGPATH_SS, fileName, fileName, 120, 120,"png");
+		sample.setImg_s(Constants.UPLOADIMGPATH_S + fileName);
+		sample.setImg_ss(Constants.UPLOADIMGPATH_SS + ss_filename);
+		
 		sample.setHelp_code(HanyuPinyinUtil.getFirstSpellByString(sample.getName())) ;
 		sample.setCreated_at(DateTool.now());
 		sample.setUpdated_at(DateTool.now());
@@ -168,8 +177,15 @@ public class SampleController extends BaseController {
         MultiValueMap<String, MultipartFile> multiValueMap = multipartRequest.getMultiFileMap();  
         List<MultipartFile> file = multiValueMap.get("file");  
         if(file!=null && !file.isEmpty()){  
-        	String img = fileUpload(request,(CommonsMultipartFile)file.get(0));
+        	String fileName = fileUpload(request,(CommonsMultipartFile)file.get(0));
+        	String img = Constants.UPLOADIMGPATH + fileName;
     		sample.setImg(img);
+    		//中等缩略图：样品详情
+    		CompressUtil.compressPic(SystemContextUtils.getAppPath(request) + Constants.UPLOADIMGPATH, SystemContextUtils.getAppPath(request)+ Constants.UPLOADIMGPATH_S, fileName, fileName, 350, 350);
+    		//缩略图：列表
+    		String ss_filename = CompressUtil.compressPic(SystemContextUtils.getAppPath(request) + Constants.UPLOADIMGPATH, SystemContextUtils.getAppPath(request)+ Constants.UPLOADIMGPATH_S, fileName, fileName, 120, 120,"png");
+    		sample.setImg_s(Constants.UPLOADIMGPATH_S + fileName);
+    		sample.setImg_ss(Constants.UPLOADIMGPATH_SS + ss_filename);
         }  
 	
 		sample.setHelp_code(HanyuPinyinUtil.getFirstSpellByString(sample.getName())) ;
@@ -185,19 +201,20 @@ public class SampleController extends BaseController {
 	
     public String fileUpload(HttpServletRequest request , CommonsMultipartFile file) throws Exception {
          long  startTime=System.currentTimeMillis();
-        
-        String path = Constants.UPLOADIMGPATH + new Date().getTime() +file.getOriginalFilename();
+        String fileName = new Date().getTime() +file.getOriginalFilename();
+        String path = Constants.UPLOADIMGPATH + fileName;
         
         java.io.File pathFile=new java.io.File(request.getSession().getServletContext().getRealPath("/") + Constants.UPLOADIMGPATH);
+        
         if(!pathFile.exists()){
         	pathFile.mkdir();
         }
         System.out.println("path："+path);
-        java.io.File newFile=new java.io.File(request.getSession().getServletContext().getRealPath("/")  + path);
+        java.io.File newFile=new java.io.File(request.getSession().getServletContext().getRealPath("/") + path);
         //通过CommonsMultipartFile的方法直接写文件（注意这个时候）
         file.transferTo(newFile);
         long  endTime=System.currentTimeMillis();
         System.out.println("方法二的运行时间："+String.valueOf(endTime-startTime)+"ms");
-        return path;  
+        return fileName;  
     }
 }

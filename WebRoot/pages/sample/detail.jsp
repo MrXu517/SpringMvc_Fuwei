@@ -88,7 +88,7 @@
 					<div class="sampleImg">
 
 						<a href="#" class="thumbnail"> <img id="previewImg"
-								alt="400 x 100%" src="<%=sample.getImg()%>"> </a>
+								alt="400 x 100%" src="<%=sample.getImg_s()%>"> </a>
 
 					</div>
 					<div class="sampleData">

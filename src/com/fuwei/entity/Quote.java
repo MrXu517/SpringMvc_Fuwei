@@ -153,5 +153,11 @@ public class Quote implements Serializable{
 	public void setShas_detail(Boolean has_detail) {
 		sample.setHas_detail(has_detail);
 	}
+	public void setSimg_s(String img_s){
+		sample.setImg_s(img_s);
+	}
+	public void setSimg_ss(String img_ss){
+		sample.setImg_ss(img_ss);
+	}
 }
 

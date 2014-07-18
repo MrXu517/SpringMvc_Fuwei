@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import com.fuwei.commons.SystemCache;
+import com.fuwei.constant.Constants;
 import com.fuwei.entity.QuoteOrder;
 import com.fuwei.entity.QuoteOrderDetail;
 import com.fuwei.entity.QuotePrice;
@@ -45,10 +46,12 @@ public class ExportExcel {
 	private static final String factoryPhone = "0571-64677060";
 
 	// 生成报价单excel
-	public final static String exportExcel(String fileName,String imgPath,QuoteOrder quoteorder) {
-
-		String result = "系统提示：Excel文件导出成功！";
-		System.out.println(result);
+	public final static void exportExcel(String fileName,String appPath,QuoteOrder quoteorder) throws Exception {
+		java.io.File pathFile=new java.io.File(appPath + Constants.UPLOADEXCEL);
+        if(!pathFile.exists()){
+        	pathFile.mkdir();
+        }
+        fileName = appPath + fileName;
 		// 以下开始输出到EXCEL
 		try {
 			// 定义输出流，以便打开保存对话框______________________begin
@@ -109,7 +112,7 @@ public class ExportExcel {
 			company_wcf_center.setAlignment(Alignment.LEFT); // 文字水平对齐
 			company_wcf_center.setWrap(false); // 文字是否换行
 			sheet.mergeCells(0, 2, 6, 2);
-			sheet.addCell(new Label(0, 2, "  №:" + " " + quoteorder.getQuotationNumber(),
+			sheet.addCell(new Label(0, 2, "  No:" + " " + quoteorder.getQuotationNumber(),
 					company_wcf_center));
 			sheet.mergeCells(0, 3, 6, 3);
 			sheet.addCell(new Label(0, 3, "  TO:" + SystemCache.getCompanyName(quoteorder.getCompanyId())  + "   "
@@ -150,7 +153,7 @@ public class ExportExcel {
 //				Sample sample = sampleDAO.getSample(companyPriceList.get(i)
 //						.getSampleId());
 				sheet.addCell(new Label(0, 6 + i, i + 1 + "", content_center));
-				File pictureFile = new File(imgPath + detail.getImg());
+				File pictureFile = new File( appPath + detail.getImg_ss());//imgPath
 				if (pictureFile.exists()) {
 					WritableImage a = new WritableImage(1, 6 + i, 1, 1,
 							pictureFile);
@@ -176,13 +179,15 @@ public class ExportExcel {
 			workbook.close();
 
 		} catch (Exception e) {
-			result = "系统提示：Excel文件导出失败，原因：" + e.toString();
-			System.out.println(result);
 			e.printStackTrace();
+			throw e;
 		}
-		return result;
 	}
-
+	//删除报价单excel
+	public final static Boolean deleteExcel(String filename,String appPath){
+		File file = new File(filename);
+		return file.delete();
+	}
 	// 生成样品标签
 //	public final static String exportSampleSignExcel(
 //			List<Sample> samplelist, String filePath,
@@ -1191,8 +1196,6 @@ public class ExportExcel {
 			workbook.close();
 
 		} catch (Exception e) {
-			result = "系统提示：Excel文件导出失败，原因：" + e.toString();
-			System.out.println(result);
 			e.printStackTrace();
 		}
 		return result;
