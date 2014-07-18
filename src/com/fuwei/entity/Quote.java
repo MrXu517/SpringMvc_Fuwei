@@ -81,6 +81,9 @@ public class Quote implements Serializable{
 	public void setQprice(double price) {
 		quotePrice.setPrice(price);
 	}
+	public void setQcproductN(String cproductN){
+		quotePrice.setCproductN(cproductN);
+	}
 	public void setQmemo(String memo) {
 		quotePrice.setMemo(memo);
 	}

@@ -19,7 +19,7 @@ public class DateTool {
 	}
 
 	public static Date parse(String strDate) throws ParseException {
-		if(strDate == null){
+		if(strDate == null || strDate == ""){
 			return null;
 		}
 		try{
@@ -40,6 +40,11 @@ public class DateTool {
 	
 	public static String formatDateYMD(Date date) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		return sdf.format(date);
+	}
+	
+	public static String formDate(Date date,String format)throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		return sdf.format(date);
 	}
 }

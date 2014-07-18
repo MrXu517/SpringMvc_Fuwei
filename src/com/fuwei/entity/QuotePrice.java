@@ -19,13 +19,24 @@ public class QuotePrice implements Serializable{
 	private Date created_at;// 创建时间
 	private Date updated_at;// 最近更新时间
 	private Integer created_user;//创建用户
+	
+	private String cproductN ; //公司款号
 	@Temporary
 	private Sample sample = new Sample();
 	@Temporary
 	private int companyId;
 	
 	
-
+	
+	public String getCproductN() {
+		return cproductN;
+	}
+	public void setCproductN(String cproductN) {
+		this.cproductN = cproductN;
+	}
+	public void setCreated_user(Integer created_user) {
+		this.created_user = created_user;
+	}
 	public int getCompanyId() {
 		return companyId;
 	}

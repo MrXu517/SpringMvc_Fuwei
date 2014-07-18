@@ -9,11 +9,11 @@ import net.keepsoft.commons.annotation.Table;
 public class QuoteOrderDetail {
 	@IdentityId
 	private Integer id;//主键
-	private Integer quoteId;//报价ID
 	private Integer quoteOrderId;//报价单ID
 	private double price;//报价
 	private String memo;//价格的备注
 	private int sampleId;//样品ID
+	private String cproductN ; //公司款号
 	
 	//接下来的Sample的属性
 	private String name;//样品名称
@@ -29,11 +29,18 @@ public class QuoteOrderDetail {
 	private Integer charge_user;//打样人
 	private String detail;//报价详情
 	
-	public Integer getQuoteId() {
-		return quoteId;
+	
+	public String getCproductN() {
+		return cproductN;
 	}
-	public void setQuoteId(Integer quoteId) {
-		this.quoteId = quoteId;
+	public void setCproductN(String cproductN) {
+		this.cproductN = cproductN;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	public Integer getQuoteOrderId() {
 		return quoteOrderId;

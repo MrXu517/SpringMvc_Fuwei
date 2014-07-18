@@ -75,7 +75,7 @@
 												</label>
 												<div class="col-sm-8">
 													<input type="text" class="form-control require"
-														name="productNumber" id="productNumber" placeholder="产品编号"
+														name="productNumber" id="productNumber" readonly placeholder="产品编号"
 														value="<%=sample.getProductNumber() %>">
 												</div>
 												<div class="col-sm-1"></div>
@@ -160,16 +160,6 @@
 												<div class="col-sm-1"></div>
 											</div>
 
-											<div class="form-group">
-												<label for="cost" class="col-sm-3 control-label">
-													成本
-												</label>
-												<div class="col-sm-8">
-													<input type="text" class="form-control require" name="cost"
-														id="cost" placeholder="成本" value="<%=sample.getCost() %>">
-												</div>
-												<div class="col-sm-1"></div>
-											</div>
 											<div class="form-group">
 												<label for="machine" class="col-sm-3 control-label">
 													机织

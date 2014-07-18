@@ -60,4 +60,41 @@ $(document).ready(function(){
 		$("tbody tr[sid!='"+salesmanId + "']").find("td>input[type='checkbox']").prop("checked",false);
 	}
 	//级联选中
+	
+	//生成报价单
+	$("#QuoteBtn").click(function(){
+		var $checkeds = $("table tr.group-body td>input[type='checkbox']:checked");
+		if($checkeds.length<0){
+			
+		}
+		var quoteIds = [];
+		var $checkedTrs = $checkeds.closest("tr");
+		for(var i = 0 ; i < $checkedTrs.length;++i){
+			var $checkedTr = $checkedTrs.eq(i);
+			var quoteId = $checkedTr.attr("quoteId");
+			quoteIds.push(quoteId);
+		}
+			$.ajax({
+	            url: "quoteorder/add",
+	            type: 'POST',
+	            data:{ids:quoteIds.toString()}
+	        })
+	            .done(function(result) {
+	            	if(result.success){
+	            		Common.Tip("创建报价单成功",function(){
+	            			location = "quoteorder/index";
+	            		});
+	            	}else{
+	            		Common.Error("创建报价单失败：" + result.message);
+	            	}
+	            })
+	            .fail(function(result) {
+	            	Common.Error("请求服务器过程中出错:" + result.responseText);
+	            })
+	            .always(function() {
+	            	
+	            });
+	});
+	
+	//生成报价单
 });

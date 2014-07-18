@@ -12,8 +12,6 @@ import net.keepsoft.commons.annotation.Temporary;
 public class QuoteOrder implements Serializable{
 	@IdentityId
 	private int id;//主键
-	//private quoteId;//报价ID
-	private String quote_ids;//报价IDs
 	
 	private String excelUrl;//excel文件地址
 	private String quotationNumber;//报价单单号
@@ -26,8 +24,16 @@ public class QuoteOrder implements Serializable{
 	@Temporary
 	private List<QuoteOrderDetail> detaillist ;
 	
+	@Temporary
+	private int companyId;
 	
 	
+	public int getCompanyId() {
+		return companyId;
+	}
+	public void setCompanyId(int companyId) {
+		this.companyId = companyId;
+	}
 	public List<QuoteOrderDetail> getDetaillist() {
 		return detaillist;
 	}
@@ -64,12 +70,6 @@ public class QuoteOrder implements Serializable{
 	}
 	public void setId(int id) {
 		this.id = id;
-	}
-	public String getQuote_ids() {
-		return quote_ids;
-	}
-	public void setQuote_ids(String quote_ids) {
-		this.quote_ids = quote_ids;
 	}
 	public String getExcelUrl() {
 		return excelUrl;

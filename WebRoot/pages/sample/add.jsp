@@ -69,7 +69,7 @@
 												</label>
 												<div class="col-sm-8">
 													<input type="text" class="form-control require"
-														name="productNumber" id="productNumber" placeholder="产品编号">
+														name="productNumber" id="productNumber" readonly value="自动生成" placeholder="产品编号">
 												</div>
 												<div class="col-sm-1"></div>
 											</div>
@@ -144,16 +144,6 @@
 												<div class="col-sm-1"></div>
 											</div>
 
-											<div class="form-group">
-												<label for="cost" class="col-sm-3 control-label">
-													成本
-												</label>
-												<div class="col-sm-8">
-													<input type="text" class="form-control require double" name="cost"
-														id="cost" placeholder="成本">
-												</div>
-												<div class="col-sm-1"></div>
-											</div>
 											<div class="form-group">
 												<label for="machine" class="col-sm-3 control-label">
 													机织

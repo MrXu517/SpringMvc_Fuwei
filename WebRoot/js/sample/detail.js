@@ -46,16 +46,14 @@ $(document).ready(function(){
 			success : function(result) {
 				if (result.success) {
 					Common.Tip("添加成功", function() {
-						// reload();
+						//reload();
 					});
 				} else {
 					Common.Error("添加失败：" + result.message);
 				}
-				$submitBtn.button('reset');
 			},
 			error : function(result) {
 				Common.Error("请求服务器过程中出错:" + result.responseText);
-				$submitBtn.button('reset');
 			}
 
 		});

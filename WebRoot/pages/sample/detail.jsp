@@ -287,6 +287,15 @@
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">
+										公司款号
+									</label>
+									<div class="col-sm-8">
+										<input type="text" name="cproductN" id="cproductN"
+											class="form-control">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">
 										价格
 									</label>
 									<div class="col-sm-8">

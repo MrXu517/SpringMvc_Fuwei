@@ -163,7 +163,7 @@
 									class="fa fa-shopping-cart"></i>报价列表</a>
 							</li>
 							<li>
-								<a href="searchQuotationList.do"><i class="fa fa-calendar"></i>报价单列表</a>
+								<a href="quoteorder/index"><i class="fa fa-calendar"></i>报价单列表</a>
 							</li>
 						</ul>
 					</li>

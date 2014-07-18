@@ -47,7 +47,7 @@
 					<div class="row">
 						<div class="col-md-12 tablewidget">
 							<div>
-								<button type="button" class="btn btn-danger">
+								<button type="button" class="btn btn-danger" id="QuoteBtn">
 									确定报价
 								</button>
 							</div>

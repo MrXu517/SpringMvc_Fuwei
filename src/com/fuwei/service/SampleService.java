@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
 import com.fuwei.entity.Sample;
+import com.fuwei.util.CreateNumberUtil;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
 
@@ -103,13 +104,16 @@ public class SampleService extends BaseService {
 	@Transactional
 	public int add(Sample sample) throws Exception {
 		try {
-			return this.insert(sample);
+			Integer sampleId = this.insert(sample);
+			String productNumber = CreateNumberUtil.createSampleProductNumber(sampleId);
+			sample.setProductNumber(productNumber);
+			return this.update(sample, "id", null);
 		} catch (Exception e) {
 			throw e;
 		}
 	}
 
-	// 删除公司
+	// 删除样品
 	public int remove(int id) throws Exception {
 		try {
 			return dao.update("delete from tb_sample WHERE  id = ?", id);
@@ -118,11 +122,11 @@ public class SampleService extends BaseService {
 		}
 	}
 
-	// 编辑公司
+	// 编辑样品
 	public int update(Sample sample) throws Exception {
 		try {
 			return this.update(sample, "id",
-					"created_user,detail,has_detail,created_at", true);
+					"created_user,detail,has_detail,created_at,productNumber", true);
 		} catch (Exception e) {
 			throw e;
 		}
