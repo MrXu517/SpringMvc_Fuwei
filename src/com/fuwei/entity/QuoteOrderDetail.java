@@ -5,7 +5,7 @@ import net.keepsoft.commons.annotation.Table;
 
 
 //该类是报价单的一条记录，如淘宝中订单与商品的关系
-@Table("tb_quoteorder_quote")
+@Table("tb_quoteorder_detail")
 public class QuoteOrderDetail {
 	@IdentityId
 	private Integer id;//主键
