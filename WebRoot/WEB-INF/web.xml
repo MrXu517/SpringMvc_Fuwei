@@ -87,7 +87,14 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	<!-- spring的字符编码拦截器 对所有的请求都是用utf-8编码 -->
-	
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.xls</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.xlsx</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>default</servlet-name>
 		<url-pattern>*.ico</url-pattern>

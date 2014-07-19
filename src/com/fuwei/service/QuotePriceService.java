@@ -20,7 +20,7 @@ public class QuotePriceService extends BaseService {
 	public List<QuotePrice> getList(int sampleId) throws Exception {
 		try {
 			List<QuotePrice> quotepriceList = dao.queryForBeanList(
-					"SELECT * FROM tb_quoteprice WHERE sampleId=?", QuotePrice.class,sampleId);
+					"SELECT * FROM tb_quoteprice WHERE sampleId=? order by created_at desc", QuotePrice.class,sampleId);
 			return quotepriceList;
 		} catch (Exception e) {
 			throw e;

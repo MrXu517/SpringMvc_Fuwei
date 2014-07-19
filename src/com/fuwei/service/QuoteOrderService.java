@@ -37,12 +37,12 @@ public class QuoteOrderService extends BaseService {
 			sql.append("select * from tb_quoteorder ");
 			String seq = "WHERE ";
 			if (start_time != null) {
-				sql.append(seq + " created_at>='" + DateTool.formatDate(start_time) + "'");
+				sql.append(seq + " created_at>='" + DateTool.formateDate(start_time) + "'");
 				seq = " AND ";
 			}
 			if (end_time != null) {
 				
-				sql.append(seq + " created_at<='" +  DateTool.formatDate(DateTool.addDay(end_time, 1))+"'");
+				sql.append(seq + " created_at<='" +  DateTool.formateDate(DateTool.addDay(end_time, 1))+"'");
 			}
 
 			if (sortlist != null && sortlist.size() > 0) {
@@ -110,15 +110,15 @@ public class QuoteOrderService extends BaseService {
 //		}
 //	}
 //	
-//	// 获取报价
-//	public Quote get(int id) throws Exception {
-//		try {
-//			Quote quote = dao.queryForBean(
-//					"select * from tb_quote where id = ?", Quote.class,
-//					id);
-//			return quote;
-//		} catch (Exception e) {
-//			throw e;
-//		}
-//	}
+	// 获取报价单
+	public QuoteOrder get(int id) throws Exception {
+		try {
+			QuoteOrder quoteOrder = dao.queryForBean(
+					"select * from tb_quoteorder where id = ?", QuoteOrder.class,
+					id);
+			return quoteOrder;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 }

@@ -119,7 +119,7 @@ public class ExportExcel {
 					+ SystemCache.getSalesmanName(quoteorder.getSalesmanId()), company_wcf_center));
 
 			sheet.mergeCells(0, 4, 6, 4);
-			sheet.addCell(new Label(0, 4, "  时间:" + DateTool.formatDate(quoteorder.getCreated_at()), company_wcf_center));
+			sheet.addCell(new Label(0, 4, "  时间:" + DateTool.formateDate(quoteorder.getCreated_at()), company_wcf_center));
 			/** ***************以下是EXCEL第4行列标题列********************* */
 
 			// sheet.addCell(new Label(i+1, 0, Title[i], wcf_center));
@@ -1172,7 +1172,7 @@ public class ExportExcel {
 			sheet.addCell(new Label(1, 5, sample.getWeight()+"  克", sample_detail_content_center));
 			sheet.addCell(new Label(1, 6, sample.getMaterial(), sample_detail_content_center));
 			sheet.addCell(new Label(1, 7, sample.getMachine(), sample_detail_content_center));
-			sheet.addCell(new Label(1, 8, DateTool.formatDate(sample.getCreated_at()), sample_detail_content_center));
+			sheet.addCell(new Label(1, 8, DateTool.formateDate(sample.getCreated_at()), sample_detail_content_center));
 			sheet.addCell(new Label(1, 9, sample.getCost()+"  元", sample_detail_content_center));
 			sheet.addCell(new Label(1, 10, sample.getMemo(), sample_detail_content_center));
 			
@@ -1188,7 +1188,7 @@ public class ExportExcel {
 			//sheet.addCell(new Label(7, 3, companyPrice.getProductName(), sample_detail_content_center));
 			sheet.addCell(new Label(7, 4, SystemCache.getSalesmanName(quotePrice.getSalesmanId()) , sample_detail_content_center));
 			sheet.addCell(new Label(7, 5, quotePrice.getPrice()+" 元", sample_detail_content_center));
-			sheet.addCell(new Label(7, 6, DateTool.formatDate(quotePrice.getCreated_at()), sample_detail_content_center));
+			sheet.addCell(new Label(7, 6, DateTool.formateDate(quotePrice.getCreated_at()), sample_detail_content_center));
 			sheet.addCell(new Label(7, 7, quotePrice.getMemo(), sample_detail_content_center));	
 			/** **********将以上缓存中的内容写到EXCEL文件中******** */
 			workbook.write();

@@ -29,11 +29,11 @@ public class SampleService extends BaseService {
 			StringBuffer sql = new StringBuffer();
 			sql.append("select * from tb_sample where has_detail=1");
 			if (start_time != null) {
-				sql.append(" AND created_at>='" + DateTool.formatDate(start_time) + "'");
+				sql.append(" AND created_at>='" + DateTool.formateDate(start_time) + "'");
 			}
 			if (end_time != null) {
 				
-				sql.append(" AND created_at<='" +  DateTool.formatDate(DateTool.addDay(end_time, 1))+"'");
+				sql.append(" AND created_at<='" +  DateTool.formateDate(DateTool.addDay(end_time, 1))+"'");
 			}
 
 			if (sortlist != null && sortlist.size() > 0) {
@@ -75,12 +75,12 @@ public class SampleService extends BaseService {
 			List<Sample> sampleList = new ArrayList<Sample>();
 			if (charge_user == null) {
 				sampleList = dao.queryForBeanList(
-						"SELECT * FROM tb_sample WHERE has_detail=0",
+						"SELECT * FROM tb_sample WHERE has_detail=0 order by created_at desc",
 						Sample.class);
 			} else {
 				sampleList = dao
 						.queryForBeanList(
-								"SELECT * FROM tb_sample WHERE has_detail=0 and charge_user=?",
+								"SELECT * FROM tb_sample WHERE has_detail=0 and charge_user=? order by created_at desc",
 								Sample.class, charge_user);
 			}
 			return sampleList;
@@ -93,7 +93,7 @@ public class SampleService extends BaseService {
 	public List<Sample> getList() throws Exception {
 		try {
 			List<Sample> sampleList = dao.queryForBeanList(
-					"SELECT * FROM tb_sample WHERE has_detail=1", Sample.class);
+					"SELECT * FROM tb_sample WHERE has_detail=1 order by created_at desc", Sample.class);
 			return sampleList;
 		} catch (Exception e) {
 			throw e;

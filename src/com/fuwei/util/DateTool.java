@@ -13,7 +13,7 @@ public class DateTool {
 		return new Date();
 	}
 
-	public static String formatDate(Date date) throws ParseException {
+	public static String formateDate(Date date) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return sdf.format(date);
 	}
@@ -43,7 +43,7 @@ public class DateTool {
 		return sdf.format(date);
 	}
 	
-	public static String formDate(Date date,String format)throws ParseException {
+	public static String formateDate(Date date,String format)throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		return sdf.format(date);
 	}

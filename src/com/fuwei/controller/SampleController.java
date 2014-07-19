@@ -1,5 +1,6 @@
 package com.fuwei.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -95,7 +96,15 @@ public class SampleController extends BaseController {
 		if(sortJSON!=null){
 			sortList = SerializeTool.deserializeList(sortJSON,Sort.class);
 		}
+		if(sortList == null){
+			sortList = new ArrayList<Sort>();
+		}
+		Sort sort = new Sort();
+		sort.setDirection("desc");
+		sort.setProperty("created_at");
+		sortList.add(sort);
 		pager = sampleService.getList(pager,start_time_d,end_time_d,sortList);
+		
 		request.setAttribute("start_time", start_time_d);
 		request.setAttribute("end_time", end_time_d);
 		request.setAttribute("pager", pager);

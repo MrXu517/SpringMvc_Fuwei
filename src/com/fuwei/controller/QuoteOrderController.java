@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,7 +45,10 @@ public class QuoteOrderController extends BaseController {
 	QuoteService quoteService;
 	@Autowired
 	QuoteOrderService quoteOrderService;
-
+	@Autowired
+	QuoteOrderDetailService quoteOrderDetailService;
+	
+	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	@Transactional
@@ -52,7 +56,7 @@ public class QuoteOrderController extends BaseController {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		String excelfile_name = Constants.UPLOADEXCEL
-				+ DateTool.formDate(new Date(), "yyyyMMddHHmmss") + "_"
+				+ DateTool.formateDate(new Date(), "yyyyMMddHHmmss") + "_"
 				+ new Date().getTime() + ".xls";
 		String appPath = SystemContextUtils
 		.getAppPath(request);
@@ -136,6 +140,13 @@ public class QuoteOrderController extends BaseController {
 		if (sortJSON != null) {
 			sortList = SerializeTool.deserializeList(sortJSON, Sort.class);
 		}
+		if(sortList == null){
+			sortList = new ArrayList<Sort>();
+		}
+		Sort sort = new Sort();
+		sort.setDirection("desc");
+		sort.setProperty("created_at");
+		sortList.add(sort);
 		pager = quoteOrderService.getList(pager, start_time_d, end_time_d,
 				sortList);
 		if (pager != null & pager.getResult() != null) {
@@ -151,4 +162,19 @@ public class QuoteOrderController extends BaseController {
 		request.setAttribute("pager", pager);
 		return new ModelAndView("quoteorder/index");
 	}
+	
+	@RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView detail(@PathVariable Integer id,HttpSession session, HttpServletRequest request) throws Exception{
+		if(id == null){
+			throw new Exception("缺少报价单ID");
+		}
+		QuoteOrder quoteOrder = quoteOrderService.get(id);
+		quoteOrder.setCompanyId(SystemCache.getSalesman(quoteOrder.getSalesmanId()).getCompanyId());
+		List<QuoteOrderDetail> detaillist = quoteOrderDetailService.getListByQuoteOrder(id);
+		quoteOrder.setDetaillist(detaillist);
+		request.setAttribute("quoteorder", quoteOrder);
+		return new ModelAndView("quoteorder/detail");
+	}
+	
 }

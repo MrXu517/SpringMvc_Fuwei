@@ -18,7 +18,7 @@ public class QuoteOrderDetailService extends BaseService {
 	public List<QuoteOrderDetail> getListByQuoteOrder(int quoteOrderId) throws Exception {
 		try {
 			List<QuoteOrderDetail> quoteorder_quoteList = dao.queryForBeanList(
-					"SELECT * FROM tb_quoteorder_quote WHERE quoteOrderId=?", QuoteOrderDetail.class);
+					"SELECT * FROM tb_quoteorder_detail WHERE quoteOrderId=?", QuoteOrderDetail.class,quoteOrderId);
 			return quoteorder_quoteList;
 		} catch (Exception e) {
 			throw e;
@@ -46,6 +46,7 @@ public class QuoteOrderDetailService extends BaseService {
 			throw e;
 		}
 	}
+
 //	// 删除报价
 //	public int remove(int id) throws Exception {
 //		try{
