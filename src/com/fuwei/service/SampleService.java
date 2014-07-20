@@ -23,7 +23,7 @@ public class SampleService extends BaseService {
 	@Autowired
 	JdbcTemplate jdbc;
 
-	public Pager getList(Pager pager, Date start_time, Date end_time,
+	public Pager getList(Pager pager, Date start_time, Date end_time,Integer charge_user,
 			List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
@@ -35,7 +35,9 @@ public class SampleService extends BaseService {
 				
 				sql.append(" AND created_at<='" +  DateTool.formateDate(DateTool.addDay(end_time, 1))+"'");
 			}
-
+			if(charge_user!=null){
+				sql.append(" AND charge_user='" +  charge_user +"'");
+			}
 			if (sortlist != null && sortlist.size() > 0) {
 
 				for (int i = 0; i < sortlist.size(); ++i) {

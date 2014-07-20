@@ -31,6 +31,9 @@
 	if (end_time != null) {
 		end_time_str = DateTool.formatDateYMD(end_time);
 	}
+
+	Integer charge_userId = (Integer) request
+			.getAttribute("charge_user");
 %>
 <!DOCTYPE html>
 
@@ -71,15 +74,17 @@
 							<div clas="navbar navbar-default">
 								<ul class="pagination">
 									<li>
-										<a href="sample/index?start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
+										<a
+											href="sample/index?start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=1">«</a>
 									</li>
 
 									<%
 										if (pager.getPageNo() > 1) {
 									%>
 									<li class="">
-										<a href="sample/index?start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页 <span
-											class="sr-only"></span> </a>
+										<a
+											href="sample/index?start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() - 1%>">上一页
+											<span class="sr-only"></span> </a>
 									</li>
 									<%
 										} else {
@@ -92,8 +97,9 @@
 									%>
 
 									<li class="active">
-										<a href="sample/index?start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%><span class="sr-only"></span>
-										</a>
+										<a
+											href="sample/index?start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%><span
+											class="sr-only"></span> </a>
 									</li>
 									<li>
 										<%
@@ -101,8 +107,9 @@
 										%>
 									
 									<li class="">
-										<a href="sample/index?start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页 <span
-											class="sr-only"></span> </a>
+										<a
+											href="sample/index?start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() + 1%>">下一页
+											<span class="sr-only"></span> </a>
 									</li>
 									<%
 										} else {
@@ -116,23 +123,57 @@
 
 									</li>
 									<li>
-										<a href="sample/index?start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
+										<a
+											href="sample/index?start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getTotalPage()%>">»</a>
 									</li>
 								</ul>
-								<form class="form-inline pageform form-horizontal" role="form" action="sample/index?start_time=<%=start_time_str %>&end_time=<%=end_time_str %>">
-									<input type="hidden" name="start_time" id="start_time" value="<%=start_time_str %>">
-<input type="hidden" name="end_time" id="end_time" value="<%=end_time_str %>">
+								<form class="form-inline pageform form-horizontal" role="form"
+									action="sample/index?start_time=<%=start_time_str%>&end_time=<%=end_time_str%>">
+									<input type="hidden" name="start_time" id="start_time"
+										value="<%=start_time_str%>">
+									<input type="hidden" name="end_time" id="end_time"
+										value="<%=end_time_str%>">
 									<div class="form-group">
 										<div class="input-group">
 											<span class="input-group-addon">去第</span>
 											<input type="text" name="page" id="page"
-												class="int form-control" placeholder="1,2,..." value="<%=pager.getPageNo() %>">
+												class="int form-control" placeholder="1,2,..."
+												value="<%=pager.getPageNo()%>">
 
 											<span class="input-group-addon">页</span>
 											<span class="input-group-btn">
 												<button class="btn btn-primary" type="submit">
 													Go!
 												</button> </span>
+										</div>
+									</div>
+								</form>
+								<form class="form-horizontal searchform form-inline" role="form">
+									<input type="hidden" name="page" id="page"
+										value="<%=pager.getPageNo()%>" />
+									<div class="form-group">
+										<label for="charge_user" class="col-sm-3 control-label">
+											打样人
+										</label>
+										<div class="col-sm-8">
+											<select id="charge_user" class="form-control">
+												<option value="">
+													所有
+												</option>
+												<%
+													for (User tempU : userlist) {
+														if (charge_userId != null && charge_userId == tempU.getId()) {
+												%>
+												<option value="<%=tempU.getId()%>" selected="selected"><%=tempU.getName()%></option>
+												<%
+													} else {
+												%>
+												<option value="<%=tempU.getId()%>"><%=tempU.getName()%></option>
+												<%
+													}
+													}
+												%>
+											</select>
 										</div>
 									</div>
 								</form>

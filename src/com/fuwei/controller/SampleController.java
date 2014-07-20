@@ -84,7 +84,7 @@ public class SampleController extends BaseController {
 	@SuppressWarnings("deprecation")
 	@RequestMapping(value="/index",method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView index(Integer page,String start_time,String end_time,String sortJSON,  HttpSession session,HttpServletRequest request) throws Exception{
+	public ModelAndView index(Integer page,String start_time,String end_time,String sortJSON,Integer charge_user,  HttpSession session,HttpServletRequest request) throws Exception{
 		Date start_time_d = DateTool.parse(start_time);
 		Date end_time_d = DateTool.parse(end_time);
 		Pager pager = new Pager();
@@ -103,11 +103,13 @@ public class SampleController extends BaseController {
 		sort.setDirection("desc");
 		sort.setProperty("created_at");
 		sortList.add(sort);
-		pager = sampleService.getList(pager,start_time_d,end_time_d,sortList);
+		pager = sampleService.getList(pager,start_time_d,end_time_d,charge_user,sortList);
 		
 		request.setAttribute("start_time", start_time_d);
 		request.setAttribute("end_time", end_time_d);
 		request.setAttribute("pager", pager);
+		request.setAttribute("charge_user", charge_user);
+		request.setAttribute("userlist", SystemCache.userlist);
 		return new ModelAndView("sample/index");
 	}
 	
