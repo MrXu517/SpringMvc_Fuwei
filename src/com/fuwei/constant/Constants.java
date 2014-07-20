@@ -56,4 +56,6 @@ public class Constants {
 	public static final String UPLOADEXCEL = "upload/excel/";//上传样品图片的路径
 	public static final String UPLOADIMGPATH_SS = "upload/images/ss/";
 	public static final String UPLOADIMGPATH_S = "upload/images/s/";
+	
+	public static final String LOGIN_URL = "/login.jsp";
 }

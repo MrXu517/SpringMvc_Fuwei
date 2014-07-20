@@ -84,6 +84,24 @@ public class UserController extends BaseController {
 		
 	}
 	
+	//退出登录
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	@ResponseBody
+	public void Logout (HttpSession session,HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		try{
+			session.removeAttribute(Constants.LOGIN_SESSION_NAME);
+			String path = request.getContextPath();
+			String basePath = request.getScheme() + "://"
+					+ request.getServerName() + ":" + request.getServerPort()
+					+ path;
+			response.sendRedirect(basePath + Constants.LOGIN_URL);
+		} catch (Exception e) {
+			throw e;
+		}
+		
+	}
+	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView Index (HttpSession session,HttpServletRequest request,

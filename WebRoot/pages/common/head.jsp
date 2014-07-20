@@ -117,7 +117,7 @@
 						<a href="#"><i class="fa fa-cog"></i>修改密码</a>
 					</li>
 					<li>
-						<a href="#"><i class="fa fa-power-off"></i>退出登录</a>
+						<a href="user/logout"><i class="fa fa-power-off"></i>退出登录</a>
 					</li>
 				</ul>
 			</div>
