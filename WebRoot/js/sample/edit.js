@@ -20,6 +20,20 @@ $(document).ready( function() {
 		if (!Common.checkform(this)) {
 			return false;
 		}
+		var $file = $(this).find("#file");
+		var file_v = $file.val();
+		if(file_v!=""){
+			if(file_v.lastIndexOf(".")<=0){
+				Common.Error("添加失败：" + "请上传有效的图片文件，包括 以.bmp,.png,.jpg,.jpeg,.gif为扩展名的文件");
+				return false;
+			}
+			var ext = file_v.substr(file_v.lastIndexOf(".")+1).toLowerCase();
+			if(ext != "bmp" & ext != "png" & ext != "jpg" & ext !="jpeg" & ext !="gif"){
+				Common.Error("添加失败：" + "请上传有效的图片文件，包括 以.bmp,.png,.jpg,.jpeg,.gif为扩展名的文件");
+				return false;
+			}
+		}
+		
 		$submitBtn.button('loading');
 		$(this).ajaxSubmit( {
 			url :"sample/put",
@@ -27,7 +41,7 @@ $(document).ready( function() {
 			success : function(result) {
 				if (result.success) {
 					Common.Tip("修改成功", function() {
-						location.reload();
+						location = "sample/undetailedindex";
 					});
 				} else {
 					Common.Error("修改失败：" + result.message);

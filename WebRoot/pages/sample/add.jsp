@@ -32,6 +32,11 @@
 		<script src="js/common/common.js" type="text/javascript"></script>
 		<script src="js/plugins/jquery.form.js" type="text/javascript"></script>
 		<script src="js/sample/add.js" type="text/javascript"></script>
+		<style type="text/css">
+.sampleform input[type='file'] {
+	outline: none !important ;
+}
+</style>
 	</head>
 	<body>
 		<%@ include file="../common/head.jsp"%>
@@ -39,8 +44,12 @@
 			<div class="breadcrumbs" id="breadcrumbs">
 				<ul class="breadcrumb">
 					<li>
-						<i class="icon-home home-icon"></i>
-						<a href="index.jsp">首页</a>
+						<i class="fa fa-home"></i>
+						<a href="user/index">首页</a>
+					</li>
+					<li>
+						<i class=""></i>
+						<a href="sample/index">样品管理</a>
 					</li>
 					<li class="active">
 						创建样品
@@ -68,8 +77,9 @@
 													产品编号
 												</label>
 												<div class="col-sm-8">
-													<input type="text" class="form-control require"
-														name="productNumber" id="productNumber" readonly value="自动生成" placeholder="产品编号">
+													<input type="text" class="form-control"
+														name="productNumber" id="productNumber" readonly
+														value="自动生成" placeholder="产品编号">
 												</div>
 												<div class="col-sm-1"></div>
 											</div>
@@ -88,8 +98,8 @@
 													图片
 												</label>
 												<div class="col-sm-8">
-													<input type="file" name="file" id="file" class="require"
-														placeholder="图片" />
+													<input type="file" name="file" id="file"
+														class="form-control require" placeholder="图片" />
 
 												</div>
 												<div class="col-sm-1"></div>
@@ -159,7 +169,7 @@
 													备注
 												</label>
 												<div class="col-sm-8">
-													<input type="text" class="form-control require" name="memo"
+													<input type="text" class="form-control" name="memo"
 														id="memo" placeholder="备注">
 												</div>
 												<div class="col-sm-1"></div>
@@ -181,8 +191,8 @@
 											</div>
 										</div>
 										<div class="col-md-5" style="width: 400px;" id="previewWidget">
-											<a href="#" class="thumbnail"> <img id="previewImg" alt="400 x 100%">
-											</a>
+											<a href="#" class="thumbnail"> <img id="previewImg"
+													alt="400 x 100%"> </a>
 										</div>
 									</form>
 								</div>

@@ -209,14 +209,31 @@ public class SampleController extends BaseController {
      */
 	
     public String fileUpload(HttpServletRequest request , CommonsMultipartFile file) throws Exception {
+    	String nameString = file.getOriginalFilename();
+    	if(nameString.lastIndexOf(".") == -1 || nameString.lastIndexOf(".") == 0){
+    		throw new Exception("请上传有效的图片文件，包括 以.bmp,.png,.jpg,.jpeg,.gif为扩展名的文件");
+    	}
+    	else{
+    		String extString = nameString.substring(nameString.lastIndexOf(".")+1,nameString.length());
+    		extString = extString.toLowerCase();
+    		if(!extString.equals("bmp")  && !extString.equals("png") && !extString.equals("jpg") && !extString.equals("jpeg") && !extString.equals("gif")){
+    			throw new Exception("请上传有效的图片文件，包括 以.bmp,.png,.jpg,.jpeg,.gif为扩展名的文件");
+    		}
+    	}
          long  startTime=System.currentTimeMillis();
         String fileName = new Date().getTime() +file.getOriginalFilename();
         String path = Constants.UPLOADIMGPATH + fileName;
         
-        java.io.File pathFile=new java.io.File(request.getSession().getServletContext().getRealPath("/") + Constants.UPLOADIMGPATH);
+        java.io.File pathFile=new java.io.File(request.getSession().getServletContext().getRealPath("/") + Constants.UPLOAD);
         
         if(!pathFile.exists()){
         	pathFile.mkdir();
+        }
+        
+        java.io.File pathFile2=new java.io.File(request.getSession().getServletContext().getRealPath("/") + Constants.UPLOADIMGPATH);
+        
+        if(!pathFile2.exists()){
+        	pathFile2.mkdir();
         }
         System.out.println("path："+path);
         java.io.File newFile=new java.io.File(request.getSession().getServletContext().getRealPath("/") + path);

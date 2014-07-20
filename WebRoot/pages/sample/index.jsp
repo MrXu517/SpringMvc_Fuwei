@@ -31,18 +31,6 @@
 	if (end_time != null) {
 		end_time_str = DateTool.formatDateYMD(end_time);
 	}
-
-	/*List<Company> companylist = (List<Company>) request
-			.getAttribute("companylist");
-	List<Salesman> salesmanlist = (List<Salesman>) request
-			.getAttribute("salesmanlist");
-	List<GongXu> gongxulist = (List<GongXu>) request
-			.getAttribute("gongxulist");
-	
-	
-	List<Role> rolelist = (List<Role>) request.getAttribute("rolelist");
-	
-	String tabname = (String) request.getParameter("tab");*/
 %>
 <!DOCTYPE html>
 
@@ -66,8 +54,8 @@
 			<div class="breadcrumbs" id="breadcrumbs">
 				<ul class="breadcrumb">
 					<li>
-						<i class="icon-home home-icon"></i>
-						<a href="index.jsp">首页</a>
+						<i class="fa fa-home"></i>
+						<a href="user/index">首页</a>
 					</li>
 					<li class="active">
 						样品管理

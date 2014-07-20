@@ -1,8 +1,9 @@
 /*body*/ 
 body{
 	position:relative;
+	overflow:hidden;
 }
-/*body*/ /*µ¼º½Ìõ*/
+/*body*/ /*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 .menubar-ul li>ul li a {
 	display: block;
 	position: relative;
@@ -154,7 +155,7 @@ body{
  .left_mini + #Content {
      margin-left: 43px;
  }
-/*µ¼º½Ìõ*/ /*×ó±ßÀ¸µÄµ¼º½*/
+/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/ /*ï¿½ï¿½ï¿½8ï¿½Äµï¿½ï¿½ï¿½*/
 .menubar {
 	background: #f9f9f9;
 	overflow: visible;
@@ -316,7 +317,7 @@ body{
 	padding: 0 10px;
 }
 
-/*×ó±ßÀ¸µÄµ¼º½ -- ½áÊø*/ /*Í·²¿ -- ¿ªÊ¼*/
+/*ï¿½ï¿½ï¿½8ï¿½Äµï¿½ï¿½ï¿½ -- ï¿½ï¿½ï¿½ï¿½*/ /*Í·ï¿½ï¿½ -- ï¿½ï¿½Ê¼*/
 #header {
 	background: #438eb9;
 	width: 100%;
@@ -362,7 +363,7 @@ body{
 	width: 160px;
 }
 
-/*Í·²¿ -- ½áÊø*/ /*ÊÕËõÌõµÄÑùÊ½ -- ¿ªÊ¼*/
+/*Í·ï¿½ï¿½ -- ï¿½ï¿½ï¿½ï¿½*/ /*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ -- ï¿½ï¿½Ê¼*/
 .sidebar-collapse { /*border-bottom: 1px solid #e0e0e0;*/
 	
 	text-align: center;
@@ -394,7 +395,7 @@ body{
 	top: 13px;
 }
 
-/*ÊÕËõÌõµÄÑùÊ½ -- ½áÊø*/ /*Ê×Ò³²¼¾Ö -- ¿ªÊ¼*/
+/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ -- ï¿½ï¿½ï¿½ï¿½*/ /*ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½ -- ï¿½ï¿½Ê¼*/
 #left {
 	float: left;
 	width: 220px;
@@ -434,4 +435,4 @@ body{
 	margin-bottom: -45px;
 	padding-bottom: 45px;
 }
-/*Ê×Ò³²¼¾Ö -- ½áÊø*/
+/*ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½ -- ï¿½ï¿½ï¿½ï¿½

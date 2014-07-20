@@ -64,6 +64,16 @@ $(document).ready(function(){
 	var $calculateModal = $('#calculateDialog>div.modal');
 	$calculateModal.on('hidden.bs.modal', function (e) {//核价对话框被隐藏之后触发
 		Common.resetForm($(".calculateform")[0]);
+		//恢复到报价计算器初始阶段
+		//1.材料费1的倒纱系数
+		$("#bj_dsxishu").attr("disabled",true);
+		//2.测试工序恢复到一行，且默认选中第一个
+		$("#gongxuTb tbody tr:not(:first)").remove();
+		$("#gongxuTb tbody tr").first().find("#bj_gongxu option").first().attr("checked",true);
+		//3.材料费2
+		$("#bj_2_enable").change();
+		//恢复到报价计算器初始阶段
+		
 	});
 	$("#calculateBtn").click(function(){
 		var $model = $('#calculateDialog>div.modal');
@@ -160,6 +170,12 @@ $(document).ready(function(){
 	}
 	var priceform_cost = 0 ;//成本
     function bj_result_fill(){
+    	$(".calculateform .checkerror").removeClass("checkerror");
+    	//验证表格
+    	if (!Common.checkform($(".calculateform")[0])) {
+			return false;
+		}
+    	
     	/*材料费1*/
     	var bj_weigth_val = parseFloat(getDoubleValById("bj_weight"));//克重
     	var bj_sunhao_val = parseFloat(getDoubleValById("bj_sunhao"));//损耗
@@ -290,7 +306,7 @@ $(document).ready(function(){
 			success : function(result) {
 				if (result.success) {
 					Common.Tip("核价成功", function() {
-						location.reload();
+						location = "sample/detail/" + sampleId;
 					});
 				} else {
 					Common.Error("核价失败：" + result.message);

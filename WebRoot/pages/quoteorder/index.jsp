@@ -53,8 +53,8 @@
 			<div class="breadcrumbs" id="breadcrumbs">
 				<ul class="breadcrumb">
 					<li>
-						<i class="icon-home home-icon"></i>
-						<a href="index.jsp">首页</a>
+						<i class="fa fa-home"></i>
+						<a href="user/index">首页</a>
 					</li>
 					<li class="active">
 						报价单列表

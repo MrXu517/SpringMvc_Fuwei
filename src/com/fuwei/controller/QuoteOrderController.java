@@ -109,11 +109,11 @@ public class QuoteOrderController extends BaseController {
 
 			quoteOrder.setExcelUrl(excelfile_name);
 			
-			quoteOrderService.add(quoteOrder, ids);
+			int quoteOrderId = quoteOrderService.add(quoteOrder, ids);
 			ExportExcel.exportExcel(excelfile_name, appPath, quoteOrder);
 			excel = true;
 
-			return this.returnSuccess();
+			return this.returnSuccess("id",quoteOrderId);
 		} catch (Exception e) {
 			if(excel){
 				ExportExcel.deleteExcel(excelfile_name, appPath);

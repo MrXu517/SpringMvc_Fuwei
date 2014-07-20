@@ -23,8 +23,9 @@ public class BaseController extends MultiActionController{
 		return returnSuccess(true);
 	}
 
-	protected Map<String, String> returnSuccess(String type, String value) {
-		Map<String, String> result = new HashMap<String, String>();
+	protected Map<String, Object> returnSuccess(String type,  Object value) {
+		Map<String,  Object> result = new HashMap<String,  Object>();
+		result.put("success", true);
 		result.put(type, value);
 		return result;
 	}

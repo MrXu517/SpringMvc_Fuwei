@@ -528,12 +528,6 @@ $(document).ready( function() {
 			$(this).addClass('tip');
 		}
 	});
-
-	// 2014-3-26修改
-		$(".breadcrumb li a").click( function() {
-			return false;
-		});
-
 		/* 2014-6-11 高度自适应修改 */
 		$(window).resize( function(event) {
 			_c9_autoheight();

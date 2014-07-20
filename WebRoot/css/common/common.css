@@ -58,6 +58,10 @@
 #alert_error .modal{
 	z-index:99999999999999;
 }
+#alert_error .modal-content{
+	color: #b94a48;
+	border-color: #b94a48;
+}
 #alert_tip .modal{
 	z-index:99999999999999;
 }
@@ -68,4 +72,10 @@
 	clear:both;
 	content:"";
 	display:table;
+}
+.checkerror{
+	border-color:red !important;
+}
+.modal-title{
+	font-weight:bold;
 }

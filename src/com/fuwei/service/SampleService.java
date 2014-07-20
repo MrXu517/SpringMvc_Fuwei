@@ -107,6 +107,7 @@ public class SampleService extends BaseService {
 			Integer sampleId = this.insert(sample);
 			String productNumber = CreateNumberUtil.createSampleProductNumber(sampleId);
 			sample.setProductNumber(productNumber);
+			sample.setId(sampleId);
 			return this.update(sample, "id", null);
 		} catch (Exception e) {
 			throw e;

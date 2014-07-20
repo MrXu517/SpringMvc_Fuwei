@@ -64,9 +64,9 @@ public class QuoteOrderService extends BaseService {
 		}
 	}
 	
-	// 添加报价单
+	// 添加报价单,返回主键
 	@Transactional
-	public void add(QuoteOrder quoteorder,String ids) throws Exception {
+	public int add(QuoteOrder quoteorder,String ids) throws Exception {
 		try{
 			
 			if(quoteorder.getDetaillist()==null || quoteorder.getDetaillist().size()<=0){
@@ -83,7 +83,7 @@ public class QuoteOrderService extends BaseService {
 				quoteOrderDetailService.addBatch(quoteorder.getDetaillist());
 				//删除报价
 				quoteService.batch_remove(ids);
-				
+				return quoteOrderId;
 			}
 		}catch(Exception e){
 			throw e;

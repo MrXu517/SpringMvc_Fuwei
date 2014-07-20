@@ -82,7 +82,7 @@ $(document).ready(function(){
 	            .done(function(result) {
 	            	if(result.success){
 	            		Common.Tip("创建报价单成功",function(){
-	            			location = "quoteorder/index";
+	            			location = "quoteorder/detail/" +result.id;
 	            		});
 	            	}else{
 	            		Common.Error("创建报价单失败：" + result.message);

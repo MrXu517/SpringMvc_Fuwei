@@ -9,22 +9,12 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	List<User> userlist = (List<User>) request.getAttribute("userlist");
-	/*List<Company> companylist = (List<Company>) request
-			.getAttribute("companylist");
-	List<Salesman> salesmanlist = (List<Salesman>) request
-			.getAttribute("salesmanlist");
-	List<GongXu> gongxulist = (List<GongXu>) request
-			.getAttribute("gongxulist");
-	
-	
-	List<Role> rolelist = (List<Role>) request.getAttribute("rolelist");
-	
-	String tabname = (String) request.getParameter("tab");*/
-	
+
 	Sample sample = (Sample) request.getAttribute("sample");
 %>
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<base href="<%=basePath%>">
 		<title>样品管理 -- 桐庐富伟针织厂</title>
@@ -36,6 +26,11 @@
 		<script src="js/common/common.js" type="text/javascript"></script>
 		<script src="js/plugins/jquery.form.js" type="text/javascript"></script>
 		<script src="js/sample/edit.js" type="text/javascript"></script>
+		<style type="text/css">
+			.sampleform input[type='file'] {
+				outline: none !important ;
+			}
+		</style>
 	</head>
 	<body>
 		<%@ include file="../common/head.jsp"%>
@@ -43,8 +38,12 @@
 			<div class="breadcrumbs" id="breadcrumbs">
 				<ul class="breadcrumb">
 					<li>
-						<i class="icon-home home-icon"></i>
-						<a href="index.jsp">首页</a>
+						<i class="fa fa-home"></i>
+						<a href="user/index">首页</a>
+					</li>
+					<li>
+						<i class=""></i>
+						<a href="sample/index">样品管理</a>
 					</li>
 					<li class="active">
 						编辑样品属性
@@ -68,15 +67,15 @@
 										enctype="multipart/form-data">
 										<div class="col-md-7">
 											<input type="hidden" id="id" name="id"
-												value="<%=sample.getId() %>" />
+												value="<%=sample.getId()%>" />
 											<div class="form-group">
 												<label for="productNumber" class="col-sm-3 control-label">
 													产品编号
 												</label>
 												<div class="col-sm-8">
-													<input type="text" class="form-control require"
-														name="productNumber" id="productNumber" readonly placeholder="产品编号"
-														value="<%=sample.getProductNumber() %>">
+													<input type="text" class="form-control"
+														name="productNumber" id="productNumber" readonly
+														placeholder="产品编号" value="<%=sample.getProductNumber()%>">
 												</div>
 												<div class="col-sm-1"></div>
 											</div>
@@ -86,7 +85,7 @@
 												</label>
 												<div class="col-sm-8">
 													<input type="text" class="form-control require" name="name"
-														id="name" placeholder="名称" value="<%=sample.getName() %>">
+														id="name" placeholder="名称" value="<%=sample.getName()%>">
 												</div>
 												<div class="col-sm-1"></div>
 											</div>
@@ -95,8 +94,8 @@
 													图片
 												</label>
 												<div class="col-sm-8">
-													<input type="file" name="file" id="file" class=""
-														placeholder="图片" />
+													<input type="file" name="file" id="file"
+														class="form-control" placeholder="图片" />
 
 												</div>
 												<div class="col-sm-1"></div>
@@ -106,16 +105,16 @@
 													打样人
 												</label>
 												<div class="col-sm-8">
-													<select value="<%=sample.getCharge_user() %>"
+													<select value="<%=sample.getCharge_user()%>"
 														class="form-control require" name="charge_user"
 														id="charge_user">
 														<%
 															for (User item : userlist) {
-															if(item.getId() == sample.getCharge_user()){
+																if (item.getId() == sample.getCharge_user()) {
 														%>
 														<option value="<%=item.getId()%>" selected="selected"><%=item.getName()%></option>
 														<%
-														}else{
+															} else {
 														%>
 														<option value="<%=item.getId()%>"><%=item.getName()%></option>
 														<%
@@ -133,7 +132,7 @@
 												<div class="col-sm-8">
 													<input type="text" class="form-control require"
 														id="material" name="material" placeholder="材料"
-														value="<%=sample.getMaterial() %>">
+														value="<%=sample.getMaterial()%>">
 												</div>
 												<div class="col-sm-1"></div>
 											</div>
@@ -142,9 +141,9 @@
 													克重
 												</label>
 												<div class="col-sm-8">
-													<input type="text" class="form-control require"
+													<input type="text" class="double form-control require"
 														name="weight" id="weight" placeholder="克重"
-														value="<%=sample.getWeight() %>">
+														value="<%=sample.getWeight()%>">
 												</div>
 												<div class="col-sm-1"></div>
 											</div>
@@ -155,7 +154,7 @@
 												</label>
 												<div class="col-sm-8">
 													<input type="text" class="form-control require" name="size"
-														id="size" placeholder="尺寸" value="<%=sample.getSize() %>">
+														id="size" placeholder="尺寸" value="<%=sample.getSize()%>">
 												</div>
 												<div class="col-sm-1"></div>
 											</div>
@@ -167,7 +166,7 @@
 												<div class="col-sm-8">
 													<input type="text" class="form-control require"
 														name="machine" id="machine" placeholder="机织"
-														value="<%=sample.getMachine() %>">
+														value="<%=sample.getMachine()%>">
 												</div>
 												<div class="col-sm-1"></div>
 											</div>
@@ -176,8 +175,8 @@
 													备注
 												</label>
 												<div class="col-sm-8">
-													<input type="text" class="form-control require" name="memo"
-														id="memo" placeholder="备注" value="<%=sample.getMemo() %>">
+													<input type="text" class="form-control" name="memo"
+														id="memo" placeholder="备注" value="<%=sample.getMemo()%>">
 												</div>
 												<div class="col-sm-1"></div>
 											</div>
@@ -199,7 +198,7 @@
 										</div>
 										<div class="col-md-5" style="width: 400px;" id="previewWidget">
 											<a href="#" class="thumbnail"> <img id="previewImg"
-													alt="400 x 100%" src="<%=sample.getImg() %>"> </a>
+													alt="400 x 100%" src="<%=sample.getImg()%>"> </a>
 										</div>
 									</form>
 								</div>

@@ -52,8 +52,12 @@
 			<div class="breadcrumbs" id="breadcrumbs">
 				<ul class="breadcrumb">
 					<li>
-						<i class="icon-home home-icon"></i>
-						<a href="index.jsp">首页</a>
+						<i class="fa fa-home"></i>
+						<a href="user/index">首页</a>
+					</li>
+					<li>
+						<i class=""></i>
+						<a href="sample/index">样品管理</a>
 					</li>
 					<li class="active">
 						样品详情
@@ -300,7 +304,7 @@
 									</label>
 									<div class="col-sm-8">
 										<input type="text" name="price" id="price"
-											class="double form-control">
+											class="double form-control require">
 									</div>
 								</div>
 								<div class="form-group">

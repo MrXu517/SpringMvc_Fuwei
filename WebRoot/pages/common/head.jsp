@@ -46,7 +46,7 @@
 								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
 							</button>
 							<h4 class="modal-title">
-								桐庐富伟针织厂
+								提示
 							</h4>
 						</div>
 						<div class="modal-body">
@@ -76,7 +76,7 @@
 								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
 							</button>
 							<h4 class="modal-title">
-								桐庐富伟针织厂
+								错误信息
 							</h4>
 						</div>
 						<div class="modal-body">

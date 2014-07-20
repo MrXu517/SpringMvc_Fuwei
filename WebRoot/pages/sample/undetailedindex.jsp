@@ -99,6 +99,10 @@
 .bj_gongxu_delete {
 	cursor: pointer;
 }
+.gongxuTbWidget{
+	height:250px;
+	overflow:auto;
+}
 </style>
 	</head>
 	<body>
@@ -107,8 +111,8 @@
 			<div class="breadcrumbs" id="breadcrumbs">
 				<ul class="breadcrumb">
 					<li>
-						<i class="icon-home home-icon"></i>
-						<a href="index.jsp">首页</a>
+						<i class="fa fa-home"></i>
+						<a href="user/index">首页</a>
 					</li>
 					<li class="active">
 						待核价样品
@@ -123,10 +127,14 @@
 							<!-- Table -->
 							<form class="form-horizontal sampleform" role="form"
 								enctype="multipart/form-data">
-								<div class="form-group col-md-2">
+								<div class="form-group col-md-4">
+									<label for="productNumber" class="col-sm-3 control-label">
+													打样人
+												</label>
+									<div class="col-sm-8">
 									<select id="charge_user" class="form-control">
 										<option value="">
-											未选择
+											所有
 										</option>
 										<%
 											for (User tempU : userlist) {
@@ -141,7 +149,7 @@
 											}
 											}
 										%>
-									</select>
+									</select></div>
 								</div>
 							</form>
 							<table class="table table-responsive">
@@ -228,7 +236,7 @@
 								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
 							</button>
 							<h4 class="modal-title">
-								桐庐富伟针织厂 ------ 核价
+								核价
 							</h4>
 						</div>
 						<div class="modal-body">
@@ -286,7 +294,7 @@
 								<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
 							</button>
 							<h4 class="modal-title">
-								桐庐富伟针织厂 ------ 报价计算器
+								报价计算器
 							</h4>
 						</div>
 						<div class="modal-body">
@@ -355,7 +363,7 @@
 													添加工序
 												</button>
 											</div>
-											<div class="panel panel-default">
+											<div class="panel panel-default gongxuTbWidget">
 												<table class="table-condensed table  table-hover"
 													id="gongxuTb">
 													<thead>

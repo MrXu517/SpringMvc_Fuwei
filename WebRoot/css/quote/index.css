@@ -1,9 +1,7 @@
 table.table tr.group-head td{
 	border-top:none;
 }
-.tablewidget table thead th{
-	border-bottom:none !important;
-}
+
 table.table tr.group-body{
 	border-left: 1px solid #ccc;
 	border-right: 1px solid #ccc;
