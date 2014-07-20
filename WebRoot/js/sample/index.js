@@ -32,8 +32,7 @@ $(document).ready(function(){
 	
 	//打样人改变事件
 	$("#charge_user").change(function(){
-		var value = this.value;
-		location = location.pathname+"?charge_user="+this.value;
+		$(".searchform").submit();
 	});
 	//打样人改变事件
 	

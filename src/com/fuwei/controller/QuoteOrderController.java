@@ -126,7 +126,7 @@ public class QuoteOrderController extends BaseController {
 
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView index(Integer page, String start_time, String end_time,
+	public ModelAndView index(Integer page, String start_time, String end_time,Integer companyId,Integer salesmanId,
 			String sortJSON, HttpSession session, HttpServletRequest request)
 			throws Exception {
 		Date start_time_d = DateTool.parse(start_time);
@@ -147,7 +147,7 @@ public class QuoteOrderController extends BaseController {
 		sort.setDirection("desc");
 		sort.setProperty("created_at");
 		sortList.add(sort);
-		pager = quoteOrderService.getList(pager, start_time_d, end_time_d,
+		pager = quoteOrderService.getList(pager, start_time_d, end_time_d,companyId,salesmanId,
 				sortList);
 		if (pager != null & pager.getResult() != null) {
 			List<QuoteOrder> quoteorderlist = (List<QuoteOrder>) pager
@@ -159,6 +159,11 @@ public class QuoteOrderController extends BaseController {
 		}
 		request.setAttribute("start_time", start_time_d);
 		request.setAttribute("end_time", end_time_d);
+		request.setAttribute("salesmanId", salesmanId);
+		if(companyId==null & salesmanId!=null){
+			companyId = SystemCache.getSalesman(salesmanId).getCompanyId();
+		}
+		request.setAttribute("companyId", companyId);
 		request.setAttribute("pager", pager);
 		return new ModelAndView("quoteorder/index");
 	}

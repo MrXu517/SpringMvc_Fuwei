@@ -34,6 +34,10 @@
 
 	Integer charge_userId = (Integer) request
 			.getAttribute("charge_user");
+	String charge_user_str = "";
+	if(charge_userId!=null){
+		charge_user_str = String.valueOf(charge_userId);
+	}
 %>
 <!DOCTYPE html>
 
@@ -72,91 +76,17 @@
 						<div class="col-md-12 tablewidget">
 							<!-- Table -->
 							<div clas="navbar navbar-default">
-								<ul class="pagination">
-									<li>
-										<a
-											href="sample/index?start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=1">«</a>
-									</li>
-
-									<%
-										if (pager.getPageNo() > 1) {
-									%>
-									<li class="">
-										<a
-											href="sample/index?start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() - 1%>">上一页
-											<span class="sr-only"></span> </a>
-									</li>
-									<%
-										} else {
-									%>
-									<li class="disabled">
-										<a disabled>上一页 <span class="sr-only"></span> </a>
-									</li>
-									<%
-										}
-									%>
-
-									<li class="active">
-										<a
-											href="sample/index?start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%><span
-											class="sr-only"></span> </a>
-									</li>
-									<li>
-										<%
-											if (pager.getPageNo() < pager.getTotalPage()) {
-										%>
-									
-									<li class="">
-										<a
-											href="sample/index?start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() + 1%>">下一页
-											<span class="sr-only"></span> </a>
-									</li>
-									<%
-										} else {
-									%>
-									<li class="disabled">
-										<a disabled>下一页 <span class="sr-only"></span> </a>
-									</li>
-									<%
-										}
-									%>
-
-									</li>
-									<li>
-										<a
-											href="sample/index?start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getTotalPage()%>">»</a>
-									</li>
-								</ul>
-								<form class="form-inline pageform form-horizontal" role="form"
-									action="sample/index?start_time=<%=start_time_str%>&end_time=<%=end_time_str%>">
-									<input type="hidden" name="start_time" id="start_time"
-										value="<%=start_time_str%>">
-									<input type="hidden" name="end_time" id="end_time"
-										value="<%=end_time_str%>">
-									<div class="form-group">
-										<div class="input-group">
-											<span class="input-group-addon">去第</span>
-											<input type="text" name="page" id="page"
-												class="int form-control" placeholder="1,2,..."
-												value="<%=pager.getPageNo()%>">
-
-											<span class="input-group-addon">页</span>
-											<span class="input-group-btn">
-												<button class="btn btn-primary" type="submit">
-													Go!
-												</button> </span>
-										</div>
-									</div>
-								</form>
-								<form class="form-horizontal searchform form-inline" role="form">
+								<form class="form-horizontal searchform form-inline" role="form" action="sample/index">
 									<input type="hidden" name="page" id="page"
-										value="<%=pager.getPageNo()%>" />
-									<div class="form-group">
-										<label for="charge_user" class="col-sm-3 control-label">
+										value="<%=pager.getPageNo()%>">
+									<div class="form-group" style="width: 200px;">
+										<label for="charge_user" class="col-sm-3 control-label"
+											style="width: 60px;">
 											打样人
 										</label>
 										<div class="col-sm-8">
-											<select id="charge_user" class="form-control">
+											<select id="charge_user" name="charge_user"
+												class="form-control">
 												<option value="">
 													所有
 												</option>
@@ -176,16 +106,12 @@
 											</select>
 										</div>
 									</div>
-								</form>
-								<form class="form-horizontal searchform form-inline" role="form">
-									<input type="hidden" name="page" id="page"
-										value="<%=pager.getPageNo()%>" />
-									<div class="form-group">
-										<label class="col-sm-3 control-label">
+									<div class="form-group timegroup">
+										<label class="col-sm-2 control-label">
 											创建时间
 										</label>
 
-										<div class="input-group col-md-9">
+										<div class="input-group col-md-10">
 											<input type="text" name="start_time" id="start_time"
 												class="date form-control" value="<%=start_time_str%>" />
 											<span class="input-group-addon">到</span>
@@ -199,6 +125,85 @@
 										</div>
 									</div>
 								</form>
+								<ul class="pagination">
+									<li>
+										<a
+											href="sample/index?charge_user=<%=charge_user_str %>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=1">«</a>
+									</li>
+
+									<%
+										if (pager.getPageNo() > 1) {
+									%>
+									<li class="">
+										<a
+											href="sample/index?charge_user=<%=charge_user_str %>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() - 1%>">上一页
+											<span class="sr-only"></span> </a>
+									</li>
+									<%
+										} else {
+									%>
+									<li class="disabled">
+										<a disabled>上一页 <span class="sr-only"></span> </a>
+									</li>
+									<%
+										}
+									%>
+
+									<li class="active">
+										<a
+											href="sample/index?charge_user=<%=charge_user_str %>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%><span
+											class="sr-only"></span> </a>
+									</li>
+									<li>
+										<%
+											if (pager.getPageNo() < pager.getTotalPage()) {
+										%>
+									
+									<li class="">
+										<a
+											href="sample/index?charge_user=<%=charge_user_str %>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() + 1%>">下一页
+											<span class="sr-only"></span> </a>
+									</li>
+									<%
+										} else {
+									%>
+									<li class="disabled">
+										<a disabled>下一页 <span class="sr-only"></span> </a>
+									</li>
+									<%
+										}
+									%>
+
+									</li>
+									<li>
+										<a
+											href="sample/index?charge_user=<%=charge_user_str %>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getTotalPage()%>">»</a>
+									</li>
+								</ul>
+								<form class="form-inline pageform form-horizontal" role="form"
+									action="sample/index">
+									<input type="hidden" name="charge_user" id="charge_user"
+										value="<%=charge_user_str%>">
+									<input type="hidden" name="start_time" id="start_time"
+										value="<%=start_time_str%>">
+									<input type="hidden" name="end_time" id="end_time"
+										value="<%=end_time_str%>">
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon">去第</span>
+											<input type="text" name="page" id="page"
+												class="int form-control" placeholder="1,2,..."
+												value="<%=pager.getPageNo()%>">
+
+											<span class="input-group-addon">页</span>
+											<span class="input-group-btn">
+												<button class="btn btn-primary" type="submit">
+													Go!
+												</button> </span>
+										</div>
+									</div>
+								</form>
+
 							</div>
 							<table class="table table-responsive">
 								<thead>

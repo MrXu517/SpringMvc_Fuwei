@@ -2,10 +2,12 @@
 	contentType="text/html; charset=utf-8"%>
 <%@page import="com.fuwei.entity.QuoteOrder"%>
 <%@page import="com.fuwei.entity.Salesman"%>
+<%@page import="com.fuwei.entity.Company"%>
 <%@page import="com.fuwei.entity.User"%>
 <%@page import="com.fuwei.commons.Pager"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
+<%@page import="net.sf.json.JSONObject"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -31,6 +33,27 @@
 	if (end_time != null) {
 		end_time_str = DateTool.formatDateYMD(end_time);
 	}
+	Integer salesmanId = (Integer)request.getAttribute("salesmanId");
+	Integer companyId = (Integer)request.getAttribute("companyId");
+	String company_str = "";
+	String salesman_str = "";
+	if(salesmanId!=null){
+		salesman_str = String.valueOf(salesmanId);
+	}
+	if(companyId!=null){
+		company_str = String.valueOf(companyId);
+	}
+	if(salesmanId == null){
+		salesmanId = -1;
+	}
+	if(companyId == null){
+		companyId = -1;
+	}
+	HashMap<String, List<Salesman>> companySalesmanMap = SystemCache
+			.getCompanySalesmanMap_ID();
+	JSONObject jObject = new JSONObject();
+	jObject.put("companySalesmanMap", companySalesmanMap);
+	String companySalesmanMap_str = jObject.toString();
 %>
 <!DOCTYPE html>
 
@@ -41,14 +64,15 @@
 		<meta charset="utf-8" />
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
-
 		<script src="js/plugins/jquery-1.10.2.min.js"></script>
-		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
-		<script src="js/common/common.js" type="text/javascript"></script>
-		<link href="css/sample/sample.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
 		<%@ include file="../common/head.jsp"%>
+
+		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
+		<script src="js/common/common.js" type="text/javascript"></script>
+		<link href="css/sample/sample.css" rel="stylesheet" type="text/css" />
+		<script src="js/quoteorder/index.js" type="text/javascript"></script>
 		<div id="Content">
 			<div class="breadcrumbs" id="breadcrumbs">
 				<ul class="breadcrumb">
@@ -68,10 +92,83 @@
 						<div class="col-md-12 tablewidget">
 							<!-- Table -->
 							<div clas="navbar navbar-default">
+								<form class="form-horizontal searchform form-inline quoteorderform" role="form">
+									<input type="hidden" name="page" id="page"
+										value="<%=pager.getPageNo()%>" />
+									<div class="form-group salesgroup">
+										<label for="companyId" class="col-sm-3 control-label">
+											公司
+										</label>
+										<div class="col-sm-9">
+											<select data='<%=companySalesmanMap_str%>'
+												class="form-control" name="companyId" id="companyId"
+												placeholder="公司">
+												<option value="">
+													所有
+												</option>
+												<%
+												for (Company company : SystemCache.companylist) {
+													if(companyId == company.getId()){
+											%>
+												<option value="<%=company.getId()%>" selected><%=company.getFullname()%></option>
+												<%}
+		else{ %>
+												<option value="<%=company.getId()%>"><%=company.getFullname()%></option>
+												<%
+												}
+												}
+											%>
+											</select>
+										</div>
+									</div>
+									<div class="form-group salesgroup">
+										<label for="salesmanId" class="col-sm-4 control-label">
+											业务员
+										</label>
+										<div class="col-sm-8">
+											<select class="form-control" name="salesmanId"
+												id="salesmanId" placeholder="业务员">
+												<option value="">
+													所有
+												</option>
+												<%
+												for (Salesman salesman : SystemCache.getSalesmanList(companyId)) {
+													if(salesmanId == salesman.getId()){
+											%>
+												<option value="<%=salesman.getId()%>" selected><%=salesman.getName()%></option>
+												<%}
+		else{ %>
+												<option value="<%=salesman.getId()%>"><%=salesman.getName()%></option>
+												<%
+												}
+												}
+											%>
+											</select>
+										</div>
+									</div>
+									<div class="form-group timegroup">
+										<label class="col-sm-3 control-label">
+											创建时间
+										</label>
+
+										<div class="input-group col-md-9">
+											<input type="text" name="start_time" id="start_time"
+												class="date form-control" value="<%=start_time_str%>" />
+											<span class="input-group-addon">到</span>
+											<input type="text" name="end_time" id="end_time"
+												class="date form-control" value="<%=end_time_str%>">
+
+											<span class="input-group-btn">
+												<button class="btn btn-primary" type="submit">
+													搜索
+												</button> </span>
+										</div>
+									</div>
+								</form>
 								<ul class="pagination">
 									<li>
 										<a
-											href="quoteorder/index?start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
+											href="quoteorder/index?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
 									</li>
 
 									<%
@@ -79,7 +176,7 @@
 									%>
 									<li class="">
 										<a
-											href="quoteorder/index?start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
+											href="quoteorder/index?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
 											<span class="sr-only"></span> </a>
 									</li>
 									<%
@@ -94,7 +191,7 @@
 
 									<li class="active">
 										<a
-											href="quoteorder/index?start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%><span
+											href="quoteorder/index?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%><span
 											class="sr-only"></span> </a>
 									</li>
 									<li>
@@ -104,7 +201,7 @@
 									
 									<li class="">
 										<a
-											href="quoteorder/index?start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
+											href="quoteorder/index?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
 											<span class="sr-only"></span> </a>
 									</li>
 									<%
@@ -120,11 +217,14 @@
 									</li>
 									<li>
 										<a
-											href="quoteorder/index?start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
+											href="quoteorder/index?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
 									</li>
 								</ul>
 								<form class="form-inline pageform form-horizontal" role="form"
-									action="quoteorder/index?start_time=<%=start_time_str %>&end_time=<%=end_time_str %>">
+									action="quoteorder/index">
+									
+									<input type="hidden" name="salesmanId" id="salesmanId" value="<%=salesman_str %>"/>
+									<input type="hidden" name="companyId" id="companyId" value="<%=company_str %>"/>
 									<input type="hidden" name="start_time" id="start_time"
 										value="<%=start_time_str %>">
 									<input type="hidden" name="end_time" id="end_time"
@@ -144,28 +244,7 @@
 										</div>
 									</div>
 								</form>
-								<form class="form-horizontal searchform form-inline" role="form">
-									<input type="hidden" name="page" id="page"
-										value="<%=pager.getPageNo()%>" />
-									<div class="form-group">
-										<label class="col-sm-3 control-label">
-											创建时间
-										</label>
 
-										<div class="input-group col-md-9">
-											<input type="text" name="start_time" id="start_time"
-												class="date form-control" value="<%=start_time_str%>" />
-											<span class="input-group-addon">到</span>
-											<input type="text" name="end_time" id="end_time"
-												class="date form-control" value="<%=end_time_str%>">
-
-											<span class="input-group-btn">
-												<button class="btn btn-primary" type="submit">
-													搜索
-												</button> </span>
-										</div>
-									</div>
-								</form>
 							</div>
 							<table class="table table-responsive">
 								<thead>
@@ -173,7 +252,9 @@
 										<th>
 											序号
 										</th>
-
+										<th>
+											报价单号
+										</th>
 										<th>
 											公司
 										</th>
@@ -195,6 +276,7 @@
 									%>
 									<tr quoteorderId="<%=quoteorder.getId()%>">
 										<td><%=++i%></td>
+										<td><%=quoteorder.getQuotationNumber()%></td>
 										<td><%=SystemCache.getCompanyName(quoteorder.getCompanyId()) %></td>
 										<td><%=SystemCache.getSalesmanName(quoteorder.getSalesmanId())%></td>
 										<td><%=quoteorder.getCreated_at()%></td>

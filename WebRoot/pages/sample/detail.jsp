@@ -15,17 +15,6 @@
 	Sample sample = (Sample) request.getAttribute("sample");
 	List<QuotePrice> quotepricelist = (List<QuotePrice>) request
 			.getAttribute("quotepricelist");
-	/*List<Company> companylist = (List<Company>) request
-			.getAttribute("companylist");
-	List<Salesman> salesmanlist = (List<Salesman>) request
-			.getAttribute("salesmanlist");
-	List<GongXu> gongxulist = (List<GongXu>) request
-			.getAttribute("gongxulist");
-	
-	
-	List<Role> rolelist = (List<Role>) request.getAttribute("rolelist");
-	
-	String tabname = (String) request.getParameter("tab");*/
 	HashMap<String, List<Salesman>> companySalesmanMap = SystemCache
 			.getCompanySalesmanMap_ID();
 	JSONObject jObject = new JSONObject();

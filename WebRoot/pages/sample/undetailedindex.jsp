@@ -128,10 +128,10 @@
 							<form class="form-horizontal sampleform" role="form"
 								enctype="multipart/form-data">
 								<div class="form-group col-md-4">
-									<label for="charge_user" class="col-sm-3 control-label">
+									<label for="charge_user" class="col-sm-2 control-label">
 													打样人
 												</label>
-									<div class="col-sm-8">
+									<div class="col-sm-6">
 									<select id="charge_user" class="form-control">
 										<option value="">
 											所有

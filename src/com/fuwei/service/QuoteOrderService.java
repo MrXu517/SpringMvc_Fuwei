@@ -30,29 +30,39 @@ public class QuoteOrderService extends BaseService {
 	QuoteService quoteService;
 	
 	// 获取报价单列表
-	public Pager getList(Pager pager, Date start_time, Date end_time,
+	public Pager getList(Pager pager, Date start_time, Date end_time,Integer companyId,Integer salesmanId,
 			List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
-			sql.append("select * from tb_quoteorder ");
 			String seq = "WHERE ";
+			if (companyId != null & salesmanId == null) {
+				sql.append("select q.* from tb_quoteorder q,tb_salesman s where q.salesmanId=s.id AND s.companyId='" + companyId + "'");
+				seq = " AND ";
+			}else{
+				sql.append("select * from tb_quoteorder q ");
+			}
+			
+			
 			if (start_time != null) {
-				sql.append(seq + " created_at>='" + DateTool.formateDate(start_time) + "'");
+				sql.append(seq + " q.created_at>='" + DateTool.formateDate(start_time) + "'");
 				seq = " AND ";
 			}
 			if (end_time != null) {
-				
-				sql.append(seq + " created_at<='" +  DateTool.formateDate(DateTool.addDay(end_time, 1))+"'");
+				sql.append(seq + " q.created_at<='" +  DateTool.formateDate(DateTool.addDay(end_time, 1))+"'");
+				seq = " AND ";
 			}
-
+			if (salesmanId != null) {
+				sql.append(seq + " q.salesmanId='" +  salesmanId +"'");
+			}
+			
 			if (sortlist != null && sortlist.size() > 0) {
 
 				for (int i = 0; i < sortlist.size(); ++i) {
 					if (i == 0) {
-						sql.append("order by " + sortlist.get(i).getProperty()
+						sql.append(" order by q." + sortlist.get(i).getProperty()
 								+ " " + sortlist.get(i).getDirection() + " ");
 					} else {
-						sql.append("," + sortlist.get(i).getProperty() + " "
+						sql.append(",q." + sortlist.get(i).getProperty() + " "
 								+ sortlist.get(i).getDirection() + " ");
 					}
 
