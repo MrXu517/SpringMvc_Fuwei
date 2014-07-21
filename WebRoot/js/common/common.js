@@ -578,16 +578,7 @@ Common.Error = function(message, callback) {
 	}
 	$dialog.css("padding-top", paddingtop);
 	$model.hide();
-	$model.on('show.bs.modal', function(e) {//show 方法调用之后立即触发该事件
-		//添加一个
-		$model.after("<div class='modal-backdrop fade in'></div>");
-		
-	});
-	$model.on('hide.bs.modal', function(e) {//hide 方法调用之后立即触发该事件
-		$model.siblings(".modal-backdrop").first().remove();
-		
-	});
-	$model.modal({keyboard:true,backdrop:false});
+	$model.modal({keyboard:true});
 
 	$model.on('hidden.bs.modal', function(e) {
 		if(callback!=undefined){
@@ -609,18 +600,18 @@ Common.Tip = function(message, callback) {
 	}
 	$dialog.css("padding-top", paddingtop);
 	$model.hide();
-	$model.on('show.bs.modal', function(e) {//show 方法调用之后立即触发该事件
+	$model.one('show.bs.modal', function(e) {//show 方法调用之后立即触发该事件
 		//添加一个
 		$model.after("<div class='modal-backdrop fade in'></div>");
 		
 	});
-	$model.on('hide.bs.modal', function(e) {//hide 方法调用之后立即触发该事件
+	$model.one('hide.bs.modal', function(e) {//hide 方法调用之后立即触发该事件
 		$model.siblings(".modal-backdrop").first().remove();
 		
 	});
 	$model.modal({keyboard:true,backdrop:false});
 
-	$model.on('hidden.bs.modal', function(e) {
+	$model.one('hidden.bs.modal', function(e) {
 		if(callback!=undefined){
 			callback(e);
 		}

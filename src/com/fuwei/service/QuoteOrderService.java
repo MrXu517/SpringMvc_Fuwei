@@ -10,12 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
+import com.fuwei.constant.Constants;
 import com.fuwei.entity.Quote;
 import com.fuwei.entity.QuoteOrder;
 import com.fuwei.entity.QuoteOrderDetail;
 import com.fuwei.entity.Sample;
 import com.fuwei.util.CreateNumberUtil;
 import com.fuwei.util.DateTool;
+import com.fuwei.util.ExportExcel;
 
 
 @Component
@@ -76,7 +78,7 @@ public class QuoteOrderService extends BaseService {
 	
 	// 添加报价单,返回主键
 	@Transactional
-	public int add(QuoteOrder quoteorder,String ids) throws Exception {
+	public int add(QuoteOrder quoteorder,String ids,String appPath) throws Exception {
 		try{
 			
 			if(quoteorder.getDetaillist()==null || quoteorder.getDetaillist().size()<=0){
@@ -84,6 +86,7 @@ public class QuoteOrderService extends BaseService {
 			}else{
 				Integer quoteOrderId = this.insert(quoteorder);
 				String quotationNumber = CreateNumberUtil.createQuoteOrderNumber(quoteOrderId);
+				quoteorder.setExcelUrl(Constants.UPLOADEXCEL_QuoteOrder + quoteOrderId+"_"+quoteorder.getExcelUrl());
 				quoteorder.setQuotationNumber(quotationNumber);
 				quoteorder.setId(quoteOrderId);
 				this.update(quoteorder, "id", null);
@@ -93,22 +96,29 @@ public class QuoteOrderService extends BaseService {
 				quoteOrderDetailService.addBatch(quoteorder.getDetaillist());
 				//删除报价
 				quoteService.batch_remove(ids);
+				
+				//生成excel文件
+				ExportExcel.exportExcel(quoteorder.getExcelUrl(), appPath, quoteorder ,appPath);
 				return quoteOrderId;
 			}
 		}catch(Exception e){
+			
 			throw e;
 		}
 	}
 	
+	public int updateExcel(String excelUrl,int quoteOrderId){
+		return dao.update("update tb_quoteorder set excelUrl=? where id=? ",excelUrl,quoteOrderId);
+	}
 
-//	// 删除报价
-//	public int remove(int id) throws Exception {
-//		try{
-//			return dao.update("delete from tb_quote WHERE  id = ?", id);
-//		}catch(Exception e){
-//			throw e;
-//		}
-//	}
+	// 删除报价单
+	public int remove(int id) throws Exception {
+		try{
+			return dao.update("delete from tb_quoteorder WHERE  id = ?", id);
+		}catch(Exception e){
+			throw e;
+		}
+	}
 //
 //	// 编辑报价
 //	public int update(Quote quote) throws Exception {

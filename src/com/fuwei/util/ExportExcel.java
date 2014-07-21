@@ -3,7 +3,10 @@ package com.fuwei.util;
 import java.io.File;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.fuwei.commons.SystemCache;
+import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.constant.Constants;
 import com.fuwei.entity.QuoteOrder;
 import com.fuwei.entity.QuoteOrderDetail;
@@ -46,12 +49,13 @@ public class ExportExcel {
 	private static final String factoryPhone = "0571-64677060";
 
 	// 生成报价单excel
-	public final static void exportExcel(String fileName,String appPath,QuoteOrder quoteorder) throws Exception {
-		java.io.File pathFile=new java.io.File(appPath + Constants.UPLOADEXCEL);
+	public final static void exportExcel(String fileName,String filePath,QuoteOrder quoteorder,String appPath) throws Exception {
+		java.io.File File=new java.io.File(filePath + fileName);
+		java.io.File pathFile=new java.io.File(File.getParent());
         if(!pathFile.exists()){
-        	pathFile.mkdir();
+        	pathFile.mkdirs();
         }
-        fileName = appPath + fileName;
+        fileName = filePath + fileName;
 		// 以下开始输出到EXCEL
 		try {
 			// 定义输出流，以便打开保存对话框______________________begin
@@ -184,846 +188,840 @@ public class ExportExcel {
 		}
 	}
 	//删除报价单excel
-	public final static Boolean deleteExcel(String filename,String appPath){
-		File file = new File(filename);
-		return file.delete();
+	public final static Boolean deleteExcel(String filename,String filePath){
+		File file = new File(filePath + filename);
+		if(file.exists()){
+			return file.delete();
+		}
+		return true;
 	}
 	// 生成样品标签
-//	public final static String exportSampleSignExcel(
-//			List<Sample> samplelist, String filePath,
-//			String fileName) {
-//
-//		String result = "系统提示：Excel文件导出成功！";
-//		// 以下开始输出到EXCEL
-//		try {
-//			// 定义输出流，以便打开保存对话框______________________begin
-//			// 定义输出流，以便打开保存对话框_______________________end
-//			/** **********创建工作簿************ */
-//			WritableWorkbook workbook = Workbook.createWorkbook(new File(
-//					filePath + fileName));
-//
-//			/** **********创建工作表************ */
-//
-//			WritableSheet sheet = workbook.createSheet("Sheet1", 0);
-//
-//			/** **********设置纵横打印（默认为纵打）、打印纸***************** */
-//			jxl.SheetSettings sheetset = sheet.getSettings();
-//			sheetset.setProtected(false);
-//			sheetset.setLeftMargin(0);
-//			sheetset.setRightMargin(0);
-//			sheetset.setTopMargin(0);
-//			sheetset.setBottomMargin(0);
-//			/** ************设置单元格字体************** */
-//			WritableFont NormalFont = new WritableFont(WritableFont.ARIAL, 10);
-//			WritableFont BoldFont = new WritableFont(WritableFont.ARIAL, 12,
-//					WritableFont.BOLD);
-//
-//			/** ************以下设置三种单元格样式，灵活备用************ */
-//			// 用于标题居中
-//			WritableCellFormat wcf_center = new WritableCellFormat(BoldFont);
-//			wcf_center.setBorder(Border.ALL, BorderLineStyle.THIN); // 线条
-//			wcf_center.setVerticalAlignment(VerticalAlignment.CENTRE); // 文字垂直对齐
-//			wcf_center.setAlignment(Alignment.LEFT); // 文字水平对齐
-//			wcf_center.setWrap(false); // 文字是否换行
-//
-//			// 用于正文居左
-//			WritableCellFormat wcf_left = new WritableCellFormat(NormalFont);
-//			wcf_left.setBorder(Border.NONE, BorderLineStyle.THIN); // 线条
-//			wcf_left.setVerticalAlignment(VerticalAlignment.CENTRE); // 文字垂直对齐
-//			wcf_left.setAlignment(Alignment.LEFT); // 文字水平对齐
-//			wcf_left.setWrap(false); // 文字是否换行
-//
-//			// 设置列宽
-//			sheet.setColumnView(0, 6);
-//			sheet.setColumnView(1, 17);
-//
-//			/** ***************以下是EXCEL正文数据********************* */
-//			WritableFont content_BoldFont = new WritableFont(
-//					WritableFont.ARIAL, 11, WritableFont.NO_BOLD);
-//			WritableCellFormat content_center = new WritableCellFormat(
-//					content_BoldFont);
-//			content_center.setBorder(Border.BOTTOM, BorderLineStyle.THIN); // 线条
-//			content_center.setVerticalAlignment(VerticalAlignment.CENTRE); // 文字垂直对齐
-//			content_center.setAlignment(Alignment.CENTRE); // 文字水平对齐
-//			content_center.setWrap(false); // 文字是否换行
-//
-//			WritableFont content_BoldFont2 = new WritableFont(
-//					WritableFont.ARIAL, 11, WritableFont.NO_BOLD);
-//			WritableCellFormat content_center2 = new WritableCellFormat(
-//					content_BoldFont2);
-//
-//			content_center2.setVerticalAlignment(VerticalAlignment.CENTRE); // 文字垂直对齐
-//			content_center2.setAlignment(Alignment.CENTRE); // 文字水平对齐
-//			content_center2.setWrap(false); // 文字是否换行
-//			int index = 0;
-//			int number = 0;
-//			for (Sample sample : samplelist) {
-//				if(sample.getMemo().length()>1){
-//					switch (Integer.valueOf(sample.getMaterial().length()) / 9) {
-//					case 0: {
-//						for (int i = index; i < 16 + index; i++) {
-//							sheet.setRowView(i, 290);
-//						}
-//						switch (Integer.valueOf(sample.getMemo().length()) / 9) {
-//						case 0: {
-//							sheet.setRowView(0, 340);
-//							sheet.setRowView(2, 200);
-//							sheet.setRowView(4, 200);
-//							sheet.setRowView(6, 200);
-//							sheet.setRowView(8, 200);
-//							sheet.setRowView(10, 200);
-//							sheet.setRowView(12, 200);
-//							sheet.setRowView(14, 200);
-//							sheet.addCell(new Label(0, index + 1 + number, "款号:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 1 + number,
-//									sample.getProductNumber(),
-//									content_center));
-//
-//							sheet.addCell(new Label(0, index + 3 + number, "打样:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 3 + number,
-//									SystemCache.getUserName(sample.getCharge_user()), content_center));
-//
-//							sheet.addCell(new Label(0, index + 5 + number, "尺寸:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 5 + number,
-//									sample.getSize(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 7 + number, "材料:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 7 + number,
-//									sample.getMaterial(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 9 + number, "克重:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 9 + number,
-//									sample.getWeight() + " 克",
-//									content_center));
-//
-//							sheet.addCell(new Label(0, index + 11 + number, "机织:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 11 + number,
-//									sample.getMachine(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 13 + number, "时间:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 13 + number,
-//									DateTool.formatDate(sample.getCreated_at()), content_center));
-//
-//							sheet.addCell(new Label(0, index + 15 + number, "备注:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 15 + number,
-//									sample.getMemo(), content_center));
-//						}
-//							break;
-//						case 1: {
-//							sheet.setRowView(0, 340);
-//							sheet.setRowView(2, 200);
-//							sheet.setRowView(4, 200);
-//							sheet.setRowView(6, 200);
-//							sheet.setRowView(8, 200);
-//							sheet.setRowView(10, 200);
-//							sheet.setRowView(12, 200);
-//							sheet.setRowView(14, 200);
-//							sheet.addCell(new Label(0, index + 1 + number, "款号:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 1 + number,
-//									unPricedSample.getProductNumber(),
-//									content_center));
-//
-//							sheet.addCell(new Label(0, index + 3 + number, "打样:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 3 + number,
-//									FuweiSystemData.getDeveloperById(unPricedSample.getDeveloperId()).getName(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 5 + number, "尺寸:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 5 + number,
-//									unPricedSample.getSize(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 7 + number, "材料:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 7 + number,
-//									unPricedSample.getMaterial(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 9 + number, "克重:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 9 + number,
-//									unPricedSample.getWeight() + " 克",
-//									content_center));
-//
-//							sheet.addCell(new Label(0, index + 11 + number, "机织:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 11 + number,
-//									unPricedSample.getMachine(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 13 + number, "时间:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 13 + number,
-//									DateFormateUtil.formateDate(unPricedSample
-//											.getDate()), content_center));
-//
-//							sheet.addCell(new Label(0, index + 15 + number, "备注:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 15 + number,
-//									unPricedSample.getMemo().substring(0, 8),
-//									content_center));
-//							sheet.addCell(new Label(1, index + 16 + number,
-//									unPricedSample.getMemo().substring(8,
-//											unPricedSample.getMemo().length()),
-//									content_center));
-//						}
-//
-//							break;
-//						case 2: {
-//							sheet.setRowView(0, 200);
-//							sheet.setRowView(2, 200);
-//							sheet.setRowView(4, 200);
-//							sheet.setRowView(6, 200);
-//							sheet.setRowView(8, 200);
-//							sheet.setRowView(10, 200);
-//							sheet.setRowView(12, 200);
-//							sheet.setRowView(14, 200);
-//							sheet.addCell(new Label(0, index + 1 + number, "款号:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 1 + number,
-//									unPricedSample.getProductNumber(),
-//									content_center));
-//
-//							sheet.addCell(new Label(0, index + 3 + number, "打样:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 3 + number,
-//									FuweiSystemData.getDeveloperById(unPricedSample.getDeveloperId()).getName(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 5 + number, "尺寸:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 5 + number,
-//									unPricedSample.getSize(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 7 + number, "材料:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 7 + number,
-//									unPricedSample.getMaterial(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 9 + number, "克重:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 9 + number,
-//									unPricedSample.getWeight() + " 克",
-//									content_center));
-//
-//							sheet.addCell(new Label(0, index + 11 + number, "机织:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 11 + number,
-//									unPricedSample.getMachine(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 13 + number, "时间:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 13 + number,
-//									DateFormateUtil.formateDate(unPricedSample
-//											.getDate()), content_center));
-//
-//							sheet.addCell(new Label(0, index + 15 + number, "备注:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 15 + number,
-//									unPricedSample.getMemo().substring(0, 8),
-//									content_center));
-//							sheet.addCell(new Label(1, index + 16 + number,
-//									unPricedSample.getMemo().substring(8, 16),
-//									content_center));
-//							sheet.addCell(new Label(1, index + 17 + number,
-//									unPricedSample.getMemo().substring(16,
-//											unPricedSample.getMemo().length()),
-//									content_center));
-//						}
-//
-//							break;
-//
-//						default:
-//							break;
-//						}
-//
-//					}
-//						break;
-//
-//					case 1: {
-//						for (int i = index; i < 16 + index; i++) {
-//							sheet.setRowView(i, 290);
-//						}
-//
-//						switch (Integer.valueOf(unPricedSample.getMemo().length()) / 9) {
-//						case 0: {
-//							sheet.setRowView(0, 200);
-//							sheet.setRowView(2, 200);
-//							sheet.setRowView(4, 200);
-//							sheet.setRowView(6, 200);
-//							sheet.setRowView(9, 200);
-//							sheet.setRowView(11, 200);
-//							sheet.setRowView(13, 200);
-//							sheet.setRowView(15, 200);
-//							sheet.addCell(new Label(0, index + 1 + number, "款号:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 1 + number,
-//									unPricedSample.getProductNumber(),
-//									content_center));
-//
-//							sheet.addCell(new Label(0, index + 3 + number, "打样:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 3 + number,
-//									FuweiSystemData.getDeveloperById(unPricedSample.getDeveloperId()).getName(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 5 + number, "尺寸:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 5 + number,
-//									unPricedSample.getSize(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 7 + number, "材料:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 7 + number,
-//									unPricedSample.getMaterial().substring(0, 8),
-//									content_center));
-//							sheet.addCell(new Label(1, index + 8 + number,
-//									unPricedSample.getMaterial().substring(8,
-//											unPricedSample.getMaterial().length()),
-//									content_center));
-//
-//							sheet.addCell(new Label(0, index + 10 + number, "克重:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 10 + number,
-//									unPricedSample.getWeight() + " 克",
-//									content_center));
-//
-//							sheet.addCell(new Label(0, index + 12 + number, "机织:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 12 + number,
-//									unPricedSample.getMachine(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 14 + number, "时间:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 14 + number,
-//									DateFormateUtil.formateDate(unPricedSample
-//											.getDate()), content_center));
-//
-//							sheet.addCell(new Label(0, index + 16 + number, "备注:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 16 + number,
-//									unPricedSample.getMemo(), content_center));
-//						}
-//
-//							break;
-//
-//						case 1: {
-//							sheet.setRowView(0, 200);
-//							sheet.setRowView(2, 200);
-//							sheet.setRowView(4, 200);
-//							sheet.setRowView(6, 200);
-//							sheet.setRowView(9, 200);
-//							sheet.setRowView(11, 200);
-//							sheet.setRowView(13, 200);
-//							sheet.setRowView(15, 200);
-//							sheet.addCell(new Label(0, index + 1 + number, "款号:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 1 + number,
-//									unPricedSample.getProductNumber(),
-//									content_center));
-//
-//							sheet.addCell(new Label(0, index + 3 + number, "打样:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 3 + number,
-//									FuweiSystemData.getDeveloperById(unPricedSample.getDeveloperId()).getName(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 5 + number, "尺寸:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 5 + number,
-//									unPricedSample.getSize(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 7 + number, "材料:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 7 + number,
-//									unPricedSample.getMaterial().substring(0, 8),
-//									content_center));
-//							sheet.addCell(new Label(1, index + 8 + number,
-//									unPricedSample.getMaterial().substring(8,
-//											unPricedSample.getMaterial().length()),
-//									content_center));
-//
-//							sheet.addCell(new Label(0, index + 10 + number, "克重:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 10 + number,
-//									unPricedSample.getWeight() + " 克",
-//									content_center));
-//
-//							sheet.addCell(new Label(0, index + 12 + number, "机织:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 12 + number,
-//									unPricedSample.getMachine(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 14 + number, "时间:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 14 + number,
-//									DateFormateUtil.formateDate(unPricedSample
-//											.getDate()), content_center));
-//
-//							sheet.addCell(new Label(0, index + 16 + number, "备注:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 16 + number,
-//									unPricedSample.getMemo().substring(0, 8),
-//									content_center));
-//							sheet.addCell(new Label(1, index + 17 + number,
-//									unPricedSample.getMemo().substring(8,
-//											unPricedSample.getMemo().length()),
-//									content_center));
-//						}
-//
-//							break;
-//						case 2: {
-//							sheet.setRowView(0, 150);
-//							sheet.setRowView(2, 150);
-//							sheet.setRowView(4, 150);
-//							sheet.setRowView(6, 150);
-//							sheet.setRowView(9, 150);
-//							sheet.setRowView(11, 150);
-//							sheet.setRowView(13, 150);
-//							sheet.setRowView(15, 150);
-//							sheet.addCell(new Label(0, index + 1 + number, "款号:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 1 + number,
-//									unPricedSample.getProductNumber(),
-//									content_center));
-//
-//							sheet.addCell(new Label(0, index + 3 + number, "打样:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 3 + number,
-//									FuweiSystemData.getDeveloperById(unPricedSample.getDeveloperId()).getName(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 5 + number, "尺寸:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 5 + number,
-//									unPricedSample.getSize(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 7 + number, "材料:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 7 + number,
-//									unPricedSample.getMaterial().substring(0, 8),
-//									content_center));
-//							sheet.addCell(new Label(1, index + 8 + number,
-//									unPricedSample.getMaterial().substring(8,
-//											unPricedSample.getMaterial().length()),
-//									content_center));
-//
-//							sheet.addCell(new Label(0, index + 10 + number, "克重:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 10 + number,
-//									unPricedSample.getWeight() + " 克",
-//									content_center));
-//
-//							sheet.addCell(new Label(0, index + 12 + number, "机织:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 12 + number,
-//									unPricedSample.getMachine(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 14 + number, "时间:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 14 + number,
-//									DateFormateUtil.formateDate(unPricedSample
-//											.getDate()), content_center));
-//
-//							sheet.addCell(new Label(0, index + 16 + number, "备注:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 16 + number,
-//									unPricedSample.getMemo().substring(0, 8),
-//									content_center));
-//							sheet.addCell(new Label(1, index + 17 + number,
-//									unPricedSample.getMemo().substring(8, 16),
-//									content_center));
-//							sheet.addCell(new Label(1, index + 18 + number,
-//									unPricedSample.getMemo().substring(16,
-//											unPricedSample.getMemo().length()),
-//									content_center));
-//
-//						}
-//
-//							break;
-//						default:
-//							break;
-//						}
-//
-//					}
-//
-//						break;
-//					case 2: {
-//						for (int i = index; i < 16 + index; i++) {
-//							sheet.setRowView(i, 290);
-//						}
-//						switch (Integer.valueOf(unPricedSample.getMemo().length()) / 9) {
-//						case 0:{
-//							sheet.setRowView(0, 200);
-//							sheet.setRowView(2, 170);
-//							sheet.setRowView(4, 170);
-//							sheet.setRowView(6, 170);
-//							sheet.setRowView(10, 170);
-//							sheet.setRowView(12, 170);
-//							sheet.setRowView(14, 170);
-//							sheet.setRowView(16, 170);
-//							sheet.addCell(new Label(0, index + 1 + number, "款号:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 1 + number,
-//									unPricedSample.getProductNumber(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 3 + number, "打样:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 3 + number,
-//									FuweiSystemData.getDeveloperById(unPricedSample.getDeveloperId()).getName(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 5 + number, "尺寸:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 5 + number,
-//									unPricedSample.getSize(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 7 + number, "材料:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 7 + number,
-//									unPricedSample.getMaterial().substring(0, 8),
-//									content_center));
-//							sheet.addCell(new Label(1, index + 8 + number,
-//									unPricedSample.getMaterial().substring(8, 16),
-//									content_center));
-//							sheet.addCell(new Label(1, index + 9 + number,
-//									unPricedSample.getMaterial().substring(16,
-//											unPricedSample.getMaterial().length()),
-//									content_center));
-//
-//							sheet.addCell(new Label(0, index + 11 + number, "克重:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 11 + number,
-//									unPricedSample.getWeight() + " 克", content_center));
-//
-//							sheet.addCell(new Label(0, index + 13 + number, "机织:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 13 + number,
-//									unPricedSample.getMachine(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 15 + number, "时间:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 15 + number,
-//									DateFormateUtil.formateDate(unPricedSample
-//											.getDate()), content_center));
-//							
-//							sheet.addCell(new Label(0, index + 17 + number, "备注:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 17 + number,unPricedSample.getMemo(), content_center));
-//						}
-//							break;
-//
-//						case 1:{
-//							sheet.setRowView(0, 170);
-//							sheet.setRowView(2, 170);
-//							sheet.setRowView(4, 170);
-//							sheet.setRowView(6, 170);
-//							sheet.setRowView(10, 170);
-//							sheet.setRowView(12, 170);
-//							sheet.setRowView(14, 170);
-//							sheet.setRowView(16, 170);
-//							sheet.addCell(new Label(0, index + 1 + number, "款号:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 1 + number,
-//									unPricedSample.getProductNumber(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 3 + number, "打样:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 3 + number,
-//									FuweiSystemData.getDeveloperById(unPricedSample.getDeveloperId()).getName(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 5 + number, "尺寸:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 5 + number,
-//									unPricedSample.getSize(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 7 + number, "材料:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 7 + number,
-//									unPricedSample.getMaterial().substring(0, 8),
-//									content_center));
-//							sheet.addCell(new Label(1, index + 8 + number,
-//									unPricedSample.getMaterial().substring(8, 16),
-//									content_center));
-//							sheet.addCell(new Label(1, index + 9 + number,
-//									unPricedSample.getMaterial().substring(16,
-//											unPricedSample.getMaterial().length()),
-//									content_center));
-//
-//							sheet.addCell(new Label(0, index + 11 + number, "克重:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 11 + number,
-//									unPricedSample.getWeight() + " 克", content_center));
-//
-//							sheet.addCell(new Label(0, index + 13 + number, "机织:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 13 + number,
-//									unPricedSample.getMachine(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 15 + number, "时间:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 15 + number,
-//									DateFormateUtil.formateDate(unPricedSample
-//											.getDate()), content_center));
-//							
-//							sheet.addCell(new Label(0, index + 17 + number, "备注:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 17 + number,unPricedSample.getMemo().substring(0, 8), content_center));
-//							sheet.addCell(new Label(1, index + 18 + number,unPricedSample.getMemo().substring(8, unPricedSample.getMemo().length()), content_center));
-//						}
-//							break;
-//						case 2:{
-//							sheet.setRowView(0, 130);
-//							sheet.setRowView(2, 130);
-//							sheet.setRowView(4, 130);
-//							sheet.setRowView(6, 130);
-//							sheet.setRowView(10, 130);
-//							sheet.setRowView(12, 130);
-//							sheet.setRowView(14, 130);
-//							sheet.setRowView(16, 130);
-//							sheet.addCell(new Label(0, index + 1 + number, "款号:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 1 + number,
-//									unPricedSample.getProductNumber(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 3 + number, "打样:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 3 + number,
-//									FuweiSystemData.getDeveloperById(unPricedSample.getDeveloperId()).getName(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 5 + number, "尺寸:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 5 + number,
-//									unPricedSample.getSize(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 7 + number, "材料:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 7 + number,
-//									unPricedSample.getMaterial().substring(0, 8),
-//									content_center));
-//							sheet.addCell(new Label(1, index + 8 + number,
-//									unPricedSample.getMaterial().substring(8, 16),
-//									content_center));
-//							sheet.addCell(new Label(1, index + 9 + number,
-//									unPricedSample.getMaterial().substring(16,
-//											unPricedSample.getMaterial().length()),
-//									content_center));
-//
-//							sheet.addCell(new Label(0, index + 11 + number, "克重:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 11 + number,
-//									unPricedSample.getWeight() + " 克", content_center));
-//
-//							sheet.addCell(new Label(0, index + 13 + number, "机织:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 13 + number,
-//									unPricedSample.getMachine(), content_center));
-//
-//							sheet.addCell(new Label(0, index + 15 + number, "时间:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 15 + number,
-//									DateFormateUtil.formateDate(unPricedSample
-//											.getDate()), content_center));
-//							
-//							sheet.addCell(new Label(0, index + 17 + number, "备注:",
-//									content_center2));
-//							sheet.addCell(new Label(1, index + 17 + number,unPricedSample.getMemo().substring(0, 8), content_center));
-//							sheet.addCell(new Label(1, index + 18 + number,unPricedSample.getMemo().substring(8, 16), content_center));
-//							sheet.addCell(new Label(1, index + 19 + number,unPricedSample.getMemo().substring(16, unPricedSample.getMemo().length()), content_center));
-//
-//						}
-//
-//							break;
-//
-//						default:
-//							break;
-//						}
-//						
-//
-//					}
-//						break;
-//					default: {
-//						for (int i = index; i < 16 + index; i++) {
-//							sheet.setRowView(i, 290);
-//						}
-//						sheet.addCell(new Label(0, index + 1 + number, "款号:",
-//								content_center2));
-//						sheet.addCell(new Label(1, index + 1 + number,
-//								unPricedSample.getProductNumber(), content_center));
-//
-//						sheet.addCell(new Label(0, index + 3 + number, "打样:",
-//								content_center2));
-//						sheet.addCell(new Label(1, index + 3 + number,
-//								FuweiSystemData.getDeveloperById(unPricedSample.getDeveloperId()).getName(), content_center));
-//
-//						sheet.addCell(new Label(0, index + 5 + number, "尺寸:",
-//								content_center2));
-//						sheet.addCell(new Label(1, index + 5 + number,
-//								unPricedSample.getSize(), content_center));
-//
-//						sheet.addCell(new Label(0, index + 7 + number, "材料:",
-//								content_center2));
-//
-//						sheet.addCell(new Label(0, index + 10 + number, "克重:",
-//								content_center2));
-//						sheet.addCell(new Label(1, index + 10 + number,
-//								unPricedSample.getWeight() + " 克", content_center));
-//
-//						sheet.addCell(new Label(0, index + 12 + number, "机织:",
-//								content_center2));
-//						sheet.addCell(new Label(1, index + 12 + number,
-//								unPricedSample.getMachine(), content_center));
-//
-//						sheet.addCell(new Label(0, index + 14 + number, "时间:",
-//								content_center2));
-//						sheet.addCell(new Label(1, index + 14 + number,
-//								DateFormateUtil.formateDate(unPricedSample
-//										.getDate()), content_center));
-//
-//					}
-//						break;
-//					}
-//				}else {
-//					switch (Integer.valueOf(unPricedSample.getMaterial().length())/9) {
-//					case 0:{
-//						for (int i = index; i < 16+index; i++) {
-//							sheet.setRowView(i, 290);
-//						}
-//						
-//						sheet.addCell(new Label(0, index+1+number, "款号:", content_center2));
-//						sheet.addCell(new Label(1, index+1+number, unPricedSample.getProductNumber(), content_center));
-//						
-//						sheet.addCell(new Label(0, index+3+number, "打样:", content_center2));
-//						sheet.addCell(new Label(1, index+3+number, FuweiSystemData.getDeveloperById(unPricedSample.getDeveloperId()).getName(), content_center));
-//						
-//						sheet.addCell(new Label(0, index+5+number, "尺寸:", content_center2));
-//						sheet.addCell(new Label(1, index+5+number, unPricedSample.getSize(), content_center));
-//						
-//						sheet.addCell(new Label(0, index+7+number, "材料:", content_center2));
-//						sheet.addCell(new Label(1, index+7+number, unPricedSample.getMaterial(), content_center));
-//						
-//						sheet.addCell(new Label(0, index+9+number, "克重:", content_center2));
-//						sheet.addCell(new Label(1, index+9+number, unPricedSample.getWeight()+" 克", content_center));
-//						
-//						sheet.addCell(new Label(0, index+11+number, "机织:", content_center2));
-//						sheet.addCell(new Label(1, index+11+number, unPricedSample.getMachine(), content_center));
-//						
-//						sheet.addCell(new Label(0, index+13+number, "时间:", content_center2));
-//						sheet.addCell(new Label(1, index+13+number, DateFormateUtil.formateDate(unPricedSample.getDate()), content_center));
-//					}
-//						break;
-//
-//					case 1:{
-//						for (int i = index; i < 16+index; i++) {
-//							sheet.setRowView(i, 290);
-//						}
-//						sheet.addCell(new Label(0, index+1+number, "款号:", content_center2));
-//						sheet.addCell(new Label(1, index+1+number, unPricedSample.getProductNumber(), content_center));
-//						
-//						sheet.addCell(new Label(0, index+3+number, "打样:", content_center2));
-//						sheet.addCell(new Label(1, index+3+number,FuweiSystemData.getDeveloperById(unPricedSample.getDeveloperId()).getName(), content_center));
-//						
-//						sheet.addCell(new Label(0, index+5+number, "尺寸:", content_center2));
-//						sheet.addCell(new Label(1, index+5+number, unPricedSample.getSize(), content_center));
-//						
-//						sheet.addCell(new Label(0, index+7+number, "材料:", content_center2));
-//						sheet.addCell(new Label(1, index+7+number, unPricedSample.getMaterial().substring(0, 8), content_center));
-//						sheet.addCell(new Label(1, index+8+number, unPricedSample.getMaterial().substring(8, unPricedSample.getMaterial().length()), content_center));
-//						
-//						
-//						sheet.addCell(new Label(0, index+10+number, "克重:", content_center2));
-//						sheet.addCell(new Label(1, index+10+number, unPricedSample.getWeight()+" 克", content_center));
-//						
-//						sheet.addCell(new Label(0, index+12+number, "机织:", content_center2));
-//						sheet.addCell(new Label(1, index+12+number, unPricedSample.getMachine(), content_center));
-//						
-//						sheet.addCell(new Label(0, index+14+number, "时间:", content_center2));
-//						sheet.addCell(new Label(1, index+14+number, DateFormateUtil.formateDate(unPricedSample.getDate()), content_center));
-//
-//					}
-//						
-//						break;
-//					case 2:{
-//						for (int i = index; i < 16+index; i++) {
-//							sheet.setRowView(i, 290);
-//						}
-//						sheet.addCell(new Label(0, index+1+number, "款号:", content_center2));
-//						sheet.addCell(new Label(1, index+1+number, unPricedSample.getProductNumber(), content_center));
-//						
-//						sheet.addCell(new Label(0, index+3+number, "打样:", content_center2));
-//						sheet.addCell(new Label(1, index+3+number, FuweiSystemData.getDeveloperById(unPricedSample.getDeveloperId()).getName(), content_center));
-//						
-//						sheet.addCell(new Label(0, index+5+number, "尺寸:", content_center2));
-//						sheet.addCell(new Label(1, index+5+number, unPricedSample.getSize(), content_center));
-//						
-//						sheet.addCell(new Label(0, index+7+number, "材料:", content_center2));
-//						sheet.addCell(new Label(1, index+7+number, unPricedSample.getMaterial().substring(0, 8), content_center));
-//						sheet.addCell(new Label(1, index+8+number, unPricedSample.getMaterial().substring(8, 16), content_center));
-//						sheet.addCell(new Label(1, index+9+number, unPricedSample.getMaterial().substring(16, unPricedSample.getMaterial().length()), content_center));
-//						
-//						
-//						
-//						sheet.addCell(new Label(0, index+10+number, "克重:", content_center2));
-//						sheet.addCell(new Label(1, index+10+number, unPricedSample.getWeight()+" 克", content_center));
-//						
-//						sheet.addCell(new Label(0, index+12+number, "机织:", content_center2));
-//						sheet.addCell(new Label(1, index+12+number, unPricedSample.getMachine(), content_center));
-//						
-//						sheet.addCell(new Label(0, index+14+number, "时间:", content_center2));
-//						sheet.addCell(new Label(1, index+14+number, DateFormateUtil.formateDate(unPricedSample.getDate()), content_center));
-//
-//					}
-//						break;
-//					default:{
-//						for (int i = index; i < 16+index; i++) {
-//							sheet.setRowView(i, 290);
-//						}
-//						sheet.addCell(new Label(0, index+1+number, "款号:", content_center2));
-//						sheet.addCell(new Label(1, index+1+number, unPricedSample.getProductNumber(), content_center));
-//						
-//						sheet.addCell(new Label(0, index+3+number, "打样:", content_center2));
-//						sheet.addCell(new Label(1, index+3+number,FuweiSystemData.getDeveloperById(unPricedSample.getDeveloperId()).getName(), content_center));
-//						
-//						sheet.addCell(new Label(0, index+5+number, "尺寸:", content_center2));
-//						sheet.addCell(new Label(1, index+5+number, unPricedSample.getSize(), content_center));
-//						
-//						sheet.addCell(new Label(0, index+7+number, "材料:", content_center2));
-//						
-//						sheet.addCell(new Label(0, index+10+number, "克重:", content_center2));
-//						sheet.addCell(new Label(1, index+10+number, unPricedSample.getWeight()+" 克", content_center));
-//						
-//						sheet.addCell(new Label(0, index+12+number, "机织:", content_center2));
-//						sheet.addCell(new Label(1, index+12+number, unPricedSample.getMachine(), content_center));
-//						
-//						sheet.addCell(new Label(0, index+14+number, "时间:", content_center2));
-//						sheet.addCell(new Label(1, index+14+number, DateFormateUtil.formateDate(unPricedSample.getDate()), content_center));
-//
-//					}
-//					break;
-//					}
-//				}
-//				number -= 2;
-//				index = index + 18;
-//			}
-//
-//			/** **********将以上缓存中的内容写到EXCEL文件中******** */
-//			workbook.write();
-//			/** *********关闭文件************* */
-//			workbook.close();
-//
-//		} catch (Exception e) {
-//			result = "系统提示：Excel文件导出失败，原因：" + e.toString();
-//			System.out.println(result);
-//			e.printStackTrace();
-//		}
-//		return result;
-//	}
+	public final static void exportSampleSignExcel(
+			List<Sample> samplelist,String fileName, String filePath) throws Exception {
+		java.io.File File=new java.io.File(filePath + fileName);
+		java.io.File pathFile=new java.io.File(File.getPath());
+        if(!pathFile.exists()){
+        	pathFile.mkdirs();
+        }
+		// 以下开始输出到EXCEL
+		try {
+			// 定义输出流，以便打开保存对话框______________________begin
+			// 定义输出流，以便打开保存对话框_______________________end
+			/** **********创建工作簿************ */
+			WritableWorkbook workbook = Workbook.createWorkbook(new File(
+					filePath + fileName));
+
+			/** **********创建工作表************ */
+
+			WritableSheet sheet = workbook.createSheet("Sheet1", 0);
+
+			/** **********设置纵横打印（默认为纵打）、打印纸***************** */
+			jxl.SheetSettings sheetset = sheet.getSettings();
+			sheetset.setProtected(false);
+			sheetset.setLeftMargin(0);
+			sheetset.setRightMargin(0);
+			sheetset.setTopMargin(0);
+			sheetset.setBottomMargin(0);
+			/** ************设置单元格字体************** */
+			WritableFont NormalFont = new WritableFont(WritableFont.ARIAL, 10);
+			WritableFont BoldFont = new WritableFont(WritableFont.ARIAL, 12,
+					WritableFont.BOLD);
+
+			/** ************以下设置三种单元格样式，灵活备用************ */
+			// 用于标题居中
+			WritableCellFormat wcf_center = new WritableCellFormat(BoldFont);
+			wcf_center.setBorder(Border.ALL, BorderLineStyle.THIN); // 线条
+			wcf_center.setVerticalAlignment(VerticalAlignment.CENTRE); // 文字垂直对齐
+			wcf_center.setAlignment(Alignment.LEFT); // 文字水平对齐
+			wcf_center.setWrap(false); // 文字是否换行
+
+			// 用于正文居左
+			WritableCellFormat wcf_left = new WritableCellFormat(NormalFont);
+			wcf_left.setBorder(Border.NONE, BorderLineStyle.THIN); // 线条
+			wcf_left.setVerticalAlignment(VerticalAlignment.CENTRE); // 文字垂直对齐
+			wcf_left.setAlignment(Alignment.LEFT); // 文字水平对齐
+			wcf_left.setWrap(false); // 文字是否换行
+
+			// 设置列宽
+			sheet.setColumnView(0, 6);
+			sheet.setColumnView(1, 17);
+
+			/** ***************以下是EXCEL正文数据********************* */
+			WritableFont content_BoldFont = new WritableFont(
+					WritableFont.ARIAL, 11, WritableFont.NO_BOLD);
+			WritableCellFormat content_center = new WritableCellFormat(
+					content_BoldFont);
+			content_center.setBorder(Border.BOTTOM, BorderLineStyle.THIN); // 线条
+			content_center.setVerticalAlignment(VerticalAlignment.CENTRE); // 文字垂直对齐
+			content_center.setAlignment(Alignment.CENTRE); // 文字水平对齐
+			content_center.setWrap(false); // 文字是否换行
+
+			WritableFont content_BoldFont2 = new WritableFont(
+					WritableFont.ARIAL, 11, WritableFont.NO_BOLD);
+			WritableCellFormat content_center2 = new WritableCellFormat(
+					content_BoldFont2);
+
+			content_center2.setVerticalAlignment(VerticalAlignment.CENTRE); // 文字垂直对齐
+			content_center2.setAlignment(Alignment.CENTRE); // 文字水平对齐
+			content_center2.setWrap(false); // 文字是否换行
+			int index = 0;
+			int number = 0;
+			for (Sample sample : samplelist) {
+				if(sample.getMemo().length()>1){
+					switch (Integer.valueOf(sample.getMaterial().length()) / 9) {
+					case 0: {
+						for (int i = index; i < 16 + index; i++) {
+							sheet.setRowView(i, 290);
+						}
+						switch (Integer.valueOf(sample.getMemo().length()) / 9) {
+						case 0: {
+							sheet.setRowView(0, 340);
+							sheet.setRowView(2, 200);
+							sheet.setRowView(4, 200);
+							sheet.setRowView(6, 200);
+							sheet.setRowView(8, 200);
+							sheet.setRowView(10, 200);
+							sheet.setRowView(12, 200);
+							sheet.setRowView(14, 200);
+							sheet.addCell(new Label(0, index + 1 + number, "款号:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 1 + number,
+									sample.getProductNumber(),
+									content_center));
+
+							sheet.addCell(new Label(0, index + 3 + number, "打样:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 3 + number,
+									SystemCache.getUserName(sample.getCharge_user()), content_center));
+
+							sheet.addCell(new Label(0, index + 5 + number, "尺寸:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 5 + number,
+									sample.getSize(), content_center));
+
+							sheet.addCell(new Label(0, index + 7 + number, "材料:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 7 + number,
+									sample.getMaterial(), content_center));
+
+							sheet.addCell(new Label(0, index + 9 + number, "克重:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 9 + number,
+									sample.getWeight() + " 克",
+									content_center));
+
+							sheet.addCell(new Label(0, index + 11 + number, "机织:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 11 + number,
+									sample.getMachine(), content_center));
+
+							sheet.addCell(new Label(0, index + 13 + number, "时间:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 13 + number,
+									DateTool.formateDate(sample.getCreated_at()), content_center));
+
+							sheet.addCell(new Label(0, index + 15 + number, "备注:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 15 + number,
+									sample.getMemo(), content_center));
+						}
+							break;
+						case 1: {
+							sheet.setRowView(0, 340);
+							sheet.setRowView(2, 200);
+							sheet.setRowView(4, 200);
+							sheet.setRowView(6, 200);
+							sheet.setRowView(8, 200);
+							sheet.setRowView(10, 200);
+							sheet.setRowView(12, 200);
+							sheet.setRowView(14, 200);
+							sheet.addCell(new Label(0, index + 1 + number, "款号:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 1 + number,
+									sample.getProductNumber(),
+									content_center));
+
+							sheet.addCell(new Label(0, index + 3 + number, "打样:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 3 + number,
+									SystemCache.getUserName(sample.getCharge_user()), content_center));
+
+							sheet.addCell(new Label(0, index + 5 + number, "尺寸:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 5 + number,
+									sample.getSize(), content_center));
+
+							sheet.addCell(new Label(0, index + 7 + number, "材料:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 7 + number,
+									sample.getMaterial(), content_center));
+
+							sheet.addCell(new Label(0, index + 9 + number, "克重:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 9 + number,
+									sample.getWeight() + " 克",
+									content_center));
+
+							sheet.addCell(new Label(0, index + 11 + number, "机织:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 11 + number,
+									sample.getMachine(), content_center));
+
+							sheet.addCell(new Label(0, index + 13 + number, "时间:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 13 + number,
+									DateTool.formateDate(sample.getCreated_at()), content_center));
+
+							sheet.addCell(new Label(0, index + 15 + number, "备注:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 15 + number,
+									sample.getMemo().substring(0, 8),
+									content_center));
+							sheet.addCell(new Label(1, index + 16 + number,
+									sample.getMemo().substring(8,
+											sample.getMemo().length()),
+									content_center));
+						}
+
+							break;
+						case 2: {
+							sheet.setRowView(0, 200);
+							sheet.setRowView(2, 200);
+							sheet.setRowView(4, 200);
+							sheet.setRowView(6, 200);
+							sheet.setRowView(8, 200);
+							sheet.setRowView(10, 200);
+							sheet.setRowView(12, 200);
+							sheet.setRowView(14, 200);
+							sheet.addCell(new Label(0, index + 1 + number, "款号:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 1 + number,
+									sample.getProductNumber(),
+									content_center));
+
+							sheet.addCell(new Label(0, index + 3 + number, "打样:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 3 + number,
+									SystemCache.getUserName(sample.getCharge_user()), content_center));
+
+							sheet.addCell(new Label(0, index + 5 + number, "尺寸:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 5 + number,
+									sample.getSize(), content_center));
+
+							sheet.addCell(new Label(0, index + 7 + number, "材料:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 7 + number,
+									sample.getMaterial(), content_center));
+
+							sheet.addCell(new Label(0, index + 9 + number, "克重:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 9 + number,
+									sample.getWeight() + " 克",
+									content_center));
+
+							sheet.addCell(new Label(0, index + 11 + number, "机织:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 11 + number,
+									sample.getMachine(), content_center));
+
+							sheet.addCell(new Label(0, index + 13 + number, "时间:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 13 + number,
+									DateTool.formateDate(sample.getCreated_at()), content_center));
+
+							sheet.addCell(new Label(0, index + 15 + number, "备注:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 15 + number,
+									sample.getMemo().substring(0, 8),
+									content_center));
+							sheet.addCell(new Label(1, index + 16 + number,
+									sample.getMemo().substring(8, 16),
+									content_center));
+							sheet.addCell(new Label(1, index + 17 + number,
+									sample.getMemo().substring(16,
+											sample.getMemo().length()),
+									content_center));
+						}
+
+							break;
+
+						default:
+							break;
+						}
+
+					}
+						break;
+
+					case 1: {
+						for (int i = index; i < 16 + index; i++) {
+							sheet.setRowView(i, 290);
+						}
+
+						switch (Integer.valueOf(sample.getMemo().length()) / 9) {
+						case 0: {
+							sheet.setRowView(0, 200);
+							sheet.setRowView(2, 200);
+							sheet.setRowView(4, 200);
+							sheet.setRowView(6, 200);
+							sheet.setRowView(9, 200);
+							sheet.setRowView(11, 200);
+							sheet.setRowView(13, 200);
+							sheet.setRowView(15, 200);
+							sheet.addCell(new Label(0, index + 1 + number, "款号:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 1 + number,
+									sample.getProductNumber(),
+									content_center));
+
+							sheet.addCell(new Label(0, index + 3 + number, "打样:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 3 + number,
+									SystemCache.getUserName(sample.getCharge_user()), content_center));
+
+							sheet.addCell(new Label(0, index + 5 + number, "尺寸:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 5 + number,
+									sample.getSize(), content_center));
+
+							sheet.addCell(new Label(0, index + 7 + number, "材料:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 7 + number,
+									sample.getMaterial().substring(0, 8),
+									content_center));
+							sheet.addCell(new Label(1, index + 8 + number,
+									sample.getMaterial().substring(8,
+											sample.getMaterial().length()),
+									content_center));
+
+							sheet.addCell(new Label(0, index + 10 + number, "克重:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 10 + number,
+									sample.getWeight() + " 克",
+									content_center));
+
+							sheet.addCell(new Label(0, index + 12 + number, "机织:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 12 + number,
+									sample.getMachine(), content_center));
+
+							sheet.addCell(new Label(0, index + 14 + number, "时间:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 14 + number,
+									DateTool.formateDate(sample.getCreated_at()), content_center));
+
+							sheet.addCell(new Label(0, index + 16 + number, "备注:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 16 + number,
+									sample.getMemo(), content_center));
+						}
+
+							break;
+
+						case 1: {
+							sheet.setRowView(0, 200);
+							sheet.setRowView(2, 200);
+							sheet.setRowView(4, 200);
+							sheet.setRowView(6, 200);
+							sheet.setRowView(9, 200);
+							sheet.setRowView(11, 200);
+							sheet.setRowView(13, 200);
+							sheet.setRowView(15, 200);
+							sheet.addCell(new Label(0, index + 1 + number, "款号:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 1 + number,
+									sample.getProductNumber(),
+									content_center));
+
+							sheet.addCell(new Label(0, index + 3 + number, "打样:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 3 + number,
+									SystemCache.getUserName(sample.getCharge_user()), content_center));
+
+							sheet.addCell(new Label(0, index + 5 + number, "尺寸:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 5 + number,
+									sample.getSize(), content_center));
+
+							sheet.addCell(new Label(0, index + 7 + number, "材料:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 7 + number,
+									sample.getMaterial().substring(0, 8),
+									content_center));
+							sheet.addCell(new Label(1, index + 8 + number,
+									sample.getMaterial().substring(8,
+											sample.getMaterial().length()),
+									content_center));
+
+							sheet.addCell(new Label(0, index + 10 + number, "克重:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 10 + number,
+									sample.getWeight() + " 克",
+									content_center));
+
+							sheet.addCell(new Label(0, index + 12 + number, "机织:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 12 + number,
+									sample.getMachine(), content_center));
+
+							sheet.addCell(new Label(0, index + 14 + number, "时间:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 14 + number,
+									DateTool.formateDate(sample.getCreated_at()), content_center));
+
+							sheet.addCell(new Label(0, index + 16 + number, "备注:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 16 + number,
+									sample.getMemo().substring(0, 8),
+									content_center));
+							sheet.addCell(new Label(1, index + 17 + number,
+									sample.getMemo().substring(8,
+											sample.getMemo().length()),
+									content_center));
+						}
+
+							break;
+						case 2: {
+							sheet.setRowView(0, 150);
+							sheet.setRowView(2, 150);
+							sheet.setRowView(4, 150);
+							sheet.setRowView(6, 150);
+							sheet.setRowView(9, 150);
+							sheet.setRowView(11, 150);
+							sheet.setRowView(13, 150);
+							sheet.setRowView(15, 150);
+							sheet.addCell(new Label(0, index + 1 + number, "款号:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 1 + number,
+									sample.getProductNumber(),
+									content_center));
+
+							sheet.addCell(new Label(0, index + 3 + number, "打样:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 3 + number,
+									SystemCache.getUserName(sample.getCharge_user()), content_center));
+
+							sheet.addCell(new Label(0, index + 5 + number, "尺寸:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 5 + number,
+									sample.getSize(), content_center));
+
+							sheet.addCell(new Label(0, index + 7 + number, "材料:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 7 + number,
+									sample.getMaterial().substring(0, 8),
+									content_center));
+							sheet.addCell(new Label(1, index + 8 + number,
+									sample.getMaterial().substring(8,
+											sample.getMaterial().length()),
+									content_center));
+
+							sheet.addCell(new Label(0, index + 10 + number, "克重:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 10 + number,
+									sample.getWeight() + " 克",
+									content_center));
+
+							sheet.addCell(new Label(0, index + 12 + number, "机织:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 12 + number,
+									sample.getMachine(), content_center));
+
+							sheet.addCell(new Label(0, index + 14 + number, "时间:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 14 + number,
+									DateTool.formateDate(sample.getCreated_at()), content_center));
+
+							sheet.addCell(new Label(0, index + 16 + number, "备注:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 16 + number,
+									sample.getMemo().substring(0, 8),
+									content_center));
+							sheet.addCell(new Label(1, index + 17 + number,
+									sample.getMemo().substring(8, 16),
+									content_center));
+							sheet.addCell(new Label(1, index + 18 + number,
+									sample.getMemo().substring(16,
+											sample.getMemo().length()),
+									content_center));
+
+						}
+
+							break;
+						default:
+							break;
+						}
+
+					}
+
+						break;
+					case 2: {
+						for (int i = index; i < 16 + index; i++) {
+							sheet.setRowView(i, 290);
+						}
+						switch (Integer.valueOf(sample.getMemo().length()) / 9) {
+						case 0:{
+							sheet.setRowView(0, 200);
+							sheet.setRowView(2, 170);
+							sheet.setRowView(4, 170);
+							sheet.setRowView(6, 170);
+							sheet.setRowView(10, 170);
+							sheet.setRowView(12, 170);
+							sheet.setRowView(14, 170);
+							sheet.setRowView(16, 170);
+							sheet.addCell(new Label(0, index + 1 + number, "款号:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 1 + number,
+									sample.getProductNumber(), content_center));
+
+							sheet.addCell(new Label(0, index + 3 + number, "打样:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 3 + number,
+									SystemCache.getUserName(sample.getCharge_user()), content_center));
+
+							sheet.addCell(new Label(0, index + 5 + number, "尺寸:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 5 + number,
+									sample.getSize(), content_center));
+
+							sheet.addCell(new Label(0, index + 7 + number, "材料:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 7 + number,
+									sample.getMaterial().substring(0, 8),
+									content_center));
+							sheet.addCell(new Label(1, index + 8 + number,
+									sample.getMaterial().substring(8, 16),
+									content_center));
+							sheet.addCell(new Label(1, index + 9 + number,
+									sample.getMaterial().substring(16,
+											sample.getMaterial().length()),
+									content_center));
+
+							sheet.addCell(new Label(0, index + 11 + number, "克重:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 11 + number,
+									sample.getWeight() + " 克", content_center));
+
+							sheet.addCell(new Label(0, index + 13 + number, "机织:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 13 + number,
+									sample.getMachine(), content_center));
+
+							sheet.addCell(new Label(0, index + 15 + number, "时间:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 15 + number,
+									DateTool.formateDate(sample.getCreated_at()), content_center));
+							
+							sheet.addCell(new Label(0, index + 17 + number, "备注:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 17 + number,sample.getMemo(), content_center));
+						}
+							break;
+
+						case 1:{
+							sheet.setRowView(0, 170);
+							sheet.setRowView(2, 170);
+							sheet.setRowView(4, 170);
+							sheet.setRowView(6, 170);
+							sheet.setRowView(10, 170);
+							sheet.setRowView(12, 170);
+							sheet.setRowView(14, 170);
+							sheet.setRowView(16, 170);
+							sheet.addCell(new Label(0, index + 1 + number, "款号:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 1 + number,
+									sample.getProductNumber(), content_center));
+
+							sheet.addCell(new Label(0, index + 3 + number, "打样:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 3 + number,
+									SystemCache.getUserName(sample.getCharge_user()), content_center));
+
+							sheet.addCell(new Label(0, index + 5 + number, "尺寸:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 5 + number,
+									sample.getSize(), content_center));
+
+							sheet.addCell(new Label(0, index + 7 + number, "材料:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 7 + number,
+									sample.getMaterial().substring(0, 8),
+									content_center));
+							sheet.addCell(new Label(1, index + 8 + number,
+									sample.getMaterial().substring(8, 16),
+									content_center));
+							sheet.addCell(new Label(1, index + 9 + number,
+									sample.getMaterial().substring(16,
+											sample.getMaterial().length()),
+									content_center));
+
+							sheet.addCell(new Label(0, index + 11 + number, "克重:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 11 + number,
+									sample.getWeight() + " 克", content_center));
+
+							sheet.addCell(new Label(0, index + 13 + number, "机织:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 13 + number,
+									sample.getMachine(), content_center));
+
+							sheet.addCell(new Label(0, index + 15 + number, "时间:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 15 + number,
+									DateTool.formateDate(sample.getCreated_at()), content_center));
+							
+							sheet.addCell(new Label(0, index + 17 + number, "备注:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 17 + number,sample.getMemo().substring(0, 8), content_center));
+							sheet.addCell(new Label(1, index + 18 + number,sample.getMemo().substring(8, sample.getMemo().length()), content_center));
+						}
+							break;
+						case 2:{
+							sheet.setRowView(0, 130);
+							sheet.setRowView(2, 130);
+							sheet.setRowView(4, 130);
+							sheet.setRowView(6, 130);
+							sheet.setRowView(10, 130);
+							sheet.setRowView(12, 130);
+							sheet.setRowView(14, 130);
+							sheet.setRowView(16, 130);
+							sheet.addCell(new Label(0, index + 1 + number, "款号:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 1 + number,
+									sample.getProductNumber(), content_center));
+
+							sheet.addCell(new Label(0, index + 3 + number, "打样:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 3 + number,
+									SystemCache.getUserName(sample.getCharge_user()), content_center));
+
+							sheet.addCell(new Label(0, index + 5 + number, "尺寸:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 5 + number,
+									sample.getSize(), content_center));
+
+							sheet.addCell(new Label(0, index + 7 + number, "材料:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 7 + number,
+									sample.getMaterial().substring(0, 8),
+									content_center));
+							sheet.addCell(new Label(1, index + 8 + number,
+									sample.getMaterial().substring(8, 16),
+									content_center));
+							sheet.addCell(new Label(1, index + 9 + number,
+									sample.getMaterial().substring(16,
+											sample.getMaterial().length()),
+									content_center));
+
+							sheet.addCell(new Label(0, index + 11 + number, "克重:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 11 + number,
+									sample.getWeight() + " 克", content_center));
+
+							sheet.addCell(new Label(0, index + 13 + number, "机织:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 13 + number,
+									sample.getMachine(), content_center));
+
+							sheet.addCell(new Label(0, index + 15 + number, "时间:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 15 + number,
+									DateTool.formateDate(sample.getCreated_at()), content_center));
+							
+							sheet.addCell(new Label(0, index + 17 + number, "备注:",
+									content_center2));
+							sheet.addCell(new Label(1, index + 17 + number,sample.getMemo().substring(0, 8), content_center));
+							sheet.addCell(new Label(1, index + 18 + number,sample.getMemo().substring(8, 16), content_center));
+							sheet.addCell(new Label(1, index + 19 + number,sample.getMemo().substring(16, sample.getMemo().length()), content_center));
+
+						}
+
+							break;
+
+						default:
+							break;
+						}
+						
+
+					}
+						break;
+					default: {
+						for (int i = index; i < 16 + index; i++) {
+							sheet.setRowView(i, 290);
+						}
+						sheet.addCell(new Label(0, index + 1 + number, "款号:",
+								content_center2));
+						sheet.addCell(new Label(1, index + 1 + number,
+								sample.getProductNumber(), content_center));
+
+						sheet.addCell(new Label(0, index + 3 + number, "打样:",
+								content_center2));
+						sheet.addCell(new Label(1, index + 3 + number,
+								SystemCache.getUserName(sample.getCharge_user()), content_center));
+
+						sheet.addCell(new Label(0, index + 5 + number, "尺寸:",
+								content_center2));
+						sheet.addCell(new Label(1, index + 5 + number,
+								sample.getSize(), content_center));
+
+						sheet.addCell(new Label(0, index + 7 + number, "材料:",
+								content_center2));
+
+						sheet.addCell(new Label(0, index + 10 + number, "克重:",
+								content_center2));
+						sheet.addCell(new Label(1, index + 10 + number,
+								sample.getWeight() + " 克", content_center));
+
+						sheet.addCell(new Label(0, index + 12 + number, "机织:",
+								content_center2));
+						sheet.addCell(new Label(1, index + 12 + number,
+								sample.getMachine(), content_center));
+
+						sheet.addCell(new Label(0, index + 14 + number, "时间:",
+								content_center2));
+						sheet.addCell(new Label(1, index + 14 + number,
+								DateTool.formateDate(sample.getCreated_at()), content_center));
+
+					}
+						break;
+					}
+				}else {
+					switch (Integer.valueOf(sample.getMaterial().length())/9) {
+					case 0:{
+						for (int i = index; i < 16+index; i++) {
+							sheet.setRowView(i, 290);
+						}
+						
+						sheet.addCell(new Label(0, index+1+number, "款号:", content_center2));
+						sheet.addCell(new Label(1, index+1+number, sample.getProductNumber(), content_center));
+						
+						sheet.addCell(new Label(0, index+3+number, "打样:", content_center2));
+						sheet.addCell(new Label(1, index+3+number, SystemCache.getUserName(sample.getCharge_user()), content_center));
+						
+						sheet.addCell(new Label(0, index+5+number, "尺寸:", content_center2));
+						sheet.addCell(new Label(1, index+5+number, sample.getSize(), content_center));
+						
+						sheet.addCell(new Label(0, index+7+number, "材料:", content_center2));
+						sheet.addCell(new Label(1, index+7+number, sample.getMaterial(), content_center));
+						
+						sheet.addCell(new Label(0, index+9+number, "克重:", content_center2));
+						sheet.addCell(new Label(1, index+9+number, sample.getWeight()+" 克", content_center));
+						
+						sheet.addCell(new Label(0, index+11+number, "机织:", content_center2));
+						sheet.addCell(new Label(1, index+11+number, sample.getMachine(), content_center));
+						
+						sheet.addCell(new Label(0, index+13+number, "时间:", content_center2));
+						sheet.addCell(new Label(1, index+13+number, DateTool.formateDate(sample.getCreated_at()), content_center));
+					}
+						break;
+
+					case 1:{
+						for (int i = index; i < 16+index; i++) {
+							sheet.setRowView(i, 290);
+						}
+						sheet.addCell(new Label(0, index+1+number, "款号:", content_center2));
+						sheet.addCell(new Label(1, index+1+number, sample.getProductNumber(), content_center));
+						
+						sheet.addCell(new Label(0, index+3+number, "打样:", content_center2));
+						sheet.addCell(new Label(1, index+3+number,SystemCache.getUserName(sample.getCharge_user()), content_center));
+						
+						sheet.addCell(new Label(0, index+5+number, "尺寸:", content_center2));
+						sheet.addCell(new Label(1, index+5+number, sample.getSize(), content_center));
+						
+						sheet.addCell(new Label(0, index+7+number, "材料:", content_center2));
+						sheet.addCell(new Label(1, index+7+number, sample.getMaterial().substring(0, 8), content_center));
+						sheet.addCell(new Label(1, index+8+number, sample.getMaterial().substring(8, sample.getMaterial().length()), content_center));
+						
+						
+						sheet.addCell(new Label(0, index+10+number, "克重:", content_center2));
+						sheet.addCell(new Label(1, index+10+number, sample.getWeight()+" 克", content_center));
+						
+						sheet.addCell(new Label(0, index+12+number, "机织:", content_center2));
+						sheet.addCell(new Label(1, index+12+number, sample.getMachine(), content_center));
+						
+						sheet.addCell(new Label(0, index+14+number, "时间:", content_center2));
+						sheet.addCell(new Label(1, index+14+number, DateTool.formateDate(sample.getCreated_at()), content_center));
+
+					}
+						
+						break;
+					case 2:{
+						for (int i = index; i < 16+index; i++) {
+							sheet.setRowView(i, 290);
+						}
+						sheet.addCell(new Label(0, index+1+number, "款号:", content_center2));
+						sheet.addCell(new Label(1, index+1+number, sample.getProductNumber(), content_center));
+						
+						sheet.addCell(new Label(0, index+3+number, "打样:", content_center2));
+						sheet.addCell(new Label(1, index+3+number, SystemCache.getUserName(sample.getCharge_user()), content_center));
+						
+						sheet.addCell(new Label(0, index+5+number, "尺寸:", content_center2));
+						sheet.addCell(new Label(1, index+5+number, sample.getSize(), content_center));
+						
+						sheet.addCell(new Label(0, index+7+number, "材料:", content_center2));
+						sheet.addCell(new Label(1, index+7+number, sample.getMaterial().substring(0, 8), content_center));
+						sheet.addCell(new Label(1, index+8+number, sample.getMaterial().substring(8, 16), content_center));
+						sheet.addCell(new Label(1, index+9+number, sample.getMaterial().substring(16, sample.getMaterial().length()), content_center));
+						
+						
+						
+						sheet.addCell(new Label(0, index+10+number, "克重:", content_center2));
+						sheet.addCell(new Label(1, index+10+number, sample.getWeight()+" 克", content_center));
+						
+						sheet.addCell(new Label(0, index+12+number, "机织:", content_center2));
+						sheet.addCell(new Label(1, index+12+number, sample.getMachine(), content_center));
+						
+						sheet.addCell(new Label(0, index+14+number, "时间:", content_center2));
+						sheet.addCell(new Label(1, index+14+number, DateTool.formateDate(sample.getCreated_at()), content_center));
+
+					}
+						break;
+					default:{
+						for (int i = index; i < 16+index; i++) {
+							sheet.setRowView(i, 290);
+						}
+						sheet.addCell(new Label(0, index+1+number, "款号:", content_center2));
+						sheet.addCell(new Label(1, index+1+number, sample.getProductNumber(), content_center));
+						
+						sheet.addCell(new Label(0, index+3+number, "打样:", content_center2));
+						sheet.addCell(new Label(1, index+3+number,SystemCache.getUserName(sample.getCharge_user()), content_center));
+						
+						sheet.addCell(new Label(0, index+5+number, "尺寸:", content_center2));
+						sheet.addCell(new Label(1, index+5+number, sample.getSize(), content_center));
+						
+						sheet.addCell(new Label(0, index+7+number, "材料:", content_center2));
+						
+						sheet.addCell(new Label(0, index+10+number, "克重:", content_center2));
+						sheet.addCell(new Label(1, index+10+number, sample.getWeight()+" 克", content_center));
+						
+						sheet.addCell(new Label(0, index+12+number, "机织:", content_center2));
+						sheet.addCell(new Label(1, index+12+number, sample.getMachine(), content_center));
+						
+						sheet.addCell(new Label(0, index+14+number, "时间:", content_center2));
+						sheet.addCell(new Label(1, index+14+number, DateTool.formateDate(sample.getCreated_at()), content_center));
+
+					}
+					break;
+					}
+				}
+				number -= 2;
+				index = index + 18;
+			}
+
+			/** **********将以上缓存中的内容写到EXCEL文件中******** */
+			workbook.write();
+			/** *********关闭文件************* */
+			workbook.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
 
 	// 生成样品详情
-	public final static String exportSampleDetailExcel(Sample sample,QuotePrice quotePrice,
-			String filePath, String fileName) {
+	public final static void exportSampleDetailExcel(Sample sample,QuotePrice quotePrice,
+			String filePath, String fileName) throws Exception {
 
 		String result = "系统提示：Excel文件导出成功！";
 		// 以下开始输出到EXCEL
@@ -1197,8 +1195,8 @@ public class ExportExcel {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw e;
 		}
-		return result;
 	}
 
 //	public final static String exportKuaiDiDan(String filePath,

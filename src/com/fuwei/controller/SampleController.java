@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -36,6 +38,7 @@ import com.fuwei.service.QuoteService;
 import com.fuwei.service.SampleService;
 import com.fuwei.util.CompressUtil;
 import com.fuwei.util.DateTool;
+import com.fuwei.util.ExportExcel;
 import com.fuwei.util.HanyuPinyinUtil;
 import com.fuwei.util.SerializeTool;
 
@@ -49,6 +52,19 @@ public class SampleController extends BaseController {
 	SampleService sampleService;
 	@Autowired
 	QuotePriceService quotePriceService;
+	
+	//生成样品标签
+	@RequestMapping(value="/print_sign/{id}",method = RequestMethod.GET)
+	@ResponseBody
+	public void printSign(@PathVariable Integer id,HttpSession session,HttpServletRequest request) throws Exception{
+		Sample sample = sampleService.get(id);
+		String excelfile_name = Constants.UPLOADEXCEL_Sample_temp + "样品标签" + sample.getId() + "_"
+		+ DateTool.formateDate(new Date(), "yyyyMMddHHmmss") + ".xls";
+		String uploadSite = Constants.UPLOADSite;
+		List<Sample> samplelist = new ArrayList<Sample>();
+		samplelist.add(sample);
+		ExportExcel.exportSampleSignExcel(samplelist,excelfile_name, uploadSite );
+	}
 	
 	//样品详情
 	@RequestMapping(value="/detail/{id}",method = RequestMethod.GET)
@@ -127,15 +143,10 @@ public class SampleController extends BaseController {
 	public Map<String,Object> add(Sample sample,@RequestParam("file") CommonsMultipartFile file,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String fileName = fileUpload(request,file);
-    	String img = Constants.UPLOADIMGPATH + fileName;
-		sample.setImg(img);
-		//中等缩略图：样品详情
-		CompressUtil.compressPic(SystemContextUtils.getAppPath(request) + Constants.UPLOADIMGPATH, SystemContextUtils.getAppPath(request)+ Constants.UPLOADIMGPATH_S, fileName, fileName, 350, 350);
-		//缩略图：列表
-		String ss_filename = CompressUtil.compressPic(SystemContextUtils.getAppPath(request) + Constants.UPLOADIMGPATH, SystemContextUtils.getAppPath(request)+ Constants.UPLOADIMGPATH_SS, fileName, fileName, 120, 120,"png");
-		sample.setImg_s(Constants.UPLOADIMGPATH_S + fileName);
-		sample.setImg_ss(Constants.UPLOADIMGPATH_SS + ss_filename);
+		JSONObject jObject = fileUpload(request,file);
+		sample.setImg((String)jObject.get("img"));
+		sample.setImg_s((String)jObject.get("img_s"));
+		sample.setImg_ss((String)jObject.get("img_ss"));
 		
 		sample.setHelp_code(HanyuPinyinUtil.getFirstSpellByString(sample.getName())) ;
 		sample.setCreated_at(DateTool.now());
@@ -188,15 +199,10 @@ public class SampleController extends BaseController {
         MultiValueMap<String, MultipartFile> multiValueMap = multipartRequest.getMultiFileMap();  
         List<MultipartFile> file = multiValueMap.get("file");  
         if(file!=null && !file.isEmpty()){  
-        	String fileName = fileUpload(request,(CommonsMultipartFile)file.get(0));
-        	String img = Constants.UPLOADIMGPATH + fileName;
-    		sample.setImg(img);
-    		//中等缩略图：样品详情
-    		CompressUtil.compressPic(SystemContextUtils.getAppPath(request) + Constants.UPLOADIMGPATH, SystemContextUtils.getAppPath(request)+ Constants.UPLOADIMGPATH_S, fileName, fileName, 350, 350);
-    		//缩略图：列表
-    		String ss_filename = CompressUtil.compressPic(SystemContextUtils.getAppPath(request) + Constants.UPLOADIMGPATH, SystemContextUtils.getAppPath(request)+ Constants.UPLOADIMGPATH_S, fileName, fileName, 120, 120,"png");
-    		sample.setImg_s(Constants.UPLOADIMGPATH_S + fileName);
-    		sample.setImg_ss(Constants.UPLOADIMGPATH_SS + ss_filename);
+        	JSONObject jObject = fileUpload(request,(CommonsMultipartFile)file.get(0));
+    		sample.setImg((String)jObject.get("img"));
+    		sample.setImg_s((String)jObject.get("img_s"));
+    		sample.setImg_ss((String)jObject.get("img_ss"));
         }  
 	
 		sample.setHelp_code(HanyuPinyinUtil.getFirstSpellByString(sample.getName())) ;
@@ -210,7 +216,7 @@ public class SampleController extends BaseController {
      * 采用file.Transto 来保存上传的文件
      */
 	
-    public String fileUpload(HttpServletRequest request , CommonsMultipartFile file) throws Exception {
+    public JSONObject fileUpload(HttpServletRequest request , CommonsMultipartFile file) throws Exception {
     	String nameString = file.getOriginalFilename();
     	if(nameString.lastIndexOf(".") == -1 || nameString.lastIndexOf(".") == 0){
     		throw new Exception("请上传有效的图片文件，包括 以.bmp,.png,.jpg,.jpeg,.gif为扩展名的文件");
@@ -224,25 +230,31 @@ public class SampleController extends BaseController {
     	}
          long  startTime=System.currentTimeMillis();
         String fileName = new Date().getTime() +file.getOriginalFilename();
-        String path = Constants.UPLOADIMGPATH + fileName;
+        String path = Constants.UPLOADIMGPATH_Sample + fileName;
         
-        java.io.File pathFile=new java.io.File(request.getSession().getServletContext().getRealPath("/") + Constants.UPLOAD);
+        java.io.File pathFile=new java.io.File(Constants.UPLOADSite + Constants.UPLOADIMGPATH_Sample);
         
         if(!pathFile.exists()){
-        	pathFile.mkdir();
+        	pathFile.mkdirs();
         }
-        
-        java.io.File pathFile2=new java.io.File(request.getSession().getServletContext().getRealPath("/") + Constants.UPLOADIMGPATH);
-        
-        if(!pathFile2.exists()){
-        	pathFile2.mkdir();
-        }
-        System.out.println("path："+path);
-        java.io.File newFile=new java.io.File(request.getSession().getServletContext().getRealPath("/") + path);
+       
+        java.io.File newFile=new java.io.File(Constants.UPLOADSite + path);
         //通过CommonsMultipartFile的方法直接写文件（注意这个时候）
         file.transferTo(newFile);
         long  endTime=System.currentTimeMillis();
+        
+        //上传原图后，上传中等缩略图 与 缩略图
+        //中等缩略图：样品详情
+		CompressUtil.compressPic(Constants.UPLOADSite + Constants.UPLOADIMGPATH_Sample, Constants.UPLOADSite+ Constants.UPLOADIMGPATH_Sample_S, fileName, fileName, 350, 350);
+		//缩略图：列表
+		String ss_filename = CompressUtil.compressPic(Constants.UPLOADSite + Constants.UPLOADIMGPATH_Sample, Constants.UPLOADSite+ Constants.UPLOADIMGPATH_Sample_SS, fileName, fileName, 120, 120,"png");
+		
+		JSONObject jObject = new JSONObject();
+		jObject.put("img",Constants.UPLOADIMGPATH_Sample + fileName );
+		jObject.put("img_s", Constants.UPLOADIMGPATH_Sample_S + fileName);
+		jObject.put("img_ss", Constants.UPLOADIMGPATH_Sample_SS + ss_filename);
+		
         System.out.println("方法二的运行时间："+String.valueOf(endTime-startTime)+"ms");
-        return fileName;  
+        return jObject;  
     }
 }

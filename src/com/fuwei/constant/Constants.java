@@ -51,11 +51,21 @@ public class Constants {
 
 	public static final int ORDER_TYPE_HH = 3;
 	
-	public static final String UPLOAD = "upload/";//上传样品图片的路径
-	public static final String UPLOADIMGPATH = "upload/images/";//上传样品图片的路径
-	public static final String UPLOADEXCEL = "upload/excel/";//上传样品图片的路径
-	public static final String UPLOADIMGPATH_SS = "upload/images/ss/";
-	public static final String UPLOADIMGPATH_S = "upload/images/s/";
+	public static final String UPLOADSite = "d:/";//上传样品图片的路径
+	public static final String UPLOADIMGPATH = "upload.fuwei.com/images/";//上传样品图片的路径
+	public static final String UPLOADEXCEL = "upload.fuwei.com/excel/";//上传样品图片的路径
+	
+	public static final String UPLOADEXCEL_TEMP = "upload.fuwei.com/excel/temp/";//excel临时生成路径
+	
+	public static final String UPLOADEXCEL_QuoteOrder = "upload.fuwei.com/excel/quote/";
+	public static final String UPLOADEXCEL_Sample = "upload.fuwei.com/excel/sample/";
+	public static final String UPLOADEXCEL_Sample_temp = "upload.fuwei.com/excel/sample/temp/";
+	public static final String UPLOADIMGPATH_Sample = "upload.fuwei.com/images/sample/";
+	public static final String UPLOADIMGPATH_Sample_SS = "upload.fuwei.com/images/sample/ss/";
+	public static final String UPLOADIMGPATH_Sample_S = "upload.fuwei.com/images/sample/s/";
+	
 	
 	public static final String LOGIN_URL = "/login.jsp";
+	
+	
 }

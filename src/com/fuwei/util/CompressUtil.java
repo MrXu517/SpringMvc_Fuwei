@@ -22,7 +22,7 @@ public class CompressUtil {
 			// 获得源文件
 			File mdfile = new File(outputDir);
 			if (!mdfile.exists()) {
-				mdfile.mkdir();
+				mdfile.mkdirs();
 			}
 			File file = new File(inputDir + inputFileName);
 			if (!file.exists()) {

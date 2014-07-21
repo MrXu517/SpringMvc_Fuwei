@@ -55,16 +55,14 @@ public class QuoteOrderController extends BaseController {
 	public Map<String, Object> add(String ids, HttpSession session,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		String excelfile_name = Constants.UPLOADEXCEL
-				+ DateTool.formateDate(new Date(), "yyyyMMddHHmmss") + "_"
-				+ new Date().getTime() + ".xls";
-		String appPath = SystemContextUtils
-		.getAppPath(request);
+		String excelfile_name = "报价单"+DateTool.formateDate(new Date(), "yyyyMMddHHmmss") + ".xls";
+		String uploadSite = Constants.UPLOADSite;
 		Boolean excel = false;
+		QuoteOrder quoteOrder = new QuoteOrder();
 		try {
 			User user = SystemContextUtils.getCurrentUser(session)
 					.getLoginedUser();
-			QuoteOrder quoteOrder = new QuoteOrder();
+			
 			// 自动生成报价单号
 
 			quoteOrder.setCreated_at(DateTool.now());
@@ -106,19 +104,15 @@ public class QuoteOrderController extends BaseController {
 			quoteOrder.setSalesmanId(salesmanId);
 			quoteOrder.setDetaillist(detaillist);
 			// 生成excel的文件名
-
-			quoteOrder.setExcelUrl(excelfile_name);
-			
-			int quoteOrderId = quoteOrderService.add(quoteOrder, ids);
-			ExportExcel.exportExcel(excelfile_name, appPath, quoteOrder);
+			quoteOrder.setExcelUrl(excelfile_name);//先设一次excel文件名，之后再设一次（把quoteOrderId加上去）
 			excel = true;
-
+			int quoteOrderId = quoteOrderService.add(quoteOrder, ids,uploadSite);
+			excelfile_name = quoteOrder.getExcelUrl();
 			return this.returnSuccess("id",quoteOrderId);
 		} catch (Exception e) {
 			if(excel){
-				ExportExcel.deleteExcel(excelfile_name, appPath);
+				ExportExcel.deleteExcel(excelfile_name, uploadSite);
 			}
-			
 			throw e;
 		}
 

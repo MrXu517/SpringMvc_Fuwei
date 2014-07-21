@@ -48,7 +48,8 @@ public class SystemContextUtils {
 		return context.getBean(_class);
 	}
 	
-	public static String getAppPath(HttpServletRequest request){
-		return request.getSession().getServletContext().getRealPath("/");
-	}
+//	public static String getAppPath(HttpServletRequest request){
+//		return request.getSession().getServletContext().getRealPath("/");
+//	}
+	
 }
