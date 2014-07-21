@@ -65,6 +65,9 @@
 #alert_tip .modal{
 	z-index:99999999999999;
 }
+#alert_error .modal-backdrop,#alert_tip .modal-backdrop{
+	z-index:2000;
+}
 .RMB{
 	font-family:"Microsoft Yahei";
 }

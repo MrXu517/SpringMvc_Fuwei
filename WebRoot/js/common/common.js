@@ -578,7 +578,16 @@ Common.Error = function(message, callback) {
 	}
 	$dialog.css("padding-top", paddingtop);
 	$model.hide();
-	$model.modal({keyboard:true});
+	$model.on('show.bs.modal', function(e) {//show 方法调用之后立即触发该事件
+		//添加一个
+		$model.after("<div class='modal-backdrop fade in'></div>");
+		
+	});
+	$model.on('hide.bs.modal', function(e) {//hide 方法调用之后立即触发该事件
+		$model.siblings(".modal-backdrop").first().remove();
+		
+	});
+	$model.modal({keyboard:true,backdrop:false});
 
 	$model.on('hidden.bs.modal', function(e) {
 		if(callback!=undefined){
@@ -600,7 +609,16 @@ Common.Tip = function(message, callback) {
 	}
 	$dialog.css("padding-top", paddingtop);
 	$model.hide();
-	$model.modal({keyboard:true});
+	$model.on('show.bs.modal', function(e) {//show 方法调用之后立即触发该事件
+		//添加一个
+		$model.after("<div class='modal-backdrop fade in'></div>");
+		
+	});
+	$model.on('hide.bs.modal', function(e) {//hide 方法调用之后立即触发该事件
+		$model.siblings(".modal-backdrop").first().remove();
+		
+	});
+	$model.modal({keyboard:true,backdrop:false});
 
 	$model.on('hidden.bs.modal', function(e) {
 		if(callback!=undefined){
@@ -608,6 +626,7 @@ Common.Tip = function(message, callback) {
 		}
 		
 	});
+	
 };
 Common.openModal = function($modal){//打开对话框并高度居中
 	var $dialog = $modal.find('.modal-dialog');
