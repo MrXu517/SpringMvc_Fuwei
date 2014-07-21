@@ -113,9 +113,9 @@
 										<td width="10%" nowrap="nowrap"
 											style="max-width: 120px; height: 120px; max-height: 120px;">
 											<a target="_blank" class="cellimg"
-												href="<%=quote.getSample().getImg()%>"><img
+												href="/<%=quote.getSample().getImg()%>"><img
 													style="max-width: 120px; height: 120px; max-height: 120px;"
-													src="<%=quote.getSample().getImg()%>"> </a>
+													src="/<%=quote.getSample().getImg()%>"> </a>
 										</td>
 										<td width="5%" nowrap="nowrap"><%=SystemCache.getCompanyName(SystemCache
 									.getSalesman(

@@ -4,6 +4,53 @@ $(document).ready(function(){
 	setActiveLeft($a.parent("li"));
 	/* 设置当前选中的页 */
 	
+	//生成样品标签 -- 开始
+	$("#printSignBtn").click(function(){
+		var sampleId = $(this).attr("sampleId");
+		$.ajax( {
+			url :"sample/print_sign/"+sampleId,
+			type :'GET',
+			success : function(result) {
+				if (result.success) {
+					Common.Tip("生成样品标签成功,开始打印...", function() {
+						//reload();
+					});
+				} else {
+					Common.Error("生成样品标签失败：" + result.message);
+				}
+			},
+			error : function(result) {
+				Common.Error("请求服务器过程中出错:" + result.responseText);
+			}
+
+		});
+	});
+	//生成样品标签 -- 结束
+	
+	//打印样品价格详情 -- 开始
+	$(".printDetail").click(function(){
+		var quotepriceId = $(this).attr("data-cid");
+		$.ajax( {
+			url :"sample/printDetail/"+quotepriceId,
+			type :'GET',
+			success : function(result) {
+				if (result.success) {
+					Common.Tip("开始打印...", function() {
+						//reload();
+					});
+				} else {
+					Common.Error("生成样品标签失败：" + result.message);
+				}
+			},
+			error : function(result) {
+				Common.Error("请求服务器过程中出错:" + result.responseText);
+			}
+
+		});
+		return false;
+	});
+	//打印样品价格详情-- 结束
+	
 	// 公司-业务员级联
 	$("#companyId").change(function(){
 		changeCompany(this.value);

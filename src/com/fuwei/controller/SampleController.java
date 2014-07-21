@@ -33,6 +33,7 @@ import com.fuwei.constant.Constants;
 import com.fuwei.entity.QuotePrice;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
+import com.fuwei.print.PrintExcel;
 import com.fuwei.service.QuotePriceService;
 import com.fuwei.service.QuoteService;
 import com.fuwei.service.SampleService;
@@ -56,7 +57,7 @@ public class SampleController extends BaseController {
 	//生成样品标签
 	@RequestMapping(value="/print_sign/{id}",method = RequestMethod.GET)
 	@ResponseBody
-	public void printSign(@PathVariable Integer id,HttpSession session,HttpServletRequest request) throws Exception{
+	public Map<String,Object> printSign(@PathVariable Integer id,HttpSession session,HttpServletRequest request) throws Exception{
 		Sample sample = sampleService.get(id);
 		String excelfile_name = Constants.UPLOADEXCEL_Sample_temp + "样品标签" + sample.getId() + "_"
 		+ DateTool.formateDate(new Date(), "yyyyMMddHHmmss") + ".xls";
@@ -64,6 +65,23 @@ public class SampleController extends BaseController {
 		List<Sample> samplelist = new ArrayList<Sample>();
 		samplelist.add(sample);
 		ExportExcel.exportSampleSignExcel(samplelist,excelfile_name, uploadSite );
+		PrintExcel.printExcel(uploadSite + excelfile_name, true);
+		return this.returnSuccess();
+	}
+	
+	//打印样品价格详情
+	@RequestMapping(value="/printDetail/{id}",method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String,Object> printDetail(@PathVariable Integer id,HttpSession session,HttpServletRequest request) throws Exception{
+		QuotePrice quotePrice = quotePriceService.get(id);
+		Sample sample = sampleService.get(quotePrice.getSampleId());
+		String excelfile_name = Constants.UPLOADEXCEL_Sample_temp + "样品详情" + sample.getId() + "_"
+		+ DateTool.formateDate(new Date(), "yyyyMMddHHmmss") + ".xls";
+		String uploadSite = Constants.UPLOADSite;
+
+		ExportExcel.exportSampleDetailExcel(sample,quotePrice,uploadSite,excelfile_name,uploadSite );
+		PrintExcel.printExcel(uploadSite + excelfile_name, true);
+		return this.returnSuccess();
 	}
 	
 	//样品详情
@@ -245,13 +263,14 @@ public class SampleController extends BaseController {
         
         //上传原图后，上传中等缩略图 与 缩略图
         //中等缩略图：样品详情
-		CompressUtil.compressPic(Constants.UPLOADSite + Constants.UPLOADIMGPATH_Sample, Constants.UPLOADSite+ Constants.UPLOADIMGPATH_Sample_S, fileName, fileName, 350, 350);
+		String s_filename = CompressUtil.compressPic(Constants.UPLOADSite + Constants.UPLOADIMGPATH_Sample, Constants.UPLOADSite+ Constants.UPLOADIMGPATH_Sample_S, fileName, fileName, 350, 350,"png");
+		
 		//缩略图：列表
 		String ss_filename = CompressUtil.compressPic(Constants.UPLOADSite + Constants.UPLOADIMGPATH_Sample, Constants.UPLOADSite+ Constants.UPLOADIMGPATH_Sample_SS, fileName, fileName, 120, 120,"png");
 		
 		JSONObject jObject = new JSONObject();
 		jObject.put("img",Constants.UPLOADIMGPATH_Sample + fileName );
-		jObject.put("img_s", Constants.UPLOADIMGPATH_Sample_S + fileName);
+		jObject.put("img_s", Constants.UPLOADIMGPATH_Sample_S + s_filename);
 		jObject.put("img_ss", Constants.UPLOADIMGPATH_Sample_SS + ss_filename);
 		
         System.out.println("方法二的运行时间："+String.valueOf(endTime-startTime)+"ms");

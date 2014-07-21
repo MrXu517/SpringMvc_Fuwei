@@ -199,7 +199,7 @@ public class ExportExcel {
 	public final static void exportSampleSignExcel(
 			List<Sample> samplelist,String fileName, String filePath) throws Exception {
 		java.io.File File=new java.io.File(filePath + fileName);
-		java.io.File pathFile=new java.io.File(File.getPath());
+		java.io.File pathFile=new java.io.File(File.getParent());
         if(!pathFile.exists()){
         	pathFile.mkdirs();
         }
@@ -1021,9 +1021,13 @@ public class ExportExcel {
 
 	// 生成样品详情
 	public final static void exportSampleDetailExcel(Sample sample,QuotePrice quotePrice,
-			String filePath, String fileName) throws Exception {
+			String filePath, String fileName,String appPath) throws Exception {
 
-		String result = "系统提示：Excel文件导出成功！";
+		java.io.File File=new java.io.File(filePath + fileName);
+		java.io.File pathFile=new java.io.File(File.getParent());
+        if(!pathFile.exists()){
+        	pathFile.mkdirs();
+        }
 		// 以下开始输出到EXCEL
 		try {
 			// 定义输出流，以便打开保存对话框______________________begin
@@ -1083,9 +1087,15 @@ public class ExportExcel {
 			content_center2.setWrap(true); // 文字是否换行
 
 			sheet.mergeCells(0, 12, 4, 21);
-			WritableImage a = new WritableImage(0, 12, 5, 10, new File(
-					"e:/1.png"));
-			sheet.addImage(a);
+			File pictureFile = new File( appPath + sample.getImg_s());//imgPath
+			if (pictureFile.exists()) {
+				WritableImage a = new WritableImage(0, 12, 5, 10,
+						pictureFile);
+				sheet.addImage(a);
+			} else {
+				sheet.addCell(new Label(0, 12, "图片缺失", content_center));
+
+			}
 			sheet.mergeCells(6, 12, 9, 30);
 			sheet.addCell(new Label(6,12,sample.getDetail(),content_center2));
 			
@@ -1183,7 +1193,7 @@ public class ExportExcel {
 			sheet.addCell(new Label(6, 7, "备注", sample_detail_content_center));
 			
 			sheet.addCell(new Label(7, 2, SystemCache.getCompanyName(quotePrice.getCompanyId()) , sample_detail_content_center));
-			//sheet.addCell(new Label(7, 3, companyPrice.getProductName(), sample_detail_content_center));
+			sheet.addCell(new Label(7, 3, quotePrice.getCproductN(), sample_detail_content_center));
 			sheet.addCell(new Label(7, 4, SystemCache.getSalesmanName(quotePrice.getSalesmanId()) , sample_detail_content_center));
 			sheet.addCell(new Label(7, 5, quotePrice.getPrice()+" 元", sample_detail_content_center));
 			sheet.addCell(new Label(7, 6, DateTool.formateDate(quotePrice.getCreated_at()), sample_detail_content_center));

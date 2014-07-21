@@ -70,7 +70,7 @@
 							<span><%=sample.getProductNumber()%></span>
 						</div>
 						<div class="pull-right">
-							<button type="button" class="btn btn-info">
+							<button type="button" class="btn btn-info" id="printSignBtn" sampleId="<%=sample.getId() %>">
 								生成样品标签
 							</button>
 						</div>
@@ -81,7 +81,7 @@
 					<div class="sampleImg">
 
 						<a href="#" class="thumbnail"> <img id="previewImg"
-								alt="400 x 100%" src="<%=sample.getImg_s()%>"> </a>
+								alt="400 x 100%" src="/<%=sample.getImg_s()%>"> </a>
 
 					</div>
 					<div class="sampleData">

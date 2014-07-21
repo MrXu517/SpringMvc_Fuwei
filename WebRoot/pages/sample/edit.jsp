@@ -198,7 +198,7 @@
 										</div>
 										<div class="col-md-5" style="width: 400px;" id="previewWidget">
 											<a href="#" class="thumbnail"> <img id="previewImg"
-													alt="400 x 100%" src="<%=sample.getImg()%>"> </a>
+													alt="400 x 100%" src="/<%=sample.getImg()%>"> </a>
 										</div>
 									</form>
 								</div>

@@ -55,7 +55,7 @@
 								桐庐富伟针织厂报价单
 								</h3>
 								<div align="right">
-									<a href="<%=quoteOrder.getExcelUrl()%>"
+									<a href="/<%=quoteOrder.getExcelUrl()%>"
 										style="margin-right: 200px;">下载对应excel表格</a>
 								</div>
 						</span>
@@ -111,7 +111,7 @@
 						<tr>
 							<td align="center"><%=i + 1%></td>
 							<td align="center">
-								<img src="<%=detail.getImg_ss()%>">
+								<img src="/<%=detail.getImg_ss()%>">
 							</td>
 							<td align="center">
 								<%=detail.getName()%>
@@ -143,3 +143,11 @@
 
 	</body>
 </html>
+<script type="text/javascript">
+	$(document).ready( function() {
+		/*设置当前选中的页*/
+		var $a = $("#left li a[href='quoteorder/index']");
+		setActiveLeft($a.parent("li"));
+		/*设置当前选中的页*/
+	});
+</script>
