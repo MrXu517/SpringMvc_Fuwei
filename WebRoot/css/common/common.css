@@ -79,3 +79,6 @@
 .modal-title{
 	font-weight:bold;
 }
+span.error{
+	color:red;
+}

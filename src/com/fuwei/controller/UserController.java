@@ -87,10 +87,10 @@ public class UserController extends BaseController {
 	//退出登录
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	@ResponseBody
-	public void Logout (HttpSession session,HttpServletRequest request,
+	public void Logout (Boolean redirect, HttpSession session,HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		try{
-			session.removeAttribute(Constants.LOGIN_SESSION_NAME);
+			logout(session,request,response);
 			String path = request.getContextPath();
 			String basePath = request.getScheme() + "://"
 					+ request.getServerName() + ":" + request.getServerPort()
@@ -102,6 +102,14 @@ public class UserController extends BaseController {
 		
 	}
 	
+	public void logout(HttpSession session,HttpServletRequest request,
+			HttpServletResponse response)throws Exception {
+		try{
+			session.removeAttribute(Constants.LOGIN_SESSION_NAME);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView Index (HttpSession session,HttpServletRequest request,
@@ -208,6 +216,39 @@ public class UserController extends BaseController {
 		new SystemCache().initUserList();
 		
 		return this.returnSuccess();
+	}
+	
+	@RequestMapping(value = "/set", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView Set (HttpSession session,HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+			return new ModelAndView("user/set");
+	}
+	
+	@RequestMapping(value = "/set", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> Set (String password ,String password_2, String newPassword,HttpSession session,HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		try{
+			//修改密码时不更新系统用户
+			if(password.equals("")){
+				throw new Exception("原密码不能为空");
+			}
+			if(!password.equals(password_2)){
+				throw new Exception("原密码不一致");
+			}
+			if(newPassword.equals("")){
+				throw new Exception("新密码不能为空");
+			}
+			User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+			userService.setPassword(user.getId(), password, newPassword);//修改密码时不更新系统用户缓存
+			//修改成功之后去掉Session的user信息，重新登录
+			logout(session, request, response);
+			//session.removeAttribute(Constants.LOGIN_SESSION_NAME);
+			return this.returnSuccess();
+		} catch (Exception e) {
+			throw e;
+		}
 		
 	}
 }

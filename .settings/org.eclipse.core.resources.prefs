@@ -1,5 +1,6 @@
-#Tue Jun 24 22:09:07 CST 2014
+#Mon Jul 21 10:31:28 CST 2014
 eclipse.preferences.version=1
+encoding//WebRoot/css/common/head.css=UTF-8
 encoding//WebRoot/pages/user/index.jsp=UTF-8
 encoding//src/com/fuwei/controller/BaseController.java=UTF-8
 encoding//src/com/fuwei/service/BaseService.java=UTF-8

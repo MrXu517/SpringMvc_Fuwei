@@ -7,17 +7,6 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	List<User> userlist = (List<User>) request.getAttribute("userlist");
-	/*List<Company> companylist = (List<Company>) request
-			.getAttribute("companylist");
-	List<Salesman> salesmanlist = (List<Salesman>) request
-			.getAttribute("salesmanlist");
-	List<GongXu> gongxulist = (List<GongXu>) request
-			.getAttribute("gongxulist");
-	
-	
-	List<Role> rolelist = (List<Role>) request.getAttribute("rolelist");
-	
-	String tabname = (String) request.getParameter("tab");*/
 %>
 <!DOCTYPE html>
 <html>

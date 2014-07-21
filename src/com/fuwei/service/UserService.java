@@ -1,5 +1,6 @@
 package com.fuwei.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +10,29 @@ import org.springframework.stereotype.Component;
 
 import com.fuwei.entity.Company;
 import com.fuwei.entity.User;
+import com.fuwei.util.DateTool;
 
 @Component
 public class UserService extends BaseService {
 	@Autowired
 	JdbcTemplate jdbc;
+	
+	//修改密码
+	public int setPassword(int user_id ,String password,String newPassword)throws Exception{
+		try{
+			User user = this.get(user_id);
+			if(user == null){
+				throw new Exception("该用户不存在");
+			}
+			if(!user.getPassword().equals(password)){
+				throw new Exception("密码错误");
+			}
+			Date updated_at = DateTool.now();
+			return dao.update("UPDATE tb_user SET password=?,updated_at=? WHERE  id = ?",newPassword,updated_at, user.getId());
+		}catch(Exception e){
+			throw e;
+		}
+	}
 	
 	//用户登录
 	public User login(String uname, String pwd) throws Exception{

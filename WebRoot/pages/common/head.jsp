@@ -57,7 +57,7 @@
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default"
 								data-dismiss="modal">
-								关闭
+								确定
 							</button>
 						</div>
 					</div>
@@ -101,7 +101,7 @@
 	<div id="header">
 		<div class="headnav">
 			<div class="btn-group">
-				<button type="button" class="btn btn-success">
+				<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
 					<%=user.getName()%>
 				</button>
 				<button type="button" class="btn btn-success dropdown-toggle"
@@ -111,10 +111,7 @@
 				</button>
 				<ul class="dropdown-menu" role="menu">
 					<li>
-						<a href="#"></a>
-					</li>
-					<li>
-						<a href="#"><i class="fa fa-cog"></i>修改密码</a>
+						<a href="user/set"><i class="fa fa-cog"></i>修改密码</a>
 					</li>
 					<li>
 						<a href="user/logout"><i class="fa fa-power-off"></i>退出登录</a>
@@ -205,7 +202,7 @@
 					<div class="sidebar-collapse" id="sidebar-collapse">
 						<i class="fa fa-angle-double-left"
 							data-icon1="fa-angle-double-left"
-							data-icon2="fa-angle-double-right">点击缩放</i>
+							data-icon2="fa-angle-double-right"></i>
 					</div>
 				</h3>
 			</div>
