@@ -25,6 +25,7 @@ import net.sf.json.JSONObject;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.propertyeditors.URLEditor;
 
 import com.fuwei.commons.LoginedUser;
 import com.fuwei.commons.SystemContextUtils;
@@ -109,7 +110,7 @@ public class CheckUserLoginFilter implements Filter {
 				String basePath = request.getScheme() + "://"
 						+ request.getServerName() + ":" + request.getServerPort()
 						+ path;
-				String me = URLEncoder.encode(ERROR.RELOGIN);
+				String me = URLEncoder.encode(ERROR.RELOGIN, "utf-8");
 				response.sendRedirect(basePath + url + "?message="  +  me );
 			}
 		}
