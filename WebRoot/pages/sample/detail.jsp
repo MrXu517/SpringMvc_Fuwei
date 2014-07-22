@@ -218,6 +218,8 @@
 											data-cid="<%=quotePrice.getId()%>">添加到报价列表</a> |
 										<a class="edit" href="#"
 											data-cid="<%=quotePrice.getId()%>">编辑</a> |
+										<a class="delete" href="#"
+											data-cid="<%=quotePrice.getId()%>">删除</a> |
 										<a class="printDetail" href="#"
 											data-cid="<%=quotePrice.getId()%>">打印样品详情</a>
 									</td>
