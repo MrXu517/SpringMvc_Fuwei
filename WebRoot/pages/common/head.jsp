@@ -133,7 +133,7 @@
 			<div class="menubar">
 				<ul class="menubar-ul">
 					<li class="first active">
-						<a href="index.jsp"><i class="fa fa-home"></i>首页</a>
+						<a href="user/index"><i class="fa fa-home"></i>首页</a>
 					</li>
 					<li class="li_dropdown">
 						<a href="#"><i class="fa fa-desktop"></i>样品系统<i

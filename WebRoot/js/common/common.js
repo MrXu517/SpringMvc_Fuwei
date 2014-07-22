@@ -1,3 +1,16 @@
+
+$(document).ajaxError(function(event, jqXHR, ajaxSettings, thrownError) {
+    if(jqXHR.responseJSON!=undefined & jqXHR.responseJSON.relogin == true){
+    	Common.Error("登录失效，请重新登录",function(){
+    		location = "login.jsp?message=登录失效，请重新登录";
+    	});
+    }
+    else if(jqXHR.responseJSON!=undefined & jqXHR.responseJSON.locked == true){
+    	Common.Error("您的权限已被修改，请重新登录",function(){
+    		location = "login.jsp?message=您的权限已被修改，请重新登录";
+    	});
+    }
+});
 var loadingNumbers = 0;
 $(document).ajaxSend( function(event, xhr, settings) {
 	xhr.setRequestHeader("Cache-Control", "no-cache");

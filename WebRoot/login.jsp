@@ -1,6 +1,11 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
-<% %>
+<%
+String message = request.getParameter("message");
+if(message == null){
+	message = "";
+}
+ %>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta charset="utf-8">
@@ -39,7 +44,7 @@
 							<div class="panel-body">
 								<form id="loginform" role="form" >
 									<div class="form-group">
-										<span class="error"></span>
+										<span class="error"><%=message %></span>
 									</div>
 									<div class="form-group">
 										<label for="username">
