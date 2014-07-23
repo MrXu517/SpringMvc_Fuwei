@@ -22,10 +22,12 @@ import com.fuwei.commons.LoginedUser;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.constant.Constants;
+import com.fuwei.entity.Authority;
 import com.fuwei.entity.Module;
 import com.fuwei.entity.Role;
 import com.fuwei.entity.Salesman;
 import com.fuwei.entity.User;
+import com.fuwei.service.AuthorityService;
 import com.fuwei.service.ModuleService;
 import com.fuwei.service.RoleService;
 import com.fuwei.service.UserService;
@@ -42,7 +44,7 @@ public class UserController extends BaseController {
 	@Autowired
 	private RoleService roleService;
 	@Autowired
-	private ModuleService moduleService;
+	private AuthorityService authorityService;
 	
 	/**
 	 * 登录
@@ -61,13 +63,13 @@ public class UserController extends BaseController {
 			loginUser.setLoginedUser(user);
 			//获取登录用户的角色与权限
 			Role role = null;
-			List<Module> moduleList = null;
+			List<Authority> authoritylist = null;
 			Integer roleId = user.getRoleId();
 			if(roleId != null){
 				role = roleService.get(roleId);
-				moduleList = moduleService.getList(roleId);
+				authoritylist = authorityService.getList(roleId);
 			}
-			loginUser.setModulelist(moduleList);
+			loginUser.setAuthoritylist(authoritylist);
 			loginUser.setRole(role);
 			//登录成功，若该用户的locked为true,则改为false，且从缓存列表中删除
 			if(user.getLocked()){

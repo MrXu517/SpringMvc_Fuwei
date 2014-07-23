@@ -1,11 +1,22 @@
 package com.fuwei.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONObject;
+
+import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
+
+import com.fuwei.constant.ERROR;
 
 /**
  * 
@@ -67,9 +78,33 @@ public class BaseController extends MultiActionController{
 	/*捕捉异常的通用方法*/
 	@ExceptionHandler
 	@ResponseBody
-	public Map<String,Object> exception(Exception e){
+	public void exception(HttpServletRequest request,HttpServletResponse response ,Exception e) throws IOException{
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://"
+				+ request.getServerName() + ":"
+				+ request.getServerPort() + path + "/";
+		String errorUrl = "error.jsp";
+		if(e instanceof PermissionDeniedDataAccessException){//如果捕获到权限异常
+			//则跳到异常页面
+			errorUrl = "authority/error";
+		}
+		String requestType = (String) request.getHeader("X-Requested-With");
+		if (requestType != null && requestType.equals("XMLHttpRequest")) {
+			JSONObject json = new JSONObject();
+			json.put("message", e.getMessage());
+			json.put("success", false);
+			PrintWriter pw = response.getWriter();
+			pw.print(json.toString());
+
+			response.setContentType("text/json;charset=utf-8");
+			response.setCharacterEncoding("utf-8");
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			pw.close();
+		}else{
+			String message = URLEncoder.encode(e.getMessage(), "utf-8");
+			response.sendRedirect(basePath + errorUrl + "?message=" + message);
+		}
 		System.out.println(e.getMessage());
-//		e.printStackTrace();
-		return this.returnFail(e.getMessage());
+//		return this.returnFail(e.getMessage());
 	}
 }

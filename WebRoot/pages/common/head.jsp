@@ -8,7 +8,7 @@
 	LoginedUser loginedUser = SystemContextUtils
 			.getCurrentUser(session);
 	User user = loginedUser.getLoginedUser();
-	List<Module> moduleList = loginedUser.getModulelist();
+	
 %>
 <html>
 

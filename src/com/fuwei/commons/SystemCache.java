@@ -5,11 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import com.fuwei.entity.Authority;
 import com.fuwei.entity.Company;
 import com.fuwei.entity.GongXu;
 import com.fuwei.entity.Role;
@@ -245,5 +248,41 @@ public class SystemCache {
 		return map;
 	}
 	
+	/*权限相关*/
+	public static Boolean hasAuthority(HttpSession session, int authorityId){
+		LoginedUser loginUser = SystemContextUtils.getCurrentUser(session);
+		return SystemCache.hasAuthority(loginUser, authorityId);
+	}
 	
+	public static Boolean hasAuthority(HttpSession session,String lcode){
+		LoginedUser loginUser = SystemContextUtils.getCurrentUser(session);
+		return SystemCache.hasAuthority(loginUser, lcode);
+	}
+	
+	public static Boolean hasAuthority(LoginedUser loginUser, int authorityId){
+		List<Authority> authorityList = loginUser.getAuthoritylist();
+		if(authorityList == null || authorityList.size()<=0){
+			return false;
+		}
+		for(Authority authority : authorityList){
+			if(authority.getId() == authorityId){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static Boolean hasAuthority(LoginedUser loginUser,String lcode){
+		List<Authority> authorityList = loginUser.getAuthoritylist();
+		if(authorityList == null || authorityList.size()<=0){
+			return false;
+		}
+		for(Authority authority : authorityList){
+			if(authority.getLcode().trim().equals(lcode.trim())){
+				return true;
+			}
+		}
+		return false;
+	}
+	/*权限相关*/
 }

@@ -86,35 +86,30 @@ public class CheckUserLoginFilter implements Filter {
 			HttpServletResponse response, String url) throws IOException {
 		String requestType = (String) request.getHeader("X-Requested-With");
 		if (requestType != null && requestType.equals("XMLHttpRequest")) {
-			try {
-				JSONObject json = new JSONObject();
-				json.put("message", ERROR.RELOGIN);
-				json.put("relogin", true);
-				PrintWriter pw = response.getWriter();
-				pw.print(json.toString());
-				
-				response.setContentType("text/json;charset=utf-8");
-				response.setCharacterEncoding("utf-8");
-				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				pw.close();
+			JSONObject json = new JSONObject();
+			json.put("message", ERROR.RELOGIN);
+			json.put("relogin", true);
+			PrintWriter pw = response.getWriter();
+			pw.print(json.toString());
 
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}else{
+			response.setContentType("text/json;charset=utf-8");
+			response.setCharacterEncoding("utf-8");
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			pw.close();
+		} else {
 			if (url.startsWith("http")) {
-				response.sendRedirect(url);
+				String me = URLEncoder.encode(ERROR.RELOGIN, "utf-8");
+				response.sendRedirect(url + "?message=" + me);
 			} else {
 				String path = request.getContextPath();
 				String basePath = request.getScheme() + "://"
-						+ request.getServerName() + ":" + request.getServerPort()
-						+ path;
+						+ request.getServerName() + ":"
+						+ request.getServerPort() + path;
 				String me = URLEncoder.encode(ERROR.RELOGIN, "utf-8");
-				response.sendRedirect(basePath + url + "?message="  +  me );
+				response.sendRedirect(basePath + url + "?message=" + me);
 			}
 		}
-		
+
 	}
 
 	@Override
