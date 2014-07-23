@@ -51,6 +51,15 @@ public class UserService extends BaseService {
 			throw e;
 		}
 	}
+	//根据角色锁定所有用户
+	public int lockByRole(int roleId) throws Exception{
+		try{
+			return dao.update("UPDATE tb_user SET locked = true WHERE  roleId = ?", roleId);
+		}catch(Exception e){
+			throw e;
+		}
+	}
+	
 	//锁定用户
 	public int lock(int id) throws Exception{
 		try{

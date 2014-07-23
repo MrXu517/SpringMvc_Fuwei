@@ -73,9 +73,9 @@ public class UserController extends BaseController {
 			loginUser.setRole(role);
 			//登录成功，若该用户的locked为true,则改为false，且从缓存列表中删除
 			if(user.getLocked()){
-				userService.unlock(user.getId());		
-				//从缓存列表中删除
-				SystemCache.removeRelogin(user.getId());
+				userService.unlock(user.getId());	
+				//更新缓存
+				new SystemCache().initUserList();
 			}
 			//登录成功，若该用户的locked为true,则改为false
 			session.setAttribute(Constants.LOGIN_SESSION_NAME, loginUser);

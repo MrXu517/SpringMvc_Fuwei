@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.keepsoft.pojo.User;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.logging.Log;
@@ -28,7 +29,9 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.propertyeditors.URLEditor;
 
 import com.fuwei.commons.LoginedUser;
+import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
+import com.fuwei.constant.Constants;
 import com.fuwei.constant.ERROR;
 
 /**
@@ -66,14 +69,20 @@ public class CheckUserLoginFilter implements Filter {
 			LoginedUser sessionUser = SystemContextUtils
 					.getCurrentUser(session);
 			if (sessionUser == null) {
-				redirectTo(request, response, LOGIN_URL);
+				redirectTo(request, response, LOGIN_URL,false);
 				return;
 			} else {
-
-				// 若该用户已登录，则判断该用户的权限是否已改变（用户角色的权限是否已改变）
-
-				// 若该用户已登录，则判断该用户的权限是否已改变（用户角色的权限是否已改变）
-
+				//判断该用户是否被锁定
+				for(com.fuwei.entity.User user : SystemCache.userlist){
+					if(user.getId() == sessionUser.getLoginedUser().getId()){
+						if(user.getLocked()){//被锁定
+							//去除session的用户信息
+							session.removeAttribute(Constants.LOGIN_SESSION_NAME);
+							redirectTo(request, response, LOGIN_URL,true);
+							return;
+						}
+					}
+				}
 				chain.doFilter(servletRequest, servletResponse);
 			}
 		} else {
@@ -83,12 +92,21 @@ public class CheckUserLoginFilter implements Filter {
 
 	@SuppressWarnings("deprecation")
 	private void redirectTo(HttpServletRequest request,
-			HttpServletResponse response, String url) throws IOException {
+			HttpServletResponse response, String url,Boolean locked) throws IOException {
+		String message =  ERROR.RELOGIN;
+		if(locked){
+			message = ERROR.LOCKED;
+		}
 		String requestType = (String) request.getHeader("X-Requested-With");
 		if (requestType != null && requestType.equals("XMLHttpRequest")) {
 			JSONObject json = new JSONObject();
-			json.put("message", ERROR.RELOGIN);
-			json.put("relogin", true);
+			json.put("message",message);
+			if(locked){
+				json.put("locked", true);
+			}else{
+				json.put("relogin", true);
+			}
+			
 			PrintWriter pw = response.getWriter();
 			pw.print(json.toString());
 
@@ -105,7 +123,7 @@ public class CheckUserLoginFilter implements Filter {
 				String basePath = request.getScheme() + "://"
 						+ request.getServerName() + ":"
 						+ request.getServerPort() + path;
-				String me = URLEncoder.encode(ERROR.RELOGIN, "utf-8");
+				String me = URLEncoder.encode(message, "utf-8");
 				response.sendRedirect(basePath + url + "?message=" + me);
 			}
 		}
