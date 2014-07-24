@@ -4,11 +4,23 @@
 <%@page import="com.fuwei.entity.User"%>
 <%@page import="com.fuwei.entity.Module"%>
 <%@page import="com.fuwei.commons.SystemContextUtils"%>
+<%@page import="com.fuwei.commons.SystemCache"%>
 <%
 	LoginedUser loginedUser = SystemContextUtils
 			.getCurrentUser(session);
 	User user = loginedUser.getLoginedUser();
 	
+	
+	//权限相关
+	Boolean h_has_sample = SystemCache.hasAuthority(session,"sample");
+	Boolean h_has_sample_add = SystemCache.hasAuthority(session,"sample/add");
+	Boolean h_has_sample_index = SystemCache.hasAuthority(session,"sample/index");
+	Boolean h_has_sample_undetailedindex = SystemCache.hasAuthority(session,"sample/undetailedindex");
+	Boolean h_has_quote_index = SystemCache.hasAuthority(session,"quote/index");
+	Boolean h_has_quoteorder_index = SystemCache.hasAuthority(session,"quoteorder/index");
+	Boolean h_has_systeminfo= SystemCache.hasAuthority(session,"systeminfo");
+	Boolean h_has_authority = SystemCache.hasAuthority(session,"authority");
+	//权限相关
 %>
 <html>
 	<link href="css/common/head.css" rel="stylesheet" type="text/css" />
@@ -117,6 +129,7 @@
 					<li class="first active">
 						<a href="user/index"><i class="fa fa-home"></i>首页</a>
 					</li>
+					<%if(h_has_sample){ %>
 					<li class="li_dropdown">
 						<a href="#"><i class="fa fa-desktop"></i>样品系统<i
 							class="fa fa-angle-down"></i> </a>
@@ -124,29 +137,33 @@
 							<%
 								//if(user.getAuthority() == FuweiSystemData.AUTHORITY_GENERAL){
 							%>
+							<%if(h_has_sample_index){ %>
 							<li>
 								<a href="sample/index"><i class="fa fa-dashboard"></i>样品管理</a>
 							</li>
+							<%}if(h_has_sample_add){ %>
 							<li>
 								<a href="sample/add"><i class="fa fa-plus"></i>新增样品</a>
 							</li>
+							<%}if(h_has_sample_undetailedindex){ %>
 							<li>
 								<a href="sample/undetailedindex"><i class="fa fa-edit"></i>待核价样品</a>
 							</li>
 							<%
-								//}else{
+							}if(h_has_quote_index){
 							%>
-						
 							<li>
 								<a href="quote/index"><i
 									class="fa fa-shopping-cart"></i>报价列表</a>
 							</li>
+							<%}if(h_has_quoteorder_index){ %>
 							<li>
 								<a href="quoteorder/index"><i class="fa fa-calendar"></i>报价单列表</a>
 							</li>
+							<%} %>
 						</ul>
 					</li>
-
+					<%} %>
 					<li class="li_dropdown">
 						<a href="#"><i class="fa fa-paperclip"></i>订单系统<i
 							class="fa fa-angle-down"></i> </a>
@@ -165,16 +182,18 @@
 					<li>
 						<a href="print.jsp"><i class="fa fa-print"></i>快递单打印</a>
 					</li>
+					<%if(h_has_systeminfo){ %>
 					<li>
 						<a href="systeminfo/index"><i class="fa fa-list-alt"></i>系统信息管理</a>
 					</li>
-					
+					<%} 
+					if(h_has_authority){%>
 					<li>
 						<a href="authority/index"><i class="fa fa-lock"></i>权限设置</a>
 					</li>
 
 					<%
-						//}
+					}
 					%>
 				</ul>
 			</div>

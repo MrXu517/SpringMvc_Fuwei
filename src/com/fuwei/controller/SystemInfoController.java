@@ -25,7 +25,7 @@ public class SystemInfoController extends BaseController {
 	@ResponseBody
 	public ModelAndView Index(HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		String lcode = "systeminfo/index";
+		String lcode = "systeminfo";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有系统信息管理的权限", null);
