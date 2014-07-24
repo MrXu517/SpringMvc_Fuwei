@@ -37,6 +37,7 @@
 			"quoteprice/print");
 	Boolean has_sample_print_sign = SystemCache.hasAuthority(session,
 			"sample/print_sign");
+	Boolean has_sample_detail_detail = SystemCache.hasAuthority(session,"sample/detail_detail");//是否可以查看报价详情
 	//权限相关
 %>
 <!DOCTYPE html>
@@ -190,6 +191,7 @@
 							</table>
 
 						</div>
+						<%if(has_sample_detail_detail){ %>
 						<div class="sampleDetail">
 							<fieldset>
 								<legend>
@@ -199,9 +201,11 @@
 									name="detail" placeholder="报价详情"><%=sample.getDetail()%></textarea>
 							</fieldset>
 						</div>
+						<%}%>
 						<div class="clear"></div>
-
 					</div>
+					
+					
 					<%
 						if (has_quote_index) {
 					%>
