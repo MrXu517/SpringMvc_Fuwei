@@ -17,12 +17,10 @@ $(document).ready(function(){
             		Common.Tip("删除成功",function(){
             			reload();
             		});
-            	}else{
-            		Common.Error("删除失败：" + result.message);
             	}
             })
             .fail(function(result) {
-            	Common.Error("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("删除失败：" + result.responseText);
             })
             .always(function() {
             	
@@ -40,14 +38,10 @@ $(document).ready(function(){
             	if(result.success || result.success==undefined){
             		//填充到表单中
                 	setUpdateCompany(result);
-            	}else{
-            		Common.Error("获取公司详情失败：" + result.message);
             	}
-            	
-            	
             })
             .fail(function(result) {
-            	Common.Error("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("获取公司详情失败：" + result.responseText);
             })
             .always(function() {
             	
@@ -70,12 +64,10 @@ $(document).ready(function(){
             		Common.Tip("删除成功",function(){
             			reload();
             		});
-            	}else{
-            		Common.Error("删除失败：" +result.message);
             	}
             })
             .fail(function(result) {
-            	Common.Error("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("删除失败：" +result.responseText);
             })
             .always(function() {
             	
@@ -93,14 +85,10 @@ $(document).ready(function(){
             	if(result.success || result.success==undefined){
             		//填充到表单中
                 	setUpdateSalesman(result);
-            	}else{
-            		Common.Error("获取业务员详情失败：" +result.message);
             	}
-            	
-            	
             })
             .fail(function(result) {
-            	Common.Error("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("获取业务员详情失败：" +result.responseText);
             })
             .always(function() {
             	
@@ -123,12 +111,10 @@ $(document).ready(function(){
             		Common.Tip("删除成功",function(){
             			reload();
             		});
-            	}else{
-            		Common.Error("删除失败：" +result.message);
             	}
             })
             .fail(function(result) {
-            	Common.Error("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("删除失败：" +result.responseText);
             })
             .always(function() {
             	
@@ -146,19 +132,53 @@ $(document).ready(function(){
             	if(result.success || result.success==undefined){
             		//填充到表单中
                 	setUpdateUser(result);
-            	}else{
-            		Common.Error("获取用户详情失败：" +result.message);
             	}
-            	
-            	
             })
             .fail(function(result) {
-            	Common.Error("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("获取用户详情失败：" +result.responseText);
             })
             .always(function() {
-            	
             });
 		//设置
+		return false;
+	});
+	
+	//注销用户
+	$(".cancelUser").click(function(){
+		var id= $(this).attr("data-cid");
+		$.ajax({
+            url: "user/cancel/"+id,
+            type: 'POST'
+        })
+            .done(function(result) {
+            	Common.Tip("注销用户成功",function(){
+        			reload();
+        		});
+            })
+            .fail(function(result) {
+            	Common.Error("注销用户失败：" +result.responseText);
+            })
+            .always(function() {
+            });
+		return false;
+	});
+	//启用用户
+	$(".enableUser").click(function(){
+		var id= $(this).attr("data-cid");
+		$.ajax({
+            url: "user/enable/"+id,
+            type: 'POST'
+        })
+            .done(function(result) {
+            	Common.Tip("启用用户成功",function(){
+        			reload();
+        		});
+            })
+            .fail(function(result) {
+            	Common.Error("启用用户失败：" +result.responseText);
+            })
+            .always(function() {
+            });
 		return false;
 	});
 	//用户 -- 结束
@@ -176,12 +196,10 @@ $(document).ready(function(){
             		Common.Tip("删除成功",function(){
             			reload();
             		});
-            	}else{
-            		Common.Error("删除失败：" + result.message);
             	}
             })
             .fail(function(result) {
-            	Common.Error("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("删除失败：" + result.responseText);
             })
             .always(function() {
             	
@@ -199,14 +217,10 @@ $(document).ready(function(){
             	if(result.success || result.success==undefined){
             		//填充到表单中
                 	setUpdateGongxu(result);
-            	}else{
-            		Common.Error("获取工序详情失败：" + result.message);
             	}
-            	
-            	
             })
             .fail(function(result) {
-            	Common.Error("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("获取工序详情失败：" + result.responseText);
             })
             .always(function() {
             	
@@ -242,12 +256,10 @@ function setAddCompany(){
             		Common.Tip("添加成功",function(){
             			reload();
             		});
-            	}else{
-            		Common.Error("添加失败：" + result.message);
             	}
             })
             .fail(function(result) {
-            	Common.Error("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("添加失败：" + result.responseText);
             })
             .always(function() {
             	$submitBtn.button('reset');
@@ -287,12 +299,10 @@ function setUpdateCompany(result){
             		Common.Tip("修改成功",function(){
             			reload();
             		});
-            	}else{
-            		Common.Error("修改失败：" + result.message);
             	}
             })
             .fail(function(result) {
-            	Common.Error("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("修改失败：" + result.responseText);
             })
             .always(function() {
             	$submitBtn.button('reset');
@@ -327,12 +337,10 @@ function setAddSalesman(){
             		Common.Tip("添加成功",function(){
             			reload();
             		});
-            	}else{
-            		Common.Error("添加失败：" + result.message);
             	}
             })
             .fail(function(result) {
-            	Common.Error("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("添加失败：" + result.responseText);
             })
             .always(function() {
             	$submitBtn.button('reset');
@@ -372,12 +380,10 @@ function setUpdateSalesman(result){
             		Common.Tip("修改成功",function(){
             			reload();
             		});
-            	}else{
-            		Common.Error("修改失败：" + result.message);
             	}
             })
             .fail(function(result) {
-            	Common.Error("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("修改失败：" + result.responseText);
             })
             .always(function() {
             	$submitBtn.button('reset');
@@ -413,12 +419,10 @@ function setAddUser(){
             		Common.Tip("添加成功",function(){
             			reload();
             		});
-            	}else{
-            		Common.Error("添加失败：" + result.message);
             	}
             })
             .fail(function(result) {
-            	Common.Error("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("添加失败：" + result.responseText);
             })
             .always(function() {
             	$submitBtn.button('reset');
@@ -458,12 +462,10 @@ function setUpdateUser(result){
             		Common.Tip("修改成功",function(){
             			reload();
             		});
-            	}else{
-            		Common.Error("修改失败：" + result.message);
             	}
             })
             .fail(function(result) {
-            	Common.Error("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("修改失败：" + result.responseText);
             })
             .always(function() {
             	$submitBtn.button('reset');
@@ -498,12 +500,10 @@ function setAddGongxu(){
             		Common.Tip("添加成功",function(){
             			reload();
             		});
-            	}else{
-            		Common.Error("添加失败：" + result.message);
             	}
             })
             .fail(function(result) {
-            	Common.Error("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("添加失败：" + result.responseText);
             })
             .always(function() {
             	$submitBtn.button('reset');
@@ -543,12 +543,10 @@ function setUpdateGongxu(result){
             		Common.Tip("修改成功",function(){
             			reload();
             		});
-            	}else{
-            		Common.Error("修改失败：" + result.message);
             	}
             })
             .fail(function(result) {
-            	Common.Error("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("修改失败：" + result.responseText);
             })
             .always(function() {
             	$submitBtn.button('reset');

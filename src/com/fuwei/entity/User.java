@@ -38,7 +38,16 @@ public class User implements Serializable {
 	//2014-6-24晚添加  是否被锁定字段，表明当前用户是否权限已修改。 重新登录后，则字段归false
 	private Boolean locked = false;
 	
+	private Boolean built_in = false;//是否是内建用户，内建用户（比如：系统管理员是不能被删或者注销的）
 	
+	public Boolean getBuilt_in() {
+		return built_in;
+	}
+
+	public void setBuilt_in(Boolean built_in) {
+		this.built_in = built_in;
+	}
+
 	public Boolean getLocked() {
 		return locked;
 	}

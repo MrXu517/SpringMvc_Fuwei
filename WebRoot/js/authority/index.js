@@ -1,4 +1,9 @@
 $(document).ready( function() {
+	/*设置当前选中的页*/
+	var $a = $("#left li a[href='authority/index']");
+	setActiveLeft($a.parent("li"));
+	/*设置当前选中的页*/
+	
 	var checkedRoleId = null;
 	$(".rolelist>a").click( function() {
 		$(this).siblings().removeClass("active");

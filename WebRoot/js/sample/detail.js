@@ -15,12 +15,10 @@ $(document).ready(function(){
 					Common.Tip("生成样品标签成功,开始打印...", function() {
 						//reload();
 					});
-				} else {
-					Common.Error("生成样品标签失败：" + result.message);
 				}
 			},
 			error : function(result) {
-				Common.Error("请求服务器过程中出错:" + result.responseText);
+				Common.Error("生成样品标签失败：" + result.responseText);
 			}
 
 		});
@@ -38,12 +36,10 @@ $(document).ready(function(){
 					Common.Tip("开始打印...", function() {
 						//reload();
 					});
-				} else {
-					Common.Error("生成样品标签失败：" + result.message);
 				}
 			},
 			error : function(result) {
-				Common.Error("请求服务器过程中出错:" + result.responseText);
+				Common.Error("生成样品标签失败：" + result.responseText);
 			}
 
 		});
@@ -95,12 +91,10 @@ $(document).ready(function(){
 					Common.Tip("添加成功", function() {
 						//reload();
 					});
-				} else {
-					Common.Error("添加失败：" + result.message);
 				}
 			},
 			error : function(result) {
-				Common.Error("请求服务器过程中出错:" + result.responseText);
+				Common.Error("添加失败：" + result.responseText);
 			}
 
 		});
@@ -120,12 +114,10 @@ $(document).ready(function(){
             		Common.Tip("删除成功",function(){
             			location.reload();
             		});
-            	}else{
-            		Common.Error("删除失败：" + result.message);
             	}
             })
             .fail(function(result) {
-            	Common.Error("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("删除失败：" + result.responseText);
             })
             .always(function() {
             	
@@ -146,12 +138,10 @@ $(document).ready(function(){
             		// 将数据填充到编辑表单中
             		setUpdateQuote(result);// 设置创建的表单
             		Common.openModal($quoteModal);
-            	}else{
-            		Common.Error("获取价格详情失败：" + result.message);
             	}
             })
             .fail(function(result) {
-            	Common.Error("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("获取价格详情失败：" + result.responseText);
             })
             .always(function() {
             	
@@ -200,13 +190,11 @@ function setAddQuote(){
 					Common.Tip("添加成功", function() {
 						location.reload();
 					});
-				} else {
-					Common.Error("添加失败：" + result.message);
 				}
 				$submitBtn.button('reset');
 			},
 			error : function(result) {
-				Common.Error("请求服务器过程中出错:" + result.responseText);
+				Common.Error("添加失败：" + result.responseText);
 				$submitBtn.button('reset');
 			}
 		});
@@ -248,16 +236,13 @@ function setUpdateQuote(result){
             			location.reload();
             		});
             		
-            	}else{
-            		Common.Error("修改失败：" + result.message);
             	}
             })
             .fail(function(result) {
-            	Common.Error("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("修改失败：" + result.responseText);
             })
             .always(function() {
             	$submitBtn.button('reset');
-            	
             });
 		return false;
 	});

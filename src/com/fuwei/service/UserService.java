@@ -106,6 +106,10 @@ public class UserService extends BaseService {
 	//注销用户
 	public int cancel(int id)throws Exception{
 		try{
+			User user = this.get(id);
+			if(user.getBuilt_in()){
+				throw new Exception("系统用户，不能注销");
+			}
 			return dao.update("UPDATE tb_user SET inUse = false WHERE  id = ?", id);
 		}catch(Exception e){
 			throw e;
@@ -115,6 +119,10 @@ public class UserService extends BaseService {
 	//删除用户
 	public int remove(int id)throws Exception{
 		try{
+			User user = this.get(id);
+			if(user.getBuilt_in()){
+				throw new Exception("系统用户，不能删除");
+			}
 			return dao.update("delete from tb_user WHERE  id = ?", id);
 		}catch(Exception e){
 			throw e;
@@ -124,6 +132,10 @@ public class UserService extends BaseService {
 	//编辑用户
 	public int update(User user)throws Exception{
 		try{
+			User user2 = this.get(user.getId());
+			if(user2.getBuilt_in() && user2.getRoleId()!=user.getRoleId()){
+				throw new Exception("不能更改系统用户的角色");
+			}
 			return dao.update("UPDATE tb_user SET name=?,username=?,updated_at=?,help_code=?,roleId=?,tel=?,email=?,qq=? WHERE  id = ?",
 					user.getName(),user.getUsername(),user.getUpdated_at(),user.getHelp_code(),user.getRoleId(),user.getTel(),user.getEmail(),user.getQq(),
 					user.getId());

@@ -443,8 +443,12 @@ body {
 	overflow: auto;
 	height: 100%;
 	margin-left: 220px;
-	margin-bottom: -45px;
+	/*margin-bottom: -45px;*/
 	padding-bottom: 45px;
+}
+#Content #main{
+	overflow: auto;
+	height: 100%;
 }
 
 .headnav .dropdown-menu>li>a>i {

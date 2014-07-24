@@ -11,12 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 import com.fuwei.constant.ERROR;
+import com.fuwei.service.AuthorityService;
 
 /**
  * 
@@ -24,7 +26,7 @@ import com.fuwei.constant.ERROR;
  *
  */
 public class BaseController extends MultiActionController{
-
+	
 	/**
 	 * 返回结果成功结果
 	 * 
@@ -91,11 +93,8 @@ public class BaseController extends MultiActionController{
 		String requestType = (String) request.getHeader("X-Requested-With");
 		if (requestType != null && requestType.equals("XMLHttpRequest")) {
 			JSONObject json = new JSONObject();
-			json.put("message", e.getMessage());
-			json.put("success", false);
 			PrintWriter pw = response.getWriter();
-			pw.print(json.toString());
-
+			pw.print(e.getMessage());
 			response.setContentType("text/json;charset=utf-8");
 			response.setCharacterEncoding("utf-8");
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

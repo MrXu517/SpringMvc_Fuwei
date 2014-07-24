@@ -16,15 +16,12 @@ $(document).ready(function(){
             		Common.Tip("删除成功",function(){
             			location.reload();
             		});
-            	}else{
-            		Common.Error("删除失败：" + result.message);
             	}
             })
             .fail(function(result) {
-            	Common.Error("请求服务器过程中出错:" + result.responseText);
+            	Common.Error("删除失败：" + result.responseText);
             })
             .always(function() {
-            	
             });
 		return false;
 	});
@@ -84,12 +81,10 @@ $(document).ready(function(){
 	            		Common.Tip("创建报价单成功",function(){
 	            			location = "quoteorder/detail/" +result.id;
 	            		});
-	            	}else{
-	            		Common.Error("创建报价单失败：" + result.message);
 	            	}
 	            })
 	            .fail(function(result) {
-	            	Common.Error("请求服务器过程中出错:" + result.responseText);
+	            	Common.Error("创建报价单失败：" + result.responseText);
 	            })
 	            .always(function() {
 	            	

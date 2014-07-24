@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ import com.fuwei.entity.QuoteOrderDetail;
 import com.fuwei.entity.QuotePrice;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
+import com.fuwei.service.AuthorityService;
 import com.fuwei.service.QuoteOrderDetailService;
 import com.fuwei.service.QuoteOrderService;
 import com.fuwei.service.QuoteService;
@@ -47,7 +49,8 @@ public class QuoteOrderController extends BaseController {
 	QuoteOrderService quoteOrderService;
 	@Autowired
 	QuoteOrderDetailService quoteOrderDetailService;
-	
+	@Autowired
+	AuthorityService authorityService;
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
@@ -55,16 +58,19 @@ public class QuoteOrderController extends BaseController {
 	public Map<String, Object> add(String ids, HttpSession session,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "quoteorder/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有添加报价单的权限", null);
+		}
+		
 		String excelfile_name = "报价单"+DateTool.formateDate(new Date(), "yyyyMMddHHmmss") + ".xls";
 		String uploadSite = Constants.UPLOADSite;
 		Boolean excel = false;
 		QuoteOrder quoteOrder = new QuoteOrder();
 		try {
-			User user = SystemContextUtils.getCurrentUser(session)
-					.getLoginedUser();
-			
 			// 自动生成报价单号
-
 			quoteOrder.setCreated_at(DateTool.now());
 			quoteOrder.setUpdated_at(DateTool.now());
 			quoteOrder.setCreated_user(user.getId());
@@ -123,6 +129,12 @@ public class QuoteOrderController extends BaseController {
 	public ModelAndView index(Integer page, String start_time, String end_time,Integer companyId,Integer salesmanId,
 			String sortJSON, HttpSession session, HttpServletRequest request)
 			throws Exception {
+		String lcode = "quoteorder/index";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有查看报价单列表的权限", null);
+		}
+		
 		Date start_time_d = DateTool.parse(start_time);
 		Date end_time_d = DateTool.parse(end_time);
 		Pager pager = new Pager();
@@ -165,6 +177,12 @@ public class QuoteOrderController extends BaseController {
 	@RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView detail(@PathVariable Integer id,HttpSession session, HttpServletRequest request) throws Exception{
+		String lcode = "quoteorder/detail";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有查看报价单详情的权限", null);
+		}
+		
 		if(id == null){
 			throw new Exception("缺少报价单ID");
 		}

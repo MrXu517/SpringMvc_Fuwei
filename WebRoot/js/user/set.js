@@ -38,13 +38,11 @@ $(document).ready( function() {
 					Common.Tip("修改密码成功，点击确定重新登录", function() {
 						location = "login.jsp";
 					});
-				} else {
-					Common.Error("修改密码失败：" + result.message);
 				}
 				$submitBtn.button('reset');
 			},
 			error : function(result) {
-				Common.Error("请求服务器过程中出错:" + result.responseText);
+				Common.Error("修改密码失败：" + result.responseText);
 				$submitBtn.button('reset');
 			}
 

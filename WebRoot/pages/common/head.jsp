@@ -11,26 +11,8 @@
 	
 %>
 <html>
-
-	<head>
-
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<!-- 为了让IE浏览器运行最新的渲染模式 -->
-		<link href="css/plugins/bootstrap.min.css" rel="stylesheet"
-			type="text/css" />
-		<link href="css/plugins/font-awesome.min.css" rel="stylesheet"
-			type="text/css" />
-
-		<script src="js/plugins/bootstrap.min.js" type="text/javascript"></script>
-
-		<link href="css/common/head.css" rel="stylesheet" type="text/css" />
-		<link href="css/common/common.css" rel="stylesheet" type="text/css" />
-
-		<script src="js/common/head.js" type="text/javascript"></script>
-
-	</head>
-
+	<link href="css/common/head.css" rel="stylesheet" type="text/css" />
+	<script src="js/common/head.js" type="text/javascript"></script>
 	<div style="display: none;" class="background"></div>
 	<div style="display: none;" class="loading">
 		数据加载中，请稍等......

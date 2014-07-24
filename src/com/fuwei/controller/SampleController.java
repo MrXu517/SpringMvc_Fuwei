@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.MultiValueMap;
@@ -34,6 +35,7 @@ import com.fuwei.entity.QuotePrice;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
 import com.fuwei.print.PrintExcel;
+import com.fuwei.service.AuthorityService;
 import com.fuwei.service.QuotePriceService;
 import com.fuwei.service.QuoteService;
 import com.fuwei.service.SampleService;
@@ -53,11 +55,19 @@ public class SampleController extends BaseController {
 	SampleService sampleService;
 	@Autowired
 	QuotePriceService quotePriceService;
+	@Autowired
+	AuthorityService authorityService;
 	
 	//生成样品标签
 	@RequestMapping(value="/print_sign/{id}",method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String,Object> printSign(@PathVariable Integer id,HttpSession session,HttpServletRequest request) throws Exception{
+		String lcode = "sample/print_sign";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有生成样品标签的权限", null);
+		}
+		
 		Sample sample = sampleService.get(id);
 		String excelfile_name = Constants.UPLOADEXCEL_Sample_temp + "样品标签" + sample.getId() + "_"
 		+ DateTool.formateDate(new Date(), "yyyyMMddHHmmss") + ".xls";
@@ -70,10 +80,16 @@ public class SampleController extends BaseController {
 	}
 	
 	//打印样品价格详情
-	@RequestMapping(value="/printDetail/{id}",method = RequestMethod.GET)
+	@RequestMapping(value="/printDetail/{quotePriceId}",method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> printDetail(@PathVariable Integer id,HttpSession session,HttpServletRequest request) throws Exception{
-		QuotePrice quotePrice = quotePriceService.get(id);
+	public Map<String,Object> printDetail(@PathVariable Integer quotePriceId,HttpSession session,HttpServletRequest request) throws Exception{
+		String lcode = "quoteprice/print";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有打印价格详情的权限", null);
+		}
+		
+		QuotePrice quotePrice = quotePriceService.get(quotePriceId);
 		Sample sample = sampleService.get(quotePrice.getSampleId());
 		String excelfile_name = Constants.UPLOADEXCEL_Sample_temp + "样品详情" + sample.getId() + "_"
 		+ DateTool.formateDate(new Date(), "yyyyMMddHHmmss") + ".xls";
@@ -88,6 +104,13 @@ public class SampleController extends BaseController {
 	@RequestMapping(value="/detail/{id}",method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView Detail(@PathVariable Integer id,HttpSession session,HttpServletRequest request) throws Exception{
+		
+		String lcode = "sample/detail";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有查看样品详情的权限", null);
+		}
+		
 		Sample sample = sampleService.get(id);
 		request.setAttribute("sample", sample);
 		List<QuotePrice> quotepricelist = quotePriceService.getList(id);
@@ -99,6 +122,14 @@ public class SampleController extends BaseController {
 	@RequestMapping(value="/setDetail",method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> setDetail(Integer id,Double cost,String detail ,HttpSession session,HttpServletRequest request) throws Exception{
+		
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "sample/set_detail";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有样品核价的权限", null);
+		}
+		
 		sampleService.setCost_Detail(id, cost, detail);
 		return this.returnSuccess();
 	}
@@ -107,6 +138,13 @@ public class SampleController extends BaseController {
 	@RequestMapping(value="/undetailedindex",method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView undetailedindex(Integer charge_user ,HttpSession session,HttpServletRequest request) throws Exception{
+		
+		String lcode = "sample/undetailedindex";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有查看待核价样品列表的权限", null);
+		}
+		
 		List<Sample> samplelist = sampleService.getUnDetailList(charge_user);
 		request.setAttribute("samplelist", samplelist);
 		request.setAttribute("userlist", SystemCache.userlist);
@@ -119,6 +157,12 @@ public class SampleController extends BaseController {
 	@RequestMapping(value="/index",method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView index(Integer page,String start_time,String end_time,String sortJSON,Integer charge_user,  HttpSession session,HttpServletRequest request) throws Exception{
+		String lcode = "sample/index";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有查看样品列表的权限", null);
+		}
+		
 		Date start_time_d = DateTool.parse(start_time);
 		Date end_time_d = DateTool.parse(end_time);
 		Pager pager = new Pager();
@@ -160,7 +204,14 @@ public class SampleController extends BaseController {
 	@ResponseBody
 	public Map<String,Object> add(Sample sample,@RequestParam("file") CommonsMultipartFile file,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
+		
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "sample/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有添加样品的权限", null);
+		}
+		
 		JSONObject jObject = fileUpload(request,file);
 		sample.setImg((String)jObject.get("img"));
 		sample.setImg_s((String)jObject.get("img_s"));
@@ -179,8 +230,16 @@ public class SampleController extends BaseController {
 	
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> delete(@PathVariable int id, HttpServletRequest request,
+	public Map<String,Object> delete(@PathVariable int id,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
+		
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "sample/delete";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有删除样品的权限", null);
+		}
+		
 		int success = sampleService.remove(id);
 		
 		return this.returnSuccess();
@@ -189,8 +248,15 @@ public class SampleController extends BaseController {
 	
 	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public Sample get(@PathVariable int id, HttpServletRequest request,
+	public Sample get(@PathVariable int id,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
+		
+		String lcode = "sample/detail";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有查看样品详情的权限", null);
+		}
+		
 		Sample sample = sampleService.get(id);
 		return sample;
 		
@@ -198,8 +264,9 @@ public class SampleController extends BaseController {
 	
 	@RequestMapping(value = "/put/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView update(@PathVariable int id, HttpServletRequest request,
+	public ModelAndView update(@PathVariable int id, HttpSession session,HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
+		
 		Sample sample = sampleService.get(id);
 		request.setAttribute("userlist", SystemCache.userlist);
 		request.setAttribute("sample", sample);
@@ -209,8 +276,16 @@ public class SampleController extends BaseController {
 	
 	@RequestMapping(value = "/put", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> update(Sample sample, HttpServletRequest request,
+	public Map<String,Object> update(Sample sample, HttpSession session,HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
+		
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "sample/edit";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有编辑样品的权限", null);
+		}
+		
 		// 转型为MultipartHttpRequest  
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;  
         // 获得上传的文件（根据前台的name名称得到上传的文件）  

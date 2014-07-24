@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -127,8 +128,16 @@ public class UserController extends BaseController {
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> add(User user, HttpServletRequest request,
+	public Map<String,Object> add(User user,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
+		
+		User loginuser = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "user/add";
+		Boolean hasAuthority = authorityService.checkLcode(loginuser.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有添加用户的权限", null);
+		}
+		
 		user.setHelp_code(HanyuPinyinUtil.getFirstSpellByString(user.getName())) ;
 		user.setInUse(true);
 		user.setCreated_at(DateTool.now());
@@ -144,8 +153,16 @@ public class UserController extends BaseController {
 	
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> delete(@PathVariable int id, HttpServletRequest request,
+	public Map<String,Object> delete(@PathVariable int id,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
+		
+		User loginuser = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "user/delete";
+		Boolean hasAuthority = authorityService.checkLcode(loginuser.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有删除用户的权限", null);
+		}
+		
 		int success = userService.remove(id);
 		
 		//更新缓存
@@ -157,8 +174,15 @@ public class UserController extends BaseController {
 	
 	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public User get(@PathVariable int id, HttpServletRequest request,
+	public User get(@PathVariable int id,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
+		
+		String lcode = "user/index";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有查看用户列表的权限", null);
+		}
+		
 		User user = userService.get(id);
 		return user;
 		
@@ -166,8 +190,18 @@ public class UserController extends BaseController {
 	
 	@RequestMapping(value = "/put", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> update(User user, HttpServletRequest request,
+	public Map<String,Object> update(User user,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
+		
+		User loginuser = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		if(user.getId() != loginuser.getId()){//不是本人时，应判断有无编辑其他用户权限
+			String lcode = "user/edit";
+			Boolean hasAuthority = authorityService.checkLcode(loginuser.getId(), lcode);
+			if(!hasAuthority){
+				throw new PermissionDeniedDataAccessException("没有编辑其他用户的权限", null);
+			}
+		}
+		
 		user.setHelp_code(HanyuPinyinUtil.getFirstSpellByString(user.getName())) ;
 		user.setUpdated_at(DateTool.now());
 		int success = userService.update(user);
@@ -182,8 +216,16 @@ public class UserController extends BaseController {
 	//注销用户
 	@RequestMapping(value = "/cancel/{id}", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> cancel(@PathVariable int id, HttpServletRequest request,
+	public Map<String,Object> cancel(@PathVariable int id,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
+		
+		User loginuser = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "user/cancel";
+		Boolean hasAuthority = authorityService.checkLcode(loginuser.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有注销用户的权限", null);
+		}
+		
 		int success = userService.cancel(id);
 		
 		//更新缓存
@@ -196,8 +238,16 @@ public class UserController extends BaseController {
 	//启用用户
 	@RequestMapping(value = "/enable/{id}", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> enable(@PathVariable int id, HttpServletRequest request,
+	public Map<String,Object> enable(@PathVariable int id,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
+		
+		User loginuser = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "user/enable";
+		Boolean hasAuthority = authorityService.checkLcode(loginuser.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有启用用户的权限", null);
+		}
+		
 		int success = userService.enable(id);
 		
 		//更新缓存
@@ -207,18 +257,18 @@ public class UserController extends BaseController {
 		
 	}
 	
-	@RequestMapping(value = "login/cancel", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String,Object> cancel(HttpSession session, HttpServletRequest request,
-			HttpServletResponse response) throws Exception{
-		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		int success = userService.cancel(user.getId());
-		
-		//更新缓存
-		new SystemCache().initUserList();
-		
-		return this.returnSuccess();
-	}
+//	@RequestMapping(value = "login/cancel", method = RequestMethod.POST)
+//	@ResponseBody
+//	public Map<String,Object> cancel(HttpSession session, HttpServletRequest request,
+//			HttpServletResponse response) throws Exception{
+//		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+//		int success = userService.cancel(user.getId());
+//		
+//		//更新缓存
+//		new SystemCache().initUserList();
+//		
+//		return this.returnSuccess();
+//	}
 	
 	@RequestMapping(value = "/set", method = RequestMethod.GET)
 	@ResponseBody
@@ -251,6 +301,5 @@ public class UserController extends BaseController {
 		} catch (Exception e) {
 			throw e;
 		}
-		
 	}
 }

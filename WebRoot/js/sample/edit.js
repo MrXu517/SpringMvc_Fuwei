@@ -43,13 +43,11 @@ $(document).ready( function() {
 					Common.Tip("修改成功", function() {
 						location = "sample/undetailedindex";
 					});
-				} else {
-					Common.Error("修改失败：" + result.message);
 				}
 				$submitBtn.button('reset');
 			},
 			error : function(result) {
-				Common.Error("请求服务器过程中出错:" + result.responseText);
+				Common.Error("修改失败：" + result.responseText);
 				$submitBtn.button('reset');
 			}
 

@@ -22,29 +22,35 @@
 	}
 	List<GongXu> gongxulist = (List<GongXu>) request
 			.getAttribute("gongxulist");
-	/*List<Company> companylist = (List<Company>) request
-			.getAttribute("companylist");
-	List<Salesman> salesmanlist = (List<Salesman>) request
-			.getAttribute("salesmanlist");
-	List<GongXu> gongxulist = (List<GongXu>) request
-			.getAttribute("gongxulist");
-	
-	
-	List<Role> rolelist = (List<Role>) request.getAttribute("rolelist");
-	
-	String tabname = (String) request.getParameter("tab");*/
+
+	//权限相关
+	Boolean has_sample_delete = SystemCache.hasAuthority(session,
+			"sample/delete");
+	Boolean has_sample_edit = SystemCache.hasAuthority(session,
+			"sample/edit");
+	Boolean has_sample_set_detail = SystemCache.hasAuthority(session,
+			"sample/set_detail");
+	//权限相关
 %>
 <!DOCTYPE html>
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>样品管理 -- 桐庐富伟针织厂</title>
-		<meta charset="utf-8" />
+		<title>待核价列表 -- 桐庐富伟针织厂</title>
+		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
-
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!-- 为了让IE浏览器运行最新的渲染模式 -->
+		<link href="css/plugins/bootstrap.min.css" rel="stylesheet"
+			type="text/css" />
+		<link href="css/plugins/font-awesome.min.css" rel="stylesheet"
+			type="text/css" />
+		<link href="css/common/common.css" rel="stylesheet" type="text/css" />
 		<script src="js/plugins/jquery-1.10.2.min.js"></script>
+		<script src="js/plugins/bootstrap.min.js" type="text/javascript"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
+
 		<script src="js/sample/undetailedindex.js" type="text/javascript"></script>
 		<style type="text/css">
 #calculateBtn {
@@ -69,7 +75,7 @@
 	padding-right: 0;
 }
 
-#gongxuTb input   , #gongxuTb select {
+#gongxuTb input     , #gongxuTb select {
 	height: 30px;
 }
 
@@ -99,39 +105,38 @@
 .bj_gongxu_delete {
 	cursor: pointer;
 }
-.gongxuTbWidget{
-	height:250px;
-	overflow:auto;
+
+.gongxuTbWidget {
+	height: 250px;
+	overflow: auto;
 }
 </style>
 	</head>
 	<body>
 		<%@ include file="../common/head.jsp"%>
 		<div id="Content">
-			<div class="breadcrumbs" id="breadcrumbs">
-				<ul class="breadcrumb">
-					<li>
-						<i class="fa fa-home"></i>
-						<a href="user/index">首页</a>
-					</li>
-					<li class="active">
-						待核价样品
-					</li>
-				</ul>
-			</div>
-			<div class="body">
+			<div id="main">
+				<div class="breadcrumbs" id="breadcrumbs">
+					<ul class="breadcrumb">
+						<li>
+							<i class="fa fa-home"></i>
+							<a href="user/index">首页</a>
+						</li>
+						<li class="active">
+							待核价样品
+						</li>
+					</ul>
+				</div>
+				<div class="body">
 
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-md-12 tablewidget">
-							<!-- Table -->
-							<form class="form-horizontal sampleform" role="form"
-								enctype="multipart/form-data">
-								<div class="form-group col-md-4">
-									<label for="charge_user" class="col-sm-3 control-label">
-													打样人
-												</label>
-									<div class="col-sm-6">
+					<div class="container-fluid">
+						<form class="form-horizontal sampleform row" role="form"
+							enctype="multipart/form-data">
+							<div class="form-group col-md-4">
+								<label for="charge_user" class="col-sm-3 control-label">
+									打样人
+								</label>
+								<div class="col-sm-6">
 									<select id="charge_user" class="form-control">
 										<option value="">
 											所有
@@ -149,84 +154,106 @@
 											}
 											}
 										%>
-									</select></div>
+									</select>
 								</div>
-							</form>
-							<table class="table table-responsive">
-								<thead>
-									<tr>
-										<th>
-											序号
-										</th>
+							</div>
+						</form>
+						<table class="table table-responsive">
+							<thead>
+								<tr>
+									<th>
+										序号
+									</th>
 
-										<th>
-											图片
-										</th>
-										<th>
-											名称
-										</th>
-										<th>
-											货号
-										</th>
-										<th>
-											材料
-										</th>
-										<th>
-											克重
-										</th>
-										<th>
-											尺寸
-										</th>
-										<th>
-											打样人
-										</th>
-										<th>
-											创建时间
-										</th>
-										<th>
-											操作
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									<%
-										int i = 0;
-										for (Sample sample : samplelist) {
-									%>
-									<tr sampleId="<%=sample.getId()%>">
-										<td><%=++i%></td>
-										<td
-											style="max-width: 120px; height: 120px; max-height: 120px;">
-											<a target="_blank" class="cellimg"
-												href="/<%=sample.getImg()%>"><img
-													style="max-width: 120px; height: 120px; max-height: 120px;"
-													src="/<%=sample.getImg_ss()%>"> </a>
-										</td>
-										<td><%=sample.getName()%></td>
-										<td><%=sample.getProductNumber()%></td>
-										<td><%=sample.getMaterial()%></td>
-										<td><%=sample.getWeight()%></td>
-										<td><%=sample.getSize()%></td>
-										<td><%=sample.getCharge_user()%></td>
-										<td><%=sample.getCreated_at()%></td>
-										<td>
-											<a class="calcuteDetail" href="#">核价</a> |
-											<a href="sample/put/<%=sample.getId()%>">编辑</a> |
-											<a data-cid="<%=sample.getId()%>" class="delete" href="#">删除</a>
-										</td>
-									</tr>
-									<%
-										}
-									%>
-								</tbody>
-							</table>
-						</div>
+									<th>
+										图片
+									</th>
+									<th>
+										名称
+									</th>
+									<th>
+										货号
+									</th>
+									<th>
+										材料
+									</th>
+									<th>
+										克重
+									</th>
+									<th>
+										尺寸
+									</th>
+									<th>
+										打样人
+									</th>
+									<th>
+										创建时间
+									</th>
+									<th>
+										操作
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<%
+									int i = 0;
+									for (Sample sample : samplelist) {
+								%>
+								<tr sampleId="<%=sample.getId()%>">
+									<td><%=++i%></td>
+									<td style="max-width: 120px; height: 120px; max-height: 120px;">
+										<a target="_blank" class="cellimg"
+											href="/<%=sample.getImg()%>"><img
+												style="max-width: 120px; height: 120px; max-height: 120px;"
+												src="/<%=sample.getImg_ss()%>"> </a>
+									</td>
+									<td><%=sample.getName()%></td>
+									<td><%=sample.getProductNumber()%></td>
+									<td><%=sample.getMaterial()%></td>
+									<td><%=sample.getWeight()%></td>
+									<td><%=sample.getSize()%></td>
+									<td><%=sample.getCharge_user()%></td>
+									<td><%=sample.getCreated_at()%></td>
+									<td>
+										<%
+											if (has_sample_set_detail) {
+										%>
+										<a class="calcuteDetail" href="#">核价</a>
+										<%
+											}
+										%>
+										<%
+											if (has_sample_edit) {
+										%>
+										|
+										<a href="sample/put/<%=sample.getId()%>">编辑</a>
+										<%
+											}
+										%>
+										<%
+											if (has_sample_delete) {
+										%>
+										|
+										<a data-cid="<%=sample.getId()%>" class="delete" href="#">删除</a>
+										<%
+											}
+										%>
+
+
+
+
+									</td>
+								</tr>
+								<%
+									}
+								%>
+							</tbody>
+						</table>
 					</div>
-				</div>
 
+				</div>
 			</div>
 		</div>
-
 		<div id="priceDialog">
 			<div class="modal fade">
 				<div class="modal-dialog">

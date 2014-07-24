@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.entity.Company;
 import com.fuwei.entity.Role;
 import com.fuwei.entity.User;
+import com.fuwei.service.AuthorityService;
 import com.fuwei.service.CompanyService;
 import com.fuwei.service.RoleService;
 import com.fuwei.util.DateTool;
@@ -28,12 +30,20 @@ public class RoleController extends BaseController {
 	
 	@Autowired
 	RoleService roleService;
+	@Autowired
+	AuthorityService authorityService;
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> add(Role role,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "role/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有添加角色的权限", null);
+		}
+		
 		role.setCreated_at(DateTool.now());
 		role.setUpdated_at(DateTool.now());
 		role.setCreated_user(user.getId());
@@ -48,8 +58,16 @@ public class RoleController extends BaseController {
 	
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> delete(@PathVariable int id, HttpServletRequest request,
+	public Map<String,Object> delete(@PathVariable int id,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
+		
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "role/delete";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有删除角色的权限", null);
+		}
+		
 		int success = roleService.remove(id);
 		
 		//更新缓存
@@ -61,8 +79,15 @@ public class RoleController extends BaseController {
 	
 	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public Role get(@PathVariable int id, HttpServletRequest request,
+	public Role get(@PathVariable int id,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
+		
+		String lcode = "role/index";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有查看角色列表的权限", null);
+		}
+		
 		Role role = roleService.get(id);
 		return role;
 		
@@ -70,8 +95,16 @@ public class RoleController extends BaseController {
 	
 	@RequestMapping(value = "/put", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> update(Role role, HttpServletRequest request,
+	public Map<String,Object> update(Role role,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
+		
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "role/edit";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有编辑角色的权限", null);
+		}
+		
 		role.setUpdated_at(DateTool.now());
 		int success = roleService.update(role);
 		
