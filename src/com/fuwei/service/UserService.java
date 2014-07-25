@@ -104,6 +104,11 @@ public class UserService extends BaseService {
 			user.setPassword("123456");
 			return this.insert(user);
 		}catch(Exception e){
+			SQLException sqlException = (java.sql.SQLException)e.getCause();
+			if(sqlException!=null && sqlException.getErrorCode() == 1062){//外键约束
+				log.error(e);
+				throw new Exception("用户名必须唯一");
+			}
 			throw e;
 		}
 	}
