@@ -11,14 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.apache.log4j.Logger;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
-
-import com.fuwei.constant.ERROR;
-import com.fuwei.service.AuthorityService;
 
 /**
  * 
@@ -26,6 +26,7 @@ import com.fuwei.service.AuthorityService;
  *
  */
 public class BaseController extends MultiActionController{
+	private Logger log = org.apache.log4j.LogManager.getLogger(BaseController.class);
 	
 	/**
 	 * 返回结果成功结果
@@ -81,11 +82,13 @@ public class BaseController extends MultiActionController{
 	@ExceptionHandler
 	@ResponseBody
 	public void exception(HttpServletRequest request,HttpServletResponse response ,Exception e) throws IOException{
+		log.error(e);
 		String path = request.getContextPath();
 		String basePath = request.getScheme() + "://"
 				+ request.getServerName() + ":"
 				+ request.getServerPort() + path + "/";
 		String errorUrl = "error.jsp";
+		String message = e.getMessage();
 		if(e instanceof PermissionDeniedDataAccessException){//如果捕获到权限异常
 			//则跳到异常页面
 			errorUrl = "authority/error";
@@ -94,16 +97,15 @@ public class BaseController extends MultiActionController{
 		if (requestType != null && requestType.equals("XMLHttpRequest")) {
 			JSONObject json = new JSONObject();
 			PrintWriter pw = response.getWriter();
-			pw.print(e.getMessage());
+			pw.print(message);
 			response.setContentType("text/json;charset=utf-8");
 			response.setCharacterEncoding("utf-8");
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			pw.close();
 		}else{
-			String message = URLEncoder.encode(e.getMessage(), "utf-8");
+			message = URLEncoder.encode(message, "utf-8");
 			response.sendRedirect(basePath + errorUrl + "?message=" + message);
 		}
 		System.out.println(e.getMessage());
-//		return this.returnFail(e.getMessage());
 	}
 }

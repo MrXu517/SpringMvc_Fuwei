@@ -20,8 +20,10 @@ import net.keepsoft.dao.Dao;
 import net.keepsoft.sql.SQLHelperFactory;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.fuwei.commons.Pager;
+import com.fuwei.controller.BaseController;
 
 /**
  * Service基类
@@ -30,7 +32,7 @@ import com.fuwei.commons.Pager;
  * 
  */
 public class BaseService {
-
+	
 	@Resource(name = "dao")
 	protected Dao dao;
 	

@@ -2,6 +2,7 @@ package com.fuwei.service;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import com.fuwei.entity.Role;
 
 @Component
 public class ModuleService extends BaseService {
+	private Logger log = org.apache.log4j.LogManager.getLogger(ModuleService.class);
 	@Autowired
 	JdbcTemplate jdbc;
 	

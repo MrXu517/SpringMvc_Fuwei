@@ -1,7 +1,9 @@
 package com.fuwei.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -11,6 +13,7 @@ import com.fuwei.entity.Company;
 
 @Component
 public class CompanyService extends BaseService {
+	private Logger log = org.apache.log4j.LogManager.getLogger(CompanyService.class);
 	@Autowired
 	JdbcTemplate jdbc;
 
@@ -40,6 +43,11 @@ public class CompanyService extends BaseService {
 		try{
 			return dao.update("delete from tb_company WHERE  id = ?", id);
 		}catch(Exception e){
+			SQLException sqlException = (java.sql.SQLException)e.getCause();
+			if(sqlException!=null && sqlException.getErrorCode() == 1451){//外键约束
+				log.error(e);
+				throw new Exception("公司已被引用，无法删除，请先删除与公司有关的业务员等");
+			}
 			throw e;
 		}
 	}

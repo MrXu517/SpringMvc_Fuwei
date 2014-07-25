@@ -1,8 +1,10 @@
 
 package com.fuwei.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,7 @@ import com.fuwei.entity.Quote;
 
 @Component
 public class QuoteService extends BaseService {
+	private Logger log = org.apache.log4j.LogManager.getLogger(QuoteService.class);
 	@Autowired
 	JdbcTemplate jdbc;
 	

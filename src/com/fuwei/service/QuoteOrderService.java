@@ -1,8 +1,10 @@
 package com.fuwei.service;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,7 @@ import com.fuwei.util.ExportExcel;
 
 @Component
 public class QuoteOrderService extends BaseService {
+	private Logger log = org.apache.log4j.LogManager.getLogger(QuoteOrderService.class);
 	@Autowired
 	JdbcTemplate jdbc;
 	
@@ -116,6 +119,11 @@ public class QuoteOrderService extends BaseService {
 		try{
 			return dao.update("delete from tb_quoteorder WHERE  id = ?", id);
 		}catch(Exception e){
+			SQLException sqlException = (java.sql.SQLException)e.getCause();
+			if(sqlException!=null && sqlException.getErrorCode() == 1451){//外键约束
+				log.error(e);
+				throw new Exception("报价单已被引用，无法删除，请先删除订单");
+			}
 			throw e;
 		}
 	}
