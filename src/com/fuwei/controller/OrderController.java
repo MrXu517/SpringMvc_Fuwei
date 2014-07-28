@@ -149,30 +149,10 @@ public class OrderController extends BaseController {
 			double amount = 0;
 			String info = "";
 			for (OrderDetail orderDetail : orderDetaillist) {
-				OrderDetail detail = new OrderDetail();	
-				detail.setCproductN(orderDetail.getCproductN());
-				detail.setPrice(NumberUtil.formateDouble(orderDetail.getPrice(),3));
-				detail.setQuantity(1000);
-				detail.setAmount(NumberUtil.formateDouble(detail.getQuantity() * detail.getPrice(), 3));//保留三位小数
-				amount += detail.getAmount();
-				
-				detail.setMemo(orderDetail.getMemo());
-				detail.setSampleId(orderDetail.getSampleId());
-				detail.setName(orderDetail.getName());
-				detail.setImg(orderDetail.getImg());
-				detail.setImg_s(orderDetail.getImg_s());
-				detail.setImg_ss(orderDetail.getImg_ss());
-				detail.setMaterial(orderDetail.getMaterial());
-				detail.setMachine(orderDetail.getMachine());
-				detail.setWeight(orderDetail.getWeight());
-				detail.setSize(orderDetail.getSize());
-				detail.setCost(orderDetail.getCost());
-				detail.setProductNumber(orderDetail.getProductNumber());
-				detail.setMachine(orderDetail.getMachine());
-				detail.setCharge_user(orderDetail.getCharge_user());
-				detail.setDetail(orderDetail.getDetail());
-				orderDetaillist.add(detail);
-				info += detail.getName()+"(" + detail.getWeight() + "克)";
+				orderDetail.setPrice(NumberUtil.formateDouble(orderDetail.getPrice(),3));
+				orderDetail.setAmount(NumberUtil.formateDouble(orderDetail.getQuantity() * orderDetail.getPrice(), 3));//保留三位小数
+				amount += orderDetail.getAmount();
+				info += orderDetail.getName()+"(" + orderDetail.getWeight() + "克)";
 			}
 			order.setAmount(NumberUtil.formateDouble(amount,3));//设置订单总金额
 			order.setInfo(info);//设置订单信息

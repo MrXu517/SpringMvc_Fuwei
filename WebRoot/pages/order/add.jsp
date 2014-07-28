@@ -253,7 +253,7 @@
 										<%
 											for (OrderDetail detail : orderdetaillist) {
 										%>
-										<tr data_detail="<%=SerializeTool.serialize(detail)%>">
+										<tr data_detail='<%=SerializeTool.serialize(detail)%>'>
 
 											<td
 												style="max-width: 120px; height: 120px; max-height: 120px;">

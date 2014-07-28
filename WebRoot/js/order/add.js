@@ -19,7 +19,7 @@ $(document).ready( function() {
 			if (!Common.checkform(this)) {
 				return false;
 			}
-			var formdata = $(this).serialize();
+			var formdata = $(this).serializeJson();
 			var tabledata = [];
 			//获取表格数据
 			var $trs = $("#detailTable tbody tr");
@@ -30,18 +30,18 @@ $(document).ready( function() {
 				trdata.quantity = quantity;
 				tabledata.push(trdata);
 			}
-			formdata.order_details = tabledata;
+			formdata.order_details = JSON.stringify(tabledata);
 			
 			//获取表格数据
 			$submitBtn.button('loading');
 			$.ajax( {
 				url :"order/add",
 				type :'POST',
-				data:JSON.stringify(formdata),
+				data:$.param(formdata),
 				success : function(result) {
 					if (result.success) {
 						Common.Tip("添加成功", function() {
-							location = "order/detail";
+							location = "order/detail/"+result.id;
 						});
 					}
 					$submitBtn.button('reset');
