@@ -54,7 +54,6 @@ public class QuoteOrderController extends BaseController {
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	@Transactional
 	public Map<String, Object> add(String ids, HttpSession session,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {

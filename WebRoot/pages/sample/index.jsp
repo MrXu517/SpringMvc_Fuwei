@@ -276,7 +276,7 @@
 											<td><%=sample.getMaterial()%></td>
 											<td><%=sample.getWeight()%></td>
 											<td><%=sample.getSize()%></td>
-											<td><%=sample.getCharge_user()%></td>
+											<td><%=SystemCache.getUserName(sample.getCharge_user()) %></td>
 											<td><%=sample.getCreated_at()%></td>
 											<td>
 												<%
