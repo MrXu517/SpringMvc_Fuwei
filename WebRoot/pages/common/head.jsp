@@ -169,10 +169,10 @@
 							class="fa fa-angle-down"></i> </a>
 						<ul class="submenu">
 							<li>
-								<a href="order/add"><i class="fa fa-plus"></i>创建订单</a>
+								<a href="order/index"><i class="fa fa-dashboard"></i>订单列表</a>
 							</li>
 							<li>
-								<a href="orderlist.do"><i class="fa fa-dashboard"></i>订单列表</a>
+								<a href="order/add"><i class="fa fa-plus"></i>创建订单</a>
 							</li>
 							<li>
 								<a href="addproductNotification.jsp"><i class="fa fa-plus"></i>创建生产通知单</a>

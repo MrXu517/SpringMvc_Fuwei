@@ -294,7 +294,7 @@
 											<td><%=quoteorder.getCreated_at()%></td>
 											<td>
 												<a href="quoteorder/detail/<%=quoteorder.getId()%>">详情</a>
-												 | <a href="order/add/<%=quoteorder.getId()%>">创建订单</a>
+												 | <a href="order/add?quoteOrderId=<%=quoteorder.getId()%>">创建订单</a>
 											</td>
 										</tr>
 										<%

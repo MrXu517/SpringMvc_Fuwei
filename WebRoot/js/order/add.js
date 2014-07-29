@@ -60,8 +60,29 @@ $(document).ready( function() {
 			changeCompany(this.value);
 		});
 		// 公司-业务员级联
+		
+		//数量金额的联动
+		$("#detailTable").on("input propertychange",".quantity_value",function(){
+			Common.positive_intCheck_Rewrite(this, this.value);
+			//修改该行金额
+			var quantity = this.value;
+			var price = Number($(this).parent().siblings(".price").text());
+			var amount = (Number(quantity) * price).toFixed(2);
+			$(this).parent().siblings(".amount").text(amount);
+			//修改订单总金额
+			$("#amount").val(totalAmount());
+		});
 
 	});
+function totalAmount(){
+	var amount = 0 ; 
+	var $trs = $("#detailTable tbody tr");
+	for(var i = 0 ; i < $trs.length ; ++i){
+		var $tr = $trs.eq(i);
+		amount += Number($tr.find(".amount").text());
+	}
+	return amount.toFixed(2);
+}
 function changeCompany(companyId) {
 	var companyName = $("#companyId").val();
 	var companySalesmanMap = $("#companyId").attr("data");

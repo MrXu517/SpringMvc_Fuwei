@@ -49,4 +49,13 @@ public class OrderDetailService extends BaseService {
 			throw e;
 		}
 	}
+	
+	@Transactional
+	public int deleteBatch(int orderId) throws Exception {
+		try{
+			return dao.update("delete from tb_order_detail WHERE  orderId =?", orderId);
+		}catch(Exception e){
+			throw e;
+		}
+	}
 }

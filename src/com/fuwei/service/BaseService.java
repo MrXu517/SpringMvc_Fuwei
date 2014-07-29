@@ -251,7 +251,7 @@ public class BaseService {
 			if (StringUtils.isNotBlank(primaryKey)) {
 				if (primaryKey.equalsIgnoreCase(fileName))
 					continue;
-				if (StringUtils.isNotBlank(notField) && notField.indexOf("," + fileName + ",") != -1)
+				if (StringUtils.isNotBlank(notField) && (notField.indexOf(fileName + ",") != -1 || notField.indexOf("," + fileName) != -1  || notField.indexOf("," + fileName + ",") != -1) )//2014-7-29修改，添加notField.indexOf(fileName + ",") != -1 || notField.indexOf("," + fileName) != -1  ||
 					continue;
 			} else {
 				if (field.isAnnotationPresent(IdentityId.class))

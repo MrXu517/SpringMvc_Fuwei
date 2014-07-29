@@ -1,0 +1,79 @@
+.quantity_value{
+	width:100px;
+}
+.head{
+	font-size: 20px;
+	font-weight: bold;
+	padding-bottom: 20px;
+}
+.head>div{
+	margin-right:40px;
+}
+.detailTb table tbody tr td{
+	border-top:none;
+	border-bottom:1px solid #ddd;
+}
+.basic-steps ol li
+{
+    float: left;
+    width: 100px;
+}
+.basic-steps dl
+{
+    background-image: url("../images/T1sOc7Xa4XXXcw5nfN-40-200.png");
+    background-position: 0 26px;
+    background-repeat: repeat-x;
+    height: 57px;
+    position: relative;
+    z-index: 10;
+    background-color: #F5F3F0;
+    border-bottom: 1px solid #D2D2D2;
+    margin-top: 0;
+}
+.basic-steps dl dd
+{
+    float: left;
+    margin: 0;
+    padding: 0;
+    width: 90px;
+}
+
+.basic-steps dl dt
+{
+    background-color: #F5F3F0;
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    height: 30px;
+    margin-top: 26px;
+    overflow: hidden;
+    text-indent: -40em;
+    width: 60px;
+    float: left;
+    background-image: url("../images/T1sOc7Xa4XXXcw5nfN-40-200.png");
+    padding: 0;
+}
+.basic-steps dl dd a
+{
+    background-image: url("../images/T1sOc7Xa4XXXcw5nfN-40-200.png");
+    float: left;
+    width: 100px;
+    background-position: center -18px;
+    color: #AC9F90;
+    text-decoration: none;
+    background-repeat: no-repeat;
+    height: 18px;
+    line-height: 18px;
+    margin: 2px 0 5px;
+    padding: 32px 0 0;
+    text-align: center;
+    width: 100%;
+}
+.basic-steps dl dd.selected a
+{
+    background-position: center -68px;
+}
+
+.basic-steps dl dd a:hover
+{
+    background-position: center -68px;
+}

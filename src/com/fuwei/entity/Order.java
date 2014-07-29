@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.fuwei.constant.OrderStatus;
+
 import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
 import net.keepsoft.commons.annotation.Temporary;
@@ -26,8 +28,37 @@ public class Order implements Serializable{
 	private int created_user;//创建用户
 	private Integer salesmanId;//业务员ID
 	private Integer companyId;//公司ID
+	
+	//动态的生产步骤
+	private Integer stepId;
+	private String setp_state;
+	@Temporary
+	private List<OrderStep> stepList ;
+	//动态的生产步骤
+	
 	@Temporary
 	private List<OrderDetail> detaillist ;
+	
+	public List<OrderStep> getStepList() {
+		return stepList;
+	}
+	public void setStepList(List<OrderStep> stepList) {
+		this.stepList = stepList;
+	}
+	public Integer getStepId() {
+		return stepId;
+	}
+	public void setStepId(Integer stepId) {
+		this.stepId = stepId;
+	}
+	public String getSetp_state() {
+		return setp_state;
+	}
+	public void setSetp_state(String setp_state) {
+		this.setp_state = setp_state;
+	}
+
+	
 	public int getId() {
 		return id;
 	}
@@ -125,6 +156,9 @@ public class Order implements Serializable{
 		this.detaillist = detaillist;
 	}
 	
-	
+	//是否可编辑
+	public Boolean isEdit(){
+		return this.status < OrderStatus.COLORING.ordinal();
+	}
 	
 }

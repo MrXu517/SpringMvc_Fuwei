@@ -2,6 +2,7 @@
 	contentType="text/html; charset=utf-8"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.entity.Order"%>
+<%@page import="com.fuwei.constant.OrderStatus"%>
 <%@page import="com.fuwei.entity.OrderDetail"%>
 <%@page import="com.fuwei.entity.Salesman"%>
 <%@page import="com.fuwei.entity.Company"%>
@@ -30,7 +31,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>创建订单 -- 桐庐富伟针织厂</title>
+		<title>编辑订单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -46,7 +47,7 @@
 		<script src="js/common/common.js" type="text/javascript"></script>
 		<script src="js/plugins/jquery.form.js" type="text/javascript"></script>
 		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
-		<script src="js/order/add.js" type="text/javascript"></script>
+		<script src="js/order/edit.js" type="text/javascript"></script>
 		<link href="css/order/index.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
@@ -64,7 +65,7 @@
 							<a href="order/index">订单列表</a>
 						</li>
 						<li class="active">
-							创建订单
+							编辑订单
 						</li>
 					</ul>
 				</div>
@@ -78,7 +79,7 @@
 										<div class="col-sm-offset-3 col-sm-5">
 											<button type="submit" class="btn btn-primary"
 												data-loading-text="正在保存...">
-												创建订单
+												编辑订单
 											</button>
 
 										</div>
@@ -91,12 +92,13 @@
 									</div>
 									<div class="clear"></div>
 									<div class="form-group col-md-6">
+										<input type="hidden" id="id" name="id" value="<%=order.getId() %>"/>
 										<label for="orderNumber" class="col-sm-3 control-label">
 											订单号
 										</label>
 										<div class="col-sm-8">
 											<input type="text" class="form-control" name="orderNumber"
-												id="orderNumber" readonly value="自动生成" placeholder="订单号">
+												id="orderNumber" disabled value="<%=order.getOrderNumber() %>" placeholder="订单号">
 										</div>
 										<div class="col-sm-1"></div>
 									</div>
@@ -113,7 +115,7 @@
 												</option>
 												<%
 													for (Company company : SystemCache.companylist) {
-														if (order.getCompanyId()!=null && order.getCompanyId() == company.getId()) {
+														if (order.getCompanyId()!=null && company.getId() == order.getCompanyId()) {
 												%>
 												<option value="<%=company.getId()%>" selected><%=company.getFullname()%></option>
 												<%
@@ -173,7 +175,7 @@
 										</label>
 										<div class="col-sm-8">
 											<input type="text" name="start_at" id="start_at"
-												class="date form-control require" placeholder="" />
+												class="date form-control require" value="<%=DateTool.formatDateYMD(order.getStart_at()) %>" placeholder="" />
 
 										</div>
 										<div class="col-sm-1"></div>
@@ -184,7 +186,7 @@
 										</label>
 										<div class="col-sm-8">
 											<input disabled type="text" name="created_at" id="created_at"
-												class="date form-control require" placeholder=""
+												class="date form-control require" placeholder="" 
 												value="<%=DateTool.formatDateYMD(order.getCreated_at())%>" />
 
 										</div>
@@ -196,7 +198,7 @@
 										</label>
 										<div class="col-sm-8">
 											<input type="text" name="end_at" id="end_at"
-												class="date form-control require" placeholder="" />
+												class="date form-control require" placeholder="" value="<%=DateTool.formatDateYMD(order.getEnd_at()) %>"/>
 
 										</div>
 										<div class="col-sm-1"></div>

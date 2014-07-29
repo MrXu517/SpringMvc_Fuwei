@@ -11,7 +11,7 @@ public class OrderHandle {
 	private int id;
 	private int orderId;
 	private String name;//操作名称
-	private int status;//操作时的订单状态
+	private Integer status;//操作时的订单状态
 	private String state;//操作时的订单状态描述
 	private String memo;//操作备注
 	private int created_user;//操作用户
@@ -34,10 +34,10 @@ public class OrderHandle {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 	public String getState() {

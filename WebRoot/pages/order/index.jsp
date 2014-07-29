@@ -2,16 +2,17 @@
 	contentType="text/html; charset=utf-8"%>
 <%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.entity.Salesman"%>
+<%@page import="com.fuwei.entity.Company"%>
 <%@page import="com.fuwei.entity.User"%>
 <%@page import="com.fuwei.commons.Pager"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
+<%@page import="net.sf.json.JSONObject"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	List<User> userlist = (List<User>) request.getAttribute("userlist");
 	Pager pager = (Pager) request.getAttribute("pager");
 	if (pager == null) {
 		pager = new Pager();
@@ -32,12 +33,27 @@
 		end_time_str = DateTool.formatDateYMD(end_time);
 	}
 
-	Integer charge_userId = (Integer) request
-			.getAttribute("charge_user");
-	String charge_user_str = "";
-	if (charge_userId != null) {
-		charge_user_str = String.valueOf(charge_userId);
+	Integer salesmanId = (Integer) request.getAttribute("salesmanId");
+	Integer companyId = (Integer) request.getAttribute("companyId");
+	String company_str = "";
+	String salesman_str = "";
+	if (salesmanId != null) {
+		salesman_str = String.valueOf(salesmanId);
 	}
+	if (companyId != null) {
+		company_str = String.valueOf(companyId);
+	}
+	if (salesmanId == null) {
+		salesmanId = -1;
+	}
+	if (companyId == null) {
+		companyId = -1;
+	}
+	HashMap<String, List<Salesman>> companySalesmanMap = SystemCache
+			.getCompanySalesmanMap_ID();
+	JSONObject jObject = new JSONObject();
+	jObject.put("companySalesmanMap", companySalesmanMap);
+	String companySalesmanMap_str = jObject.toString();
 
 	//权限相关
 	Boolean has_order_detail = SystemCache.hasAuthority(session,
@@ -66,7 +82,7 @@
 		<script src="js/plugins/bootstrap.min.js" type="text/javascript"></script>
 		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
-		<script src="js/sample/index.js" type="text/javascript"></script>
+		<script src="js/order/index.js" type="text/javascript"></script>
 		<link href="css/sample/sample.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
@@ -80,7 +96,7 @@
 							<a href="user/index">首页</a>
 						</li>
 						<li class="active">
-							订单管理
+							订单列表
 						</li>
 					</ul>
 				</div>
@@ -91,30 +107,57 @@
 							<div class="col-md-12 tablewidget">
 								<!-- Table -->
 								<div clas="navbar navbar-default">
-									<form class="form-horizontal searchform form-inline"
-										role="form" action="sample/index">
+									<form
+										class="form-horizontal searchform form-inline searchform"
+										role="form">
 										<input type="hidden" name="page" id="page"
-											value="<%=pager.getPageNo()%>">
-										<div class="form-group" style="width: 200px;">
-											<label for="charge_user" class="col-sm-3 control-label"
-												style="width: 60px;">
-												打样人
+											value="<%=pager.getPageNo()%>" />
+										<div class="form-group salesgroup">
+											<label for="companyId" class="col-sm-3 control-label">
+												公司
 											</label>
-											<div class="col-sm-8">
-												<select id="charge_user" name="charge_user"
-													class="form-control">
+											<div class="col-sm-9">
+												<select data='<%=companySalesmanMap_str%>'
+													class="form-control" name="companyId" id="companyId"
+													placeholder="公司">
 													<option value="">
 														所有
 													</option>
 													<%
-														for (User tempU : userlist) {
-															if (charge_userId != null && charge_userId == tempU.getId()) {
+														for (Company company : SystemCache.companylist) {
+															if (companyId == company.getId()) {
 													%>
-													<option value="<%=tempU.getId()%>" selected="selected"><%=tempU.getName()%></option>
+													<option value="<%=company.getId()%>" selected><%=company.getFullname()%></option>
 													<%
 														} else {
 													%>
-													<option value="<%=tempU.getId()%>"><%=tempU.getName()%></option>
+													<option value="<%=company.getId()%>"><%=company.getFullname()%></option>
+													<%
+														}
+														}
+													%>
+												</select>
+											</div>
+										</div>
+										<div class="form-group salesgroup">
+											<label for="salesmanId" class="col-sm-4 control-label">
+												业务员
+											</label>
+											<div class="col-sm-8">
+												<select class="form-control" name="salesmanId"
+													id="salesmanId" placeholder="业务员">
+													<option value="">
+														所有
+													</option>
+													<%
+														for (Salesman salesman : SystemCache.getSalesmanList(companyId)) {
+															if (salesmanId == salesman.getId()) {
+													%>
+													<option value="<%=salesman.getId()%>" selected><%=salesman.getName()%></option>
+													<%
+														} else {
+													%>
+													<option value="<%=salesman.getId()%>"><%=salesman.getName()%></option>
 													<%
 														}
 														}
@@ -123,11 +166,11 @@
 											</div>
 										</div>
 										<div class="form-group timegroup">
-											<label class="col-sm-2 control-label">
+											<label class="col-sm-3 control-label">
 												创建时间
 											</label>
 
-											<div class="input-group col-md-10">
+											<div class="input-group col-md-9">
 												<input type="text" name="start_time" id="start_time"
 													class="date form-control" value="<%=start_time_str%>" />
 												<span class="input-group-addon">到</span>
@@ -141,65 +184,67 @@
 											</div>
 										</div>
 									</form>
-									<ul class="pagination">
+																		<ul class="pagination">
 										<li>
 											<a
-												href="sample/index?charge_user=<%=charge_user_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=1">«</a>
+												href="order/index?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
 										</li>
 
 										<%
-											if (pager.getPageNo() > 1) {
-										%>
+										if (pager.getPageNo() > 1) {
+									%>
 										<li class="">
 											<a
-												href="sample/index?charge_user=<%=charge_user_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() - 1%>">上一页
+												href="order/index?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
-											} else {
-										%>
+										} else {
+									%>
 										<li class="disabled">
 											<a disabled>上一页 <span class="sr-only"></span> </a>
 										</li>
 										<%
-											}
-										%>
+										}
+									%>
 
 										<li class="active">
 											<a
-												href="sample/index?charge_user=<%=charge_user_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%><span
+												href="order/index?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%><span
 												class="sr-only"></span> </a>
 										</li>
 										<li>
 											<%
-												if (pager.getPageNo() < pager.getTotalPage()) {
-											%>
+											if (pager.getPageNo() < pager.getTotalPage()) {
+										%>
 										
 										<li class="">
 											<a
-												href="sample/index?charge_user=<%=charge_user_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() + 1%>">下一页
+												href="order/index?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
-											} else {
-										%>
+										} else {
+									%>
 										<li class="disabled">
 											<a disabled>下一页 <span class="sr-only"></span> </a>
 										</li>
 										<%
-											}
-										%>
+										}
+									%>
 
 										</li>
 										<li>
 											<a
-												href="sample/index?charge_user=<%=charge_user_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getTotalPage()%>">»</a>
+												href="order/index?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
 									<form class="form-inline pageform form-horizontal" role="form"
-										action="sample/index">
-										<input type="hidden" name="charge_user" id="charge_user"
-											value="<%=charge_user_str%>">
+										action="order/index">
+										<input type="hidden" name="salesmanId" id="salesmanId"
+											value="<%=salesman_str %>" />
+										<input type="hidden" name="companyId" id="companyId"
+											value="<%=company_str %>" />
 										<input type="hidden" name="start_time" id="start_time"
 											value="<%=start_time_str%>">
 										<input type="hidden" name="end_time" id="end_time"
@@ -229,25 +274,31 @@
 											</th>
 
 											<th>
-												图片
+												订单号
 											</th>
 											<th>
-												名称
+												订单状态
 											</th>
 											<th>
-												货号
+												总金额
 											</th>
 											<th>
-												材料
+												订单信息
 											</th>
 											<th>
-												克重
+												公司
 											</th>
 											<th>
-												尺寸
+												业务员
 											</th>
 											<th>
-												打样人
+												创建用户
+											</th>
+											<th>
+												订单生效时间
+											</th>
+											<th>
+												订单截止时间
 											</th>
 											<th>
 												创建时间
@@ -264,26 +315,31 @@
 										%>
 										<tr orderId="<%=order.getId()%>">
 											<td><%=++i%></td>
-											<td><%=order.getName()%></td>
-											<td><%=order.getProductNumber()%></td>
-											<td><%=sample.getMaterial()%></td>
-											<td><%=sample.getWeight()%></td>
-											<td><%=sample.getSize()%></td>
-											<td><%=SystemCache.getUserName(sample.getCharge_user()) %></td>
-											<td><%=sample.getCreated_at()%></td>
+											<td><%=order.getOrderNumber()%></td>
+											<td><%=order.getState()%></td>
+											<td><%=order.getAmount()%></td>
+											<td><%=order.getInfo()%></td>
+											<td><%=SystemCache.getCompanyName(order
+										.getCompanyId())%></td>
+											<td><%=SystemCache.getSalesmanName(order.getSalesmanId())%></td>
+											<td><%=SystemCache.getUserName(order
+										.getCreated_user())%></td>
+											<td><%=DateTool.formatDateYMD(order.getStart_at())%></td>
+											<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
+											<td><%=DateTool.formatDateYMD(order.getCreated_at())%></td>
 											<td>
 												<%
-													if (has_sample_detail) {
+													if (has_order_detail) {
 												%>
-												<a href="order/detail/<%=sample.getId()%>">详情</a>
+												<a href="order/detail/<%=order.getId()%>">详情</a>
 												<%
 													}
 												%>
 												<%
-													if (has_sample_edit) {
+													if (has_order_edit) {
 												%>
 												|
-												<a href="order/put/<%=sample.getId()%>">编辑</a>
+												<a href="order/put/<%=order.getId()%>">编辑</a>
 												<%
 													}
 												%>

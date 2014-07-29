@@ -10,9 +10,9 @@ import net.keepsoft.commons.annotation.Temporary;
 public class Authority implements Serializable {
 	@IdentityId
 	private Integer id;
-	private Integer pid;//父节点ID
-	private String cname;//权限中文描述:为null，表示是根节点
-	private String lcode;//权限英文，唯一，后台用这个判断权限\
+	private Integer pid;//父节点ID:为null，表示是根节点
+	private String cname;//权限中文描述
+	private String lcode;//权限英文，唯一，后台用这个判断权限
 	
 	@Temporary
 	private Boolean checked = false;

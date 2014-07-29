@@ -9,13 +9,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fuwei.commons.Pager;
@@ -25,16 +31,22 @@ import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.constant.OrderStatus;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.OrderDetail;
+import com.fuwei.entity.OrderHandle;
+import com.fuwei.entity.OrderProduceStatus;
+import com.fuwei.entity.OrderStep;
 import com.fuwei.entity.QuoteOrder;
 import com.fuwei.entity.QuoteOrderDetail;
+import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.OrderDetailService;
 import com.fuwei.service.OrderHandleService;
+import com.fuwei.service.OrderProduceStatusService;
 import com.fuwei.service.OrderService;
 import com.fuwei.service.QuoteOrderDetailService;
 import com.fuwei.service.QuoteOrderService;
 import com.fuwei.util.DateTool;
+import com.fuwei.util.HanyuPinyinUtil;
 import com.fuwei.util.NumberUtil;
 import com.fuwei.util.SerializeTool;
 
@@ -53,11 +65,12 @@ public class OrderController extends BaseController {
 	QuoteOrderService quoteOrderService;
 	@Autowired
 	QuoteOrderDetailService quoteOrderDetailService;
+	@Autowired
+	OrderProduceStatusService orderProduceStatusService;
 	
-	
-	@RequestMapping(value = "/add/{quoteOrderId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView add(@PathVariable Integer quoteOrderId, HttpSession session,
+	public ModelAndView add(Integer quoteOrderId, HttpSession session,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
@@ -157,7 +170,16 @@ public class OrderController extends BaseController {
 			order.setAmount(NumberUtil.formateDouble(amount,3));//设置订单总金额
 			order.setInfo(info);//设置订单信息
 			order.setDetaillist(orderDetaillist);//设置订单详情
-			int orderId = orderService.add(order);
+			
+			//添加操作记录
+			OrderHandle handle = new OrderHandle();
+			handle.setName("创建订单");
+			handle.setState(order.getState());
+			handle.setStatus(order.getStatus());
+			handle.setCreated_at(DateTool.now());
+			handle.setCreated_user(user.getId());
+			
+			int orderId = orderService.add(order,handle);
 			return this.returnSuccess("id",orderId);
 		} catch (Exception e) {
 			throw e;
@@ -170,6 +192,7 @@ public class OrderController extends BaseController {
 	public ModelAndView index(Integer page, String start_time, String end_time,Integer companyId,Integer salesmanId,
 			String sortJSON, HttpSession session, HttpServletRequest request)
 			throws Exception {
+		
 		String lcode = "order/index";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		if(!hasAuthority){
@@ -182,6 +205,7 @@ public class OrderController extends BaseController {
 		if (page != null && page > 0) {
 			pager.setPageNo(page);
 		}
+
 		List<Sort> sortList = null;
 		if (sortJSON != null) {
 			sortList = SerializeTool.deserializeList(sortJSON, Sort.class);
@@ -197,8 +221,9 @@ public class OrderController extends BaseController {
 				sortList);
 		if (pager != null & pager.getResult() != null) {
 			List<Order> orderlist = (List<Order>) pager
-					.getResult();
+			.getResult();
 		}
+	
 		request.setAttribute("start_time", start_time_d);
 		request.setAttribute("end_time", end_time_d);
 		request.setAttribute("salesmanId", salesmanId);
@@ -223,10 +248,238 @@ public class OrderController extends BaseController {
 			throw new Exception("缺少订单ID");
 		}
 		Order order = orderService.get(id);
+		List<OrderDetail> detaillist = orderDetailService.getListByOrder(id);//获取订单详情
+		order.setDetaillist(detaillist);//设置订单详情
+		//获取订单步骤列表
+		List<OrderStep> stepList = new ArrayList<OrderStep>();
+		List<OrderProduceStatus> db_steplist = orderProduceStatusService.getListByOrder(order.getId());
+		OrderStatus[] statuses = OrderStatus.values();
+		for(OrderStatus status : statuses){
+			if(status.ordinal() >= OrderStatus.CANCEL.ordinal()){
+				break;
+			}
+			OrderStep temp = new OrderStep();
+			temp.setOrderId(order.getId());
+			temp.setState(status.getName());
+			temp.setStatus(status.ordinal());
+			temp.setStepId(null);
+			if(order.getStepId() == null && order.getStatus() == status.ordinal()){
+				temp.setChecked(true);
+			}else{
+				temp.setChecked(false);
+			}
+			stepList.add(temp);
+			if(status == OrderStatus.MACHINING){//当是机织时，填充动态生产步骤
+				for(OrderProduceStatus orderProduceStatus : db_steplist){
+					OrderStep temp2 = new OrderStep();
+					temp2.setOrderId(order.getId());
+					temp2.setState(orderProduceStatus.getName());
+					temp2.setStatus(null);
+					temp2.setStepId(orderProduceStatus.getId());
+					if(order.getStepId() != null && order.getStepId() == orderProduceStatus.getId()){
+						temp2.setChecked(true);
+					}else{
+						temp2.setChecked(false);
+					}
+					stepList.add(temp2);
+				}
+			}
+			
+		}
+		
+		order.setStepList(stepList);//设置订单步骤
+		
+		request.setAttribute("order", order);
+		return new ModelAndView("order/detail");
+	}
+	
+	@RequestMapping(value = "/put/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView update(@PathVariable int id, HttpSession session,HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		
+		Order order = orderService.get(id);
 		List<OrderDetail> detaillist = orderDetailService.getListByOrder(id);
 		order.setDetaillist(detaillist);
 		request.setAttribute("order", order);
-		return new ModelAndView("quoteorder/detail");
+		return new ModelAndView("order/edit");
+		
 	}
 	
+	@RequestMapping(value = "/put", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> update(Order order,String order_details, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/edit";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有编辑订单的权限", null);
+		}
+		try {
+			Order db_order = orderService.get(order.getId());
+			if(db_order.getStatus() >= OrderStatus.COLORING.ordinal()){
+				throw new Exception("订单已进入生产阶段，无法编辑");
+			}
+			order.setUpdated_at(DateTool.now());//设置订单更新时间			
+			if(order.getSalesmanId() == null){
+				throw new Exception("业务员不能为空");
+			}
+			order.setCompanyId(SystemCache.getSalesman(order.getSalesmanId()).getCompanyId());//设置订单公司
+			if(order.getCompanyId() == null){
+				throw new Exception("公司不能为空");
+			}
+			
+			List<OrderDetail> orderDetaillist = SerializeTool.deserializeList(order_details, OrderDetail.class);
+			if (orderDetaillist == null || orderDetaillist.size() <= 0) {
+				throw new Exception("订单中至少得有一条样品记录");
+			}
+			double amount = 0;
+			String info = "";
+			for (OrderDetail orderDetail : orderDetaillist) {
+				orderDetail.setPrice(NumberUtil.formateDouble(orderDetail.getPrice(),3));
+				orderDetail.setAmount(NumberUtil.formateDouble(orderDetail.getQuantity() * orderDetail.getPrice(), 3));//保留三位小数
+				amount += orderDetail.getAmount();
+				info += orderDetail.getName()+"(" + orderDetail.getWeight() + "克)";
+				orderDetail.setOrderId(order.getId());
+			}
+			order.setAmount(NumberUtil.formateDouble(amount,3));//设置订单总金额
+			order.setInfo(info);//设置订单信息
+			order.setDetaillist(orderDetaillist);//设置订单详情
+			
+			//添加操作记录
+			OrderHandle handle = new OrderHandle();
+			handle.setOrderId(order.getId());
+			handle.setName("修改订单");
+			handle.setState(order.getState());
+			handle.setStatus(order.getStatus());
+			handle.setCreated_at(DateTool.now());
+			handle.setCreated_user(user.getId());
+			
+			int orderId = orderService.update(order,handle);
+			return this.returnSuccess("id",orderId);
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+	
+	
+	//添加订单步骤
+	@RequestMapping(value = "addstep", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> add(OrderProduceStatus orderProduceStatus, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/addstep";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有添加订单步骤的权限", null);
+		}
+		try {
+			Integer orderId = orderProduceStatus.getOrderId();
+			Order order = orderService.get(orderId);
+			if(order.getStatus() == OrderStatus.DELIVERED.ordinal()){
+				throw new Exception("订单已发货，不能添加步骤");
+			}
+			if(order.getStatus() == OrderStatus.COMPLETED.ordinal()){
+				throw new Exception("订单已交易完成，不能添加步骤");
+			}
+			if(order.getStatus() == OrderStatus.CANCEL.ordinal()){
+				throw new Exception("订单已取消，不能添加步骤");
+			}
+			
+			orderProduceStatus.setCreated_at(DateTool.now());//设置订单创建时间
+			orderProduceStatus.setUpdated_at(DateTool.now());//设置订单更新时间
+			orderProduceStatus.setCreated_user(user.getId());//设置订单创建人
+			orderProduceStatus.setOrderId(orderId);		
+			
+			//添加操作记录
+			OrderHandle handle = new OrderHandle();
+			handle.setName("添加生产步骤");
+			handle.setOrderId(orderProduceStatus.getOrderId());
+			handle.setState(orderProduceStatus.getName());
+			handle.setStatus(orderProduceStatus.getId());
+			handle.setCreated_at(DateTool.now());
+			handle.setCreated_user(user.getId());
+			
+			int stepId = orderService.addstep(orderProduceStatus, handle);
+			return this.returnSuccess("id",stepId);
+		} catch (Exception e) {
+			throw e;
+		}
+	} 
+	
+	//修改订单步骤
+	@RequestMapping(value = "/putstep", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> update(OrderProduceStatus orderProduceStatus, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		Integer stepId = orderProduceStatus.getId();
+		if(stepId == null){
+			throw new Exception("缺少步骤ID");
+		}
+		String lcode = "order/editstep";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有编辑订单步骤的权限", null);
+		}
+		try {
+			if(orderProduceStatus.getOrderId() == null){
+				throw new Exception("缺少订单ID");
+			}
+			orderProduceStatus.setId(stepId);
+			orderProduceStatus.setUpdated_at(DateTool.now());//设置步骤更新时间			
+
+			
+			//添加操作记录
+			OrderHandle handle = new OrderHandle();
+			handle.setOrderId(orderProduceStatus.getOrderId());
+			handle.setName("修改订单步骤信息");
+			handle.setState(orderProduceStatus.getName());
+			handle.setStatus(orderProduceStatus.getId());
+			handle.setCreated_at(DateTool.now());
+			handle.setCreated_user(user.getId());
+			
+			orderService.updatestep(orderProduceStatus,handle);
+			return this.returnSuccess();
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	//删除订单步骤
+	@RequestMapping(value = "/deletestep/{stepId}", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> delete(@PathVariable Integer stepId,HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		if(stepId == null){
+			throw new Exception("缺少步骤ID");
+		}
+		String lcode = "order/deletestep";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有删除订单步骤的权限", null);
+		}
+		
+		//添加操作记录
+		OrderProduceStatus orderProduceStatus = orderProduceStatusService.get(stepId);
+		OrderHandle handle = new OrderHandle();
+		handle.setOrderId(orderProduceStatus.getOrderId());
+		handle.setName("删除订单步骤信息");
+		handle.setState(orderProduceStatus.getName());
+		handle.setStatus(orderProduceStatus.getId());
+		handle.setCreated_at(DateTool.now());
+		handle.setCreated_user(user.getId());
+		
+		orderService.deletestep(stepId,handle);
+		
+		return this.returnSuccess();		
+	}
 }
