@@ -43,17 +43,7 @@ $(document).ready(function(){
 	$(".calcuteDetail").click(function(){
 		var sampleId = $(this).closest("tr").attr("sampleid");
 		$(".priceform #id").val(sampleId);
-		var $priceModal = $('#priceDialog>div.modal');
-		var $dialog = $priceModal.find('.modal-dialog');
-		var paddingtop = 0;
-		$priceModal.show();
-		paddingtop = ($priceModal.height() - $dialog.outerHeight()) / 2;
-		if (paddingtop < 30) {
-			paddingtop = 30;
-		}
-		$dialog.css("padding-top", paddingtop);
-		$priceModal.hide();
-		$priceModal.modal({keyboard:true});
+		Common.openModal($('#priceDialog'));
 		return false;
 	});
 	//核价按钮 -- 开始
@@ -74,17 +64,7 @@ $(document).ready(function(){
 		
 	});
 	$("#calculateBtn").click(function(){
-		var $model = $('#calculateDialog>div.modal');
-		var $dialog = $model.find('.modal-dialog');
-		var paddingtop = 0;
-		$model.show();
-		paddingtop = ($model.height() - $dialog.outerHeight()) / 2;
-		if (paddingtop < 30) {
-			paddingtop = 30;
-		}
-		$dialog.css("padding-top", paddingtop);
-		$model.hide();
-		$model.modal({keyboard:true});
+		Common.openModal($('#calculateDialog'));
 		return false;
 	});
 	//报价计算器按钮 -- 结束

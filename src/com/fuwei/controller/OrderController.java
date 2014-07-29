@@ -36,6 +36,7 @@ import com.fuwei.entity.OrderProduceStatus;
 import com.fuwei.entity.OrderStep;
 import com.fuwei.entity.QuoteOrder;
 import com.fuwei.entity.QuoteOrderDetail;
+import com.fuwei.entity.QuotePrice;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
 import com.fuwei.service.AuthorityService;
@@ -468,8 +469,12 @@ public class OrderController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有删除订单步骤的权限", null);
 		}
 		
-		//添加操作记录
+		//删除时要做判断，若当前步骤已执行，则无法删除此步骤
 		OrderProduceStatus orderProduceStatus = orderProduceStatusService.get(stepId);
+		
+		
+		//添加操作记录
+		
 		OrderHandle handle = new OrderHandle();
 		handle.setOrderId(orderProduceStatus.getOrderId());
 		handle.setName("删除订单步骤信息");
@@ -481,5 +486,22 @@ public class OrderController extends BaseController {
 		orderService.deletestep(stepId,handle);
 		
 		return this.returnSuccess();		
+	}
+	
+	//获取步骤详情
+	@RequestMapping(value = "/getstep/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public OrderProduceStatus get(@PathVariable int id,HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		
+		String lcode = "order/detailstep";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有查看步骤详情的权限", null);
+		}
+		
+		OrderProduceStatus OrderProduceStatus = orderProduceStatusService.get(id);
+		return OrderProduceStatus;
+		
 	}
 }

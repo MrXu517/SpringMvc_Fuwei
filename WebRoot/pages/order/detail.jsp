@@ -46,6 +46,7 @@
 		<link href="css/order/index.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
+
 		<%@ include file="../common/head.jsp"%>
 		<div id="Content">
 			<div id="main">
@@ -65,7 +66,6 @@
 					</ul>
 				</div>
 				<div class="body">
-
 					<div class="container-fluid">
 						<div class="row">
 							<div class="col-md-12 formwidget">
@@ -120,17 +120,42 @@
 														if (step.getChecked()) {
 											%>
 											<dd class="tb-desc-segment selected">
-												<a class="tb-desc-segment-link"><%=step.getState()%></a>
-											</dd>
-											<%
-												} else {
-											%>
+												<%
+													} else {
+												%>
+											
 											<dd class="tb-desc-segment">
+												<%
+													}
+												%>
+												<%
+													if (step.getStepId() != null) {//如果是动态生产步骤
+												%>
+												<a class="tb-desc-segment-link step stepId" href="#"
+													data-toggle="tooltip" title=""><%=step.getState()%></a>
+												<div class="tooltip top" role="tooltip">
+													<div class="tooltip-arrow"></div>
+													<div class="tooltip-inner">
+														<button type="button" class="editStep btn btn-success" data-cid="<%=step.getStepId() %>">
+															编辑
+														</button>
+														<button type="button" class="deleteStep btn btn-danger" data-cid="<%=step.getStepId() %>">
+															删除
+														</button>
+													</div>
+												</div>
+												<%
+													} else {
+												%>
 												<a class="tb-desc-segment-link"><%=step.getState()%></a>
+												<%
+													}
+												%>
+
 											</dd>
+
 											<%
 												}
-													}
 											%>
 										</dl>
 									</div>

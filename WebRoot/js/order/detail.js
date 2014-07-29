@@ -1,4 +1,19 @@
 $(document).ready(function(){
+//	$(".basic-steps .step").hover(function(){
+//		$(this).siblings(".tooltip").css("opacity",1);
+//	},function(){
+//		$(this).siblings(".tooltip").css("opacity",0);
+//	});
+	$(".basic-steps .step").click(function(){
+		var open = $(this).siblings(".tooltip").hasClass("open");
+		$(this).closest(".basic-steps").find(".tooltip").removeClass("open");
+		if(open){
+			$(this).siblings(".tooltip").removeClass("open");
+		}else{
+			$(this).siblings(".tooltip").addClass("open");
+		}
+		return false;
+	});
 	/*设置当前选中的页*/
 	var $a = $("#left li a[href='order/index']");
 	setActiveLeft($a.parent("li"));
@@ -12,23 +27,14 @@ $(document).ready(function(){
 	});
 	$("#addStep").click(function(){
 		setAddStep();// 设置创建的表单
-		var $dialog = $stepModal.find('.modal-dialog');
-		var paddingtop = 0;
-		$stepModal.show();
-		paddingtop = ($stepModal.height() - $dialog.outerHeight()) / 2;
-		if (paddingtop < 30) {
-			paddingtop = 30;
-		}
-		$dialog.css("padding-top", paddingtop);
-		$stepModal.hide();
-		$stepModal.modal({keyboard:true});
+		Common.openModal($stepModal);
 		return false;
 	});
 	
 	// 添加步骤-- 结束
 	
 	// 删除步骤 -- 开始
-	$(".delete").click(function(){
+	$(".deleteStep").click(function(){
 		var id= $(this).attr("data-cid");
 		$.ajax({
             url: "order/deletestep/"+id,
@@ -52,7 +58,7 @@ $(document).ready(function(){
 	// 删除步骤 -- 结束
 	
 	// 编辑步骤 -- 开始
-	$(".edit").click(function(){
+	$(".editStep").click(function(){
 		var id= $(this).attr("data-cid");
 		$.ajax({
             url: "order/getstep/"+id,
@@ -62,7 +68,7 @@ $(document).ready(function(){
             	if(result.success!=false){
             		// 将数据填充到编辑表单中
             		setUpdateStep(result);// 设置创建的表单
-            		Common.openModal($quoteModal);
+            		Common.openModal($stepModal);
             	}
             })
             .fail(function(result) {
@@ -115,7 +121,6 @@ function setUpdateStep(result){
 	var $form = $(".stepform");
 	$form[0].reset();
 	Common.fillForm($form[0],result);
-	changeCompany(result.companyId);
 	$("#salesmanId").val(result.salesmanId);
 	$form.addClass("edit");
 	var $submitBtn = $form.find("[type='submit']");

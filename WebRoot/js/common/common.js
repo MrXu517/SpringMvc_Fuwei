@@ -635,13 +635,15 @@ Common.Tip = function(message, callback) {
 };
 Common.openModal = function($modal){//打开对话框并高度居中
 	var $dialog = $modal.find('.modal-dialog');
+	$dialog.css("padding-top", 0);
 	var paddingtop = 0;
 	$modal.show();
-	paddingtop = ($modal.height() - $dialog.outerHeight()) / 2;
-	if (paddingtop < 30) {
-		paddingtop = 30;
+	margintop = ($modal.height() - $dialog.outerHeight()) / 2;
+	if (margintop < 30) {
+		margintop = 30;
 	}
-	$dialog.css("padding-top", paddingtop);
+	//$dialog.css("padding-top", 0);
+	$dialog.css("margin-top", margintop);
 	$modal.hide();
 	$modal.modal({keyboard:true});
 }

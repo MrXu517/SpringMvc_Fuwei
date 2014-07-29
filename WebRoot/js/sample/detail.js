@@ -63,17 +63,7 @@ $(document).ready(function(){
 	});
 	$("#addQuoteBtn").click(function(){
 		setAddQuote();// 设置创建的表单
-		var $dialog = $quoteModal.find('.modal-dialog');
-		var paddingtop = 0;
-		$quoteModal.show();
-		paddingtop = ($quoteModal.height() - $dialog.outerHeight()) / 2;
-		if (paddingtop < 30) {
-			paddingtop = 30;
-		}
-		$dialog.css("padding-top", paddingtop);
-		$quoteModal.hide();
-		$quoteModal.modal({keyboard:true});
-		
+		Common.openModal($quoteModal);
 		return false;
 	});
 	
