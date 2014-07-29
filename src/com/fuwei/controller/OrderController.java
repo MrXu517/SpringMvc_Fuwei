@@ -471,7 +471,10 @@ public class OrderController extends BaseController {
 		
 		//删除时要做判断，若当前步骤已执行，则无法删除此步骤
 		OrderProduceStatus orderProduceStatus = orderProduceStatusService.get(stepId);
-		
+		Order order = orderService.get(orderProduceStatus.getOrderId());
+		if(order.getStepId()!=null && order.getStepId() > orderProduceStatus.getId() ){
+			throw new Exception("该步骤已执行，不能删除");
+		}
 		
 		//添加操作记录
 		

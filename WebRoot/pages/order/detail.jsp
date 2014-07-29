@@ -325,7 +325,7 @@
 										步骤名称
 									</label>
 									<div class="col-sm-8">
-										<input type="text" name="name" id="name" class="form-control">
+										<input type="text" name="name" id="name" class="form-control require">
 									</div>
 								</div>
 							</div>
