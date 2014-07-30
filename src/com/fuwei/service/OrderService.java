@@ -21,6 +21,7 @@ import com.fuwei.entity.QuoteOrder;
 import com.fuwei.entity.Sample;
 import com.fuwei.util.CreateNumberUtil;
 import com.fuwei.util.DateTool;
+import com.fuwei.constant.OrderStatusUtil;
 
 @Component
 public class OrderService extends BaseService {
@@ -141,14 +142,14 @@ public class OrderService extends BaseService {
 			throw e;
 		}
 	}
-
+	
 	// 编辑订单
 	@Transactional
 	public int update(Order order, OrderHandle handle) throws Exception {
 		try {
 			// 更新订单表
 			this.update(order, "id",
-					"created_user,status,state,created_at,orderNumber", true);
+					"created_user,status,state,created_at,orderNumber,stepId,setp_state", true);
 			// 删除原来订单的detail
 			orderDetailService.deleteBatch(order.getId());
 			// 再添加新的detail
@@ -181,6 +182,13 @@ public class OrderService extends BaseService {
 			throws Exception {
 		try {
 			int success = orderProduceStatusService.update(orderProduceStatus);
+			//修改当前订单的step_state描述
+			Order order = this.get(orderProduceStatus.getOrderId());
+			if(order.getStepId()!=null && order.getStepId() == orderProduceStatus.getId() && !order.getStep_state().equals(orderProduceStatus.getName())){
+				order.setStep_state(orderProduceStatus.getName());
+				this.update(order, "id",
+						"created_user,status,state,created_at,orderNumber,stepId", true);
+			}
 			// 添加操作记录
 			orderHandleService.add(handle);
 			return success;
@@ -200,4 +208,68 @@ public class OrderService extends BaseService {
 			throw e;
 		}
 	}
+	
+	//执行订单
+	public int exestep(int orderId,OrderHandle handle)
+			throws Exception {
+		try {
+			//获取当前步骤
+			Order order = this.get(orderId);
+			int status = order.getStatus();
+			//如果当前交易已完成，则不能再执行步骤
+			if(status == OrderStatus.COMPLETED.ordinal()){
+				throw new Exception("交易已完成，无法执行其他步骤");
+			}
+			if(status == OrderStatus.CANCEL.ordinal()){
+				throw new Exception("交易已取消，无法执行其他步骤");
+			}
+			Integer step = order.getStepId();
+			//若当前执行发货步骤，则修改订单的发货时间
+			if(status == OrderStatus.DELIVERING.ordinal()){
+				order.setDelivery_at(DateTool.now());
+			}
+			//获取下一步步骤,  若当前执行机织步骤，则不修改status,但修改step,执行后的状态为动态生产步骤
+			if(status == OrderStatus.MACHINING.ordinal()){//若当前步骤是机织，则要获取动态生产步骤
+				//获取下一步动态生产步骤
+				OrderProduceStatus nextStep = orderProduceStatusService.getNext(order.getId(), step);
+				if(nextStep == null){//如果获取不到下一个步骤，则跳到下一个status
+					OrderStatus orderstatus = OrderStatusUtil.getNext(status);
+					order.setStepId(null);
+					order.setStep_state(null);
+					order.setStatus(orderstatus.ordinal());
+					order.setState(orderstatus.getName());
+				}else{
+					order.setStepId(nextStep.getId());
+					order.setStep_state(nextStep.getName());
+				}
+			}
+			else{//若不是机织，则status 直接+1
+				OrderStatus orderstatus = OrderStatusUtil.getNext(status);
+				order.setStepId(null);
+				order.setStep_state(null);
+				order.setStatus(orderstatus.ordinal());
+				order.setState(orderstatus.getName());
+			}
+			
+			// 更新订单表
+			this.update(order, "id",
+					"created_user,created_at,orderNumber", false);
+			// 添加操作记录
+			handle.setOrderId(orderId);
+			if(order.getStepId()!=null){
+				handle.setState(order.getStep_state());
+				handle.setStatus(order.getStepId());
+			}else{
+				handle.setState(order.getState());
+				handle.setStatus(order.getStatus());
+			}
+			
+			orderHandleService.add(handle);
+			return 1;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	
 }

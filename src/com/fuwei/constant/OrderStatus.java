@@ -13,6 +13,8 @@ public enum OrderStatus {
 	YARNING{public String getName(){return "在备纱";}},
 	/*在机织*/
 	MACHINING{public String getName(){return "在机织";}},
+	/*发货*/
+	DELIVERING{public String getName(){return "在发货";}},
 	/*已发货*/
 	DELIVERED{public String getName(){return "已发货";}},
     /* 交易已完成 */

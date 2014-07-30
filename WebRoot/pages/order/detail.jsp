@@ -9,6 +9,7 @@
 <%@page import="com.fuwei.entity.Company"%>
 <%@page import="net.sf.json.JSONObject"%>
 <%@page import="com.fuwei.util.DateTool"%>
+<%@page import="com.fuwei.util.NumberUtil"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%
 	String path = request.getContextPath();
@@ -80,13 +81,10 @@
 										<label class="control-label">
 											订单状态：
 										</label>
-										<span><%=order.getState()%></span>
+										<span><%=order.getCNState()%></span>
 									</div>
-									<div class="pull-right">
-										<button id="addStep" type="button" class="btn btn-info">
-											添加步骤
-										</button>
-									</div>
+
+
 									<div class="pull-right">
 										<%
 											if (order.isEdit()) {
@@ -97,7 +95,17 @@
 											}
 										%>
 									</div>
-
+									<div class="pull-right">
+										<button id="addStep" type="button" class="btn btn-info">
+											添加步骤
+										</button>
+									</div>
+									<div class="pull-right">
+										<button orderId="<%=order.getId()%>" id="exeStep"
+											type="button" class="btn btn-danger">
+											执行当前步骤
+										</button>
+									</div>
 
 									<div class="clear"></div>
 
@@ -105,19 +113,37 @@
 								<%
 									if (order.getStatus() != OrderStatus.CANCEL.ordinal()) {
 								%>
-								<div class="">
+								<div class="step_widget">
+									<%
+										List<OrderStep> stepList = order.getStepList();
+											if (stepList == null) {
+												stepList = new ArrayList<OrderStep>();
+											}
+											List<List<OrderStep>> stepList10 = new ArrayList<List<OrderStep>>();
+											int size = stepList.size();
+											int listlist_length = NumberUtil.ceil( size/ 10.0);
+											
+											for (int k = 0; k < listlist_length; ++k) {
+												int begin = k * 10;
+												int end = k * 10 + 10;
+												if(begin >= size ){
+													break;
+												}
+												if(end >= size){
+													end = size;
+												}
+												stepList10.add(stepList.subList(begin,end ));
+											}
+											for (List<OrderStep> list : stepList10) {
+									%>
 									<div class="basic-steps">
 										<dl class="tb-desc-segments-list tb-clearfix">
 											<dt>
 												详情直达
 											</dt>
 											<%
-												List<OrderStep> stepList = order.getStepList();
-													if (stepList == null) {
-														stepList = new ArrayList<OrderStep>();
-													}
-													for (OrderStep step : stepList) {
-														if (step.getChecked()) {
+												for (OrderStep step : list) {
+															if (step.getChecked()) {
 											%>
 											<dd class="tb-desc-segment selected">
 												<%
@@ -136,10 +162,12 @@
 												<div class="tooltip top" role="tooltip">
 													<div class="tooltip-arrow"></div>
 													<div class="tooltip-inner">
-														<button type="button" class="editStep btn btn-success" data-cid="<%=step.getStepId() %>">
+														<button type="button" class="editStep btn btn-success"
+															data-cid="<%=step.getStepId()%>">
 															编辑
 														</button>
-														<button type="button" class="deleteStep btn btn-danger" data-cid="<%=step.getStepId() %>">
+														<button type="button" class="deleteStep btn btn-danger"
+															data-cid="<%=step.getStepId()%>">
 															删除
 														</button>
 													</div>
@@ -157,8 +185,12 @@
 											<%
 												}
 											%>
+											<div class="clear"></div>
 										</dl>
 									</div>
+									<%
+										}
+									%>
 								</div>
 								<%
 									}
@@ -283,7 +315,8 @@
 											<td><%=detail.getMaterial()%></td>
 											<td><%=detail.getWeight()%></td>
 											<td><%=detail.getSize()%></td>
-											<td><%=detail.getCharge_user()%></td>
+											<td><%=SystemCache.getUserName(detail
+										.getCharge_user())%></td>
 											<td class="price"><%=detail.getPrice()%></td>
 											<td><%=detail.getQuantity()%></td>
 											<td class="amount"><%=detail.getAmount()%></td>
@@ -325,7 +358,8 @@
 										步骤名称
 									</label>
 									<div class="col-sm-8">
-										<input type="text" name="name" id="name" class="form-control require">
+										<input type="text" name="name" id="name"
+											class="form-control require">
 									</div>
 								</div>
 							</div>

@@ -106,3 +106,15 @@
 .basic-steps .stepId{
 	border-right: 1px dashed #AC9F90;
 }
+.step_widget{
+	margin-bottom:30px;
+}
+.step_widget .basic-steps dl{
+	margin-bottom:0;
+}
+.step_widget .basic-steps:first-child dl dt{
+	background-image: url("../images/T1sOc7Xa4XXXcw5nfN-40-200.png"); */
+}
+.step_widget .basic-steps dl dt{
+	background-image: none;
+}

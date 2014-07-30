@@ -74,4 +74,22 @@ public class OrderProduceStatusService  extends BaseService {
 			throw e;
 		}
 	}
+	
+	//获取下一步生产步骤
+	public OrderProduceStatus getNext(int orderId,Integer stepId)throws Exception {
+		try {
+			String sql = "";
+			OrderProduceStatus OrderProduceStatus = null;
+			if(stepId == null){//若第一次进入动态生产步骤
+				OrderProduceStatus = dao.queryForBean(
+						 "select * from tb_order_produce_status where orderId=? order by id asc limit 1", OrderProduceStatus.class, orderId);
+			}else{
+				 OrderProduceStatus = dao.queryForBean(
+							"select * from tb_order_produce_status where orderId=? AND id > ? order by id asc limit 1", OrderProduceStatus.class, orderId,stepId);
+			}
+			return OrderProduceStatus;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 }

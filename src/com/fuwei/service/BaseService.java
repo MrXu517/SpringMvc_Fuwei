@@ -416,7 +416,7 @@ public class BaseService {
 	 */
 	@SuppressWarnings("rawtypes")
 	protected int update(Object requiredType, String primaryKey, String notField,Boolean nullget) {
-		Map map = getTypeMap(requiredType, primaryKey, notField,true);
+		Map map = getTypeMap(requiredType, primaryKey, notField,nullget);
 		String sql = "update " + map.get("tableName") + " set " + map.get("names") + " where  " + primaryKey + "=?";
 		Object[] obj = (Object[]) map.get("values");
 		return this.dao.update(sql, obj);

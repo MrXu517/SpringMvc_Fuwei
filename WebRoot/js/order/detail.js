@@ -80,6 +80,30 @@ $(document).ready(function(){
 		return false;
 	});
 	// 编辑步骤 -- 结束
+	
+	//执行当前步骤 -- 开始
+	$("#exeStep").click(function(){
+		var orderId = $(this).attr("orderId");
+		$.ajax({
+            url: "order/exestep/"+orderId,
+            type: 'POST'
+        })
+            .done(function(result) {
+            	if(result.success!=false){
+            		Common.Tip("执行步骤成功",function(){
+            			location.reload();
+            		});
+            	}
+            })
+            .fail(function(result) {
+            	Common.Error("执行步骤失败：" + result.responseText);
+            })
+            .always(function() {
+            	
+            });
+		return false;
+	});
+	//执行当前步骤 -- 结束
 });
 
 function setAddStep(){

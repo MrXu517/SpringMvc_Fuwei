@@ -8,4 +8,8 @@ public class NumberUtil {
 		}
 		return (double) (Math.round(value*100)/100.0);
 	}
+	
+	public static int ceil(double value){
+		return (int)Math.ceil(value);
+	}
 }

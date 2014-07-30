@@ -31,7 +31,8 @@ public class Order implements Serializable{
 	
 	//动态的生产步骤
 	private Integer stepId;
-	private String setp_state;
+	
+	private String step_state;
 	@Temporary
 	private List<OrderStep> stepList ;
 	//动态的生产步骤
@@ -51,14 +52,15 @@ public class Order implements Serializable{
 	public void setStepId(Integer stepId) {
 		this.stepId = stepId;
 	}
-	public String getSetp_state() {
-		return setp_state;
-	}
-	public void setSetp_state(String setp_state) {
-		this.setp_state = setp_state;
-	}
+	
 
 	
+	public String getStep_state() {
+		return step_state;
+	}
+	public void setStep_state(String step_state) {
+		this.step_state = step_state;
+	}
 	public int getId() {
 		return id;
 	}
@@ -159,6 +161,13 @@ public class Order implements Serializable{
 	//是否可编辑
 	public Boolean isEdit(){
 		return this.status < OrderStatus.COLORING.ordinal();
+	}
+	public String getCNState(){
+		if(this.stepId == null){
+			return this.state;
+		}else{
+			return this.step_state;
+		}
 	}
 	
 }

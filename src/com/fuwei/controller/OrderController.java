@@ -145,8 +145,8 @@ public class OrderController extends BaseController {
 			order.setCreated_at(DateTool.now());//设置订单创建时间
 			order.setUpdated_at(DateTool.now());//设置订单更新时间
 			order.setCreated_user(user.getId());//设置订单创建人
-			order.setStatus(OrderStatus.CREATE.ordinal());//设置订单状态
-			order.setState(OrderStatus.CREATE.getName());//设置订单状态描述
+			order.setStatus(OrderStatus.CONFIRMSAMPLE.ordinal());//设置订单状态,订单创建时，默认打确认样状态
+			order.setState(OrderStatus.CONFIRMSAMPLE.getName());//设置订单状态描述
 			
 			if(order.getSalesmanId() == null){
 				throw new Exception("业务员不能为空");
@@ -252,10 +252,13 @@ public class OrderController extends BaseController {
 		List<OrderDetail> detaillist = orderDetailService.getListByOrder(id);//获取订单详情
 		order.setDetaillist(detaillist);//设置订单详情
 		//获取订单步骤列表
-		List<OrderStep> stepList = new ArrayList<OrderStep>();
+		
 		List<OrderProduceStatus> db_steplist = orderProduceStatusService.getListByOrder(order.getId());
 		OrderStatus[] statuses = OrderStatus.values();
+		
+		List<OrderStep> stepList = new ArrayList<OrderStep>();
 		for(OrderStatus status : statuses){
+			
 			if(status.ordinal() >= OrderStatus.CANCEL.ordinal()){
 				break;
 			}
@@ -285,9 +288,7 @@ public class OrderController extends BaseController {
 					stepList.add(temp2);
 				}
 			}
-			
 		}
-		
 		order.setStepList(stepList);//设置订单步骤
 		
 		request.setAttribute("order", order);
@@ -382,6 +383,9 @@ public class OrderController extends BaseController {
 		try {
 			Integer orderId = orderProduceStatus.getOrderId();
 			Order order = orderService.get(orderId);
+			if(order.getStatus() == OrderStatus.DELIVERING.ordinal()){
+				throw new Exception("订单已完成生产，不能添加步骤");
+			}
 			if(order.getStatus() == OrderStatus.DELIVERED.ordinal()){
 				throw new Exception("订单已发货，不能添加步骤");
 			}
@@ -472,6 +476,9 @@ public class OrderController extends BaseController {
 		//删除时要做判断，若当前步骤已执行，则无法删除此步骤
 		OrderProduceStatus orderProduceStatus = orderProduceStatusService.get(stepId);
 		Order order = orderService.get(orderProduceStatus.getOrderId());
+		if(order.getStatus() > OrderStatus.MACHINING.ordinal()){
+			throw new Exception("该步骤已执行，不能删除");
+		}
 		if(order.getStepId()!=null && order.getStepId() > orderProduceStatus.getId() ){
 			throw new Exception("该步骤已执行，不能删除");
 		}
@@ -506,5 +513,32 @@ public class OrderController extends BaseController {
 		OrderProduceStatus OrderProduceStatus = orderProduceStatusService.get(id);
 		return OrderProduceStatus;
 		
+	}
+	
+	//执行订单步骤
+	@RequestMapping(value = "/exestep/{orderId}", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> exeStep(@PathVariable Integer orderId,HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		if(orderId == null){
+			throw new Exception("缺少订单ID");
+		}
+		String lcode = "order/exestep";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有执行订单的权限", null);
+		}
+		
+		//添加操作记录
+		OrderHandle handle = new OrderHandle();
+		handle.setCreated_at(DateTool.now());
+		handle.setCreated_user(user.getId());
+		handle.setName("执行订单步骤");
+		//修改订单信息
+		orderService.exestep(orderId,handle);
+		
+		return this.returnSuccess();		
 	}
 }
