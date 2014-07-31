@@ -377,7 +377,7 @@
 													}
 												%>
 												<%
-													if (has_order_edit) {
+													if (has_order_edit && order.isEdit()) {
 												%>
 												|
 												<a href="order/put/<%=order.getId()%>">编辑</a>
