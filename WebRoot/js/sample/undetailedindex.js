@@ -43,7 +43,7 @@ $(document).ready(function(){
 	$(".calcuteDetail").click(function(){
 		var sampleId = $(this).closest("tr").attr("sampleid");
 		$(".priceform #id").val(sampleId);
-		Common.openModal($('#priceDialog'));
+		Common.openModal($('#priceDialog .modal'));
 		return false;
 	});
 	//核价按钮 -- 开始
@@ -64,7 +64,7 @@ $(document).ready(function(){
 		
 	});
 	$("#calculateBtn").click(function(){
-		Common.openModal($('#calculateDialog'));
+		Common.openModal($('#calculateDialog .modal'));
 		return false;
 	});
 	//报价计算器按钮 -- 结束

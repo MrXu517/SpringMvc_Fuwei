@@ -118,3 +118,10 @@
 .step_widget .basic-steps dl dt{
 	background-image: none;
 }
+.deliveryDiv{
+	font-size:18px;
+	font-weight: bold;
+}
+.deliveryDiv .control-label{
+	padding-left:8px;
+}

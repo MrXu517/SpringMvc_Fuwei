@@ -1,10 +1,12 @@
 package com.fuwei.entity;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
 import com.fuwei.constant.OrderStatus;
+import com.fuwei.util.DateTool;
 
 import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
@@ -162,11 +164,26 @@ public class Order implements Serializable{
 	public Boolean isEdit(){
 		return this.status < OrderStatus.COLORING.ordinal();
 	}
+	//获取当前状态描述
 	public String getCNState(){
 		if(this.stepId == null){
 			return this.state;
 		}else{
 			return this.step_state;
+		}
+	}
+	//获取发货时间
+	public String getDevelivery(){
+		if(this.delivery_at == null){
+			return "未发货";
+		}else{
+			try {
+				return DateTool.formateDate(this.delivery_at);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return "";
+			}
 		}
 	}
 	

@@ -84,8 +84,7 @@
 										<span><%=order.getCNState()%></span>
 									</div>
 
-
-									<div class="pull-right">
+									<div class="pull-right" style="margin-right:0;">
 										<%
 											if (order.isEdit()) {
 										%>
@@ -196,6 +195,13 @@
 									}
 								%>
 								<div class="clear"></div>
+								<div class="col-md-12 deliveryDiv">
+										<label class="control-label">
+											发货时间：
+										</label>
+										<span><%=order.getDevelivery()%></span>
+									</div>
+								<div class="clear"></div>
 								<div class="col-md-6 detailTb">
 									<table class="table table-responsive">
 										<tbody>
@@ -223,7 +229,7 @@
 												<td>
 													备注
 												</td>
-												<td><%=order.getMemo()%></td>
+												<td><%= order.getMemo() == null?"":order.getMemo()%></td>
 											</tr>
 										</tbody>
 									</table>
