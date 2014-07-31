@@ -301,6 +301,7 @@
 											<th>
 												金额
 											</th>
+											<th>备注</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -326,6 +327,7 @@
 											<td class="price"><%=detail.getPrice()%></td>
 											<td><%=detail.getQuantity()%></td>
 											<td class="amount"><%=detail.getAmount()%></td>
+											<td class="memo"><%=detail.getMemo()==null?"":detail.getMemo() %></td>
 										</tr>
 										<%
 											}

@@ -6,6 +6,7 @@
 <%@page import="com.fuwei.entity.User"%>
 <%@page import="com.fuwei.commons.Pager"%>
 <%@page import="com.fuwei.util.DateTool"%>
+<%@page import="com.fuwei.constant.OrderStatus"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="net.sf.json.JSONObject"%>
 <%
@@ -49,6 +50,13 @@
 	if (companyId == null) {
 		companyId = -1;
 	}
+	//订单状态status
+	Integer status = (Integer) request.getAttribute("status");
+	String status_str = "";
+	if (status != null) {
+		status_str = String.valueOf(status);
+	}
+	//订单状态status
 	HashMap<String, List<Salesman>> companySalesmanMap = SystemCache
 			.getCompanySalesmanMap_ID();
 	JSONObject jObject = new JSONObject();
@@ -83,7 +91,7 @@
 		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
 		<script src="js/order/index.js" type="text/javascript"></script>
-		<link href="css/sample/sample.css" rel="stylesheet" type="text/css" />
+		<link href="css/order/index.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
 		<%@ include file="../common/head.jsp"%>
@@ -112,6 +120,32 @@
 										role="form">
 										<input type="hidden" name="page" id="page"
 											value="<%=pager.getPageNo()%>" />
+										<div class="form-group">
+											<label for="status" class="col-sm-3 control-label">
+												订单状态
+											</label>
+											<div class="col-sm-9">
+												<select class="form-control" name="status"
+													id="status">
+													<option value="">
+														所有
+													</option>
+													<%
+														for (OrderStatus orderStatus : OrderStatus.values()) {
+															if (status!=null && orderStatus.ordinal() == status) {
+													%>
+													<option value="<%=orderStatus.ordinal()%>" selected><%=orderStatus.getName()%></option>
+													<%
+														} else {
+													%>
+													<option value="<%=orderStatus.ordinal()%>"><%=orderStatus.getName()%></option>
+													<%
+														}
+														}
+													%>
+												</select>	
+											</div>
+										</div>
 										<div class="form-group salesgroup">
 											<label for="companyId" class="col-sm-3 control-label">
 												公司
@@ -187,7 +221,7 @@
 																		<ul class="pagination">
 										<li>
 											<a
-												href="order/index?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
+												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
 										</li>
 
 										<%
@@ -195,7 +229,7 @@
 									%>
 										<li class="">
 											<a
-												href="order/index?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
+												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -210,7 +244,7 @@
 
 										<li class="active">
 											<a
-												href="order/index?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%><span
+												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%><span
 												class="sr-only"></span> </a>
 										</li>
 										<li>
@@ -220,7 +254,7 @@
 										
 										<li class="">
 											<a
-												href="order/index?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
+												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -236,11 +270,13 @@
 										</li>
 										<li>
 											<a
-												href="order/index?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
+												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
 									<form class="form-inline pageform form-horizontal" role="form"
 										action="order/index">
+										<input type="hidden" name="status" id="status"
+											value="<%=status_str %>" />
 										<input type="hidden" name="salesmanId" id="salesmanId"
 											value="<%=salesman_str %>" />
 										<input type="hidden" name="companyId" id="companyId"
@@ -266,6 +302,11 @@
 									</form>
 
 								</div>
+								<div class="pull-left">
+										<button id="exportProcessBtn" type="button" class="btn btn-success">
+											导出生产进度单
+										</button>
+									</div>
 								<table class="table table-responsive">
 									<thead>
 										<tr>

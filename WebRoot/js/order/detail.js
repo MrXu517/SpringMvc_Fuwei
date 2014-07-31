@@ -83,6 +83,9 @@ $(document).ready(function(){
 	
 	//执行当前步骤 -- 开始
 	$("#exeStep").click(function(){
+		if(!confirm("是否确定执行？")){
+			return false;
+		}
 		var orderId = $(this).attr("orderId");
 		$.ajax({
             url: "order/exestep/"+orderId,

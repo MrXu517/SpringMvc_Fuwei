@@ -1,3 +1,70 @@
+.pageform{
+	display:inline-block;
+	width:150px;
+	vertical-align:top;
+	margin: 0 15px;
+}
+.searchform {
+	display:inline-block;
+	width:auto;
+	vertical-align:top;
+	padding-right: 20px;
+}
+.pagination {
+	margin: 0 !important;
+}
+#start_time,#end_time{
+	
+}
+.searchform label{
+	padding-right:0;
+}
+.sampleImg,.sampleData,.sampleDetail{
+	width:400px;
+	float:left;
+}
+.sampleData,.sampleDetail{
+	margin-left:20px;
+}
+.sampleDetail #detail {
+	height:300px;
+}
+.sampleData table tbody tr td{
+	border-top:none;
+	border-bottom:1px solid #ddd;
+}
+.samplehead{
+	font-size: 20px;
+	font-weight: bold;
+	padding-bottom: 20px;
+}
+.samplehead>div{
+	margin-right:40px;
+}
+#addQuoteBtn{
+	margin-left:40px;
+}
+.sampleDetail legend{
+	margin-bottom:3px;
+}
+.pagination li.active>a{
+	cursor: pointer !important;
+}
+.timegroup{
+	width:400px;
+}
+.timegroup>label{
+	width:80px;
+}
+.timegroup>div.input-group{
+	width:320px;
+}
+.salesgroup>*{
+	width:auto;
+}
+.salesgroup>div{
+	width:200px;
+}
 .quantity_value {
 	width: 100px;
 }
@@ -124,4 +191,22 @@
 }
 .deliveryDiv .control-label{
 	padding-left:8px;
+}
+.searchform .control-label{
+	width:auto;
+}
+.searchform .control-label+div{
+	width:auto;
+}
+.timegroup .control-label+div{
+	width:320px;
+}
+.searchform #companyId{
+	width:150px;
+}
+.searchform #salesmanId{
+	width:100px;
+}
+.searchform #status{
+	width:120px;
 }

@@ -191,7 +191,7 @@ public class OrderController extends BaseController {
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView index(Integer page, String start_time, String end_time,Integer companyId,Integer salesmanId,
-			String sortJSON, HttpSession session, HttpServletRequest request)
+			Integer status,String sortJSON, HttpSession session, HttpServletRequest request)
 			throws Exception {
 		
 		String lcode = "order/index";
@@ -218,7 +218,7 @@ public class OrderController extends BaseController {
 		sort.setDirection("desc");
 		sort.setProperty("created_at");
 		sortList.add(sort);
-		pager = orderService.getList(pager, start_time_d, end_time_d,companyId,salesmanId,
+		pager = orderService.getList(pager, start_time_d, end_time_d,companyId,salesmanId,status,
 				sortList);
 		if (pager != null & pager.getResult() != null) {
 			List<Order> orderlist = (List<Order>) pager
@@ -232,6 +232,7 @@ public class OrderController extends BaseController {
 			companyId = SystemCache.getSalesman(salesmanId).getCompanyId();
 		}
 		request.setAttribute("companyId", companyId);
+		request.setAttribute("status", status);
 		request.setAttribute("pager", pager);
 		return new ModelAndView("order/index");
 	}

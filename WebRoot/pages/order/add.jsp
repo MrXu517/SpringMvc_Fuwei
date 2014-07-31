@@ -214,6 +214,18 @@
 										</div>
 										<div class="col-sm-1"></div>
 									</div>
+									<div class="form-group col-md-6">
+										<label for="memo" class="col-sm-3 control-label">
+											备注
+										</label>
+										<div class="col-sm-8">
+											<input type="text" name="memo"
+												id="memo" class="form-control"
+												value="<%=order.getMemo()==null?"":order.getMemo()==null%>" />
+
+										</div>
+										<div class="col-sm-1"></div>
+									</div>
 									<div class="clear"></div>
 									<table class="table table-responsive" id="detailTable">
 									<thead>
@@ -248,6 +260,9 @@
 											<th>
 												金额
 											</th>
+											<th>
+												备注
+											</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -275,6 +290,7 @@
 													value="<%=detail.getQuantity()%>" />
 											</td>
 											<td class="amount"><%=detail.getAmount()%></td>
+											<td class="memo"><input class="form-control memo_value" value="<%=detail.getMemo()==null?"":detail.getMemo() %>" /></td>
 										</tr>
 										<%
 											}

@@ -27,6 +27,8 @@ $(document).ready( function() {
 				var $tr = $trs.eq(i);
 				var trdata = $.parseJSON($tr.attr("data_detail"));
 				var quantity = $tr.find(".quantity_value").val();
+				var memo = $tr.find(".memo_value").val();
+				trdata.memo = memo;
 				trdata.quantity = quantity;
 				tabledata.push(trdata);
 			}
