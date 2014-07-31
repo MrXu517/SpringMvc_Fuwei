@@ -107,8 +107,80 @@ $(document).ready(function(){
 		return false;
 	});
 	//执行当前步骤 -- 结束
-});
+	
+	//创建生产单 -- 开始
+	var $notificationModal = $("#notificationModal");
+	$notificationModal.on('hidden.bs.modal', function (e) {// 核价对话框被隐藏之后触发
+		$(".notificationform")[0].reset();
+	});
+	$("#addNotificationBtn").click(function(){
+		setAddNotification();// 设置创建的表单
+		Common.openModal($notificationModal);
+		return false;
+	});
+	//创建生产单 -- 结束
+	
+	//打印生产通知单 -- 开始
+	$("#printNotificationBtn").click(function(){
+		var orderId = $(this).attr("orderId");
+		$.ajax( {
+			url :"order/printnotification/"+orderId,
+			type :'GET',
+			success : function(result) {
+				if (result.success) {
+					Common.Tip("开始打印...", function() {
+					});
+				}
+			},
+			error : function(result) {
+				Common.Error("打印生产通知单失败：" + result.responseText);
+			}
 
+		});
+		return false;
+	});
+	//打印生产通知单 -- 结束
+});
+function setAddNotification(){
+	var $form = $(".notificationform");
+	$form[0].reset();
+	$form.removeClass("edit");
+	var $submitBtn = $form.find("[type='submit']");
+	$submitBtn.text("确定");
+	$("#notificationModal .modal-title").text("创建生产单");
+	$form.unbind("submit");
+	$form.submit(function(){
+		if (!Common.checkform(this)) {
+			return false;
+		}
+		$submitBtn.button('loading');
+		var formdata = $(this).serializeJson();
+		delete formdata.id;
+		$.ajax({
+	        url: "order/addnotification",
+	        type: 'POST',
+	        data: $.param(formdata)
+	    })
+	        .done(function(result) {
+	        	if(result.success){
+	        		Common.Tip("创建生产单成功",function(){
+	        			location.reload();
+	        		});
+	        	}
+	        })
+	        .fail(function(result) {
+	        	Common.Error("创建生产单失败：" + result.responseText);
+	        })
+	        .always(function() {
+	        	$submitBtn.button('reset');
+	        });
+		return false;
+	});
+}
+function addNotification(){
+	setAddNotification();// 设置创建的表单
+	Common.openModal($notificationModal);
+}
 function setAddStep(){
 	var $form = $(".stepform");
 	$form[0].reset();

@@ -17,6 +17,7 @@ import com.fuwei.entity.Order;
 import com.fuwei.entity.OrderDetail;
 import com.fuwei.entity.OrderHandle;
 import com.fuwei.entity.OrderProduceStatus;
+import com.fuwei.entity.ProductionNotification;
 import com.fuwei.entity.QuoteOrder;
 import com.fuwei.entity.Sample;
 import com.fuwei.util.CreateNumberUtil;
@@ -36,7 +37,8 @@ public class OrderService extends BaseService {
 	OrderHandleService orderHandleService;
 	@Autowired
 	OrderProduceStatusService orderProduceStatusService;
-
+	@Autowired
+	ProductionNotificationService productionNotificationService;
 	// 获取订单列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,
 			Integer companyId, Integer salesmanId,Integer status, List<Sort> sortlist)
@@ -214,6 +216,7 @@ public class OrderService extends BaseService {
 	}
 	
 	//执行订单
+	@Transactional
 	public int exestep(int orderId,OrderHandle handle)
 			throws Exception {
 		try {
@@ -228,6 +231,10 @@ public class OrderService extends BaseService {
 				throw new Exception("交易已取消，无法执行其他步骤");
 			}
 			Integer step = order.getStepId();
+			//若当前已经开始生产，但并没生成生产单，说明创建生产单过程中出错，则不能再继续执行下面的步骤
+			if(status > OrderStatus.BEFOREPRODUCESAMPLE.ordinal() && order.getStart_produce() == null){
+				throw new Exception("订单已进入生产阶段，但没生成生产单，请先生成生产单后，再继续执行");
+			}
 			//若当前执行发货步骤，则修改订单的发货时间
 			if(status == OrderStatus.DELIVERING.ordinal()){
 				order.setDelivery_at(DateTool.now());
@@ -255,6 +262,7 @@ public class OrderService extends BaseService {
 				order.setState(orderstatus.getName());
 			}
 			
+			
 			// 更新订单表
 			this.update(order, "id",
 					"created_user,created_at,orderNumber", false);
@@ -271,6 +279,26 @@ public class OrderService extends BaseService {
 			orderHandleService.add(handle);
 			return 1;
 		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	@Transactional
+	public int addNotification(ProductionNotification ProductionNotification , OrderHandle handle) throws Exception{
+		try{
+			productionNotificationService.add(ProductionNotification);
+			//修改Order的创建生产单的时间
+			Order order = this.get(ProductionNotification.getOrderId());
+			order.setStart_produce(DateTool.now());
+			// 更新订单表
+			this.update(order, "id",
+					"created_user,created_at,orderNumber", false);
+			//添加操作记录
+			handle.setState(order.getState());
+			handle.setStatus(order.getStatus());
+			orderHandleService.add(handle);
+			return 1;
+		}catch(Exception e){
 			throw e;
 		}
 	}

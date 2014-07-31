@@ -28,25 +28,30 @@ import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
+import com.fuwei.constant.Constants;
 import com.fuwei.constant.OrderStatus;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.OrderDetail;
 import com.fuwei.entity.OrderHandle;
 import com.fuwei.entity.OrderProduceStatus;
 import com.fuwei.entity.OrderStep;
+import com.fuwei.entity.ProductionNotification;
 import com.fuwei.entity.QuoteOrder;
 import com.fuwei.entity.QuoteOrderDetail;
 import com.fuwei.entity.QuotePrice;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
+import com.fuwei.print.PrintExcel;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.OrderDetailService;
 import com.fuwei.service.OrderHandleService;
 import com.fuwei.service.OrderProduceStatusService;
 import com.fuwei.service.OrderService;
+import com.fuwei.service.ProductionNotificationService;
 import com.fuwei.service.QuoteOrderDetailService;
 import com.fuwei.service.QuoteOrderService;
 import com.fuwei.util.DateTool;
+import com.fuwei.util.ExportExcel;
 import com.fuwei.util.HanyuPinyinUtil;
 import com.fuwei.util.NumberUtil;
 import com.fuwei.util.SerializeTool;
@@ -68,6 +73,8 @@ public class OrderController extends BaseController {
 	QuoteOrderDetailService quoteOrderDetailService;
 	@Autowired
 	OrderProduceStatusService orderProduceStatusService;
+	@Autowired
+	ProductionNotificationService productionNotificationService;
 	
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	@ResponseBody
@@ -542,4 +549,63 @@ public class OrderController extends BaseController {
 		
 		return this.returnSuccess();		
 	}
+	
+	//创建生产单
+	@RequestMapping(value = "/addnotification", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> addNotification(ProductionNotification productionNotification, HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		Integer orderId = productionNotification.getOrderId();
+		if(orderId == null){
+			throw new Exception("缺少订单ID");
+		}
+		String lcode = "order/exestep";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有创建生产单的权限", null);
+		}
+		
+		//添加操作记录
+		OrderHandle handle = new OrderHandle();
+		handle.setOrderId(orderId);
+		handle.setCreated_at(DateTool.now());
+		
+		handle.setCreated_user(user.getId());
+		handle.setName("生成生产单");
+		//创建生产单
+		productionNotification.setCreated_at(DateTool.now());
+		productionNotification.setUpdated_at(DateTool.now());
+		productionNotification.setCreated_user(user.getId());
+		orderService.addNotification(productionNotification,handle);
+		
+		return this.returnSuccess();		
+	}
+	
+	//打印生产通知单
+	//打印样品价格详情
+	@RequestMapping(value="/printnotification/{orderId}",method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String,Object> printNotification(@PathVariable Integer orderId,HttpSession session,HttpServletRequest request) throws Exception{
+		String lcode = "order/printnotification";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有打印生产通知单的权限", null);
+		}
+		
+		ProductionNotification productionNotification = productionNotificationService.getByOrderId(orderId);
+		if(productionNotification == null){
+			throw new Exception("此订单还未生成生产通知单");
+		}
+		
+		String excelfile_name = Constants.UPLOADEXCEL_Order_temp + "生产通知单" + orderId + "_"
+		+ DateTool.formateDate(new Date(), "yyyyMMddHHmmss") + ".xls";
+		String uploadSite = Constants.UPLOADSite;
+
+//		ExportExcel.exportSampleDetailExcel(sample,quotePrice,uploadSite,excelfile_name,uploadSite );
+		PrintExcel.printExcel(uploadSite + excelfile_name, true);
+		return this.returnSuccess();
+	}
+	
 }

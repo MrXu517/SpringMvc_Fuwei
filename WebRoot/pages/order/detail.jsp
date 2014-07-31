@@ -6,6 +6,7 @@
 <%@page import="com.fuwei.entity.OrderDetail"%>
 <%@page import="com.fuwei.entity.Salesman"%>
 <%@page import="com.fuwei.constant.OrderStatus"%>
+<%@page import="com.fuwei.constant.OrderStatusUtil"%>
 <%@page import="com.fuwei.entity.Company"%>
 <%@page import="net.sf.json.JSONObject"%>
 <%@page import="com.fuwei.util.DateTool"%>
@@ -22,6 +23,14 @@
 	if (orderdetaillist == null) {
 		orderdetaillist = new ArrayList<OrderDetail>();
 	}
+	
+	String exeStr = "执行当前步骤";
+	Boolean to_start_produce = order.startProduce();//是否要执行的是开始生产
+	switch(OrderStatusUtil.get(order.getStatus())){
+		case DELIVERING : exeStr="发货";break;
+	}
+	
+	Boolean error_notification = order.getStatus() > OrderStatus.BEFOREPRODUCESAMPLE.ordinal() && order.getStart_produce() == null; //若已经进入生产阶段，但却没有生产单，则显示生成生产单按钮
 %>
 <!DOCTYPE html>
 <html>
@@ -102,10 +111,17 @@
 									<div class="pull-right">
 										<button orderId="<%=order.getId()%>" id="exeStep"
 											type="button" class="btn btn-danger">
-											执行当前步骤
+											<%=exeStr %>
 										</button>
 									</div>
-
+									<%if(error_notification){ %>
+									<div class="pull-right">
+										<button orderId="<%=order.getId()%>" id="addNotificationBtn"
+											type="button" class="btn btn-danger">
+											创建生产单
+										</button>
+									</div>
+									<%} %>
 									<div class="clear"></div>
 
 								</div>
@@ -196,10 +212,17 @@
 								%>
 								<div class="clear"></div>
 								<div class="col-md-12 deliveryDiv">
+										<div class="pull-left">
 										<label class="control-label">
 											发货时间：
 										</label>
-										<span><%=order.getDevelivery()%></span>
+										<span><%=order.getDevelivery()%></span></div>
+										<div class="pull-right">
+											<button orderId="<%=order.getId()%>" id="printNotificationBtn"
+											type="button" class="btn btn-info">
+											打印生产通知单
+										</button>
+										</div>	
 									</div>
 								<div class="clear"></div>
 								<div class="col-md-6 detailTb">
@@ -375,6 +398,54 @@
 								<button type="submit" class="btn btn-primary"
 									data-loading-text="正在保存...">
 									新建步骤
+								</button>
+								<button type="reset" class="btn btn-default"
+									data-dismiss="modal">
+									取消
+								</button>
+							</div>
+						</form>
+					</div>
+
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
+
+
+		<div class="modal fade" id="notificationModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+						</button>
+						<h4 class="modal-title">
+							创建生产单
+						</h4>
+					</div>
+					<div class="modal-body">
+						<form class="form-horizontal notificationform" role="form">
+							<input type="hidden" name="id" id="id" />
+							<input type="hidden" id="orderId" name="orderId"
+								value="<%=order.getId()%>" />
+							<div class="row">
+								<div class="form-group">
+									<label for="processfactory" class="col-sm-3 control-label">
+										加工工厂
+									</label>
+									<div class="col-sm-8">
+										<input type="text" name="processfactory" id="processfactory"
+											class="form-control require">
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="btn btn-primary"
+									data-loading-text="正在保存...">
+									确定
 								</button>
 								<button type="reset" class="btn btn-default"
 									data-dismiss="modal">

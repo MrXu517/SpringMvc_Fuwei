@@ -64,6 +64,7 @@ public class Constants {
 	public static final String UPLOADIMGPATH_Sample_SS = "resource.fuwei.com/images/sample/ss/";
 	public static final String UPLOADIMGPATH_Sample_S = "resource.fuwei.com/images/sample/s/";
 	
+	public static final String UPLOADEXCEL_Order_temp = "resource.fuwei.com/excel/order/temp/";
 	
 	public static final String LOGIN_URL = "/login.jsp";
 	
