@@ -31,7 +31,7 @@ public class Order implements Serializable{
 	private Integer salesmanId;//业务员ID
 	private Integer companyId;//公司ID
 	
-	private Date start_produce;
+
 	//动态的生产步骤
 	private Integer stepId;
 	
@@ -43,12 +43,7 @@ public class Order implements Serializable{
 	@Temporary
 	private List<OrderDetail> detaillist ;
 	
-	public Date getStart_produce() {
-		return start_produce;
-	}
-	public void setStart_produce(Date start_produce) {
-		this.start_produce = start_produce;
-	}
+	
 	public List<OrderStep> getStepList() {
 		return stepList;
 	}
@@ -202,9 +197,5 @@ public class Order implements Serializable{
 		return false;
 	}
 	
-	//是否已生成生产单
-	public Boolean hasNotification(){
-		return this.start_produce != null;
-	}
 	
 }

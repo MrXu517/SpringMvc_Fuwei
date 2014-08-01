@@ -1,5 +1,7 @@
 package com.fuwei.service;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,13 +18,13 @@ public class ProductionNotificationService extends BaseService{
 	@Autowired
 	JdbcTemplate jdbc;
 	
-	// 根据OrderId获取生产单
-	public ProductionNotification getByOrderId(int orderId) throws Exception {
+	// 根据OrderDetailId获取生产单列表
+	public List<ProductionNotification> getByOrderDetailId(int orderDetailId) throws Exception {
 		try {
-			ProductionNotification ProductionNotification = dao.queryForBean(
-					"select * from tb_production_notification where orderId = ? limit 1", ProductionNotification.class,
-					orderId);
-			return ProductionNotification;
+			List<ProductionNotification> productionNotificationlist = dao.queryForBeanList(
+					"select * from tb_production_notification where orderDetailId = ?", ProductionNotification.class,
+					orderDetailId);
+			return productionNotificationlist;
 		} catch (Exception e) {
 			throw e;
 		}
@@ -54,8 +56,8 @@ public class ProductionNotificationService extends BaseService{
 	@Transactional
 	public int add(ProductionNotification ProductionNotification) throws Exception {
 		try{
-			if(ProductionNotification.getOrderId() == null){
-				throw new Exception("创建生产单时，订单ID不能为空");
+			if(ProductionNotification.getOrderDetailId() == null){
+				throw new Exception("创建生产单时，订单详情ID不能为空");
 			}
 			Integer ProductionNotificationId = this.insert(ProductionNotification);
 			String notificationNumber = CreateNumberUtil.createProductNotificationNumber(ProductionNotificationId);

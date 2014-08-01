@@ -113,15 +113,15 @@ $(document).ready(function(){
 	$notificationModal.on('hidden.bs.modal', function (e) {// 核价对话框被隐藏之后触发
 		$(".notificationform")[0].reset();
 	});
-	$("#addNotificationBtn").click(function(){
-		setAddNotification();// 设置创建的表单
-		Common.openModal($notificationModal);
-		return false;
-	});
+//	$(".addNotificationBtn").click(function(){
+//		setAddNotification();// 设置创建的表单
+//		Common.openModal($notificationModal);
+//		return false;
+//	});
 	//创建生产单 -- 结束
 	
 	//打印生产通知单 -- 开始
-	$("#printNotificationBtn").click(function(){
+	$(".printNotificationBtn").click(function(){
 		var orderId = $(this).attr("orderId");
 		$.ajax( {
 			url :"order/printnotification/"+orderId,

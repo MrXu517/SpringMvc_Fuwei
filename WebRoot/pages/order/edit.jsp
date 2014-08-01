@@ -223,7 +223,7 @@
 										<div class="col-sm-8">
 											<input type="text" name="memo"
 												id="memo" class="form-control"
-												value="<%=order.getMemo()%>" />
+												value="<%=order.getMemo() == null ? "" : order.getMemo()%>" />
 
 										</div>
 										<div class="col-sm-1"></div>
@@ -271,26 +271,30 @@
 										%>
 										<tr data_detail='<%=SerializeTool.serialize(detail)%>'>
 
-											<td
-												style="max-width: 120px; height: 120px; max-height: 120px;">
+											<td 
+												style="max-width: 120px; height: 120px; max-height: 120px;width:130px;">
 												<a target="_blank" class="cellimg"
 													href="/<%=detail.getImg()%>"><img
 														style="max-width: 120px; height: 120px; max-height: 120px;"
 														src="/<%=detail.getImg_ss()%>"> </a>
 											</td>
-											<td><%=detail.getName()%></td>
-											<td><%=detail.getProductNumber()%></td>
-											<td><%=detail.getMaterial()%></td>
-											<td><%=detail.getWeight()%></td>
-											<td><%=detail.getSize()%></td>
-											<td><%=detail.getCharge_user()%></td>
-											<td class="price"><%=detail.getPrice()%></td>
-											<td>
+											<td width="120px"><%=detail.getName()%></td>
+											<td width="80px"><%=detail.getProductNumber()%></td>
+											<td width="100px" class="material"><input class="form-control material_value require"
+													value="<%=detail.getMaterial()%>" /></td>
+											<td width="80px" class="weight"><input class="form-control weight_value double require"
+													value="<%=detail.getWeight()%>" /></td>
+											<td width="70px" class="size"><input class="form-control size_value require"
+													value="<%=detail.getSize()%>" /></td>
+											<td width="70px"><%=SystemCache.getUserName(detail.getCharge_user())%></td>
+											<td width="70px" class="price"><input class="form-control price_value double require"
+													value="<%=detail.getPrice()%>" /></td>
+											<td width="100px">
 												<input class="form-control quantity_value positive_int require"
 													value="<%=detail.getQuantity()%>" />
 											</td>
-											<td class="amount"><%=detail.getAmount()%></td>
-											<td class="memo"><input class="form-control memo_value" value="<%=detail.getMemo()==null?"":detail.getMemo() %>" /></td>
+											<td width="60px" class="amount"><%=detail.getAmount()%></td>
+											<td width="120px" class="memo"><textarea class="form-control memo_value"><%=detail.getMemo()==null?"":detail.getMemo() %></textarea></td>
 										</tr>
 										<%
 											}

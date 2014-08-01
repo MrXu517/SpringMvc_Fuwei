@@ -23,14 +23,16 @@
 	if (orderdetaillist == null) {
 		orderdetaillist = new ArrayList<OrderDetail>();
 	}
-	
+
 	String exeStr = "执行当前步骤";
 	Boolean to_start_produce = order.startProduce();//是否要执行的是开始生产
-	switch(OrderStatusUtil.get(order.getStatus())){
-		case DELIVERING : exeStr="发货";break;
+	switch (OrderStatusUtil.get(order.getStatus())) {
+	case DELIVERING:
+		exeStr = "发货";
+		break;
 	}
-	
-	Boolean error_notification = order.getStatus() > OrderStatus.BEFOREPRODUCESAMPLE.ordinal() && order.getStart_produce() == null; //若已经进入生产阶段，但却没有生产单，则显示生成生产单按钮
+
+	//Boolean error_notification = order.getStatus() > OrderStatus.BEFOREPRODUCESAMPLE.ordinal() && order.getStart_produce() == null; //若已经进入生产阶段，但却没有生产单，则显示生成生产单按钮
 %>
 <!DOCTYPE html>
 <html>
@@ -93,7 +95,7 @@
 										<span><%=order.getCNState()%></span>
 									</div>
 
-									<div class="pull-right" style="margin-right:0;">
+									<div class="pull-right" style="margin-right: 0;">
 										<%
 											if (order.isEdit()) {
 										%>
@@ -111,17 +113,10 @@
 									<div class="pull-right">
 										<button orderId="<%=order.getId()%>" id="exeStep"
 											type="button" class="btn btn-danger">
-											<%=exeStr %>
+											<%=exeStr%>
 										</button>
 									</div>
-									<%if(error_notification){ %>
-									<div class="pull-right">
-										<button orderId="<%=order.getId()%>" id="addNotificationBtn"
-											type="button" class="btn btn-danger">
-											创建生产单
-										</button>
-									</div>
-									<%} %>
+
 									<div class="clear"></div>
 
 								</div>
@@ -136,18 +131,18 @@
 											}
 											List<List<OrderStep>> stepList10 = new ArrayList<List<OrderStep>>();
 											int size = stepList.size();
-											int listlist_length = NumberUtil.ceil( size/ 10.0);
-											
+											int listlist_length = NumberUtil.ceil(size / 10.0);
+
 											for (int k = 0; k < listlist_length; ++k) {
 												int begin = k * 10;
 												int end = k * 10 + 10;
-												if(begin >= size ){
+												if (begin >= size) {
 													break;
 												}
-												if(end >= size){
+												if (end >= size) {
 													end = size;
 												}
-												stepList10.add(stepList.subList(begin,end ));
+												stepList10.add(stepList.subList(begin, end));
 											}
 											for (List<OrderStep> list : stepList10) {
 									%>
@@ -212,18 +207,15 @@
 								%>
 								<div class="clear"></div>
 								<div class="col-md-12 deliveryDiv">
-										<div class="pull-left">
+									<div class="pull-left">
 										<label class="control-label">
 											发货时间：
 										</label>
-										<span><%=order.getDevelivery()%></span></div>
-										<div class="pull-right">
-											<button orderId="<%=order.getId()%>" id="printNotificationBtn"
-											type="button" class="btn btn-info">
-											打印生产通知单
-										</button>
-										</div>	
+										<span><%=order.getDevelivery()%></span>
 									</div>
+
+
+								</div>
 								<div class="clear"></div>
 								<div class="col-md-6 detailTb">
 									<table class="table table-responsive">
@@ -252,7 +244,7 @@
 												<td>
 													备注
 												</td>
-												<td><%= order.getMemo() == null?"":order.getMemo()%></td>
+												<td><%=order.getMemo() == null ? "" : order.getMemo()%></td>
 											</tr>
 										</tbody>
 									</table>
@@ -324,7 +316,12 @@
 											<th>
 												金额
 											</th>
-											<th>备注</th>
+											<th>
+												备注
+											</th>
+											<th>
+												操作
+											</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -350,7 +347,21 @@
 											<td class="price"><%=detail.getPrice()%></td>
 											<td><%=detail.getQuantity()%></td>
 											<td class="amount"><%=detail.getAmount()%></td>
-											<td class="memo"><%=detail.getMemo()==null?"":detail.getMemo() %></td>
+											<td width="120px" class="memo"><%=detail.getMemo() == null ? "" : detail.getMemo()%></td>
+											<td width="120px">
+												<div class="">
+													<a href="notification/add?orderDetailId=<%=detail.getId() %>" class="addNotificationBtn btn btn-default" type="button">
+														创建生产单
+													</a>
+												</div>
+												<div class="">
+													<button orderId="<%=order.getId()%>"
+														class="printNotificationBtn btn btn-default" type="button">
+														打印生产通知单
+													</button>
+												</div>
+
+											</td>
 										</tr>
 										<%
 											}
