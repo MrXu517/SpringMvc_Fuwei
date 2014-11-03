@@ -14,10 +14,7 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	Order order = (Order) request.getAttribute("order");
-	List<OrderDetail> orderdetaillist = order.getDetaillist();
-	if (orderdetaillist == null) {
-		orderdetaillist = new ArrayList<OrderDetail>();
-	}
+	
 
 	HashMap<String, List<Salesman>> companySalesmanMap = SystemCache
 			.getCompanySalesmanMap_ID();
@@ -259,40 +256,38 @@
 											<th>
 												金额
 											</th>
-											<th>
-												备注
-											</th>
+										
 										</tr>
 									</thead>
 									<tbody>
 										<%
-											for (OrderDetail detail : orderdetaillist) {
+											
 										%>
-										<tr data_detail='<%=SerializeTool.serialize(detail)%>'>
+										<tr>
 
 											<td
 												style="max-width: 120px; height: 120px; max-height: 120px;">
 												<a target="_blank" class="cellimg"
-													href="/<%=detail.getImg()%>"><img
+													href="/<%=order.getImg()%>"><img
 														style="max-width: 120px; height: 120px; max-height: 120px;"
-														src="/<%=detail.getImg_ss()%>"> </a>
+														src="/<%=order.getImg_ss()%>"> </a>
 											</td>
-											<td><%=detail.getName()%></td>
-											<td><%=detail.getProductNumber()%></td>
-											<td><%=detail.getMaterial()%></td>
-											<td><%=detail.getWeight()%></td>
-											<td><%=detail.getSize()%></td>
-											<td><%=SystemCache.getUserName(detail.getCharge_user())%></td>
-											<td class="price"><%=detail.getPrice()%></td>
+											<td><%=order.getName()%></td>
+											<td><%=order.getProductNumber()%></td>
+											<td><%=order.getMaterial()%></td>
+											<td><%=order.getWeight()%></td>
+											<td><%=order.getSize()%></td>
+											<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+											<td class="price"><%=order.getPrice()%></td>
 											<td>
 												<input class="form-control quantity_value positive_int require"
-													value="<%=detail.getQuantity()%>" />
+													value="<%=order.getQuantity()%>" />
 											</td>
-											<td class="amount"><%=detail.getAmount()%></td>
-											<td class="memo"><input class="form-control memo_value" value="<%=detail.getMemo()==null?"":detail.getMemo() %>" /></td>
+											<td class="amount"><%=order.getAmount()%></td>
+											
 										</tr>
 										<%
-											}
+										
 										%>
 									</tbody>
 								</table>

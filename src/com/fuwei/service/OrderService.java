@@ -97,9 +97,8 @@ public class OrderService extends BaseService {
 	public int add(Order order, OrderHandle handle) throws Exception {
 		try {
 
-			if (order.getDetaillist() == null
-					|| order.getDetaillist().size() <= 0) {
-				throw new Exception("订单单中至少得有一条样品记录");
+			if (order.getSampleId() == null) {
+				throw new Exception("订单必须填写样品");
 			} else {
 				Integer orderId = this.insert(order);
 				String orderNumber = CreateNumberUtil
@@ -107,10 +106,10 @@ public class OrderService extends BaseService {
 				order.setOrderNumber(orderNumber);
 				order.setId(orderId);
 				this.update(order, "id", null);
-				for (OrderDetail detail : order.getDetaillist()) {
-					detail.setOrderId(orderId);
-				}
-				orderDetailService.addBatch(order.getDetaillist());
+//				for (OrderDetail detail : order.getDetaillist()) {
+//					detail.setOrderId(orderId);
+//				}
+//				orderDetailService.addBatch(order.getDetaillist());
 
 				// 添加操作记录
 				handle.setOrderId(orderId);
@@ -167,10 +166,10 @@ public class OrderService extends BaseService {
 			// 更新订单表
 			this.update(order, "id",
 					"created_user,status,state,created_at,orderNumber,stepId,setp_state", true);
-			// 删除原来订单的detail
-			orderDetailService.deleteBatch(order.getId());
-			// 再添加新的detail
-			orderDetailService.addBatch(order.getDetaillist());
+//			// 删除原来订单的detail
+//			orderDetailService.deleteBatch(order.getId());
+//			// 再添加新的detail
+//			orderDetailService.addBatch(order.getDetaillist());
 
 			// 添加操作记录
 			orderHandleService.add(handle);

@@ -83,4 +83,13 @@ public class OrderDetailService extends BaseService {
 			throw e;
 		}
 	}
+	
+//	@Transactional
+//	public int addHeadBankOrder() throws Exception {
+//		try{
+//			return dao.update("delete from tb_order_detail WHERE  orderId =?", orderId);
+//		}catch(Exception e){
+//			throw e;
+//		}
+//	}
 }

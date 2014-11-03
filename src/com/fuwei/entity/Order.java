@@ -30,8 +30,35 @@ public class Order implements Serializable{
 	private int created_user;//创建用户
 	private Integer salesmanId;//业务员ID
 	private Integer companyId;//公司ID
+	private String kehu;//客户
 	
+	
+	//以下为2014-11-3 添加的，假定一个订单只有一个样品，因此去除了以前的orderDetailList
+	private Integer factoryId;// 生产单位
+	private double price;//报价单价
+	private int quantity;//数量
+//	private double amount;//总价
+//	private String memo;//价格的备注
+	private Integer sampleId;//样品ID
+	private String cproductN ; //公司款号
+	
+	//接下来的Sample的属性
+	private String name;//样品名称
+	
+	private String img;//图片
+	private String material;//材料
+	private double weight;//克重
+	private String size;//尺寸
 
+	private double cost;//成本
+	private String productNumber;//产品编号
+	private String machine;//机织
+	private Integer charge_user;//打样人 ，跟单人
+	private String detail;//报价详情
+	
+	private String img_s;//中等缩略图
+	private String img_ss;//缩略图
+	
 	//动态的生产步骤
 	private Integer stepId;
 	
@@ -40,9 +67,16 @@ public class Order implements Serializable{
 	private List<OrderStep> stepList ;
 	//动态的生产步骤
 	
-	@Temporary
-	private List<OrderDetail> detaillist ;
+//	@Temporary
+//	private List<OrderDetail> detaillist ;
 	
+	
+	public String getKehu() {
+		return kehu;
+	}
+	public void setKehu(String kehu) {
+		this.kehu = kehu;
+	}
 	
 	public List<OrderStep> getStepList() {
 		return stepList;
@@ -155,12 +189,12 @@ public class Order implements Serializable{
 	public void setCompanyId(Integer companyId) {
 		this.companyId = companyId;
 	}
-	public List<OrderDetail> getDetaillist() {
-		return detaillist;
-	}
-	public void setDetaillist(List<OrderDetail> detaillist) {
-		this.detaillist = detaillist;
-	}
+//	public List<OrderDetail> getDetaillist() {
+//		return detaillist;
+//	}
+//	public void setDetaillist(List<OrderDetail> detaillist) {
+//		this.detaillist = detaillist;
+//	}
 	
 	//是否可编辑
 	public Boolean isEdit(){
@@ -196,6 +230,109 @@ public class Order implements Serializable{
 		}
 		return false;
 	}
+	public Integer getFactoryId() {
+		return factoryId;
+	}
+	public void setFactoryId(Integer factoryId) {
+		this.factoryId = factoryId;
+	}
+	public double getPrice() {
+		return price;
+	}
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	public int getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+	public Integer getSampleId() {
+		return sampleId;
+	}
+	public void setSampleId(Integer sampleId) {
+		this.sampleId = sampleId;
+	}
+	public String getCproductN() {
+		return cproductN;
+	}
+	public void setCproductN(String cproductN) {
+		this.cproductN = cproductN;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getImg() {
+		return img;
+	}
+	public void setImg(String img) {
+		this.img = img;
+	}
+	public String getMaterial() {
+		return material;
+	}
+	public void setMaterial(String material) {
+		this.material = material;
+	}
+	public double getWeight() {
+		return weight;
+	}
+	public void setWeight(double weight) {
+		this.weight = weight;
+	}
+	public String getSize() {
+		return size;
+	}
+	public void setSize(String size) {
+		this.size = size;
+	}
+	public double getCost() {
+		return cost;
+	}
+	public void setCost(double cost) {
+		this.cost = cost;
+	}
+	public String getProductNumber() {
+		return productNumber;
+	}
+	public void setProductNumber(String productNumber) {
+		this.productNumber = productNumber;
+	}
+	public String getMachine() {
+		return machine;
+	}
+	public void setMachine(String machine) {
+		this.machine = machine;
+	}
+	public Integer getCharge_user() {
+		return charge_user;
+	}
+	public void setCharge_user(Integer charge_user) {
+		this.charge_user = charge_user;
+	}
+	public String getDetail() {
+		return detail;
+	}
+	public void setDetail(String detail) {
+		this.detail = detail;
+	}
+	public String getImg_s() {
+		return img_s;
+	}
+	public void setImg_s(String img_s) {
+		this.img_s = img_s;
+	}
+	public String getImg_ss() {
+		return img_ss;
+	}
+	public void setImg_ss(String img_ss) {
+		this.img_ss = img_ss;
+	}
+	
 	
 	
 }

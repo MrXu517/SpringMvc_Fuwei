@@ -30,6 +30,7 @@ import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.constant.Constants;
 import com.fuwei.constant.OrderStatus;
+import com.fuwei.entity.HeadBankOrder;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.OrderDetail;
 import com.fuwei.entity.OrderHandle;
@@ -43,6 +44,7 @@ import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
 import com.fuwei.print.PrintExcel;
 import com.fuwei.service.AuthorityService;
+import com.fuwei.service.HeadBankOrderService;
 import com.fuwei.service.OrderDetailService;
 import com.fuwei.service.OrderHandleService;
 import com.fuwei.service.OrderProduceStatusService;
@@ -75,6 +77,9 @@ public class OrderController extends BaseController {
 	OrderProduceStatusService orderProduceStatusService;
 	@Autowired
 	ProductionNotificationService productionNotificationService;
+	
+	@Autowired
+	HeadBankOrderService headBankOrderService;
 	
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	@ResponseBody
@@ -128,7 +133,7 @@ public class OrderController extends BaseController {
 				
 			}
 			order.setAmount(NumberUtil.formateDouble(amount,3));//设置订单总金额
-			order.setDetaillist(orderDetaillist);//设置订单详情
+//			order.setDetaillist(orderDetaillist);//设置订单详情
 			request.setAttribute("order", order);
 			return new ModelAndView("order/add");
 		} catch (Exception e) {
@@ -177,7 +182,7 @@ public class OrderController extends BaseController {
 			}
 			order.setAmount(NumberUtil.formateDouble(amount,3));//设置订单总金额
 			order.setInfo(info);//设置订单信息
-			order.setDetaillist(orderDetaillist);//设置订单详情
+//			order.setDetaillist(orderDetaillist);//设置订单详情
 			
 			//添加操作记录
 			OrderHandle handle = new OrderHandle();
@@ -258,7 +263,7 @@ public class OrderController extends BaseController {
 		}
 		Order order = orderService.get(id);
 		List<OrderDetail> detaillist = orderDetailService.getListByOrder(id);//获取订单详情
-		order.setDetaillist(detaillist);//设置订单详情
+//		order.setDetaillist(detaillist);//设置订单详情
 		//获取订单步骤列表
 		
 		List<OrderProduceStatus> db_steplist = orderProduceStatusService.getListByOrder(order.getId());
@@ -310,7 +315,7 @@ public class OrderController extends BaseController {
 		
 		Order order = orderService.get(id);
 		List<OrderDetail> detaillist = orderDetailService.getListByOrder(id);
-		order.setDetaillist(detaillist);
+//		order.setDetaillist(detaillist);
 		request.setAttribute("order", order);
 		return new ModelAndView("order/edit");
 		
@@ -356,7 +361,7 @@ public class OrderController extends BaseController {
 			}
 			order.setAmount(NumberUtil.formateDouble(amount,3));//设置订单总金额
 			order.setInfo(info);//设置订单信息
-			order.setDetaillist(orderDetaillist);//设置订单详情
+//			order.setDetaillist(orderDetaillist);//设置订单详情
 			
 			//添加操作记录
 			OrderHandle handle = new OrderHandle();
@@ -550,4 +555,36 @@ public class OrderController extends BaseController {
 		return this.returnSuccess();		
 	}
 	
+	
+	
+	@RequestMapping(value = "/tablelist", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView tablelist(Integer orderId, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		
+		
+		
+		try {
+//			OrderDetail orderDetail = orderDetailService.get(orderDetailId);
+			Order order = orderService.get(orderId);
+			
+			//获取头带质量记录单
+			HeadBankOrder headBankOrder = headBankOrderService.getByOrder(order.getId());
+			headBankOrder.setDetaillist(headBankOrderService.getDetailList(headBankOrder.getId()));
+			
+//			List<OrderDetail> orderDetaillist = new ArrayList<OrderDetail>();//设置订单详情
+			
+			
+//			order.setDetaillist(orderDetaillist);//设置订单详情
+			
+			request.setAttribute("order", order);
+//			request.setAttribute("orderDetail", orderDetail);
+			request.setAttribute("headBankOrder", headBankOrder);
+			return new ModelAndView("order/tablelist");
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 }

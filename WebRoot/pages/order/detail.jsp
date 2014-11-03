@@ -19,10 +19,10 @@
 			+ path + "/";
 	List<User> userlist = (List<User>) request.getAttribute("userlist");
 	Order order = (Order) request.getAttribute("order");
-	List<OrderDetail> orderdetaillist = order.getDetaillist();
-	if (orderdetaillist == null) {
-		orderdetaillist = new ArrayList<OrderDetail>();
-	}
+	//List<OrderDetail> orderdetaillist = order.getDetaillist();
+	//if (orderdetaillist == null) {
+	//	orderdetaillist = new ArrayList<OrderDetail>();
+	//}
 
 	String exeStr = "执行当前步骤";
 	Boolean to_start_produce = order.startProduce();//是否要执行的是开始生产
@@ -115,6 +115,12 @@
 											type="button" class="btn btn-danger">
 											<%=exeStr%>
 										</button>
+									</div>
+<div class="pull-right">
+						<a href="order/tablelist?orderId=<%=order.getId() %>"
+														class="btn btn-default" type="button">
+														查看表格
+													</a>
 									</div>
 
 									<div class="clear"></div>
@@ -325,7 +331,8 @@
 										</tr>
 									</thead>
 									<tbody>
-										<%
+									<!-- 	<%
+									List<OrderDetail> orderdetaillist = new ArrayList<OrderDetail>();
 											for (OrderDetail detail : orderdetaillist) {
 										%>
 										<tr data_detail='<%=SerializeTool.serialize(detail)%>'>
@@ -365,7 +372,7 @@
 										</tr>
 										<%
 											}
-										%>
+										%> -->
 									</tbody>
 								</table>
 							</div>

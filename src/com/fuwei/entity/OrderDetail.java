@@ -29,12 +29,13 @@ public class OrderDetail {
 	private double cost;//成本
 	private String productNumber;//产品编号
 	private String machine;//机织
-	private Integer charge_user;//打样人
+	private Integer charge_user;//打样人 ，跟单人
 	private String detail;//报价详情
 	
 	private String img_s;//中等缩略图
 	private String img_ss;//缩略图
 	
+	private Integer factoryId;// 生产单位
 	
 	public String getImg_s() {
 		return img_s;
@@ -156,6 +157,12 @@ public class OrderDetail {
 	}
 	public void setDetail(String detail) {
 		this.detail = detail;
+	}
+	public Integer getFactoryId() {
+		return factoryId;
+	}
+	public void setFactoryId(Integer factoryId) {
+		this.factoryId = factoryId;
 	}
 	
 	
