@@ -5,6 +5,7 @@
 <%@page import="com.fuwei.entity.GongXu"%>
 <%@page import="com.fuwei.entity.User"%>
 <%@page import="com.fuwei.entity.Role"%>
+<%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%
 	String path = request.getContextPath();
@@ -20,6 +21,7 @@
 	List<User> userlist = (List<User>) request.getAttribute("userlist");
 	
 	List<Role> rolelist = (List<Role>) request.getAttribute("rolelist");
+	List<Factory> factorylist = (List<Factory>) request.getAttribute("factorylist");
 	
 	String tabname = (String) request.getParameter("tab");
 %>
@@ -79,6 +81,9 @@
 							</li>
 							<li>
 								<a href="#gongxus" role="tab" data-toggle="tab">工序</a>
+							</li>
+							<li>
+								<a href="#factory" role="tab" data-toggle="tab">加工工厂</a>
 							</li>
 						</ul>
 
@@ -602,6 +607,115 @@ for(Role role : rolelist){
 									</div>
 								</div>
 							</div>
+							<div class="tab-pane" id="factory">
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-md-4 formwidget">
+											<div class="panel panel-primary">
+												<div class="panel-heading">
+													<h3 class="panel-title">
+														添加加工工厂
+													</h3>
+												</div>
+												<div class="panel-body">
+													<form class="form-horizontal" role="form">
+														<input type="hidden" name="id" id="id" />
+														<div class="form-group">
+															<label for="name" class="col-sm-3 control-label">
+																名称
+															</label>
+															<div class="col-sm-8">
+																<input type="text" class="form-control require"
+																	name="name" id="name" placeholder="名称">
+															</div>
+															<div class="col-sm-1"></div>
+														</div>
+														<div class="form-group">
+															<label for="address" class="col-sm-3 control-label">
+																地址
+															</label>
+															<div class="col-sm-8">
+																<input type="text" class="form-control require"
+																	name="address" id="address" placeholder="地址">
+															</div>
+															<div class="col-sm-1"></div>
+														</div>
+
+														<div class="form-group">
+															<div class="col-sm-offset-3 col-sm-5">
+																<button type="submit" class="btn btn-primary"
+																	data-loading-text="正在保存...">
+																	添加加工工厂
+																</button>
+																<a href="#" class="switch_add">添加加工工厂</a>
+															</div>
+															<div class="col-sm-3">
+																<button type="reset" class="btn btn-default">
+																	重置表单
+																</button>
+															</div>
+															<div class="col-sm-1"></div>
+														</div>
+													</form>
+												</div>
+											</div>
+										</div>
+
+										<div class="col-md-7 tablewidget">
+											<div class="panel panel-primary">
+												<!-- Default panel contents -->
+												<div class="panel-heading">
+													加工工厂列表
+												</div>
+
+												<!-- Table -->
+												<table class="table table-responsive">
+													<thead>
+														<tr>
+															<th>
+																序号
+															</th>
+															<th>
+																名称
+															</th>
+															<th>
+																拼音
+															</th>
+															<th>
+																地址
+															</th>
+															<th>
+																操作
+															</th>
+														</tr>
+													</thead>
+													<tbody>
+														<%
+														int f_i = 1;
+														for (Factory factory : factorylist) {
+													%>
+														<tr>
+															<td><%=g_i%></td>
+															<td><%=factory.getName()%></td><td><%=factory.getHelp_code()%></td>
+															<td><%=factory.getAddress()%></td>
+															<td>
+																<a class="editFactory" href="#"
+																	data-cid="<%=factory.getId()%>">编辑</a> |
+																<a class="deleteFactory" href="#"
+																	data-cid="<%=factory.getId()%>">删除</a>
+															</td>
+														</tr>
+														<%
+														f_i++;
+														}
+													%>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<!-- Nav tabs -->
@@ -612,8 +726,7 @@ for(Role role : rolelist){
 	</body>
 </html>
 <script type="text/javascript">
-	var tabname = "<%=tabname %>
-	";
+	var tabname = "<%=tabname %>";
 	if (tabname == null || tabname == undefined) {
 		$('#tab a:first').tab('show') // Select first tab
 	}

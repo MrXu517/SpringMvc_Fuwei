@@ -15,7 +15,7 @@ public class ProductionNotification {
 	private int id;
 	private Integer orderDetailId;// 订单ID，外键
 	private String notificationNumber;// 生产通知单号
-	private String processfactory;// 加工单位
+	private Integer factoryId;// 加工单位
 
 	private Date created_at;// 创建时间
 	private Date updated_at;// 最近更新时间
@@ -76,12 +76,14 @@ public class ProductionNotification {
 		this.notificationNumber = notificationNumber;
 	}
 
-	public String getProcessfactory() {
-		return processfactory;
+	
+
+	public Integer getFactoryId() {
+		return factoryId;
 	}
 
-	public void setProcessfactory(String processfactory) {
-		this.processfactory = processfactory;
+	public void setFactoryId(Integer factoryId) {
+		this.factoryId = factoryId;
 	}
 
 	public Date getCreated_at() {

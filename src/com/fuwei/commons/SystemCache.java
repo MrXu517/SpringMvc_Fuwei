@@ -14,11 +14,13 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.fuwei.entity.Authority;
 import com.fuwei.entity.Company;
+import com.fuwei.entity.Factory;
 import com.fuwei.entity.GongXu;
 import com.fuwei.entity.Role;
 import com.fuwei.entity.Salesman;
 import com.fuwei.entity.User;
 import com.fuwei.service.CompanyService;
+import com.fuwei.service.FactoryService;
 import com.fuwei.service.GongXuService;
 import com.fuwei.service.RoleService;
 import com.fuwei.service.SalesmanService;
@@ -35,7 +37,9 @@ public class SystemCache {
 	GongXuService gongXuService;
 
 	RoleService roleService;
-
+	
+	FactoryService factoryService;
+	
 	public SystemCache() {
 		companyService = (CompanyService) SystemContextUtils
 				.getBean(CompanyService.class);
@@ -47,13 +51,10 @@ public class SystemCache {
 				.getBean(GongXuService.class);
 		roleService = (RoleService) SystemContextUtils
 				.getBean(RoleService.class);
+		factoryService = (FactoryService)SystemContextUtils
+		.getBean(FactoryService.class);
 	}
 
-	// 缓存需要重新登录的用户
-	public static Map<Integer, String[]> reloginList = new HashMap<Integer, String[]>();// 需要重新登录的user
-																						// ，
-																						// 以及错误信息
-																						// 。
 
 	// 缓存公司
 	public static List<Company> companylist = new ArrayList<Company>();
@@ -70,29 +71,8 @@ public class SystemCache {
 	// 缓存角色
 	public static List<Role> rolelist = new ArrayList<Role>();
 
-	public static Boolean checkRelogin(Integer user_id) {
-		String[] errorcodes = reloginList.get(user_id);
-		if (errorcodes != null && errorcodes.length > 0) {
-			return true;
-		}
-		return false;
-	}
-
-	public static void pushRelogin(Integer user_id, String error_code) {
-		String[] errorcodes = reloginList.get(user_id);
-		if (errorcodes == null) {
-			errorcodes = new String[] {};
-		}
-		errorcodes[error_code.length()] = error_code;
-		reloginList.put(user_id, errorcodes);
-	}
-
-	public static void removeRelogin(Integer user_id) {
-		String[] errorcodes = reloginList.get(user_id);
-		if (errorcodes != null && errorcodes.length > 0) {
-			reloginList.remove(user_id);
-		}
-	}
+	//缓存加工工厂
+	public static List<Factory> factorylist = new ArrayList<Factory>();
 
 	public static void addCompany(Company company) {
 		companylist.add(company);
@@ -112,6 +92,7 @@ public class SystemCache {
 		initGongxuList();
 		initUserList();
 		initRoleList();
+		initFactoryList();
 	}
 
 	public void reload() throws Exception {
@@ -136,6 +117,10 @@ public class SystemCache {
 
 	public void initRoleList() throws Exception {
 		SystemCache.rolelist = roleService.getList(); // userlist;
+	}
+	
+	public void initFactoryList() throws Exception {
+		SystemCache.factorylist = factoryService.getList(); // userlist;
 	}
 
 	public static String getUserName(int userid) {
@@ -198,6 +183,28 @@ public class SystemCache {
 		for (int i = 0; i < SystemCache.gongxulist.size(); ++i) {
 			GongXu temp = SystemCache.gongxulist.get(i);
 			if (temp.getId() == gongxuId) {
+				return temp.getName();
+			}
+		}
+		return "";
+	}
+	
+	public static Factory getFactory(int factoryId) {
+
+		for (int i = 0; i < SystemCache.factorylist.size(); ++i) {
+			Factory temp = SystemCache.factorylist.get(i);
+			if (temp.getId() == factoryId) {
+				return temp;
+			}
+		}
+		return null;
+	}
+	
+	public static String getFactoryName(int factoryId) {
+
+		for (int i = 0; i < SystemCache.factorylist.size(); ++i) {
+			Factory temp = SystemCache.factorylist.get(i);
+			if (temp.getId() == factoryId) {
 				return temp.getName();
 			}
 		}

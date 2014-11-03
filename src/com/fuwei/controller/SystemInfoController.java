@@ -35,6 +35,7 @@ public class SystemInfoController extends BaseController {
 		request.setAttribute("salesmanlist", SystemCache.salesmanlist);
 		request.setAttribute("userlist", SystemCache.userlist);
 		request.setAttribute("rolelist", SystemCache.rolelist);
+		request.setAttribute("factorylist", SystemCache.factorylist);
 		return new ModelAndView("systeminfo/index");
 
 	}

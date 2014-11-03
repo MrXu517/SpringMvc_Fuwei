@@ -1,0 +1,30 @@
+.formbody{
+	float:left;
+	width:350px;
+}
+.sampleImg,.sampleData,.sampleDetail{
+	width:350px;
+	float:left;
+}
+.sampleData,.sampleDetail{
+	margin-left:20px;
+}
+.sampleDetail #detail {
+	height:300px;
+}
+.sampleData table tbody tr td{
+	border-top:none;
+	border-bottom:1px solid #ddd;
+}
+.samplehead{
+	font-size: 20px;
+	font-weight: bold;
+	padding-bottom: 20px;
+	margin-left: 15px;
+}
+.samplehead>div{
+	margin-right:40px;
+}
+.sampleImg{
+	
+}

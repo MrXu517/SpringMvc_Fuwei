@@ -65,7 +65,8 @@ public class ProductionNotificationController extends BaseController{
 			ProductionNotification.setUpdated_at(DateTool.now());//设置更新时间
 			ProductionNotification.setCreated_user(user.getId());//设置创建人
 			ProductionNotification.setQuantity(0);
-		
+			ProductionNotification.setOrderDetailId(orderDetailId);
+			
 			List<ProductionNotificationDetail> Detaillist = new ArrayList<ProductionNotificationDetail>();
 			ProductionNotification.setDetaillist(Detaillist);//设置详情
 			request.setAttribute("orderDetail", orderDetail);
@@ -102,6 +103,12 @@ public class ProductionNotificationController extends BaseController{
 		productionNotification.setCreated_at(DateTool.now());
 		productionNotification.setUpdated_at(DateTool.now());
 		productionNotification.setCreated_user(user.getId());
+		List<ProductionNotificationDetail> detaillist = SerializeTool.deserializeList(productionNotification.getDetails(), ProductionNotificationDetail.class);
+		int quantity = 0 ;
+		for(ProductionNotificationDetail detail : detaillist){
+			quantity += detail.getQuantity();
+		}
+		productionNotification.setQuantity(quantity);
 		orderService.addNotification(productionNotification);
 		
 		return this.returnSuccess();		
