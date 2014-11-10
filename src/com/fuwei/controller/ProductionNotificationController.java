@@ -95,9 +95,10 @@ public class ProductionNotificationController extends BaseController{
 		}
 		//判断订单当前状态：在 打确认样 和打产前样 阶段 不能创建生产通知单
 		Order order = orderService.getByDetailId(orderDetailId);
-		if(order.getStatus() <= OrderStatus.BEFOREPRODUCESAMPLE.ordinal()){
-			throw new Exception("在打确认样 和打产前样阶段 不能创建生产通知单");
-		}
+//		2014-11-10 去掉下面三行，因为没有了打确认样和产前样两个阶段
+//		if(order.getStatus() <= OrderStatus.BEFOREPRODUCESAMPLE.ordinal()){
+//			throw new Exception("在打确认样 和打产前样阶段 不能创建生产通知单");
+//		}
 
 		//创建生产单
 		productionNotification.setCreated_at(DateTool.now());

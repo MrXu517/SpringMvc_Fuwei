@@ -260,6 +260,9 @@ Common.fillForm = function(formEle, data) {
 	for ( var i = 0; i < length; ++i) {
 		var inputEle = inputs[i];
 		var name = inputEle.name;
+		if (data[name] == undefined) {
+            continue;
+        }
 		var value = (data[name] != null) ? data[name] : "";
 		if (inputEle.type == "radio") {
 			value = (value == true) ? "1" : "0";

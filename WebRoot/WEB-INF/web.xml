@@ -60,7 +60,7 @@
 		</init-param> 
 		<init-param> 
 			<param-name>notFilterURIs</param-name> 
-			<param-value>/css/.*,/favicon.ico,/reg.jsp,/user/reg,/login.jsp,/user/login,/js/.*,/theme/login/.*,/services/.*,/site/.*</param-value> 
+			<param-value>/css/images/.*,/css/.*,/favicon.ico,/reg.jsp,/user/reg,/login.jsp,/user/login,/js/.*,/theme/login/.*,/services/.*,/site/.*</param-value> 
 		</init-param> 
 	</filter> 
 	<filter-mapping> 

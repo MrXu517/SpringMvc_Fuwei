@@ -11,8 +11,6 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	Order order = (Order) request.getAttribute("order");
-	OrderDetail orderDetail = (OrderDetail) request
-			.getAttribute("orderDetail");
 	HeadBankOrder headBankOrder = (HeadBankOrder) request
 			.getAttribute("headBankOrder");
 
@@ -38,8 +36,8 @@
 		<script src="js/common/common.js" type="text/javascript"></script>
 
 
-		<link href="css/systeminfo.css" rel="stylesheet" type="text/css" />
-		<script src="js/systeminfo/index.js" type="text/javascript"></script>
+		<link href="css/order/tablelist.css" rel="stylesheet" type="text/css" />
+		<script src="js/order/tablelist.js" type="text/javascript"></script>
 
 	</head>
 	<body>
@@ -94,27 +92,24 @@
 											<thead>
 												<tr>
 													<td>
-														<table class="table">
-															<caption>
-																桐庐富伟针织厂质量记录单
-															</caption>
-															<tbody>
-																<tr>
-																	<td colspan="7" rowspan="3">
-																		<div class="sampleImg">
+<div class="sampleImg">
 
-																			<a href="#" class="thumbnail"> <img
-																					id="previewImg" alt="400 x 100%"
-																					src="/<%=orderDetail.getImg_s()%>"> </a>
-																		</div>
-																	</td>
-																	<td>
+										<a href="#" class="thumbnail"> <img id="previewImg"
+												alt="400 x 100%" src="/<%=order.getImg_s()%>"> </a>
+
+									</div>
+									<div class="sampleData">
+										<table class="table table-responsive">
+											<tbody>
+
+												<tr>
+													<td>
 																		生产单位
 																	</td>
-																	<td class="orderproperty"><%=SystemCache.getFactoryName(order.getFactoryId())%></td>
-																</tr>
-																<tr>
-																	<td rowspan="2">
+																	<td class="orderproperty"><%=order.getFactoryId() == null ? "":SystemCache.getFactoryName(order.getFactoryId())%></td>
+												</tr>
+												<tr>
+																	<td colspan="2">
 																		订单信息
 																	</td>
 																</tr>
@@ -148,8 +143,12 @@
 																	</td>
 																	<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
 																</tr>
-															</tbody>
-														</table>
+											</tbody>
+										</table>
+
+									</div>
+
+											
 													</td>
 												</tr>
 												<tr>

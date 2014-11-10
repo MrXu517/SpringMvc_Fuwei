@@ -25,7 +25,7 @@
 	//}
 
 	String exeStr = "执行当前步骤";
-	Boolean to_start_produce = order.startProduce();//是否要执行的是开始生产
+//	Boolean to_start_produce = order.startProduce();//是否要执行的是开始生产
 	switch (OrderStatusUtil.get(order.getStatus())) {
 	case DELIVERING:
 		exeStr = "发货";
@@ -105,22 +105,22 @@
 											}
 										%>
 									</div>
+									<!-- 
 									<div class="pull-right">
 										<button id="addStep" type="button" class="btn btn-info">
 											添加步骤
 										</button>
 									</div>
+									 -->
 									<div class="pull-right">
 										<button orderId="<%=order.getId()%>" id="exeStep"
 											type="button" class="btn btn-danger">
 											<%=exeStr%>
 										</button>
 									</div>
-<div class="pull-right">
-						<a href="order/tablelist?orderId=<%=order.getId() %>"
-														class="btn btn-default" type="button">
-														查看表格
-													</a>
+									<div class="pull-right">
+										<a href="order/tablelist?orderId=<%=order.getId()%>"
+											class="btn btn-default" type="button"> 查看表格 </a>
 									</div>
 
 									<div class="clear"></div>
@@ -223,6 +223,7 @@
 
 								</div>
 								<div class="clear"></div>
+							
 								<div class="col-md-6 detailTb">
 									<table class="table table-responsive">
 										<tbody>
@@ -288,95 +289,86 @@
 									</table>
 
 								</div>
+								
 								<div class="clear"></div>
-								<table class="table table-responsive" id="detailTable">
-									<thead>
-										<tr>
-											<th>
-												图片
-											</th>
-											<th>
-												名称
-											</th>
-											<th>
-												货号
-											</th>
-											<th>
-												材料
-											</th>
-											<th>
-												克重
-											</th>
-											<th>
-												尺寸
-											</th>
-											<th>
-												打样人
-											</th>
-											<th>
-												单价
-											</th>
-											<th>
-												数量
-											</th>
-											<th>
-												金额
-											</th>
-											<th>
-												备注
-											</th>
-											<th>
-												操作
-											</th>
-										</tr>
-									</thead>
-									<tbody>
-									<!-- 	<%
-									List<OrderDetail> orderdetaillist = new ArrayList<OrderDetail>();
-											for (OrderDetail detail : orderdetaillist) {
-										%>
-										<tr data_detail='<%=SerializeTool.serialize(detail)%>'>
+									<fieldset>
+									<legend>
+										样品信息
+									</legend>
+									<div class="sampleImg">
 
-											<td
-												style="max-width: 120px; height: 120px; max-height: 120px;">
-												<a target="_blank" class="cellimg"
-													href="/<%=detail.getImg()%>"><img
-														style="max-width: 120px; height: 120px; max-height: 120px;"
-														src="/<%=detail.getImg_ss()%>"> </a>
-											</td>
-											<td><%=detail.getName()%></td>
-											<td><%=detail.getProductNumber()%></td>
-											<td><%=detail.getMaterial()%></td>
-											<td><%=detail.getWeight()%></td>
-											<td><%=detail.getSize()%></td>
-											<td><%=SystemCache.getUserName(detail
-										.getCharge_user())%></td>
-											<td class="price"><%=detail.getPrice()%></td>
-											<td><%=detail.getQuantity()%></td>
-											<td class="amount"><%=detail.getAmount()%></td>
-											<td width="120px" class="memo"><%=detail.getMemo() == null ? "" : detail.getMemo()%></td>
-											<td width="120px">
-												<div class="">
-													<a href="notification/add?orderDetailId=<%=detail.getId() %>" class="addNotificationBtn btn btn-default" type="button">
-														创建生产单
-													</a>
-												</div>
-												<div class="">
-													<button orderId="<%=order.getId()%>"
-														class="printNotificationBtn btn btn-default" type="button">
-														打印生产通知单
-													</button>
-												</div>
+										<a href="#" class="thumbnail"> <img id="previewImg"
+												alt="400 x 100%" src="/<%=order.getImg_s()%>"> </a>
 
-											</td>
-										</tr>
-										<%
-											}
-										%> -->
-									</tbody>
-								</table>
+									</div>
+									<div class="sampleData">
+										<table class="table table-responsive">
+											<tbody>
+
+												<tr>
+													<td>
+														跟单人
+													</td>
+													<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+												</tr>
+												<tr>
+													<td>
+														材料
+													</td>
+													<td><%=order.getMaterial()%></td>
+												</tr>
+												<tr>
+													<td>
+														克重
+													</td>
+													<td><%=order.getWeight()%>克
+													</td>
+												</tr>
+												<tr>
+													<td>
+														尺寸
+													</td>
+													<td><%=order.getSize()%></td>
+												</tr>
+												<tr>
+													<td>
+														成本
+													</td>
+													<td>
+														<span class="RMB">￥</span><%=order.getCost()%></td>
+												</tr>
+												<tr>
+													<td>
+														机织
+													</td>
+													<td><%=order.getMachine()%></td>
+												</tr>
+												<tr>
+													<td>
+														创建时间
+													</td>
+													<td><%=order.getCreated_at()%></td>
+												</tr>
+												<tr>
+													<td>
+														最近更新时间
+													</td>
+													<td><%=order.getUpdated_at()%></td>
+												</tr>
+												<tr>
+													<td>
+														备注
+													</td>
+													<td><%=order.getMemo()%></td>
+												</tr>
+											</tbody>
+										</table>
+
+									</div>
+								</fieldset>
+
 							</div>
-
+						
 
 						</div>
 					</div>

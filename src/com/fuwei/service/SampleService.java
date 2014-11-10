@@ -154,4 +154,38 @@ public class SampleService extends BaseService {
 			throw e;
 		}
 	}
+	
+	//根据名称等搜索样品
+	public Pager searchList(Pager pager, String name,Integer charge_user,
+			List<Sort> sortlist) throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			sql.append("select * from tb_sample where has_detail=1");
+			
+			if (name != null ) {
+				if(!name.equals("")){
+					sql.append(" AND name like %'" + name + "'");
+				}
+			}
+			if(charge_user!=null){
+				sql.append(" AND charge_user='" +  charge_user +"'");
+			}
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql.append("order by " + sortlist.get(i).getProperty()
+								+ " " + sortlist.get(i).getDirection() + " ");
+					} else {
+						sql.append("," + sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			return findPager_T(sql.toString(),Sample.class, pager);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 }

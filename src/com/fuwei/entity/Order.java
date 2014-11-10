@@ -198,7 +198,8 @@ public class Order implements Serializable{
 	
 	//是否可编辑
 	public Boolean isEdit(){
-		return this.status < OrderStatus.COLORING.ordinal();
+//		return this.status < OrderStatus.COLORING.ordinal();
+		return this.status < OrderStatus.DELIVERED.ordinal();//2014-11-10修改： 在已发货之前都可以修改订单
 	}
 	//获取当前状态描述
 	public String getCNState(){
@@ -223,13 +224,14 @@ public class Order implements Serializable{
 		}
 	}
 	
-	//是否下一步要开始生产
-	public Boolean startProduce(){
-		if(this.status == OrderStatus.BEFOREPRODUCESAMPLE.ordinal()){
-			return true;
-		}
-		return false;
-	}
+//	2014-11-10 删除该方法
+//	//是否下一步要开始生产
+//	public Boolean startProduce(){
+//		if(this.status == OrderStatus.BEFOREPRODUCESAMPLE.ordinal()){
+//			return true;
+//		}
+//		return false;
+//	}
 	public Integer getFactoryId() {
 		return factoryId;
 	}

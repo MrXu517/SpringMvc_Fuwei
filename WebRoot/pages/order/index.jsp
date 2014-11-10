@@ -273,6 +273,7 @@
 												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
+								<!-- 
 									<form class="form-inline pageform form-horizontal" role="form"
 										action="order/index">
 										<input type="hidden" name="status" id="status"
@@ -300,7 +301,7 @@
 											</div>
 										</div>
 									</form>
-
+ 								-->
 								</div>
 								<div class="pull-left">
 										<button id="exportProcessBtn" type="button" class="btn btn-success">

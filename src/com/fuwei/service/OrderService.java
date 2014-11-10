@@ -246,28 +246,30 @@ public class OrderService extends BaseService {
 			if(status == OrderStatus.DELIVERING.ordinal()){
 				order.setDelivery_at(DateTool.now());
 			}
-			//获取下一步步骤,  若当前执行机织步骤，则不修改status,但修改step,执行后的状态为动态生产步骤
-			if(status == OrderStatus.MACHINING.ordinal()){//若当前步骤是机织，则要获取动态生产步骤
-				//获取下一步动态生产步骤
-				OrderProduceStatus nextStep = orderProduceStatusService.getNext(order.getId(), step);
-				if(nextStep == null){//如果获取不到下一个步骤，则跳到下一个status
-					OrderStatus orderstatus = OrderStatusUtil.getNext(status);
-					order.setStepId(null);
-					order.setStep_state(null);
-					order.setStatus(orderstatus.ordinal());
-					order.setState(orderstatus.getName());
-				}else{
-					order.setStepId(nextStep.getId());
-					order.setStep_state(nextStep.getName());
-				}
-			}
-			else{//若不是机织，则status 直接+1
+			
+//			2014-11-10 删除if，因为去掉了动态步骤
+//			//获取下一步步骤,  若当前执行机织步骤，则不修改status,但修改step,执行后的状态为动态生产步骤
+//			if(status == OrderStatus.MACHINING.ordinal()){//若当前步骤是机织，则要获取动态生产步骤
+//				//获取下一步动态生产步骤
+//				OrderProduceStatus nextStep = orderProduceStatusService.getNext(order.getId(), step);
+//				if(nextStep == null){//如果获取不到下一个步骤，则跳到下一个status
+//					OrderStatus orderstatus = OrderStatusUtil.getNext(status);
+//					order.setStepId(null);
+//					order.setStep_state(null);
+//					order.setStatus(orderstatus.ordinal());
+//					order.setState(orderstatus.getName());
+//				}else{
+//					order.setStepId(nextStep.getId());
+//					order.setStep_state(nextStep.getName());
+//				}
+//			}
+//			else{//若不是机织，则status 直接+1
 				OrderStatus orderstatus = OrderStatusUtil.getNext(status);
 				order.setStepId(null);
 				order.setStep_state(null);
 				order.setStatus(orderstatus.ordinal());
 				order.setState(orderstatus.getName());
-			}
+//			}
 			
 			
 			// 更新订单表

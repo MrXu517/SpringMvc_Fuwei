@@ -16,10 +16,6 @@
 			+ path + "/";
 	List<User> userlist = (List<User>) request.getAttribute("userlist");
 	Order order = (Order) request.getAttribute("order");
-	List<OrderDetail> orderdetaillist = order.getDetaillist();
-	if (orderdetaillist == null) {
-		orderdetaillist = new ArrayList<OrderDetail>();
-	}
 
 	HashMap<String, List<Salesman>> companySalesmanMap = SystemCache
 			.getCompanySalesmanMap_ID();
@@ -75,6 +71,8 @@
 						<div class="row">
 							<div class="col-md-12 formwidget">
 								<form class="form-horizontal orderform" role="form">
+									<input type="hidden" id="sampleId" name="sampleId"
+										class="require" />
 									<div class="form-group col-md-6">
 										<div class="col-sm-offset-3 col-sm-5">
 											<button type="submit" class="btn btn-primary"
@@ -91,218 +89,302 @@
 										<div class="col-sm-1"></div>
 									</div>
 									<div class="clear"></div>
-									<div class="form-group col-md-6">
-										<input type="hidden" id="id" name="id" value="<%=order.getId() %>"/>
-										<label for="orderNumber" class="col-sm-3 control-label">
-											订单号
-										</label>
-										<div class="col-sm-8">
-											<input type="text" class="form-control" name="orderNumber"
-												id="orderNumber" disabled value="<%=order.getOrderNumber() %>" placeholder="订单号">
+									<fieldset>
+										<legend>
+											样品信息
+										</legend>
+										<div class="form-group col-md-6">
+											<label for="img" class="col-sm-3 control-label">
+												样品图片
+											</label>
+											<div class="col-sm-8">
+												<a href="#" class="thumbnail" id="sampleImgA"> <img
+														id="sampleImg" alt="350 x 100%"
+														src="/<%=order.getImg_s()%>"> </a>
+												<button type="button" id="chooseSampleBtn">
+													选择样品
+												</button>
+											</div>
+											<div class="col-sm-1"></div>
 										</div>
-										<div class="col-sm-1"></div>
-									</div>
-									<div class="form-group col-md-6">
-										<label for="companyId" class="col-sm-3 control-label">
-											公司
-										</label>
-										<div class="col-sm-8">
-											<select data='<%=companySalesmanMap_str%>'
-												class="form-control" name="companyId" id="companyId"
-												placeholder="公司">
-												<option value="">
-													未选择
-												</option>
-												<%
-													for (Company company : SystemCache.companylist) {
-														if (order.getCompanyId()!=null && company.getId() == order.getCompanyId()) {
-												%>
-												<option value="<%=company.getId()%>" selected><%=company.getFullname()%></option>
-												<%
-													} else {
-												%>
-												<option value="<%=company.getId()%>"><%=company.getFullname()%></option>
-												<%
-													}
-													}
-												%>
-											</select>
-										</div>
-									</div>
-									<div class="form-group col-md-6">
-										<label for="salesmanId" class="col-sm-3 control-label">
-											业务员
-										</label>
-										<div class="col-sm-8">
-											<select class="form-control" name="salesmanId"
-												id="salesmanId" placeholder="业务员">
-												<option value="">
-													未选择
-												</option>
-												<%
-													if (order.getCompanyId() != null) {
-														for (Salesman salesman : SystemCache.getSalesmanList(order
-																.getCompanyId())) {
-															if (order.getSalesmanId() == salesman.getId()) {
-												%>
-												<option value="<%=salesman.getId()%>" selected><%=salesman.getName()%></option>
-												<%
-													} else {
-												%>
-												<option value="<%=salesman.getId()%>"><%=salesman.getName()%></option>
-												<%
-													}
-														}
-													}
-												%>
-											</select>
-										</div>
-									</div>
-									<div class="form-group col-md-6">
-										<label for="amount" class="col-sm-3 control-label">
-											金额
-										</label>
-										<div class="col-sm-8">
-											<input type="text" class="form-control require double"
-												name="amount" id="amount" readonly placeholder="金额"
-												value="<%=order.getAmount()%>">
-										</div>
-										<div class="col-sm-1"></div>
-									</div>
-									<div class="form-group col-md-6">
-										<label for="start_at" class="col-sm-3 control-label">
-											订单签订时间
-										</label>
-										<div class="col-sm-8">
-											<input type="text" name="start_at" id="start_at"
-												class="date form-control require" value="<%=DateTool.formatDateYMD(order.getStart_at()) %>" placeholder="" />
 
-										</div>
-										<div class="col-sm-1"></div>
-									</div>
-									<div class="form-group col-md-6">
-										<label for="created_at" class="col-sm-3 control-label">
-											订单创建时间
-										</label>
-										<div class="col-sm-8">
-											<input disabled type="text" name="created_at" id="created_at"
-												class="date form-control require" placeholder="" 
-												value="<%=DateTool.formatDateYMD(order.getCreated_at())%>" />
+										<div class="form-group col-md-6">
+											<label for="name" class="col-sm-3 control-label">
+												样品名称
+											</label>
+											<div class="col-sm-8">
+												<input readonly type="text" name="name" id="name"
+													class="form-control"
+													value="<%=order.getName() == null ? "" : order.getName()%>" />
 
+											</div>
+											<div class="col-sm-1"></div>
 										</div>
-										<div class="col-sm-1"></div>
-									</div>
-									<div class="form-group col-md-6">
-										<label for="end_at" class="col-sm-3 control-label">
-											订单截止日期
-										</label>
-										<div class="col-sm-8">
-											<input type="text" name="end_at" id="end_at"
-												class="date form-control require" placeholder="" value="<%=DateTool.formatDateYMD(order.getEnd_at()) %>"/>
 
-										</div>
-										<div class="col-sm-1"></div>
-									</div>
-
-									<div class="form-group col-md-6">
-										<label for="created_user_name" class="col-sm-3 control-label">
-											订单创建人
-										</label>
-										<div class="col-sm-8">
-											<input type="text" name="created_user_name"
-												id="created_user_name" class="form-control require" readonly
-												value="<%=SystemCache.getUserName(order.getCreated_user())%>" />
-
-										</div>
-										<div class="col-sm-1"></div>
-									</div>
-									<div class="form-group col-md-6">
-										<label for="memo" class="col-sm-3 control-label">
-											备注
-										</label>
-										<div class="col-sm-8">
-											<input type="text" name="memo"
-												id="memo" class="form-control"
-												value="<%=order.getMemo() == null ? "" : order.getMemo()%>" />
-
-										</div>
-										<div class="col-sm-1"></div>
-									</div>
-									<div class="clear"></div>
-									<table class="table table-responsive" id="detailTable">
-									<thead>
-										<tr>
-											<th>
-												图片
-											</th>
-											<th>
-												名称
-											</th>
-											<th>
+										<div class="form-group col-md-6">
+											<label for="productNumber" class="col-sm-3 control-label">
 												货号
-											</th>
-											<th>
-												材料
-											</th>
-											<th>
-												克重
-											</th>
-											<th>
-												尺寸
-											</th>
-											<th>
-												打样人
-											</th>
-											<th>
-												单价
-											</th>
-											<th>
-												数量
-											</th>
-											<th>
-												金额
-											</th>
-											<th>备注</th>
-										</tr>
-									</thead>
-									<tbody>
-										<%
-											for (OrderDetail detail : orderdetaillist) {
-										%>
-										<tr data_detail='<%=SerializeTool.serialize(detail)%>'>
+											</label>
+											<div class="col-sm-8">
+												<input readonly type="text" name="productNumber"
+													id="productNumber" class="form-control"
+													value="<%=order.getProductNumber() == null ? "" : order
+					.getProductNumber()%>" />
 
-											<td 
-												style="max-width: 120px; height: 120px; max-height: 120px;width:130px;">
-												<a target="_blank" class="cellimg"
-													href="/<%=detail.getImg()%>"><img
-														style="max-width: 120px; height: 120px; max-height: 120px;"
-														src="/<%=detail.getImg_ss()%>"> </a>
-											</td>
-											<td width="120px"><%=detail.getName()%></td>
-											<td width="80px"><%=detail.getProductNumber()%></td>
-											<td width="100px" class="material"><input class="form-control material_value require"
-													value="<%=detail.getMaterial()%>" /></td>
-											<td width="80px" class="weight"><input class="form-control weight_value double require"
-													value="<%=detail.getWeight()%>" /></td>
-											<td width="70px" class="size"><input class="form-control size_value require"
-													value="<%=detail.getSize()%>" /></td>
-											<td width="70px"><%=SystemCache.getUserName(detail.getCharge_user())%></td>
-											<td width="70px" class="price"><input class="form-control price_value double require"
-													value="<%=detail.getPrice()%>" /></td>
-											<td width="100px">
-												<input class="form-control quantity_value positive_int require"
-													value="<%=detail.getQuantity()%>" />
-											</td>
-											<td width="60px" class="amount"><%=detail.getAmount()%></td>
-											<td width="120px" class="memo"><textarea class="form-control memo_value"><%=detail.getMemo()==null?"":detail.getMemo() %></textarea></td>
-										</tr>
-										<%
-											}
-										%>
-									</tbody>
-								</table>
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+
+										<div class="form-group col-md-6">
+											<label for="material" class="col-sm-3 control-label">
+												材料
+											</label>
+											<div class="col-sm-8">
+												<input readonly type="text" name="material" id="material"
+													class="form-control"
+													value="<%=order.getMaterial() == null ? "" : order
+					.getMaterial()%>" />
+
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+
+										<div class="form-group col-md-6">
+											<label for="weight" class="col-sm-3 control-label">
+												克重
+											</label>
+											<div class="col-sm-8">
+												<input readonly type="text" name="weight" id="weight"
+													class="form-control" value="<%=order.getWeight()%>"
+													class="require double" />
+
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+
+										<div class="form-group col-md-6">
+											<label for="size" class="col-sm-3 control-label">
+												尺寸
+											</label>
+											<div class="col-sm-8">
+												<input readonly type="text" name="size" id="size"
+													class="form-control"
+													value="<%=order.getSize() == null ? "" : order.getSize()%>" />
+
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+
+										<div class="form-group col-md-6">
+											<label for="memo" class="col-sm-3 control-label">
+												跟单人
+											</label>
+											<div class="col-sm-8">
+												<select name="charge_user" id="charge_user"
+													class="form-control">
+													<%
+														for (User item : SystemCache.userlist) {
+													%>
+													<option value="<%=item.getId()%>"><%=item.getName()%></option>
+													<%
+														}
+													%>
+												</select>
+
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+										<div class="form-group col-md-6">
+											<label for="price" class="col-sm-3 control-label">
+												单价
+											</label>
+											<div class="col-sm-8">
+												<input type="text" name="price" id="price"
+													class="form-control" value="<%=order.getPrice()%>"
+													class="require double" />
+
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+										<div class="form-group col-md-6">
+											<label for="quantity" class="col-sm-3 control-label">
+												数量
+											</label>
+											<div class="col-sm-8">
+												<input type="text" name="quantity" id="quantity"
+													class="form-control" value="<%=order.getQuantity()%>" />
+
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+										<div class="form-group col-md-6">
+											<label for="amount" class="col-sm-3 control-label">
+												金额
+											</label>
+											<div class="col-sm-8">
+												<input readonly type="text" name="amount" id="amount"
+													class="form-control" value="<%=order.getAmount()%>"
+													class="require double" />
+
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+									</fieldset>
+									<fieldset>
+										<legend>
+											订单基本属性
+										</legend>
+										<div class="form-group col-md-6">
+											<input type="hidden" id="id" name="id"
+												value="<%=order.getId()%>" />
+											<label for="orderNumber" class="col-sm-3 control-label">
+												订单号
+											</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" name="orderNumber"
+													id="orderNumber" disabled
+													value="<%=order.getOrderNumber()%>" placeholder="订单号">
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+										<div class="form-group col-md-6">
+											<label for="companyId" class="col-sm-3 control-label">
+												公司
+											</label>
+											<div class="col-sm-8">
+												<select data='<%=companySalesmanMap_str%>'
+													class="form-control" name="companyId" id="companyId"
+													placeholder="公司">
+													<option value="">
+														未选择
+													</option>
+													<%
+														for (Company company : SystemCache.companylist) {
+															if (order.getCompanyId() != null
+																	&& company.getId() == order.getCompanyId()) {
+													%>
+													<option value="<%=company.getId()%>" selected><%=company.getFullname()%></option>
+													<%
+														} else {
+													%>
+													<option value="<%=company.getId()%>"><%=company.getFullname()%></option>
+													<%
+														}
+														}
+													%>
+												</select>
+											</div>
+										</div>
+										<div class="form-group col-md-6">
+											<label for="salesmanId" class="col-sm-3 control-label">
+												业务员
+											</label>
+											<div class="col-sm-8">
+												<select class="form-control" name="salesmanId"
+													id="salesmanId" placeholder="业务员">
+													<option value="">
+														未选择
+													</option>
+													<%
+														if (order.getCompanyId() != null) {
+															for (Salesman salesman : SystemCache.getSalesmanList(order
+																	.getCompanyId())) {
+																if (order.getSalesmanId() == salesman.getId()) {
+													%>
+													<option value="<%=salesman.getId()%>" selected><%=salesman.getName()%></option>
+													<%
+														} else {
+													%>
+													<option value="<%=salesman.getId()%>"><%=salesman.getName()%></option>
+													<%
+														}
+															}
+														}
+													%>
+												</select>
+											</div>
+										</div>
+										<div class="form-group col-md-6">
+											<label for="amount" class="col-sm-3 control-label">
+												金额
+											</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control require double"
+													name="amount" id="amount" readonly placeholder="金额"
+													value="<%=order.getAmount()%>">
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+										<div class="form-group col-md-6">
+											<label for="start_at" class="col-sm-3 control-label">
+												订单签订时间
+											</label>
+											<div class="col-sm-8">
+												<input type="text" name="start_at" id="start_at"
+													class="date form-control require"
+													value="<%=DateTool.formatDateYMD(order.getStart_at())%>"
+													placeholder="" />
+
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+										<div class="form-group col-md-6">
+											<label for="created_at" class="col-sm-3 control-label">
+												订单创建时间
+											</label>
+											<div class="col-sm-8">
+												<input disabled type="text" name="created_at"
+													id="created_at" class="date form-control require"
+													placeholder=""
+													value="<%=DateTool.formatDateYMD(order.getCreated_at())%>" />
+
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+										<div class="form-group col-md-6">
+											<label for="end_at" class="col-sm-3 control-label">
+												订单截止日期
+											</label>
+											<div class="col-sm-8">
+												<input type="text" name="end_at" id="end_at"
+													class="date form-control require" placeholder=""
+													value="<%=DateTool.formatDateYMD(order.getEnd_at())%>" />
+
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+
+										<div class="form-group col-md-6">
+											<label for="created_user_name" class="col-sm-3 control-label">
+												订单创建人
+											</label>
+											<div class="col-sm-8">
+												<input type="text" name="created_user_name"
+													id="created_user_name" class="form-control require"
+													readonly
+													value="<%=SystemCache.getUserName(order.getCreated_user())%>" />
+
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+										<div class="form-group col-md-6">
+											<label for="memo" class="col-sm-3 control-label">
+												备注
+											</label>
+											<div class="col-sm-8">
+												<input type="text" name="memo" id="memo"
+													class="form-control"
+													value="<%=order.getMemo() == null ? "" : order.getMemo()%>" />
+
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+
+										<div class="clear"></div>
+									</fieldset>
+
 								</form>
-								
+
 							</div>
 
 

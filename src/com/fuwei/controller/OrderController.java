@@ -52,6 +52,7 @@ import com.fuwei.service.OrderService;
 import com.fuwei.service.ProductionNotificationService;
 import com.fuwei.service.QuoteOrderDetailService;
 import com.fuwei.service.QuoteOrderService;
+import com.fuwei.service.SampleService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.ExportExcel;
 import com.fuwei.util.HanyuPinyinUtil;
@@ -80,6 +81,9 @@ public class OrderController extends BaseController {
 	
 	@Autowired
 	HeadBankOrderService headBankOrderService;
+	
+	@Autowired
+	SampleService sampleService ;
 	
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	@ResponseBody
@@ -144,7 +148,7 @@ public class OrderController extends BaseController {
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> add(Order order,String order_details, HttpSession session,
+	public Map<String, Object> add(Order order, HttpSession session,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
@@ -153,12 +157,26 @@ public class OrderController extends BaseController {
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有添加订单的权限", null);
 		}
+		Integer sampleId = order.getSampleId();
+		if(sampleId == null){
+			throw new PermissionDeniedDataAccessException("您没有填写样品，创建订单失败", null);
+		}
 		try {
+			Sample sample = sampleService.get(sampleId);
+			order.setCost(sample.getCost());
+			order.setImg(sample.getImg());
+			order.setImg_s(sample.getImg_s());
+			order.setImg_ss(sample.getImg_ss());
+			order.setDetail(sample.getDetail());
+			
 			order.setCreated_at(DateTool.now());//设置订单创建时间
 			order.setUpdated_at(DateTool.now());//设置订单更新时间
 			order.setCreated_user(user.getId());//设置订单创建人
-			order.setStatus(OrderStatus.CONFIRMSAMPLE.ordinal());//设置订单状态,订单创建时，默认打确认样状态
-			order.setState(OrderStatus.CONFIRMSAMPLE.getName());//设置订单状态描述
+//			2014-11-10 修改 ，将初始状态设为待发货
+//			order.setStatus(OrderStatus.CONFIRMSAMPLE.ordinal());//设置订单状态,订单创建时，默认打确认样状态
+//			order.setState(OrderStatus.CONFIRMSAMPLE.getName());//设置订单状态描述
+			order.setStatus(OrderStatus.DELIVERING.ordinal());//设置订单状态,订单创建时，默认打确认样状态
+			order.setState(OrderStatus.DELIVERING.getName());//设置订单状态描述
 			
 			if(order.getSalesmanId() == null){
 				throw new Exception("业务员不能为空");
@@ -168,21 +186,12 @@ public class OrderController extends BaseController {
 				throw new Exception("公司不能为空");
 			}
 			
-			List<OrderDetail> orderDetaillist = SerializeTool.deserializeList(order_details, OrderDetail.class);
-			if (orderDetaillist == null || orderDetaillist.size() <= 0) {
-				throw new Exception("订单中至少得有一条样品记录");
-			}
-			double amount = 0;
-			String info = "";
-			for (OrderDetail orderDetail : orderDetaillist) {
-				orderDetail.setPrice(NumberUtil.formateDouble(orderDetail.getPrice(),3));
-				orderDetail.setAmount(NumberUtil.formateDouble(orderDetail.getQuantity() * orderDetail.getPrice(), 3));//保留三位小数
-				amount += orderDetail.getAmount();
-				info += orderDetail.getName()+"(" + orderDetail.getWeight() + "克)";
-			}
+			
+			double amount = order.getQuantity() * order.getPrice();
+			String info = order.getName() +"(" + order.getWeight() + "克)";
+			
 			order.setAmount(NumberUtil.formateDouble(amount,3));//设置订单总金额
 			order.setInfo(info);//设置订单信息
-//			order.setDetaillist(orderDetaillist);//设置订单详情
 			
 			//添加操作记录
 			OrderHandle handle = new OrderHandle();
@@ -286,21 +295,22 @@ public class OrderController extends BaseController {
 				temp.setChecked(false);
 			}
 			stepList.add(temp);
-			if(status == OrderStatus.MACHINING){//当是机织时，填充动态生产步骤
-				for(OrderProduceStatus orderProduceStatus : db_steplist){
-					OrderStep temp2 = new OrderStep();
-					temp2.setOrderId(order.getId());
-					temp2.setState(orderProduceStatus.getName());
-					temp2.setStatus(null);
-					temp2.setStepId(orderProduceStatus.getId());
-					if(order.getStepId() != null && order.getStepId() == orderProduceStatus.getId()){
-						temp2.setChecked(true);
-					}else{
-						temp2.setChecked(false);
-					}
-					stepList.add(temp2);
-				}
-			}
+//			2014-11-10 修改，去掉了动态生产步骤
+//			if(status == OrderStatus.MACHINING){//当是机织时，填充动态生产步骤
+//				for(OrderProduceStatus orderProduceStatus : db_steplist){
+//					OrderStep temp2 = new OrderStep();
+//					temp2.setOrderId(order.getId());
+//					temp2.setState(orderProduceStatus.getName());
+//					temp2.setStatus(null);
+//					temp2.setStepId(orderProduceStatus.getId());
+//					if(order.getStepId() != null && order.getStepId() == orderProduceStatus.getId()){
+//						temp2.setChecked(true);
+//					}else{
+//						temp2.setChecked(false);
+//					}
+//					stepList.add(temp2);
+//				}
+//			}
 		}
 		order.setStepList(stepList);//设置订单步骤
 		
@@ -334,9 +344,14 @@ public class OrderController extends BaseController {
 		}
 		try {
 			Order db_order = orderService.get(order.getId());
-			if(db_order.getStatus() >= OrderStatus.COLORING.ordinal()){
-				throw new Exception("订单已进入生产阶段，无法编辑");
+//			2014-11-10 修改：订单进入发货阶段，无法编辑
+//			if(db_order.getStatus() >= OrderStatus.COLORING.ordinal()){
+//				throw new Exception("订单已进入生产阶段，无法编辑");
+//			}
+			if(db_order.getStatus() >= OrderStatus.DELIVERED.ordinal()){
+				throw new Exception("订单已进入发货阶段，无法编辑");
 			}
+			
 			order.setUpdated_at(DateTool.now());//设置订单更新时间			
 			if(order.getSalesmanId() == null){
 				throw new Exception("业务员不能为空");
@@ -486,15 +501,17 @@ public class OrderController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有删除订单步骤的权限", null);
 		}
 		
-		//删除时要做判断，若当前步骤已执行，则无法删除此步骤
+//		2014-11-10 以下几行删除：因为去掉了动态步骤
+//		//删除时要做判断，若当前步骤已执行，则无法删除此步骤
+//		OrderProduceStatus orderProduceStatus = orderProduceStatusService.get(stepId);
+//		Order order = orderService.get(orderProduceStatus.getOrderId());
+//		if(order.getStatus() > OrderStatus.MACHINING.ordinal()){
+//			throw new Exception("该步骤已执行，不能删除");
+//		}
+//		if(order.getStepId()!=null && order.getStepId() > orderProduceStatus.getId() ){
+//			throw new Exception("该步骤已执行，不能删除");
+//		}
 		OrderProduceStatus orderProduceStatus = orderProduceStatusService.get(stepId);
-		Order order = orderService.get(orderProduceStatus.getOrderId());
-		if(order.getStatus() > OrderStatus.MACHINING.ordinal()){
-			throw new Exception("该步骤已执行，不能删除");
-		}
-		if(order.getStepId()!=null && order.getStepId() > orderProduceStatus.getId() ){
-			throw new Exception("该步骤已执行，不能删除");
-		}
 		
 		//添加操作记录
 		
@@ -572,15 +589,11 @@ public class OrderController extends BaseController {
 			
 			//获取头带质量记录单
 			HeadBankOrder headBankOrder = headBankOrderService.getByOrder(order.getId());
-			headBankOrder.setDetaillist(headBankOrderService.getDetailList(headBankOrder.getId()));
-			
-//			List<OrderDetail> orderDetaillist = new ArrayList<OrderDetail>();//设置订单详情
-			
-			
-//			order.setDetaillist(orderDetaillist);//设置订单详情
+			if(headBankOrder != null){
+				headBankOrder.setDetaillist(headBankOrderService.getDetailList(headBankOrder.getId()));
+			}
 			
 			request.setAttribute("order", order);
-//			request.setAttribute("orderDetail", orderDetail);
 			request.setAttribute("headBankOrder", headBankOrder);
 			return new ModelAndView("order/tablelist");
 		} catch (Exception e) {

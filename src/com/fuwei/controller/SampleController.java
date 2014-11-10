@@ -351,4 +351,45 @@ public class SampleController extends BaseController {
         System.out.println("方法二的运行时间："+String.valueOf(endTime-startTime)+"ms");
         return jObject;  
     }
+    
+    
+    //搜索样品
+    @SuppressWarnings("deprecation")
+	@RequestMapping(value="/search",method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView search(Integer page,String name,String sortJSON,Integer charge_user,  HttpSession session,HttpServletRequest request) throws Exception{
+//		String lcode = "sample/index";
+//		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+//		if(!hasAuthority){
+//			throw new PermissionDeniedDataAccessException("没有查看样品列表的权限", null);
+//		}
+		
+//		Date start_time_d = DateTool.parse(start_time);
+//		Date end_time_d = DateTool.parse(end_time);
+    	
+		Pager pager = new Pager();
+		if(page!=null && page > 0){
+			pager.setPageNo(page);
+		}
+		
+		List<Sort> sortList = null;
+		if(sortJSON!=null){
+			sortList = SerializeTool.deserializeList(sortJSON,Sort.class);
+		}
+		if(sortList == null){
+			sortList = new ArrayList<Sort>();
+		}
+		Sort sort = new Sort();
+		sort.setDirection("desc");
+		sort.setProperty("created_at");
+		sortList.add(sort);
+		pager = sampleService.searchList(pager,name,charge_user,sortList);
+		
+		request.setAttribute("name", name);
+		request.setAttribute("pager", pager);
+		request.setAttribute("charge_user", charge_user);
+		request.setAttribute("userlist", SystemCache.userlist);
+		return new ModelAndView("sample/search");
+	}
+	
 }
