@@ -92,89 +92,90 @@
 											<thead>
 												<tr>
 													<td>
-<div class="sampleImg">
+														<div class="sampleImg">
 
-										<a href="#" class="thumbnail"> <img id="previewImg"
-												alt="400 x 100%" src="/<%=order.getImg_s()%>"> </a>
+															<a href="#" class="thumbnail"> <img id="previewImg"
+																	alt="400 x 100%" src="/<%=order.getImg_s()%>"> </a>
 
-									</div>
-									<div class="sampleData">
-										<table class="table table-responsive">
-											<tbody>
+														</div>
+														<div class="sampleData">
+															<table class="table table-responsive">
+																<tbody>
 
-												<tr>
-													<td>
-																		生产单位
-																	</td>
-																	<td class="orderproperty"><%=order.getFactoryId() == null ? "":SystemCache.getFactoryName(order.getFactoryId())%></td>
-												</tr>
-												<tr>
-																	<td colspan="2">
-																		订单信息
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		公司
-																	</td>
-																	<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
-																</tr>
-																<tr>
-																	<td>
-																		客户
-																	</td>
-																	<td><%=order.getKehu()%></td>
-																</tr>
-																<tr>
-																	<td>
-																		货号
-																	</td>
-																	<td><%=order.getProductNumber()%></td>
-																</tr>
-																<tr>
-																	<td>
-																		款名
-																	</td>
-																	<td><%=order.getName()%></td>
-																</tr>
-																<tr>
-																	<td>
-																		跟单
-																	</td>
-																	<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
-																</tr>
-											</tbody>
-										</table>
+																	<tr>
+																		<td>
+																			生产单位
+																		</td>
+																		<td class="orderproperty"><%=order.getFactoryId() == null ? "" : SystemCache
+					.getFactoryName(order.getFactoryId())%></td>
+																	</tr>
+																	<tr>
+																		<td colspan="2">
+																			订单信息
+																		</td>
+																	</tr>
+																	<tr>
+																		<td>
+																			公司
+																		</td>
+																		<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			客户
+																		</td>
+																		<td><%=order.getKehu()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			货号
+																		</td>
+																		<td><%=order.getProductNumber()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			款名
+																		</td>
+																		<td><%=order.getName()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			跟单
+																		</td>
+																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																	</tr>
+																</tbody>
+															</table>
 
-									</div>
+														</div>
 
-											
+
 													</td>
 												</tr>
 												<tr>
 													<td>
-														<table class="table table-responsive">
+														<table class="table table-responsive detailTb">
 															<thead>
 																<tr>
-																	<th>
+																	<th width="15%">
 																		颜色
 																	</th>
-																	<th>
+																	<th width="15%">
 																		克重(g)
 																	</th>
-																	<th>
+																	<th width="15%">
 																		纱线种类
 																	</th>
-																	<th>
+																	<th width="15%">
 																		尺寸
 																	</th>
-																	<th>
+																	<th width="15%">
 																		生产数量
 																	</th>
-																	<th>
+																	<th width="15%">
 																		价格(/个)
 																	</th>
-																	<th>
+																	<th width="15%">
 																		操作
 																	</th>
 																</tr>
@@ -183,23 +184,23 @@
 
 																<tr>
 																	<td>
-																		<input type="text" name="color" class="color" />
+																		<input type="text" name="color" class="color form-control" />
 																	</td>
 																	<td>
-																		<input type="text" name="weight" class="weight double" />
+																		<input type="text" name="weight" class="weight double form-control" />
 																	</td>
 																	<td>
-																		<input type="text" name="yarn" class="yarn" />
+																		<input type="text" name="yarn" class="yarn form-control" />
 																	</td>
 																	<td>
-																		<input type="text" name="size" class="size" />
+																		<input type="text" name="size" class="size form-control" />
 																	</td>
 																	<td>
 																		<input type="text" name="quantity"
-																			class="quantity int" />
+																			class="quantity int form-control" />
 																	</td>
 																	<td>
-																		<input type="text" name="price" class="price double" />
+																		<input type="text" name="price" class="price double form-control" />
 																	</td>
 																	<td>
 																		<a class="deletecompany" href="#">删除</a>
