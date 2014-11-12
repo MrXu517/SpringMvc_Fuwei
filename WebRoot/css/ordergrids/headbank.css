@@ -1,17 +1,3 @@
-.sampleImg,.sampleData,.sampleDetail{
-	width:400px;
-	float:left;
-}
-.sampleData,.sampleDetail{
-	margin-left:20px;
-}
-.sampleDetail #detail {
-	height:300px;
-}
-.sampleData table tbody tr td{
-	border: 1px solid #ddd;
-	text-align:center;
-}
 .tablewidget table.detailTb{
 	background-color: #f5f5f5;
 	border: 1px solid #ccc;

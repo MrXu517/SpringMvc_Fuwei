@@ -53,11 +53,14 @@ public class HeadBankOrderService extends BaseService {
 			} else {
 				// 更新表
 				this.update(headBankOrder, "id",
-						"created_user,status,state,created_at", true);
+						"created_user,created_at,orderId", true);
 
 				// 删除原来单子的detail
 				deleteDetailList(headBankOrder.getId());
 				// 再添加新的detail]
+				for (HeadBankOrderDetail detail : headBankOrder.getDetaillist()) {
+					detail.setHeadBankOrderId(headBankOrder.getId());
+				}
 				addDetailList(headBankOrder.getDetaillist());
 
 				return headBankOrder.getId();

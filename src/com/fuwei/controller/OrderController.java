@@ -42,6 +42,7 @@ import com.fuwei.entity.QuoteOrderDetail;
 import com.fuwei.entity.QuotePrice;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
+import com.fuwei.entity.HeadBankOrderDetail;
 import com.fuwei.print.PrintExcel;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.HeadBankOrderService;
@@ -599,5 +600,52 @@ public class OrderController extends BaseController {
 		} catch (Exception e) {
 			throw e;
 		}
+	}
+	
+	//添加或保存质量记录单
+	@RequestMapping(value = "/headbank", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> headbank(HeadBankOrder headBankOrder,String details, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/headbank";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有创建或编辑质量记录单的权限", null);
+		}
+		try {
+			Integer headBankOrderId = headBankOrder.getId();
+			
+			if(headBankOrderId == null || headBankOrderId == 0){
+				//添加
+				if(headBankOrder.getOrderId() == null || headBankOrder.getOrderId() == 0){
+					throw new PermissionDeniedDataAccessException("质量记录单必须属于一张订单", null);
+				}else{
+					HeadBankOrder temp = headBankOrderService.getByOrder(headBankOrder.getOrderId());
+					if(temp!=null){
+						throw new PermissionDeniedDataAccessException("该订单已经存在质量记录单", null);
+					}
+				}
+				
+				
+				headBankOrder.setCreated_at(DateTool.now());//设置创建时间
+				headBankOrder.setUpdated_at(DateTool.now());//设置更新时间
+				headBankOrder.setCreated_user(user.getId());//设置创建人
+				
+				List<HeadBankOrderDetail> detaillist = SerializeTool.deserializeList(details, HeadBankOrderDetail.class);
+				headBankOrder.setDetaillist(detaillist);
+				headBankOrderId = headBankOrderService.add(headBankOrder);
+			}else{//编辑
+				headBankOrder.setUpdated_at(DateTool.now());
+				List<HeadBankOrderDetail> detaillist = SerializeTool.deserializeList(details, HeadBankOrderDetail.class);
+				headBankOrder.setDetaillist(detaillist);
+				headBankOrderId = headBankOrderService.update(headBankOrder);
+			}
+			return this.returnSuccess("id",headBankOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+
 	}
 }
