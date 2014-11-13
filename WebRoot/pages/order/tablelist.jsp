@@ -5,6 +5,7 @@
 <%@page import="com.fuwei.entity.HeadBankOrder"%>
 <%@page import="com.fuwei.entity.HeadBankOrderDetail"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
+<%@page import="com.fuwei.util.SerializeTool"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -13,6 +14,7 @@
 	Order order = (Order) request.getAttribute("order");
 	HeadBankOrder headBankOrder = (HeadBankOrder) request
 			.getAttribute("headBankOrder");
+	List<HeadBankOrderDetail> headBankOrderDetailList = headBankOrder == null? new ArrayList<HeadBankOrderDetail>():headBankOrder.getDetaillist();
 
 	String tabname = (String) request.getParameter("tab");
 %>
@@ -108,7 +110,7 @@
 																<tbody>
 																	<tr>
 																		<td rowspan="7" width="50%">
-																			<a href="#" class="thumbnail"> <img
+																			<a href="/<%=order.getImg()%>" class="thumbnail" target="_blank"> <img
 																					id="previewImg" alt="200 x 100%"
 																					src="/<%=order.getImg_s()%>"> </a>
 																		</td>
@@ -195,38 +197,178 @@
 																	</tr>
 																</thead>
 																<tbody>
-
-																	<!--<tr>
-																		<td>
-																			<input type="text" name="color"
-																				class="color form-control" />
+																	<%for(HeadBankOrderDetail detail: headBankOrderDetailList){ %>
+																	<tr class="tr" data='<%=SerializeTool.serialize(detail) %>'>
+																		<td class="color"><%=detail.getColor() %>
 																		</td>
-																		<td>
-																			<input type="text" name="weight"
-																				class="weight double form-control" />
+																		<td class="weight"><%=detail.getWeight() %>
 																		</td>
-																		<td>
-																			<input type="text" name="yarn"
-																				class="yarn form-control" />
+																		<td class="yarn"><%=detail.getYarn() %>
 																		</td>
-																		<td>
-																			<input type="text" name="size"
-																				class="size form-control" />
+																		<td class="size"><%=detail.getSize() %>
 																		</td>
-																		<td>
-																			<input type="text" name="quantity"
-																				class="quantity int form-control" />
+																		<td class="quantity"><%=detail.getQuantity() %>
 																		</td>
-																		<td>
-																			<input type="text" name="price"
-																				class="price double form-control" />
+																		<td class="price"><%=detail.getPrice() %>
 																		</td>
-																		<td>
-																			<a class="deletecompany" href="#">删除</a>
+																		<td class="_handle">
+																			<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>
 																		</td>
 																	</tr>
 
-																-->
+																<%} %>
+																	
+																</tbody>
+															</table>
+															<div id="navigator"></div>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+
+										</div>
+
+
+									</div>
+								</div>
+
+							</div>
+
+
+						</div>
+						
+	<div class="tab-content">
+							<div class="tab-pane active" id="headproduction">
+								<div class="container-fluid">
+									<div class="row">
+										<form class="saveform">
+											<input type="hidden" name="id" value="<%=headBankOrder==null?"":headBankOrder.getId() %>"/>
+											<input type="hidden" name="orderId" value="<%=order.getId() %>"/>
+											<button type="submit" class="pull-right btn btn-danger saveTable" data-loading-text="正在保存...">保存对当前表格的修改</button>
+										</form>
+										
+										<div class="clear"></div>
+										<div class="col-md-12 tablewidget">
+											<table class="table">
+												<caption>
+													桐庐富伟针织厂头带生产单
+												</caption>
+												<tbody>
+													<tr>
+														<td>
+															<table
+																class="table table-responsive table-bordered tableTb">
+																<tbody>
+																	<tr>
+																		<td rowspan="7" width="50%">
+																			<a href="/<%=order.getImg()%>" class="thumbnail" target="_blank"> <img
+																					id="previewImg" alt="200 x 100%"
+																					src="/<%=order.getImg_s()%>"> </a>
+																		</td>
+																		<td width="20%">
+																			生产单位
+																		</td>
+																		<td class="orderproperty"><%=order.getFactoryId() == null ? "" : SystemCache
+					.getFactoryName(order.getFactoryId())%></td>
+																	</tr>
+
+																	<tr>
+																		<td colspan="2" class="center">
+																			订单信息
+																		</td>
+																	</tr>
+																	<tr>
+																		<td>
+																			公司
+																		</td>
+																		<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			客户
+																		</td>
+																		<td><%=order.getKehu()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			货号
+																		</td>
+																		<td><%=order.getProductNumber()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			款名
+																		</td>
+																		<td><%=order.getName()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			跟单
+																		</td>
+																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																	</tr>
+																</tbody>
+															</table>
+
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<button type="button" class="btn btn-primary addRow">
+																添加一行
+															</button>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<table class="table table-responsive detailTb">
+																<thead>
+																	<tr>
+																		<th width="15%">
+																			颜色
+																		</th>
+																		<th width="15%">
+																			克重(g)
+																		</th>
+																		<th width="15%">
+																			纱线种类
+																		</th>
+																		<th width="15%">
+																			尺寸
+																		</th>
+																		<th width="15%">
+																			生产数量
+																		</th>
+																		<th width="15%">
+																			价格(/个)
+																		</th>
+																		<th width="15%">
+																			操作
+																		</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<%for(HeadBankOrderDetail detail: headBankOrderDetailList){ %>
+																	<tr class="tr" data='<%=SerializeTool.serialize(detail) %>'>
+																		<td class="color"><%=detail.getColor() %>
+																		</td>
+																		<td class="weight"><%=detail.getWeight() %>
+																		</td>
+																		<td class="yarn"><%=detail.getYarn() %>
+																		</td>
+																		<td class="size"><%=detail.getSize() %>
+																		</td>
+																		<td class="quantity"><%=detail.getQuantity() %>
+																		</td>
+																		<td class="price"><%=detail.getPrice() %>
+																		</td>
+																		<td class="_handle">
+																			<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>
+																		</td>
+																	</tr>
+
+																<%} %>
+																	
 																</tbody>
 															</table>
 															<div id="navigator"></div>
