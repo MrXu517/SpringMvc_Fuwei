@@ -30,7 +30,6 @@ import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.constant.Constants;
 import com.fuwei.constant.OrderStatus;
-import com.fuwei.entity.HeadBankOrder;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.OrderDetail;
 import com.fuwei.entity.OrderHandle;
@@ -42,10 +41,34 @@ import com.fuwei.entity.QuoteOrderDetail;
 import com.fuwei.entity.QuotePrice;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
-import com.fuwei.entity.HeadBankOrderDetail;
+import com.fuwei.entity.ordergrid.CarFixRecordOrder;
+import com.fuwei.entity.ordergrid.CarFixRecordOrderDetail;
+import com.fuwei.entity.ordergrid.CheckRecordOrder;
+import com.fuwei.entity.ordergrid.CheckRecordOrderDetail;
+import com.fuwei.entity.ordergrid.ColoringOrder;
+import com.fuwei.entity.ordergrid.ColoringOrderDetail;
+import com.fuwei.entity.ordergrid.FuliaoPurchaseOrder;
+import com.fuwei.entity.ordergrid.FuliaoPurchaseOrderDetail;
+import com.fuwei.entity.ordergrid.HalfCheckRecordOrder;
+import com.fuwei.entity.ordergrid.HalfCheckRecordOrderDetail;
+import com.fuwei.entity.ordergrid.HalfCheckRecordOrderDetail2;
+import com.fuwei.entity.ordergrid.HeadBankOrder;
+import com.fuwei.entity.ordergrid.HeadBankOrderDetail;
+import com.fuwei.entity.ordergrid.IroningRecordOrder;
+import com.fuwei.entity.ordergrid.IroningRecordOrderDetail;
+import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
+import com.fuwei.entity.ordergrid.MaterialPurchaseOrderDetail;
+import com.fuwei.entity.ordergrid.PlanOrder;
+import com.fuwei.entity.ordergrid.PlanOrderDetail;
+import com.fuwei.entity.ordergrid.PlanOrderProducingDetail;
+import com.fuwei.entity.ordergrid.ProducingOrder;
+import com.fuwei.entity.ordergrid.ProducingOrderDetail;
+import com.fuwei.entity.ordergrid.ProducingOrderMaterialDetail;
+import com.fuwei.entity.ordergrid.StoreOrder;
+import com.fuwei.entity.ordergrid.StoreOrderDetail;
+import com.fuwei.entity.ordergrid.StoreOrderDetail2;
 import com.fuwei.print.PrintExcel;
 import com.fuwei.service.AuthorityService;
-import com.fuwei.service.HeadBankOrderService;
 import com.fuwei.service.OrderDetailService;
 import com.fuwei.service.OrderHandleService;
 import com.fuwei.service.OrderProduceStatusService;
@@ -54,6 +77,17 @@ import com.fuwei.service.ProductionNotificationService;
 import com.fuwei.service.QuoteOrderDetailService;
 import com.fuwei.service.QuoteOrderService;
 import com.fuwei.service.SampleService;
+import com.fuwei.service.ordergrid.CarFixRecordOrderService;
+import com.fuwei.service.ordergrid.CheckRecordOrderService;
+import com.fuwei.service.ordergrid.ColoringOrderService;
+import com.fuwei.service.ordergrid.FuliaoPurchaseOrderService;
+import com.fuwei.service.ordergrid.HalfCheckRecordOrderService;
+import com.fuwei.service.ordergrid.HeadBankOrderService;
+import com.fuwei.service.ordergrid.IroningRecordOrderService;
+import com.fuwei.service.ordergrid.MaterialPurchaseOrderService;
+import com.fuwei.service.ordergrid.PlanOrderService;
+import com.fuwei.service.ordergrid.ProducingOrderService;
+import com.fuwei.service.ordergrid.StoreOrderService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.ExportExcel;
 import com.fuwei.util.HanyuPinyinUtil;
@@ -82,6 +116,27 @@ public class OrderController extends BaseController {
 	
 	@Autowired
 	HeadBankOrderService headBankOrderService;
+	
+	@Autowired
+	ProducingOrderService producingOrderService;
+	@Autowired
+	PlanOrderService planOrderService;
+	@Autowired
+	StoreOrderService storeOrderService;
+	@Autowired
+	HalfCheckRecordOrderService halfCheckRecordOrderService;
+	@Autowired
+	CheckRecordOrderService checkRecordOrderService;
+	@Autowired
+	ColoringOrderService coloringOrderService;
+	@Autowired
+	MaterialPurchaseOrderService materialPurchaseOrderService;
+	@Autowired
+	FuliaoPurchaseOrderService fuliaoPurchaseOrderService;
+	@Autowired
+	CarFixRecordOrderService carFixRecordOrderService;
+	@Autowired
+	IroningRecordOrderService ironingRecordOrderService;
 	
 	@Autowired
 	SampleService sampleService ;
@@ -585,17 +640,55 @@ public class OrderController extends BaseController {
 		
 		
 		try {
-//			OrderDetail orderDetail = orderDetailService.get(orderDetailId);
 			Order order = orderService.get(orderId);
 			
 			//获取头带质量记录单
-			HeadBankOrder headBankOrder = headBankOrderService.getByOrder(order.getId());
-			if(headBankOrder != null){
-				headBankOrder.setDetaillist(headBankOrderService.getDetailList(headBankOrder.getId()));
-			}
+			HeadBankOrder headBankOrder = headBankOrderService.getByOrder(orderId);
+
+			//获取生产单
+			ProducingOrder producingOrder = producingOrderService.getByOrder(orderId);
+			
+			//获取计划单
+			PlanOrder planOrder = planOrderService.getByOrder(orderId);
+			
+			//获取原材料仓库单
+			StoreOrder storeOrder = storeOrderService.getByOrder(orderId);
+			
+			//获取半检记录单
+			HalfCheckRecordOrder halfCheckRecordOrder = halfCheckRecordOrderService.getByOrder(orderId);
+			
+			//获取原材料采购单
+			MaterialPurchaseOrder materialPurchaseOrder = materialPurchaseOrderService.getByOrder(orderId);
+			
+			//获取染色单
+			ColoringOrder coloringOrder = coloringOrderService.getByOrder(orderId);
+			
+			//获取抽检记录单
+			CheckRecordOrder checkRecordOrder = checkRecordOrderService.getByOrder(orderId);
+			
+			//获取辅料采购单
+			FuliaoPurchaseOrder fuliaoPurchaseOrder = fuliaoPurchaseOrderService.getByOrder(orderId);
+			
+			//获取车缝记录单
+			CarFixRecordOrder carFixRecordOrder = carFixRecordOrderService.getByOrder(orderId);
+			
+			//获取整烫记录单
+			IroningRecordOrder ironingRecordOrder = ironingRecordOrderService.getByOrder(orderId);
 			
 			request.setAttribute("order", order);
 			request.setAttribute("headBankOrder", headBankOrder);
+			request.setAttribute("producingOrder", producingOrder);
+			request.setAttribute("planOrder", planOrder);
+			request.setAttribute("storeOrder", storeOrder);
+			
+			request.setAttribute("halfCheckRecordOrder", halfCheckRecordOrder);
+			request.setAttribute("materialPurchaseOrder", materialPurchaseOrder);
+			request.setAttribute("coloringOrder", coloringOrder);
+			request.setAttribute("checkRecordOrder", checkRecordOrder);
+			request.setAttribute("fuliaoPurchaseOrder", fuliaoPurchaseOrder);
+			request.setAttribute("carFixRecordOrder", carFixRecordOrder);
+			request.setAttribute("ironingRecordOrder", ironingRecordOrder);
+			
 			return new ModelAndView("order/tablelist");
 		} catch (Exception e) {
 			throw e;
@@ -643,6 +736,479 @@ public class OrderController extends BaseController {
 				headBankOrderId = headBankOrderService.update(headBankOrder);
 			}
 			return this.returnSuccess("id",headBankOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+	
+	
+	//添加或保存生产单
+	@RequestMapping(value = "/producingorder", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> headbank(ProducingOrder producingOrder,String details,String details_2, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/producing";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有创建或编辑生产单的权限", null);
+		}
+		try {
+			Integer tableOrderId = producingOrder.getId();
+			
+			if(tableOrderId == null || tableOrderId == 0){
+				//添加
+				if(producingOrder.getOrderId() == null || producingOrder.getOrderId() == 0){
+					throw new PermissionDeniedDataAccessException("生产单必须属于一张订单", null);
+				}else{
+					ProducingOrder temp = producingOrderService.getByOrder(producingOrder.getOrderId());
+					if(temp!=null){
+						throw new PermissionDeniedDataAccessException("该订单已经存在生产单", null);
+					}
+				}
+				
+				
+				producingOrder.setCreated_at(DateTool.now());//设置创建时间
+				producingOrder.setUpdated_at(DateTool.now());//设置更新时间
+				producingOrder.setCreated_user(user.getId());//设置创建人
+				
+				List<ProducingOrderDetail> detaillist = SerializeTool.deserializeList(details, ProducingOrderDetail.class);
+				List<ProducingOrderMaterialDetail> detaillist2 = SerializeTool.deserializeList(details_2, ProducingOrderMaterialDetail.class);
+				producingOrder.setDetaillist(detaillist);
+				producingOrder.setDetail_2_list(detaillist2);
+				tableOrderId = producingOrderService.add(producingOrder);
+			}else{//编辑
+				producingOrder.setUpdated_at(DateTool.now());
+				List<ProducingOrderDetail> detaillist = SerializeTool.deserializeList(details, ProducingOrderDetail.class);
+				List<ProducingOrderMaterialDetail> detaillist2 = SerializeTool.deserializeList(details_2, ProducingOrderMaterialDetail.class);
+				producingOrder.setDetaillist(detaillist);
+				producingOrder.setDetail_2_list(detaillist2);
+				tableOrderId = producingOrderService.update(producingOrder);
+			}
+			return this.returnSuccess("id",tableOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+	
+	//添加或保存计划单
+	@RequestMapping(value = "/planorder", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> planorder(PlanOrder planOrder,String details,/*String details_2,*/ HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/plan";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有创建或编辑计划单的权限", null);
+		}
+		try {
+			Integer tableOrderId = planOrder.getId();
+			
+			if(tableOrderId == null || tableOrderId == 0){
+				//添加
+				if(planOrder.getOrderId() == null || planOrder.getOrderId() == 0){
+					throw new PermissionDeniedDataAccessException("计划单必须属于一张订单", null);
+				}else{
+					PlanOrder temp = planOrderService.getByOrder(planOrder.getOrderId());
+					if(temp!=null){
+						throw new PermissionDeniedDataAccessException("该订单已经存在计划单", null);
+					}
+				}
+				
+				
+				planOrder.setCreated_at(DateTool.now());//设置创建时间
+				planOrder.setUpdated_at(DateTool.now());//设置更新时间
+				planOrder.setCreated_user(user.getId());//设置创建人
+				
+				List<PlanOrderDetail> detaillist = SerializeTool.deserializeList(details, PlanOrderDetail.class);
+				planOrder.setDetaillist(detaillist);
+				tableOrderId = planOrderService.add(planOrder);
+			}else{//编辑
+				planOrder.setUpdated_at(DateTool.now());
+				List<PlanOrderDetail> detaillist = SerializeTool.deserializeList(details, PlanOrderDetail.class);
+				planOrder.setDetaillist(detaillist);
+				tableOrderId = planOrderService.update(planOrder);
+			}
+			return this.returnSuccess("id",tableOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+	
+	
+	//添加或保存原材料仓库
+	@RequestMapping(value = "/storeorder", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> storeorder(StoreOrder storeOrder,String details,/*String details_2,*/ HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/store";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有创建或编辑原材料仓库单的权限", null);
+		}
+		try {
+			Integer tableOrderId = storeOrder.getId();
+			
+			if(tableOrderId == null || tableOrderId == 0){
+				//添加
+				if(storeOrder.getOrderId() == null || storeOrder.getOrderId() == 0){
+					throw new PermissionDeniedDataAccessException("原材料仓库单必须属于一张订单", null);
+				}else{
+					StoreOrder temp = storeOrderService.getByOrder(storeOrder.getOrderId());
+					if(temp!=null){
+						throw new PermissionDeniedDataAccessException("该订单已经存在原材料仓库单", null);
+					}
+				}
+				
+				
+				storeOrder.setCreated_at(DateTool.now());//设置创建时间
+				storeOrder.setUpdated_at(DateTool.now());//设置更新时间
+				storeOrder.setCreated_user(user.getId());//设置创建人
+				
+				List<StoreOrderDetail> detaillist = SerializeTool.deserializeList(details, StoreOrderDetail.class);
+				storeOrder.setDetaillist(detaillist);
+				tableOrderId = storeOrderService.add(storeOrder);
+			}else{//编辑
+				storeOrder.setUpdated_at(DateTool.now());
+				List<StoreOrderDetail> detaillist = SerializeTool.deserializeList(details, StoreOrderDetail.class);
+				storeOrder.setDetaillist(detaillist);
+				tableOrderId = storeOrderService.update(storeOrder);
+			}
+			return this.returnSuccess("id",tableOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+	
+	//添加或保存半检记录单
+	@RequestMapping(value = "/halfcheckrecordorder", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> halfcheckrecordorder(HalfCheckRecordOrder tableOrder,String details,String details_2, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/halfcheckrecord";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有创建或编辑半检记录单的权限", null);
+		}
+		try {
+			Integer tableOrderId = tableOrder.getId();
+			
+			if(tableOrderId == null || tableOrderId == 0){
+				//添加
+				if(tableOrder.getOrderId() == null || tableOrder.getOrderId() == 0){
+					throw new PermissionDeniedDataAccessException("半检记录单必须属于一张订单", null);
+				}else{
+					HalfCheckRecordOrder temp = halfCheckRecordOrderService.getByOrder(tableOrder.getOrderId());
+					if(temp!=null){
+						throw new PermissionDeniedDataAccessException("该订单已经存在半检记录单", null);
+					}
+				}
+				
+				
+				tableOrder.setCreated_at(DateTool.now());//设置创建时间
+				tableOrder.setUpdated_at(DateTool.now());//设置更新时间
+				tableOrder.setCreated_user(user.getId());//设置创建人
+				
+				List<HalfCheckRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, HalfCheckRecordOrderDetail.class);
+				List<HalfCheckRecordOrderDetail2> detaillist2 = SerializeTool.deserializeList(details_2, HalfCheckRecordOrderDetail2.class);
+				tableOrder.setDetaillist(detaillist);
+				tableOrder.setDetail_2_list(detaillist2);
+				tableOrderId = halfCheckRecordOrderService.add(tableOrder);
+			}else{//编辑
+				tableOrder.setUpdated_at(DateTool.now());
+				List<HalfCheckRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, HalfCheckRecordOrderDetail.class);
+				List<HalfCheckRecordOrderDetail2> detaillist2 = SerializeTool.deserializeList(details_2, HalfCheckRecordOrderDetail2.class);
+				tableOrder.setDetaillist(detaillist);
+				tableOrder.setDetail_2_list(detaillist2);
+				tableOrderId = halfCheckRecordOrderService.update(tableOrder);
+			}
+			return this.returnSuccess("id",tableOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+	
+	//添加或保存原材料采购单
+	@RequestMapping(value = "/materialpurchaseorder", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> materialpurchaseorder(MaterialPurchaseOrder tableOrder,String details, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/materialpurchase";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有创建或编辑原材料采购单的权限", null);
+		}
+		try {
+			Integer tableOrderId = tableOrder.getId();
+			
+			if(tableOrderId == null || tableOrderId == 0){
+				//添加
+				if(tableOrder.getOrderId() == null || tableOrder.getOrderId() == 0){
+					throw new PermissionDeniedDataAccessException("原材料采购单必须属于一张订单", null);
+				}else{
+//					PlanOrder temp = planOrderService.getByOrder(tableOrder.getOrderId());
+//					if(temp!=null){
+//						throw new PermissionDeniedDataAccessException("该订单已经存在计划单", null);
+//					}
+					//原材料采购单可有多张
+				}
+				
+				
+				tableOrder.setCreated_at(DateTool.now());//设置创建时间
+				tableOrder.setUpdated_at(DateTool.now());//设置更新时间
+				tableOrder.setCreated_user(user.getId());//设置创建人
+				
+				List<MaterialPurchaseOrderDetail> detaillist = SerializeTool.deserializeList(details, MaterialPurchaseOrderDetail.class);
+				tableOrder.setDetaillist(detaillist);
+				tableOrderId = materialPurchaseOrderService.add(tableOrder);
+			}else{//编辑
+				tableOrder.setUpdated_at(DateTool.now());
+				List<MaterialPurchaseOrderDetail> detaillist = SerializeTool.deserializeList(details, MaterialPurchaseOrderDetail.class);
+				tableOrder.setDetaillist(detaillist);
+				tableOrderId = materialPurchaseOrderService.update(tableOrder);
+			}
+			return this.returnSuccess("id",tableOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+	
+	//添加或保存染色单
+	@RequestMapping(value = "/coloringorder", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> coloringorder(ColoringOrder tableOrder,String details, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/coloring";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有创建或编辑染色单的权限", null);
+		}
+		try {
+			Integer tableOrderId = tableOrder.getId();
+			
+			if(tableOrderId == null || tableOrderId == 0){
+				//添加
+				if(tableOrder.getOrderId() == null || tableOrder.getOrderId() == 0){
+					throw new PermissionDeniedDataAccessException("染色单必须属于一张订单", null);
+				}else{
+				}
+				
+				
+				tableOrder.setCreated_at(DateTool.now());//设置创建时间
+				tableOrder.setUpdated_at(DateTool.now());//设置更新时间
+				tableOrder.setCreated_user(user.getId());//设置创建人
+				
+				List<ColoringOrderDetail> detaillist = SerializeTool.deserializeList(details, ColoringOrderDetail.class);
+				tableOrder.setDetaillist(detaillist);
+				tableOrderId = coloringOrderService.add(tableOrder);
+			}else{//编辑
+				tableOrder.setUpdated_at(DateTool.now());
+				List<ColoringOrderDetail> detaillist = SerializeTool.deserializeList(details, ColoringOrderDetail.class);
+				tableOrder.setDetaillist(detaillist);
+				tableOrderId = coloringOrderService.update(tableOrder);
+			}
+			return this.returnSuccess("id",tableOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+	
+	//添加或保存辅料采购单
+	@RequestMapping(value = "/fuliaopurchaseorder", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> fuliaopurchaseorder(FuliaoPurchaseOrder tableOrder,String details, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/fuliaopurchase";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有创建或编辑辅料采购单的权限", null);
+		}
+		try {
+			Integer tableOrderId = tableOrder.getId();
+			
+			if(tableOrderId == null || tableOrderId == 0){
+				//添加
+				if(tableOrder.getOrderId() == null || tableOrder.getOrderId() == 0){
+					throw new PermissionDeniedDataAccessException("辅料采购单必须属于一张订单", null);
+				}else{
+				}
+				
+				
+				tableOrder.setCreated_at(DateTool.now());//设置创建时间
+				tableOrder.setUpdated_at(DateTool.now());//设置更新时间
+				tableOrder.setCreated_user(user.getId());//设置创建人
+				
+				List<FuliaoPurchaseOrderDetail> detaillist = SerializeTool.deserializeList(details, FuliaoPurchaseOrderDetail.class);
+				tableOrder.setDetaillist(detaillist);
+				tableOrderId = fuliaoPurchaseOrderService.add(tableOrder);
+			}else{//编辑
+				tableOrder.setUpdated_at(DateTool.now());
+				List<FuliaoPurchaseOrderDetail> detaillist = SerializeTool.deserializeList(details, FuliaoPurchaseOrderDetail.class);
+				tableOrder.setDetaillist(detaillist);
+				tableOrderId = fuliaoPurchaseOrderService.update(tableOrder);
+			}
+			return this.returnSuccess("id",tableOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+	
+	//添加或保存抽检记录单
+	@RequestMapping(value = "/checkrecordorder", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> checkrecordorder(CheckRecordOrder tableOrder,String details, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/checkrecord";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有创建或编辑抽检记录单的权限", null);
+		}
+		try {
+			Integer tableOrderId = tableOrder.getId();
+			
+			if(tableOrderId == null || tableOrderId == 0){
+				//添加
+				if(tableOrder.getOrderId() == null || tableOrder.getOrderId() == 0){
+					throw new PermissionDeniedDataAccessException("抽检记录单必须属于一张订单", null);
+				}else{
+					CheckRecordOrder temp = checkRecordOrderService.getByOrder(tableOrder.getOrderId());
+					if(temp!=null){
+						throw new PermissionDeniedDataAccessException("该订单已经存在抽检记录单", null);
+					}
+				}
+				
+				
+				tableOrder.setCreated_at(DateTool.now());//设置创建时间
+				tableOrder.setUpdated_at(DateTool.now());//设置更新时间
+				tableOrder.setCreated_user(user.getId());//设置创建人
+				
+				List<CheckRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, CheckRecordOrderDetail.class);
+				tableOrder.setDetaillist(detaillist);
+				tableOrderId = checkRecordOrderService.add(tableOrder);
+			}else{//编辑
+				tableOrder.setUpdated_at(DateTool.now());
+				List<CheckRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, CheckRecordOrderDetail.class);
+				tableOrder.setDetaillist(detaillist);
+				tableOrderId = checkRecordOrderService.update(tableOrder);
+			}
+			return this.returnSuccess("id",tableOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+	
+	//添加或保存车缝记录单
+	@RequestMapping(value = "/carfixrecordorder", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> carfixrecordorder(CarFixRecordOrder tableOrder,String details, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/carfixrecord";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有创建或编辑车缝记录单的权限", null);
+		}
+		try {
+			Integer tableOrderId = tableOrder.getId();
+			
+			if(tableOrderId == null || tableOrderId == 0){
+				//添加
+				if(tableOrder.getOrderId() == null || tableOrder.getOrderId() == 0){
+					throw new PermissionDeniedDataAccessException("车缝记录单必须属于一张订单", null);
+				}else{
+					CarFixRecordOrder temp = carFixRecordOrderService.getByOrder(tableOrder.getOrderId());
+					if(temp!=null){
+						throw new PermissionDeniedDataAccessException("该订单已经存在车缝记录单", null);
+					}
+				}
+				
+				
+				tableOrder.setCreated_at(DateTool.now());//设置创建时间
+				tableOrder.setUpdated_at(DateTool.now());//设置更新时间
+				tableOrder.setCreated_user(user.getId());//设置创建人
+				
+				List<CarFixRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, CarFixRecordOrderDetail.class);
+				tableOrder.setDetaillist(detaillist);
+				tableOrderId = carFixRecordOrderService.add(tableOrder);
+			}else{//编辑
+				tableOrder.setUpdated_at(DateTool.now());
+				List<CarFixRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, CarFixRecordOrderDetail.class);
+				tableOrder.setDetaillist(detaillist);
+				tableOrderId = carFixRecordOrderService.update(tableOrder);
+			}
+			return this.returnSuccess("id",tableOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+	
+	//添加或保存整烫记录单
+	@RequestMapping(value = "/ironingrecordorder", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> ironingrecordorder(IroningRecordOrder tableOrder,String details, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/ironingrecord";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有创建或编辑整烫记录单的权限", null);
+		}
+		try {
+			Integer tableOrderId = tableOrder.getId();
+			
+			if(tableOrderId == null || tableOrderId == 0){
+				//添加
+				if(tableOrder.getOrderId() == null || tableOrder.getOrderId() == 0){
+					throw new PermissionDeniedDataAccessException("整烫记录单必须属于一张订单", null);
+				}else{
+					IroningRecordOrder temp = ironingRecordOrderService.getByOrder(tableOrder.getOrderId());
+					if(temp!=null){
+						throw new PermissionDeniedDataAccessException("该订单已经存在整烫记录单", null);
+					}
+				}
+				
+				
+				tableOrder.setCreated_at(DateTool.now());//设置创建时间
+				tableOrder.setUpdated_at(DateTool.now());//设置更新时间
+				tableOrder.setCreated_user(user.getId());//设置创建人
+				
+				List<IroningRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, IroningRecordOrderDetail.class);
+				tableOrder.setDetaillist(detaillist);
+				tableOrderId = ironingRecordOrderService.add(tableOrder);
+			}else{//编辑
+				tableOrder.setUpdated_at(DateTool.now());
+				List<IroningRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, IroningRecordOrderDetail.class);
+				tableOrder.setDetaillist(detaillist);
+				tableOrderId = ironingRecordOrderService.update(tableOrder);
+			}
+			return this.returnSuccess("id",tableOrderId);
 		} catch (Exception e) {
 			throw e;
 		}

@@ -1,4 +1,4 @@
-package com.fuwei.entity;
+package com.fuwei.entity.ordergrid;
 
 import java.io.Serializable;
 import java.util.List;
@@ -8,10 +8,10 @@ import net.keepsoft.commons.annotation.Table;
 import net.keepsoft.commons.annotation.Temporary;
 
 //头带质量记录单详情
-@Table("tb_headbankorder_detail")
+//@Table("tb_headbankorder_detail")
 public class HeadBankOrderDetail implements Serializable {
 	
-	@IdentityId
+//	@IdentityId
 	private int id;
 	private Integer headBankOrderId;//头带质量记录单ID
 	
