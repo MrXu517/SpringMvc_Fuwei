@@ -86,6 +86,9 @@ public class HeadBankOrderService extends BaseService {
 			HeadBankOrder order = dao.queryForBean(
 					"select * from tb_headbankorder where orderId = ?",
 					HeadBankOrder.class, orderId);
+			if(order == null){
+				return null;
+			}
 			if(order.getDetail_json() == null){
 				order.setDetaillist(new ArrayList<HeadBankOrderDetail>());
 				return order;

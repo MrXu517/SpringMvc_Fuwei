@@ -16,8 +16,8 @@
 	Boolean h_has_sample_add = SystemCache.hasAuthority(session,"sample/add");
 	Boolean h_has_sample_index = SystemCache.hasAuthority(session,"sample/index");
 	Boolean h_has_sample_undetailedindex = SystemCache.hasAuthority(session,"sample/undetailedindex");
-	Boolean h_has_quote_index = SystemCache.hasAuthority(session,"quote/index");
-	Boolean h_has_quoteorder_index = SystemCache.hasAuthority(session,"quoteorder/index");
+//	Boolean h_has_quote_index = SystemCache.hasAuthority(session,"quote/index");
+//	Boolean h_has_quoteorder_index = SystemCache.hasAuthority(session,"quoteorder/index");
 	Boolean h_has_systeminfo= SystemCache.hasAuthority(session,"systeminfo");
 	Boolean h_has_authority = SystemCache.hasAuthority(session,"authority");
 	//权限相关
@@ -146,21 +146,25 @@
 								<a href="sample/add"><i class="fa fa-plus"></i>新增样品</a>
 							</li>
 							<%}if(h_has_sample_undetailedindex){ %>
-							<li>
+							 <li>
 								<a href="sample/undetailedindex"><i class="fa fa-edit"></i>待核价样品</a>
-							</li>
+							</li> 
 							<%
-							}if(h_has_quote_index){
+							}
+							//if(h_has_quote_index){
 							%>
-							<li>
+							<!-- <li>
 								<a href="quote/index"><i
 									class="fa fa-shopping-cart"></i>报价列表</a>
-							</li>
-							<%}if(h_has_quoteorder_index){ %>
-							<li>
+							</li>-->
+							<%
+							//}if(h_has_quoteorder_index){ %>
+							<!-- <li>
 								<a href="quoteorder/index"><i class="fa fa-calendar"></i>报价单列表</a>
-							</li>
-							<%} %>
+							</li>-->
+							<%//} 
+							%>
+							
 						</ul>
 					</li>
 					<%} %>
@@ -174,9 +178,10 @@
 							<li>
 								<a href="order/add"><i class="fa fa-plus"></i>创建订单</a>
 							</li>
+							<!--
 							<li>
 								<a href="addproductNotification.jsp"><i class="fa fa-plus"></i>创建生产通知单</a>
-							</li>
+							</li> -->
 						</ul>
 					</li>
 					<li>

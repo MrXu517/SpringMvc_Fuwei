@@ -303,11 +303,11 @@
 									</form>
  								-->
 								</div>
-								<div class="pull-left">
+								<!-- <div class="pull-left">
 										<button id="exportProcessBtn" type="button" class="btn btn-success">
 											导出生产进度单
 										</button>
-									</div>
+									</div> -->
 								<table class="table table-responsive">
 									<thead>
 										<tr>
