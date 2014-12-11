@@ -151,18 +151,6 @@
 							</li> 
 							<%
 							}
-							//if(h_has_quote_index){
-							%>
-							<!-- <li>
-								<a href="quote/index"><i
-									class="fa fa-shopping-cart"></i>报价列表</a>
-							</li>-->
-							<%
-							//}if(h_has_quoteorder_index){ %>
-							<!-- <li>
-								<a href="quoteorder/index"><i class="fa fa-calendar"></i>报价单列表</a>
-							</li>-->
-							<%//} 
 							%>
 							
 						</ul>
@@ -178,10 +166,7 @@
 							<li>
 								<a href="order/add"><i class="fa fa-plus"></i>创建订单</a>
 							</li>
-							<!--
-							<li>
-								<a href="addproductNotification.jsp"><i class="fa fa-plus"></i>创建生产通知单</a>
-							</li> -->
+						
 						</ul>
 					</li>
 					<li>
