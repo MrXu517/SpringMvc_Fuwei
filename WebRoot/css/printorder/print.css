@@ -1,0 +1,56 @@
+body{
+	height: 29.7cm;
+	width: 21cm;
+	margin: auto;
+	font-family: "Microsoft Yahei", "Verdana", "Tahoma, Arial",
+ "Helvetica Neue", Helvetica, Sans-Serif,"SimSun";
+}
+textarea{
+	width:100%;
+	height:100%;
+}
+table{
+	width:100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+table td,table caption,table th{
+	border : 1px solid #000;
+}
+table caption{
+	border-bottom:none;
+}
+table.noborder>tr>td , table.noborder>caption,table.noborder>tbody>tr>td{
+	border:none;
+}
+#tablename{
+	font-weight:bold;
+	font-size:30px;
+}
+#allTb>tbody>tr>td{
+	border:none;
+}
+.pull-right{
+	text-align:right;
+}
+#sign{
+	padding-right: 200px;
+}
+#created_user,#date{
+	padding-right: 100px;
+}
+#previewImg{
+	height:200px;
+}
+#orderTb{
+	margin-bottom:20px;
+}
+th{
+	font-weight:normal;
+}
+#mainTb caption{
+	font-size:20px;
+}
+strong{
+	font-weight:bold;
+}

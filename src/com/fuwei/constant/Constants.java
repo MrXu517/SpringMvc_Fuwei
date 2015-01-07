@@ -51,7 +51,7 @@ public class Constants {
 
 	public static final int ORDER_TYPE_HH = 3;
 	
-	public static final String UPLOADSite = "d:/";//上传样品图片的路径
+	public static final String UPLOADSite = "c:/";//上传样品图片的路径
 	public static final String UPLOADIMGPATH = "resource.fuwei.com/images/";//上传样品图片的路径
 	public static final String UPLOADEXCEL = "resource.fuwei.com/excel/";//上传样品图片的路径
 	
