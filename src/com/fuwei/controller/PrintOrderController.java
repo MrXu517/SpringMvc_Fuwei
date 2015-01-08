@@ -76,97 +76,87 @@ public class PrintOrderController extends BaseController {
 			Order order = orderService.get(orderId);
 			
 			request.setAttribute("order", order);
-			
 			if(gridName == null){
 				throw new Exception("请输入需要打印的表格名称");
 			}
 			
+			request.setAttribute("gridName", gridName);
+			
 			//获取头带质量记录单
-			if(gridName.equals("headbankorder")){
+			if(gridName.indexOf("headbankorder") > -1){
 				HeadBankOrder headBankOrder = headBankOrderService.getByOrder(orderId);
 				request.setAttribute("headBankOrder", headBankOrder);
-				return new ModelAndView("printorder/headbankorder");
 			}
 			
 			//获取生产单
-			if(gridName.equals("producingorder")){
+			if(gridName.indexOf("producingorder") > -1){
 				ProducingOrder producingOrder = producingOrderService.getByOrder(orderId);		
 				request.setAttribute("producingOrder", producingOrder);
-				return new ModelAndView("printorder/producingorder");
 			}
 			
 			
 			//获取计划单
-			if(gridName.equals("planorder")){
+			if(gridName.indexOf("planorder") > -1){
 				PlanOrder planOrder = planOrderService.getByOrder(orderId);
 				request.setAttribute("planOrder", planOrder);
-				return new ModelAndView("printorder/planorder");
 			}
 			
 			//获取原材料仓库单
-			if(gridName.equals("storeorder")){
+			if(gridName.indexOf("storeorder") > -1){
 				StoreOrder storeOrder = storeOrderService.getByOrder(orderId);
 				request.setAttribute("storeOrder", storeOrder);
-				return new ModelAndView("printorder/storeorder");
 			}
 			
 			
 			//获取半检记录单
-			if(gridName.equals("halfcheckrecordorder")){
+			if(gridName.indexOf("halfcheckrecordorder") > -1){
 				HalfCheckRecordOrder halfCheckRecordOrder = halfCheckRecordOrderService.getByOrder(orderId);
 				request.setAttribute("halfCheckRecordOrder", halfCheckRecordOrder);
-				return new ModelAndView("printorder/halfcheckrecordorder");
 			}
 			
 			
 			//获取原材料采购单
-			if(gridName.equals("materialpurchaseorder")){
+			if(gridName.indexOf("materialpurchaseorder") > -1){
 				MaterialPurchaseOrder materialPurchaseOrder = materialPurchaseOrderService.getByOrder(orderId);
 				request.setAttribute("materialPurchaseOrder", materialPurchaseOrder);
-				return new ModelAndView("printorder/materialpurchaseorder");
 			}
 			
 			
 			//获取染色单
-			if(gridName.equals("coloringorder")){
+			if(gridName.indexOf("coloringorder") > -1){
 				ColoringOrder coloringOrder = coloringOrderService.getByOrder(orderId);
 				request.setAttribute("coloringOrder", coloringOrder);
-				return new ModelAndView("printorder/coloringorder");
 			}
 			
 			
 			//获取抽检记录单
-			if(gridName.equals("checkrecordorder")){
+			if(gridName.indexOf("checkrecordorder") > -1){
 				CheckRecordOrder checkRecordOrder = checkRecordOrderService.getByOrder(orderId);
 				request.setAttribute("checkRecordOrder", checkRecordOrder);
-				return new ModelAndView("printorder/checkrecordorder");
 			}
 			
 			
 			//获取辅料采购单
-			if(gridName.equals("fuliaopurchaseorder")){
+			if(gridName.indexOf("fuliaopurchaseorder") > -1){
 				FuliaoPurchaseOrder fuliaoPurchaseOrder = fuliaoPurchaseOrderService.getByOrder(orderId);
 				request.setAttribute("fuliaoPurchaseOrder", fuliaoPurchaseOrder);
-				return new ModelAndView("printorder/fuliaopurchaseorder");
 			}
 			
 			
 			//获取车缝记录单
-			if(gridName.equals("carfixrecordorder")){
+			if(gridName.indexOf("carfixrecordorder") > -1){
 				CarFixRecordOrder carFixRecordOrder = carFixRecordOrderService.getByOrder(orderId);
 				request.setAttribute("carFixRecordOrder", carFixRecordOrder);
-				return new ModelAndView("printorder/carfixrecordorder");
 			}
 			
 			
 			//获取整烫记录单
-			if(gridName.equals("ironingrecordorder")){
+			if(gridName.indexOf("ironingrecordorder") > -1){
 				IroningRecordOrder ironingRecordOrder = ironingRecordOrderService.getByOrder(orderId);
 				request.setAttribute("ironingRecordOrder", ironingRecordOrder);
-				return new ModelAndView("printorder/ironingrecordorder");
 			}
-			
-			throw new Exception("没有该表格");
+			return new ModelAndView("printorder/print");
+//			throw new Exception("没有该表格");
 			
 		} catch (Exception e) {
 			throw e;

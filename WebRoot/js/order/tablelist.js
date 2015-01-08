@@ -37,6 +37,10 @@ function OrderGrid(settings){
 	}
 	
 	this.init = function(){
+		//2015-1-8添加设置打印按钮的href
+		this.orderId = this.$content.find("input[name='orderId']").val();
+		this.gridName = this.$content.attr("id");
+		this.$content.find("a.printBtn").attr("href","printorder/print?orderId="+this.orderId+"&gridName=" + this.gridName );
 		Object.TableInstance = TableTools.createTableInstance(Object.tbOptions);
 		this.$content.find(".detailTb .addRow").click( function() {
 			Common.resetForm(Object.$form[0]);
@@ -180,7 +184,7 @@ $(document).ready(function() {
 	//质量记录单
 	var headBankGrid = new OrderGrid({
 		url:"order/headbank",
-		$content:$("#headbank"),
+		$content:$("#headbankorder"),
 		tbOptions:{
 		colnames : [
 					{
@@ -229,7 +233,7 @@ $(document).ready(function() {
 	//生产单
 	var producingGrid = new OrderGrid({
 		url:"order/producingorder",
-		$content:$("#producing"),
+		$content:$("#producingorder"),
 		tbOptions:{
 			colnames : [
 					{

@@ -1,6 +1,9 @@
-body{
+.gridTab{
 	height: 29.7cm;
 	width: 21cm;
+	overflow:hidden;
+}
+body{
 	margin: auto;
 	font-family: "Microsoft Yahei", "Verdana", "Tahoma, Arial",
  "Helvetica Neue", Helvetica, Sans-Serif,"SimSun";
@@ -26,6 +29,7 @@ table.noborder>tr>td , table.noborder>caption,table.noborder>tbody>tr>td{
 #tablename{
 	font-weight:bold;
 	font-size:30px;
+	margin-bottom: 15px;
 }
 #allTb>tbody>tr>td{
 	border:none;

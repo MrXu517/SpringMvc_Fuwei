@@ -8,10 +8,6 @@
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%
-	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
 	Order order = (Order) request.getAttribute("order");
 	HeadBankOrder headBankOrder = (HeadBankOrder) request
 			.getAttribute("headBankOrder");
@@ -21,20 +17,16 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<base href="<%=basePath%>">
+	
 		<title>打印质量记录单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<!-- 为了让IE浏览器运行最新的渲染模式 -->
-		<link href="css/printorder/print.css" rel="stylesheet" type="text/css"/>
-		<script src="js/plugins/jquery-1.10.2.min.js"></script>
-		<script src="js/common/common.js" type="text/javascript"></script>
-
 	</head>
-	<body class="auto_container">
-		<div class="container-fluid">
+	<body class="">
+		<div class="container-fluid gridTab auto_container">
 			<div class="row">
 				<div class="col-md-12 tablewidget">
 					<table class="table noborder">
