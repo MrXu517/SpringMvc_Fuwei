@@ -35,6 +35,7 @@
 							桐庐富伟针织厂原材料采购单
 						</caption>
 						<tr><td colspan="3" class="pull-right">№：<%=order.getOrderNumber() %></td></tr>
+						<tr height="10px"></tr>
 					</table>
 
 					<table id="orderTb" class="tableTb noborder">
@@ -89,7 +90,7 @@
 									生产单号：
 								</td>
 								<td class="center underline">
-									<span><%=order.getName()%></span>
+									<span><%=order.getOrderNumber()%></span>
 								</td>
 							</tr>
 						</tbody>
