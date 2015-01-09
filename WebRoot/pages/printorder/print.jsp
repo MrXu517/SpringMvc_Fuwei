@@ -144,6 +144,7 @@
 					html += "<td></td>";
 				}
 				html += "</tr>";
+				
 				addTr(html,this);
 			});
 			
@@ -156,8 +157,7 @@
 					$(table).find("tbody").append(html);
 					addTr(html,table);
 				}
-				
-				
+		
 			}
 			
 			window.print();

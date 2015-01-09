@@ -584,7 +584,14 @@ function _c9_autoheight() {
 				var maring_border_height = $(this).outerHeight(true)
 						- $(this).height();
 				height = height - maring_border_height; // 这才是真实的高度
-
+				
+				if(this.tagName.toLocaleUpperCase() == "TABLE"){
+					var $caption = $(this).children("caption");
+					if($caption.length > 0){
+						height = height-$caption.outerHeight();
+					}
+				}
+				
 				$(this).height(height);
 			});
 	// 设置表格的自适应高度
