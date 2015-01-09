@@ -6,6 +6,7 @@
 <%@page import="com.fuwei.entity.OrderDetail"%>
 <%@page import="com.fuwei.entity.Salesman"%>
 <%@page import="com.fuwei.entity.Company"%>
+<%@page import="com.fuwei.entity.Factory"%>
 <%@page import="net.sf.json.JSONObject"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
@@ -71,7 +72,7 @@
 						<div class="row">
 							<div class="col-md-12 formwidget">
 								<form class="form-horizontal orderform" role="form">
-									<input type="hidden" id="sampleId" name="sampleId"
+									<input type="hidden" id="sampleId" name="sampleId" value="<%=order.getSampleId() %>"
 										class="require" />
 									<div class="form-group col-md-6">
 										<div class="col-sm-offset-3 col-sm-5">
@@ -101,9 +102,9 @@
 												<a href="#" class="thumbnail" id="sampleImgA"> <img
 														id="sampleImg" alt="350 x 100%"
 														src="/<%=order.getImg_s()%>"> </a>
-												<button type="button" id="chooseSampleBtn">
+												<!--  <button type="button" id="chooseSampleBtn">
 													选择样品
-												</button>
+												</button> -->
 											</div>
 											<div class="col-sm-1"></div>
 										</div>
@@ -247,13 +248,51 @@
 											</div>
 											<div class="col-sm-1"></div>
 										</div>
+																				<div class="form-group col-md-6">
+											<label for="factoryId" class="col-sm-3 control-label">
+												生产单位
+											</label>
+											<div class="col-sm-8">
+												<select class="form-control" name="factoryId"
+													id="factoryId">
+													<option value="">
+														未选择
+													</option>
+													<%
+														for (Factory factory : SystemCache.factorylist) {
+															if (order.getFactoryId() != null
+																	&& order.getFactoryId() == factory.getId()) {
+													%>
+													<option value="<%=factory.getId()%>" selected><%=factory.getName()%></option>
+													<%
+														} else {
+													%>
+													<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
+													<%
+														}
+														}
+													%>
+												</select>
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+										<div class="form-group col-md-6">
+											<label for="kehu" class="col-sm-3 control-label">
+												客户
+											</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" name="kehu"
+													id="kehu" value="<%=order.getKehu() == null ? "" : order.getKehu()%>">
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
 										<div class="form-group col-md-6">
 											<label for="companyId" class="col-sm-3 control-label">
 												公司
 											</label>
 											<div class="col-sm-8">
 												<select data='<%=companySalesmanMap_str%>'
-													class="form-control" name="companyId" id="companyId"
+													class="form-control require" name="companyId" id="companyId"
 													placeholder="公司">
 													<option value="">
 														未选择
@@ -310,7 +349,7 @@
 											</label>
 											<div class="col-sm-8">
 												<input type="text" class="form-control require double"
-													name="amount" id="amount" readonly placeholder="金额"
+													name="amount" id="amount" disabled placeholder="金额"
 													value="<%=order.getAmount()%>">
 											</div>
 											<div class="col-sm-1"></div>

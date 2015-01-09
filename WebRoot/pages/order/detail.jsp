@@ -227,7 +227,6 @@
 								<div class="col-md-6 detailTb">
 									<table class="table table-responsive">
 										<tbody>
-
 											<tr>
 												<td>
 													公司
@@ -249,10 +248,17 @@
 											</tr>
 											<tr>
 												<td>
-													备注
+													生产单位
 												</td>
-												<td><%=order.getMemo() == null ? "" : order.getMemo()%></td>
+												<td><%=order.getFactoryId()==null?"":SystemCache.getFactoryName(order.getFactoryId())%></td>
 											</tr>
+											<tr>
+												<td>
+													客户
+												</td>
+												<td><%=order.getKehu()%></td>
+											</tr>
+											
 										</tbody>
 									</table>
 
@@ -284,6 +290,12 @@
 													订单创建人
 												</td>
 												<td><%=SystemCache.getUserName(order.getCreated_user())%></td>
+											</tr>
+											<tr>
+												<td>
+													备注
+												</td>
+												<td><%=order.getMemo() == null ? "" : order.getMemo()%></td>
 											</tr>
 										</tbody>
 									</table>

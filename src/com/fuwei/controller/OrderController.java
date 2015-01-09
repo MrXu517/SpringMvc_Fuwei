@@ -417,19 +417,19 @@ public class OrderController extends BaseController {
 				throw new Exception("公司不能为空");
 			}
 			
-			List<OrderDetail> orderDetaillist = SerializeTool.deserializeList(order_details, OrderDetail.class);
-			if (orderDetaillist == null || orderDetaillist.size() <= 0) {
-				throw new Exception("订单中至少得有一条样品记录");
-			}
-			double amount = 0;
-			String info = "";
-			for (OrderDetail orderDetail : orderDetaillist) {
-				orderDetail.setPrice(NumberUtil.formateDouble(orderDetail.getPrice(),3));
-				orderDetail.setAmount(NumberUtil.formateDouble(orderDetail.getQuantity() * orderDetail.getPrice(), 3));//保留三位小数
-				amount += orderDetail.getAmount();
-				info += orderDetail.getName()+"(" + orderDetail.getWeight() + "克)";
-				orderDetail.setOrderId(order.getId());
-			}
+//			List<OrderDetail> orderDetaillist = SerializeTool.deserializeList(order_details, OrderDetail.class);
+//			if (orderDetaillist == null || orderDetaillist.size() <= 0) {
+//				throw new Exception("订单中至少得有一条样品记录");
+//			}
+			double amount = order.getQuantity() * order.getPrice();
+			String info = order.getName() +"(" + order.getWeight() + "克)";
+//			for (OrderDetail orderDetail : orderDetaillist) {
+//				orderDetail.setPrice(NumberUtil.formateDouble(orderDetail.getPrice(),3));
+//				orderDetail.setAmount(NumberUtil.formateDouble(orderDetail.getQuantity() * orderDetail.getPrice(), 3));//保留三位小数
+//				amount += orderDetail.getAmount();
+//				info += orderDetail.getName()+"(" + orderDetail.getWeight() + "克)";
+//				orderDetail.setOrderId(order.getId());
+//			}
 			order.setAmount(NumberUtil.formateDouble(amount,3));//设置订单总金额
 			order.setInfo(info);//设置订单信息
 //			order.setDetaillist(orderDetaillist);//设置订单详情
