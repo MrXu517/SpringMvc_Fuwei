@@ -20,7 +20,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-	
+
 		<title>打印生产单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
@@ -38,8 +38,7 @@
 						</caption>
 					</table>
 
-					<table id="orderTb"
-						class="tableTb">
+					<table id="orderTb" class="tableTb">
 						<tbody>
 							<tr>
 								<td align="center" rowspan="7" width="50%">
@@ -149,56 +148,55 @@
 							</td>
 						</tr>
 						<tr>
-														<td>
-															<table class="detailTb2">
-																<caption>
-																	生产材料信息
-																</caption>
-																<thead>
-																	<tr>
-																		<th width="20%">
-																			材料
-																		</th>
-																		<th width="20%">
-																			色号
-																		</th>
-																		<th width="20%">
-																			数量
-																		</th>
-																		<th width="25%">
-																			标准色样
-																		</th>
-																	</tr>
-																</thead>
-																<tbody>
-																	<%
-																		for (ProducingOrderMaterialDetail detail : producingOrderMaterialDetailList) {
-																	%>
-																	<tr class="tr"
-																		data='<%=SerializeTool.serialize(detail)%>'>
-																		<td class="material"><%=detail.getMaterial()%>
-																		</td>
-																		<td class="color"><%=detail.getColor()%>
-																		</td>
-																		<td class="quantity"><%=detail.getQuantity()%>
-																		</td>
-																		<td class="colorsample"><%=detail.getColorsample()%>
-																		</td>
-																	</tr>
+							<td>
+								<table class="detailTb2">
+									<caption>
+										生产材料信息
+									</caption>
+									<thead>
+										<tr>
+											<th width="20%">
+												材料
+											</th>
+											<th width="20%">
+												色号
+											</th>
+											<th width="20%">
+												数量
+											</th>
+											<th width="25%">
+												标准色样
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<%
+											for (ProducingOrderMaterialDetail detail : producingOrderMaterialDetailList) {
+										%>
+										<tr class="tr">
+											<td class="material"><%=detail.getMaterial()%>
+											</td>
+											<td class="color"><%=detail.getColor()%>
+											</td>
+											<td class="quantity"><%=detail.getQuantity()%>
+											</td>
+											<td class="colorsample"><%=detail.getColorsample()%>
+											</td>
+										</tr>
 
-																	<%
-																		}
-																	%>
+										<%
+											}
+										%>
 
-																</tbody>
-															</table>
-														</td>
-													</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
 						<tr>
 							<td>
 								<table class="auto_height">
 									<caption>
-										
+
 									</caption>
 									<tbody>
 										<tr>

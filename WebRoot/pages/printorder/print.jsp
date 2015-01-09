@@ -128,7 +128,39 @@
 
 	</body>
 
-	<script >
-		
+	<script type="text/javascript">
+		//固定高度的表格添加空行
+		$(document).ready(function(){
+			$(".stickedTb").each(function(){
+				var html = "<tr>";
+				var $thead = $(this).find("thead");
+				var $ths = $thead.find("th");
+				if($thead.length <= 0){
+					$thead = $(this).find("tbody tr").first();
+					$ths = $thead.find("td");
+				}
+				var length = $ths.length;
+				for(var i = 0 ; i < length ; ++i){
+					html += "<td></td>";
+				}
+				html += "</tr>";
+				addTr(html,this);
+			});
+			
+			function addTr(html,table){
+				var $tr = $(table).find("tbody tr").first();
+				var height = $tr.outerHeight();
+				if(height!=null && height <= 30){
+					return true;
+				}else{
+					$(table).find("tbody").append(html);
+					addTr(html,table);
+				}
+				
+				
+			}
+			
+			window.print();
+		});
 	</script>
 </html>

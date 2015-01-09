@@ -1794,7 +1794,7 @@
 																			数量
 																		</th>
 																		<th width="15%">
-																			颜色
+																			批次号
 																		</th>
 																		<th width="15%">
 																			价格（含税）
@@ -1816,7 +1816,7 @@
 																		</td>
 																		<td class="quantity"><%=detail.getQuantity()%>
 																		</td>
-																		<td class="color"><%=detail.getColor()%>
+																		<td class="batch_number"><%=detail.getBatch_number()%>
 																		</td>
 																		<td class="price"><%=detail.getPrice()%>
 																		</td>
@@ -1897,10 +1897,10 @@
 													</div>
 													<div class="form-group col-md-12">
 														<label for="color" class="col-sm-3 control-label">
-															颜色
+															批次号
 														</label>
 														<div class="col-sm-8">
-															<input type="text" name="color" id="color"
+															<input type="text" name="batch_number" id="batch_number"
 																class="form-control require" />
 														</div>
 														<div class="col-sm-1"></div>
@@ -2284,7 +2284,7 @@
 																</thead>
 																<tbody>
 																	<%
-																		for (HeadBankOrderDetail detail : headBankOrderDetailList) {
+																		for (CheckRecordOrderDetail detail : checkRecordOrderDetailList) {
 																	%>
 																	<tr class="tr"
 																		data='<%=SerializeTool.serialize(detail)%>'>

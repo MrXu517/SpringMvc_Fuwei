@@ -21,15 +21,19 @@
 	Boolean h_has_systeminfo= SystemCache.hasAuthority(session,"systeminfo");
 	Boolean h_has_authority = SystemCache.hasAuthority(session,"authority");
 	//权限相关
+	
 %>
 <html>
 	<link href="css/common/head.css" rel="stylesheet" type="text/css" />
 	<script src="js/common/head.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		version = "2015010901";
+	</script>
 	<div style="display: none;" class="background"></div>
 	<div style="display: none;" class="loading">
 		数据加载中，请稍等......
 	</div>
-
+	
 	<div id="alert">
 		<div id="alert_tip">
 			<div class="modal fade">
@@ -169,9 +173,9 @@
 						
 						</ul>
 					</li>
-					<li>
+				<!-- 	<li>
 						<a href="print.jsp"><i class="fa fa-print"></i>快递单打印</a>
-					</li>
+					</li>  -->
 					<%if(h_has_systeminfo){ %>
 					<li>
 						<a href="systeminfo/index"><i class="fa fa-list-alt"></i>系统信息管理</a>

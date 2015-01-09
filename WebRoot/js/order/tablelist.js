@@ -488,8 +488,8 @@ $(document).ready(function() {
 						width :'15%'
 					},
 					{
-						name :'color',
-						colname :'颜色',
+						name :'batch_number',
+						colname :'批次号',
 						width :'15%'
 					},
 					{

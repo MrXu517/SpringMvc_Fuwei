@@ -117,7 +117,7 @@
 										<%
 											for (PlanOrderDetail detail : planOrderDetailList) {
 										%>
-										<tr class="tr" data='<%=SerializeTool.serialize(detail)%>'>
+										<tr class="tr">
 											<td class="color"><%=detail.getColor()%>
 											</td>
 											<td class="weight"><%=detail.getWeight()%>
@@ -165,24 +165,6 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
-											<td></td><td></td><td></td><td></td><td></td>
-										</tr>
-										<tr>
-											<td></td><td></td><td></td><td></td><td></td>
-										</tr>
-										<tr>
-											<td></td><td></td><td></td><td></td><td></td>
-										</tr>
-										<tr>
-											<td></td><td></td><td></td><td></td><td></td>
-										</tr>
-										<tr>
-											<td></td><td></td><td></td><td></td><td></td>
-										</tr>
-										<tr>
-											<td></td><td></td><td></td><td></td><td></td>
-										</tr>
 										<tr>
 											<td></td><td></td><td></td><td></td><td></td>
 										</tr>
