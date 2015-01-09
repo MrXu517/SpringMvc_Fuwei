@@ -183,8 +183,8 @@
 					</table>
 
 					<p class="pull-right auto_bottom">
-						<span id="created_user">制单人：</span>
-						<span id="date"> 日期：</span>
+						<span id="created_user">制单人：<%=SystemCache.getUserName(ironingRecordOrder.getCreated_user()) %></span>
+						<span id="date"> 日期：<%=DateTool.formatDateYMD(ironingRecordOrder.getCreated_at()) %></span>
 					</p>
 
 

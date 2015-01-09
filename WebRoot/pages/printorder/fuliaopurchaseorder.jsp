@@ -202,8 +202,8 @@
 						备注：请妥善保管此订购单。结账以此表格生产信息及提货记录为准。如有遗失我厂概不负责！！！
 					</p>
 					<p class="pull-right auto_bottom">
-						<span id="created_user">制单人：</span>
-						<span id="date"> 日期：</span>
+						<span id="created_user">制单人：<%=SystemCache.getUserName(fuliaoPurchaseOrder.getCreated_user()) %></span>
+						<span id="date"> 日期：<%=DateTool.formatDateYMD(fuliaoPurchaseOrder.getCreated_at()) %></span>
 					</p>
 
 

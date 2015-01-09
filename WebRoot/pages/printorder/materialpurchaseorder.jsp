@@ -168,7 +168,7 @@
 						备注：本单须妥善保管。结账以此单信息为准。如有异议须在3日内提出，否则默认为确认。
 					</p>
 					<p class="pull-right auto_bottom">
-						<span id="created_user">制单人：</span>
+						<span id="created_user">制单人：<%=SystemCache.getUserName(materialPurchaseOrder.getCreated_user()) %></span>
 					</p>
 
 

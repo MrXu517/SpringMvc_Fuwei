@@ -167,8 +167,8 @@
 						<strong>备注：请务必在贵厂的纱卡上标注相应的货号，谢谢！</strong>
 					</p>
 					<p class="pull-right auto_bottom">
-						<span id="created_user">制单人：</span>
-						<span id="date"> 日期：</span>
+						<span id="created_user">制单人：<%=SystemCache.getUserName(coloringOrder.getCreated_user()) %></span>
+						<span id="date"> 日期：<%=DateTool.formatDateYMD(coloringOrder.getCreated_at()) %></span>
 					</p>
 
 
