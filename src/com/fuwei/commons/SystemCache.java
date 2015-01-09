@@ -255,6 +255,28 @@ public class SystemCache {
 		return map;
 	}
 	
+	public static String getRoleName(int roleId) {
+
+		for (int i = 0; i < SystemCache.rolelist.size(); ++i) {
+			Role temp = SystemCache.rolelist.get(i);
+			if (temp.getId() == roleId) {
+				return temp.getName();
+			}
+		}
+		return "";
+	}
+	
+	public static Role getRole(int roleId) {
+
+		for (int i = 0; i < SystemCache.rolelist.size(); ++i) {
+			Role temp = SystemCache.rolelist.get(i);
+			if (temp.getId() == roleId) {
+				return temp;
+			}
+		}
+		return null;
+	}
+	
 	/*权限相关*/
 	public static Boolean hasAuthority(HttpSession session, int authorityId){
 		LoginedUser loginUser = SystemContextUtils.getCurrentUser(session);

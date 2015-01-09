@@ -473,6 +473,9 @@ for(Role role : rolelist){
 																拼音
 															</th>
 															<th>
+																角色
+															</th>
+															<th>
 																操作
 															</th>
 														</tr>
@@ -486,6 +489,7 @@ for(Role role : rolelist){
 															<td><%=u_i%></td>
 															<td><%=i_user.getName()%></td>
 															<td><%=i_user.getHelp_code()%></td>
+															<td><%=i_user.getRoleId() == null ? "" : SystemCache.getRole(i_user.getRoleId()).getDecription()%></td>
 															<td>
 																<a class="editUser" href="#"
 																	data-cid="<%=i_user.getId()%>">编辑</a> |

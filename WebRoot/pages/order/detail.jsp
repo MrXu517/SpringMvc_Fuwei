@@ -25,7 +25,7 @@
 	//}
 
 	String exeStr = "执行当前步骤";
-//	Boolean to_start_produce = order.startProduce();//是否要执行的是开始生产
+	//	Boolean to_start_produce = order.startProduce();//是否要执行的是开始生产
 	switch (OrderStatusUtil.get(order.getStatus())) {
 	case DELIVERING:
 		exeStr = "发货";
@@ -122,6 +122,12 @@
 										<a href="order/tablelist?orderId=<%=order.getId()%>"
 											class="btn btn-default" type="button"> 查看表格 </a>
 									</div>
+									<div class="pull-right">
+										<a href="printorder/print?orderId=<%=order.getId()%>"
+											target="_blank" type="button" class="btn btn-success"
+											data-loading-text="正在打印..."> 打印表格 </a>
+									</div>
+
 
 									<div class="clear"></div>
 
@@ -223,7 +229,7 @@
 
 								</div>
 								<div class="clear"></div>
-							
+
 								<div class="col-md-6 detailTb">
 									<table class="table table-responsive">
 										<tbody>
@@ -250,7 +256,8 @@
 												<td>
 													生产单位
 												</td>
-												<td><%=order.getFactoryId()==null?"":SystemCache.getFactoryName(order.getFactoryId())%></td>
+												<td><%=order.getFactoryId() == null ? "" : SystemCache
+					.getFactoryName(order.getFactoryId())%></td>
 											</tr>
 											<tr>
 												<td>
@@ -258,7 +265,7 @@
 												</td>
 												<td><%=order.getKehu()%></td>
 											</tr>
-											
+
 										</tbody>
 									</table>
 
@@ -301,9 +308,9 @@
 									</table>
 
 								</div>
-								
+
 								<div class="clear"></div>
-									<fieldset>
+								<fieldset>
 									<legend>
 										样品信息
 									</legend>
@@ -380,7 +387,7 @@
 								</fieldset>
 
 							</div>
-						
+
 
 						</div>
 					</div>

@@ -153,6 +153,10 @@
 					</ul>
 				</div>
 				<div class="body">
+					<a href="printorder/print?orderId=<%=order.getId() %>" target="_blank" type="button"
+						class="btn btn-success printAll"
+						data-loading-text="正在打印..."> 打印所有的表格 </a>
+					<div class="clear"></div>
 					<div id="tab">
 						<ul class="nav nav-tabs" role="tablist">
 							<li>
@@ -191,7 +195,7 @@
 							</li>
 						</ul>
 
-						
+
 						<div class="tab-content">
 							<!-- 质量记录单  -->
 							<div class="tab-pane" id="headbankorder" role="tabpanel">
@@ -210,9 +214,7 @@
 											</button>
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
-												data-loading-text="正在打印...">
-												打印
-											</a>
+												data-loading-text="正在打印..."> 打印 </a>
 										</form>
 
 										<div class="clear"></div>
@@ -221,6 +223,7 @@
 												<caption>
 													桐庐富伟针织厂质量记录单
 												</caption>
+												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
 												<tbody>
 													<tr>
 														<td>
@@ -473,9 +476,7 @@
 											</button>
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
-												data-loading-text="正在打印...">
-												打印
-											</a>
+												data-loading-text="正在打印..."> 打印 </a>
 										</form>
 
 										<div class="clear"></div>
@@ -484,6 +485,7 @@
 												<caption>
 													桐庐富伟针织厂生产单
 												</caption>
+												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
 												<tbody>
 													<tr>
 														<td>
@@ -865,9 +867,7 @@
 											</button>
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
-												data-loading-text="正在打印...">
-												打印
-											</a>
+												data-loading-text="正在打印..."> 打印 </a>
 										</form>
 
 										<div class="clear"></div>
@@ -876,6 +876,7 @@
 												<caption>
 													桐庐富伟针织厂计划单
 												</caption>
+												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
 												<tbody>
 													<tr>
 														<td>
@@ -1110,9 +1111,7 @@
 											</button>
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
-												data-loading-text="正在打印...">
-												打印
-											</a>
+												data-loading-text="正在打印..."> 打印 </a>
 										</form>
 
 										<div class="clear"></div>
@@ -1121,6 +1120,7 @@
 												<caption>
 													桐庐富伟针织厂原材料仓库
 												</caption>
+												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
 												<tbody>
 													<tr>
 														<td>
@@ -1343,9 +1343,7 @@
 											</button>
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
-												data-loading-text="正在打印...">
-												打印
-											</a>
+												data-loading-text="正在打印..."> 打印 </a>
 										</form>
 
 										<div class="clear"></div>
@@ -1354,6 +1352,7 @@
 												<caption>
 													桐庐富伟针织厂半检记录单
 												</caption>
+												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
 												<tbody>
 													<tr>
 														<td>
@@ -1694,7 +1693,8 @@
 									<div class="row">
 										<form class="saveform">
 											<input type="hidden" name="id"
-												value="<%=materialPurchaseOrder == null ? "" : materialPurchaseOrder.getId()%>" />
+												value="<%=materialPurchaseOrder == null ? ""
+					: materialPurchaseOrder.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
 											<button type="submit"
@@ -1704,150 +1704,159 @@
 											</button>
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
-												data-loading-text="正在打印...">
-												打印
-											</a>
-	<div class="clear"></div>
-										<div class="col-md-12 tablewidget">
-											<table class="table">
-												<caption>
-													桐庐富伟针织厂原材料采购单
-												</caption>
-												<tbody>
-													<tr>
-														<td>
-															<table
-																class="table table-responsive table-bordered tableTb">
-																<tbody>
-																	<tr>
-																		<td rowspan="7" width="50%">
-																			<a href="/<%=order.getImg()%>" class="thumbnail"
-																				target="_blank"> <img id="previewImg"
-																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
-																			</a>
-																		</td>
-																		<td width="20%">
-																			采购单位
-																		</td>
-																		<td class="orderproperty"><input class="form-control require"  type="text" name="company" value="<%=materialPurchaseOrder == null ? "" : (materialPurchaseOrder.getCompany()== null ? "":materialPurchaseOrder.getCompany())%>"/></td>
-																		
-																	</tr>
-																	<tr>
-																		<td width="20%">
-																			订购日期
-																		</td>
-																		<td class="orderproperty"><input class="form-control date require"  type="text" name="purchase_at" value="<%=materialPurchaseOrder == null ? "" : (materialPurchaseOrder.getPurchase_at()==null?"":materialPurchaseOrder.getPurchase_at()) %>"/></td>
-																	</tr>
-																	<tr>
-																		<td colspan="2" class="center">
-																			订单信息
-																		</td>
-																	</tr>
-																	<tr>
-																		<td>
-																			公司
-																		</td>
-																		<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
-																	</tr>
-																	<tr>
-																		<td>
-																			客户
-																		</td>
-																		<td><%=order.getKehu()%></td>
-																	</tr>
-																	<tr>
-																		<td>
-																			货号
-																		</td>
-																		<td><%=order.getProductNumber()%></td>
-																	</tr>
-																	<tr>
-																		<td>
-																			款名
-																		</td>
-																		<td><%=order.getName()%></td>
-																	</tr>
-																</tbody>
-															</table>
+												data-loading-text="正在打印..."> 打印 </a>
+											<div class="clear"></div>
+											<div class="col-md-12 tablewidget">
+												<table class="table">
+													<caption>
+														桐庐富伟针织厂原材料采购单
+													</caption>
+												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
+													<tbody>
+														<tr>
+															<td>
+																<table
+																	class="table table-responsive table-bordered tableTb">
+																	<tbody>
+																		<tr>
+																			<td rowspan="7" width="50%">
+																				<a href="/<%=order.getImg()%>" class="thumbnail"
+																					target="_blank"> <img id="previewImg"
+																						alt="200 x 100%" src="/<%=order.getImg_s()%>">
+																				</a>
+																			</td>
+																			<td width="20%">
+																				采购单位
+																			</td>
+																			<td class="orderproperty">
+																				<input class="form-control require" type="text"
+																					name="company"
+																					value="<%=materialPurchaseOrder == null ? ""
+					: (materialPurchaseOrder.getCompany() == null ? ""
+							: materialPurchaseOrder.getCompany())%>" />
+																			</td>
 
-														</td>
-													</tr>
-													<tr>
-														<td>
-															<table class="table table-responsive detailTb">
-																<caption>
-																	<button type="button"
-																		class="btn btn-primary addRow pull-left">
-																		添加一行
-																	</button>
-																	材料列表
-																</caption>
-																<thead>
-																	<tr>
-																		<th width="15%">
-																			材料品种
-																		</th>
-																		<th width="15%">
-																			规格
-																		</th>
-																		<th width="15%">
-																			数量
-																		</th>
-																		<th width="15%">
-																			批次号
-																		</th>
-																		<th width="15%">
-																			价格（含税）
-																		</th>
-																		<th width="15%">
-																			操作
-																		</th>
-																	</tr>
-																</thead>
-																<tbody>
-																	<%
-																		for (MaterialPurchaseOrderDetail detail : materialPurchaseOrderDetailList) {
-																	%>
-																	<tr class="tr"
-																		data='<%=SerializeTool.serialize(detail)%>'>
-																		<td class="material"><%=detail.getMaterial()%>
-																		</td>
-																		<td class="scale"><%=detail.getScale()%>
-																		</td>
-																		<td class="quantity"><%=detail.getQuantity()%>
-																		</td>
-																		<td class="batch_number"><%=detail.getBatch_number()%>
-																		</td>
-																		<td class="price"><%=detail.getPrice()%>
-																		</td>
-																		<td class="_handle">
-																			<a class='editRow' href='#'>修改</a> |
-																			<a class='deleteRow' href='#'>删除</a>
-																		</td>
-																	</tr>
+																		</tr>
+																		<tr>
+																			<td width="20%">
+																				订购日期
+																			</td>
+																			<td class="orderproperty">
+																				<input class="form-control date require" type="text"
+																					name="purchase_at"
+																					value="<%=materialPurchaseOrder == null ? ""
+					: (materialPurchaseOrder.getPurchase_at() == null ? ""
+							: materialPurchaseOrder.getPurchase_at())%>" />
+																			</td>
+																		</tr>
+																		<tr>
+																			<td colspan="2" class="center">
+																				订单信息
+																			</td>
+																		</tr>
+																		<tr>
+																			<td>
+																				公司
+																			</td>
+																			<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+																		</tr>
+																		<tr>
+																			<td>
+																				客户
+																			</td>
+																			<td><%=order.getKehu()%></td>
+																		</tr>
+																		<tr>
+																			<td>
+																				货号
+																			</td>
+																			<td><%=order.getProductNumber()%></td>
+																		</tr>
+																		<tr>
+																			<td>
+																				款名
+																			</td>
+																			<td><%=order.getName()%></td>
+																		</tr>
+																	</tbody>
+																</table>
 
-																	<%
-																		}
-																	%>
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<table class="table table-responsive detailTb">
+																	<caption>
+																		<button type="button"
+																			class="btn btn-primary addRow pull-left">
+																			添加一行
+																		</button>
+																		材料列表
+																	</caption>
+																	<thead>
+																		<tr>
+																			<th width="15%">
+																				材料品种
+																			</th>
+																			<th width="15%">
+																				规格
+																			</th>
+																			<th width="15%">
+																				数量
+																			</th>
+																			<th width="15%">
+																				批次号
+																			</th>
+																			<th width="15%">
+																				价格（含税）
+																			</th>
+																			<th width="15%">
+																				操作
+																			</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<%
+																			for (MaterialPurchaseOrderDetail detail : materialPurchaseOrderDetailList) {
+																		%>
+																		<tr class="tr"
+																			data='<%=SerializeTool.serialize(detail)%>'>
+																			<td class="material"><%=detail.getMaterial()%>
+																			</td>
+																			<td class="scale"><%=detail.getScale()%>
+																			</td>
+																			<td class="quantity"><%=detail.getQuantity()%>
+																			</td>
+																			<td class="batch_number"><%=detail.getBatch_number()%>
+																			</td>
+																			<td class="price"><%=detail.getPrice()%>
+																			</td>
+																			<td class="_handle">
+																				<a class='editRow' href='#'>修改</a> |
+																				<a class='deleteRow' href='#'>删除</a>
+																			</td>
+																		</tr>
 
-																</tbody>
-															</table>
-															<div id="navigator"></div>
-														</td>
-													</tr>
+																		<%
+																			}
+																		%>
 
-												</tbody>
-											</table>
+																	</tbody>
+																</table>
+																<div id="navigator"></div>
+															</td>
+														</tr>
 
-										</div>
+													</tbody>
+												</table>
 
-
+											</div>
 									</div>
 								</div>
 
-										</form>
+								</form>
 
-									
+
 								<!--
 						 			添加编辑原材料采购对话框 -->
 								<div class="modal fade tableRowDialog"
@@ -1954,138 +1963,140 @@
 											</button>
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
-												data-loading-text="正在打印...">
-												打印
-											</a>
+												data-loading-text="正在打印..."> 打印 </a>
 											<div class="clear"></div>
-										<div class="col-md-12 tablewidget">
-											<table class="table">
-												<caption>
-													桐庐富伟针织厂染色单
-												</caption>
-												<tbody>
-													<tr>
-														<td>
-															<table
-																class="table table-responsive table-bordered tableTb">
-																<tbody>
-																	<tr>
-																		<td rowspan="7" width="50%">
-																			<a href="/<%=order.getImg()%>" class="thumbnail"
-																				target="_blank"> <img id="previewImg"
-																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
-																			</a>
-																		</td>
-																		<td width="20%">
-																			染色单位
-																		</td>
-																		<td class="orderproperty"><input class="form-control require"  type="text" name="company" value="<%=coloringOrder == null ? "" : (coloringOrder.getCompany() == null ? "":coloringOrder.getCompany())%>"/></td>
-																		
-																	</tr>
-																	<tr>
-																		<td colspan="2" class="center">
-																			订单信息
-																		</td>
-																	</tr>
-																	<tr>
-																		<td>
-																			公司
-																		</td>
-																		<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
-																	</tr>
-																	<tr>
-																		<td>
-																			客户
-																		</td>
-																		<td><%=order.getKehu()%></td>
-																	</tr>
-																	<tr>
-																		<td>
-																			货号
-																		</td>
-																		<td><%=order.getProductNumber()%></td>
-																	</tr>
-																	<tr>
-																		<td>
-																			款名
-																		</td>
-																		<td><%=order.getName()%></td>
-																	</tr>
-																</tbody>
-															</table>
+											<div class="col-md-12 tablewidget">
+												<table class="table">
+													<caption>
+														桐庐富伟针织厂染色单
+													</caption>
+												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
+													<tbody>
+														<tr>
+															<td>
+																<table
+																	class="table table-responsive table-bordered tableTb">
+																	<tbody>
+																		<tr>
+																			<td rowspan="7" width="50%">
+																				<a href="/<%=order.getImg()%>" class="thumbnail"
+																					target="_blank"> <img id="previewImg"
+																						alt="200 x 100%" src="/<%=order.getImg_s()%>">
+																				</a>
+																			</td>
+																			<td width="20%">
+																				染色单位
+																			</td>
+																			<td class="orderproperty">
+																				<input class="form-control require" type="text"
+																					name="company"
+																					value="<%=coloringOrder == null ? "" : (coloringOrder
+					.getCompany() == null ? "" : coloringOrder.getCompany())%>" />
+																			</td>
 
-														</td>
-													</tr>
-													<tr>
-														<td>
-															<table class="table table-responsive detailTb">
-																<caption>
-																	<button type="button"
-																		class="btn btn-primary addRow pull-left">
-																		添加一行
-																	</button>
-																	材料列表
-																</caption>
-																<thead>
-																	<tr>
-																		<th width="15%">
-																			色号
-																		</th>
-																		<th width="15%">
-																			材料
-																		</th>
-																		<th width="15%">
-																			数量
-																		</th>
-																		<th width="15%">
-																			标准样纱
-																		</th>
-																		<th width="15%">
-																			操作
-																		</th>
-																	</tr>
-																</thead>
-																<tbody>
-																	<%
-																		for (ColoringOrderDetail detail : coloringOrderDetailList) {
-																	%>
-																	<tr class="tr"
-																		data='<%=SerializeTool.serialize(detail)%>'>
-																		<td class="color"><%=detail.getColor()%>
-																		</td>
-																		<td class="material"><%=detail.getMaterial()%>
-																		</td>
-																		<td class="quantity"><%=detail.getQuantity()%>
-																		</td>
-																		<td class="standardyarn"><%=detail.getStandardyarn()%>
-																		<td class="_handle">
-																			<a class='editRow' href='#'>修改</a> |
-																			<a class='deleteRow' href='#'>删除</a>
-																		</td>
-																	</tr>
+																		</tr>
+																		<tr>
+																			<td colspan="2" class="center">
+																				订单信息
+																			</td>
+																		</tr>
+																		<tr>
+																			<td>
+																				公司
+																			</td>
+																			<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+																		</tr>
+																		<tr>
+																			<td>
+																				客户
+																			</td>
+																			<td><%=order.getKehu()%></td>
+																		</tr>
+																		<tr>
+																			<td>
+																				货号
+																			</td>
+																			<td><%=order.getProductNumber()%></td>
+																		</tr>
+																		<tr>
+																			<td>
+																				款名
+																			</td>
+																			<td><%=order.getName()%></td>
+																		</tr>
+																	</tbody>
+																</table>
 
-																	<%
-																		}
-																	%>
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<table class="table table-responsive detailTb">
+																	<caption>
+																		<button type="button"
+																			class="btn btn-primary addRow pull-left">
+																			添加一行
+																		</button>
+																		材料列表
+																	</caption>
+																	<thead>
+																		<tr>
+																			<th width="15%">
+																				色号
+																			</th>
+																			<th width="15%">
+																				材料
+																			</th>
+																			<th width="15%">
+																				数量
+																			</th>
+																			<th width="15%">
+																				标准样纱
+																			</th>
+																			<th width="15%">
+																				操作
+																			</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<%
+																			for (ColoringOrderDetail detail : coloringOrderDetailList) {
+																		%>
+																		<tr class="tr"
+																			data='<%=SerializeTool.serialize(detail)%>'>
+																			<td class="color"><%=detail.getColor()%>
+																			</td>
+																			<td class="material"><%=detail.getMaterial()%>
+																			</td>
+																			<td class="quantity"><%=detail.getQuantity()%>
+																			</td>
+																			<td class="standardyarn"><%=detail.getStandardyarn()%>
+																			<td class="_handle">
+																				<a class='editRow' href='#'>修改</a> |
+																				<a class='deleteRow' href='#'>删除</a>
+																			</td>
+																		</tr>
 
-																</tbody>
-															</table>
-															<div id="navigator"></div>
-														</td>
-													</tr>
+																		<%
+																			}
+																		%>
 
-												</tbody>
-											</table>
+																	</tbody>
+																</table>
+																<div id="navigator"></div>
+															</td>
+														</tr>
 
-										</div>
+													</tbody>
+												</table>
 
-
+											</div>
 									</div>
 								</div>
 
-										</form>
+								</form>
 
-										
+
 								<!--
 						 			添加编辑染色单对话框 -->
 								<div class="modal fade tableRowDialog" id="coloringDialog">
@@ -2169,7 +2180,8 @@
 									<div class="row">
 										<form class="saveform">
 											<input type="hidden" name="id"
-												value="<%=checkRecordOrder == null ? "" : checkRecordOrder.getId()%>" />
+												value="<%=checkRecordOrder == null ? "" : checkRecordOrder
+					.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
 											<button type="submit"
@@ -2179,9 +2191,7 @@
 											</button>
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
-												data-loading-text="正在打印...">
-												打印
-											</a>
+												data-loading-text="正在打印..."> 打印 </a>
 										</form>
 
 										<div class="clear"></div>
@@ -2190,6 +2200,7 @@
 												<caption>
 													桐庐富伟针织厂抽检记录单
 												</caption>
+												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
 												<tbody>
 													<tr>
 														<td>
@@ -2425,144 +2436,149 @@
 											</button>
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
-												data-loading-text="正在打印...">
-												打印
-											</a>
-<div class="clear"></div>
-										<div class="col-md-12 tablewidget">
-											<table class="table">
-												<caption>
-													桐庐富伟针织厂辅料采购单
-												</caption>
-												<tbody>
-													<tr>
-														<td>
-															<table
-																class="table table-responsive table-bordered tableTb">
-																<tbody>
-																	<tr>
-																		<td rowspan="7" width="50%">
-																			<a href="/<%=order.getImg()%>" class="thumbnail"
-																				target="_blank"> <img id="previewImg"
-																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
-																			</a>
-																		</td>
-																		<td width="20%">
-																			供货方
-																		</td>
-																		<td class="orderproperty"><input class="form-control require"  type="text" name="company" value="<%=fuliaoPurchaseOrder == null ? "" : (fuliaoPurchaseOrder.getCompany() == null ? "":fuliaoPurchaseOrder.getCompany())%>"/></td>
-																	</tr>
+												data-loading-text="正在打印..."> 打印 </a>
+											<div class="clear"></div>
+											<div class="col-md-12 tablewidget">
+												<table class="table">
+													<caption>
+														桐庐富伟针织厂辅料采购单
+													</caption>
+												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
+													<tbody>
+														<tr>
+															<td>
+																<table
+																	class="table table-responsive table-bordered tableTb">
+																	<tbody>
+																		<tr>
+																			<td rowspan="7" width="50%">
+																				<a href="/<%=order.getImg()%>" class="thumbnail"
+																					target="_blank"> <img id="previewImg"
+																						alt="200 x 100%" src="/<%=order.getImg_s()%>">
+																				</a>
+																			</td>
+																			<td width="20%">
+																				供货方
+																			</td>
+																			<td class="orderproperty">
+																				<input class="form-control require" type="text"
+																					name="company"
+																					value="<%=fuliaoPurchaseOrder == null ? ""
+					: (fuliaoPurchaseOrder.getCompany() == null ? ""
+							: fuliaoPurchaseOrder.getCompany())%>" />
+																			</td>
+																		</tr>
 
-																	<tr>
-																		<td colspan="2" class="center">
-																			订单信息
-																		</td>
-																	</tr>
-																	<tr>
-																		<td>
-																			公司
-																		</td>
-																		<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
-																	</tr>
-																	<tr>
-																		<td>
-																			客户
-																		</td>
-																		<td><%=order.getKehu()%></td>
-																	</tr>
-																	<tr>
-																		<td>
-																			货号
-																		</td>
-																		<td><%=order.getProductNumber()%></td>
-																	</tr>
-																	<tr>
-																		<td>
-																			款名
-																		</td>
-																		<td><%=order.getName()%></td>
-																	</tr>
-																	<tr>
-																		<td>
-																			跟单
-																		</td>
-																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
-																	</tr>
-																</tbody>
-															</table>
+																		<tr>
+																			<td colspan="2" class="center">
+																				订单信息
+																			</td>
+																		</tr>
+																		<tr>
+																			<td>
+																				公司
+																			</td>
+																			<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+																		</tr>
+																		<tr>
+																			<td>
+																				客户
+																			</td>
+																			<td><%=order.getKehu()%></td>
+																		</tr>
+																		<tr>
+																			<td>
+																				货号
+																			</td>
+																			<td><%=order.getProductNumber()%></td>
+																		</tr>
+																		<tr>
+																			<td>
+																				款名
+																			</td>
+																			<td><%=order.getName()%></td>
+																		</tr>
+																		<tr>
+																			<td>
+																				跟单
+																			</td>
+																			<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																		</tr>
+																	</tbody>
+																</table>
 
-														</td>
-													</tr>
-													<tr>
-														<td>
-															<table class="table table-responsive detailTb">
-																<caption>
-																	<button type="button"
-																		class="btn btn-primary addRow pull-left">
-																		添加一行
-																	</button>
-																	采购列表
-																</caption>
-																<thead>
-																	<tr>
-																		<th width="15%">
-																			辅料类型
-																		</th>
-																		<th width="15%">
-																			标准样
-																		</th>
-																		<th width="15%">
-																			数量
-																		</th>
-																		<th width="15%">
-																			价格
-																		</th>
-																		<th width="15%">
-																			交期
-																		</th>
-																		<th width="15%">
-																			操作
-																		</th>
-																	</tr>
-																</thead>
-																<tbody>
-																	<%
-																		for (FuliaoPurchaseOrderDetail detail : fuliaoPurchaseOrderDetailList) {
-																	%>
-																	<tr class="tr"
-																		data='<%=SerializeTool.serialize(detail)%>'>
-																		<td class="style"><%=detail.getStyle()%>
-																		</td>
-																		<td class="standardsample"><%=detail.getStandardsample()%>
-																		</td>
-																		<td class="quantity"><%=detail.getQuantity()%>
-																		</td>
-																		<td class="price"><%=detail.getPrice()%>
-																		</td>
-																		<td class="end_at"><%=detail.getEnd_at()%>
-																		</td>
-																		<td class="_handle">
-																			<a class='editRow' href='#'>修改</a> |
-																			<a class='deleteRow' href='#'>删除</a>
-																		</td>
-																	</tr>
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<table class="table table-responsive detailTb">
+																	<caption>
+																		<button type="button"
+																			class="btn btn-primary addRow pull-left">
+																			添加一行
+																		</button>
+																		采购列表
+																	</caption>
+																	<thead>
+																		<tr>
+																			<th width="15%">
+																				辅料类型
+																			</th>
+																			<th width="15%">
+																				标准样
+																			</th>
+																			<th width="15%">
+																				数量
+																			</th>
+																			<th width="15%">
+																				价格
+																			</th>
+																			<th width="15%">
+																				交期
+																			</th>
+																			<th width="15%">
+																				操作
+																			</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<%
+																			for (FuliaoPurchaseOrderDetail detail : fuliaoPurchaseOrderDetailList) {
+																		%>
+																		<tr class="tr"
+																			data='<%=SerializeTool.serialize(detail)%>'>
+																			<td class="style"><%=detail.getStyle()%>
+																			</td>
+																			<td class="standardsample"><%=detail.getStandardsample()%>
+																			</td>
+																			<td class="quantity"><%=detail.getQuantity()%>
+																			</td>
+																			<td class="price"><%=detail.getPrice()%>
+																			</td>
+																			<td class="end_at"><%=detail.getEnd_at()%>
+																			</td>
+																			<td class="_handle">
+																				<a class='editRow' href='#'>修改</a> |
+																				<a class='deleteRow' href='#'>删除</a>
+																			</td>
+																		</tr>
 
-																	<%
-																		}
-																	%>
+																		<%
+																			}
+																		%>
 
-																</tbody>
-															</table>
-															<div id="navigator"></div>
-														</td>
-													</tr>
-												</tbody>
-											</table>
+																	</tbody>
+																</table>
+																<div id="navigator"></div>
+															</td>
+														</tr>
+													</tbody>
+												</table>
 
-										</div>
+											</div>
 										</form>
 
-										
+
 
 
 									</div>
@@ -2671,9 +2687,7 @@
 											</button>
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
-												data-loading-text="正在打印...">
-												打印
-											</a>
+												data-loading-text="正在打印..."> 打印 </a>
 										</form>
 
 										<div class="clear"></div>
@@ -2682,6 +2696,7 @@
 												<caption>
 													桐庐富伟针织厂车缝记录单
 												</caption>
+												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
 												<tbody>
 													<tr>
 														<td>
@@ -2918,9 +2933,7 @@
 											</button>
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
-												data-loading-text="正在打印...">
-												打印
-											</a>
+												data-loading-text="正在打印..."> 打印 </a>
 										</form>
 
 										<div class="clear"></div>
@@ -2929,6 +2942,7 @@
 												<caption>
 													桐庐富伟针织厂整烫记录单
 												</caption>
+												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
 												<tbody>
 													<tr>
 														<td>

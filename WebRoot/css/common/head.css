@@ -471,3 +471,8 @@ body {
 	background-color: #fff;
 	position: relative;
 }
+#Content>center{
+	font-size: 30px;
+	font-weight: bold;
+	margin-top: 50px;
+}

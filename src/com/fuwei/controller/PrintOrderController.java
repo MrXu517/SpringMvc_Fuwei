@@ -76,85 +76,125 @@ public class PrintOrderController extends BaseController {
 			Order order = orderService.get(orderId);
 			
 			request.setAttribute("order", order);
-			if(gridName == null){
-				throw new Exception("请输入需要打印的表格名称");
-			}
 			
-			request.setAttribute("gridName", gridName);
+			Boolean printAll = false;
+			if(gridName == null){
+				printAll = true;
+			}
+			String grids = "";
+			
 			
 			//获取头带质量记录单
-			if(gridName.indexOf("headbankorder") > -1){
+			if(printAll || gridName.indexOf("headbankorder") > -1){
 				HeadBankOrder headBankOrder = headBankOrderService.getByOrder(orderId);
-				request.setAttribute("headBankOrder", headBankOrder);
+				if(headBankOrder!=null){
+					grids += "headbankorder,";
+					request.setAttribute("headBankOrder", headBankOrder);
+				}
+				
 			}
 			
 			//获取生产单
-			if(gridName.indexOf("producingorder") > -1){
+			if(printAll || gridName.indexOf("producingorder") > -1){
 				ProducingOrder producingOrder = producingOrderService.getByOrder(orderId);		
-				request.setAttribute("producingOrder", producingOrder);
+				if(producingOrder!=null){
+					grids += "producingorder,";
+					request.setAttribute("producingOrder", producingOrder);
+				}				
 			}
 			
 			
 			//获取计划单
-			if(gridName.indexOf("planorder") > -1){
+			if(printAll || gridName.indexOf("planorder") > -1){
 				PlanOrder planOrder = planOrderService.getByOrder(orderId);
-				request.setAttribute("planOrder", planOrder);
+				if(planOrder!=null){
+					grids += "planorder,";
+					request.setAttribute("planOrder", planOrder);
+				}	
 			}
 			
 			//获取原材料仓库单
-			if(gridName.indexOf("storeorder") > -1){
+			if(printAll || gridName.indexOf("storeorder") > -1){
 				StoreOrder storeOrder = storeOrderService.getByOrder(orderId);
-				request.setAttribute("storeOrder", storeOrder);
+				if(storeOrder!=null){
+					grids += "storeorder,";
+					request.setAttribute("storeOrder", storeOrder);
+				}	
 			}
 			
 			
 			//获取半检记录单
-			if(gridName.indexOf("halfcheckrecordorder") > -1){
+			if(printAll || gridName.indexOf("halfcheckrecordorder") > -1){
 				HalfCheckRecordOrder halfCheckRecordOrder = halfCheckRecordOrderService.getByOrder(orderId);
-				request.setAttribute("halfCheckRecordOrder", halfCheckRecordOrder);
+				if(halfCheckRecordOrder!=null){
+					grids += "halfcheckrecordorder,";
+					request.setAttribute("halfCheckRecordOrder", halfCheckRecordOrder);
+				}	
 			}
 			
 			
 			//获取原材料采购单
-			if(gridName.indexOf("materialpurchaseorder") > -1){
+			if(printAll || gridName.indexOf("materialpurchaseorder") > -1){
 				MaterialPurchaseOrder materialPurchaseOrder = materialPurchaseOrderService.getByOrder(orderId);
-				request.setAttribute("materialPurchaseOrder", materialPurchaseOrder);
+				if(materialPurchaseOrder!=null){
+					grids += "materialpurchaseorder,";
+					request.setAttribute("materialPurchaseOrder", materialPurchaseOrder);
+				}	
 			}
 			
 			
 			//获取染色单
-			if(gridName.indexOf("coloringorder") > -1){
+			if(printAll || gridName.indexOf("coloringorder") > -1){
 				ColoringOrder coloringOrder = coloringOrderService.getByOrder(orderId);
-				request.setAttribute("coloringOrder", coloringOrder);
+				if(coloringOrder!=null){
+					grids += "coloringorder,";
+					request.setAttribute("coloringOrder", coloringOrder);
+				}	
 			}
 			
 			
 			//获取抽检记录单
-			if(gridName.indexOf("checkrecordorder") > -1){
+			if(printAll || gridName.indexOf("checkrecordorder") > -1){
 				CheckRecordOrder checkRecordOrder = checkRecordOrderService.getByOrder(orderId);
-				request.setAttribute("checkRecordOrder", checkRecordOrder);
+				if(checkRecordOrder!=null){
+					grids += "checkrecordorder,";
+					request.setAttribute("checkRecordOrder", checkRecordOrder);
+				}	
 			}
 			
 			
 			//获取辅料采购单
-			if(gridName.indexOf("fuliaopurchaseorder") > -1){
+			if(printAll || gridName.indexOf("fuliaopurchaseorder") > -1){
 				FuliaoPurchaseOrder fuliaoPurchaseOrder = fuliaoPurchaseOrderService.getByOrder(orderId);
-				request.setAttribute("fuliaoPurchaseOrder", fuliaoPurchaseOrder);
+				if(fuliaoPurchaseOrder!=null){
+					grids += "fuliaopurchaseorder,";
+					request.setAttribute("fuliaoPurchaseOrder", fuliaoPurchaseOrder);
+				}	
 			}
 			
 			
 			//获取车缝记录单
-			if(gridName.indexOf("carfixrecordorder") > -1){
+			if(printAll || gridName.indexOf("carfixrecordorder") > -1){
 				CarFixRecordOrder carFixRecordOrder = carFixRecordOrderService.getByOrder(orderId);
-				request.setAttribute("carFixRecordOrder", carFixRecordOrder);
+				if(carFixRecordOrder!=null){
+					grids += "carfixrecordorder,";
+					request.setAttribute("carFixRecordOrder", carFixRecordOrder);
+				}	
 			}
 			
 			
 			//获取整烫记录单
-			if(gridName.indexOf("ironingrecordorder") > -1){
+			if(printAll || gridName.indexOf("ironingrecordorder") > -1){
 				IroningRecordOrder ironingRecordOrder = ironingRecordOrderService.getByOrder(orderId);
-				request.setAttribute("ironingRecordOrder", ironingRecordOrder);
+				if(ironingRecordOrder!=null){
+					grids += "ironingrecordorder,";
+					request.setAttribute("ironingRecordOrder", ironingRecordOrder);
+				}	
 			}
+			if(grids.indexOf(",") <= -1){
+				throw new Exception("请先创建表格，再打印");
+			}
+			request.setAttribute("gridName", grids);
 			return new ModelAndView("printorder/print");
 //			throw new Exception("没有该表格");
 			
