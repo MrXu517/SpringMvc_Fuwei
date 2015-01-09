@@ -33,6 +33,7 @@
 						<caption id="tablename">
 							桐庐富伟针织厂原材料记录单
 						</caption>
+						<tr><td colspan="3" class="pull-right">№：<%=order.getOrderNumber() %></td></tr>
 					</table>
 
 					<table id="orderTb" class="tableTb">
