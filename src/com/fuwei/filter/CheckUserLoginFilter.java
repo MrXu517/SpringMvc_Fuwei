@@ -61,15 +61,19 @@ public class CheckUserLoginFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 		HttpSession session = request.getSession();
 		String path = request.getContextPath();
-		String requestURI = request.getRequestURI();
-
-		requestURI = requestURI.substring(requestURI.indexOf(path)
-				+ path.length());
+		String URI = request.getRequestURI();
+		String query = request.getQueryString();
+		String full_url = URI;
+		if(query!=null && !query.equals("")){
+			full_url = URI + "?" + query;
+		}
+		String requestURI = URI.substring(URI.indexOf(path) + path.length());
+		
 		if (this.isNeedFilter(requestURI)) {// 是需要验证登录的URI
 			LoginedUser sessionUser = SystemContextUtils
 					.getCurrentUser(session);
 			if (sessionUser == null) {
-				redirectTo(request, response, LOGIN_URL,false);
+				redirectTo(request, response, LOGIN_URL,false,full_url);
 				return;
 			} else {
 				//判断该用户是否被锁定
@@ -78,7 +82,7 @@ public class CheckUserLoginFilter implements Filter {
 						if(user.getLocked()){//被锁定
 							//去除session的用户信息
 							session.removeAttribute(Constants.LOGIN_SESSION_NAME);
-							redirectTo(request, response, LOGIN_URL,true);
+							redirectTo(request, response, LOGIN_URL,true,full_url);
 							return;
 						}
 					}
@@ -92,7 +96,11 @@ public class CheckUserLoginFilter implements Filter {
 
 	@SuppressWarnings("deprecation")
 	private void redirectTo(HttpServletRequest request,
-			HttpServletResponse response, String url,Boolean locked) throws IOException {
+			HttpServletResponse response, String url,Boolean locked,String referer) throws IOException {
+		String request_path = request.getContextPath();
+		String request_URI = request.getRequestURI();
+		String requestURI = request_URI.substring(request_URI.indexOf(request_path) + request_path.length());
+		
 		String message =  ERROR.RELOGIN;
 		if(locked){
 			message = ERROR.LOCKED;
@@ -115,16 +123,32 @@ public class CheckUserLoginFilter implements Filter {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			pw.close();
 		} else {
-			if (url.startsWith("http")) {
-				String me = URLEncoder.encode(ERROR.RELOGIN, "utf-8");
-				response.sendRedirect(url + "?message=" + me);
+			if(requestURI.equals("/") || requestURI.equals("")){//第一次登录无需提示信息
+				message = null;
+				referer = null;
+			}
+			String querystring = "";
+			String seq = "?";
+			if(message != null && !message.equals("")){
+				String me = URLEncoder.encode(message, "utf-8");
+				querystring = seq + "message=" + me;
+				seq = "&";
+			}
+			if(referer != null && !referer.equals("")){
+				referer = URLEncoder.encode(referer, "utf-8");
+				querystring = querystring + seq + "referer=" + referer;
+			}
+			
+			
+			if (url.startsWith("http")) {	
+				response.sendRedirect(url + querystring);
 			} else {
 				String path = request.getContextPath();
 				String basePath = request.getScheme() + "://"
 						+ request.getServerName() + ":"
 						+ request.getServerPort() + path;
-				String me = URLEncoder.encode(message, "utf-8");
-				response.sendRedirect(basePath + url + "?message=" + me);
+				
+				response.sendRedirect(basePath + url + querystring);
 			}
 		}
 

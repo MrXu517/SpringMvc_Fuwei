@@ -4,8 +4,13 @@
 <%@page import="java.net.URLDecoder"%>
 <%
 String message = request.getParameter("message");
+String referer =  request.getParameter("referer");
 if(message == null){
 	message = "";
+}
+String login_redirect_url = "user/index";
+if(referer != null && !referer.equals("")){
+	login_redirect_url = referer;
 }
  %>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -145,7 +150,7 @@ if(message == null){
             })
                 .done(function(result) {
                 	if(result.success){
-                		window.location = "user/index";
+                		window.location = "<%=login_redirect_url%>";
                 	}else{
                 		showError(result.message);
                 	}
