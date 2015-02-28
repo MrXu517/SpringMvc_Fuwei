@@ -74,3 +74,14 @@ td.underline{
 .center{
 	text-align:center;
 }
+thead>tr{
+	height:25px;
+}
+tfoot>tr{
+	height:40px;
+}
+p#sign{
+	margin:0;
+	height: 40px;
+	line-height: 40px;
+}
