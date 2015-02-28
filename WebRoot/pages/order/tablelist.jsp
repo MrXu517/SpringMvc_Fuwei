@@ -105,6 +105,9 @@
 			: ironingRecordOrder.getDetaillist();
 
 	String tabname = (String) request.getParameter("tab");
+
+	List<OrderDetail> DetailList = order == null ? new ArrayList<OrderDetail>()
+			: order.getDetaillist();
 %>
 <!DOCTYPE html>
 <html>
@@ -153,40 +156,144 @@
 					</ul>
 				</div>
 				<div class="body">
-					<a href="printorder/print?orderId=<%=order.getId() %>" target="_blank" type="button"
-						class="btn btn-success printAll"
+					<a href="printorder/print?orderId=<%=order.getId()%>"
+						target="_blank" type="button" class="btn btn-success printAll"
 						data-loading-text="正在打印..."> 打印所有的表格 </a>
 					<div class="clear"></div>
-					<div id="tab">
-						<ul class="nav nav-tabs" role="tablist">
-							<li>
-								<a href="#headbankorder" role="tab" data-toggle="tab">质量记录单</a>
-							</li>
+					<!-- 	<table class="table table-responsive table-bordered tableTb">
+						<thead>
+							<tr>
+								<td colspan="4" class="pull-right orderNumber">
+									№：<%=order.getOrderNumber()%></td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td rowspan="7" width="50%">
+									<a href="/<%=order.getImg()%>" class="thumbnail"
+										target="_blank"> <img id="previewImg" alt="200 x 100%"
+											src="/<%=order.getImg_s()%>"> </a>
+								</td>
+								<td width="20%">
+									生产单位
+								</td>
+								<td class="orderproperty"><%=order.getFactoryId() == null ? "" : SystemCache
+					.getFactoryName(order.getFactoryId())%></td>
+							</tr>
 
-							<li>
-								<a href="#producingorder" role="tab" data-toggle="tab">生产单</a>
-							</li>
+							<tr>
+								<td colspan="2" class="center">
+									订单信息
+								</td>
+							</tr>
+							<tr>
+								<td>
+									公司
+								</td>
+								<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+							</tr>
+							<tr>
+								<td>
+									客户
+								</td>
+								<td><%=order.getKehu()%></td>
+							</tr>
+							<tr>
+								<td>
+									货号
+								</td>
+								<td><%=order.getProductNumber()%></td>
+							</tr>
+							<tr>
+								<td>
+									款名
+								</td>
+								<td><%=order.getName()%></td>
+							</tr>
+							<tr>
+								<td>
+									跟单
+								</td>
+								<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="table table-responsive detailTb">
+						<caption>
+						</caption>
+						<thead>
+							<tr>
+								<th width="15%">
+									颜色
+								</th>
+								<th width="15%">
+									克重(g)
+								</th>
+								<th width="15%">
+									纱线种类
+								</th>
+								<th width="15%">
+									尺寸
+								</th>
+								<th width="15%">
+									生产数量
+								</th>
+								<th width="15%">
+									单价
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<%for (OrderDetail detail : DetailList) {%>
+							<tr class="tr" data='<%=SerializeTool.serialize(detail)%>'>
+								<td class="color"><%=detail.getColor()%>
+								</td>
+								<td class="weight"><%=detail.getWeight()%>
+								</td>
+								<td class="yarn"><%=detail.getYarn()%>
+								</td>
+								<td class="size"><%=detail.getSize()%>
+								</td>
+								<td class="quantity"><%=detail.getQuantity()%>
+								</td>
+								<td class="price"><%=detail.getPrice()%>
+								</td>
+							</tr>
+
+							<%}%>
+
+						</tbody>
+					</table> -->
+					<div id="tab">
+						<ul class="nav nav-pills nav-stacked" role="tablist">
 							<li>
 								<a href="#planorder" role="tab" data-toggle="tab">计划单</a>
 							</li>
 							<li>
-								<a href="#storeorder" role="tab" data-toggle="tab">原材料仓库</a>
-							</li>
-							<li>
-								<a href="#halfcheckrecordorder" role="tab" data-toggle="tab">半检记录单</a>
+								<a href="#producingorder" role="tab" data-toggle="tab">生产单</a>
 							</li>
 							<li>
 								<a href="#materialpurchaseorder" role="tab" data-toggle="tab">原材料采购单</a>
 							</li>
 							<li>
+								<a href="#fuliaopurchaseorder" role="tab" data-toggle="tab">辅料采购单</a>
+							</li>
+							<li>
 								<a href="#coloringorder" role="tab" data-toggle="tab">染色单</a>
+							</li>
+							<li>
+								<a href="#storeorder" role="tab" data-toggle="tab">原材料仓库</a>
+							</li>
+							<li>
+								<a href="#headbankorder" role="tab" data-toggle="tab">质量记录单</a>
+							</li>			
+							<li>
+								<a href="#halfcheckrecordorder" role="tab" data-toggle="tab">半检记录单</a>
 							</li>
 							<li>
 								<a href="#checkrecordorder" role="tab" data-toggle="tab">抽检记录单</a>
 							</li>
-							<li>
-								<a href="#fuliaopurchaseorder" role="tab" data-toggle="tab">辅料采购单</a>
-							</li>
+							
 							<li>
 								<a href="#carfixrecordorder" role="tab" data-toggle="tab">车缝记录单</a>
 							</li>
@@ -223,7 +330,12 @@
 												<caption>
 													桐庐富伟针织厂质量记录单
 												</caption>
-												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
+												<thead>
+													<tr>
+														<td colspan="3" class="pull-right orderNumber">
+															№：<%=order.getOrderNumber()%></td>
+													</tr>
+												</thead>
 												<tbody>
 													<tr>
 														<td>
@@ -288,10 +400,7 @@
 														<td>
 															<table class="table table-responsive detailTb">
 																<caption>
-																	<button type="button"
-																		class="btn btn-primary addRow pull-left">
-																		添加一行
-																	</button>
+																	颜色及数量
 																</caption>
 																<thead>
 																	<tr>
@@ -313,14 +422,11 @@
 																		<th width="15%">
 																			价格(/个)
 																		</th>
-																		<th width="15%">
-																			操作
-																		</th>
 																	</tr>
 																</thead>
 																<tbody>
 																	<%
-																		for (HeadBankOrderDetail detail : headBankOrderDetailList) {
+																		for (OrderDetail detail : DetailList) {
 																	%>
 																	<tr class="tr"
 																		data='<%=SerializeTool.serialize(detail)%>'>
@@ -335,10 +441,6 @@
 																		<td class="quantity"><%=detail.getQuantity()%>
 																		</td>
 																		<td class="price"><%=detail.getPrice()%>
-																		</td>
-																		<td class="_handle">
-																			<a class='editRow' href='#'>修改</a> |
-																			<a class='deleteRow' href='#'>删除</a>
 																		</td>
 																	</tr>
 
@@ -359,103 +461,6 @@
 
 									</div>
 								</div>
-								<!--
-						 添加编辑质量记录单对话框 -->
-								<div class="modal fade tableRowDialog" id="headbankDialog">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-header">
-												<button type="button" class="close" data-dismiss="modal">
-													<span aria-hidden="true">&times;</span><span
-														class="sr-only">Close</span>
-												</button>
-												<h4 class="modal-title">
-													添加一行
-													<!--
-									添加一行
-									<span class="tablename">质量记录单</span>
-								-->
-												</h4>
-											</div>
-											<div class="modal-body">
-												<form class="form-horizontal rowform" role="form">
-													<div class="form-group col-md-12">
-														<label for="color" class="col-sm-3 control-label">
-															颜色
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="color" id="color"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="weight" class="col-sm-3 control-label">
-															克重(g)
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="weight" id="weight"
-																class="form-control double require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="yarn" class="col-sm-3 control-label">
-															纱线种类
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="yarn" id="yarn"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="size" class="col-sm-3 control-label">
-															尺寸
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="size" id="size"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="quantity" class="col-sm-3 control-label">
-															生产数量
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="quantity" id="quantity"
-																class="form-control int require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="price" class="col-sm-3 control-label">
-															价格(个)
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="price" id="price"
-																class="form-control double require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="modal-footer">
-														<button type="submit" class="btn btn-primary"
-															data-loading-text="正在保存...">
-															保存
-														</button>
-														<button type="button" class="btn btn-default"
-															data-dismiss="modal">
-															关闭
-														</button>
-													</div>
-												</form>
-											</div>
-
-										</div>
-									</div>
-								</div>
-								<!-- 添加编辑质量记录单对话框 -->
 
 							</div>
 
@@ -485,7 +490,12 @@
 												<caption>
 													桐庐富伟针织厂生产单
 												</caption>
-												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
+												<thead>
+													<tr>
+														<td colspan="3" class="pull-right orderNumber">
+															№：<%=order.getOrderNumber()%></td>
+													</tr>
+												</thead>
 												<tbody>
 													<tr>
 														<td>
@@ -550,10 +560,6 @@
 														<td>
 															<table class="table table-responsive detailTb">
 																<caption>
-																	<button type="button"
-																		class="btn btn-primary addRow pull-left">
-																		添加一行
-																	</button>
 																	颜色及数量
 																</caption>
 																<thead>
@@ -576,14 +582,12 @@
 																		<th width="15%">
 																			价格(/个)
 																		</th>
-																		<th width="15%">
-																			操作
-																		</th>
+
 																	</tr>
 																</thead>
 																<tbody>
 																	<%
-																		for (ProducingOrderDetail detail : producingOrderDetailList) {
+																		for (OrderDetail detail : DetailList) {
 																	%>
 																	<tr class="tr"
 																		data='<%=SerializeTool.serialize(detail)%>'>
@@ -598,10 +602,6 @@
 																		<td class="quantity"><%=detail.getQuantity()%>
 																		</td>
 																		<td class="price"><%=detail.getPrice()%>
-																		</td>
-																		<td class="_handle">
-																			<a class='editRow' href='#'>修改</a> |
-																			<a class='deleteRow' href='#'>删除</a>
 																		</td>
 																	</tr>
 
@@ -681,102 +681,7 @@
 
 									</div>
 								</div>
-								<!--
-						 添加编辑生产单对话框 -->
-								<div class="modal fade tableRowDialog" id="producingDialog">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-header">
-												<button type="button" class="close" data-dismiss="modal">
-													<span aria-hidden="true">&times;</span><span
-														class="sr-only">Close</span>
-												</button>
-												<h4 class="modal-title">
-													添加一行
-													<!--
-									添加一行
-									<span class="tablename">质量记录单</span>
-								-->
-												</h4>
-											</div>
-											<div class="modal-body">
-												<form class="form-horizontal rowform" role="form">
-													<div class="form-group col-md-12">
-														<label for="color" class="col-sm-3 control-label">
-															颜色
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="color" id="color"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="weight" class="col-sm-3 control-label">
-															克重(g)
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="weight" id="weight"
-																class="form-control double require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="yarn" class="col-sm-3 control-label">
-															纱线种类
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="yarn" id="yarn"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="size" class="col-sm-3 control-label">
-															尺寸
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="size" id="size"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="quantity" class="col-sm-3 control-label">
-															生产数量
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="quantity" id="quantity"
-																class="form-control int require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="price" class="col-sm-3 control-label">
-															价格(个)
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="price" id="price"
-																class="form-control double require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="modal-footer">
-														<button type="submit" class="btn btn-primary"
-															data-loading-text="正在保存...">
-															保存
-														</button>
-														<button type="button" class="btn btn-default"
-															data-dismiss="modal">
-															关闭
-														</button>
-													</div>
-												</form>
-											</div>
 
-										</div>
-									</div>
-								</div>
 								<div class="modal fade tableRowDialog"
 									id="producingDetailDialog">
 									<div class="modal-dialog">
@@ -876,7 +781,12 @@
 												<caption>
 													桐庐富伟针织厂计划单
 												</caption>
-												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
+												<thead>
+													<tr>
+														<td colspan="3" class="pull-right orderNumber">
+															№：<%=order.getOrderNumber()%></td>
+													</tr>
+												</thead>
 												<tbody>
 													<tr>
 														<td>
@@ -941,10 +851,6 @@
 														<td>
 															<table class="table table-responsive detailTb">
 																<caption>
-																	<button type="button"
-																		class="btn btn-primary addRow pull-left">
-																		添加一行
-																	</button>
 																	颜色及数量
 																</caption>
 																<thead>
@@ -964,9 +870,6 @@
 																		<th width="15%">
 																			生产数量
 																		</th>
-																		<th width="15%">
-																			操作
-																		</th>
 																	</tr>
 																</thead>
 																<tbody>
@@ -983,11 +886,7 @@
 																		</td>
 																		<td class="size"><%=detail.getSize()%>
 																		</td>
-																		<td class="quantity"><%=detail.getQuantity()%>
-																		</td>
-																		<td class="_handle">
-																			<a class='editRow' href='#'>修改</a> |
-																			<a class='deleteRow' href='#'>删除</a>
+																		<td><input type="text" class="form-control quantity value" value="<%=detail.getQuantity()%>"/>
 																		</td>
 																	</tr>
 
@@ -1009,90 +908,7 @@
 									</div>
 								</div>
 
-								<!--
-						 添加编辑计划单对话框 -->
-								<div class="modal fade tableRowDialog" id="planDialog">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-header">
-												<button type="button" class="close" data-dismiss="modal">
-													<span aria-hidden="true">&times;</span><span
-														class="sr-only">Close</span>
-												</button>
-												<h4 class="modal-title">
-													添加一行
-												</h4>
-											</div>
-											<div class="modal-body">
-												<form class="form-horizontal rowform" role="form">
-													<div class="form-group col-md-12">
-														<label for="color" class="col-sm-3 control-label">
-															颜色
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="color" id="color"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="weight" class="col-sm-3 control-label">
-															克重(g)
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="weight" id="weight"
-																class="form-control double require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="yarn" class="col-sm-3 control-label">
-															纱线种类
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="yarn" id="yarn"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="size" class="col-sm-3 control-label">
-															尺寸
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="size" id="size"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="quantity" class="col-sm-3 control-label">
-															生产数量
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="quantity" id="quantity"
-																class="form-control int require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
 
-													<div class="modal-footer">
-														<button type="submit" class="btn btn-primary"
-															data-loading-text="正在保存...">
-															保存
-														</button>
-														<button type="button" class="btn btn-default"
-															data-dismiss="modal">
-															关闭
-														</button>
-													</div>
-												</form>
-											</div>
-
-										</div>
-									</div>
-								</div>
-								<!-- 添加编辑计划单对话框 -->
 							</div>
 
 							<!-- 原材料仓库单  -->
@@ -1120,7 +936,12 @@
 												<caption>
 													桐庐富伟针织厂原材料仓库
 												</caption>
-												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
+												<thead>
+													<tr>
+														<td colspan="3" class="pull-right orderNumber">
+															№：<%=order.getOrderNumber()%></td>
+													</tr>
+												</thead>
 												<tbody>
 													<tr>
 														<td>
@@ -1352,7 +1173,12 @@
 												<caption>
 													桐庐富伟针织厂半检记录单
 												</caption>
-												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
+												<thead>
+													<tr>
+														<td colspan="3" class="pull-right orderNumber">
+															№：<%=order.getOrderNumber()%></td>
+													</tr>
+												</thead>
 												<tbody>
 													<tr>
 														<td>
@@ -1417,10 +1243,6 @@
 														<td>
 															<table class="table table-responsive detailTb">
 																<caption>
-																	<button type="button"
-																		class="btn btn-primary addRow pull-left">
-																		添加一行
-																	</button>
 																	颜色及数量
 																</caption>
 																<thead>
@@ -1440,14 +1262,11 @@
 																		<th width="15%">
 																			生产数量
 																		</th>
-																		<th width="15%">
-																			操作
-																		</th>
 																	</tr>
 																</thead>
 																<tbody>
 																	<%
-																		for (HalfCheckRecordOrderDetail detail : halfCheckRecordOrderDetailList) {
+																		for (OrderDetail detail : DetailList) {
 																	%>
 																	<tr class="tr"
 																		data='<%=SerializeTool.serialize(detail)%>'>
@@ -1460,10 +1279,6 @@
 																		<td class="size"><%=detail.getSize()%>
 																		</td>
 																		<td class="quantity"><%=detail.getQuantity()%>
-																		</td>
-																		<td class="_handle">
-																			<a class='editRow' href='#'>修改</a> |
-																			<a class='deleteRow' href='#'>删除</a>
 																		</td>
 																	</tr>
 
@@ -1538,90 +1353,7 @@
 
 									</div>
 								</div>
-								<!--
-						 添加编辑半检记录单对话框 -->
-								<div class="modal fade tableRowDialog"
-									id="halfcheckrecordDialog">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-header">
-												<button type="button" class="close" data-dismiss="modal">
-													<span aria-hidden="true">&times;</span><span
-														class="sr-only">Close</span>
-												</button>
-												<h4 class="modal-title">
-													添加一行
 
-												</h4>
-											</div>
-											<div class="modal-body">
-												<form class="form-horizontal rowform" role="form">
-													<div class="form-group col-md-12">
-														<label for="color" class="col-sm-3 control-label">
-															颜色
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="color" id="color"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="weight" class="col-sm-3 control-label">
-															克重(g)
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="weight" id="weight"
-																class="form-control double require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="yarn" class="col-sm-3 control-label">
-															纱线种类
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="yarn" id="yarn"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="size" class="col-sm-3 control-label">
-															尺寸
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="size" id="size"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="quantity" class="col-sm-3 control-label">
-															生产数量
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="quantity" id="quantity"
-																class="form-control int require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="modal-footer">
-														<button type="submit" class="btn btn-primary"
-															data-loading-text="正在保存...">
-															保存
-														</button>
-														<button type="button" class="btn btn-default"
-															data-dismiss="modal">
-															关闭
-														</button>
-													</div>
-												</form>
-											</div>
-
-										</div>
-									</div>
-								</div>
 								<div class="modal fade tableRowDialog"
 									id="halfcheckrecordDialog2">
 									<div class="modal-dialog">
@@ -1711,7 +1443,12 @@
 													<caption>
 														桐庐富伟针织厂原材料采购单
 													</caption>
-												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
+													<thead>
+														<tr>
+															<td colspan="3" class="pull-right orderNumber">
+																№：<%=order.getOrderNumber()%></td>
+														</tr>
+													</thead>
 													<tbody>
 														<tr>
 															<td>
@@ -1970,7 +1707,12 @@
 													<caption>
 														桐庐富伟针织厂染色单
 													</caption>
-												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
+													<thead>
+														<tr>
+															<td colspan="3" class="pull-right orderNumber">
+																№：<%=order.getOrderNumber()%></td>
+														</tr>
+													</thead>
 													<tbody>
 														<tr>
 															<td>
@@ -2200,7 +1942,12 @@
 												<caption>
 													桐庐富伟针织厂抽检记录单
 												</caption>
-												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
+												<thead>
+													<tr>
+														<td colspan="3" class="pull-right orderNumber">
+															№：<%=order.getOrderNumber()%></td>
+													</tr>
+												</thead>
 												<tbody>
 													<tr>
 														<td>
@@ -2265,10 +2012,6 @@
 														<td>
 															<table class="table table-responsive detailTb">
 																<caption>
-																	<button type="button"
-																		class="btn btn-primary addRow pull-left">
-																		添加一行
-																	</button>
 																	颜色及数量
 																</caption>
 																<thead>
@@ -2288,14 +2031,11 @@
 																		<th width="15%">
 																			订单数量
 																		</th>
-																		<th width="15%">
-																			操作
-																		</th>
 																	</tr>
 																</thead>
 																<tbody>
 																	<%
-																		for (CheckRecordOrderDetail detail : checkRecordOrderDetailList) {
+																		for (OrderDetail detail : DetailList) {
 																	%>
 																	<tr class="tr"
 																		data='<%=SerializeTool.serialize(detail)%>'>
@@ -2308,10 +2048,6 @@
 																		<td class="size"><%=detail.getSize()%>
 																		</td>
 																		<td class="quantity"><%=detail.getQuantity()%>
-																		</td>
-																		<td class="_handle">
-																			<a class='editRow' href='#'>修改</a> |
-																			<a class='deleteRow' href='#'>删除</a>
 																		</td>
 																	</tr>
 
@@ -2334,87 +2070,7 @@
 								</div>
 								<!--
 						 添加编辑抽检记录单对话框 -->
-								<div class="modal fade tableRowDialog" id="checkrecordDialog">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-header">
-												<button type="button" class="close" data-dismiss="modal">
-													<span aria-hidden="true">&times;</span><span
-														class="sr-only">Close</span>
-												</button>
-												<h4 class="modal-title">
-													添加一行
-												</h4>
-											</div>
-											<div class="modal-body">
-												<form class="form-horizontal rowform" role="form">
-													<div class="form-group col-md-12">
-														<label for="color" class="col-sm-3 control-label">
-															颜色
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="color" id="color"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="weight" class="col-sm-3 control-label">
-															克重(g)
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="weight" id="weight"
-																class="form-control double require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="yarn" class="col-sm-3 control-label">
-															纱线种类
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="yarn" id="yarn"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="size" class="col-sm-3 control-label">
-															尺寸
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="size" id="size"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="quantity" class="col-sm-3 control-label">
-															订单数量
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="quantity" id="quantity"
-																class="form-control int require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
 
-													<div class="modal-footer">
-														<button type="submit" class="btn btn-primary"
-															data-loading-text="正在保存...">
-															保存
-														</button>
-														<button type="button" class="btn btn-default"
-															data-dismiss="modal">
-															关闭
-														</button>
-													</div>
-												</form>
-											</div>
-
-										</div>
-									</div>
-								</div>
 								<!-- 添加编辑抽检记录单对话框 -->
 
 							</div>
@@ -2443,7 +2099,12 @@
 													<caption>
 														桐庐富伟针织厂辅料采购单
 													</caption>
-												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
+													<thead>
+														<tr>
+															<td colspan="3" class="pull-right orderNumber">
+																№：<%=order.getOrderNumber()%></td>
+														</tr>
+													</thead>
 													<tbody>
 														<tr>
 															<td>
@@ -2696,7 +2357,12 @@
 												<caption>
 													桐庐富伟针织厂车缝记录单
 												</caption>
-												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
+												<thead>
+													<tr>
+														<td colspan="3" class="pull-right orderNumber">
+															№：<%=order.getOrderNumber()%></td>
+													</tr>
+												</thead>
 												<tbody>
 													<tr>
 														<td>
@@ -2761,10 +2427,6 @@
 														<td>
 															<table class="table table-responsive detailTb">
 																<caption>
-																	<button type="button"
-																		class="btn btn-primary addRow pull-left">
-																		添加一行
-																	</button>
 																	颜色及数量
 																</caption>
 																<thead>
@@ -2784,14 +2446,11 @@
 																		<th width="15%">
 																			生产数量
 																		</th>
-																		<th width="15%">
-																			操作
-																		</th>
 																	</tr>
 																</thead>
 																<tbody>
 																	<%
-																		for (CarFixRecordOrderDetail detail : carFixRecordOrderDetailList) {
+																		for (OrderDetail detail : DetailList) {
 																	%>
 																	<tr class="tr"
 																		data='<%=SerializeTool.serialize(detail)%>'>
@@ -2804,10 +2463,6 @@
 																		<td class="size"><%=detail.getSize()%>
 																		</td>
 																		<td class="quantity"><%=detail.getQuantity()%>
-																		</td>
-																		<td class="_handle">
-																			<a class='editRow' href='#'>修改</a> |
-																			<a class='deleteRow' href='#'>删除</a>
 																		</td>
 																	</tr>
 
@@ -2830,87 +2485,6 @@
 								</div>
 								<!--
 						 添加编辑车缝记录单对话框 -->
-								<div class="modal fade tableRowDialog" id="carfixrecordDialog">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-header">
-												<button type="button" class="close" data-dismiss="modal">
-													<span aria-hidden="true">&times;</span><span
-														class="sr-only">Close</span>
-												</button>
-												<h4 class="modal-title">
-													添加一行
-												</h4>
-											</div>
-											<div class="modal-body">
-												<form class="form-horizontal rowform" role="form">
-													<div class="form-group col-md-12">
-														<label for="color" class="col-sm-3 control-label">
-															颜色
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="color" id="color"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="weight" class="col-sm-3 control-label">
-															克重(g)
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="weight" id="weight"
-																class="form-control double require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="yarn" class="col-sm-3 control-label">
-															纱线种类
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="yarn" id="yarn"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="size" class="col-sm-3 control-label">
-															尺寸
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="size" id="size"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="quantity" class="col-sm-3 control-label">
-															生产数量
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="quantity" id="quantity"
-																class="form-control int require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-
-													<div class="modal-footer">
-														<button type="submit" class="btn btn-primary"
-															data-loading-text="正在保存...">
-															保存
-														</button>
-														<button type="button" class="btn btn-default"
-															data-dismiss="modal">
-															关闭
-														</button>
-													</div>
-												</form>
-											</div>
-
-										</div>
-									</div>
-								</div>
 								<!-- 添加编辑车缝记录单对话框 -->
 
 							</div>
@@ -2942,7 +2516,12 @@
 												<caption>
 													桐庐富伟针织厂整烫记录单
 												</caption>
-												<thead><tr><td colspan="3" class="pull-right orderNumber">№：<%=order.getOrderNumber() %></td></tr></thead>
+												<thead>
+													<tr>
+														<td colspan="3" class="pull-right orderNumber">
+															№：<%=order.getOrderNumber()%></td>
+													</tr>
+												</thead>
 												<tbody>
 													<tr>
 														<td>
@@ -3007,10 +2586,6 @@
 														<td>
 															<table class="table table-responsive detailTb">
 																<caption>
-																	<button type="button"
-																		class="btn btn-primary addRow pull-left">
-																		添加一行
-																	</button>
 																	颜色及数量
 																</caption>
 																<thead>
@@ -3030,14 +2605,11 @@
 																		<th width="15%">
 																			生产数量
 																		</th>
-																		<th width="15%">
-																			操作
-																		</th>
 																	</tr>
 																</thead>
 																<tbody>
 																	<%
-																		for (IroningRecordOrderDetail detail : ironingRecordOrderDetailList) {
+																		for (OrderDetail detail : DetailList) {
 																	%>
 																	<tr class="tr"
 																		data='<%=SerializeTool.serialize(detail)%>'>
@@ -3050,10 +2622,6 @@
 																		<td class="size"><%=detail.getSize()%>
 																		</td>
 																		<td class="quantity"><%=detail.getQuantity()%>
-																		</td>
-																		<td class="_handle">
-																			<a class='editRow' href='#'>修改</a> |
-																			<a class='deleteRow' href='#'>删除</a>
 																		</td>
 																	</tr>
 
@@ -3076,87 +2644,7 @@
 								</div>
 								<!--
 						 添加编辑整烫记录单对话框 -->
-								<div class="modal fade tableRowDialog" id="ironingrecordDialog">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-header">
-												<button type="button" class="close" data-dismiss="modal">
-													<span aria-hidden="true">&times;</span><span
-														class="sr-only">Close</span>
-												</button>
-												<h4 class="modal-title">
-													添加一行
-												</h4>
-											</div>
-											<div class="modal-body">
-												<form class="form-horizontal rowform" role="form">
-													<div class="form-group col-md-12">
-														<label for="color" class="col-sm-3 control-label">
-															颜色
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="color" id="color"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="weight" class="col-sm-3 control-label">
-															克重(g)
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="weight" id="weight"
-																class="form-control double require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="yarn" class="col-sm-3 control-label">
-															纱线种类
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="yarn" id="yarn"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="size" class="col-sm-3 control-label">
-															尺寸
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="size" id="size"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="quantity" class="col-sm-3 control-label">
-															生产数量
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="quantity" id="quantity"
-																class="form-control int require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
 
-													<div class="modal-footer">
-														<button type="submit" class="btn btn-primary"
-															data-loading-text="正在保存...">
-															保存
-														</button>
-														<button type="button" class="btn btn-default"
-															data-dismiss="modal">
-															关闭
-														</button>
-													</div>
-												</form>
-											</div>
-
-										</div>
-									</div>
-								</div>
 								<!-- 添加编辑整烫记录单对话框 -->
 
 							</div>

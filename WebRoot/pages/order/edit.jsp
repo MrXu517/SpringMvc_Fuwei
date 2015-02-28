@@ -23,6 +23,9 @@
 	JSONObject jObject = new JSONObject();
 	jObject.put("companySalesmanMap", companySalesmanMap);
 	String companySalesmanMap_str = jObject.toString();
+
+	List<OrderDetail> DetailList = order == null ? new ArrayList<OrderDetail>()
+			: order.getDetaillist();
 %>
 <!DOCTYPE html>
 <html>
@@ -72,8 +75,8 @@
 						<div class="row">
 							<div class="col-md-12 formwidget">
 								<form class="form-horizontal orderform" role="form">
-									<input type="hidden" id="sampleId" name="sampleId" value="<%=order.getSampleId() %>"
-										class="require" />
+									<input type="hidden" id="sampleId" name="sampleId"
+										value="<%=order.getSampleId()%>" class="require" />
 									<div class="form-group col-md-6">
 										<div class="col-sm-offset-3 col-sm-5">
 											<button type="submit" class="btn btn-primary"
@@ -213,7 +216,8 @@
 											</label>
 											<div class="col-sm-8">
 												<input type="text" name="quantity" id="quantity"
-													class="form-control" value="<%=order.getQuantity()%>" />
+													class="form-control" value="<%=order.getQuantity()%>"
+													readonly />
 
 											</div>
 											<div class="col-sm-1"></div>
@@ -230,6 +234,73 @@
 											</div>
 											<div class="col-sm-1"></div>
 										</div>
+									</fieldset>
+
+									<fieldset id="orderDetail">
+										<legend>
+											颜色及数量
+										</legend>
+										<table class="table table-responsive detailTb">
+											<caption>
+												<button type="button"
+													class="btn btn-primary addRow pull-left">
+													添加一行
+												</button>
+											</caption>
+											<thead>
+												<tr>
+													<th width="15%">
+														颜色
+													</th>
+													<th width="15%">
+														克重(g)
+													</th>
+													<th width="15%">
+														纱线种类
+													</th>
+													<th width="15%">
+														尺寸
+													</th>
+													<th width="15%">
+														生产数量
+													</th>
+													<th width="15%">
+														单价
+													</th>
+													<th width="15%">
+														操作
+													</th>
+												</tr>
+											</thead>
+											<tbody>
+												<%
+													for (OrderDetail detail : DetailList) {
+												%>
+												<tr class="tr" data='<%=SerializeTool.serialize(detail)%>'>
+													<td class="color"><%=detail.getColor()%>
+													</td>
+													<td class="weight"><%=detail.getWeight()%>
+													</td>
+													<td class="yarn"><%=detail.getYarn()%>
+													</td>
+													<td class="size"><%=detail.getSize()%>
+													</td>
+													<td class="quantity"><%=detail.getQuantity()%>
+													</td>
+													<td class="price"><%=detail.getPrice()%>
+													</td>
+													<td class="_handle">
+														<a class='editRow' href='#'>修改</a> |
+														<a class='deleteRow' href='#'>删除</a>
+													</td>
+												</tr>
+
+												<%
+													}
+												%>
+
+											</tbody>
+										</table>
 									</fieldset>
 									<fieldset>
 										<legend>
@@ -248,13 +319,12 @@
 											</div>
 											<div class="col-sm-1"></div>
 										</div>
-																				<div class="form-group col-md-6">
+										<div class="form-group col-md-6">
 											<label for="factoryId" class="col-sm-3 control-label">
 												生产单位
 											</label>
 											<div class="col-sm-8">
-												<select class="form-control" name="factoryId"
-													id="factoryId">
+												<select class="form-control" name="factoryId" id="factoryId">
 													<option value="">
 														未选择
 													</option>
@@ -282,7 +352,8 @@
 											</label>
 											<div class="col-sm-8">
 												<input type="text" class="form-control" name="kehu"
-													id="kehu" value="<%=order.getKehu() == null ? "" : order.getKehu()%>">
+													id="kehu"
+													value="<%=order.getKehu() == null ? "" : order.getKehu()%>">
 											</div>
 											<div class="col-sm-1"></div>
 										</div>
@@ -292,8 +363,8 @@
 											</label>
 											<div class="col-sm-8">
 												<select data='<%=companySalesmanMap_str%>'
-													class="form-control require" name="companyId" id="companyId"
-													placeholder="公司">
+													class="form-control require" name="companyId"
+													id="companyId" placeholder="公司">
 													<option value="">
 														未选择
 													</option>
@@ -319,7 +390,7 @@
 												业务员
 											</label>
 											<div class="col-sm-8">
-												<select class="form-control" name="salesmanId"
+												<select class="form-control require" name="salesmanId"
 													id="salesmanId" placeholder="业务员">
 													<option value="">
 														未选择
@@ -433,5 +504,100 @@
 				</div>
 			</div>
 		</div>
+
+		<!--
+						 添加编辑订单明细对话框 -->
+		<div class="modal fade tableRowDialog" id="orderDetailDialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+						</button>
+						<h4 class="modal-title">
+							添加一行
+
+						</h4>
+					</div>
+					<div class="modal-body">
+						<form class="form-horizontal rowform" role="form">
+							<div class="form-group col-md-12">
+								<label for="color" class="col-sm-3 control-label">
+									颜色
+								</label>
+								<div class="col-sm-8">
+									<input type="text" name="color" id="color"
+										class="form-control require" />
+								</div>
+								<div class="col-sm-1"></div>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="weight" class="col-sm-3 control-label">
+									克重(g)
+								</label>
+								<div class="col-sm-8">
+									<input type="text" name="weight" id="weight"
+										class="form-control double require" />
+								</div>
+								<div class="col-sm-1"></div>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="yarn" class="col-sm-3 control-label">
+									纱线种类
+								</label>
+								<div class="col-sm-8">
+									<input type="text" name="yarn" id="yarn"
+										class="form-control require" />
+								</div>
+								<div class="col-sm-1"></div>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="size" class="col-sm-3 control-label">
+									尺寸
+								</label>
+								<div class="col-sm-8">
+									<input type="text" name="size" id="size"
+										class="form-control require" />
+								</div>
+								<div class="col-sm-1"></div>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="quantity" class="col-sm-3 control-label">
+									生产数量
+								</label>
+								<div class="col-sm-8">
+									<input type="text" name="quantity" id="quantity"
+										class="form-control int require" />
+								</div>
+								<div class="col-sm-1"></div>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="price" class="col-sm-3 control-label">
+									单价
+								</label>
+								<div class="col-sm-8">
+									<input type="text" name="price" id="price"
+										class="form-control double require" />
+								</div>
+								<div class="col-sm-1"></div>
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="btn btn-primary"
+									data-loading-text="正在保存...">
+									保存
+								</button>
+								<button type="button" class="btn btn-default"
+									data-dismiss="modal">
+									关闭
+								</button>
+							</div>
+						</form>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!--
+						 添加编辑订单明细对话框 -->
 	</body>
 </html>

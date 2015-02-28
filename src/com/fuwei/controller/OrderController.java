@@ -162,34 +162,34 @@ public class OrderController extends BaseController {
 				List<QuoteOrderDetail> quoteOrderDetaillist = quoteOrderDetailService.getListByQuoteOrder(quoteOrderId);
 				order.setCompanyId(SystemCache.getSalesman(quoteOrder.getSalesmanId()).getCompanyId());//设置订单公司
 				order.setSalesmanId(quoteOrder.getSalesmanId());//设置订单业务员
-				if (quoteOrderDetaillist == null) {
-					quoteOrderDetaillist = new ArrayList<QuoteOrderDetail>();
-				}
+//				if (quoteOrderDetaillist == null) {
+//					quoteOrderDetaillist = new ArrayList<QuoteOrderDetail>();
+//				}
 				
-				for (QuoteOrderDetail quoteOrderDetail : quoteOrderDetaillist) {
-					OrderDetail detail = new OrderDetail();
-					detail.setCproductN(quoteOrderDetail.getCproductN());
-					detail.setPrice(NumberUtil.formateDouble(quoteOrderDetail.getPrice(),3));//保留三位小数
-					detail.setQuantity(1000);
-					detail.setAmount(NumberUtil.formateDouble(detail.getQuantity() * detail.getPrice(), 3));//保留三位小数
-					amount += detail.getAmount();
-					detail.setMemo(quoteOrderDetail.getMemo());
-					detail.setSampleId(quoteOrderDetail.getSampleId());
-					detail.setName(quoteOrderDetail.getName());
-					detail.setImg(quoteOrderDetail.getImg());
-					detail.setImg_s(quoteOrderDetail.getImg_s());
-					detail.setImg_ss(quoteOrderDetail.getImg_ss());
-					detail.setMaterial(quoteOrderDetail.getMaterial());
-					detail.setMachine(quoteOrderDetail.getMachine());
-					detail.setWeight(quoteOrderDetail.getWeight());
-					detail.setSize(quoteOrderDetail.getSize());
-					detail.setCost(quoteOrderDetail.getCost());
-					detail.setProductNumber(quoteOrderDetail.getProductNumber());
-					detail.setMachine(quoteOrderDetail.getMachine());
-					detail.setCharge_user(quoteOrderDetail.getCharge_user());
-					detail.setDetail(quoteOrderDetail.getDetail());
-					orderDetaillist.add(detail);
-				}
+//				for (QuoteOrderDetail quoteOrderDetail : quoteOrderDetaillist) {
+//					OrderDetail detail = new OrderDetail();
+//					detail.setCproductN(quoteOrderDetail.getCproductN());
+//					detail.setPrice(NumberUtil.formateDouble(quoteOrderDetail.getPrice(),3));//保留三位小数
+//					detail.setQuantity(1000);
+//					detail.setAmount(NumberUtil.formateDouble(detail.getQuantity() * detail.getPrice(), 3));//保留三位小数
+//					amount += detail.getAmount();
+//					detail.setMemo(quoteOrderDetail.getMemo());
+//					detail.setSampleId(quoteOrderDetail.getSampleId());
+//					detail.setName(quoteOrderDetail.getName());
+//					detail.setImg(quoteOrderDetail.getImg());
+//					detail.setImg_s(quoteOrderDetail.getImg_s());
+//					detail.setImg_ss(quoteOrderDetail.getImg_ss());
+//					detail.setMaterial(quoteOrderDetail.getMaterial());
+//					detail.setMachine(quoteOrderDetail.getMachine());
+//					detail.setWeight(quoteOrderDetail.getWeight());
+//					detail.setSize(quoteOrderDetail.getSize());
+//					detail.setCost(quoteOrderDetail.getCost());
+//					detail.setProductNumber(quoteOrderDetail.getProductNumber());
+//					detail.setMachine(quoteOrderDetail.getMachine());
+//					detail.setCharge_user(quoteOrderDetail.getCharge_user());
+//					detail.setDetail(quoteOrderDetail.getDetail());
+//					orderDetaillist.add(detail);
+//				}
 				
 			}
 			order.setAmount(NumberUtil.formateDouble(amount,3));//设置订单总金额
@@ -204,7 +204,7 @@ public class OrderController extends BaseController {
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> add(Order order, HttpSession session,
+	public Map<String, Object> add(Order order,String details, HttpSession session,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
@@ -256,6 +256,11 @@ public class OrderController extends BaseController {
 			handle.setStatus(order.getStatus());
 			handle.setCreated_at(DateTool.now());
 			handle.setCreated_user(user.getId());
+			
+			//2015-2-27添加颜色及数量
+			List<OrderDetail> detaillist = SerializeTool.deserializeList(details, OrderDetail.class);
+			order.setDetaillist(detaillist);
+			//2015-2-27添加颜色及数量
 			
 			int orderId = orderService.add(order,handle);
 			return this.returnSuccess("id",orderId);
@@ -389,7 +394,7 @@ public class OrderController extends BaseController {
 	
 	@RequestMapping(value = "/put", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> update(Order order,String order_details, HttpSession session,
+	public Map<String, Object> update(Order order,String details, HttpSession session,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
@@ -443,6 +448,10 @@ public class OrderController extends BaseController {
 			handle.setCreated_at(DateTool.now());
 			handle.setCreated_user(user.getId());
 			
+			//2015-2-27添加颜色及数量
+			List<OrderDetail> detaillist = SerializeTool.deserializeList(details, OrderDetail.class);
+			order.setDetaillist(detaillist);
+			//2015-2-27添加颜色及数量
 			int orderId = orderService.update(order,handle);
 			return this.returnSuccess("id",orderId);
 		} catch (Exception e) {

@@ -224,3 +224,10 @@
 	height: 30px;
 	padding: 0 6px;
 }
+.detailTb{
+	background-color: #f5f5f5;
+	border: 1px solid #ccc;
+}
+.addRow{
+	margin-bottom:5px;
+}

@@ -22,6 +22,7 @@ import com.fuwei.entity.QuoteOrder;
 import com.fuwei.entity.Sample;
 import com.fuwei.util.CreateNumberUtil;
 import com.fuwei.util.DateTool;
+import com.fuwei.util.SerializeTool;
 import com.fuwei.constant.OrderStatusUtil;
 
 @Component
@@ -100,6 +101,9 @@ public class OrderService extends BaseService {
 			if (order.getSampleId() == null) {
 				throw new Exception("订单必须填写样品");
 			} else {
+				order.setDetail_json(SerializeTool
+						.serialize(order.getDetaillist()));
+				
 				Integer orderId = this.insert(order);
 				String orderNumber = CreateNumberUtil
 						.createFWStyleNumber(orderId);
@@ -164,6 +168,9 @@ public class OrderService extends BaseService {
 	public int update(Order order, OrderHandle handle) throws Exception {
 		try {
 			// 更新订单表
+			String details = SerializeTool.serialize(order
+					.getDetaillist());
+			order.setDetail_json(details);
 			this.update(order, "id",
 					"created_user,status,state,created_at,orderNumber,stepId,setp_state", true);
 //			// 删除原来订单的detail

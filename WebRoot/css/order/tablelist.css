@@ -62,3 +62,18 @@
 .tablewidget>table>tbody>tr>td{
 	padding-top:0;
 }
+.detailTb{
+	background-color: #f5f5f5;
+	border: 1px solid #ccc;
+}
+a.thumbnail{
+	border:none;
+}
+#tab>ul.nav{
+	width:200px;
+	float:left;
+}
+#tab>.tab-content{
+	margin-left: 200px;
+	overflow:auto;
+}

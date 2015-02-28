@@ -179,7 +179,7 @@ function OrderGrid(settings){
 }
 
 $(document).ready(function() {
-	$('#tab>ul.nav-tabs a:first').tab('show') // Select first tab
+	$('#tab>ul.nav a:first').tab('show') // Select first tab
 	
 	//质量记录单
 	var headBankGrid = new OrderGrid({
@@ -265,15 +265,7 @@ $(document).ready(function() {
 						name :'price',
 						colname :'价格(/个)',
 						width :'15%'
-					},
-					{
-						name :'_handle',
-						colname :'操作',
-						width :'15%',
-						displayValue : function(value, rowdata) {
-							return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
-						}
-					} ],
+					}],
 					$dialog:$("#producingDialog")
 		},
 		tbOptions2:{
@@ -342,15 +334,7 @@ $(document).ready(function() {
 						name :'quantity',
 						colname :'生产数量',
 						width :'15%'
-					},
-					{
-						name :'_handle',
-						colname :'操作',
-						width :'15%',
-						displayValue : function(value, rowdata) {
-							return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
-						}
-					} ],
+					}],
 					$dialog:$("#planDialog")
 		}
 	});

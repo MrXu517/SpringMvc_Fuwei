@@ -32,6 +32,8 @@
 		break;
 	}
 
+	List<OrderDetail> DetailList = order == null ? new ArrayList<OrderDetail>()
+			: order.getDetaillist();
 	//Boolean error_notification = order.getStatus() > OrderStatus.BEFOREPRODUCESAMPLE.ordinal() && order.getStart_produce() == null; //若已经进入生产阶段，但却没有生产单，则显示生成生产单按钮
 %>
 <!DOCTYPE html>
@@ -245,6 +247,15 @@
 												</td>
 												<td><%=SystemCache.getSalesmanName(order.getSalesmanId())%></td>
 											</tr>
+
+
+											<tr>
+												<td>
+													客户
+												</td>
+												<td><%=order.getKehu()%></td>
+											</tr>
+
 											<tr>
 												<td>
 													金额
@@ -254,18 +265,10 @@
 											</tr>
 											<tr>
 												<td>
-													生产单位
+													备注
 												</td>
-												<td><%=order.getFactoryId() == null ? "" : SystemCache
-					.getFactoryName(order.getFactoryId())%></td>
+												<td><%=order.getMemo() == null ? "" : order.getMemo()%></td>
 											</tr>
-											<tr>
-												<td>
-													客户
-												</td>
-												<td><%=order.getKehu()%></td>
-											</tr>
-
 										</tbody>
 									</table>
 
@@ -275,35 +278,36 @@
 										<tbody>
 											<tr>
 												<td>
-													订单签订时间
+													签订时间
 												</td>
 												<td><%=DateTool.formatDateYMD(order.getStart_at())%></td>
 											</tr>
 											<tr>
 												<td>
-													订单截止时间
+													截止时间
 												</td>
 												<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
 											</tr>
 											<tr>
 												<td>
-													订单创建时间
+													创建时间
 												</td>
 												<td>
 													<%=order.getCreated_at()%></td>
 											</tr>
 											<tr>
 												<td>
-													订单创建人
+													最近更新时间
 												</td>
-												<td><%=SystemCache.getUserName(order.getCreated_user())%></td>
+												<td><%=order.getUpdated_at()%></td>
 											</tr>
 											<tr>
 												<td>
-													备注
+													创建人
 												</td>
-												<td><%=order.getMemo() == null ? "" : order.getMemo()%></td>
+												<td><%=SystemCache.getUserName(order.getCreated_user())%></td>
 											</tr>
+
 										</tbody>
 									</table>
 
@@ -362,30 +366,70 @@
 													</td>
 													<td><%=order.getMachine()%></td>
 												</tr>
-												<tr>
-													<td>
-														创建时间
-													</td>
-													<td><%=order.getCreated_at()%></td>
-												</tr>
-												<tr>
-													<td>
-														最近更新时间
-													</td>
-													<td><%=order.getUpdated_at()%></td>
-												</tr>
-												<tr>
-													<td>
-														备注
-													</td>
-													<td><%=order.getMemo()%></td>
-												</tr>
+
+
+
 											</tbody>
 										</table>
 
 									</div>
 								</fieldset>
 
+								<fieldset id="orderDetail">
+									<legend>
+										颜色及数量
+									</legend>
+									<table class="table table-responsive detailTb">
+										<caption>
+										</caption>
+										<thead>
+											<tr>
+												<th width="15%">
+													颜色
+												</th>
+												<th width="15%">
+													克重(g)
+												</th>
+												<th width="15%">
+													纱线种类
+												</th>
+												<th width="15%">
+													尺寸
+												</th>
+												<th width="15%">
+													生产数量
+												</th>
+												<th width="15%">
+													单价
+												</th>
+											</tr>
+										</thead>
+										<tbody>
+											<%
+												for (OrderDetail detail : DetailList) {
+											%>
+											<tr class="tr" data='<%=SerializeTool.serialize(detail)%>'>
+												<td class="color"><%=detail.getColor()%>
+												</td>
+												<td class="weight"><%=detail.getWeight()%>
+												</td>
+												<td class="yarn"><%=detail.getYarn()%>
+												</td>
+												<td class="size"><%=detail.getSize()%>
+												</td>
+												<td class="quantity"><%=detail.getQuantity()%>
+												</td>
+												<td class="price"><%=detail.getPrice()%>
+												</td>
+											</tr>
+
+											<%
+												}
+											%>
+
+										</tbody>
+									</table>
+								</fieldset>
 							</div>
 
 
