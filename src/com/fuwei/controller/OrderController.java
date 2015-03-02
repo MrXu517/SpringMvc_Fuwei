@@ -201,7 +201,7 @@ public class OrderController extends BaseController {
 		}
 	}
 	
-	
+	/*创建订单*/
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> add(Order order,String details, HttpSession session,
@@ -263,6 +263,11 @@ public class OrderController extends BaseController {
 			//2015-2-27添加颜色及数量
 			
 			int orderId = orderService.add(order,handle);
+			
+			//2015-3-2添加 创建订单时 自动创建计划单
+			
+			//2015-3-2添加 创建订单时 自动创建计划单
+			
 			return this.returnSuccess("id",orderId);
 		} catch (Exception e) {
 			throw e;
@@ -707,7 +712,7 @@ public class OrderController extends BaseController {
 	//添加或保存质量记录单
 	@RequestMapping(value = "/headbank", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> headbank(HeadBankOrder headBankOrder,String details, HttpSession session,
+	public Map<String, Object> headbank(HeadBankOrder headBankOrder, HttpSession session,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
@@ -735,13 +740,13 @@ public class OrderController extends BaseController {
 				headBankOrder.setUpdated_at(DateTool.now());//设置更新时间
 				headBankOrder.setCreated_user(user.getId());//设置创建人
 				
-				List<HeadBankOrderDetail> detaillist = SerializeTool.deserializeList(details, HeadBankOrderDetail.class);
-				headBankOrder.setDetaillist(detaillist);
+//				List<HeadBankOrderDetail> detaillist = SerializeTool.deserializeList(details, HeadBankOrderDetail.class);
+//				headBankOrder.setDetaillist(detaillist);
 				headBankOrderId = headBankOrderService.add(headBankOrder);
 			}else{//编辑
 				headBankOrder.setUpdated_at(DateTool.now());
-				List<HeadBankOrderDetail> detaillist = SerializeTool.deserializeList(details, HeadBankOrderDetail.class);
-				headBankOrder.setDetaillist(detaillist);
+//				List<HeadBankOrderDetail> detaillist = SerializeTool.deserializeList(details, HeadBankOrderDetail.class);
+//				headBankOrder.setDetaillist(detaillist);
 				headBankOrderId = headBankOrderService.update(headBankOrder);
 			}
 			return this.returnSuccess("id",headBankOrderId);
@@ -901,7 +906,7 @@ public class OrderController extends BaseController {
 	//添加或保存半检记录单
 	@RequestMapping(value = "/halfcheckrecordorder", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> halfcheckrecordorder(HalfCheckRecordOrder tableOrder,String details,String details_2, HttpSession session,
+	public Map<String, Object> halfcheckrecordorder(HalfCheckRecordOrder tableOrder,String details_2, HttpSession session,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
@@ -929,16 +934,16 @@ public class OrderController extends BaseController {
 				tableOrder.setUpdated_at(DateTool.now());//设置更新时间
 				tableOrder.setCreated_user(user.getId());//设置创建人
 				
-				List<HalfCheckRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, HalfCheckRecordOrderDetail.class);
+//				List<HalfCheckRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, HalfCheckRecordOrderDetail.class);
 				List<HalfCheckRecordOrderDetail2> detaillist2 = SerializeTool.deserializeList(details_2, HalfCheckRecordOrderDetail2.class);
-				tableOrder.setDetaillist(detaillist);
+//				tableOrder.setDetaillist(detaillist);
 				tableOrder.setDetail_2_list(detaillist2);
 				tableOrderId = halfCheckRecordOrderService.add(tableOrder);
 			}else{//编辑
 				tableOrder.setUpdated_at(DateTool.now());
-				List<HalfCheckRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, HalfCheckRecordOrderDetail.class);
+//				List<HalfCheckRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, HalfCheckRecordOrderDetail.class);
 				List<HalfCheckRecordOrderDetail2> detaillist2 = SerializeTool.deserializeList(details_2, HalfCheckRecordOrderDetail2.class);
-				tableOrder.setDetaillist(detaillist);
+//				tableOrder.setDetaillist(detaillist);
 				tableOrder.setDetail_2_list(detaillist2);
 				tableOrderId = halfCheckRecordOrderService.update(tableOrder);
 			}
@@ -1086,7 +1091,7 @@ public class OrderController extends BaseController {
 	//添加或保存抽检记录单
 	@RequestMapping(value = "/checkrecordorder", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> checkrecordorder(CheckRecordOrder tableOrder,String details, HttpSession session,
+	public Map<String, Object> checkrecordorder(CheckRecordOrder tableOrder, HttpSession session,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
@@ -1114,13 +1119,13 @@ public class OrderController extends BaseController {
 				tableOrder.setUpdated_at(DateTool.now());//设置更新时间
 				tableOrder.setCreated_user(user.getId());//设置创建人
 				
-				List<CheckRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, CheckRecordOrderDetail.class);
-				tableOrder.setDetaillist(detaillist);
+//				List<CheckRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, CheckRecordOrderDetail.class);
+//				tableOrder.setDetaillist(detaillist);
 				tableOrderId = checkRecordOrderService.add(tableOrder);
 			}else{//编辑
 				tableOrder.setUpdated_at(DateTool.now());
-				List<CheckRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, CheckRecordOrderDetail.class);
-				tableOrder.setDetaillist(detaillist);
+//				List<CheckRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, CheckRecordOrderDetail.class);
+//				tableOrder.setDetaillist(detaillist);
 				tableOrderId = checkRecordOrderService.update(tableOrder);
 			}
 			return this.returnSuccess("id",tableOrderId);
@@ -1133,7 +1138,7 @@ public class OrderController extends BaseController {
 	//添加或保存车缝记录单
 	@RequestMapping(value = "/carfixrecordorder", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> carfixrecordorder(CarFixRecordOrder tableOrder,String details, HttpSession session,
+	public Map<String, Object> carfixrecordorder(CarFixRecordOrder tableOrder, HttpSession session,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
@@ -1161,13 +1166,13 @@ public class OrderController extends BaseController {
 				tableOrder.setUpdated_at(DateTool.now());//设置更新时间
 				tableOrder.setCreated_user(user.getId());//设置创建人
 				
-				List<CarFixRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, CarFixRecordOrderDetail.class);
-				tableOrder.setDetaillist(detaillist);
+//				List<CarFixRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, CarFixRecordOrderDetail.class);
+//				tableOrder.setDetaillist(detaillist);
 				tableOrderId = carFixRecordOrderService.add(tableOrder);
 			}else{//编辑
 				tableOrder.setUpdated_at(DateTool.now());
-				List<CarFixRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, CarFixRecordOrderDetail.class);
-				tableOrder.setDetaillist(detaillist);
+//				List<CarFixRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, CarFixRecordOrderDetail.class);
+//				tableOrder.setDetaillist(detaillist);
 				tableOrderId = carFixRecordOrderService.update(tableOrder);
 			}
 			return this.returnSuccess("id",tableOrderId);
@@ -1180,7 +1185,7 @@ public class OrderController extends BaseController {
 	//添加或保存整烫记录单
 	@RequestMapping(value = "/ironingrecordorder", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> ironingrecordorder(IroningRecordOrder tableOrder,String details, HttpSession session,
+	public Map<String, Object> ironingrecordorder(IroningRecordOrder tableOrder,HttpSession session,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
@@ -1208,13 +1213,13 @@ public class OrderController extends BaseController {
 				tableOrder.setUpdated_at(DateTool.now());//设置更新时间
 				tableOrder.setCreated_user(user.getId());//设置创建人
 				
-				List<IroningRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, IroningRecordOrderDetail.class);
-				tableOrder.setDetaillist(detaillist);
+//				List<IroningRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, IroningRecordOrderDetail.class);
+//				tableOrder.setDetaillist(detaillist);
 				tableOrderId = ironingRecordOrderService.add(tableOrder);
 			}else{//编辑
 				tableOrder.setUpdated_at(DateTool.now());
-				List<IroningRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, IroningRecordOrderDetail.class);
-				tableOrder.setDetaillist(detaillist);
+//				List<IroningRecordOrderDetail> detaillist = SerializeTool.deserializeList(details, IroningRecordOrderDetail.class);
+//				tableOrder.setDetaillist(detaillist);
 				tableOrderId = ironingRecordOrderService.update(tableOrder);
 			}
 			return this.returnSuccess("id",tableOrderId);

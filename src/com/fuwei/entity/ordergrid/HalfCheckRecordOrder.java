@@ -20,12 +20,12 @@ public class HalfCheckRecordOrder {
 	
 	private Integer created_user;//创建用户
 	
-	private String detail_json;
+//	private String detail_json;
 	
 	private String detail_2_json;
 	
-	@Temporary
-	private List<HalfCheckRecordOrderDetail> detaillist ;
+//	@Temporary
+//	private List<HalfCheckRecordOrderDetail> detaillist ;
 	
 	@Temporary
 	private List<HalfCheckRecordOrderDetail2> detail_2_list ;
@@ -70,17 +70,17 @@ public class HalfCheckRecordOrder {
 		this.created_user = created_user;
 	}
 
-	public String getDetail_json() {
-		return detail_json;
-	}
-
-	public void setDetail_json(String detail_json) throws Exception {
-		if(detail_json != null && !detail_json.equals("")){
-			this.setDetaillist(SerializeTool.deserializeList(detail_json,HalfCheckRecordOrderDetail.class));
-		}
-		
-		this.detail_json = detail_json;
-	}
+//	public String getDetail_json() {
+//		return detail_json;
+//	}
+//
+//	public void setDetail_json(String detail_json) throws Exception {
+//		if(detail_json != null && !detail_json.equals("")){
+//			this.setDetaillist(SerializeTool.deserializeList(detail_json,HalfCheckRecordOrderDetail.class));
+//		}
+//		
+//		this.detail_json = detail_json;
+//	}
 
 	public String getDetail_2_json() {
 		return detail_2_json;
@@ -93,13 +93,13 @@ public class HalfCheckRecordOrder {
 		this.detail_2_json = detail_2_json;
 	}
 
-	public List<HalfCheckRecordOrderDetail> getDetaillist() {
-		return detaillist;
-	}
-
-	public void setDetaillist(List<HalfCheckRecordOrderDetail> detaillist) {
-		this.detaillist = detaillist;
-	}
+//	public List<HalfCheckRecordOrderDetail> getDetaillist() {
+//		return detaillist;
+//	}
+//
+//	public void setDetaillist(List<HalfCheckRecordOrderDetail> detaillist) {
+//		this.detaillist = detaillist;
+//	}
 
 	public List<HalfCheckRecordOrderDetail2> getDetail_2_list() {
 		return detail_2_list;

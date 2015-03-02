@@ -26,12 +26,12 @@ public class HeadBankOrderService extends BaseService {
 	@Transactional
 	public int add(HeadBankOrder headbankOrder) throws Exception {
 		try {
-			if (headbankOrder.getDetaillist() == null
-					|| headbankOrder.getDetaillist().size() <= 0) {
-				throw new Exception("头带质量记录单中至少得有一条详情记录");
-			} else {
+//			if (headbankOrder.getDetaillist() == null
+//					|| headbankOrder.getDetaillist().size() <= 0) {
+//				throw new Exception("头带质量记录单中至少得有一条详情记录");
+//			} else {
 				
-				headbankOrder.setDetail_json(SerializeTool.serialize(headbankOrder.getDetaillist()));
+//				headbankOrder.setDetail_json(SerializeTool.serialize(headbankOrder.getDetaillist()));
 				
 				Integer headbankOrderId = this.insert(headbankOrder);
 
@@ -43,7 +43,7 @@ public class HeadBankOrderService extends BaseService {
 //				addDetailList(headbankOrder.getDetaillist());
 
 				return headbankOrderId;
-			}
+//			}
 		} catch (Exception e) {
 
 			throw e;
@@ -54,12 +54,12 @@ public class HeadBankOrderService extends BaseService {
 	@Transactional
 	public int update(HeadBankOrder headBankOrder) throws Exception {
 		try {
-			if (headBankOrder.getDetaillist() == null
-					|| headBankOrder.getDetaillist().size() <= 0) {
-				throw new Exception("头带质量记录单中至少得有一条详情记录");
-			} else {
-				String details = SerializeTool.serialize(headBankOrder.getDetaillist());
-				headBankOrder.setDetail_json(details);
+//			if (headBankOrder.getDetaillist() == null
+//					|| headBankOrder.getDetaillist().size() <= 0) {
+//				throw new Exception("头带质量记录单中至少得有一条详情记录");
+//			} else {
+//				String details = SerializeTool.serialize(headBankOrder.getDetaillist());
+//				headBankOrder.setDetail_json(details);
 				
 				// 更新表
 				this.update(headBankOrder, "id",
@@ -74,7 +74,7 @@ public class HeadBankOrderService extends BaseService {
 //				addDetailList(headBankOrder.getDetaillist());
 
 				return headBankOrder.getId();
-			}
+//			}
 		} catch (Exception e) {
 			throw e;
 		}
@@ -89,11 +89,11 @@ public class HeadBankOrderService extends BaseService {
 			if(order == null){
 				return null;
 			}
-			if(order.getDetail_json() == null){
-				order.setDetaillist(new ArrayList<HeadBankOrderDetail>());
-				return order;
-			}
-			order.setDetaillist(SerializeTool.deserializeList(order.getDetail_json(), HeadBankOrderDetail.class));
+//			if(order.getDetail_json() == null){
+//				order.setDetaillist(new ArrayList<HeadBankOrderDetail>());
+//				return order;
+//			}
+//			order.setDetaillist(SerializeTool.deserializeList(order.getDetail_json(), HeadBankOrderDetail.class));
 			return order;
 		} catch (Exception e) {
 			throw e;
@@ -106,11 +106,11 @@ public class HeadBankOrderService extends BaseService {
 			HeadBankOrder order = dao.queryForBean(
 					"select * from tb_headbankorder where id = ?",
 					HeadBankOrder.class, id);
-			if(order.getDetail_json() == null){
-				order.setDetaillist(new ArrayList<HeadBankOrderDetail>());
-				return order;
-			}
-			order.setDetaillist(SerializeTool.deserializeList(order.getDetail_json(), HeadBankOrderDetail.class));
+//			if(order.getDetail_json() == null){
+//				order.setDetaillist(new ArrayList<HeadBankOrderDetail>());
+//				return order;
+//			}
+//			order.setDetaillist(SerializeTool.deserializeList(order.getDetail_json(), HeadBankOrderDetail.class));
 			return order;
 		} catch (Exception e) {
 			throw e;
@@ -118,19 +118,19 @@ public class HeadBankOrderService extends BaseService {
 	}
 
 	// 获取订单详情列表
-	public List<HeadBankOrderDetail> getDetailList(int headBankOrderId)
-			throws Exception {
-		try {
-			HeadBankOrder order = dao.queryForBean(
-					"select * from tb_headbankorder where id = ?",
-					HeadBankOrder.class, headBankOrderId);
-			
-			List<HeadBankOrderDetail> detailList = SerializeTool.deserializeList(order.getDetail_json(), HeadBankOrderDetail.class);
-			return detailList;
-		} catch (Exception e) {
-			throw e;
-		}
-	}
+//	public List<HeadBankOrderDetail> getDetailList(int headBankOrderId)
+//			throws Exception {
+//		try {
+//			HeadBankOrder order = dao.queryForBean(
+//					"select * from tb_headbankorder where id = ?",
+//					HeadBankOrder.class, headBankOrderId);
+//			
+//			List<HeadBankOrderDetail> detailList = SerializeTool.deserializeList(order.getDetail_json(), HeadBankOrderDetail.class);
+//			return detailList;
+//		} catch (Exception e) {
+//			throw e;
+//		}
+//	}
 
 	// 添加头套质量记录单详情
 	@Transactional

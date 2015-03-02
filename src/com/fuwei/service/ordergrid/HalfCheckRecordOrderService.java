@@ -30,16 +30,16 @@ public class HalfCheckRecordOrderService extends BaseService {
 	@Transactional
 	public int add(HalfCheckRecordOrder halfCheckRecordOrder) throws Exception {
 		try {
-			if (halfCheckRecordOrder.getDetaillist() == null
-					|| halfCheckRecordOrder.getDetaillist().size() <= 0) {
-				throw new Exception("半检记录单中至少得有一条颜色及数量详情记录");
-			} else {
+//			if (halfCheckRecordOrder.getDetaillist() == null
+//					|| halfCheckRecordOrder.getDetaillist().size() <= 0) {
+//				throw new Exception("半检记录单中至少得有一条颜色及数量详情记录");
+//			} else {
 				if (halfCheckRecordOrder.getDetail_2_list() == null
 						|| halfCheckRecordOrder.getDetail_2_list().size() <= 0) {
 					throw new Exception("半检记录单中至少得有一条生产材料信息记录");
 				} else {
-					halfCheckRecordOrder.setDetail_json(SerializeTool
-							.serialize(halfCheckRecordOrder.getDetaillist()));
+//					halfCheckRecordOrder.setDetail_json(SerializeTool
+//							.serialize(halfCheckRecordOrder.getDetaillist()));
 					halfCheckRecordOrder
 							.setDetail_2_json(SerializeTool
 									.serialize(halfCheckRecordOrder
@@ -51,7 +51,7 @@ public class HalfCheckRecordOrderService extends BaseService {
 
 					return tableOrderId;
 				}
-			}
+//			}
 		} catch (Exception e) {
 
 			throw e;
@@ -62,17 +62,17 @@ public class HalfCheckRecordOrderService extends BaseService {
 	@Transactional
 	public int update(HalfCheckRecordOrder halfCheckRecordOrder) throws Exception {
 		try {
-			if (halfCheckRecordOrder.getDetaillist() == null
-					|| halfCheckRecordOrder.getDetaillist().size() <= 0) {
-				throw new Exception("半检记录单中至少得有一条颜色及数量详情记录");
-			} else {
+//			if (halfCheckRecordOrder.getDetaillist() == null
+//					|| halfCheckRecordOrder.getDetaillist().size() <= 0) {
+//				throw new Exception("半检记录单中至少得有一条颜色及数量详情记录");
+//			} else {
 				if (halfCheckRecordOrder.getDetail_2_list() == null
 						|| halfCheckRecordOrder.getDetail_2_list().size() <= 0) {
 					throw new Exception("半检记录单中至少得有一条生产材料信息记录");
 				} else {
-					String details = SerializeTool.serialize(halfCheckRecordOrder
-							.getDetaillist());
-					halfCheckRecordOrder.setDetail_json(details);
+//					String details = SerializeTool.serialize(halfCheckRecordOrder
+//							.getDetaillist());
+//					halfCheckRecordOrder.setDetail_json(details);
 					
 					halfCheckRecordOrder.setDetail_2_json(SerializeTool
 							.serialize(halfCheckRecordOrder
@@ -84,7 +84,7 @@ public class HalfCheckRecordOrderService extends BaseService {
 
 					return halfCheckRecordOrder.getId();
 				}
-			}
+//			}
 		} catch (Exception e) {
 			throw e;
 		}

@@ -40,10 +40,11 @@ public class OrderService extends BaseService {
 	OrderProduceStatusService orderProduceStatusService;
 	@Autowired
 	ProductionNotificationService productionNotificationService;
+
 	// 获取订单列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,
-			Integer companyId, Integer salesmanId,Integer status, List<Sort> sortlist)
-			throws Exception {
+			Integer companyId, Integer salesmanId, Integer status,
+			List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
 			String seq = "WHERE ";
@@ -70,7 +71,7 @@ public class OrderService extends BaseService {
 				sql.append(seq + " salesmanId='" + salesmanId + "'");
 				seq = " AND ";
 			}
-			if(status!=null){
+			if (status != null) {
 				sql.append(seq + " status='" + status + "'");
 			}
 
@@ -101,25 +102,30 @@ public class OrderService extends BaseService {
 			if (order.getSampleId() == null) {
 				throw new Exception("订单必须填写样品");
 			} else {
-				order.setDetail_json(SerializeTool
-						.serialize(order.getDetaillist()));
-				
-				Integer orderId = this.insert(order);
-				String orderNumber = CreateNumberUtil
-						.createFWStyleNumber(orderId);
-				order.setOrderNumber(orderNumber);
-				order.setId(orderId);
-				this.update(order, "id", null);
-//				for (OrderDetail detail : order.getDetaillist()) {
-//					detail.setOrderId(orderId);
-//				}
-//				orderDetailService.addBatch(order.getDetaillist());
+				if (order.getDetaillist() == null
+						|| order.getDetaillist().size() <= 0) {
+					throw new Exception("订单中至少得有一条颜色及数量记录");
+				} else {
+					order.setDetail_json(SerializeTool.serialize(order
+							.getDetaillist()));
 
-				// 添加操作记录
-				handle.setOrderId(orderId);
-				orderHandleService.add(handle);
+					Integer orderId = this.insert(order);
+					String orderNumber = CreateNumberUtil
+							.createFWStyleNumber(orderId);
+					order.setOrderNumber(orderNumber);
+					order.setId(orderId);
+					this.update(order, "id", null);
+					// for (OrderDetail detail : order.getDetaillist()) {
+					// detail.setOrderId(orderId);
+					// }
+					// orderDetailService.addBatch(order.getDetaillist());
 
-				return orderId;
+					// 添加操作记录
+					handle.setOrderId(orderId);
+					orderHandleService.add(handle);
+
+					return orderId;
+				}
 			}
 		} catch (Exception e) {
 
@@ -140,18 +146,20 @@ public class OrderService extends BaseService {
 			throw e;
 		}
 	}
-	
+
 	// 根据detailId获取订单
 	public Order getByDetailId(int detailId) throws Exception {
 		try {
-			Order order = dao.queryForBean(
-					"select o.* from tb_order o ,tb_order_detail d where o.id=d.orderId AND d.id = ?", Order.class, detailId);
+			Order order = dao
+					.queryForBean(
+							"select o.* from tb_order o ,tb_order_detail d where o.id=d.orderId AND d.id = ?",
+							Order.class, detailId);
 			return order;
 		} catch (Exception e) {
 			throw e;
 		}
 	}
-	
+
 	// 获取订单
 	public Order get(int id) throws Exception {
 		try {
@@ -162,26 +170,31 @@ public class OrderService extends BaseService {
 			throw e;
 		}
 	}
-	
+
 	// 编辑订单
 	@Transactional
 	public int update(Order order, OrderHandle handle) throws Exception {
 		try {
 			// 更新订单表
-			String details = SerializeTool.serialize(order
-					.getDetaillist());
-			order.setDetail_json(details);
-			this.update(order, "id",
-					"created_user,status,state,created_at,orderNumber,stepId,setp_state", true);
-//			// 删除原来订单的detail
-//			orderDetailService.deleteBatch(order.getId());
-//			// 再添加新的detail
-//			orderDetailService.addBatch(order.getDetaillist());
+			if (order.getDetaillist() == null
+					|| order.getDetaillist().size() <= 0) {
+				throw new Exception("订单中至少得有一条颜色及数量记录");
+			} else {
+				String details = SerializeTool.serialize(order.getDetaillist());
+				order.setDetail_json(details);
+				this
+						.update(order,"id","created_user,status,state,created_at,orderNumber,stepId,setp_state",
+								true);
+				// // 删除原来订单的detail
+				// orderDetailService.deleteBatch(order.getId());
+				// // 再添加新的detail
+				// orderDetailService.addBatch(order.getDetaillist());
 
-			// 添加操作记录
-			orderHandleService.add(handle);
+				// 添加操作记录
+				orderHandleService.add(handle);
 
-			return order.getId();
+				return order.getId();
+			}
 		} catch (Exception e) {
 			throw e;
 		}
@@ -200,17 +213,25 @@ public class OrderService extends BaseService {
 			throw e;
 		}
 	}
+
 	// 修改步骤
-	public int updatestep(OrderProduceStatus orderProduceStatus, OrderHandle handle)
-			throws Exception {
+	public int updatestep(OrderProduceStatus orderProduceStatus,
+			OrderHandle handle) throws Exception {
 		try {
 			int success = orderProduceStatusService.update(orderProduceStatus);
-			//修改当前订单的step_state描述
+			// 修改当前订单的step_state描述
 			Order order = this.get(orderProduceStatus.getOrderId());
-			if(order.getStepId()!=null && order.getStepId() == orderProduceStatus.getId() && !order.getStep_state().equals(orderProduceStatus.getName())){
+			if (order.getStepId() != null
+					&& order.getStepId() == orderProduceStatus.getId()
+					&& !order.getStep_state().equals(
+							orderProduceStatus.getName())) {
 				order.setStep_state(orderProduceStatus.getName());
-				this.update(order, "id",
-						"created_user,status,state,created_at,orderNumber,stepId", true);
+				this
+						.update(
+								order,
+								"id",
+								"created_user,status,state,created_at,orderNumber,stepId",
+								true);
 			}
 			// 添加操作记录
 			orderHandleService.add(handle);
@@ -219,9 +240,9 @@ public class OrderService extends BaseService {
 			throw e;
 		}
 	}
+
 	// 删除步骤
-	public int deletestep(int stepId, OrderHandle handle)
-			throws Exception {
+	public int deletestep(int stepId, OrderHandle handle) throws Exception {
 		try {
 			int success = orderProduceStatusService.remove(stepId);
 			// 添加操作记录
@@ -231,83 +252,83 @@ public class OrderService extends BaseService {
 			throw e;
 		}
 	}
-	
-	//执行订单
+
+	// 执行订单
 	@Transactional
-	public int exestep(int orderId,OrderHandle handle)
-			throws Exception {
+	public int exestep(int orderId, OrderHandle handle) throws Exception {
 		try {
-			//获取当前步骤
+			// 获取当前步骤
 			Order order = this.get(orderId);
 			int status = order.getStatus();
-			//如果当前交易已完成，则不能再执行步骤
-			if(status == OrderStatus.COMPLETED.ordinal()){
+			// 如果当前交易已完成，则不能再执行步骤
+			if (status == OrderStatus.COMPLETED.ordinal()) {
 				throw new Exception("交易已完成，无法执行其他步骤");
 			}
-			if(status == OrderStatus.CANCEL.ordinal()){
+			if (status == OrderStatus.CANCEL.ordinal()) {
 				throw new Exception("交易已取消，无法执行其他步骤");
 			}
 			Integer step = order.getStepId();
 
-			//若当前执行发货步骤，则修改订单的发货时间
-			if(status == OrderStatus.DELIVERING.ordinal()){
+			// 若当前执行发货步骤，则修改订单的发货时间
+			if (status == OrderStatus.DELIVERING.ordinal()) {
 				order.setDelivery_at(DateTool.now());
 			}
-			
-//			2014-11-10 删除if，因为去掉了动态步骤
-//			//获取下一步步骤,  若当前执行机织步骤，则不修改status,但修改step,执行后的状态为动态生产步骤
-//			if(status == OrderStatus.MACHINING.ordinal()){//若当前步骤是机织，则要获取动态生产步骤
-//				//获取下一步动态生产步骤
-//				OrderProduceStatus nextStep = orderProduceStatusService.getNext(order.getId(), step);
-//				if(nextStep == null){//如果获取不到下一个步骤，则跳到下一个status
-//					OrderStatus orderstatus = OrderStatusUtil.getNext(status);
-//					order.setStepId(null);
-//					order.setStep_state(null);
-//					order.setStatus(orderstatus.ordinal());
-//					order.setState(orderstatus.getName());
-//				}else{
-//					order.setStepId(nextStep.getId());
-//					order.setStep_state(nextStep.getName());
-//				}
-//			}
-//			else{//若不是机织，则status 直接+1
-				OrderStatus orderstatus = OrderStatusUtil.getNext(status);
-				order.setStepId(null);
-				order.setStep_state(null);
-				order.setStatus(orderstatus.ordinal());
-				order.setState(orderstatus.getName());
-//			}
-			
-			
+
+			// 2014-11-10 删除if，因为去掉了动态步骤
+			// //获取下一步步骤, 若当前执行机织步骤，则不修改status,但修改step,执行后的状态为动态生产步骤
+			// if(status ==
+			// OrderStatus.MACHINING.ordinal()){//若当前步骤是机织，则要获取动态生产步骤
+			// //获取下一步动态生产步骤
+			// OrderProduceStatus nextStep =
+			// orderProduceStatusService.getNext(order.getId(), step);
+			// if(nextStep == null){//如果获取不到下一个步骤，则跳到下一个status
+			// OrderStatus orderstatus = OrderStatusUtil.getNext(status);
+			// order.setStepId(null);
+			// order.setStep_state(null);
+			// order.setStatus(orderstatus.ordinal());
+			// order.setState(orderstatus.getName());
+			// }else{
+			// order.setStepId(nextStep.getId());
+			// order.setStep_state(nextStep.getName());
+			// }
+			// }
+			// else{//若不是机织，则status 直接+1
+			OrderStatus orderstatus = OrderStatusUtil.getNext(status);
+			order.setStepId(null);
+			order.setStep_state(null);
+			order.setStatus(orderstatus.ordinal());
+			order.setState(orderstatus.getName());
+			// }
+
 			// 更新订单表
-			this.update(order, "id",
-					"created_user,created_at,orderNumber", false);
+			this.update(order, "id", "created_user,created_at,orderNumber",
+					false);
 			// 添加操作记录
 			handle.setOrderId(orderId);
-			if(order.getStepId()!=null){
+			if (order.getStepId() != null) {
 				handle.setState(order.getStep_state());
 				handle.setStatus(order.getStepId());
-			}else{
+			} else {
 				handle.setState(order.getState());
 				handle.setStatus(order.getStatus());
 			}
-			
+
 			orderHandleService.add(handle);
 			return 1;
 		} catch (Exception e) {
 			throw e;
 		}
 	}
-	
+
 	@Transactional
-	public int addNotification(ProductionNotification ProductionNotification) throws Exception{
-		try{
+	public int addNotification(ProductionNotification ProductionNotification)
+			throws Exception {
+		try {
 			productionNotificationService.add(ProductionNotification);
 			return 1;
-		}catch(Exception e){
+		} catch (Exception e) {
 			throw e;
 		}
 	}
-	
-	
+
 }

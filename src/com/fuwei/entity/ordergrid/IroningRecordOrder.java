@@ -9,7 +9,7 @@ import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
 import net.keepsoft.commons.annotation.Temporary;
 
-//整烫记录单
+//整烫记录单，计划单数量
 @Table("tb_ironingrecordorder")
 public class IroningRecordOrder {
 	@IdentityId
@@ -20,10 +20,10 @@ public class IroningRecordOrder {
 	
 	private Integer created_user;//创建用户
 	
-	private String detail_json;
-	
-	@Temporary
-	private List<IroningRecordOrderDetail> detaillist ;
+//	private String detail_json;
+//	
+//	@Temporary
+//	private List<IroningRecordOrderDetail> detaillist ;
 
 	public int getId() {
 		return id;
@@ -65,25 +65,25 @@ public class IroningRecordOrder {
 		this.created_user = created_user;
 	}
 
-	public String getDetail_json() {
-		return detail_json;
-	}
-
-	public void setDetail_json(String detail_json) throws Exception {
-		if(detail_json != null && !detail_json.equals("")){
-			this.setDetaillist(SerializeTool.deserializeList(detail_json,IroningRecordOrderDetail.class));
-		}
-		
-		this.detail_json = detail_json;
-	}
-
-	public List<IroningRecordOrderDetail> getDetaillist() {
-		return detaillist;
-	}
-
-	public void setDetaillist(List<IroningRecordOrderDetail> detaillist) {
-		this.detaillist = detaillist;
-	}
+//	public String getDetail_json() {
+//		return detail_json;
+//	}
+//
+//	public void setDetail_json(String detail_json) throws Exception {
+//		if(detail_json != null && !detail_json.equals("")){
+//			this.setDetaillist(SerializeTool.deserializeList(detail_json,IroningRecordOrderDetail.class));
+//		}
+//		
+//		this.detail_json = detail_json;
+//	}
+//
+//	public List<IroningRecordOrderDetail> getDetaillist() {
+//		return detaillist;
+//	}
+//
+//	public void setDetaillist(List<IroningRecordOrderDetail> detaillist) {
+//		this.detaillist = detaillist;
+//	}
 	
 	
 }

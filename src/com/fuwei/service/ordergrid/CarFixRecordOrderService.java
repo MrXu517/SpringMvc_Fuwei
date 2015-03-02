@@ -34,19 +34,19 @@ public class CarFixRecordOrderService extends BaseService {
 	@Transactional
 	public int add(CarFixRecordOrder tableOrder) throws Exception {
 		try {
-			if (tableOrder.getDetaillist() == null
-					|| tableOrder.getDetaillist().size() <= 0) {
-				throw new Exception("车缝记录单中至少得有一条颜色及数量记录");
-			} else {
-				tableOrder.setDetail_json(SerializeTool
-							.serialize(tableOrder.getDetaillist()));
+//			if (tableOrder.getDetaillist() == null
+//					|| tableOrder.getDetaillist().size() <= 0) {
+//				throw new Exception("车缝记录单中至少得有一条颜色及数量记录");
+//			} else {
+//				tableOrder.setDetail_json(SerializeTool
+//							.serialize(tableOrder.getDetaillist()));
 
 					Integer tableOrderId = this.insert(tableOrder);
 
 					tableOrder.setId(tableOrderId);
 
 					return tableOrderId;
-			}
+//			}
 		} catch (Exception e) {
 
 			throw e;
@@ -57,20 +57,20 @@ public class CarFixRecordOrderService extends BaseService {
 	@Transactional
 	public int update(CarFixRecordOrder tableOrder) throws Exception {
 		try {
-			if (tableOrder.getDetaillist() == null
-					|| tableOrder.getDetaillist().size() <= 0) {
-				throw new Exception("车缝记录单中至少得有一条颜色及数量记录");
-			} else {
-					String details = SerializeTool.serialize(tableOrder
-							.getDetaillist());
-					tableOrder.setDetail_json(details);
+//			if (tableOrder.getDetaillist() == null
+//					|| tableOrder.getDetaillist().size() <= 0) {
+//				throw new Exception("车缝记录单中至少得有一条颜色及数量记录");
+//			} else {
+//					String details = SerializeTool.serialize(tableOrder
+//							.getDetaillist());
+//					tableOrder.setDetail_json(details);
 
 					// 更新表
 					this.update(tableOrder, "id",
 							"created_user,created_at,orderId", true);
 
 					return tableOrder.getId();
-			}
+//			}
 		} catch (Exception e) {
 			throw e;
 		}

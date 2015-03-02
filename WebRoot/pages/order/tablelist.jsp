@@ -41,8 +41,8 @@
 	Order order = (Order) request.getAttribute("order");
 	HeadBankOrder headBankOrder = (HeadBankOrder) request
 			.getAttribute("headBankOrder");
-	List<HeadBankOrderDetail> headBankOrderDetailList = headBankOrder == null ? new ArrayList<HeadBankOrderDetail>()
-			: headBankOrder.getDetaillist();
+//	List<HeadBankOrderDetail> headBankOrderDetailList = headBankOrder == null ? new ArrayList<HeadBankOrderDetail>()
+//			: headBankOrder.getDetaillist();
 
 	ProducingOrder producingOrder = (ProducingOrder) request
 			.getAttribute("producingOrder");
@@ -63,8 +63,8 @@
 	//半检记录单
 	HalfCheckRecordOrder halfCheckRecordOrder = (HalfCheckRecordOrder) request
 			.getAttribute("halfCheckRecordOrder");
-	List<HalfCheckRecordOrderDetail> halfCheckRecordOrderDetailList = halfCheckRecordOrder == null ? new ArrayList<HalfCheckRecordOrderDetail>()
-			: halfCheckRecordOrder.getDetaillist();
+//	List<HalfCheckRecordOrderDetail> halfCheckRecordOrderDetailList = halfCheckRecordOrder == null ? new ArrayList<HalfCheckRecordOrderDetail>()
+//			: halfCheckRecordOrder.getDetaillist();
 	List<HalfCheckRecordOrderDetail2> halfCheckRecordOrderDetailList2 = halfCheckRecordOrder == null ? new ArrayList<HalfCheckRecordOrderDetail2>()
 			: halfCheckRecordOrder.getDetail_2_list();
 
@@ -83,8 +83,8 @@
 	//抽检记录单
 	CheckRecordOrder checkRecordOrder = (CheckRecordOrder) request
 			.getAttribute("checkRecordOrder");
-	List<CheckRecordOrderDetail> checkRecordOrderDetailList = checkRecordOrder == null ? new ArrayList<CheckRecordOrderDetail>()
-			: checkRecordOrder.getDetaillist();
+//	List<CheckRecordOrderDetail> checkRecordOrderDetailList = checkRecordOrder == null ? new ArrayList<CheckRecordOrderDetail>()
+//			: checkRecordOrder.getDetaillist();
 
 	//辅料采购单
 	FuliaoPurchaseOrder fuliaoPurchaseOrder = (FuliaoPurchaseOrder) request
@@ -95,19 +95,22 @@
 	//车缝记录单
 	CarFixRecordOrder carFixRecordOrder = (CarFixRecordOrder) request
 			.getAttribute("carFixRecordOrder");
-	List<CarFixRecordOrderDetail> carFixRecordOrderDetailList = carFixRecordOrder == null ? new ArrayList<CarFixRecordOrderDetail>()
-			: carFixRecordOrder.getDetaillist();
+//	List<CarFixRecordOrderDetail> carFixRecordOrderDetailList = carFixRecordOrder == null ? new ArrayList<CarFixRecordOrderDetail>()
+//			: carFixRecordOrder.getDetaillist();
 
 	//整烫记录单
 	IroningRecordOrder ironingRecordOrder = (IroningRecordOrder) request
 			.getAttribute("ironingRecordOrder");
-	List<IroningRecordOrderDetail> ironingRecordOrderDetailList = ironingRecordOrder == null ? new ArrayList<IroningRecordOrderDetail>()
-			: ironingRecordOrder.getDetaillist();
+//	List<IroningRecordOrderDetail> ironingRecordOrderDetailList = ironingRecordOrder == null ? new ArrayList<IroningRecordOrderDetail>()
+//			: ironingRecordOrder.getDetaillist();
 
 	String tabname = (String) request.getParameter("tab");
 
 	List<OrderDetail> DetailList = order == null ? new ArrayList<OrderDetail>()
 			: order.getDetaillist();
+	if(DetailList == null){
+		DetailList = new ArrayList<OrderDetail>();
+	}
 %>
 <!DOCTYPE html>
 <html>
@@ -283,17 +286,16 @@
 							</li>
 							<li>
 								<a href="#storeorder" role="tab" data-toggle="tab">原材料仓库</a>
-							</li>
-							<li>
-								<a href="#headbankorder" role="tab" data-toggle="tab">质量记录单</a>
-							</li>			
+							</li>		
 							<li>
 								<a href="#halfcheckrecordorder" role="tab" data-toggle="tab">半检记录单</a>
 							</li>
 							<li>
 								<a href="#checkrecordorder" role="tab" data-toggle="tab">抽检记录单</a>
 							</li>
-							
+							<li>
+								<a href="#headbankorder" role="tab" data-toggle="tab">质量记录单</a>
+							</li>
 							<li>
 								<a href="#carfixrecordorder" role="tab" data-toggle="tab">车缝记录单</a>
 							</li>

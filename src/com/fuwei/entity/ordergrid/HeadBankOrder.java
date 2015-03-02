@@ -8,7 +8,7 @@ import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
 import net.keepsoft.commons.annotation.Temporary;
 
-//头带质量记录单
+//头带质量记录单，计划单数量
 @Table("tb_headbankorder")
 public class HeadBankOrder {
 	@IdentityId
@@ -19,19 +19,19 @@ public class HeadBankOrder {
 	
 	private Integer created_user;//创建用户
 	
-	private String detail_json;
+//	private String detail_json;
 	
-	public String getDetail_json() {
-		return detail_json;
-	}
+//	public String getDetail_json() {
+//		return detail_json;
+//	}
+//
+//	public void setDetail_json(String detail_json) {
+//		this.detail_json = detail_json;
+//	}
 
-	public void setDetail_json(String detail_json) {
-		this.detail_json = detail_json;
-	}
+//	@Temporary
+//	private List<HeadBankOrderDetail> detaillist ;
 
-	@Temporary
-	private List<HeadBankOrderDetail> detaillist ;
-	
 	public int getId() {
 		return id;
 	}
@@ -74,13 +74,13 @@ public class HeadBankOrder {
 		this.created_user = created_user;
 	}
 
-	public List<HeadBankOrderDetail> getDetaillist() {
-		return detaillist;
-	}
-
-	public void setDetaillist(List<HeadBankOrderDetail> detaillist) {
-		this.detaillist = detaillist;
-	}
+//	public List<HeadBankOrderDetail> getDetaillist() {
+//		return detaillist;
+//	}
+//
+//	public void setDetaillist(List<HeadBankOrderDetail> detaillist) {
+//		this.detaillist = detaillist;
+//	}
 	
 	
 	
