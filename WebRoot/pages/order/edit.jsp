@@ -203,9 +203,9 @@
 												金额
 											</label>
 											<div class="col-sm-8">
-												<input readonly type="text" name="amount" id="amount"
+												<input type="text" name="amount" id="amount"
 													class="form-control" value="<%=order.getAmount()%>"
-													class="require double" />
+													class="require double" defaultvalue="<%=order.getAmount()%>"/>
 
 											</div>
 											<div class="col-sm-1"></div>

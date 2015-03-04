@@ -3,7 +3,6 @@
 <%@page import="com.fuwei.entity.OrderDetail"%>
 <%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.entity.ordergrid.HalfCheckRecordOrder"%>
-<%@page import="com.fuwei.entity.ordergrid.HalfCheckRecordOrderDetail"%>
 <%@page import="com.fuwei.entity.ordergrid.HalfCheckRecordOrderDetail2"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
@@ -13,10 +12,13 @@
 	//半检记录单
 	HalfCheckRecordOrder halfCheckRecordOrder = (HalfCheckRecordOrder) request
 			.getAttribute("halfCheckRecordOrder");
-	List<HalfCheckRecordOrderDetail> halfCheckRecordOrderDetailList = halfCheckRecordOrder == null ? new ArrayList<HalfCheckRecordOrderDetail>()
-			: halfCheckRecordOrder.getDetaillist();
 	List<HalfCheckRecordOrderDetail2> halfCheckRecordOrderDetailList2 = halfCheckRecordOrder == null ? new ArrayList<HalfCheckRecordOrderDetail2>()
 			: halfCheckRecordOrder.getDetail_2_list();
+	List<OrderDetail> DetailList = order == null ? new ArrayList<OrderDetail>()
+			: order.getDetaillist();
+	if(DetailList == null){
+		DetailList = new ArrayList<OrderDetail>();
+	}
 %>
 <!DOCTYPE html>
 <html>
@@ -120,7 +122,7 @@
 									</thead>
 									<tbody>
 										<%
-											for (HalfCheckRecordOrderDetail detail : halfCheckRecordOrderDetailList) {
+											for (OrderDetail detail : DetailList) {
 										%>
 										<tr class="tr">
 											<td class="color"><%=detail.getColor()%>

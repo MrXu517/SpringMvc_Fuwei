@@ -27,7 +27,7 @@
 	<link href="css/common/head.css" rel="stylesheet" type="text/css" />
 	<script src="js/common/head.js" type="text/javascript"></script>
 	<script type="text/javascript">
-		version = 2015030401;
+		version = 2015030402;
 	</script>
 	<div style="display: none;" class="background"></div>
 	<div style="display: none;" class="loading">

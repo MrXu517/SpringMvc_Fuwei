@@ -77,6 +77,10 @@ $(document)
 							}
 						});
 				// 2015-2-27添加颜色及数量
+				
+				//2015-3-4添加重新设置amount的值
+				$(".orderform #amount").val($(".orderform #amount").attr("defaultvalue"));
+				//2015-3-4添加重新设置amount的值
 
 				var $form = $(".orderform");
 				var $submitBtn = $form.find("[type='submit']");

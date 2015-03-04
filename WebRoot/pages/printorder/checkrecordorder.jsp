@@ -3,7 +3,6 @@
 <%@page import="com.fuwei.entity.OrderDetail"%>
 <%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.entity.ordergrid.CheckRecordOrder"%>
-<%@page import="com.fuwei.entity.ordergrid.CheckRecordOrderDetail"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
@@ -12,8 +11,11 @@
 	//抽检记录单
 	CheckRecordOrder checkRecordOrder = (CheckRecordOrder) request
 			.getAttribute("checkRecordOrder");
-	List<CheckRecordOrderDetail> checkRecordOrderDetailList = checkRecordOrder == null ? new ArrayList<CheckRecordOrderDetail>()
-			: checkRecordOrder.getDetaillist();
+	List<OrderDetail> DetailList = order == null ? new ArrayList<OrderDetail>()
+			: order.getDetaillist();
+	if(DetailList == null){
+		DetailList = new ArrayList<OrderDetail>();
+	}
 %>
 <!DOCTYPE html>
 <html>
@@ -117,7 +119,7 @@
 									</thead>
 									<tbody>
 										<%
-											for (CheckRecordOrderDetail detail : checkRecordOrderDetailList) {
+											for (OrderDetail detail : DetailList) {
 										%>
 										<tr class="tr">
 											<td class="color"><%=detail.getColor()%>

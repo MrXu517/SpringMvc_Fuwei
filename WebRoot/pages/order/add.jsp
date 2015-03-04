@@ -208,11 +208,13 @@
 												金额
 											</label>
 											<div class="col-sm-8">
-												<input readonly type="text" name="amount" id="amount"
+												<input type="text" name="amount" id="amount"
 													class="form-control" value="<%=order.getAmount()%>"
 													class="require double" />
 
 											</div>
+											<div class="col-sm-1"></div>
+										</div>
 										<div class="form-group col-md-6">
 											<label for="quantity" class="col-sm-3 control-label">
 												数量
@@ -226,8 +228,7 @@
 											<div class="col-sm-1"></div>
 										</div>
 										
-											<div class="col-sm-1"></div>
-										</div>
+											
 									</fieldset>
 									<fieldset id="orderDetail">
 										<legend>
