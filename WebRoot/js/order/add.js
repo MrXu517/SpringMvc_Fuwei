@@ -45,6 +45,11 @@ $(document).ready( function() {
 							width :'15%'
 						},
 						{
+							name :'price',
+							colname :'单价',
+							width :'15%'
+						},
+						{
 							name :'_handle',
 							colname :'操作',
 							width :'15%',
@@ -57,10 +62,13 @@ $(document).ready( function() {
 							// 2015-2-28添加
 							var tabledata = TableInstance.getTableData();
 							var total_quantity = 0;
+							var total_amount = 0 ;
 							for ( var i in tabledata) {
 								total_quantity += tabledata[i].quantity;
+								total_amount += Number(tabledata[i].quantity * tabledata[i].price);
 							}
 							$(".orderform #quantity").val(total_quantity);
+							$(".orderform #amount").val(total_amount);
 							// 2015-2-28添加
 						}
 			}
@@ -112,16 +120,7 @@ $(document).ready( function() {
 		});
 		// 公司-业务员级联
 
-		// 数量金额的联动
-		$("#quantity,#price").bind("input propertychange", function() {
-			Common.positive_intCheck_Rewrite(this, this.value);
-			// 修改该行金额
-				var quantity = Number($("#quantity").val());
-				var price = Number($("#price").val());
-				var amount = (Number(quantity) * price).toFixed(2);
-				$("#amount").val(amount);
-			});
-
+	    
 		// 2014-11-10添加选择样品
 		$("#sampleImgA").click( function() {
 			$("#chooseSampleBtn").click();

@@ -421,14 +421,11 @@
 																		<th width="15%">
 																			生产数量
 																		</th>
-																		<th width="15%">
-																			价格(/个)
-																		</th>
 																	</tr>
 																</thead>
 																<tbody>
 																	<%
-																		for (OrderDetail detail : DetailList) {
+																		for (PlanOrderDetail detail : planOrderDetailList) {
 																	%>
 																	<tr class="tr"
 																		data='<%=SerializeTool.serialize(detail)%>'>
@@ -441,8 +438,6 @@
 																		<td class="size"><%=detail.getSize()%>
 																		</td>
 																		<td class="quantity"><%=detail.getQuantity()%>
-																		</td>
-																		<td class="price"><%=detail.getPrice()%>
 																		</td>
 																	</tr>
 
@@ -589,7 +584,7 @@
 																</thead>
 																<tbody>
 																	<%
-																		for (OrderDetail detail : DetailList) {
+																		for (ProducingOrderDetail detail : producingOrderDetailList) {
 																	%>
 																	<tr class="tr"
 																		data='<%=SerializeTool.serialize(detail)%>'>
@@ -2452,7 +2447,7 @@
 																</thead>
 																<tbody>
 																	<%
-																		for (OrderDetail detail : DetailList) {
+																		for (PlanOrderDetail detail : planOrderDetailList) {
 																	%>
 																	<tr class="tr"
 																		data='<%=SerializeTool.serialize(detail)%>'>
@@ -2611,7 +2606,7 @@
 																</thead>
 																<tbody>
 																	<%
-																		for (OrderDetail detail : DetailList) {
+																		for (PlanOrderDetail detail : planOrderDetailList) {
 																	%>
 																	<tr class="tr"
 																		data='<%=SerializeTool.serialize(detail)%>'>

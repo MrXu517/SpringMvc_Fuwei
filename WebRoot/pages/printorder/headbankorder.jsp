@@ -3,7 +3,7 @@
 <%@page import="com.fuwei.entity.OrderDetail"%>
 <%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.entity.ordergrid.HeadBankOrder"%>
-<%@page import="com.fuwei.entity.ordergrid.HeadBankOrderDetail"%>
+<%@page import="com.fuwei.entity.ordergrid.PlanOrderDetail"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
@@ -11,7 +11,7 @@
 	Order order = (Order) request.getAttribute("order");
 	HeadBankOrder headBankOrder = (HeadBankOrder) request
 			.getAttribute("headBankOrder");
-	List<HeadBankOrderDetail> headBankOrderDetailList = headBankOrder == null ? new ArrayList<HeadBankOrderDetail>()
+	List<PlanOrderDetail> headBankOrderDetailList = headBankOrder == null ? new ArrayList<PlanOrderDetail>()
 			: headBankOrder.getDetaillist();
 %>
 <!DOCTYPE html>
@@ -113,15 +113,12 @@
 											<th width="15%">
 												生产数量
 											</th>
-											<th width="15%">
-												价格(/个)
-											</th>
 
 										</tr>
 									</thead>
 									<tbody>
 										<%
-											for (HeadBankOrderDetail detail : headBankOrderDetailList) {
+											for (PlanOrderDetail detail : headBankOrderDetailList) {
 										%>
 										<tr class="tr">
 											<td class="color"><%=detail.getColor()%>
@@ -133,8 +130,6 @@
 											<td class="size"><%=detail.getSize()%>
 											</td>
 											<td class="quantity"><%=detail.getQuantity()%>
-											</td>
-											<td class="price"><%=detail.getPrice()%>
 											</td>
 										</tr>
 

@@ -19,6 +19,7 @@
 			+ path + "/";
 	List<User> userlist = (List<User>) request.getAttribute("userlist");
 	Order order = (Order) request.getAttribute("order");
+	System.out.println(order.getAmount());
 	//List<OrderDetail> orderdetaillist = order.getDetaillist();
 	//if (orderdetaillist == null) {
 	//	orderdetaillist = new ArrayList<OrderDetail>();

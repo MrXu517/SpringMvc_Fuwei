@@ -3,7 +3,7 @@
 <%@page import="com.fuwei.entity.OrderDetail"%>
 <%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.entity.ordergrid.IroningRecordOrder"%>
-<%@page import="com.fuwei.entity.ordergrid.IroningRecordOrderDetail"%>
+<%@page import="com.fuwei.entity.ordergrid.PlanOrderDetail"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
@@ -12,7 +12,7 @@
 	//整烫记录单
 	IroningRecordOrder ironingRecordOrder = (IroningRecordOrder) request
 			.getAttribute("ironingRecordOrder");
-	List<IroningRecordOrderDetail> ironingRecordOrderDetailList = ironingRecordOrder == null ? new ArrayList<IroningRecordOrderDetail>()
+	List<PlanOrderDetail> ironingRecordOrderDetailList = ironingRecordOrder == null ? new ArrayList<PlanOrderDetail>()
 			: ironingRecordOrder.getDetaillist();
 
 %>
@@ -119,7 +119,7 @@
 									</thead>
 									<tbody>
 										<%
-											for (IroningRecordOrderDetail detail : ironingRecordOrderDetailList) {
+											for (PlanOrderDetail detail : ironingRecordOrderDetailList) {
 										%>
 										<tr class="tr">
 											<td class="color"><%=detail.getColor()%>

@@ -29,8 +29,8 @@ public class HeadBankOrder {
 //		this.detail_json = detail_json;
 //	}
 
-//	@Temporary
-//	private List<HeadBankOrderDetail> detaillist ;
+	@Temporary
+	private List<PlanOrderDetail> detaillist ;
 
 	public int getId() {
 		return id;
@@ -74,13 +74,13 @@ public class HeadBankOrder {
 		this.created_user = created_user;
 	}
 
-//	public List<HeadBankOrderDetail> getDetaillist() {
-//		return detaillist;
-//	}
-//
-//	public void setDetaillist(List<HeadBankOrderDetail> detaillist) {
-//		this.detaillist = detaillist;
-//	}
+	public List<PlanOrderDetail> getDetaillist() {
+		return detaillist;
+	}
+
+	public void setDetaillist(List<PlanOrderDetail> detaillist) {
+		this.detaillist = detaillist;
+	}
 	
 	
 	

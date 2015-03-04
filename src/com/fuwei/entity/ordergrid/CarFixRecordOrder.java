@@ -22,8 +22,8 @@ public class CarFixRecordOrder {
 	
 //	private String detail_json;
 //	
-//	@Temporary
-//	private List<CarFixRecordOrderDetail> detaillist ;
+	@Temporary
+	private List<PlanOrderDetail> detaillist ;
 
 	public int getId() {
 		return id;
@@ -77,13 +77,13 @@ public class CarFixRecordOrder {
 //		this.detail_json = detail_json;
 //	}
 //
-//	public List<CarFixRecordOrderDetail> getDetaillist() {
-//		return detaillist;
-//	}
-//
-//	public void setDetaillist(List<CarFixRecordOrderDetail> detaillist) {
-//		this.detaillist = detaillist;
-//	}
+	public List<PlanOrderDetail> getDetaillist() {
+		return detaillist;
+	}
+
+	public void setDetaillist(List<PlanOrderDetail> detaillist) {
+		this.detaillist = detaillist;
+	}
 	
 	
 }

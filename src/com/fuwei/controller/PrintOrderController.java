@@ -74,6 +74,7 @@ public class PrintOrderController extends BaseController {
 		
 		try {
 			Order order = orderService.get(orderId);
+			PlanOrder planOrder = null;
 			
 			request.setAttribute("order", order);
 			
@@ -84,12 +85,17 @@ public class PrintOrderController extends BaseController {
 			String grids = "";
 			
 			
-			//获取头带质量记录单
+			//获取质量记录单
 			if(printAll || gridName.indexOf("headbankorder") > -1){
 				HeadBankOrder headBankOrder = headBankOrderService.getByOrder(orderId);
 				if(headBankOrder!=null){
+					if(planOrder!=null){
+						planOrder = planOrderService.getByOrder(orderId);
+					}
+					headBankOrder.setDetaillist(planOrder.getDetaillist());
 					grids += "headbankorder,";
 					request.setAttribute("headBankOrder", headBankOrder);
+					
 				}
 				
 			}
@@ -106,7 +112,7 @@ public class PrintOrderController extends BaseController {
 			
 			//获取计划单
 			if(printAll || gridName.indexOf("planorder") > -1){
-				PlanOrder planOrder = planOrderService.getByOrder(orderId);
+				planOrder = planOrderService.getByOrder(orderId);
 				if(planOrder!=null){
 					grids += "planorder,";
 					request.setAttribute("planOrder", planOrder);
@@ -177,6 +183,10 @@ public class PrintOrderController extends BaseController {
 			if(printAll || gridName.indexOf("carfixrecordorder") > -1){
 				CarFixRecordOrder carFixRecordOrder = carFixRecordOrderService.getByOrder(orderId);
 				if(carFixRecordOrder!=null){
+					if(planOrder!=null){
+						planOrder = planOrderService.getByOrder(orderId);
+					}
+					carFixRecordOrder.setDetaillist(planOrder.getDetaillist());
 					grids += "carfixrecordorder,";
 					request.setAttribute("carFixRecordOrder", carFixRecordOrder);
 				}	
@@ -187,6 +197,10 @@ public class PrintOrderController extends BaseController {
 			if(printAll || gridName.indexOf("ironingrecordorder") > -1){
 				IroningRecordOrder ironingRecordOrder = ironingRecordOrderService.getByOrder(orderId);
 				if(ironingRecordOrder!=null){
+					if(planOrder!=null){
+						planOrder = planOrderService.getByOrder(orderId);
+					}
+					ironingRecordOrder.setDetaillist(planOrder.getDetaillist());
 					grids += "ironingrecordorder,";
 					request.setAttribute("ironingRecordOrder", ironingRecordOrder);
 				}	

@@ -354,61 +354,56 @@ Common.checkform = function(formEle) {
 	return true;
 };
 Common.doubleCheck = function(ele, value) {
-	if (value == "") { // 若为空，则反悔true
-		return true;
-	}
-	// var myRegExp = /^\d+\.?\d*$/; //数字，且只出现0或1次小数点 问号?表示前面的只出现0或1次
-	// var myRegExp = /^(-?\d+)(\.\d+)?$/; //浮点数：^(-?\d+)(\.\d+)?$
-	// |表示或者 ()|()
-	// var myRegExp = /^(-|\d)\d{0,}\.?\d*$/; // 以-或数字开头的浮点数，只有一个小数点
-	var myRegExp2 = /^\d+\.?\d*$/; // 正数,不以小数点开头
-	var myRegExp3 = /^-\d+\.?\d*$/; // 负数,不以小数点开头
-	var myRegExp4 = /^(-?\.)\d*$/; // ;//以小数点.开头的数字
+    if (value == "") { //若为空，则反悔true
+        return true;
+    }
+    // var myRegExp = /^\d+\.?\d*$/; //数字，且只出现0或1次小数点  问号?表示前面的只出现0或1次
+    //var myRegExp = /^(-?\d+)(\.\d+)?$/; //浮点数：^(-?\d+)(\.\d+)?$
+    // |表示或者 ()|()
+    // var myRegExp = /^(-|\d)\d{0,}\.?\d*$/; //     以-或数字开头的浮点数，只有一个小数点
+    var myRegExp2 = /^\d+\.?\d*$/; //正数,不以小数点开头
+    var myRegExp3 = /^-\d+\.?\d*$/; //负数,不以小数点开头
+    var myRegExp4 = /^(-?\.)\d*$/; //;//以小数点.开头的数字
 
-	if (!myRegExp2.test(value) & !myRegExp3.test(value)
-			& !myRegExp4.test(value)) {
-		// alert("数据格式不正确，请重新输入!");
-		$(ele).focus();
-		return false;
-	} else {
-		return true;
-	}
+    if (!myRegExp2.test(value) & !myRegExp3.test(value) & !myRegExp4.test(value)) {
+        // alert("数据格式不正确，请重新输入!");
+        $(ele).focus();
+        return false;
+    } else {
+        return true;
+    }
 };
 
 Common.doubleCheck_Rewrite = function(ele, value) {
-	if (value == "") { // 若为空，则反悔true
-		return;
-	}
-	// var myRegExp = /^\d+\.?\d*$/; //数字，且只出现0或1次小数点 问号?表示前面的只出现0或1次
-	// var myRegExp = /^(-?\d+)(\.\d+)?$/; //浮点数：^(-?\d+)(\.\d+)?$
-	// var myRegExp = /^(-|\d)\d{0,}\.?\d*$/; // 以-或数字开头的浮点数，只有一个小数点
-	// /(^-{1})|(^(-?\d+)+\.?\d*)$/
-	var myRegExp1 = /^-$/; // value="-"时
-	var myRegExp2 = /^\d+\.?\d*$/; // 正数,不以小数点开头
-	var myRegExp3 = /^-\d+\.?\d*$/; // 负数,不以小数点开头
-	var myRegExp4 = /^(-?\.)\d*$/; // ;//以小数点.开头的数字
-	if (!myRegExp1.test(value) & !myRegExp2.test(value)
-			& !myRegExp3.test(value) & !myRegExp4.test(value)) {
-		value = value.replace(/[^-\d.]/g, ""); // []中表示其中的字符只出现一次/[^(-\d.)]/g
-		// 保证只有出现一个.而没有多个.
-		value = value.replace(/\.{2,}/g, ".");
-		// 保证.只出现一次，而不能出现两次以上
-		value = value.replace(".", "$#$").replace(/\./g, "")
-				.replace("$#$", ".");
+    if (value == "") { //若为空，则反悔true
+        return;
+    }
+    //var myRegExp = /^\d+\.?\d*$/; //数字，且只出现0或1次小数点  问号?表示前面的只出现0或1次
+    //var myRegExp = /^(-?\d+)(\.\d+)?$/; //浮点数：^(-?\d+)(\.\d+)?$
+    // var myRegExp = /^(-|\d)\d{0,}\.?\d*$/; //     以-或数字开头的浮点数，只有一个小数点  /(^-{1})|(^(-?\d+)+\.?\d*)$/
+    var myRegExp1 = /^-$/; //value="-"时
+    var myRegExp2 = /^\d+\.?\d*$/; //正数,不以小数点开头
+    var myRegExp3 = /^-\d+\.?\d*$/; //负数,不以小数点开头
+    var myRegExp4 = /^(-?\.)\d*$/; //;//以小数点.开头的数字
+    if (!myRegExp1.test(value) & !myRegExp2.test(value) & !myRegExp3.test(value) & !myRegExp4.test(value)) {
+        value = value.replace(/[^-\d.]/g, ""); //[]中表示其中的字符只出现一次/[^(-\d.)]/g
+        //保证只有出现一个.而没有多个.    
+        value = value.replace(/\.{2,}/g, ".");
+        //保证.只出现一次，而不能出现两次以上    
+        value = value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
 
-		// -先保留第一个-
-		value = value.replace("-", "$#$").replace(/\-/g, "")
-				.replace("$#$", "-");
-		if (!myRegExp3.test(value) & !myRegExp4.test(value)) {
-			value = value.replace(/\-/g, "");
-		}
-		ele.value = value;
-		// if (ele.value != "") {
-		// ele.value = Number(value);
-		// } else {
-		// ele.value = value;
-		// }
-	}
+        //-先保留第一个-
+        value = value.replace("-", "$#$").replace(/\-/g, "").replace("$#$", "-");
+        if (!myRegExp3.test(value) & !myRegExp4.test(value)) {
+            value = value.replace(/\-/g, "");
+        }
+        ele.value = value;
+        // if (ele.value != "") {
+        //     ele.value = Number(value);
+        // } else {
+        //     ele.value = value;
+        // }
+    }
 
 };
 Common.positive_intCheck = function(ele, value) {
@@ -555,6 +550,12 @@ $(document).ready( function() {
 			$(this).addClass('tip');
 		}
 	});
+	
+	//2015-3-4添加数字验证，包括小数点
+    $("input.double").keyup(function(event) {
+        Common.doubleCheck_Rewrite(this, this.value);
+    });
+    //2015-3-4添加数字验证，包括小数点
 		/* 2014-6-11 高度自适应修改 */
 		$(window).resize( function(event) {
 			_c9_autoheight();

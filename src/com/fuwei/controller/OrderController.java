@@ -162,34 +162,6 @@ public class OrderController extends BaseController {
 				List<QuoteOrderDetail> quoteOrderDetaillist = quoteOrderDetailService.getListByQuoteOrder(quoteOrderId);
 				order.setCompanyId(SystemCache.getSalesman(quoteOrder.getSalesmanId()).getCompanyId());//设置订单公司
 				order.setSalesmanId(quoteOrder.getSalesmanId());//设置订单业务员
-//				if (quoteOrderDetaillist == null) {
-//					quoteOrderDetaillist = new ArrayList<QuoteOrderDetail>();
-//				}
-				
-//				for (QuoteOrderDetail quoteOrderDetail : quoteOrderDetaillist) {
-//					OrderDetail detail = new OrderDetail();
-//					detail.setCproductN(quoteOrderDetail.getCproductN());
-//					detail.setPrice(NumberUtil.formateDouble(quoteOrderDetail.getPrice(),3));//保留三位小数
-//					detail.setQuantity(1000);
-//					detail.setAmount(NumberUtil.formateDouble(detail.getQuantity() * detail.getPrice(), 3));//保留三位小数
-//					amount += detail.getAmount();
-//					detail.setMemo(quoteOrderDetail.getMemo());
-//					detail.setSampleId(quoteOrderDetail.getSampleId());
-//					detail.setName(quoteOrderDetail.getName());
-//					detail.setImg(quoteOrderDetail.getImg());
-//					detail.setImg_s(quoteOrderDetail.getImg_s());
-//					detail.setImg_ss(quoteOrderDetail.getImg_ss());
-//					detail.setMaterial(quoteOrderDetail.getMaterial());
-//					detail.setMachine(quoteOrderDetail.getMachine());
-//					detail.setWeight(quoteOrderDetail.getWeight());
-//					detail.setSize(quoteOrderDetail.getSize());
-//					detail.setCost(quoteOrderDetail.getCost());
-//					detail.setProductNumber(quoteOrderDetail.getProductNumber());
-//					detail.setMachine(quoteOrderDetail.getMachine());
-//					detail.setCharge_user(quoteOrderDetail.getCharge_user());
-//					detail.setDetail(quoteOrderDetail.getDetail());
-//					orderDetaillist.add(detail);
-//				}
 				
 			}
 			order.setAmount(NumberUtil.formateDouble(amount,3));//设置订单总金额
@@ -243,7 +215,7 @@ public class OrderController extends BaseController {
 			}
 			
 			
-			double amount = order.getQuantity() * order.getPrice();
+			double amount = order.getAmount();
 			String info = order.getName() +"(" + order.getWeight() + "克)";
 			
 			order.setAmount(NumberUtil.formateDouble(amount,3));//设置订单总金额
@@ -265,9 +237,68 @@ public class OrderController extends BaseController {
 			int orderId = orderService.add(order,handle);
 			
 			//2015-3-2添加 创建订单时 自动创建计划单
+			PlanOrder planOrder = new PlanOrder();
+			planOrder.setOrderId(orderId);
+			planOrder.setCreated_at(DateTool.now());//设置创建时间
+			planOrder.setUpdated_at(DateTool.now());//设置更新时间
+			planOrder.setCreated_user(user.getId());//设置创建人
 			
+			List<PlanOrderDetail> plandetaillist = SerializeTool.deserializeList(details, PlanOrderDetail.class);
+			planOrder.setDetaillist(plandetaillist);
+			int planOrderId = planOrderService.add(planOrder);
 			//2015-3-2添加 创建订单时 自动创建计划单
 			
+			//2015-3-4创建订单时自动创建半检记录单、抽检记录单
+			//半检记录单
+			HalfCheckRecordOrder halfCheckRecordOrder = new HalfCheckRecordOrder();
+			halfCheckRecordOrder.setCreated_at(DateTool.now());//设置创建时间
+			halfCheckRecordOrder.setUpdated_at(DateTool.now());//设置更新时间
+			halfCheckRecordOrder.setCreated_user(user.getId());//设置创建人
+			List<HalfCheckRecordOrderDetail2> halfCheckRecordOrderDetaillist2 = new ArrayList<HalfCheckRecordOrderDetail2>();
+			for(OrderDetail detail:detaillist){
+				HalfCheckRecordOrderDetail2 temp = new HalfCheckRecordOrderDetail2();
+				temp.setMaterial(detail.getYarn());
+				temp.setColor(detail.getColor());
+				halfCheckRecordOrderDetaillist2.add(temp);
+			}
+			halfCheckRecordOrder.setDetail_2_list(halfCheckRecordOrderDetaillist2);
+			halfCheckRecordOrderService.add(halfCheckRecordOrder);
+			
+			//抽检记录单
+			CheckRecordOrder checkRecordOrder = new CheckRecordOrder();
+			checkRecordOrder.setOrderId(orderId);
+			checkRecordOrder.setCreated_at(DateTool.now());//设置创建时间
+			checkRecordOrder.setUpdated_at(DateTool.now());//设置更新时间
+			checkRecordOrder.setCreated_user(user.getId());//设置创建人
+			 checkRecordOrderService.add(checkRecordOrder);
+			//2015-3-4创建订单时自动创建半检记录单、抽检记录单
+			
+			//2015-3-4创建计划单后，自动创建 质量记录单、车缝记录单、整烫记录单
+			 //质量记录单
+			 HeadBankOrder headBankOrder = new HeadBankOrder();
+			 headBankOrder.setOrderId(orderId);
+			 headBankOrder.setCreated_at(DateTool.now());//设置创建时间
+			 headBankOrder.setUpdated_at(DateTool.now());//设置更新时间
+			 headBankOrder.setCreated_user(user.getId());//设置创建人
+			 headBankOrderService.add(headBankOrder);
+			 
+			 //车缝记录单
+			 CarFixRecordOrder carFixRecordOrder = new CarFixRecordOrder();
+			 carFixRecordOrder.setOrderId(orderId);
+			 carFixRecordOrder.setCreated_at(DateTool.now());//设置创建时间
+			 carFixRecordOrder.setUpdated_at(DateTool.now());//设置更新时间
+			 carFixRecordOrder.setCreated_user(user.getId());//设置创建人
+			 carFixRecordOrderService.add(carFixRecordOrder);
+			 
+			 //整烫记录单
+			 IroningRecordOrder ironingRecordOrder = new IroningRecordOrder();
+			 ironingRecordOrder.setOrderId(orderId);
+			 ironingRecordOrder.setCreated_at(DateTool.now());//设置创建时间
+			 ironingRecordOrder.setUpdated_at(DateTool.now());//设置更新时间
+			 ironingRecordOrder.setCreated_user(user.getId());//设置创建人
+			 ironingRecordOrderService.add(ironingRecordOrder);
+			//2015-3-4创建计划单后，自动创建 质量记录单、车缝记录单、整烫记录单
+
 			return this.returnSuccess("id",orderId);
 		} catch (Exception e) {
 			throw e;
@@ -431,7 +462,7 @@ public class OrderController extends BaseController {
 //			if (orderDetaillist == null || orderDetaillist.size() <= 0) {
 //				throw new Exception("订单中至少得有一条样品记录");
 //			}
-			double amount = order.getQuantity() * order.getPrice();
+			double amount = order.getAmount();
 			String info = order.getName() +"(" + order.getWeight() + "克)";
 //			for (OrderDetail orderDetail : orderDetaillist) {
 //				orderDetail.setPrice(NumberUtil.formateDouble(orderDetail.getPrice(),3));
@@ -710,57 +741,14 @@ public class OrderController extends BaseController {
 	}
 	
 	//添加或保存质量记录单
-	@RequestMapping(value = "/headbank", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> headbank(HeadBankOrder headBankOrder, HttpSession session,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "order/headbank";
-		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
-		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有创建或编辑质量记录单的权限", null);
-		}
-		try {
-			Integer headBankOrderId = headBankOrder.getId();
-			
-			if(headBankOrderId == null || headBankOrderId == 0){
-				//添加
-				if(headBankOrder.getOrderId() == null || headBankOrder.getOrderId() == 0){
-					throw new PermissionDeniedDataAccessException("质量记录单必须属于一张订单", null);
-				}else{
-					HeadBankOrder temp = headBankOrderService.getByOrder(headBankOrder.getOrderId());
-					if(temp!=null){
-						throw new PermissionDeniedDataAccessException("该订单已经存在质量记录单", null);
-					}
-				}
-				
-				
-				headBankOrder.setCreated_at(DateTool.now());//设置创建时间
-				headBankOrder.setUpdated_at(DateTool.now());//设置更新时间
-				headBankOrder.setCreated_user(user.getId());//设置创建人
-				
-//				List<HeadBankOrderDetail> detaillist = SerializeTool.deserializeList(details, HeadBankOrderDetail.class);
-//				headBankOrder.setDetaillist(detaillist);
-				headBankOrderId = headBankOrderService.add(headBankOrder);
-			}else{//编辑
-				headBankOrder.setUpdated_at(DateTool.now());
-//				List<HeadBankOrderDetail> detaillist = SerializeTool.deserializeList(details, HeadBankOrderDetail.class);
-//				headBankOrder.setDetaillist(detaillist);
-				headBankOrderId = headBankOrderService.update(headBankOrder);
-			}
-			return this.returnSuccess("id",headBankOrderId);
-		} catch (Exception e) {
-			throw e;
-		}
-
-	}
+	
+	
 	
 	
 	//添加或保存生产单
 	@RequestMapping(value = "/producingorder", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> headbank(ProducingOrder producingOrder,String details,String details_2, HttpSession session,
+	public Map<String, Object> producingorder(ProducingOrder producingOrder,String details,String details_2, HttpSession session,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
@@ -809,6 +797,9 @@ public class OrderController extends BaseController {
 	}
 	
 	//添加或保存计划单
+	
+	
+	
 	@RequestMapping(value = "/planorder", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> planorder(PlanOrder planOrder,String details,/*String details_2,*/ HttpSession session,
@@ -1088,7 +1079,50 @@ public class OrderController extends BaseController {
 
 	}
 	
-	//添加或保存抽检记录单
+/*	
+ 	@RequestMapping(value = "/headbank", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> headbank(HeadBankOrder headBankOrder, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/headbank";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有创建或编辑质量记录单的权限", null);
+		}
+		try {
+			Integer headBankOrderId = headBankOrder.getId();
+			
+			if(headBankOrderId == null || headBankOrderId == 0){
+				//添加
+				if(headBankOrder.getOrderId() == null || headBankOrder.getOrderId() == 0){
+					throw new PermissionDeniedDataAccessException("质量记录单必须属于一张订单", null);
+				}else{
+					HeadBankOrder temp = headBankOrderService.getByOrder(headBankOrder.getOrderId());
+					if(temp!=null){
+						throw new PermissionDeniedDataAccessException("该订单已经存在质量记录单", null);
+					}
+				}
+				
+				
+				headBankOrder.setCreated_at(DateTool.now());//设置创建时间
+				headBankOrder.setUpdated_at(DateTool.now());//设置更新时间
+				headBankOrder.setCreated_user(user.getId());//设置创建人
+				
+				headBankOrderId = headBankOrderService.add(headBankOrder);
+			}else{//编辑
+				headBankOrder.setUpdated_at(DateTool.now());
+				headBankOrderId = headBankOrderService.update(headBankOrder);
+			}
+			return this.returnSuccess("id",headBankOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+ 	
+  	//添加或保存抽检记录单
 	@RequestMapping(value = "/checkrecordorder", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> checkrecordorder(CheckRecordOrder tableOrder, HttpSession session,
@@ -1228,4 +1262,5 @@ public class OrderController extends BaseController {
 		}
 
 	}
+	*/
 }

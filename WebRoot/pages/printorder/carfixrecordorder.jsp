@@ -3,7 +3,7 @@
 <%@page import="com.fuwei.entity.OrderDetail"%>
 <%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.entity.ordergrid.CarFixRecordOrder"%>
-<%@page import="com.fuwei.entity.ordergrid.CarFixRecordOrderDetail"%>
+<%@page import="com.fuwei.entity.ordergrid.PlanOrderDetail"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
@@ -12,7 +12,7 @@
 	//车缝记录单
 	CarFixRecordOrder carFixRecordOrder = (CarFixRecordOrder) request
 			.getAttribute("carFixRecordOrder");
-	List<CarFixRecordOrderDetail> carFixRecordOrderDetailList = carFixRecordOrder == null ? new ArrayList<CarFixRecordOrderDetail>()
+	List<PlanOrderDetail> carFixRecordOrderDetailList = carFixRecordOrder == null ? new ArrayList<PlanOrderDetail>()
 			: carFixRecordOrder.getDetaillist();
 %>
 <!DOCTYPE html>
@@ -122,7 +122,7 @@
 									</thead>
 									<tbody>
 										<%
-											for (CarFixRecordOrderDetail detail : carFixRecordOrderDetailList) {
+											for (PlanOrderDetail detail : carFixRecordOrderDetailList) {
 										%>
 										<tr class="tr">
 											<td class="color"><%=detail.getColor()%>

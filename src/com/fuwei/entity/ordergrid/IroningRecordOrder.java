@@ -22,8 +22,8 @@ public class IroningRecordOrder {
 	
 //	private String detail_json;
 //	
-//	@Temporary
-//	private List<IroningRecordOrderDetail> detaillist ;
+	@Temporary
+	private List<PlanOrderDetail> detaillist ;
 
 	public int getId() {
 		return id;
@@ -77,13 +77,13 @@ public class IroningRecordOrder {
 //		this.detail_json = detail_json;
 //	}
 //
-//	public List<IroningRecordOrderDetail> getDetaillist() {
-//		return detaillist;
-//	}
-//
-//	public void setDetaillist(List<IroningRecordOrderDetail> detaillist) {
-//		this.detaillist = detaillist;
-//	}
+	public List<PlanOrderDetail> getDetaillist() {
+		return detaillist;
+	}
+
+	public void setDetaillist(List<PlanOrderDetail> detaillist) {
+		this.detaillist = detaillist;
+	}
 	
 	
 }
