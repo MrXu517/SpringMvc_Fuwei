@@ -730,7 +730,7 @@
 														</label>
 														<div class="col-sm-8">
 															<input type="text" name="colorsample" id="colorsample"
-																class="form-control require" />
+																class="form-control" />
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -1392,7 +1392,7 @@
 														</label>
 														<div class="col-sm-8">
 															<input type="text" name="colorsample" id="colorsample"
-																class="form-control require" />
+																class="form-control" />
 														</div>
 														<div class="col-sm-1"></div>
 													</div>

@@ -29,61 +29,66 @@ function OrderGrid(settings){
 		
 	}
 	
-	
-	this.$dialog = settings.tbOptions.$dialog || null;
-	this.$form = null;
-	if(this.$dialog){
-		this.$form = this.$dialog.find(".rowform");
+	if(this.tbOptions){
+		this.$dialog = settings.tbOptions.$dialog || null;
+		this.$form = null;
+		if(this.$dialog){
+			this.$form = this.$dialog.find(".rowform");
+		}
 	}
+	
 	
 	this.init = function(){
 		//2015-1-8添加设置打印按钮的href
 		this.orderId = this.$content.find("input[name='orderId']").val();
 		this.gridName = this.$content.attr("id");
 		this.$content.find("a.printBtn").attr("href","printorder/print?orderId="+this.orderId+"&gridName=" + this.gridName );
-		Object.TableInstance = TableTools.createTableInstance(Object.tbOptions);
-		this.$content.find(".detailTb .addRow").click( function() {
-			Common.resetForm(Object.$form[0]);
-			Object.$dialog.find(".modal-title").text("添加一行");
-			Object.$dialog.modal();
+		if(this.tbOptions){
+			Object.TableInstance = TableTools.createTableInstance(Object.tbOptions);
+			this.$content.find(".detailTb .addRow").click( function() {
+				Common.resetForm(Object.$form[0]);
+				Object.$dialog.find(".modal-title").text("添加一行");
+				Object.$dialog.modal();
 
-			Object.$form.unbind("submit");
-			Object.$form.bind("submit", function() {
-				// 添加一行
+				Object.$form.unbind("submit");
+				Object.$form.bind("submit", function() {
+					// 添加一行
+						if (!Common.checkform(this)) {
+							return false;
+						}
+						var formdata = $(this).serializeJson();
+						Object.TableInstance.addRow(formdata);
+						Object.$dialog.modal("hide");
+						return false;
+					});
+			});
+			this.$content.find(".detailTb").on("click", ".editRow", function() {
+				Common.resetForm(Object.$form[0]);
+				Object.$dialog.find(".modal-title").text("编辑");
+				var $tr = $(this).closest("tr");
+				var rowdata = $.parseJSON($tr.attr("data"));
+				Common.fillForm(Object.$form[0],rowdata);
+				Object.$dialog.modal();
+				Object.$form.unbind("submit");
+				Object.$form.bind("submit", function() {
 					if (!Common.checkform(this)) {
 						return false;
 					}
+					// 修改一行
 					var formdata = $(this).serializeJson();
-					Object.TableInstance.addRow(formdata);
+					Object.TableInstance.updateRow(formdata,$tr[0]);
 					Object.$dialog.modal("hide");
 					return false;
 				});
-		});
-		this.$content.find(".detailTb").on("click", ".editRow", function() {
-			Common.resetForm(Object.$form[0]);
-			Object.$dialog.find(".modal-title").text("编辑");
-			var $tr = $(this).closest("tr");
-			var rowdata = $.parseJSON($tr.attr("data"));
-			Common.fillForm(Object.$form[0],rowdata);
-			Object.$dialog.modal();
-			Object.$form.unbind("submit");
-			Object.$form.bind("submit", function() {
-				if (!Common.checkform(this)) {
-					return false;
-				}
-				// 修改一行
-				var formdata = $(this).serializeJson();
-				Object.TableInstance.updateRow(formdata,$tr[0]);
-				Object.$dialog.modal("hide");
 				return false;
 			});
-			return false;
-		});
 
-		this.$content.find(".detailTb").on("click", ".deleteRow", function() {
-			$(this).closest("tr").remove();
-			return false;
-		});
+			this.$content.find(".detailTb").on("click", ".deleteRow", function() {
+				$(this).closest("tr").remove();
+				return false;
+			});
+		}
+		
 		
 		if(Object.tbOptions2){
 			Object.TableInstance2 = TableTools.createTableInstance(Object.tbOptions2);
@@ -145,11 +150,14 @@ function OrderGrid(settings){
 		var $submitBtn = $(this).find("[type='submit']");
 		$submitBtn.button('loading');
 		var formdata = $(this).serializeJson();
-		var detailTbdata = Object.TableInstance.getTableData();
+		if(Object.tbOptions){
+			var detailTbdata = Object.TableInstance.getTableData();
+			formdata.details = JSON.stringify(detailTbdata);
+		}		
 		if(formdata.id == ""){
 			delete formdata.id;
 		}
-		formdata.details = JSON.stringify(detailTbdata);
+		
 		
 		if(Object.tbOptions2){
 			var detailTbdata2 = Object.TableInstance2.getTableData();
@@ -184,50 +192,7 @@ $(document).ready(function() {
 	//质量记录单
 	var headBankGrid = new OrderGrid({
 		url:"order/headbank",
-		$content:$("#headbankorder"),
-		tbOptions:{
-		colnames : [
-					{
-						name :'color',
-						colname :'颜色',
-						width :'15%'
-					},
-					{
-						name :'weight',
-						colname :'克重(g)',
-						width :'15%'
-					},
-					{
-						name :'yarn',
-						colname :'纱线种类',
-						width :'15%'
-					},
-					{
-						name :'size',
-						colname :'尺寸',
-						width :'15%'
-					},
-					{
-						name :'quantity',
-						colname :'生产数量',
-						width :'15%'
-					},
-					{
-						name :'price',
-						colname :'价格(/个)',
-						width :'15%'
-					},
-					{
-						name :'_handle',
-						colname :'操作',
-						width :'15%',
-						displayValue : function(value, rowdata) {
-							return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
-						}
-					} ],
-					$dialog:$("#headbankDialog"),
-		}
-		
+		$content:$("#headbankorder")
 	});
 
 	//生产单
@@ -382,43 +347,6 @@ $(document).ready(function() {
 	var halfcheckrecordGrid = new OrderGrid({
 		url:"order/halfcheckrecordorder",
 		$content:$("#halfcheckrecordorder"),
-		tbOptions:{
-			colnames : [
-					{
-						name :'color',
-						colname :'颜色',
-						width :'15%'
-					},
-					{
-						name :'weight',
-						colname :'克重(g)',
-						width :'15%'
-					},
-					{
-						name :'yarn',
-						colname :'纱线种类',
-						width :'15%'
-					},
-					{
-						name :'size',
-						colname :'尺寸',
-						width :'15%'
-					},
-					{
-						name :'quantity',
-						colname :'生产数量',
-						width :'15%'
-					},
-					{
-						name :'_handle',
-						colname :'操作',
-						width :'15%',
-						displayValue : function(value, rowdata) {
-							return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
-						}
-					} ],
-					$dialog:$("#halfcheckrecordDialog")
-		},
 		tbOptions2:{
 			colnames : [
 			        {
@@ -537,45 +465,7 @@ $(document).ready(function() {
 	//抽检记录单
 	var checkRecordGrid = new OrderGrid({
 		url:"order/checkrecordorder",
-		$content:$("#checkrecordorder"),
-		tbOptions:{
-		colnames : [
-					{
-						name :'color',
-						colname :'颜色',
-						width :'15%'
-					},
-					{
-						name :'weight',
-						colname :'克重(g)',
-						width :'15%'
-					},
-					{
-						name :'yarn',
-						colname :'纱线种类',
-						width :'15%'
-					},
-					{
-						name :'size',
-						colname :'尺寸',
-						width :'15%'
-					},
-					{
-						name :'quantity',
-						colname :'订单数量',
-						width :'15%'
-					},
-					{
-						name :'_handle',
-						colname :'操作',
-						width :'15%',
-						displayValue : function(value, rowdata) {
-							return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
-						}
-					} ],
-					$dialog:$("#checkrecordDialog"),
-		}
-		
+		$content:$("#checkrecordorder"),		
 	});
 	
 	//辅料采购单
@@ -626,88 +516,12 @@ $(document).ready(function() {
 	var carfixRecordGrid = new OrderGrid({
 		url:"order/carfixrecordorder",
 		$content:$("#carfixrecordorder"),
-		tbOptions:{
-		colnames : [
-					{
-						name :'color',
-						colname :'颜色',
-						width :'15%'
-					},
-					{
-						name :'weight',
-						colname :'克重(g)',
-						width :'15%'
-					},
-					{
-						name :'yarn',
-						colname :'纱线种类',
-						width :'15%'
-					},
-					{
-						name :'size',
-						colname :'尺寸',
-						width :'15%'
-					},
-					{
-						name :'quantity',
-						colname :'生产数量',
-						width :'15%'
-					},
-					{
-						name :'_handle',
-						colname :'操作',
-						width :'15%',
-						displayValue : function(value, rowdata) {
-							return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
-						}
-					} ],
-					$dialog:$("#carfixrecordDialog"),
-		}
-		
 	});
 	
 	//整烫记录单
 	var ironingRecordGrid = new OrderGrid({
 		url:"order/ironingrecordorder",
 		$content:$("#ironingrecordorder"),
-		tbOptions:{
-		colnames : [
-					{
-						name :'color',
-						colname :'颜色',
-						width :'15%'
-					},
-					{
-						name :'weight',
-						colname :'克重(g)',
-						width :'15%'
-					},
-					{
-						name :'yarn',
-						colname :'纱线种类',
-						width :'15%'
-					},
-					{
-						name :'size',
-						colname :'尺寸',
-						width :'15%'
-					},
-					{
-						name :'quantity',
-						colname :'生产数量',
-						width :'15%'
-					},
-					{
-						name :'_handle',
-						colname :'操作',
-						width :'15%',
-						displayValue : function(value, rowdata) {
-							return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
-						}
-					} ],
-					$dialog:$("#ironingrecordDialog"),
-		}
-		
 	});
 	
 		

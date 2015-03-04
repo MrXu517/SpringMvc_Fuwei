@@ -20,6 +20,7 @@ import com.fuwei.entity.OrderProduceStatus;
 import com.fuwei.entity.ProductionNotification;
 import com.fuwei.entity.QuoteOrder;
 import com.fuwei.entity.Sample;
+import com.fuwei.entity.User;
 import com.fuwei.util.CreateNumberUtil;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
@@ -146,7 +147,36 @@ public class OrderService extends BaseService {
 			throw e;
 		}
 	}
-
+	
+	//注销订单
+	public int cancel(int id,OrderHandle handle)throws Exception{
+		try{
+			Order order = this.get(id);
+			if(!order.isCancelable()){
+				throw new Exception("订单已发货，无法取消");
+			}
+			order.setStepId(null);
+			order.setStepId(null);
+			order.setStep_state(null);
+			order.setStatus(OrderStatus.CANCEL.ordinal());
+			order.setState(OrderStatus.CANCEL.getName());
+			order.setIn_use(false);
+			
+			//添加操作记录
+			handle.setOrderId(order.getId());
+			handle.setName("取消订单");
+			handle.setState(order.getState());
+			handle.setStatus(order.getStatus());
+			// 更新订单表
+			this.update(order, "id", null);
+			// 添加操作记录
+			orderHandleService.add(handle);
+			return order.getId();
+		}catch(Exception e){
+			throw e;
+		}
+	}
+	
 	// 根据detailId获取订单
 	public Order getByDetailId(int detailId) throws Exception {
 		try {
@@ -183,7 +213,7 @@ public class OrderService extends BaseService {
 				String details = SerializeTool.serialize(order.getDetaillist());
 				order.setDetail_json(details);
 				this
-						.update(order,"id","created_user,status,state,created_at,orderNumber,stepId,setp_state",
+						.update(order,"id","created_user,status,state,created_at,orderNumber,stepId,setp_state,in_use",
 								true);
 				// // 删除原来订单的detail
 				// orderDetailService.deleteBatch(order.getId());
@@ -230,7 +260,7 @@ public class OrderService extends BaseService {
 						.update(
 								order,
 								"id",
-								"created_user,status,state,created_at,orderNumber,stepId",
+								"created_user,status,state,created_at,orderNumber,stepId,in_use",
 								true);
 			}
 			// 添加操作记录
@@ -301,7 +331,7 @@ public class OrderService extends BaseService {
 			// }
 
 			// 更新订单表
-			this.update(order, "id", "created_user,created_at,orderNumber",
+			this.update(order, "id", "created_user,created_at,orderNumber,in_use",
 					false);
 			// 添加操作记录
 			handle.setOrderId(orderId);

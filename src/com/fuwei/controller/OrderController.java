@@ -251,6 +251,7 @@ public class OrderController extends BaseController {
 			//2015-3-4创建订单时自动创建半检记录单、抽检记录单
 			//半检记录单
 			HalfCheckRecordOrder halfCheckRecordOrder = new HalfCheckRecordOrder();
+			halfCheckRecordOrder.setOrderId(orderId);
 			halfCheckRecordOrder.setCreated_at(DateTool.now());//设置创建时间
 			halfCheckRecordOrder.setUpdated_at(DateTool.now());//设置更新时间
 			halfCheckRecordOrder.setCreated_user(user.getId());//设置创建人
@@ -259,6 +260,7 @@ public class OrderController extends BaseController {
 				HalfCheckRecordOrderDetail2 temp = new HalfCheckRecordOrderDetail2();
 				temp.setMaterial(detail.getYarn());
 				temp.setColor(detail.getColor());
+				temp.setColorsample("");
 				halfCheckRecordOrderDetaillist2.add(temp);
 			}
 			halfCheckRecordOrder.setDetail_2_list(halfCheckRecordOrderDetaillist2);
@@ -496,6 +498,26 @@ public class OrderController extends BaseController {
 
 	}
 	
+	/*2015-3-4添加取消订单*/
+	@RequestMapping(value = "/cancel/{id}", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> cancel(@PathVariable int id,HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/cancel";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有取消订单的权限", null);
+		}
+		OrderHandle handle = new OrderHandle();
+		handle.setCreated_at(DateTool.now());
+		handle.setCreated_user(user.getId());
+		int success = orderService.cancel(id,handle);
+		
+		return this.returnSuccess();
+		
+	}
 	
 	//添加订单步骤
 	@RequestMapping(value = "addstep", method = RequestMethod.POST)

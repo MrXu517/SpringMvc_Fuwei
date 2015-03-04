@@ -68,6 +68,8 @@
 			"order/detail");
 	Boolean has_order_edit = SystemCache.hasAuthority(session,
 			"order/edit");
+	Boolean has_order_cancel = SystemCache.hasAuthority(session,
+			"order/cancel");
 	//权限相关
 %>
 <!DOCTYPE html>
@@ -115,8 +117,7 @@
 							<div class="col-md-12 tablewidget">
 								<!-- Table -->
 								<div clas="navbar navbar-default">
-									<form
-										class="form-horizontal searchform form-inline searchform"
+									<form class="form-horizontal searchform form-inline searchform"
 										role="form">
 										<input type="hidden" name="page" id="page"
 											value="<%=pager.getPageNo()%>" />
@@ -125,8 +126,7 @@
 												订单状态
 											</label>
 											<div class="col-sm-9">
-												<select class="form-control" name="status"
-													id="status">
+												<select class="form-control" name="status" id="status">
 													<option value="">
 														所有
 													</option>
@@ -143,7 +143,7 @@
 														}
 														}
 													%>
-												</select>	
+												</select>
 											</div>
 										</div>
 										<div class="form-group salesgroup">
@@ -218,7 +218,7 @@
 											</div>
 										</div>
 									</form>
-																		<ul class="pagination">
+									<ul class="pagination">
 										<li>
 											<a
 												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
@@ -273,7 +273,7 @@
 												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
-								<!-- 
+									<!-- 
 									<form class="form-inline pageform form-horizontal" role="form"
 										action="order/index">
 										<input type="hidden" name="status" id="status"
@@ -378,13 +378,28 @@
 													}
 												%>
 												<%
+												if(!order.getIn_use()){
+												 %>
+													<span class="label label-default">已取消</span>
+												<%
+												}else{
 													if (has_order_edit && order.isEdit()) {
 												%>
-												|
-												<a href="order/put/<%=order.getId()%>">编辑</a>
+													|
+													<a href="order/put/<%=order.getId()%>">编辑</a>
+													<%
+														}
+													%>
+													<%
+														if (order.getIn_use()&& has_order_cancel && order.isCancelable()) {
+													%>
+													|
+													<a data-cid="<%=order.getId()%>" class="delete" href="#">取消订单</a>
 												<%
+														}
 													}
 												%>
+
 											</td>
 										</tr>
 										<%

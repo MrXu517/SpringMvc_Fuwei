@@ -9,6 +9,30 @@ $(document).ready(function(){
 		changeCompany(this.value);
 	});
 	// 公司-业务员级联
+	
+	//取消订单 -- 开始
+	$(".delete").click(function(){
+		var id= $(this).attr("data-cid");
+		$.ajax({
+            url: "order/cancel/"+id,
+            type: 'POST'
+        })
+            .done(function(result) {
+            	if(result.success){
+            		Common.Tip("取消订单成功",function(){
+            			location.reload();
+            		});
+            	}
+            })
+            .fail(function(result) {
+            	Common.Error("取消订单失败：" + result.responseText);
+            })
+            .always(function() {
+            	
+            });
+		return false;
+	});
+	//取消订单 -- 结束
 });
 function changeCompany(companyId) {
 	var companyName = $("#companyId").val();

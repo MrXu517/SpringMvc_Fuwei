@@ -33,7 +33,7 @@
 		break;
 	}
 
-	List<OrderDetail> DetailList = order == null ? new ArrayList<OrderDetail>()
+	List<OrderDetail> DetailList = order == null || order.getDetaillist() == null ? new ArrayList<OrderDetail>()
 			: order.getDetaillist();
 	//Boolean error_notification = order.getStatus() > OrderStatus.BEFOREPRODUCESAMPLE.ordinal() && order.getStart_produce() == null; //若已经进入生产阶段，但却没有生产单，则显示生成生产单按钮
 %>

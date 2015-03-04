@@ -24,7 +24,11 @@
 		<script src="js/plugins/jquery-1.10.2.min.js"></script>
 		<script src="js/plugins/bootstrap.min.js" type="text/javascript"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
-
+		<style type="text/css" >
+			.formwidget{
+				width:600px;
+			}
+		</style>
 	</head>
 
 	<body>

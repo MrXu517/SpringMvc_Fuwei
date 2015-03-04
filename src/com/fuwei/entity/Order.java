@@ -71,6 +71,18 @@ public class Order implements Serializable {
 	private String detail_json;
 	@Temporary
 	private List<OrderDetail> detaillist;
+	
+	//2015-3-4增加
+	private Boolean in_use;//是否取消
+	
+
+	public Boolean getIn_use() {
+		return in_use;
+	}
+
+	public void setIn_use(Boolean in_use) {
+		this.in_use = in_use;
+	}
 
 	public String getKehu() {
 		return kehu;
@@ -255,6 +267,11 @@ public class Order implements Serializable {
 		// return this.status < OrderStatus.COLORING.ordinal();
 		return this.status < OrderStatus.DELIVERED.ordinal();// 2014-11-10修改：
 																// 在已发货之前都可以修改订单
+	}
+	
+	//是否可取消订单
+	public Boolean isCancelable(){
+		return this.status < OrderStatus.DELIVERED.ordinal();
 	}
 
 	// 获取当前状态描述
