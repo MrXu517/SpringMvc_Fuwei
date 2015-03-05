@@ -112,7 +112,7 @@
 														电话
 													</label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control require" id="tel"
+														<input type="text" class="form-control" id="tel"
 															name="tel" placeholder="电话，手机">
 													</div>
 													<div class="col-sm-1"></div>
@@ -122,7 +122,7 @@
 														邮箱
 													</label>
 													<div class="col-sm-8">
-														<input type="Email" class="form-control require"
+														<input type="Email" class="form-control"
 															id="email" name="email" placeholder="邮箱">
 													</div>
 													<div class="col-sm-1"></div>
@@ -132,7 +132,7 @@
 														QQ
 													</label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control require" id="qq"
+														<input type="text" class="form-control" id="qq"
 															name="qq" placeholder="QQ">
 													</div>
 													<div class="col-sm-1"></div>
