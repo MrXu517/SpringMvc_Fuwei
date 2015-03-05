@@ -18,8 +18,34 @@
 	Boolean h_has_sample_undetailedindex = SystemCache.hasAuthority(session,"sample/undetailedindex");
 //	Boolean h_has_quote_index = SystemCache.hasAuthority(session,"quote/index");
 //	Boolean h_has_quoteorder_index = SystemCache.hasAuthority(session,"quoteorder/index");
-	Boolean h_has_systeminfo= SystemCache.hasAuthority(session,"systeminfo");
+//	Boolean h_has_systeminfo= SystemCache.hasAuthority(session,"systeminfo");
 	Boolean h_has_authority = SystemCache.hasAuthority(session,"authority");
+	
+	Boolean h_has_order = SystemCache.hasAuthority(session,"order");
+	Boolean h_has_order_add = SystemCache.hasAuthority(session,"order/add");
+	Boolean h_has_order_index = SystemCache.hasAuthority(session,"order/index");
+	
+	Boolean h_has_materialsys = SystemCache.hasAuthority(session,"materialsys");
+	Boolean h_has_materialsys_sample = SystemCache.hasAuthority(session,"materialsys/sample");//打样
+	Boolean h_has_material_index = SystemCache.hasAuthority(session,"material/index");
+	
+	Boolean h_has_materialsys_purchase = SystemCache.hasAuthority(session,"order/materialpurchase");//原材料采购单
+	
+	
+	//报表
+	Boolean h_has_report = SystemCache.hasAuthority(session,"report");
+	Boolean h_has_report_material = SystemCache.hasAuthority(session,"report/material");//材料库存报表
+	Boolean h_has_report_material_purchase = SystemCache.hasAuthority(session,"report/material_purchase");//材料采购报表
+	Boolean h_has_report_financial = SystemCache.hasAuthority(session,"report/financial");//财务报表
+	
+	//系统信息管理
+	Boolean h_has_systeminfo = SystemCache.hasAuthority(session,"systeminfo");
+	Boolean h_has_systeminfo_salesman = SystemCache.hasAuthority(session,"salesman");
+	Boolean h_has_systeminfo_material = SystemCache.hasAuthority(session,"material");
+	Boolean h_has_systeminfo_factory = SystemCache.hasAuthority(session,"factory");
+	Boolean h_has_systeminfo_gongxu = SystemCache.hasAuthority(session,"gongxu");
+	Boolean h_has_systeminfo_user = SystemCache.hasAuthority(session,"user");
+	
 	//权限相关
 	
 %>
@@ -27,7 +53,7 @@
 	<link href="css/common/head.css" rel="stylesheet" type="text/css" />
 	<script src="js/common/head.js" type="text/javascript"></script>
 	<script type="text/javascript">
-		version = 2015030403;
+		version = 2015030501;
 	</script>
 	<div style="display: none;" class="background"></div>
 	<div style="display: none;" class="loading">
@@ -160,26 +186,108 @@
 						</ul>
 					</li>
 					<%} %>
+
+					<%if(h_has_order){ %>
 					<li class="li_dropdown">
 						<a href="#"><i class="fa fa-paperclip"></i>订单系统<i
 							class="fa fa-angle-down"></i> </a>
 						<ul class="submenu">
+							<%if(h_has_order_index){ %>
 							<li>
 								<a href="order/index"><i class="fa fa-dashboard"></i>订单列表</a>
 							</li>
+							<%} %>
+							<%if(h_has_order_add){ %>
 							<li>
 								<a href="order/add"><i class="fa fa-plus"></i>创建订单</a>
 							</li>
+							<%} %>
 						
 						</ul>
 					</li>
-				<!-- 	<li>
-						<a href="print.jsp"><i class="fa fa-print"></i>快递单打印</a>
-					</li>  -->
-					<%if(h_has_systeminfo){ %>
-					<li>
-						<a href="systeminfo/index"><i class="fa fa-list-alt"></i>系统信息管理</a>
+					<%} %>
+
+					<%if(h_has_materialsys){ %>
+					<li class="li_dropdown">
+						<a href="#"><i class="fa fa-barcode"></i>材料系统<i
+							class="fa fa-angle-down"></i> </a>
+						<ul class="submenu">
+							<%if(h_has_materialsys_sample){ %>
+							<li>
+								<a href="materialsys/sample"><i class="fa fa-plus"></i>打样</a>
+							</li>
+							<%} %>
+							<%if(h_has_materialsys_purchase){ %>
+							<li>
+								<a href="materialsys/purchase"><i class="fa fa-sign-in"></i>原材料采购单</a>
+							</li>
+							<%} %>
+						
+						</ul>
 					</li>
+					<%} %>
+
+					<%if(h_has_report){ %>
+					<li class="li_dropdown">
+						<a href="#"><i class="fa fa-table"></i>报表中心<i
+							class="fa fa-angle-down"></i> </a>
+						<ul class="submenu">
+							<%if(h_has_report_material){ %>
+							<li>
+								<a href="report/material"><i class="fa fa-hdd-o"></i>材料库存报表</a>
+							</li>
+							<%} %>
+							<%if(h_has_report_material_purchase){ %>
+							<li>
+								<a href="report/material_purchase"><i class="fa fa-sign-in"></i>材料采购报表</a>
+							</li>
+							<%} %>
+							<%if(h_has_report_financial){ %>
+							<li>
+								<a href="report/financial"><i class="fa fa-jpy"></i>财务报表</a>
+							</li>
+							<%} %>
+						
+						</ul>
+					</li>
+					<%} %>
+
+
+					<%if(h_has_systeminfo){ %>
+					<li class="li_dropdown">
+						<a href="#"><i class="fa fa-list-alt"></i>系统信息管理<i
+							class="fa fa-angle-down"></i> </a>
+						<ul class="submenu">
+							<%if(h_has_systeminfo_salesman){ %>
+							<li>
+								<a href="salesman/index">公司和业务员</a>
+							</li>
+							<%} %>
+							<%if(h_has_systeminfo_gongxu){ %>
+							<li>
+								<a href="gongxu/index">工序</a>
+							</li>
+							<%} %>
+							<%if(h_has_systeminfo_factory){ %>
+							<li>
+								<a href="factory/index">加工工厂</a>
+							</li>
+							<%} %>
+							<%if(h_has_systeminfo_material){ %>
+							<li>
+								<a href="material/index">材料</a>
+							</li>
+							<%} %>
+							<%if(h_has_systeminfo_user){ %>
+							<li>
+								<a href="user/list">用户管理</a>
+							</li>
+							<%} %>
+						
+						</ul>
+					</li>
+
+
 					<%} 
 					if(h_has_authority){%>
 					<li>
@@ -189,6 +297,8 @@
 					<%
 					}
 					%>
+
+					
 				</ul>
 			</div>
 

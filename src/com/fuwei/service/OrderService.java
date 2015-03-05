@@ -109,7 +109,7 @@ public class OrderService extends BaseService {
 				} else {
 					order.setDetail_json(SerializeTool.serialize(order
 							.getDetaillist()));
-
+					order.setIn_use(true);
 					Integer orderId = this.insert(order);
 					String orderNumber = CreateNumberUtil
 							.createFWStyleNumber(orderId);

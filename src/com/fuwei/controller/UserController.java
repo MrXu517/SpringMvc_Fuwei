@@ -53,6 +53,21 @@ public class UserController extends BaseController {
 	 * @throws Exception
 	 * 
 	 */
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView List(HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		String lcode = "user";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有用户管理的权限", null);
+		}
+		request.setAttribute("userlist", SystemCache.userlist);
+		request.setAttribute("rolelist", SystemCache.rolelist);
+		return new ModelAndView("systeminfo/user");
+
+	}
+	
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ResponseBody

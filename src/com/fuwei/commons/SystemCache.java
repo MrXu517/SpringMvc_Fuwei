@@ -16,12 +16,14 @@ import com.fuwei.entity.Authority;
 import com.fuwei.entity.Company;
 import com.fuwei.entity.Factory;
 import com.fuwei.entity.GongXu;
+import com.fuwei.entity.Material;
 import com.fuwei.entity.Role;
 import com.fuwei.entity.Salesman;
 import com.fuwei.entity.User;
 import com.fuwei.service.CompanyService;
 import com.fuwei.service.FactoryService;
 import com.fuwei.service.GongXuService;
+import com.fuwei.service.MaterialService;
 import com.fuwei.service.RoleService;
 import com.fuwei.service.SalesmanService;
 import com.fuwei.service.UserService;
@@ -40,6 +42,8 @@ public class SystemCache {
 	
 	FactoryService factoryService;
 	
+	MaterialService materialService;
+	
 	public SystemCache() {
 		companyService = (CompanyService) SystemContextUtils
 				.getBean(CompanyService.class);
@@ -53,6 +57,8 @@ public class SystemCache {
 				.getBean(RoleService.class);
 		factoryService = (FactoryService)SystemContextUtils
 		.getBean(FactoryService.class);
+		materialService = (MaterialService)SystemContextUtils
+		.getBean(MaterialService.class);
 	}
 
 
@@ -73,6 +79,9 @@ public class SystemCache {
 
 	//缓存加工工厂
 	public static List<Factory> factorylist = new ArrayList<Factory>();
+	
+	//缓存材料
+	public static List<Material> materiallist = new ArrayList<Material>();
 
 	public static void addCompany(Company company) {
 		companylist.add(company);
@@ -93,6 +102,7 @@ public class SystemCache {
 		initUserList();
 		initRoleList();
 		initFactoryList();
+		initMaterialList();
 	}
 
 	public void reload() throws Exception {
@@ -122,7 +132,33 @@ public class SystemCache {
 	public void initFactoryList() throws Exception {
 		SystemCache.factorylist = factoryService.getList(); // userlist;
 	}
+	public void initMaterialList() throws Exception {
+		SystemCache.materiallist = materialService.getList(); // userlist;
+	}
+	
+	public static String getMaterialName(int materialId) {
 
+		for (int i = 0; i < SystemCache.materiallist.size(); ++i) {
+			Material temp = SystemCache.materiallist.get(i);
+			if (temp.getId() == materialId) {
+				return temp.getName();
+			}
+		}
+		return "";
+	}
+	
+	public static Material getMaterial(int materialId) {
+
+		for (int i = 0; i < SystemCache.materiallist.size(); ++i) {
+			Material temp = SystemCache.materiallist.get(i);
+			if (temp.getId() == materialId) {
+				return temp;
+			}
+		}
+		return null;
+	}
+	
+	
 	public static String getUserName(int userid) {
 
 		for (int i = 0; i < SystemCache.userlist.size(); ++i) {

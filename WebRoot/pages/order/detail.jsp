@@ -19,19 +19,9 @@
 			+ path + "/";
 	List<User> userlist = (List<User>) request.getAttribute("userlist");
 	Order order = (Order) request.getAttribute("order");
-	System.out.println(order.getAmount());
-	//List<OrderDetail> orderdetaillist = order.getDetaillist();
-	//if (orderdetaillist == null) {
-	//	orderdetaillist = new ArrayList<OrderDetail>();
-	//}
 
-	String exeStr = "执行当前步骤";
-	//	Boolean to_start_produce = order.startProduce();//是否要执行的是开始生产
-	switch (OrderStatusUtil.get(order.getStatus())) {
-	case DELIVERING:
-		exeStr = "发货";
-		break;
-	}
+
+	String exeStr = OrderStatusUtil.get(order.getStatus()).getStepName();
 
 	List<OrderDetail> DetailList = order == null || order.getDetaillist() == null ? new ArrayList<OrderDetail>()
 			: order.getDetaillist();
@@ -97,6 +87,15 @@
 										</label>
 										<span><%=order.getCNState()%></span>
 									</div>
+									<%if(exeStr!=null){ %>
+									<div class="pull-left">
+										<button orderId="<%=order.getId()%>" id="exeStep"
+											type="button" class="btn btn-danger">
+											<%=exeStr%>
+										</button>
+									</div>
+									<%} %>
+
 
 									<div class="pull-right" style="margin-right: 0;">
 										<%
@@ -115,12 +114,8 @@
 										</button>
 									</div>
 									 -->
-									<div class="pull-right">
-										<button orderId="<%=order.getId()%>" id="exeStep"
-											type="button" class="btn btn-danger">
-											<%=exeStr%>
-										</button>
-									</div>
+									
+									
 									<div class="pull-right">
 										<a href="order/tablelist?orderId=<%=order.getId()%>"
 											class="btn btn-default" type="button"> 查看表格 </a>

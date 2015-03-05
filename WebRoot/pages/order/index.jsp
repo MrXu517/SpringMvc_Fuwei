@@ -273,41 +273,9 @@
 												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
-									<!-- 
-									<form class="form-inline pageform form-horizontal" role="form"
-										action="order/index">
-										<input type="hidden" name="status" id="status"
-											value="<%=status_str %>" />
-										<input type="hidden" name="salesmanId" id="salesmanId"
-											value="<%=salesman_str %>" />
-										<input type="hidden" name="companyId" id="companyId"
-											value="<%=company_str %>" />
-										<input type="hidden" name="start_time" id="start_time"
-											value="<%=start_time_str%>">
-										<input type="hidden" name="end_time" id="end_time"
-											value="<%=end_time_str%>">
-										<div class="form-group">
-											<div class="input-group">
-												<span class="input-group-addon">去第</span>
-												<input type="text" name="page" id="page"
-													class="int form-control" placeholder="1,2,..."
-													value="<%=pager.getPageNo()%>">
-
-												<span class="input-group-addon">页</span>
-												<span class="input-group-btn">
-													<button class="btn btn-primary" type="submit">
-														Go!
-													</button> </span>
-											</div>
-										</div>
-									</form>
- 								-->
+									
 								</div>
-								<!-- <div class="pull-left">
-										<button id="exportProcessBtn" type="button" class="btn btn-success">
-											导出生产进度单
-										</button>
-									</div> -->
+								
 								<table class="table table-responsive">
 									<thead>
 										<tr>
@@ -358,7 +326,16 @@
 										<tr orderId="<%=order.getId()%>">
 											<td><%=++i%></td>
 											<td><%=order.getOrderNumber()%></td>
-											<td><%=order.getState()%></td>
+											<td><%if(order.getStatus() == OrderStatus.CANCEL.ordinal()){ %>
+												<span class="label label-default">已取消</span>
+											<%}else if(order.getStatus() == OrderStatus.DELIVERED.ordinal()){ %>
+												<span class="label label-primary">已发货</span>
+											<%}else if(order.isCompleted()){ %>
+												<span class="label label-success">交易已完成</span>
+											<%}else{ %>
+												<%=order.getState()%>
+											<%} %>
+											</td>
 											<td><%=order.getAmount()%></td>
 											<td><%=order.getInfo()%></td>
 											<td><%=SystemCache.getCompanyName(order
@@ -378,11 +355,7 @@
 													}
 												%>
 												<%
-												if(!order.getIn_use()){
-												 %>
-													<span class="label label-default">已取消</span>
-												<%
-												}else{
+												if(order.getIn_use()){
 													if (has_order_edit && order.isEdit()) {
 												%>
 													|
@@ -391,7 +364,7 @@
 														}
 													%>
 													<%
-														if (order.getIn_use()&& has_order_cancel && order.isCancelable()) {
+														if (has_order_cancel && order.isCancelable()) {
 													%>
 													|
 													<a data-cid="<%=order.getId()%>" class="delete" href="#">取消订单</a>

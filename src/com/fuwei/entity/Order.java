@@ -262,17 +262,7 @@ public class Order implements Serializable {
 	// this.detaillist = detaillist;
 	// }
 
-	// 是否可编辑
-	public Boolean isEdit() {
-		// return this.status < OrderStatus.COLORING.ordinal();
-		return this.status < OrderStatus.DELIVERED.ordinal();// 2014-11-10修改：
-																// 在已发货之前都可以修改订单
-	}
 	
-	//是否可取消订单
-	public Boolean isCancelable(){
-		return this.status < OrderStatus.DELIVERED.ordinal();
-	}
 
 	// 获取当前状态描述
 	public String getCNState() {
@@ -441,5 +431,21 @@ public class Order implements Serializable {
 	public void setImg_ss(String img_ss) {
 		this.img_ss = img_ss;
 	}
+	
+	// 是否可编辑
+	public Boolean isEdit() {
+		// return this.status < OrderStatus.COLORING.ordinal();
+		return this.status < OrderStatus.DELIVERED.ordinal();// 2014-11-10修改：
+																// 在已发货之前都可以修改订单
+	}
+	
+	//是否可取消订单
+	public Boolean isCancelable(){
+		return this.status < OrderStatus.DELIVERED.ordinal();
+	}
+	public Boolean isCompleted(){
+		return this.status >= OrderStatus.COMPLETED.ordinal();
+	}
+	
 
 }

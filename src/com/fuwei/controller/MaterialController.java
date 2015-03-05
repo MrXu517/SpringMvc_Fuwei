@@ -17,19 +17,19 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
-import com.fuwei.entity.Company;
+import com.fuwei.entity.Material;
 import com.fuwei.entity.User;
 import com.fuwei.service.AuthorityService;
-import com.fuwei.service.CompanyService;
+import com.fuwei.service.MaterialService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.HanyuPinyinUtil;
 
-@RequestMapping("/company")
+@RequestMapping("/material")
 @Controller
-public class CompanyController extends BaseController {
+public class MaterialController extends BaseController {
 	
 	@Autowired
-	CompanyService companyService;
+	MaterialService materialService;
 	@Autowired
 	AuthorityService authorityService;
 	
@@ -37,37 +37,36 @@ public class CompanyController extends BaseController {
 	@ResponseBody
 	public ModelAndView Index(HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		String lcode = "company";
+		String lcode = "material";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有公司管理的权限", null);
+			throw new PermissionDeniedDataAccessException("没有材料管理的权限", null);
 		}
-		request.setAttribute("companylist", SystemCache.companylist);
-		request.setAttribute("salesmanlist", SystemCache.salesmanlist);
-		return new ModelAndView("systeminfo/salesman");
+		request.setAttribute("materiallist", SystemCache.materiallist);
+		return new ModelAndView("systeminfo/material");
 
 	}
 	
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> add(Company company,HttpSession session, HttpServletRequest request,
+	public Map<String,Object> add(Material material,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "company/add";
+		String lcode = "material/add";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有添加公司的权限", null);
+			throw new PermissionDeniedDataAccessException("没有添加材料的权限", null);
 		}
-		company.setHelp_code(HanyuPinyinUtil.getFirstSpellByString(company.getFullname())) ;
-		company.setCreated_at(DateTool.now());
-		company.setUpdated_at(DateTool.now());
-		company.setCreated_user(user.getId());
-		int success = companyService.add(company);
+		
+		material.setCreated_at(DateTool.now());
+		material.setUpdated_at(DateTool.now());
+		material.setCreated_user(user.getId());
+		int success = materialService.add(material);
 		
 		//更新缓存
-		new SystemCache().initCompanyList();
+		new SystemCache().initMaterialList();
 		
 		return this.returnSuccess();
 		
@@ -78,15 +77,15 @@ public class CompanyController extends BaseController {
 	public Map<String,Object> delete(@PathVariable int id,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "company/delete";
+		String lcode = "material/delete";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有删除公司的权限", null);
+			throw new PermissionDeniedDataAccessException("没有删除材料的权限", null);
 		}
-		int success = companyService.remove(id);
+		int success = materialService.remove(id);
 		
 		//更新缓存
-		new SystemCache().initCompanyList();
+		new SystemCache().initMaterialList();
 		
 		return this.returnSuccess();
 		
@@ -94,33 +93,33 @@ public class CompanyController extends BaseController {
 	
 	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public Company get(@PathVariable int id, HttpSession session,HttpServletRequest request,
+	public Material get(@PathVariable int id, HttpSession session,HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
-		String lcode = "company/index";
+		String lcode = "material/index";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有查看公司列表的权限", null);
+			throw new PermissionDeniedDataAccessException("没有查看材料列表的权限", null);
 		}
-		Company company = companyService.get(id);
-		return company;
+		Material material = materialService.get(id);
+		return material;
 	}
 	
 	@RequestMapping(value = "/put", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> update(Company company,HttpSession session, HttpServletRequest request,
+	public Map<String,Object> update(Material material,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "company/edit";
+		String lcode = "material/edit";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有编辑公司的权限", null);
+			throw new PermissionDeniedDataAccessException("没有编辑材料的权限", null);
 		}
-		company.setHelp_code(HanyuPinyinUtil.getFirstSpellByString(company.getFullname())) ;
-		company.setUpdated_at(DateTool.now());
-		int success = companyService.update(company);
+		
+		material.setUpdated_at(DateTool.now());
+		int success = materialService.update(material);
 		
 		//更新缓存
-		new SystemCache().initCompanyList();
+		new SystemCache().initMaterialList();
 		
 		return this.returnSuccess();
 		

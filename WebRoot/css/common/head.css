@@ -13,6 +13,7 @@ body {
 	margin: 0;
 	border-top: 1px dotted #e4e4e4;
 	text-decoration: none;
+	line-height: 38px;
 }
 
 .menubar-ul>li>a .fa-angle-down {

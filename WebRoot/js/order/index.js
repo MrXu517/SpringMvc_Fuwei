@@ -13,6 +13,9 @@ $(document).ready(function(){
 	//取消订单 -- 开始
 	$(".delete").click(function(){
 		var id= $(this).attr("data-cid");
+		if(!confirm("确定要取消该订单吗？")){
+			return false;
+		}
 		$.ajax({
             url: "order/cancel/"+id,
             type: 'POST'

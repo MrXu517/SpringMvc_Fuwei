@@ -699,7 +699,7 @@ for(Role role : rolelist){
 														for (Factory factory : factorylist) {
 													%>
 														<tr>
-															<td><%=g_i%></td>
+															<td><%=f_i%></td>
 															<td><%=factory.getName()%></td><td><%=factory.getHelp_code()%></td>
 															<td><%=factory.getAddress()%></td>
 															<td>

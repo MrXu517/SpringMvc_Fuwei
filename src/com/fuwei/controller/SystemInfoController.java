@@ -39,4 +39,5 @@ public class SystemInfoController extends BaseController {
 		return new ModelAndView("systeminfo/index");
 
 	}
+
 }
