@@ -3,6 +3,12 @@ $(document).ready(function(){
 	var $a = $("#left li a[href='salesman/index']");
 	setActiveLeft($a.parent("li"));
 	/*设置当前选中的页*/
+	var tabname = Common.urlParams().tab;
+	if (tabname == null || tabname == undefined) {
+		$('#tab a:first').tab('show') // Select first tab
+	}
+	$("#tab a[href='#" + tabname + "']").tab('show') // Select tab by name
+	
 	
 	//公司 -- 开始
 	setAddCompany();
