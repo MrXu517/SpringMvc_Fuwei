@@ -713,7 +713,7 @@ public class OrderController extends BaseController {
 			HeadBankOrder headBankOrder = headBankOrderService.getByOrder(orderId);
 
 			//获取生产单
-			ProducingOrder producingOrder = producingOrderService.getByOrder(orderId);
+			List<ProducingOrder> producingOrderList = producingOrderService.getByOrder(orderId);
 			
 			//获取计划单
 			PlanOrder planOrder = planOrderService.getByOrder(orderId);
@@ -744,7 +744,7 @@ public class OrderController extends BaseController {
 			
 			request.setAttribute("order", order);
 			request.setAttribute("headBankOrder", headBankOrder);
-			request.setAttribute("producingOrder", producingOrder);
+			request.setAttribute("producingOrder", producingOrderList);
 			request.setAttribute("planOrder", planOrder);
 			request.setAttribute("storeOrder", storeOrder);
 			
@@ -765,7 +765,44 @@ public class OrderController extends BaseController {
 	//添加或保存质量记录单
 	
 	
-	
+	@RequestMapping(value = "/{orderId}/addproducingorder", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView addproducingorder(@PathVariable Integer orderId, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/producing";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有创建或编辑生产单的权限", null);
+		}
+		try {
+			Order order = orderService.get(orderId);
+			PlanOrder planOrder = planOrderService.getByOrder(orderId);
+			
+			if(planOrder == null){
+				throw new PermissionDeniedDataAccessException("请先创建计划单", null);
+			}
+			if(planOrder.getDetaillist() == null || planOrder.getDetaillist().size() <= 0){
+				throw new PermissionDeniedDataAccessException("计划单缺少颜色及数量明细，请先修改计划单 ", null);
+			}
+			List<ProducingOrder> producingOrderList = producingOrderService.getByOrder(orderId);
+			int total_quantity = 0;
+			for(ProducingOrder producingorder : producingOrderList){
+				for(ProducingOrderDetail temp : producingorder.getDetaillist()){
+					total_quantity += temp.getQuantity();
+				}
+			}
+			
+			List<ProducingOrderDetail> detaillist = new ArrayList<ProducingOrderDetail>();
+			
+			request.setAttribute("order", order);
+			request.setAttribute("planOrder", planOrder);
+			return new ModelAndView("order/addproducingorder");
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 	
 	//添加或保存生产单
 	@RequestMapping(value = "/producingorder", method = RequestMethod.POST)
@@ -787,10 +824,10 @@ public class OrderController extends BaseController {
 				if(producingOrder.getOrderId() == null || producingOrder.getOrderId() == 0){
 					throw new PermissionDeniedDataAccessException("生产单必须属于一张订单", null);
 				}else{
-					ProducingOrder temp = producingOrderService.getByOrder(producingOrder.getOrderId());
-					if(temp!=null){
-						throw new PermissionDeniedDataAccessException("该订单已经存在生产单", null);
-					}
+//					ProducingOrder temp = producingOrderService.getByOrder(producingOrder.getOrderId());
+//					if(temp!=null){
+//						throw new PermissionDeniedDataAccessException("该订单已经存在生产单", null);
+//					}
 				}
 				
 				

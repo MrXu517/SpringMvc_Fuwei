@@ -91,11 +91,9 @@ public class ProducingOrderService extends BaseService {
 	}
 
 	// 获取生产单
-	public ProducingOrder getByOrder(int orderId) throws Exception {
+	public List<ProducingOrder> getByOrder(int orderId) throws Exception {
 		try {
-			ProducingOrder order = dao.queryForBean(
-					"select * from tb_producingorder where orderId = ?",
-					ProducingOrder.class, orderId);
+			List<ProducingOrder> list = dao.queryForBeanList("select * from tb_producingorder where orderId = ?", ProducingOrder.class, orderId);
 //			if (order.getDetail_json() == null) {
 //				order.setDetaillist(new ArrayList<ProducingOrderDetail>());
 //				return order;
@@ -111,7 +109,7 @@ public class ProducingOrderService extends BaseService {
 //						.getDetail_json(), ProducingOrderMaterialDetail.class));
 //			}
 			
-			return order;
+			return list;
 		} catch (Exception e) {
 			throw e;
 		}

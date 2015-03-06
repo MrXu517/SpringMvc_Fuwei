@@ -1,5 +1,7 @@
 package com.fuwei.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -102,10 +104,10 @@ public class PrintOrderController extends BaseController {
 			
 			//获取生产单
 			if(printAll || gridName.indexOf("producingorder") > -1){
-				ProducingOrder producingOrder = producingOrderService.getByOrder(orderId);		
-				if(producingOrder!=null){
+				List<ProducingOrder> producingOrderList = producingOrderService.getByOrder(orderId);		
+				if(producingOrderList!=null){
 					grids += "producingorder,";
-					request.setAttribute("producingOrder", producingOrder);
+					request.setAttribute("producingOrderList", producingOrderList);
 				}				
 			}
 			

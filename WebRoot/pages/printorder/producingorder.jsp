@@ -10,12 +10,10 @@
 <%@page import="com.fuwei.util.DateTool"%>
 <%
 	Order order = (Order) request.getAttribute("order");
-	ProducingOrder producingOrder = (ProducingOrder) request
-			.getAttribute("producingOrder");
-	List<ProducingOrderDetail> producingOrderDetailList = producingOrder == null ? new ArrayList<ProducingOrderDetail>()
-			: producingOrder.getDetaillist();
-	List<ProducingOrderMaterialDetail> producingOrderMaterialDetailList = producingOrder == null ? new ArrayList<ProducingOrderMaterialDetail>()
-			: producingOrder.getDetail_2_list();
+	List<ProducingOrder> producingOrderList = (List<ProducingOrder>) request
+			.getAttribute("producingOrderList");
+	producingOrderList = producingOrderList == null? new ArrayList<ProducingOrder>()
+			: producingOrderList;
 %>
 <!DOCTYPE html>
 <html>
@@ -29,6 +27,12 @@
 		<!-- 为了让IE浏览器运行最新的渲染模式 -->
 	</head>
 	<body>
+		<%for(ProducingOrder producingOrder : producingOrderList){ 
+			List<ProducingOrderDetail> producingOrderDetailList = producingOrder == null ? new ArrayList<ProducingOrderDetail>()
+			: producingOrder.getDetaillist();
+			List<ProducingOrderMaterialDetail> producingOrderMaterialDetailList = producingOrder == null ? new ArrayList<ProducingOrderMaterialDetail>()
+			: producingOrder.getDetail_2_list();
+		%>
 		<div class="container-fluid gridTab auto_container">
 			<div class="row">
 				<div class="col-md-12 tablewidget">
@@ -235,5 +239,6 @@
 
 			</div>
 		</div>
+		<%} %>
 	</body>
 </html>

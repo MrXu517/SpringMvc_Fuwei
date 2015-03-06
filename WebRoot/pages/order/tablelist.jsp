@@ -41,15 +41,19 @@
 	Order order = (Order) request.getAttribute("order");
 	HeadBankOrder headBankOrder = (HeadBankOrder) request
 			.getAttribute("headBankOrder");
-//	List<HeadBankOrderDetail> headBankOrderDetailList = headBankOrder == null ? new ArrayList<HeadBankOrderDetail>()
-//			: headBankOrder.getDetaillist();
+	//	List<HeadBankOrderDetail> headBankOrderDetailList = headBankOrder == null ? new ArrayList<HeadBankOrderDetail>()
+	//			: headBankOrder.getDetaillist();
 
-	ProducingOrder producingOrder = (ProducingOrder) request
-			.getAttribute("producingOrder");
-	List<ProducingOrderDetail> producingOrderDetailList = producingOrder == null ? new ArrayList<ProducingOrderDetail>()
-			: producingOrder.getDetaillist();
-	List<ProducingOrderMaterialDetail> producingOrderMaterialDetailList = producingOrder == null ? new ArrayList<ProducingOrderMaterialDetail>()
-			: producingOrder.getDetail_2_list();
+	//	ProducingOrder producingOrder = (ProducingOrder) request
+	//			.getAttribute("producingOrder");
+	//	List<ProducingOrderDetail> producingOrderDetailList = producingOrder == null ? new ArrayList<ProducingOrderDetail>()
+	//			: producingOrder.getDetaillist();
+	//	List<ProducingOrderMaterialDetail> producingOrderMaterialDetailList = producingOrder == null ? new ArrayList<ProducingOrderMaterialDetail>()
+	//			: producingOrder.getDetail_2_list();
+	List<ProducingOrder> producingOrderList = (List<ProducingOrder>) request
+			.getAttribute("producingOrderList");
+	producingOrderList = producingOrderList == null ? new ArrayList<ProducingOrder>()
+			: producingOrderList;
 
 	PlanOrder planOrder = (PlanOrder) request.getAttribute("planOrder");
 	List<PlanOrderDetail> planOrderDetailList = planOrder == null ? new ArrayList<PlanOrderDetail>()
@@ -63,8 +67,8 @@
 	//半检记录单
 	HalfCheckRecordOrder halfCheckRecordOrder = (HalfCheckRecordOrder) request
 			.getAttribute("halfCheckRecordOrder");
-//	List<HalfCheckRecordOrderDetail> halfCheckRecordOrderDetailList = halfCheckRecordOrder == null ? new ArrayList<HalfCheckRecordOrderDetail>()
-//			: halfCheckRecordOrder.getDetaillist();
+	//	List<HalfCheckRecordOrderDetail> halfCheckRecordOrderDetailList = halfCheckRecordOrder == null ? new ArrayList<HalfCheckRecordOrderDetail>()
+	//			: halfCheckRecordOrder.getDetaillist();
 	List<HalfCheckRecordOrderDetail2> halfCheckRecordOrderDetailList2 = halfCheckRecordOrder == null ? new ArrayList<HalfCheckRecordOrderDetail2>()
 			: halfCheckRecordOrder.getDetail_2_list();
 
@@ -83,8 +87,8 @@
 	//抽检记录单
 	CheckRecordOrder checkRecordOrder = (CheckRecordOrder) request
 			.getAttribute("checkRecordOrder");
-//	List<CheckRecordOrderDetail> checkRecordOrderDetailList = checkRecordOrder == null ? new ArrayList<CheckRecordOrderDetail>()
-//			: checkRecordOrder.getDetaillist();
+	//	List<CheckRecordOrderDetail> checkRecordOrderDetailList = checkRecordOrder == null ? new ArrayList<CheckRecordOrderDetail>()
+	//			: checkRecordOrder.getDetaillist();
 
 	//辅料采购单
 	FuliaoPurchaseOrder fuliaoPurchaseOrder = (FuliaoPurchaseOrder) request
@@ -95,20 +99,20 @@
 	//车缝记录单
 	CarFixRecordOrder carFixRecordOrder = (CarFixRecordOrder) request
 			.getAttribute("carFixRecordOrder");
-//	List<CarFixRecordOrderDetail> carFixRecordOrderDetailList = carFixRecordOrder == null ? new ArrayList<CarFixRecordOrderDetail>()
-//			: carFixRecordOrder.getDetaillist();
+	//	List<CarFixRecordOrderDetail> carFixRecordOrderDetailList = carFixRecordOrder == null ? new ArrayList<CarFixRecordOrderDetail>()
+	//			: carFixRecordOrder.getDetaillist();
 
 	//整烫记录单
 	IroningRecordOrder ironingRecordOrder = (IroningRecordOrder) request
 			.getAttribute("ironingRecordOrder");
-//	List<IroningRecordOrderDetail> ironingRecordOrderDetailList = ironingRecordOrder == null ? new ArrayList<IroningRecordOrderDetail>()
-//			: ironingRecordOrder.getDetaillist();
+	//	List<IroningRecordOrderDetail> ironingRecordOrderDetailList = ironingRecordOrder == null ? new ArrayList<IroningRecordOrderDetail>()
+	//			: ironingRecordOrder.getDetaillist();
 
 	String tabname = (String) request.getParameter("tab");
 
 	List<OrderDetail> DetailList = order == null ? new ArrayList<OrderDetail>()
 			: order.getDetaillist();
-	if(DetailList == null){
+	if (DetailList == null) {
 		DetailList = new ArrayList<OrderDetail>();
 	}
 %>
@@ -116,7 +120,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>系统信息管理 -- 桐庐富伟针织厂</title>
+		<title>订单表格 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -137,6 +141,7 @@
 			type="text/css" />
 
 		<link href="css/order/tablelist.css" rel="stylesheet" type="text/css" />
+		<script src="js/order/ordergrid.js" type="text/javascript"></script>
 		<script src="js/order/tablelist.js" type="text/javascript"></script>
 
 	</head>
@@ -286,7 +291,7 @@
 							</li>
 							<li>
 								<a href="#storeorder" role="tab" data-toggle="tab">原材料仓库</a>
-							</li>		
+							</li>
 							<li>
 								<a href="#halfcheckrecordorder" role="tab" data-toggle="tab">半检记录单</a>
 							</li>
@@ -463,12 +468,24 @@
 
 							<!-- 生产单  -->
 							<div class="tab-pane" id="producingorder" role="tabpanel">
+								<%if(producingOrderList.size()<=0){ %>
+								<div class="emptyrecordwidget">
+								<p>您还没有创建过生产单，请点击下方的按钮进行创建</p>
+								<a href="order/<%=order.getId() %>/addproducingorder" class="btn btn-primary" id="createProducingorderBtn">创建生产单</a></div>
+								<%}else{ %>
+								<%
+									for (ProducingOrder producingOrder : producingOrderList) {
+										List<ProducingOrderDetail> producingOrderDetailList = producingOrder == null ? new ArrayList<ProducingOrderDetail>()
+												: producingOrder.getDetaillist();
+										List<ProducingOrderMaterialDetail> producingOrderMaterialDetailList = producingOrder == null ? new ArrayList<ProducingOrderMaterialDetail>()
+												: producingOrder.getDetail_2_list();
+								%>
 								<div class="container-fluid">
 									<div class="row">
 										<form class="saveform">
 											<input type="hidden" name="id"
 												value="<%=producingOrder == null ? "" : producingOrder
-							.getId()%>" />
+						.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
 											<button type="submit"
@@ -510,7 +527,7 @@
 																			生产单位
 																		</td>
 																		<td class="orderproperty"><%=order.getFactoryId() == null ? "" : SystemCache
-					.getFactoryName(order.getFactoryId())%></td>
+						.getFactoryName(order.getFactoryId())%></td>
 																	</tr>
 
 																	<tr>
@@ -522,7 +539,8 @@
 																		<td>
 																			公司
 																		</td>
-																		<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+																		<td><%=SystemCache.getCompanyName(order
+										.getCompanyId())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -678,7 +696,10 @@
 
 									</div>
 								</div>
-
+								<%
+									}
+								}
+								%>
 								<div class="modal fade tableRowDialog"
 									id="producingDetailDialog">
 									<div class="modal-dialog">
@@ -883,7 +904,10 @@
 																		</td>
 																		<td class="size"><%=detail.getSize()%>
 																		</td>
-																		<td><input type="text" class="form-control quantity value" value="<%=detail.getQuantity()%>"/>
+																		<td>
+																			<input type="text"
+																				class="form-control quantity value"
+																				value="<%=detail.getQuantity()%>" />
 																		</td>
 																	</tr>
 
