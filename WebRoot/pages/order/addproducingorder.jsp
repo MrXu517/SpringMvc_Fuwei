@@ -22,14 +22,10 @@
 			+ path + "/";
 	Order order = (Order) request.getAttribute("order");
 
-	PlanOrder planOrder = (PlanOrder) request.getAttribute("planOrder");
-	List<PlanOrderDetail> planOrderDetailList = planOrder == null ? new ArrayList<PlanOrderDetail>()
-			: planOrder.getDetaillist();
-
-	List<OrderDetail> DetailList = order == null ? new ArrayList<OrderDetail>()
-			: order.getDetaillist();
-	if (DetailList == null) {
-		DetailList = new ArrayList<OrderDetail>();
+	List<ProducingOrderDetail> detaillist = (List<ProducingOrderDetail>) request.getAttribute("detaillist");
+	
+	if (detaillist == null) {
+		detaillist = new ArrayList<ProducingOrderDetail>();
 	}
 %>
 <!DOCTYPE html>
@@ -174,10 +170,7 @@
 											<td>
 												<table class="table table-responsive detailTb">
 													<caption>
-														<button type="button"
-															class="btn btn-primary addRow pull-left">
-															添加一行
-														</button>
+														
 														颜色及数量
 													</caption>
 													<thead>
@@ -200,12 +193,49 @@
 															<th width="15%">
 																价格(/个)
 															</th>
-
+															<th width="15%">
+																操作
+															</th>
 														</tr>
 													</thead>
 													<tbody>
+																	<%
+																		for (ProducingOrderDetail detail : detaillist) {
+																	%>
+																	<tr class="tr"
+																		data='<%=SerializeTool.serialize(detail)%>'>
+																		<td class="color"><%=detail.getColor()%>
+																		</td>
+																		<td class="weight"><%=detail.getWeight()%>
+																		</td>
+																		<td class="yarn"><%=detail.getYarn()%>
+																		</td>
+																		<td class="size"><%=detail.getSize()%>
+																		</td>
+																		<td class="int">
+																			<input type="text"
+																				class="form-control quantity value"
+																				value="<%=detail.getQuantity()%>" />
+																		</td>
+																		<td class="double">
+																			<input type="text"
+																				class="form-control price value"
+																				value="<%=detail.getPrice()%>" />
+																		</td>
+																		<td class="_handle"> <a href="#" class="delete"><i class="fa fa-trash-o"></i></a>
+																		</td>
+																	</tr>
 
-													</tbody>
+																	<%
+																		}
+																	%>
+
+																</tbody>
+															</table>
+															<div id="navigator"></div>
+														</td>
+													</tr>
+												</tbody>
 												</table>
 												<div id="navigator"></div>
 											</td>

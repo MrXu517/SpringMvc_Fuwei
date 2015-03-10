@@ -3,6 +3,7 @@ package com.fuwei.entity.ordergrid;
 import java.io.Serializable;
 
 public class ProducingOrderDetail implements Serializable {
+	private int planOrderDetailId;
 	private String color;//颜色
 	private double weight;//克重
 	private String yarn;//纱线种类
@@ -10,6 +11,13 @@ public class ProducingOrderDetail implements Serializable {
 	private int quantity;//生产数量
 	private double price;//单价
 	
+	
+	public int getPlanOrderDetailId() {
+		return planOrderDetailId;
+	}
+	public void setPlanOrderDetailId(int planOrderDetailId) {
+		this.planOrderDetailId = planOrderDetailId;
+	}
 	public String getColor() {
 		return color;
 	}

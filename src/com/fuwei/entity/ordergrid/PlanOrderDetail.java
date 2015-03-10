@@ -1,11 +1,28 @@
 package com.fuwei.entity.ordergrid;
 
 public class PlanOrderDetail {
+	private int id;
 	private String color;//颜色
 	private double weight;//克重
 	private String yarn;//纱线种类
 	private String size;//尺寸
 	private int quantity;//订单出货数量
+	private double price;
+	
+	
+	
+	public double getPrice() {
+		return price;
+	}
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getColor() {
 		return color;
 	}

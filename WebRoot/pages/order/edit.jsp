@@ -231,10 +231,10 @@
 										</legend>
 										<table class="table table-responsive detailTb">
 											<caption>
-												<button type="button"
+											<!-- <button type="button"
 													class="btn btn-primary addRow pull-left">
 													添加一行
-												</button>
+												</button> -->
 											</caption>
 											<thead>
 												<tr>
@@ -256,9 +256,9 @@
 													<th width="15%">
 														单价
 													</th>
-													<th width="15%">
+												<!-- 	<th width="15%">
 														操作
-													</th>
+													</th> -->
 												</tr>
 											</thead>
 											<tbody>
@@ -274,14 +274,15 @@
 													</td>
 													<td class="size"><%=detail.getSize()%>
 													</td>
-													<td class="quantity"><%=detail.getQuantity()%>
+													<td>
+													<input type="text" class="form-control quantity value"
+																				value="<%=detail.getQuantity()%>" />
 													</td>
 													<td class="price"><%=detail.getPrice()%>
 													</td>
-													<td class="_handle">
-														<a class='editRow' href='#'>修改</a> |
-														<a class='deleteRow' href='#'>删除</a>
-													</td>
+													<!--  <td class="_handle">
+														<a class='editRow' href='#'>修改</a>
+													</td> -->
 												</tr>
 
 												<%

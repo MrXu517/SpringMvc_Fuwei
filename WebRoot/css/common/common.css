@@ -85,3 +85,7 @@
 span.error{
 	color:red;
 }
+table.detailTb td .form-control{
+	height:auto;
+	padding:3px 6px;
+}

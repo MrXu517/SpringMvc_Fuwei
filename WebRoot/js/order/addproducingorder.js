@@ -28,12 +28,14 @@ $(document).ready(function(){
 					{
 						name :'quantity',
 						colname :'生产数量',
-						width :'15%'
+						width :'15%',
+						className:"input int"
 					},
 					{
 						name :'price',
 						colname :'价格(/个)',
-						width :'15%'
+						width :'15%',
+						className:"input double"
 					}],
 					$dialog:$("#producingDialog")
 		},

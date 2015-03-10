@@ -904,7 +904,7 @@
 																		</td>
 																		<td class="size"><%=detail.getSize()%>
 																		</td>
-																		<td>
+																		<td class="int">
 																			<input type="text"
 																				class="form-control quantity value"
 																				value="<%=detail.getQuantity()%>" />

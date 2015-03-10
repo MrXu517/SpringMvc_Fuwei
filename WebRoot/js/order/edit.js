@@ -44,22 +44,24 @@ $(document)
 										{
 											name :'quantity',
 											colname :'生产数量',
-											width :'15%'
+											width :'15%',
+											className:"input double"
 										},
 										{
 											name :'price',
 											colname :'单价',
 											width :'15%'
 										},
-										{
-											name :'_handle',
-											colname :'操作',
-											width :'15%',
-											displayValue : function(value,
-													rowdata) {
-												return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
-											}
-										} ],
+//										{
+//											name :'_handle',
+//											colname :'操作',
+//											width :'15%',
+//											displayValue : function(value,
+//													rowdata) {
+//												return "<a class='editRow' href='#'>修改</a>";
+//											}
+//										}
+										],
 								changeTotalRow : function() {
 									var TableInstance = this;
 									// 2015-2-28添加
@@ -71,7 +73,7 @@ $(document)
 										total_amount += Number(tabledata[i].quantity * tabledata[i].price);
 									}
 									$(".orderform #quantity").val(total_quantity);
-									$(".orderform #amount").val(total_amount);
+									$(".orderform #amount").val(Common.round(total_amount,3));
 									// 2015-2-28添加
 								}
 							}
@@ -80,6 +82,10 @@ $(document)
 				
 				//2015-3-4添加重新设置amount的值
 				$(".orderform #amount").val($(".orderform #amount").attr("defaultvalue"));
+				
+				$("#orderDetail .detailTb").on("input propertychange",".quantity",function(){
+					orderGrid.TableInstance.changeTotalRow();
+				});
 				//2015-3-4添加重新设置amount的值
 
 				var $form = $(".orderform");

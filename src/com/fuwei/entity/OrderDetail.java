@@ -8,6 +8,7 @@ package com.fuwei.entity;
 //订单明细
 //@Table("tb_order_detail")
 public class OrderDetail {
+	private int id;
 	private String color;//颜色
 	private double weight;//克重
 	private String yarn;//纱线种类
@@ -15,6 +16,13 @@ public class OrderDetail {
 	private int quantity;//生产数量
 	private double price;//单价
 	
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public double getPrice() {
 		return price;
 	}
