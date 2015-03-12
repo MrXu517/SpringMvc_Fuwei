@@ -25,11 +25,24 @@ public class ProducingOrder {
 	
 	private String detail_2_json;
 	
+	//2015-3-12添加生产单位
+	private Integer factoryId;// 生产单位
+	
 	@Temporary
 	private List<ProducingOrderDetail> detaillist ;
 	
 	@Temporary
 	private List<ProducingOrderMaterialDetail> detail_2_list ;
+
+	
+	
+	public Integer getFactoryId() {
+		return factoryId;
+	}
+
+	public void setFactoryId(Integer factoryId) {
+		this.factoryId = factoryId;
+	}
 
 	public int getId() {
 		return id;

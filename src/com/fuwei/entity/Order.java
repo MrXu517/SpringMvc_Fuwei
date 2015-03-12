@@ -35,7 +35,7 @@ public class Order implements Serializable {
 	private String kehu;// 客户
 
 	// 以下为2014-11-3 添加的，假定一个订单只有一个样品，因此去除了以前的orderDetailList
-	private Integer factoryId;// 生产单位
+//	private Integer factoryId;// 生产单位
 	private double price;// 报价单价
 	private int quantity;// 数量
 	// private double amount;//总价
@@ -296,13 +296,13 @@ public class Order implements Serializable {
 	// }
 	// return false;
 	// }
-	public Integer getFactoryId() {
-		return factoryId;
-	}
-
-	public void setFactoryId(Integer factoryId) {
-		this.factoryId = factoryId;
-	}
+//	public Integer getFactoryId() {
+//		return factoryId;
+//	}
+//
+//	public void setFactoryId(Integer factoryId) {
+//		this.factoryId = factoryId;
+//	}
 
 	public double getPrice() {
 		return price;

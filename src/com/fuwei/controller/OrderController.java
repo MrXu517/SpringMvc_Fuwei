@@ -589,7 +589,7 @@ public class OrderController extends BaseController {
 
 			request.setAttribute("order", order);
 			request.setAttribute("headBankOrder", headBankOrder);
-			request.setAttribute("producingOrder", producingOrderList);
+			request.setAttribute("producingOrderList", producingOrderList);
 			request.setAttribute("planOrder", planOrder);
 			request.setAttribute("storeOrder", storeOrder);
 
@@ -661,7 +661,7 @@ public class OrderController extends BaseController {
 				producingorderdetail.setYarn(planOrderDetail.getYarn());
 				Integer quantity = hashmap.get(planOrderDetail.getId());
 				quantity = quantity == null? 0 : quantity;
-				producingorderdetail.setQuantity(quantity);
+				producingorderdetail.setQuantity(planOrderDetail.getQuantity()- quantity);
 				detaillist.add(producingorderdetail);
 			}
 			request.setAttribute("order", order);
@@ -694,16 +694,15 @@ public class OrderController extends BaseController {
 						|| producingOrder.getOrderId() == 0) {
 					throw new PermissionDeniedDataAccessException(
 							"生产单必须属于一张订单", null);
-				} else {
-					// ProducingOrder temp =
-					// producingOrderService.getByOrder(producingOrder
-					// .getOrderId());
-					// if(temp!=null){
-					// throw new
-					// PermissionDeniedDataAccessException("该订单已经存在生产单", null);
-					// }
 				}
-
+				if (producingOrder.getFactoryId() == null
+						|| producingOrder.getFactoryId() == 0) {
+					throw new PermissionDeniedDataAccessException(
+							"生产单必须指定生产单位", null);
+				} 
+				//判断生产数量是否超出了计划数量
+				//判断生产数量是否超出了计划数量
+				
 				producingOrder.setCreated_at(DateTool.now());// 设置创建时间
 				producingOrder.setUpdated_at(DateTool.now());// 设置更新时间
 				producingOrder.setCreated_user(user.getId());// 设置创建人
@@ -717,6 +716,9 @@ public class OrderController extends BaseController {
 				producingOrder.setDetail_2_list(detaillist2);
 				tableOrderId = producingOrderService.add(producingOrder);
 			} else {// 编辑
+				//判断生产数量是否超出了计划数量
+				//判断生产数量是否超出了计划数量
+				
 				producingOrder.setUpdated_at(DateTool.now());
 				List<ProducingOrderDetail> detaillist = SerializeTool
 						.deserializeList(details, ProducingOrderDetail.class);

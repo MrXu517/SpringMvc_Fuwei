@@ -168,110 +168,7 @@
 						target="_blank" type="button" class="btn btn-success printAll"
 						data-loading-text="正在打印..."> 打印所有的表格 </a>
 					<div class="clear"></div>
-					<!-- 	<table class="table table-responsive table-bordered tableTb">
-						<thead>
-							<tr>
-								<td colspan="4" class="pull-right orderNumber">
-									№：<%=order.getOrderNumber()%></td>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td rowspan="7" width="50%">
-									<a href="/<%=order.getImg()%>" class="thumbnail"
-										target="_blank"> <img id="previewImg" alt="200 x 100%"
-											src="/<%=order.getImg_s()%>"> </a>
-								</td>
-								<td width="20%">
-									生产单位
-								</td>
-								<td class="orderproperty"><%=order.getFactoryId() == null ? "" : SystemCache
-					.getFactoryName(order.getFactoryId())%></td>
-							</tr>
-
-							<tr>
-								<td colspan="2" class="center">
-									订单信息
-								</td>
-							</tr>
-							<tr>
-								<td>
-									公司
-								</td>
-								<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
-							</tr>
-							<tr>
-								<td>
-									客户
-								</td>
-								<td><%=order.getKehu()%></td>
-							</tr>
-							<tr>
-								<td>
-									货号
-								</td>
-								<td><%=order.getProductNumber()%></td>
-							</tr>
-							<tr>
-								<td>
-									款名
-								</td>
-								<td><%=order.getName()%></td>
-							</tr>
-							<tr>
-								<td>
-									跟单
-								</td>
-								<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
-							</tr>
-						</tbody>
-					</table>
-					<table class="table table-responsive detailTb">
-						<caption>
-						</caption>
-						<thead>
-							<tr>
-								<th width="15%">
-									颜色
-								</th>
-								<th width="15%">
-									克重(g)
-								</th>
-								<th width="15%">
-									纱线种类
-								</th>
-								<th width="15%">
-									尺寸
-								</th>
-								<th width="15%">
-									生产数量
-								</th>
-								<th width="15%">
-									单价
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							<%for (OrderDetail detail : DetailList) {%>
-							<tr class="tr" data='<%=SerializeTool.serialize(detail)%>'>
-								<td class="color"><%=detail.getColor()%>
-								</td>
-								<td class="weight"><%=detail.getWeight()%>
-								</td>
-								<td class="yarn"><%=detail.getYarn()%>
-								</td>
-								<td class="size"><%=detail.getSize()%>
-								</td>
-								<td class="quantity"><%=detail.getQuantity()%>
-								</td>
-								<td class="price"><%=detail.getPrice()%>
-								</td>
-							</tr>
-
-							<%}%>
-
-						</tbody>
-					</table> -->
+					
 					<div id="tab">
 						<ul class="nav nav-pills nav-stacked" role="tablist">
 							<li>
@@ -359,8 +256,7 @@
 																		<td width="20%">
 																			生产单位
 																		</td>
-																		<td class="orderproperty"><%=order.getFactoryId() == null ? "" : SystemCache
-					.getFactoryName(order.getFactoryId())%></td>
+																		<td class="orderproperty"></td>
 																	</tr>
 
 																	<tr>
@@ -468,11 +364,11 @@
 
 							<!-- 生产单  -->
 							<div class="tab-pane" id="producingorder" role="tabpanel">
-								<%if(producingOrderList.size()<=0){ %>
+								
 								<div class="emptyrecordwidget">
-								<p>您还没有创建过生产单，请点击下方的按钮进行创建</p>
+								<p>如果您要创建生产单，请点击下方的按钮</p>
 								<a href="order/<%=order.getId() %>/addproducingorder" class="btn btn-primary" id="createProducingorderBtn">创建生产单</a></div>
-								<%}else{ %>
+							
 								<%
 									for (ProducingOrder producingOrder : producingOrderList) {
 										List<ProducingOrderDetail> producingOrderDetailList = producingOrder == null ? new ArrayList<ProducingOrderDetail>()
@@ -480,7 +376,7 @@
 										List<ProducingOrderMaterialDetail> producingOrderMaterialDetailList = producingOrder == null ? new ArrayList<ProducingOrderMaterialDetail>()
 												: producingOrder.getDetail_2_list();
 								%>
-								<div class="container-fluid">
+								<div class="container-fluid producingorderWidget">
 									<div class="row">
 										<form class="saveform">
 											<input type="hidden" name="id"
@@ -526,8 +422,7 @@
 																		<td width="20%">
 																			生产单位
 																		</td>
-																		<td class="orderproperty"><%=order.getFactoryId() == null ? "" : SystemCache
-						.getFactoryName(order.getFactoryId())%></td>
+																		<td class="orderproperty"><%=SystemCache.getFactoryName(producingOrder.getFactoryId()) %></td>
 																	</tr>
 
 																	<tr>
@@ -614,9 +509,9 @@
 																		</td>
 																		<td class="size"><%=detail.getSize()%>
 																		</td>
-																		<td class="quantity"><%=detail.getQuantity()%>
+																		<td class="int"><input class="form-control require quantity value" value="<%=detail.getQuantity()%>" /> 
 																		</td>
-																		<td class="price"><%=detail.getPrice()%>
+																		<td class="double"><input class="form-control require price value" value="<%=detail.getPrice()%>" />
 																		</td>
 																	</tr>
 
@@ -698,7 +593,7 @@
 								</div>
 								<%
 									}
-								}
+								
 								%>
 								<div class="modal fade tableRowDialog"
 									id="producingDetailDialog">
@@ -821,8 +716,7 @@
 																		<td width="20%">
 																			生产单位
 																		</td>
-																		<td class="orderproperty"><%=order.getFactoryId() == null ? "" : SystemCache
-					.getFactoryName(order.getFactoryId())%></td>
+																		<td class="orderproperty"></td>
 																	</tr>
 
 																	<tr>
@@ -979,8 +873,7 @@
 																		<td width="20%">
 																			生产单位
 																		</td>
-																		<td class="orderproperty"><%=order.getFactoryId() == null ? "" : SystemCache
-					.getFactoryName(order.getFactoryId())%></td>
+																		<td class="orderproperty"></td>
 																	</tr>
 
 																	<tr>
@@ -1216,8 +1109,7 @@
 																		<td width="20%">
 																			生产单位
 																		</td>
-																		<td class="orderproperty"><%=order.getFactoryId() == null ? "" : SystemCache
-					.getFactoryName(order.getFactoryId())%></td>
+																		<td class="orderproperty"></td>
 																	</tr>
 
 																	<tr>
@@ -1985,8 +1877,7 @@
 																		<td width="20%">
 																			生产单位
 																		</td>
-																		<td class="orderproperty"><%=order.getFactoryId() == null ? "" : SystemCache
-					.getFactoryName(order.getFactoryId())%></td>
+																		<td class="orderproperty"></td>
 																	</tr>
 
 																	<tr>
@@ -2400,8 +2291,7 @@
 																		<td width="20%">
 																			生产单位
 																		</td>
-																		<td class="orderproperty"><%=order.getFactoryId() == null ? "" : SystemCache
-					.getFactoryName(order.getFactoryId())%></td>
+																		<td class="orderproperty"></td>
 																	</tr>
 
 																	<tr>
@@ -2559,8 +2449,7 @@
 																		<td width="20%">
 																			生产单位
 																		</td>
-																		<td class="orderproperty"><%=order.getFactoryId() == null ? "" : SystemCache
-					.getFactoryName(order.getFactoryId())%></td>
+																		<td class="orderproperty"></td>
 																	</tr>
 
 																	<tr>

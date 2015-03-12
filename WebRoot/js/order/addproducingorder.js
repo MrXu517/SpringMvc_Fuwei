@@ -1,6 +1,7 @@
 $(document).ready(function(){
 //生产单
 	var producingGrid = new OrderGrid({
+		tipText:"生产单",
 		url:"order/producingorder",
 		$content:$(".body"),
 		tbOptions:{

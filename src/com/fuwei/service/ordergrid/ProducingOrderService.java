@@ -79,7 +79,7 @@ public class ProducingOrderService extends BaseService {
 
 					// 更新表
 					this.update(producingOrder, "id",
-							"created_user,created_at,orderId", true);
+							"created_user,created_at,orderId,factoryId", true);
 
 					return producingOrder.getId();
 				}

@@ -11,7 +11,7 @@
 <%@page import="com.fuwei.entity.ordergrid.PlanOrder"%>
 <%@page import="com.fuwei.entity.ordergrid.PlanOrderDetail"%>
 <%@page import="com.fuwei.entity.ordergrid.PlanOrderProducingDetail"%>
-
+<%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
@@ -91,10 +91,10 @@
 								<button type="submit"
 									class="pull-right btn btn-danger saveTable"
 									data-loading-text="正在保存...">
-									保存对当前表格的修改
+									创建生产单
 								</button>
 
-							</form>
+							
 
 							<div class="clear"></div>
 							<div class="col-md-12 tablewidget">
@@ -122,8 +122,20 @@
 															<td width="20%">
 																生产单位
 															</td>
-															<td class="orderproperty"><%=order.getFactoryId() == null ? "" : SystemCache
-					.getFactoryName(order.getFactoryId())%></td>
+															<td class="orderproperty">
+																<select class="form-control" name="factoryId" id="factoryId">
+													<option value="">
+														未选择
+													</option>
+													<%
+														for (Factory factory : SystemCache.factorylist) {
+													%>
+													<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
+													<%
+														}
+													%>
+												</select>
+															</td>
 														</tr>
 
 														<tr>
@@ -281,7 +293,7 @@
 
 							</div>
 
-
+							</form>
 						</div>
 					</div>
 

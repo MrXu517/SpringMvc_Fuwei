@@ -154,8 +154,13 @@ function OrderGrid(settings){
 			var detailTbdata = Object.TableInstance.getTableData();
 			formdata.details = JSON.stringify(detailTbdata);
 		}		
-		if(formdata.id == ""){
+		
+		var tipText = Object.tipText || "当前表格";
+		if(formdata.id == "" || formdata.id == undefined || formdata.id == null){
 			delete formdata.id;
+			tipText = "创建" + tipText;
+		}else{
+			tipText = "修改" + tipText;
 		}
 		
 		
@@ -170,13 +175,13 @@ function OrderGrid(settings){
 			success : function(result) {
 				if (result.success) {
 					$saveform.find("[name='id']").val(result.id);
-					Common.Tip("修改当前表格成功", function() {
+					Common.Tip(tipText+"成功", function() {
 					});
 				}
 				$submitBtn.button('reset');
 			},
 			error : function(result) {
-				Common.Error("修改当前表格失败：" + result.responseText);
+				Common.Error(tipText+"失败：" + result.responseText);
 				$submitBtn.button('reset');
 			}
 
