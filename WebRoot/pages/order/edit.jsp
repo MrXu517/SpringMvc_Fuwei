@@ -309,33 +309,7 @@
 											</div>
 											<div class="col-sm-1"></div>
 										</div>
-										<div class="form-group col-md-6">
-											<label for="factoryId" class="col-sm-3 control-label">
-												生产单位
-											</label>
-											<div class="col-sm-8">
-												<select class="form-control" name="factoryId" id="factoryId">
-													<option value="">
-														未选择
-													</option>
-													<%
-														for (Factory factory : SystemCache.factorylist) {
-															if (order.getFactoryId() != null
-																	&& order.getFactoryId() == factory.getId()) {
-													%>
-													<option value="<%=factory.getId()%>" selected><%=factory.getName()%></option>
-													<%
-														} else {
-													%>
-													<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
-													<%
-														}
-														}
-													%>
-												</select>
-											</div>
-											<div class="col-sm-1"></div>
-										</div>
+										
 										<div class="form-group col-md-6">
 											<label for="kehu" class="col-sm-3 control-label">
 												客户
