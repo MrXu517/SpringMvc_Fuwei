@@ -563,6 +563,13 @@ $(document).ready( function() {
 		_c9_autoheight();
 
 		/* 2014-6-11 高度自适应修改 */
+		
+		/*2015-3-15添加*/
+		$(".breadcrumb li a").click(function(){
+			location.href = $(this).attr("href");
+			return false;
+		});
+		/*2015-3-15添加*/
 	});
 
 function _c9_autoheight() {

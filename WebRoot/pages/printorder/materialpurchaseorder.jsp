@@ -46,8 +46,7 @@
 								</td>
 								<td class="center orderproperty underline">
 									<span><%=materialPurchaseOrder == null ? ""
-					: (materialPurchaseOrder.getCompany() == null ? ""
-							: materialPurchaseOrder.getCompany())%></span>
+					: (SystemCache.getFactoryName(materialPurchaseOrder.getFactoryId()))%></span>
 								</td>
 								<td width="15%"></td>
 

@@ -41,15 +41,7 @@
 	Order order = (Order) request.getAttribute("order");
 	HeadBankOrder headBankOrder = (HeadBankOrder) request
 			.getAttribute("headBankOrder");
-	//	List<HeadBankOrderDetail> headBankOrderDetailList = headBankOrder == null ? new ArrayList<HeadBankOrderDetail>()
-	//			: headBankOrder.getDetaillist();
 
-	//	ProducingOrder producingOrder = (ProducingOrder) request
-	//			.getAttribute("producingOrder");
-	//	List<ProducingOrderDetail> producingOrderDetailList = producingOrder == null ? new ArrayList<ProducingOrderDetail>()
-	//			: producingOrder.getDetaillist();
-	//	List<ProducingOrderMaterialDetail> producingOrderMaterialDetailList = producingOrder == null ? new ArrayList<ProducingOrderMaterialDetail>()
-	//			: producingOrder.getDetail_2_list();
 	List<ProducingOrder> producingOrderList = (List<ProducingOrder>) request
 			.getAttribute("producingOrderList");
 	producingOrderList = producingOrderList == null ? new ArrayList<ProducingOrder>()
@@ -64,6 +56,24 @@
 	List<StoreOrderDetail> storeOrderDetailList = storeOrder == null ? new ArrayList<StoreOrderDetail>()
 			: storeOrder.getDetaillist();
 
+	//原材料采购单
+	List<MaterialPurchaseOrder> materialPurchaseOrderList = (List<MaterialPurchaseOrder>) request
+			.getAttribute("materialPurchaseOrderList");
+	materialPurchaseOrderList = materialPurchaseOrderList == null ? new ArrayList<MaterialPurchaseOrder>()
+			: materialPurchaseOrderList;
+
+	//染色单
+	List<ColoringOrder> coloringOrderList = (List<ColoringOrder>) request
+			.getAttribute("coloringOrderList");
+	coloringOrderList = coloringOrderList == null ? new ArrayList<ColoringOrder>()
+			: coloringOrderList;
+
+	//辅料采购单
+	List<FuliaoPurchaseOrder> fuliaoPurchaseOrderList = (List<FuliaoPurchaseOrder>) request
+			.getAttribute("fuliaoPurchaseOrderList");
+	fuliaoPurchaseOrderList = fuliaoPurchaseOrderList == null ? new ArrayList<FuliaoPurchaseOrder>()
+			: fuliaoPurchaseOrderList;
+
 	//半检记录单
 	HalfCheckRecordOrder halfCheckRecordOrder = (HalfCheckRecordOrder) request
 			.getAttribute("halfCheckRecordOrder");
@@ -72,43 +82,18 @@
 	List<HalfCheckRecordOrderDetail2> halfCheckRecordOrderDetailList2 = halfCheckRecordOrder == null ? new ArrayList<HalfCheckRecordOrderDetail2>()
 			: halfCheckRecordOrder.getDetail_2_list();
 
-	//原材料采购单
-	MaterialPurchaseOrder materialPurchaseOrder = (MaterialPurchaseOrder) request
-			.getAttribute("materialPurchaseOrder");
-	List<MaterialPurchaseOrderDetail> materialPurchaseOrderDetailList = materialPurchaseOrder == null ? new ArrayList<MaterialPurchaseOrderDetail>()
-			: materialPurchaseOrder.getDetaillist();
-
-	//染色单
-	ColoringOrder coloringOrder = (ColoringOrder) request
-			.getAttribute("coloringOrder");
-	List<ColoringOrderDetail> coloringOrderDetailList = coloringOrder == null ? new ArrayList<ColoringOrderDetail>()
-			: coloringOrder.getDetaillist();
-
 	//抽检记录单
 	CheckRecordOrder checkRecordOrder = (CheckRecordOrder) request
 			.getAttribute("checkRecordOrder");
-	//	List<CheckRecordOrderDetail> checkRecordOrderDetailList = checkRecordOrder == null ? new ArrayList<CheckRecordOrderDetail>()
-	//			: checkRecordOrder.getDetaillist();
-
-	//辅料采购单
-	FuliaoPurchaseOrder fuliaoPurchaseOrder = (FuliaoPurchaseOrder) request
-			.getAttribute("fuliaoPurchaseOrder");
-	List<FuliaoPurchaseOrderDetail> fuliaoPurchaseOrderDetailList = fuliaoPurchaseOrder == null ? new ArrayList<FuliaoPurchaseOrderDetail>()
-			: fuliaoPurchaseOrder.getDetaillist();
 
 	//车缝记录单
 	CarFixRecordOrder carFixRecordOrder = (CarFixRecordOrder) request
 			.getAttribute("carFixRecordOrder");
-	//	List<CarFixRecordOrderDetail> carFixRecordOrderDetailList = carFixRecordOrder == null ? new ArrayList<CarFixRecordOrderDetail>()
-	//			: carFixRecordOrder.getDetaillist();
 
 	//整烫记录单
 	IroningRecordOrder ironingRecordOrder = (IroningRecordOrder) request
 			.getAttribute("ironingRecordOrder");
-	//	List<IroningRecordOrderDetail> ironingRecordOrderDetailList = ironingRecordOrder == null ? new ArrayList<IroningRecordOrderDetail>()
-	//			: ironingRecordOrder.getDetaillist();
 
-	String tabname = (String) request.getParameter("tab");
 
 	List<OrderDetail> DetailList = order == null ? new ArrayList<OrderDetail>()
 			: order.getDetaillist();
@@ -168,7 +153,7 @@
 						target="_blank" type="button" class="btn btn-success printAll"
 						data-loading-text="正在打印..."> 打印所有的表格 </a>
 					<div class="clear"></div>
-					
+
 					<div id="tab">
 						<ul class="nav nav-pills nav-stacked" role="tablist">
 							<li>
@@ -364,11 +349,15 @@
 
 							<!-- 生产单  -->
 							<div class="tab-pane" id="producingorder" role="tabpanel">
-								
+
 								<div class="emptyrecordwidget">
-								<p>如果您要创建生产单，请点击下方的按钮</p>
-								<a href="order/<%=order.getId() %>/addproducingorder" class="btn btn-primary" id="createProducingorderBtn">创建生产单</a></div>
-							
+									<p>
+										如果您要创建生产单，请点击下方的按钮
+									</p>
+									<a href="order/<%=order.getId()%>/addproducingorder"
+										class="btn btn-primary" id="createProducingorderBtn">创建生产单</a>
+								</div>
+
 								<%
 									for (ProducingOrder producingOrder : producingOrderList) {
 										List<ProducingOrderDetail> producingOrderDetailList = producingOrder == null ? new ArrayList<ProducingOrderDetail>()
@@ -422,7 +411,8 @@
 																		<td width="20%">
 																			生产单位
 																		</td>
-																		<td class="orderproperty"><%=SystemCache.getFactoryName(producingOrder.getFactoryId()) %></td>
+																		<td class="orderproperty"><%=SystemCache.getFactoryName(producingOrder
+								.getFactoryId())%></td>
 																	</tr>
 
 																	<tr>
@@ -509,9 +499,13 @@
 																		</td>
 																		<td class="size"><%=detail.getSize()%>
 																		</td>
-																		<td class="int"><input class="form-control require quantity value" value="<%=detail.getQuantity()%>" /> 
+																		<td class="int">
+																			<input class="form-control require quantity value"
+																				value="<%=detail.getQuantity()%>" />
 																		</td>
-																		<td class="double"><input class="form-control require price value" value="<%=detail.getPrice()%>" />
+																		<td class="double">
+																			<input class="form-control require price value"
+																				value="<%=detail.getPrice()%>" />
 																		</td>
 																	</tr>
 
@@ -593,7 +587,6 @@
 								</div>
 								<%
 									}
-								
 								%>
 								<div class="modal fade tableRowDialog"
 									id="producingDetailDialog">
@@ -1334,12 +1327,26 @@
 
 							<!-- 原材料采购单 -->
 							<div class="tab-pane" id="materialpurchaseorder" role="tabpanel">
-								<div class="container-fluid">
+								<div class="emptyrecordwidget">
+									<p>
+										如果您要创建原材料采购单，请点击下方的按钮
+									</p>
+									<a href="material_purchase_order/add/<%=order.getId()%>"
+										class="btn btn-primary" id="createProducingorderBtn">创建原材料采购单</a>
+								</div>
+
+								<%
+									for (MaterialPurchaseOrder materialPurchaseOrder : materialPurchaseOrderList) {
+										List<MaterialPurchaseOrderDetail> materialPurchaseOrderDetailList = materialPurchaseOrder == null ? new ArrayList<MaterialPurchaseOrderDetail>()
+												: materialPurchaseOrder.getDetaillist();
+								%>
+
+								<div class="container-fluid materialorderWidget">
 									<div class="row">
 										<form class="saveform">
 											<input type="hidden" name="id"
 												value="<%=materialPurchaseOrder == null ? ""
-					: materialPurchaseOrder.getId()%>" />
+						: materialPurchaseOrder.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
 											<button type="submit"
@@ -1381,9 +1388,8 @@
 																			<td class="orderproperty">
 																				<input class="form-control require" type="text"
 																					name="company"
-																					value="<%=materialPurchaseOrder == null ? ""
-					: (materialPurchaseOrder.getCompany() == null ? ""
-							: materialPurchaseOrder.getCompany())%>" />
+																					value="<%=SystemCache.getFactoryName(materialPurchaseOrder
+								.getFactoryId())%>" />
 																			</td>
 
 																		</tr>
@@ -1395,8 +1401,8 @@
 																				<input class="form-control date require" type="text"
 																					name="purchase_at"
 																					value="<%=materialPurchaseOrder == null ? ""
-					: (materialPurchaseOrder.getPurchase_at() == null ? ""
-							: materialPurchaseOrder.getPurchase_at())%>" />
+						: (materialPurchaseOrder.getPurchase_at() == null ? ""
+								: materialPurchaseOrder.getPurchase_at())%>" />
 																			</td>
 																		</tr>
 																		<tr>
@@ -1408,7 +1414,8 @@
 																			<td>
 																				公司
 																			</td>
-																			<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+																			<td><%=SystemCache.getCompanyName(order
+										.getCompanyId())%></td>
 																		</tr>
 																		<tr>
 																			<td>
@@ -1501,12 +1508,13 @@
 												</table>
 
 											</div>
+										</form>
 									</div>
 								</div>
 
-								</form>
-
-
+								<%
+									}
+								%>
 								<!--
 						 			添加编辑原材料采购对话框 -->
 								<div class="modal fade tableRowDialog"
@@ -1597,13 +1605,29 @@
 								<!-- 添加编辑原材料采购对话框 -->
 							</div>
 
+
 							<!-- 染色单 -->
+
 							<div class="tab-pane" id="coloringorder" role="tabpanel">
-								<div class="container-fluid">
+								<div class="emptyrecordwidget">
+									<p>
+										如果您要创建染色单，请点击下方的按钮
+									</p>
+									<a href="order/<%=order.getId()%>/addproducingorder"
+										class="btn btn-primary" id="createProducingorderBtn">创建原材料染色单</a>
+								</div>
+
+								<%
+									for (ColoringOrder coloringOrder : coloringOrderList) {
+										List<ColoringOrderDetail> coloringOrderDetailList = coloringOrder == null ? new ArrayList<ColoringOrderDetail>()
+												: coloringOrder.getDetaillist();
+								%>
+								<div class="container-fluid coloringorderWidget">
 									<div class="row">
 										<form class="saveform">
 											<input type="hidden" name="id"
-												value="<%=coloringOrder == null ? "" : coloringOrder.getId()%>" />
+												value="<%=coloringOrder == null ? "" : coloringOrder
+						.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
 											<button type="submit"
@@ -1645,8 +1669,8 @@
 																			<td class="orderproperty">
 																				<input class="form-control require" type="text"
 																					name="company"
-																					value="<%=coloringOrder == null ? "" : (coloringOrder
-					.getCompany() == null ? "" : coloringOrder.getCompany())%>" />
+																					value="<%=SystemCache.getFactoryName(coloringOrder
+								.getFactoryId())%>" />
 																			</td>
 
 																		</tr>
@@ -1659,7 +1683,8 @@
 																			<td>
 																				公司
 																			</td>
-																			<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+																			<td><%=SystemCache.getCompanyName(order
+										.getCompanyId())%></td>
 																		</tr>
 																		<tr>
 																			<td>
@@ -1746,10 +1771,13 @@
 												</table>
 
 											</div>
+										</form>
 									</div>
 								</div>
+								<%
+									}
+								%>
 
-								</form>
 
 
 								<!--
@@ -1828,6 +1856,8 @@
 								</div>
 								<!-- 添加编辑染色单对话框 -->
 							</div>
+
+
 
 							<!-- 抽检记录单 -->
 							<div class="tab-pane" id="checkrecordorder" role="tabpanel">
@@ -1988,13 +2018,27 @@
 							</div>
 
 							<!-- 辅料采购单 -->
+
 							<div class="tab-pane" id="fuliaopurchaseorder" role="tabpanel">
-								<div class="container-fluid">
+								<div class="emptyrecordwidget">
+									<p>
+										如果您要创建辅料采购单，请点击下方的按钮
+									</p>
+									<a href="order/<%=order.getId()%>/addproducingorder"
+										class="btn btn-primary" id="createProducingorderBtn">创建辅料采购单</a>
+								</div>
+
+								<%
+									for (FuliaoPurchaseOrder fuliaoPurchaseOrder : fuliaoPurchaseOrderList) {
+										List<FuliaoPurchaseOrderDetail> fuliaoPurchaseOrderDetailList = fuliaoPurchaseOrder == null ? new ArrayList<FuliaoPurchaseOrderDetail>()
+												: fuliaoPurchaseOrder.getDetaillist();
+								%>
+								<div class="container-fluid fuliaoorderWidget">
 									<div class="row">
 										<form class="saveform">
 											<input type="hidden" name="id"
 												value="<%=fuliaoPurchaseOrder == null ? ""
-					: fuliaoPurchaseOrder.getId()%>" />
+						: fuliaoPurchaseOrder.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
 											<button type="submit"
@@ -2036,9 +2080,8 @@
 																			<td class="orderproperty">
 																				<input class="form-control require" type="text"
 																					name="company"
-																					value="<%=fuliaoPurchaseOrder == null ? ""
-					: (fuliaoPurchaseOrder.getCompany() == null ? ""
-							: fuliaoPurchaseOrder.getCompany())%>" />
+																					value="<%=SystemCache.getFactoryName(fuliaoPurchaseOrder
+								.getFactoryId())%>" />
 																			</td>
 																		</tr>
 
@@ -2051,7 +2094,8 @@
 																			<td>
 																				公司
 																			</td>
-																			<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+																			<td><%=SystemCache.getCompanyName(order
+										.getCompanyId())%></td>
 																		</tr>
 																		<tr>
 																			<td>
@@ -2156,6 +2200,9 @@
 
 									</div>
 								</div>
+								<%
+									}
+								%>
 								<!--
 						 添加编辑辅料采购单对话框 -->
 								<div class="modal fade tableRowDialog" id="fuliaopurchaseDialog">
@@ -2242,6 +2289,7 @@
 								<!-- 添加编辑辅料采购单对话框 -->
 
 							</div>
+
 
 							<!-- 车缝记录单 -->
 							<div class="tab-pane" id="carfixrecordorder" role="tabpanel">
@@ -2570,11 +2618,3 @@
 			</div>
 	</body>
 </html>
-<!--<script type="text/javascript">
-	var tabname =
-	";
-	if (tabname == null || tabname == undefined) {
-		$('#tab a:first').tab('show') // Select first tab
-	}
-	$("#tab a[href='#" + tabname + "']").tab('show') // Select tab by name
-</script>-->

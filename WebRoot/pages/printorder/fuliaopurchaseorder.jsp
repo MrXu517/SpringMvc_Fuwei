@@ -45,8 +45,7 @@
 								</td>
 								<td class="orderproperty">
 									<span><%=fuliaoPurchaseOrder == null ? ""
-					: (fuliaoPurchaseOrder.getCompany() == null ? ""
-							: fuliaoPurchaseOrder.getCompany())%></span>
+					: (SystemCache.getFactoryName(fuliaoPurchaseOrder.getFactoryId()))%></span>
 								</td>
 								<td width="15%"></td>
 

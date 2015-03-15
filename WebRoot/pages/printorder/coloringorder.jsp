@@ -44,8 +44,7 @@
 									染色单位：
 								</td>
 								<td class="orderproperty">
-									<span><%=coloringOrder == null ? "" : (coloringOrder
-					.getCompany() == null ? "" : coloringOrder.getCompany())%></span>
+									<span><%=coloringOrder == null ? "" : (SystemCache.getFactoryName(coloringOrder.getFactoryId()))%></span>
 								</td>
 								<td width="15%"></td>
 

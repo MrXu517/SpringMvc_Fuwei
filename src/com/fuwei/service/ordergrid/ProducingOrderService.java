@@ -1,6 +1,7 @@
 package com.fuwei.service.ordergrid;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -9,13 +10,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fuwei.entity.ordergrid.HeadBankOrder;
-import com.fuwei.entity.ordergrid.HeadBankOrderDetail;
+import com.fuwei.commons.Pager;
+import com.fuwei.commons.Sort;
 import com.fuwei.entity.ordergrid.ProducingOrder;
-//import com.fuwei.entity.ProducingOrderDetail;
-//import com.fuwei.entity.ProducingOrderMaterialDetail;
 import com.fuwei.service.BaseService;
-import com.fuwei.service.QuoteOrderDetailService;
+import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
 
 @Component
@@ -133,21 +132,61 @@ public class ProducingOrderService extends BaseService {
 		}
 	}
 
-	// // 获取生产单详情列表
-	// public List<HeadBankOrderDetail> getDetailList(int headBankOrderId)
-	// throws Exception {
-	// try {
-	// HeadBankOrder order = dao.queryForBean(
-	// "select * from tb_headbankorder where id = ?",
-	// HeadBankOrder.class, headBankOrderId);
-	//			
-	// List<HeadBankOrderDetail> detailList =
-	// SerializeTool.deserializeList(order.getDetail_json(),
-	// HeadBankOrderDetail.class);
-	// return detailList;
-	// } catch (Exception e) {
-	// throw e;
-	// }
-	// }
+	
+	// 获取生产单列表
+	public Pager getList(Pager pager, Date start_time, Date end_time, 
+			List<Sort> sortlist) throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			String seq = "WHERE ";
+			
+			sql.append("select * from tb_producingorder ");
+
+			if (start_time != null) {
+				sql.append(seq + " created_at>='"
+						+ DateTool.formateDate(start_time) + "'");
+				seq = " AND ";
+			}
+			if (end_time != null) {
+				sql.append(seq + " created_at<='"
+						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
+						+ "'");
+				seq = " AND ";
+			}
+			
+			
+
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql.append(" order by " + sortlist.get(i).getProperty()
+								+ " " + sortlist.get(i).getDirection() + " ");
+					} else {
+						sql.append("," + sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			return findPager_T(sql.toString(), ProducingOrder.class, pager);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	// 删除生产单
+	public int remove(int id) throws Exception {
+		try{
+			return dao.update("delete from tb_producingorder WHERE  id = ?", id);
+		}catch(Exception e){
+			SQLException sqlException = (java.sql.SQLException)e.getCause();
+			if(sqlException!=null && sqlException.getErrorCode() == 1451){//外键约束
+				log.error(e);
+				throw new Exception("已被引用，无法删除，请先删除与生产单有关的引用");
+			}
+			throw e;
+		}
+	}
 
 }

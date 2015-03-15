@@ -357,7 +357,7 @@ public class OrderController extends BaseController {
 		pager = orderService.getList(pager, start_time_d, end_time_d,
 				companyId, salesmanId, status, sortList);
 		if (pager != null & pager.getResult() != null) {
-			List<Order> orderlist = (List<Order>) pager.getResult();
+			List<FuliaoPurchaseOrder> orderlist = (List<FuliaoPurchaseOrder>) pager.getResult();
 		}
 
 		request.setAttribute("start_time", start_time_d);
@@ -564,11 +564,11 @@ public class OrderController extends BaseController {
 					.getByOrder(orderId);
 
 			// 获取原材料采购单
-			MaterialPurchaseOrder materialPurchaseOrder = materialPurchaseOrderService
+			List<MaterialPurchaseOrder> materialPurchaseOrderList = materialPurchaseOrderService
 					.getByOrder(orderId);
 
 			// 获取染色单
-			ColoringOrder coloringOrder = coloringOrderService
+			List<ColoringOrder> coloringOrderList = coloringOrderService
 					.getByOrder(orderId);
 
 			// 获取抽检记录单
@@ -576,7 +576,7 @@ public class OrderController extends BaseController {
 					.getByOrder(orderId);
 
 			// 获取辅料采购单
-			FuliaoPurchaseOrder fuliaoPurchaseOrder = fuliaoPurchaseOrderService
+			List<FuliaoPurchaseOrder> fuliaoPurchaseOrderList = fuliaoPurchaseOrderService
 					.getByOrder(orderId);
 
 			// 获取车缝记录单
@@ -594,12 +594,11 @@ public class OrderController extends BaseController {
 			request.setAttribute("storeOrder", storeOrder);
 
 			request.setAttribute("halfCheckRecordOrder", halfCheckRecordOrder);
-			request
-					.setAttribute("materialPurchaseOrder",
-							materialPurchaseOrder);
-			request.setAttribute("coloringOrder", coloringOrder);
+			request.setAttribute("materialPurchaseOrderList",
+							materialPurchaseOrderList);
+			request.setAttribute("coloringOrderList", coloringOrderList);
 			request.setAttribute("checkRecordOrder", checkRecordOrder);
-			request.setAttribute("fuliaoPurchaseOrder", fuliaoPurchaseOrder);
+			request.setAttribute("fuliaoPurchaseOrderList", fuliaoPurchaseOrderList);
 			request.setAttribute("carFixRecordOrder", carFixRecordOrder);
 			request.setAttribute("ironingRecordOrder", ironingRecordOrder);
 
@@ -911,62 +910,7 @@ public class OrderController extends BaseController {
 
 	}
 
-	// 添加或保存原材料采购单
-	@RequestMapping(value = "/materialpurchaseorder", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> materialpurchaseorder(
-			MaterialPurchaseOrder tableOrder, String details,
-			HttpSession session, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "order/materialpurchase";
-		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
-		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有创建或编辑原材料采购单的权限",
-					null);
-		}
-		try {
-			Integer tableOrderId = tableOrder.getId();
-
-			if (tableOrderId == null || tableOrderId == 0) {
-				// 添加
-				if (tableOrder.getOrderId() == null
-						|| tableOrder.getOrderId() == 0) {
-					throw new PermissionDeniedDataAccessException(
-							"原材料采购单必须属于一张订单", null);
-				} else {
-					// PlanOrder temp =
-					// planOrderService.getByOrder(tableOrder.getOrderId());
-					// if(temp!=null){
-					// throw new
-					// PermissionDeniedDataAccessException("该订单已经存在计划单", null);
-					// }
-					// 原材料采购单可有多张
-				}
-
-				tableOrder.setCreated_at(DateTool.now());// 设置创建时间
-				tableOrder.setUpdated_at(DateTool.now());// 设置更新时间
-				tableOrder.setCreated_user(user.getId());// 设置创建人
-
-				List<MaterialPurchaseOrderDetail> detaillist = SerializeTool
-						.deserializeList(details,
-								MaterialPurchaseOrderDetail.class);
-				tableOrder.setDetaillist(detaillist);
-				tableOrderId = materialPurchaseOrderService.add(tableOrder);
-			} else {// 编辑
-				tableOrder.setUpdated_at(DateTool.now());
-				List<MaterialPurchaseOrderDetail> detaillist = SerializeTool
-						.deserializeList(details,
-								MaterialPurchaseOrderDetail.class);
-				tableOrder.setDetaillist(detaillist);
-				tableOrderId = materialPurchaseOrderService.update(tableOrder);
-			}
-			return this.returnSuccess("id", tableOrderId);
-		} catch (Exception e) {
-			throw e;
-		}
-
-	}
+	
 
 	// 添加或保存染色单
 	@RequestMapping(value = "/coloringorder", method = RequestMethod.POST)

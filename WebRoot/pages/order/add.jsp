@@ -44,16 +44,6 @@
 		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
 		<script src="js/order/add.js" type="text/javascript"></script>
 		<link href="css/order/index.css" rel="stylesheet" type="text/css" />
-		<style type="text/css">
-#sampleDialog .modal-dialog {
-	width: 900px;
-}
-
-#sampleDialog iframe {
-	width: 100%;
-	height: 400px;
-}
-</style>
 	</head>
 	<body>
 		<%@ include file="../common/head.jsp"%>

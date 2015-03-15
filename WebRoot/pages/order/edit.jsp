@@ -315,7 +315,7 @@
 												客户
 											</label>
 											<div class="col-sm-8">
-												<input type="text" class="form-control" name="kehu"
+												<input disabled type="text" class="form-control" name="kehu"
 													id="kehu"
 													value="<%=order.getKehu() == null ? "" : order.getKehu()%>">
 											</div>
@@ -326,7 +326,7 @@
 												公司
 											</label>
 											<div class="col-sm-8">
-												<select data='<%=companySalesmanMap_str%>'
+												<select disabled data='<%=companySalesmanMap_str%>'
 													class="form-control require" name="companyId"
 													id="companyId" placeholder="公司">
 													<option value="">

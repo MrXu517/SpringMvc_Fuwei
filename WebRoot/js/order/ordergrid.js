@@ -176,6 +176,9 @@ function OrderGrid(settings){
 				if (result.success) {
 					$saveform.find("[name='id']").val(result.id);
 					Common.Tip(tipText+"成功", function() {
+						if(Object.donecall){
+							Object.donecall(result);
+						}
 					});
 				}
 				$submitBtn.button('reset');

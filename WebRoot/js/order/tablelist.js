@@ -1,5 +1,14 @@
 $(document).ready(function() {
-	$('#tab>ul.nav a:first').tab('show') // Select first tab
+	/*设置当前选中的页*/
+	var $a = $("#left li a[href='order/index']");
+	setActiveLeft($a.parent("li"));
+	/*设置当前选中的页*/
+	var tabname = Common.urlParams().tab;
+	if (tabname == null || tabname == undefined) {
+		$('#tab>ul.nav a:first').tab('show') // Select first tab
+	}
+	$("#tab a[href='#" + tabname + "']").tab('show') // Select tab by name
+	
 	
 	//质量记录单
 	var headBankGrid = new OrderGrid({
@@ -198,88 +207,98 @@ $(document).ready(function() {
 	});
 	
 	//原材料采购单
-	var materialPurchaseGrid = new OrderGrid({
-		url:"order/materialpurchaseorder",
-		$content:$("#materialpurchaseorder"),
-		tbOptions:{
-			colnames : [
-					{
-						name :'material',
-						colname :'材料品种',
-						width :'15%'
-					},
-					{
-						name :'scale',
-						colname :'规格',
-						width :'15%'
-					},
-					{
-						name :'quantity',
-						colname :'数量',
-						width :'15%'
-					},
-					{
-						name :'batch_number',
-						colname :'批次号',
-						width :'15%'
-					},
-					{
-						name :'price',
-						colname :'价格（含税）',
-						width :'15%'
-					},
-					{
-						name :'_handle',
-						colname :'操作',
-						width :'15%',
-						displayValue : function(value, rowdata) {
-							return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
-						}
-					} ],
-					$dialog:$("#materialpurchaseDialog")
-		}
-		
+	var $materialpurchaseorderTab = $("#materialpurchaseorder .materialorderWidget");
+	$materialpurchaseorderTab.each(function(){
+		var $content = $(this);
+		var materialPurchaseGrid = new OrderGrid({
+			url:"order/materialpurchaseorder",
+			$content:$content,
+			tbOptions:{
+				colnames : [
+						{
+							name :'material',
+							colname :'材料品种',
+							width :'15%'
+						},
+						{
+							name :'scale',
+							colname :'规格',
+							width :'15%'
+						},
+						{
+							name :'quantity',
+							colname :'数量',
+							width :'15%'
+						},
+						{
+							name :'batch_number',
+							colname :'批次号',
+							width :'15%'
+						},
+						{
+							name :'price',
+							colname :'价格（含税）',
+							width :'15%'
+						},
+						{
+							name :'_handle',
+							colname :'操作',
+							width :'15%',
+							displayValue : function(value, rowdata) {
+								return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
+							}
+						} ],
+						$dialog:$("#materialpurchaseDialog")
+			}
+			
+		});
 	});
 	
+	
 	//染色单
-	var coloringGrid = new OrderGrid({
-		url:"order/coloringorder",
-		$content:$("#coloringorder"),
-		tbOptions:{
-			colnames : [
-			        {
-			        	name :'color',
-			        	colname :'色号',
-			        	width :'15%'
-			        },
-					{
-						name :'material',
-						colname :'材料',
-						width :'15%'
-					},
-					{
-						name :'quantity',
-						colname :'数量',
-						width :'15%'
-					},
-					
-					{
-						name :'standardyarn',
-						colname :'标准样纱',
-						width :'15%'
-					},
-					{
-						name :'_handle',
-						colname :'操作',
-						width :'15%',
-						displayValue : function(value, rowdata) {
-							return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
-						}
-					} ],
-					$dialog:$("#coloringDialog")
-		}
-		
+	var $coloringorderTab = $("#coloringorder .coloringorderWidget");
+	$coloringorderTab.each(function(){
+		var $content = $(this);
+		var coloringGrid = new OrderGrid({
+			url:"order/coloringorder",
+			$content:$content,
+			tbOptions:{
+				colnames : [
+				        {
+				        	name :'color',
+				        	colname :'色号',
+				        	width :'15%'
+				        },
+						{
+							name :'material',
+							colname :'材料',
+							width :'15%'
+						},
+						{
+							name :'quantity',
+							colname :'数量',
+							width :'15%'
+						},
+						
+						{
+							name :'standardyarn',
+							colname :'标准样纱',
+							width :'15%'
+						},
+						{
+							name :'_handle',
+							colname :'操作',
+							width :'15%',
+							displayValue : function(value, rowdata) {
+								return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
+							}
+						} ],
+						$dialog:$("#coloringDialog")
+			}
+			
+		});
 	});
+	
 	
 	//抽检记录单
 	var checkRecordGrid = new OrderGrid({
@@ -288,48 +307,53 @@ $(document).ready(function() {
 	});
 	
 	//辅料采购单
-	var fuliaoPurchaseGrid = new OrderGrid({
-		url:"order/fuliaopurchaseorder",
-		$content:$("#fuliaopurchaseorder"),
-		tbOptions:{
-		colnames : [
-					{
-						name :'style',
-						colname :'辅料类型',
-						width :'15%'
-					},
-					{
-						name :'standardsample',
-						colname :'标准样',
-						width :'15%'
-					},
-					{
-						name :'quantity',
-						colname :'数量',
-						width :'15%'
-					},
-					{
-						name :'price',
-						colname :'价格(/个)',
-						width :'15%'
-					},
-					{
-						name :'end_at',
-						colname :'交期',
-						width :'15%'
-					},
-					{
-						name :'_handle',
-						colname :'操作',
-						width :'15%',
-						displayValue : function(value, rowdata) {
-							return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
-						}
-					} ],
-					$dialog:$("#fuliaopurchaseDialog"),
-		}
-		
+	var $fuliaoorderTab = $("#fuliaopurchaseorder .fuliaoorderWidget");
+	$fuliaoorderTab.each(function(){
+		var $content = $(this);
+		var fuliaoPurchaseGrid = new OrderGrid({
+			url:"order/fuliaopurchaseorder",
+			$content:$content,
+			tbOptions:{
+			colnames : [
+						{
+							name :'style',
+							colname :'辅料类型',
+							width :'15%'
+						},
+						{
+							name :'standardsample',
+							colname :'标准样',
+							width :'15%'
+						},
+						{
+							name :'quantity',
+							colname :'数量',
+							width :'15%'
+						},
+						{
+							name :'price',
+							colname :'价格(/个)',
+							width :'15%'
+						},
+						{
+							name :'end_at',
+							colname :'交期',
+							width :'15%'
+						},
+						{
+							name :'_handle',
+							colname :'操作',
+							width :'15%',
+							displayValue : function(value, rowdata) {
+								return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
+							}
+						} ],
+						$dialog:$("#fuliaopurchaseDialog"),
+			}
+			
+		});
 	});
+	
 	
 	//车缝记录单
 	var carfixRecordGrid = new OrderGrid({

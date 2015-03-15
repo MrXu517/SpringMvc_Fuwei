@@ -3,6 +3,7 @@ package com.fuwei.entity.ordergrid;
 import java.util.Date;
 import java.util.List;
 
+import com.fuwei.constant.OrderStatus;
 import com.fuwei.util.SerializeTool;
 
 import net.keepsoft.commons.annotation.IdentityId;
@@ -27,7 +28,96 @@ public class MaterialPurchaseOrder {
 	@Temporary
 	private List<MaterialPurchaseOrderDetail> detaillist ;
 	
-	private String company;//原材料采购单位
+	private int factoryId;//原材料采购单位
+	
+	private Integer companyId;// 公司ID
+	private String kehu;// 客户
+	// 接下来的Sample的属性
+	private Integer sampleId;// 样品ID
+	
+	private String name;// 样品名称
+
+	private String img;// 图片
+	private String material;// 材料
+	private double weight;// 克重
+	private String size;// 尺寸
+	private String productNumber;// 产品编号
+	
+	
+
+	public Integer getSampleId() {
+		return sampleId;
+	}
+
+	public void setSampleId(Integer sampleId) {
+		this.sampleId = sampleId;
+	}
+
+	
+
+	public Integer getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(Integer companyId) {
+		this.companyId = companyId;
+	}
+
+	public String getKehu() {
+		return kehu;
+	}
+
+	public void setKehu(String kehu) {
+		this.kehu = kehu;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
+	public String getMaterial() {
+		return material;
+	}
+
+	public void setMaterial(String material) {
+		this.material = material;
+	}
+
+	public double getWeight() {
+		return weight;
+	}
+
+	public void setWeight(double weight) {
+		this.weight = weight;
+	}
+
+	public String getSize() {
+		return size;
+	}
+
+	public void setSize(String size) {
+		this.size = size;
+	}
+
+	public String getProductNumber() {
+		return productNumber;
+	}
+
+	public void setProductNumber(String productNumber) {
+		this.productNumber = productNumber;
+	}
 
 	public int getId() {
 		return id;
@@ -81,12 +171,14 @@ public class MaterialPurchaseOrder {
 		this.detail_json = detail_json;
 	}
 
-	public String getCompany() {
-		return company;
+	
+
+	public int getFactoryId() {
+		return factoryId;
 	}
 
-	public void setCompany(String company) {
-		this.company = company;
+	public void setFactoryId(int factoryId) {
+		this.factoryId = factoryId;
 	}
 
 	public List<MaterialPurchaseOrderDetail> getDetaillist() {
@@ -105,5 +197,8 @@ public class MaterialPurchaseOrder {
 		this.purchase_at = purchase_at;
 	}
 	
-	
+	// 是否可编辑
+	public Boolean isEdit() {
+		return true;
+	}
 }

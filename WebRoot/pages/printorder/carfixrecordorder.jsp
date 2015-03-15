@@ -47,8 +47,7 @@
 								<td width="20%">
 									生产单位
 								</td>
-								<td width="20%" class="orderproperty"><%=order.getFactoryId() == null ? "" : SystemCache
-					.getFactoryName(order.getFactoryId())%></td>
+								<td width="20%" class="orderproperty"></td>
 								<td class="orderproperty center" width="30%">样标</td>
 							</tr>
 

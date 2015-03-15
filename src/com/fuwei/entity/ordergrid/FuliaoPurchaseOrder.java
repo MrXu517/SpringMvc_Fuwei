@@ -25,7 +25,7 @@ public class FuliaoPurchaseOrder {
 	@Temporary
 	private List<FuliaoPurchaseOrderDetail> detaillist ;
 	
-	private String company;//染色单位
+	private int factoryId;//染色单位
 
 	public int getId() {
 		return id;
@@ -79,12 +79,14 @@ public class FuliaoPurchaseOrder {
 		this.detail_json = detail_json;
 	}
 
-	public String getCompany() {
-		return company;
+	
+
+	public int getFactoryId() {
+		return factoryId;
 	}
 
-	public void setCompany(String company) {
-		this.company = company;
+	public void setFactoryId(int factoryId) {
+		this.factoryId = factoryId;
 	}
 
 	public List<FuliaoPurchaseOrderDetail> getDetaillist() {
