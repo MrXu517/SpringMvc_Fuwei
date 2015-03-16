@@ -34,7 +34,7 @@
 						<caption id="tablename">
 							桐庐富伟针织厂染色单
 						</caption>
-						<tr><td colspan="3" class="pull-right">№：<%=order.getOrderNumber() %></td></tr>
+						<tr><td colspan="3" class="pull-right">№：<%=coloringOrder.getOrderNumber() %></td></tr>
 					</table>
 
 					<table id="orderTb" class="tableTb noborder">
@@ -81,16 +81,16 @@
 										</tr>
 										<tr>
 											<td class="center">
-												<span><%=SystemCache.getCompanyName(order.getCompanyId())%></span>
+												<span><%=SystemCache.getCompanyName(coloringOrder.getCompanyId())%></span>
 											</td>
 											<td class="center">
-												<span><%=order.getProductNumber()%></span>
+												<span><%=coloringOrder.getProductNumber()%></span>
 											</td>
 											<td class="center">
-												<span><%=order.getKehu()%></span>
+												<span><%=coloringOrder.getKehu()%></span>
 											</td>
 											<td class="center">
-												<span><%=order.getName()%></span>
+												<span><%=coloringOrder.getName()%></span>
 											</td>
 										</tr>
 									</table>

@@ -47,6 +47,13 @@
 	Boolean h_has_systeminfo_gongxu = SystemCache.hasAuthority(session,"gongxu");
 	Boolean h_has_systeminfo_user = SystemCache.hasAuthority(session,"user");
 	
+	//染色单
+	Boolean h_has_coloring_order_index = SystemCache.hasAuthority(session,"coloring_order/index");//染色单
+	Boolean h_has_coloring_order_add = SystemCache.hasAuthority(session,"coloring_order/add");//原材料采购单
+	//辅料采购单
+	Boolean h_has_fuliao_purchase_order_index = SystemCache.hasAuthority(session,"fuliao_purchase_order/index");//辅料采购单
+	Boolean h_has_fuliao_purchase_order_add = SystemCache.hasAuthority(session,"fuliao_purchase_order/add");//辅料采购单
+	
 	//权限相关
 	
 %>
@@ -54,7 +61,7 @@
 	<link href="css/common/head.css" rel="stylesheet" type="text/css" />
 	<script src="js/common/head.js" type="text/javascript"></script>
 	<script type="text/javascript">
-		version = 2015030503;
+		version = 2015031701;
 	</script>
 	<div style="display: none;" class="background"></div>
 	<div style="display: none;" class="loading">
@@ -226,6 +233,28 @@
 							<%if(h_has_materialsys_purchase_add){ %>
 							<li>
 								<a href="material_purchase_order/add"><i class="fa fa-plus"></i>创建原材料采购单</a>
+							</li>
+							<%} %>
+
+							<%if(h_has_fuliao_purchase_order_index){ %>
+							<li>
+								<a href="fuliao_purchase_order/index"><i class="fa fa-sign-in"></i>辅料采购单</a>
+							</li>
+							<%} %>
+							<%if(h_has_fuliao_purchase_order_add){ %>
+							<li>
+								<a href="fuliao_purchase_order/add"><i class="fa fa-plus"></i>创建辅料采购单</a>
+							</li>
+							<%} %>
+
+							<%if(h_has_coloring_order_index){ %>
+							<li>
+								<a href="coloring_order/index"><i class="fa fa-sign-in"></i>染色单</a>
+							</li>
+							<%} %>
+							<%if(h_has_coloring_order_add){ %>
+							<li>
+								<a href="coloring_order/add"><i class="fa fa-plus"></i>创建染色单</a>
 							</li>
 							<%} %>
 						

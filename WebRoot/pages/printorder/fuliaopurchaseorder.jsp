@@ -34,7 +34,7 @@
 						<caption id="tablename">
 							桐庐富伟针织厂辅料采购单
 						</caption>
-						<tr><td colspan="3" class="pull-right">№：<%=order.getOrderNumber() %></td></tr>
+						<tr><td colspan="3" class="pull-right">№：<%=fuliaoPurchaseOrder.getOrderNumber() %></td></tr>
 					</table>
 
 					<table id="orderTb" class="tableTb noborder">
@@ -70,25 +70,25 @@
 											<td>
 												公司
 											</td>
-											<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+											<td><%=SystemCache.getCompanyName(fuliaoPurchaseOrder.getCompanyId())%></td>
 										</tr>
 										<tr>
 											<td>
 												客户
 											</td>
-											<td><%=order.getKehu()%></td>
+											<td><%=fuliaoPurchaseOrder.getKehu()%></td>
 										</tr>
 										<tr>
 											<td>
 												货号
 											</td>
-											<td><%=order.getProductNumber()%></td>
+											<td><%=fuliaoPurchaseOrder.getProductNumber()%></td>
 										</tr>
 										<tr>
 											<td>
 												款名
 											</td>
-											<td><%=order.getName()%></td>
+											<td><%=fuliaoPurchaseOrder.getName()%></td>
 										</tr>
 										<tr>
 											<td>

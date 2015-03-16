@@ -1607,7 +1607,7 @@
 									<p>
 										如果您要创建染色单，请点击下方的按钮
 									</p>
-									<a href="order/<%=order.getId()%>/addproducingorder"
+									<a href="coloring_order/add/<%=order.getId()%>"
 										class="btn btn-primary" id="createProducingorderBtn">创建原材料染色单</a>
 								</div>
 
@@ -2018,7 +2018,7 @@
 									<p>
 										如果您要创建辅料采购单，请点击下方的按钮
 									</p>
-									<a href="order/<%=order.getId()%>/addproducingorder"
+									<a href="fuliao_purchase_order/add/<%=order.getId()%>"
 										class="btn btn-primary" id="createProducingorderBtn">创建辅料采购单</a>
 								</div>
 
@@ -2088,26 +2088,26 @@
 																			<td>
 																				公司
 																			</td>
-																			<td><%=SystemCache.getCompanyName(order
+																			<td><%=SystemCache.getCompanyName(fuliaoPurchaseOrder
 										.getCompanyId())%></td>
 																		</tr>
 																		<tr>
 																			<td>
 																				客户
 																			</td>
-																			<td><%=order.getKehu()%></td>
+																			<td><%=fuliaoPurchaseOrder.getKehu()%></td>
 																		</tr>
 																		<tr>
 																			<td>
 																				货号
 																			</td>
-																			<td><%=order.getProductNumber()%></td>
+																			<td><%=fuliaoPurchaseOrder.getProductNumber()%></td>
 																		</tr>
 																		<tr>
 																			<td>
 																				款名
 																			</td>
-																			<td><%=order.getName()%></td>
+																			<td><%=fuliaoPurchaseOrder.getName()%></td>
 																		</tr>
 																		<tr>
 																			<td>

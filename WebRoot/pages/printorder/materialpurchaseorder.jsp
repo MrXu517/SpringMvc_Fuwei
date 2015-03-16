@@ -34,7 +34,7 @@
 						<caption id="tablename">
 							桐庐富伟针织厂原材料采购单
 						</caption>
-						<tr><td colspan="3" class="pull-right">№：<%=order.getOrderNumber() %></td></tr>
+						<tr><td colspan="3" class="pull-right">№：<%=materialPurchaseOrder.getOrderNumber() %></td></tr>
 						<tr height="10px"></tr>
 					</table>
 
@@ -66,14 +66,14 @@
 									公司：
 								</td>
 								<td class="center underline">
-									<span><%=SystemCache.getCompanyName(order.getCompanyId())%></span>
+									<span><%=SystemCache.getCompanyName(materialPurchaseOrder.getCompanyId())%></span>
 								</td>
 								<td width="15%"></td>
 								<td width="15%">
 									客户：
 								</td>
 								<td class="center underline">
-									<span><%=order.getKehu()%></span>
+									<span><%=materialPurchaseOrder.getKehu()%></span>
 								</td>
 							</tr>
 							<tr height="10px"><td></td><td></td><td></td><td></td><td></td></tr>
@@ -82,14 +82,14 @@
 									货号：
 								</td>
 								<td class="center underline">
-									<span><%=order.getProductNumber()%></span>
+									<span><%=materialPurchaseOrder.getProductNumber()%></span>
 								</td>
 								<td width="15%"></td>
 								<td width="15%">
 									生产单号：
 								</td>
 								<td class="center underline">
-									<span><%=order.getOrderNumber()%></span>
+									<span><%=materialPurchaseOrder.getOrderNumber()%></span>
 								</td>
 							</tr>
 						</tbody>
