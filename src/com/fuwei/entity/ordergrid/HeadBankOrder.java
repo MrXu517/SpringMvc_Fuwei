@@ -10,7 +10,7 @@ import net.keepsoft.commons.annotation.Temporary;
 
 //头带质量记录单，计划单数量
 @Table("tb_headbankorder")
-public class HeadBankOrder {
+public class HeadBankOrder extends BaseTableOrder{
 	@IdentityId
 	private int id;
 	private Integer orderId;//订单ID

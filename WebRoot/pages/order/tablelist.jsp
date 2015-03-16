@@ -1385,11 +1385,8 @@
 																			<td width="20%">
 																				采购单位
 																			</td>
-																			<td class="orderproperty">
-																				<input class="form-control require" type="text"
-																					name="company"
-																					value="<%=SystemCache.getFactoryName(materialPurchaseOrder
-								.getFactoryId())%>" />
+																			<td class="orderproperty"><%=SystemCache.getFactoryName(materialPurchaseOrder
+								.getFactoryId())%>
 																			</td>
 
 																		</tr>
@@ -1397,12 +1394,9 @@
 																			<td width="20%">
 																				订购日期
 																			</td>
-																			<td class="orderproperty">
-																				<input class="form-control date require" type="text"
-																					name="purchase_at"
-																					value="<%=materialPurchaseOrder == null ? ""
+																			<td class="orderproperty"><%=materialPurchaseOrder == null ? ""
 						: (materialPurchaseOrder.getPurchase_at() == null ? ""
-								: materialPurchaseOrder.getPurchase_at())%>" />
+								: materialPurchaseOrder.getPurchase_at())%>
 																			</td>
 																		</tr>
 																		<tr>

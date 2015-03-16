@@ -17,6 +17,14 @@ public class Factory {
 	private Date created_at;// 创建时间
 	private Date updated_at;// 最近更新时间
 	private Integer created_user;//创建用户
+	private Integer type = 0 ;
+	
+	public Integer getType() {
+		return type;
+	}
+	public void setType(Integer type) {
+		this.type = type;
+	}
 	public int getId() {
 		return id;
 	}
@@ -60,5 +68,18 @@ public class Factory {
 		this.created_user = created_user;
 	}
 	
+	public String getTypeName() {
+		Integer type = this.type;
+		if(type == null || type == 0){
+			return "机织";
+		}
+		if(type == 1){
+			return "采购";
+		}
+		if(type == 2){
+			return "染色";
+		}
+		return "";
+	}
 	
 }

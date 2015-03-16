@@ -12,7 +12,7 @@ import net.keepsoft.commons.annotation.Temporary;
 
 //原材料采购单
 @Table("tb_materialpurchaseorder")
-public class MaterialPurchaseOrder {
+public class MaterialPurchaseOrder extends BaseTableOrder{
 	@IdentityId
 	private int id;
 	private Integer orderId;//订单ID
@@ -23,7 +23,7 @@ public class MaterialPurchaseOrder {
 	
 	private String detail_json;
 	
-	private String purchase_at;//订购日期
+	private Date purchase_at;//订购日期
 	
 	@Temporary
 	private List<MaterialPurchaseOrderDetail> detaillist ;
@@ -42,8 +42,35 @@ public class MaterialPurchaseOrder {
 	private double weight;// 克重
 	private String size;// 尺寸
 	private String productNumber;// 产品编号
+	private String orderNumber;//订单编号
 	
+	private String img_s;// 中等缩略图
+	private String img_ss;// 缩略图
 	
+
+	public String getImg_s() {
+		return img_s;
+	}
+
+	public void setImg_s(String img_s) {
+		this.img_s = img_s;
+	}
+
+	public String getImg_ss() {
+		return img_ss;
+	}
+
+	public void setImg_ss(String img_ss) {
+		this.img_ss = img_ss;
+	}
+
+	public String getOrderNumber() {
+		return orderNumber;
+	}
+
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
+	}
 
 	public Integer getSampleId() {
 		return sampleId;
@@ -189,16 +216,12 @@ public class MaterialPurchaseOrder {
 		this.detaillist = detaillist;
 	}
 
-	public String getPurchase_at() {
+	public Date getPurchase_at() {
 		return purchase_at;
 	}
 
-	public void setPurchase_at(String purchase_at) {
+	public void setPurchase_at(Date purchase_at) {
 		this.purchase_at = purchase_at;
 	}
 	
-	// 是否可编辑
-	public Boolean isEdit() {
-		return true;
-	}
 }

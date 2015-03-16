@@ -11,7 +11,7 @@ import net.keepsoft.commons.annotation.Temporary;
 
 //原材料仓库
 @Table("tb_storeorder")
-public class StoreOrder {
+public class StoreOrder extends BaseTableOrder{
 	@IdentityId
 	private int id;
 	private Integer orderId;//订单ID

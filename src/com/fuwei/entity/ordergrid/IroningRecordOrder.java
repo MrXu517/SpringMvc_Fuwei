@@ -11,7 +11,7 @@ import net.keepsoft.commons.annotation.Temporary;
 
 //整烫记录单，计划单数量
 @Table("tb_ironingrecordorder")
-public class IroningRecordOrder {
+public class IroningRecordOrder extends BaseTableOrder{
 	@IdentityId
 	private int id;
 	private Integer orderId;//订单ID

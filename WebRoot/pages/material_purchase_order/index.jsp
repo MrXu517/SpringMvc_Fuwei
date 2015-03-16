@@ -113,7 +113,7 @@
 											value="<%=pager.getPageNo()%>" />
 										<div class="form-group">
 											<label for="status" class="col-sm-3 control-label">
-												订单状态
+												状态
 											</label>
 											<div class="col-sm-9">
 												<select class="form-control" name="status" id="status">

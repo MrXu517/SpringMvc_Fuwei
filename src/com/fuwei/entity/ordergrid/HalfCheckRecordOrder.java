@@ -11,7 +11,7 @@ import com.fuwei.util.SerializeTool;
 
 //半检记录单
 @Table("tb_halfcheckrecordorder")
-public class HalfCheckRecordOrder {
+public class HalfCheckRecordOrder extends BaseTableOrder{
 	@IdentityId
 	private int id;
 	private Integer orderId;//订单ID

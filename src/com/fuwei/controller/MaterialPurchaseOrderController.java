@@ -160,6 +160,8 @@ public class MaterialPurchaseOrderController extends BaseController {
 				materialPurchaseOrder.setSize(sample.getSize());
 				materialPurchaseOrder.setWeight(sample.getWeight());
 				materialPurchaseOrder.setName(sample.getName());
+				materialPurchaseOrder.setImg_s(sample.getImg_s());
+				materialPurchaseOrder.setImg_ss(sample.getImg_ss());
 			}
 			List<MaterialPurchaseOrderDetail> detaillist = SerializeTool
 						.deserializeList(details,
@@ -208,6 +210,8 @@ public class MaterialPurchaseOrderController extends BaseController {
 				tableOrder.setCreated_user(user.getId());// 设置创建人
 				
 				tableOrder.setImg(order.getImg());
+				tableOrder.setImg_s(order.getImg_s());
+				tableOrder.setImg_ss(order.getImg_ss());
 				tableOrder.setProductNumber(order.getProductNumber());
 				tableOrder.setMaterial(order.getMaterial());
 				tableOrder.setSize(order.getSize());
@@ -216,6 +220,7 @@ public class MaterialPurchaseOrderController extends BaseController {
 				tableOrder.setCompanyId(order.getCompanyId());
 				tableOrder.setKehu(order.getKehu());
 				tableOrder.setSampleId(order.getSampleId());
+				tableOrder.setOrderNumber(order.getOrderNumber());
 				
 				List<MaterialPurchaseOrderDetail> detaillist = SerializeTool
 						.deserializeList(details,
@@ -223,6 +228,11 @@ public class MaterialPurchaseOrderController extends BaseController {
 				tableOrder.setDetaillist(detaillist);
 				tableOrderId = materialPurchaseOrderService.add(tableOrder);
 			} else {// 编辑
+				if (tableOrder.getOrderId() == null
+						|| tableOrder.getOrderId() == 0) {
+					throw new PermissionDeniedDataAccessException(
+							"缺少订单ID", null);
+				}
 				tableOrder.setUpdated_at(DateTool.now());
 				List<MaterialPurchaseOrderDetail> detaillist = SerializeTool
 						.deserializeList(details,
@@ -264,6 +274,35 @@ public class MaterialPurchaseOrderController extends BaseController {
 		}
 		MaterialPurchaseOrder materialPurchaseOrder = materialPurchaseOrderService.get(id);
 		return materialPurchaseOrder;
+	}
+	
+	@RequestMapping(value = "/put/{tableOrderId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView update(@PathVariable Integer tableOrderId,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "material_purchase_order/edit";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有添加原材料采购单的权限", null);
+		}
+		try {
+			if(tableOrderId!=null){
+				MaterialPurchaseOrder materialPurchaseOrder = materialPurchaseOrderService.get(tableOrderId);
+				request.setAttribute("materialPurchaseOrder", materialPurchaseOrder);
+				if(materialPurchaseOrder.getOrderId()!=null){
+					return new ModelAndView("material_purchase_order/editbyorder");
+				}else{
+					return new ModelAndView("material_purchase_order/edit");
+				}
+				
+			}
+			throw new Exception("缺少原材料采购单ID");
+			
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 	
 	@RequestMapping(value = "/put", method = RequestMethod.POST)

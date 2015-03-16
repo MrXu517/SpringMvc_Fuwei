@@ -11,7 +11,7 @@ import net.keepsoft.commons.annotation.Temporary;
 
 //抽检记录单
 @Table("tb_checkrecordorder")
-public class CheckRecordOrder {
+public class CheckRecordOrder  extends BaseTableOrder{
 	@IdentityId
 	private int id;
 	private Integer orderId;//订单ID

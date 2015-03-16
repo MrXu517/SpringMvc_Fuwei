@@ -11,7 +11,7 @@ import net.keepsoft.commons.annotation.Temporary;
 
 //车缝记录单，计划单数量
 @Table("tb_carfixrecordorder")
-public class CarFixRecordOrder {
+public class CarFixRecordOrder extends BaseTableOrder{
 	@IdentityId
 	private int id;
 	private Integer orderId;//订单ID

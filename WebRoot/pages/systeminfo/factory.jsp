@@ -62,7 +62,7 @@
 									<div class="panel panel-primary">
 										<div class="panel-heading">
 											<h3 class="panel-title">
-												添加加工工厂
+												添加工厂
 											</h3>
 										</div>
 										<div class="panel-body">
@@ -75,6 +75,20 @@
 													<div class="col-sm-8">
 														<input type="text" class="form-control require"
 															name="name" id="name" placeholder="名称">
+													</div>
+													<div class="col-sm-1"></div>
+												</div>
+												<div class="form-group">
+													<label for="name" class="col-sm-3 control-label">
+														类型
+													</label>
+													<div class="col-sm-8">
+														<select class="form-control require"
+															name="type" id="type">
+															<option value="0">机织</option>
+															<option value="1">采购</option>
+															<option value="2">染色</option>
+														</select>
 													</div>
 													<div class="col-sm-1"></div>
 												</div>
@@ -127,6 +141,9 @@
 														名称
 													</th>
 													<th>
+														类型
+													</th>
+													<th>
 														拼音
 													</th>
 													<th>
@@ -145,6 +162,7 @@
 												<tr>
 													<td><%=f_i%></td>
 													<td><%=factory.getName()%></td>
+													<td><%=factory.getTypeName()%></td>
 													<td><%=factory.getHelp_code()%></td>
 													<td><%=factory.getAddress()%></td>
 													<td>

@@ -276,7 +276,7 @@
 							<%} %>
 							<%if(h_has_systeminfo_factory){ %>
 							<li>
-								<a href="factory/index">加工工厂</a>
+								<a href="factory/index">工厂</a>
 							</li>
 							<%} %>
 							<%if(h_has_systeminfo_material){ %>

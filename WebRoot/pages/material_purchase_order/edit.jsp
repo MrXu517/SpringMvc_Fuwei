@@ -1,26 +1,24 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
-<%@page import="com.fuwei.entity.OrderDetail"%>
+<%@page import="com.fuwei.commons.SystemCache"%>
+<%@page import="com.fuwei.entity.Company"%>
 <%@page import="com.fuwei.entity.Order"%>
-
-<%@page import="com.fuwei.entity.ordergrid.HeadBankOrder"%>
-<%@page import="com.fuwei.entity.ordergrid.HeadBankOrderDetail"%>
-<%@page import="com.fuwei.entity.ordergrid.ProducingOrder"%>
-<%@page import="com.fuwei.entity.ordergrid.ProducingOrderDetail"%>
-<%@page import="com.fuwei.entity.ordergrid.ProducingOrderMaterialDetail"%>
-<%@page import="com.fuwei.entity.ordergrid.PlanOrder"%>
-<%@page import="com.fuwei.entity.ordergrid.PlanOrderDetail"%>
-<%@page import="com.fuwei.entity.ordergrid.PlanOrderProducingDetail"%>
 <%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.entity.ordergrid.MaterialPurchaseOrderDetail"%>
+<%@page import="com.fuwei.entity.ordergrid.MaterialPurchaseOrder"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
+	MaterialPurchaseOrder materialPurchaseOrder = (MaterialPurchaseOrder)request.getAttribute("materialPurchaseOrder");
+	List<MaterialPurchaseOrderDetail> detaillist = materialPurchaseOrder.getDetaillist();
+	if(detaillist == null){
+		detaillist = new ArrayList<MaterialPurchaseOrderDetail>();
+	}
 %>
 <!DOCTYPE html>
 <html>
@@ -61,8 +59,11 @@
 							<i class="fa fa-home"></i>
 							<a href="user/index">首页</a>
 						</li>
+						<li>
+							<a href="material_purchase_order/index">原材料采购单列表</a>
+						</li>
 						<li class="active">
-							创建原材料采购单
+							编辑原材料采购单
 						</li>
 					</ul>
 				</div>
@@ -70,89 +71,158 @@
 					<div class="container-fluid materialorderWidget">
 						<div class="row">
 							<form class="saveform">
+								<input type="hidden" id="id" name="id"
+									value="<%=materialPurchaseOrder.getId()%>" class="require" />
+								<input type="hidden" id="sampleId" name="sampleId"
+									value="<%=materialPurchaseOrder.getSampleId()%>" class="require" />
 								<button type="submit"
 									class="pull-right btn btn-danger saveTable"
 									data-loading-text="正在保存...">
-									创建原材料采购单
+									保存修改
 								</button>
-								<a target="_blank" type="button"
-									class="pull-right btn btn-success printBtn"
-									data-loading-text="正在打印..."> 打印 </a>
+
 								<div class="clear"></div>
 								<div class="col-md-12 tablewidget">
 									<table class="table">
 										<caption>
 											桐庐富伟针织厂原材料采购单
 										</caption>
-										
+
 										<tbody>
 											<tr>
 												<td>
-													<table
-														class="table table-responsive table-bordered tableTb">
-														<tbody>
-															<tr>
-																<td rowspan="7" width="50%">
-																	<a href="/" class="thumbnail"
-																		target="_blank"> <img id="previewImg"
-																			alt="200 x 100%" src="/">
-																	</a>
-																</td>
-																<td width="20%">
-																	采购单位
-																</td>
-																<td class="orderproperty">
-																	<input class="form-control require" type="text"
-																		name="company"
-																		value="" />
-																</td>
+													<fieldset>
+														<legend>
+															基本信息
+														</legend>
+														<div class="form-group col-md-6">
+															<label for="img" class="col-sm-3 control-label">
+																样品图片
+															</label>
+															<div class="col-sm-8">
+																<a href="#" class="thumbnail" id="sampleImgA"> <img
+																		id="sampleImg" alt="350 x 100%"
+																		src="/<%=materialPurchaseOrder.getImg_s()%>"> </a>
+															</div>
+															<div class="col-sm-1"></div>
+														</div>
 
-															</tr>
-															<tr>
-																<td width="20%">
-																	订购日期
-																</td>
-																<td class="orderproperty">
-																	<input class="form-control date require" type="text"
-																		name="purchase_at"
-																		value="" />
-																</td>
-															</tr>
+														<div class="form-group col-md-6">
+															<label for="name" class="col-sm-3 control-label">
+																样品名称
+															</label>
+															<div class="col-sm-8">
+																<input readonly type="text" name="name" id="name"
+																	class="form-control"
+																	value="<%=materialPurchaseOrder.getName() == null ? "" : materialPurchaseOrder.getName()%>" />
+
+															</div>
+															<div class="col-sm-1"></div>
+														</div>
+
+														<div class="form-group col-md-6">
+															<label for="productNumber" class="col-sm-3 control-label">
+																货号
+															</label>
+															<div class="col-sm-8">
+																<input readonly type="text" name="productNumber"
+																	id="productNumber" class="form-control"
+																	value="<%=materialPurchaseOrder.getProductNumber() == null ? "" : materialPurchaseOrder
+					.getProductNumber()%>" />
+
+															</div>
+															<div class="col-sm-1"></div>
+														</div>
+														<div class="form-group col-md-6">
+															<label for="factoryId" class="col-sm-3 control-label">
+																采购单位
+															</label>
+															<div class="col-sm-8">
+																<select class="form-control require"
+																	name="factoryId" id="factoryId">
+																	<option value="">
+																		未选择
+																	</option>
+																	<%
+																		for (Factory factory : SystemCache.factorylist) {
+																			if(factory.getId() == materialPurchaseOrder.getFactoryId()){
+																	%>
+																	<option value="<%=factory.getId()%>" selected='selected'><%=factory.getName()%></option>
+																	<%}else{ %>
+																	<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
+																	<%
+																		}
+																		}
+																	%>
+
+																</select>
+															</div>
+															<div class="col-sm-1"></div>
+														</div>
+
+														<div class="form-group col-md-6">
+															<label for="purchase_at" class="col-sm-3 control-label">
+																订购日期
+															</label>
+															<div class="col-sm-8">
+																<input class="form-control date require" type="text"
+																	name="purchase_at" id="purchase_at"
+																	value="<%=DateTool.formatDateYMD(materialPurchaseOrder.getPurchase_at())%>" />
+															</div>
+															<div class="col-sm-1"></div>
+														</div>
+
+														<div class="form-group col-md-6">
+															<label for="kehu" class="col-sm-3 control-label">
+																客户
+															</label>
+															<div class="col-sm-8">
+																<input disabled type="text" class="form-control"
+																	name="kehu" id="kehu"
+																	value="<%=materialPurchaseOrder.getKehu() == null ? "" : materialPurchaseOrder.getKehu()%>">
+															</div>
+															<div class="col-sm-1"></div>
+														</div>
+														<div class="form-group col-md-6">
+															<label for="companyId" class="col-sm-3 control-label">
+																公司
+															</label>
+															<div class="col-sm-8">
+																<select disabled class="form-control require"
+																	name="companyId" id="companyId" placeholder="公司">
+																	<option value="">
+																		未选择
+																	</option>
+																	<%
+																		for (Company company : SystemCache.companylist) {
+																			if (materialPurchaseOrder.getCompanyId() != null
+																					&& company.getId() == materialPurchaseOrder.getCompanyId()) {
+																	%>
+																	<option value="<%=company.getId()%>" selected><%=company.getFullname()%></option>
+																	<%
+																		} else {
+																	%>
+																	<option value="<%=company.getId()%>"><%=company.getFullname()%></option>
+																	<%
+																		}
+																		}
+																	%>
+																</select>
+															</div>
+														</div>
 														
-															<tr>
-																<td>
-																	公司
-																</td>
-																<td><input class="form-control require" type="text"
-																		name="companyId"
-																		value="" /></td>
-															</tr>
-															<tr>
-																<td>
-																	客户
-																</td>
-																<td><input class="form-control require" type="text"
-																		name="kehu"
-																		value="" /></td>
-															</tr>
-															<tr>
-																<td>
-																	货号
-																</td>
-																<td><input class="form-control require" type="text"
-																		name="productNumber"
-																		value="" /></td>
-															</tr>
-															<tr>
-																<td>
-																	款名
-																</td>
-																<td><input class="form-control require" type="text"
-																		name="name"
-																		value="" /></td>
-															</tr>
-														</tbody>
-													</table>
+														<div class="form-group col-md-6">
+															<label for="orderNumber" class="col-sm-3 control-label">
+																生产单号
+															</label>
+															<div class="col-sm-8">
+																<input disabled type="text" class="form-control" name="orderNumber"
+																	id="orderNumber" value="<%=materialPurchaseOrder.getOrderNumber() == null ? "" : materialPurchaseOrder.getOrderNumber()%>">
+															</div>
+															<div class="col-sm-1"></div>
+														</div>
+													</fieldset>
+
 
 												</td>
 											</tr>
@@ -189,7 +259,30 @@
 															</tr>
 														</thead>
 														<tbody>
+															<%
+																			for (MaterialPurchaseOrderDetail detail : detaillist) {
+																		%>
+																		<tr class="tr"
+																			data='<%=SerializeTool.serialize(detail)%>'>
+																			<td class="material"><%=detail.getMaterial()%>
+																			</td>
+																			<td class="scale"><%=detail.getScale()%>
+																			</td>
+																			<td class="quantity"><%=detail.getQuantity()%>
+																			</td>
+																			<td class="batch_number"><%=detail.getBatch_number()%>
+																			</td>
+																			<td class="price"><%=detail.getPrice()%>
+																			</td>
+																			<td class="_handle">
+																				<a class='editRow' href='#'>修改</a> |
+																				<a class='deleteRow' href='#'>删除</a>
+																			</td>
+																		</tr>
 
+																		<%
+																			}
+																		%>
 														</tbody>
 													</table>
 													<div id="navigator"></div>
@@ -200,6 +293,7 @@
 									</table>
 
 								</div>
+							</form>
 						</div>
 					</div>
 					<!--
@@ -288,6 +382,35 @@
 						</div>
 					</div>
 					<!-- 添加编辑原材料采购对话框 -->
+
+					<!-- 选择样品对话框 -->
+					<div class="modal fade" id="sampleDialog">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">
+										<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+									</button>
+									<h4 class="modal-title">
+										请选择样品
+									</h4>
+								</div>
+								<div class="modal-body">
+									<iframe id="sampleIframe" name="sampleIframe" frameborder=0></iframe>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default"
+										data-dismiss="modal">
+										关闭
+									</button>
+								</div>
+							</div>
+							<!-- /.modal-content -->
+						</div>
+						<!-- /.modal-dialog -->
+					</div>
+					<!-- 选择样品对话框 -->
+
 				</div>
 			</div>
 		</div>

@@ -12,7 +12,7 @@ import net.keepsoft.commons.annotation.Temporary;
 
 /*生产单*/
 @Table("tb_producingorder")
-public class ProducingOrder {
+public class ProducingOrder extends BaseTableOrder{
 	@IdentityId
 	private int id;
 	private Integer orderId;//订单ID

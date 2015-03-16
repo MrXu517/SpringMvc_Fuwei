@@ -25,22 +25,22 @@ import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
-import com.fuwei.entity.ordergrid.FuliaoPurchaseOrder;
-import com.fuwei.entity.ordergrid.FuliaoPurchaseOrderDetail;
+import com.fuwei.entity.ordergrid.ColoringOrder;
+import com.fuwei.entity.ordergrid.ColoringOrderDetail;
 import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.OrderService;
 import com.fuwei.service.SampleService;
-import com.fuwei.service.ordergrid.FuliaoPurchaseOrderService;
+import com.fuwei.service.ordergrid.ColoringOrderService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
 
-@RequestMapping("/fuliao_purchase_order")
+@RequestMapping("/coloring_order")
 @Controller
-public class FuliaoPurchaseOrderController extends BaseController {
+public class ColorOrderController extends BaseController {
 	
 	@Autowired
-	FuliaoPurchaseOrderService fuliaoPurchaseOrderService;
+	ColoringOrderService coloringOrderService;
 	@Autowired
 	OrderService orderService;
 	@Autowired
@@ -54,10 +54,10 @@ public class FuliaoPurchaseOrderController extends BaseController {
 			String sortJSON, HttpSession session, HttpServletRequest request)
 			throws Exception {
 
-		String lcode = "fuliao_purchase_order/index";
+		String lcode = "coloring_order/index";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有查看辅料采购单列表的权限", null);
+			throw new PermissionDeniedDataAccessException("没有查看染色单列表的权限", null);
 		}
 
 		Date start_time_d = DateTool.parse(start_time);
@@ -78,15 +78,15 @@ public class FuliaoPurchaseOrderController extends BaseController {
 		sort.setDirection("desc");
 		sort.setProperty("created_at");
 		sortList.add(sort);
-		pager = fuliaoPurchaseOrderService.getList(pager, start_time_d, end_time_d, sortList);
+		pager = coloringOrderService.getList(pager, start_time_d, end_time_d, sortList);
 		if (pager != null & pager.getResult() != null) {
-			List<FuliaoPurchaseOrder> orderlist = (List<FuliaoPurchaseOrder>) pager.getResult();
+			List<ColoringOrder> orderlist = (List<ColoringOrder>) pager.getResult();
 		}
 
 		request.setAttribute("start_time", start_time_d);
 		request.setAttribute("end_time", end_time_d);
 		request.setAttribute("pager", pager);
-		return new ModelAndView("fuliao_purchase_order/index");
+		return new ModelAndView("coloring_order/index");
 	}
 	
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
@@ -94,13 +94,13 @@ public class FuliaoPurchaseOrderController extends BaseController {
 	public ModelAndView addproducingorder(HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "fuliao_purchase_order/add";
+		String lcode = "coloring_order/add";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有添加辅料采购单的权限", null);
+			throw new PermissionDeniedDataAccessException("没有添加染色单的权限", null);
 		}
 		try {
-			return new ModelAndView("fuliao_purchase_order/add");	
+			return new ModelAndView("coloring_order/add");	
 			
 		} catch (Exception e) {
 			throw e;
@@ -114,16 +114,16 @@ public class FuliaoPurchaseOrderController extends BaseController {
 			HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "fuliao_purchase_order/add";
+		String lcode = "coloring_order/add";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有添加辅料采购单的权限", null);
+			throw new PermissionDeniedDataAccessException("没有添加染色单的权限", null);
 		}
 		try {
 			if(orderId!=null){
 				Order order = orderService.get(orderId);
 				request.setAttribute("order", order);
-				return new ModelAndView("fuliao_purchase_order/addbyorder");
+				return new ModelAndView("coloring_order/addbyorder");
 			}
 			throw new Exception("缺少订单ID");
 			
@@ -134,36 +134,36 @@ public class FuliaoPurchaseOrderController extends BaseController {
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> add(FuliaoPurchaseOrder fuliaoPurchaseOrder, String details,HttpSession session, HttpServletRequest request,
+	public Map<String,Object> add(ColoringOrder coloringOrder, String details,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "fuliao_purchase_order/add";
+		String lcode = "coloring_order/add";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有添加辅料采购单的权限", null);
+			throw new PermissionDeniedDataAccessException("没有添加染色单的权限", null);
 		}
 		try {	
-			fuliaoPurchaseOrder.setCreated_at(DateTool.now());// 设置创建时间
-			fuliaoPurchaseOrder.setUpdated_at(DateTool.now());// 设置更新时间
-			fuliaoPurchaseOrder.setCreated_user(user.getId());// 设置创建人
-			Integer sampleId = fuliaoPurchaseOrder.getSampleId();
+			coloringOrder.setCreated_at(DateTool.now());// 设置创建时间
+			coloringOrder.setUpdated_at(DateTool.now());// 设置更新时间
+			coloringOrder.setCreated_user(user.getId());// 设置创建人
+			Integer sampleId = coloringOrder.getSampleId();
 			if(sampleId != null){
 				Sample sample = sampleService.get(sampleId);
-				fuliaoPurchaseOrder.setImg(sample.getImg());
-				fuliaoPurchaseOrder.setProductNumber(sample.getProductNumber());
-				fuliaoPurchaseOrder.setMaterial(sample.getMaterial());
-				fuliaoPurchaseOrder.setSize(sample.getSize());
-				fuliaoPurchaseOrder.setWeight(sample.getWeight());
-				fuliaoPurchaseOrder.setName(sample.getName());
-				fuliaoPurchaseOrder.setImg_s(sample.getImg_s());
-				fuliaoPurchaseOrder.setImg_ss(sample.getImg_ss());
+				coloringOrder.setImg(sample.getImg());
+				coloringOrder.setProductNumber(sample.getProductNumber());
+				coloringOrder.setMaterial(sample.getMaterial());
+				coloringOrder.setSize(sample.getSize());
+				coloringOrder.setWeight(sample.getWeight());
+				coloringOrder.setName(sample.getName());
+				coloringOrder.setImg_s(sample.getImg_s());
+				coloringOrder.setImg_ss(sample.getImg_ss());
 			}
-			List<FuliaoPurchaseOrderDetail> detaillist = SerializeTool
+			List<ColoringOrderDetail> detaillist = SerializeTool
 						.deserializeList(details,
-								FuliaoPurchaseOrderDetail.class);
-			fuliaoPurchaseOrder.setDetaillist(detaillist);
-			Integer tableOrderId = fuliaoPurchaseOrderService.add(fuliaoPurchaseOrder);
+								ColoringOrderDetail.class);
+			coloringOrder.setDetaillist(detaillist);
+			Integer tableOrderId = coloringOrderService.add(coloringOrder);
 			return this.returnSuccess("id", tableOrderId);
 		} catch (Exception e) {
 			throw e;
@@ -175,14 +175,14 @@ public class FuliaoPurchaseOrderController extends BaseController {
 	@RequestMapping(value = "/addbyorder", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> addbyorder(
-			FuliaoPurchaseOrder tableOrder, String details,
+			ColoringOrder tableOrder, String details,
 			HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "order/fuliaopurchase";
+		String lcode = "order/coloring";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有创建或编辑辅料采购单的权限",
+			throw new PermissionDeniedDataAccessException("没有创建或编辑染色单的权限",
 					null);
 		}
 		try {
@@ -193,7 +193,7 @@ public class FuliaoPurchaseOrderController extends BaseController {
 				if (tableOrder.getOrderId() == null
 						|| tableOrder.getOrderId() == 0) {
 					throw new PermissionDeniedDataAccessException(
-							"辅料采购单必须属于一张订单", null);
+							"染色单必须属于一张订单", null);
 				}
 				Order order = orderService.get(tableOrder.getOrderId());
 				if(order == null){
@@ -218,11 +218,11 @@ public class FuliaoPurchaseOrderController extends BaseController {
 				tableOrder.setSampleId(order.getSampleId());
 				tableOrder.setOrderNumber(order.getOrderNumber());
 				
-				List<FuliaoPurchaseOrderDetail> detaillist = SerializeTool
+				List<ColoringOrderDetail> detaillist = SerializeTool
 						.deserializeList(details,
-								FuliaoPurchaseOrderDetail.class);
+								ColoringOrderDetail.class);
 				tableOrder.setDetaillist(detaillist);
-				tableOrderId = fuliaoPurchaseOrderService.add(tableOrder);
+				tableOrderId = coloringOrderService.add(tableOrder);
 			} else {// 编辑
 				if (tableOrder.getOrderId() == null
 						|| tableOrder.getOrderId() == 0) {
@@ -230,11 +230,11 @@ public class FuliaoPurchaseOrderController extends BaseController {
 							"缺少订单ID", null);
 				}
 				tableOrder.setUpdated_at(DateTool.now());
-				List<FuliaoPurchaseOrderDetail> detaillist = SerializeTool
+				List<ColoringOrderDetail> detaillist = SerializeTool
 						.deserializeList(details,
-								FuliaoPurchaseOrderDetail.class);
+								ColoringOrderDetail.class);
 				tableOrder.setDetaillist(detaillist);
-				tableOrderId = fuliaoPurchaseOrderService.update(tableOrder);
+				tableOrderId = coloringOrderService.update(tableOrder);
 			}
 			return this.returnSuccess("id", tableOrderId);
 		} catch (Exception e) {
@@ -248,12 +248,12 @@ public class FuliaoPurchaseOrderController extends BaseController {
 	public Map<String,Object> delete(@PathVariable int id,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "fuliao_purchase_order/delete";
+		String lcode = "coloring_order/delete";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有删除辅料采购单的权限", null);
+			throw new PermissionDeniedDataAccessException("没有删除染色单的权限", null);
 		}
-		int success = fuliaoPurchaseOrderService.remove(id);
+		int success = coloringOrderService.remove(id);
 		
 		return this.returnSuccess();
 		
@@ -261,15 +261,15 @@ public class FuliaoPurchaseOrderController extends BaseController {
 	
 	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public FuliaoPurchaseOrder get(@PathVariable int id, HttpSession session,HttpServletRequest request,
+	public ColoringOrder get(@PathVariable int id, HttpSession session,HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
-		String lcode = "fuliao_purchase_order/get";
+		String lcode = "coloring_order/get";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有查看辅料采购单详情的权限", null);
+			throw new PermissionDeniedDataAccessException("没有查看染色单详情的权限", null);
 		}
-		FuliaoPurchaseOrder fuliaoPurchaseOrder = fuliaoPurchaseOrderService.get(id);
-		return fuliaoPurchaseOrder;
+		ColoringOrder coloringOrder = coloringOrderService.get(id);
+		return coloringOrder;
 	}
 	
 	@RequestMapping(value = "/put/{id}", method = RequestMethod.GET)
@@ -278,19 +278,19 @@ public class FuliaoPurchaseOrderController extends BaseController {
 			HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "fuliao_purchase_order/edit";
+		String lcode = "coloring_order/edit";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if (!hasAuthority) {
 			throw new PermissionDeniedDataAccessException("没有添加原材料采购单的权限", null);
 		}
 		try {
 			if(tableOrderId!=null){
-				FuliaoPurchaseOrder fuliaoPurchaseOrder = fuliaoPurchaseOrderService.get(tableOrderId);
-				request.setAttribute("fuliaoPurchaseOrder", fuliaoPurchaseOrder);
-				if(fuliaoPurchaseOrder.getOrderId()!=null){
-					return new ModelAndView("fuliao_purchase_order/editbyorder");
+				ColoringOrder coloringOrder = coloringOrderService.get(tableOrderId);
+				request.setAttribute("coloringOrder", coloringOrder);
+				if(coloringOrder.getOrderId()!=null){
+					return new ModelAndView("coloring_order/editbyorder");
 				}else{
-					return new ModelAndView("fuliao_purchase_order/edit");
+					return new ModelAndView("coloring_order/edit");
 				}
 				
 			}
@@ -303,24 +303,23 @@ public class FuliaoPurchaseOrderController extends BaseController {
 	
 	@RequestMapping(value = "/put", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> update(FuliaoPurchaseOrder fuliaoPurchaseOrder, String details,HttpSession session, HttpServletRequest request,
+	public Map<String,Object> update(ColoringOrder coloringOrder, String details,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "fuliao_purchase_order/edit";
+		String lcode = "coloring_order/edit";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有编辑辅料采购单的权限", null);
+			throw new PermissionDeniedDataAccessException("没有编辑染色单的权限", null);
 		}
-		fuliaoPurchaseOrder.setUpdated_at(DateTool.now());
-		List<FuliaoPurchaseOrderDetail> detaillist = SerializeTool
+		coloringOrder.setUpdated_at(DateTool.now());
+		List<ColoringOrderDetail> detaillist = SerializeTool
 				.deserializeList(details,
-						FuliaoPurchaseOrderDetail.class);
-		fuliaoPurchaseOrder.setDetaillist(detaillist);
-		Integer tableOrderId = fuliaoPurchaseOrderService.update(fuliaoPurchaseOrder);
+						ColoringOrderDetail.class);
+		coloringOrder.setDetaillist(detaillist);
+		Integer tableOrderId = coloringOrderService.update(coloringOrder);
 		return this.returnSuccess("id", tableOrderId);
 		
 	}
 	
 	
 }
-

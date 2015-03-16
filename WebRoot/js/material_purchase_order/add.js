@@ -50,6 +50,7 @@ $(document).ready( function() {
 		var materialPurchaseGrid = new OrderGrid({
 			tipText:"原材料采购单",
 			url:"material_purchase_order/add",
+			postUrl:"material_purchase_order/put",
 			$content:$(".materialorderWidget"),
 			tbOptions:{
 				colnames : [

@@ -142,6 +142,7 @@ function OrderGrid(settings){
 	
 	
 	this.url = settings.url || "";
+	this.postUrl = settings.postUrl;
 	this.$content.find(".saveform").submit(function(){
 		if (!Common.checkform(this)) {
 			return false;
@@ -155,12 +156,14 @@ function OrderGrid(settings){
 			formdata.details = JSON.stringify(detailTbdata);
 		}		
 		
+		var url = Object.url;
 		var tipText = Object.tipText || "当前表格";
 		if(formdata.id == "" || formdata.id == undefined || formdata.id == null){
 			delete formdata.id;
 			tipText = "创建" + tipText;
 		}else{
 			tipText = "修改" + tipText;
+			url = Object.postUrl || url;
 		}
 		
 		
@@ -168,8 +171,10 @@ function OrderGrid(settings){
 			var detailTbdata2 = Object.TableInstance2.getTableData();
 			formdata.details_2 = JSON.stringify(detailTbdata2);
 		}
+		
+		
 		$.ajax( {
-			url :Object.url,
+			url :url,
 			type :'POST',
 			data :$.param(formdata),
 			success : function(result) {

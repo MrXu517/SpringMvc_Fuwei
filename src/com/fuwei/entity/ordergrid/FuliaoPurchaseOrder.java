@@ -11,7 +11,7 @@ import net.keepsoft.commons.annotation.Temporary;
 
 //原材料采购单
 @Table("tb_fuliaopurchaseorder")
-public class FuliaoPurchaseOrder {
+public class FuliaoPurchaseOrder extends BaseTableOrder{
 	@IdentityId
 	private int id;
 	private Integer orderId;//订单ID
@@ -26,6 +26,122 @@ public class FuliaoPurchaseOrder {
 	private List<FuliaoPurchaseOrderDetail> detaillist ;
 	
 	private int factoryId;//染色单位
+	
+	
+	private Integer companyId;// 公司ID
+	private String kehu;// 客户
+	// 接下来的Sample的属性
+	private Integer sampleId;// 样品ID
+	
+	private String name;// 样品名称
+
+	private String img;// 图片
+	private String material;// 材料
+	private double weight;// 克重
+	private String size;// 尺寸
+	private String productNumber;// 产品编号
+	private String orderNumber;//订单编号
+	private String img_s;// 中等缩略图
+	private String img_ss;// 缩略图
+	
+	
+	
+	
+	public String getImg_s() {
+		return img_s;
+	}
+
+	public void setImg_s(String img_s) {
+		this.img_s = img_s;
+	}
+
+	public String getImg_ss() {
+		return img_ss;
+	}
+
+	public void setImg_ss(String img_ss) {
+		this.img_ss = img_ss;
+	}
+
+	public Integer getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(Integer companyId) {
+		this.companyId = companyId;
+	}
+
+	public String getKehu() {
+		return kehu;
+	}
+
+	public void setKehu(String kehu) {
+		this.kehu = kehu;
+	}
+
+	public Integer getSampleId() {
+		return sampleId;
+	}
+
+	public void setSampleId(Integer sampleId) {
+		this.sampleId = sampleId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
+	public String getMaterial() {
+		return material;
+	}
+
+	public void setMaterial(String material) {
+		this.material = material;
+	}
+
+	public double getWeight() {
+		return weight;
+	}
+
+	public void setWeight(double weight) {
+		this.weight = weight;
+	}
+
+	public String getSize() {
+		return size;
+	}
+
+	public void setSize(String size) {
+		this.size = size;
+	}
+
+	public String getProductNumber() {
+		return productNumber;
+	}
+
+	public void setProductNumber(String productNumber) {
+		this.productNumber = productNumber;
+	}
+
+	public String getOrderNumber() {
+		return orderNumber;
+	}
+
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
+	}
 
 	public int getId() {
 		return id;
