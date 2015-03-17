@@ -180,19 +180,15 @@
 										</div>
 
 										<div class="form-group col-md-6">
-											<label for="memo" class="col-sm-3 control-label">
+											<label for="charge_user" class="col-sm-3 control-label">
 												跟单人
 											</label>
 											<div class="col-sm-8">
-												<select name="charge_user" id="charge_user"
+												<select disabled name="charge_user" id="charge_user"
 													class="form-control">
-													<%
-														for (User item : SystemCache.userlist) {
-													%>
-													<option value="<%=item.getId()%>"><%=item.getName()%></option>
-													<%
-														}
-													%>
+													<option value="<%=order.getCharge_user()%>"
+														selected><%=SystemCache.getUserName(order
+							.getCharge_user())%></option>
 												</select>
 
 											</div>
@@ -205,7 +201,8 @@
 											<div class="col-sm-8">
 												<input type="text" name="amount" id="amount"
 													class="form-control" value="<%=order.getAmount()%>"
-													class="require double" defaultvalue="<%=order.getAmount()%>"/>
+													class="require double"
+													defaultvalue="<%=order.getAmount()%>" />
 
 											</div>
 											<div class="col-sm-1"></div>
@@ -222,7 +219,7 @@
 											</div>
 											<div class="col-sm-1"></div>
 										</div>
-										
+
 									</fieldset>
 
 									<fieldset id="orderDetail">
@@ -231,7 +228,7 @@
 										</legend>
 										<table class="table table-responsive detailTb">
 											<caption>
-											<!-- <button type="button"
+												<!-- <button type="button"
 													class="btn btn-primary addRow pull-left">
 													添加一行
 												</button> -->
@@ -256,7 +253,7 @@
 													<th width="15%">
 														单价
 													</th>
-												<!-- 	<th width="15%">
+													<!-- 	<th width="15%">
 														操作
 													</th> -->
 												</tr>
@@ -275,8 +272,8 @@
 													<td class="size"><%=detail.getSize()%>
 													</td>
 													<td>
-													<input type="text" class="form-control quantity value"
-																				value="<%=detail.getQuantity()%>" />
+														<input type="text" class="form-control quantity value"
+															value="<%=detail.getQuantity()%>" />
 													</td>
 													<td class="price"><%=detail.getPrice()%>
 													</td>
@@ -309,7 +306,7 @@
 											</div>
 											<div class="col-sm-1"></div>
 										</div>
-										
+
 										<div class="form-group col-md-6">
 											<label for="kehu" class="col-sm-3 control-label">
 												客户

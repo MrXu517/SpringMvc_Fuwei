@@ -2,6 +2,7 @@ package com.fuwei.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
 import com.fuwei.entity.ordergrid.ColoringOrder;
 import com.fuwei.entity.ordergrid.ColoringOrderDetail;
+import com.fuwei.entity.ordergrid.FuliaoPurchaseOrder;
 import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.OrderService;
@@ -217,6 +219,7 @@ public class ColorOrderController extends BaseController {
 				tableOrder.setKehu(order.getKehu());
 				tableOrder.setSampleId(order.getSampleId());
 				tableOrder.setOrderNumber(order.getOrderNumber());
+				tableOrder.setCharge_user(order.getCharge_user());//2015/3/17 添加跟单人
 				
 				List<ColoringOrderDetail> detaillist = SerializeTool
 						.deserializeList(details,
@@ -272,7 +275,31 @@ public class ColorOrderController extends BaseController {
 		return coloringOrder;
 	}
 	
-	@RequestMapping(value = "/put/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView detail(@PathVariable Integer id, HttpSession session,
+			HttpServletRequest request) throws Exception {
+		
+		if (id == null) {
+			throw new Exception("缺少染色单ID");
+		}		
+		String lcode = "fuliao_purchase_order/detail";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有查看染色单详情的权限", null);
+		}
+		
+		ColoringOrder coloringOrder = coloringOrderService.get(id);
+		
+		List<ColoringOrder> coloringOrderList = new ArrayList<ColoringOrder>();
+		coloringOrderList.add(coloringOrder);
+		request.setAttribute("coloringOrderList", coloringOrderList);
+		Map<String,Object> data = new HashMap<String,Object>();  
+	    data.put("gridName","coloringorder");  
+		return new ModelAndView("printorder/preview",data);
+	}
+	
+	@RequestMapping(value = "/put/{tableOrderId}", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView update(@PathVariable Integer tableOrderId,
 			HttpSession session, HttpServletRequest request,

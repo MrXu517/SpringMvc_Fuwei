@@ -10,10 +10,11 @@
 <%
 	Order order = (Order) request.getAttribute("order");
 	//辅料采购单
-	FuliaoPurchaseOrder fuliaoPurchaseOrder = (FuliaoPurchaseOrder) request
-			.getAttribute("fuliaoPurchaseOrder");
-	List<FuliaoPurchaseOrderDetail> fuliaoPurchaseOrderDetailList = fuliaoPurchaseOrder == null ? new ArrayList<FuliaoPurchaseOrderDetail>()
-			: fuliaoPurchaseOrder.getDetaillist();
+	List<FuliaoPurchaseOrder> fuliaoPurchaseOrderList = (List<FuliaoPurchaseOrder>) request
+			.getAttribute("fuliaoPurchaseOrderList");
+	fuliaoPurchaseOrderList = fuliaoPurchaseOrderList == null? new ArrayList<FuliaoPurchaseOrder>()
+			: fuliaoPurchaseOrderList;	
+	
 %>
 <!DOCTYPE html>
 <html>
@@ -24,9 +25,14 @@
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<link href="css/printorder/print.css" rel="stylesheet" type="text/css" />
 		<!-- 为了让IE浏览器运行最新的渲染模式 -->
 	</head>
 	<body class="">
+		<%for(FuliaoPurchaseOrder fuliaoPurchaseOrder : fuliaoPurchaseOrderList){ 
+			List<FuliaoPurchaseOrderDetail> fuliaoPurchaseOrderDetailList = fuliaoPurchaseOrder == null ? new ArrayList<FuliaoPurchaseOrderDetail>()
+			: fuliaoPurchaseOrder.getDetaillist();
+		%>
 		<div class="container-fluid gridTab auto_container">
 			<div class="row">
 				<div class="col-md-12 tablewidget">
@@ -212,5 +218,6 @@
 
 			</div>
 		</div>
+		<%} %>
 	</body>
 </html>

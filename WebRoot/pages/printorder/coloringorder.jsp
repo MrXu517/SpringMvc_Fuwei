@@ -1,19 +1,16 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
-<%@page import="com.fuwei.entity.OrderDetail"%>
-<%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.entity.ordergrid.ColoringOrder"%>
 <%@page import="com.fuwei.entity.ordergrid.ColoringOrderDetail"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%
-	Order order = (Order) request.getAttribute("order");
 	//染色单
-	ColoringOrder coloringOrder = (ColoringOrder) request
-			.getAttribute("coloringOrder");
-	List<ColoringOrderDetail> coloringOrderDetailList = coloringOrder == null ? new ArrayList<ColoringOrderDetail>()
-			: coloringOrder.getDetaillist();
+	List<ColoringOrder> coloringOrderList = (List<ColoringOrder>) request
+			.getAttribute("coloringOrderList");
+	coloringOrderList = coloringOrderList == null? new ArrayList<ColoringOrder>()
+			: coloringOrderList;	
 %>
 <!DOCTYPE html>
 <html>
@@ -27,6 +24,10 @@
 		<!-- 为了让IE浏览器运行最新的渲染模式 -->
 	</head>
 	<body>
+		<%for(ColoringOrder coloringOrder : coloringOrderList){ 
+			List<ColoringOrderDetail> coloringOrderDetailList = coloringOrder == null ? new ArrayList<ColoringOrderDetail>()
+			: coloringOrder.getDetaillist();
+		%>
 		<div class="container-fluid gridTab auto_container">
 			<div class="row">
 				<div class="col-md-12 tablewidget">
@@ -177,5 +178,6 @@
 
 			</div>
 		</div>
+		<%} %>
 	</body>
 </html>

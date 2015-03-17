@@ -19,7 +19,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>创建原材料采购单 -- 桐庐富伟针织厂</title>
+		<title>创建辅料采购单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -41,7 +41,7 @@
 
 		<link href="css/order/tablelist.css" rel="stylesheet" type="text/css" />
 		<script src="js/order/ordergrid.js" type="text/javascript"></script>
-		<script src="js/material_purchase_order/addbyorder.js" type="text/javascript"></script>
+		<script src="js/fuliao_purchase_order/addbyorder.js" type="text/javascript"></script>
 
 	</head>
 	<body>
@@ -58,10 +58,10 @@
 							<a href="order/detail/<%=order.getId()%>">订单详情</a>
 						</li>
 						<li>
-							<a href="order/tablelist?orderId=<%=order.getId()%>&tab=materialpurchaseorder">表格</a>
+							<a href="order/tablelist?orderId=<%=order.getId()%>&tab=fuliaopurchaseorder">表格</a>
 						</li>
 						<li class="active">
-							创建原材料采购单
+							创建辅料采购单
 						</li>
 					</ul>
 				</div>
@@ -76,14 +76,14 @@
 								<button type="submit"
 									class="pull-right btn btn-danger saveTable"
 									data-loading-text="正在保存...">
-									创建原材料采购单
+									创建辅料采购单
 								</button>
 
 								<div class="clear"></div>
 								<div class="col-md-12 tablewidget">
 									<table class="table">
 										<caption>
-											桐庐富伟针织厂原材料采购单
+											桐庐富伟针织厂辅料采购单
 										</caption>
 
 										<tbody>
@@ -133,7 +133,7 @@
 														</div>
 														<div class="form-group col-md-6">
 															<label for="factoryId" class="col-sm-3 control-label">
-																采购单位
+																供货方
 															</label>
 															<div class="col-sm-8">
 																<select class="form-control require"
@@ -154,17 +154,7 @@
 															<div class="col-sm-1"></div>
 														</div>
 
-														<div class="form-group col-md-6">
-															<label for="purchase_at" class="col-sm-3 control-label">
-																订购日期
-															</label>
-															<div class="col-sm-8">
-																<input class="form-control date require" type="text"
-																	name="purchase_at" id="purchase_at"
-																	value="<%=DateTool.formatDateYMD(DateTool.now())%>" />
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
+														
 
 														<div class="form-group col-md-6">
 															<label for="kehu" class="col-sm-3 control-label">
@@ -206,6 +196,19 @@
 														</div>
 														
 														<div class="form-group col-md-6">
+															<label for="charge_user" class="col-sm-3 control-label">
+																跟单人
+															</label>
+															<div class="col-sm-8">
+																<select disabled name="charge_user" id="charge_user"
+																	class="form-control">
+																	<option value="<%=order.getCharge_user()%>" selected><%=SystemCache.getUserName(order.getCharge_user())%></option>
+																</select>
+
+															</div>
+															<div class="col-sm-1"></div>
+														</div>
+														<div class="form-group col-md-6">
 															<label for="orderNumber" class="col-sm-3 control-label">
 																生产单号
 															</label>
@@ -228,28 +231,28 @@
 																class="btn btn-primary addRow pull-left">
 																添加一行
 															</button>
-															材料列表
+															采购列表
 														</caption>
 														<thead>
 															<tr>
 																<th width="15%">
-																	材料品种
-																</th>
-																<th width="15%">
-																	规格
-																</th>
-																<th width="15%">
-																	数量
-																</th>
-																<th width="15%">
-																	批次号
-																</th>
-																<th width="15%">
-																	价格（含税）
-																</th>
-																<th width="15%">
-																	操作
-																</th>
+																				辅料类型
+																			</th>
+																			<th width="15%">
+																				标准样
+																			</th>
+																			<th width="15%">
+																				数量
+																			</th>
+																			<th width="15%">
+																				价格
+																			</th>
+																			<th width="15%">
+																				交期
+																			</th>
+																			<th width="15%">
+																				操作
+																			</th>
 															</tr>
 														</thead>
 														<tbody>
@@ -267,92 +270,91 @@
 							</form>
 						</div>
 					</div>
-					<!--
-						 			添加编辑原材料采购对话框 -->
-					<div class="modal fade tableRowDialog" id="materialpurchaseDialog">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal">
-										<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-									</button>
-									<h4 class="modal-title">
-										添加一行
-									</h4>
+					
+<!--
+						 添加编辑辅料采购单对话框 -->
+								<div class="modal fade tableRowDialog" id="fuliaopurchaseDialog">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal">
+													<span aria-hidden="true">&times;</span><span
+														class="sr-only">Close</span>
+												</button>
+												<h4 class="modal-title">
+													添加一行
+												</h4>
+											</div>
+											<div class="modal-body">
+												<form class="form-horizontal rowform" role="form">
+													<div class="form-group col-md-12">
+														<label for="style" class="col-sm-3 control-label">
+															辅料类型
+														</label>
+														<div class="col-sm-8">
+															<input type="text" name="style" id="style"
+																class="form-control require" />
+														</div>
+														<div class="col-sm-1"></div>
+													</div>
+													<div class="form-group col-md-12">
+														<label for="standardsample" class="col-sm-3 control-label">
+															标准样
+														</label>
+														<div class="col-sm-8">
+															<input type="text" name="standardsample"
+																id="standardsample" class="form-control require" />
+														</div>
+														<div class="col-sm-1"></div>
+													</div>
+													<div class="form-group col-md-12">
+														<label for="quantity" class="col-sm-3 control-label">
+															数量
+														</label>
+														<div class="col-sm-8">
+															<input type="text" name="quantity" id="quantity"
+																class="form-control int require" />
+														</div>
+														<div class="col-sm-1"></div>
+													</div>
+													<div class="form-group col-md-12">
+														<label for="price" class="col-sm-3 control-label">
+															价格
+														</label>
+														<div class="col-sm-8">
+															<input type="text" name="price" id="price"
+																class="form-control double require" />
+														</div>
+														<div class="col-sm-1"></div>
+													</div>
+													<div class="form-group col-md-12">
+														<label for="end_at" class="col-sm-3 control-label">
+															交期
+														</label>
+														<div class="col-sm-8">
+															<input type="text" name="end_at" id="end_at"
+																class="form-control date require" />
+														</div>
+														<div class="col-sm-1"></div>
+													</div>
+
+													<div class="modal-footer">
+														<button type="submit" class="btn btn-primary"
+															data-loading-text="正在保存...">
+															保存
+														</button>
+														<button type="button" class="btn btn-default"
+															data-dismiss="modal">
+															关闭
+														</button>
+													</div>
+												</form>
+											</div>
+
+										</div>
+									</div>
 								</div>
-								<div class="modal-body">
-									<form class="form-horizontal rowform" role="form">
-										<div class="form-group col-md-12">
-											<label for="material" class="col-sm-3 control-label">
-												材料品种
-											</label>
-											<div class="col-sm-8">
-												<input type="text" name="material" id="material"
-													class="form-control require" />
-											</div>
-											<div class="col-sm-1"></div>
-										</div>
-										<div class="form-group col-md-12">
-											<label for="scale" class="col-sm-3 control-label">
-												规格
-											</label>
-											<div class="col-sm-8">
-												<input type="text" name="scale" id="scale"
-													class="form-control require" />
-											</div>
-											<div class="col-sm-1"></div>
-										</div>
-										<div class="form-group col-md-12">
-											<label for="quantity" class="col-sm-3 control-label">
-												数量
-											</label>
-											<div class="col-sm-8">
-												<input type="text" name="quantity" id="quantity"
-													class="form-control int require" />
-											</div>
-											<div class="col-sm-1"></div>
-										</div>
-										<div class="form-group col-md-12">
-											<label for="color" class="col-sm-3 control-label">
-												批次号
-											</label>
-											<div class="col-sm-8">
-												<input type="text" name="batch_number" id="batch_number"
-													class="form-control" />
-											</div>
-											<div class="col-sm-1"></div>
-										</div>
-
-
-										<div class="form-group col-md-12">
-											<label for="price" class="col-sm-3 control-label">
-												价格（含税）
-											</label>
-											<div class="col-sm-8">
-												<input type="text" name="price" id="price"
-													class="form-control double require" />
-											</div>
-											<div class="col-sm-1"></div>
-										</div>
-
-
-										<div class="modal-footer">
-											<button type="submit" class="btn btn-primary"
-												data-loading-text="正在保存...">
-												保存
-											</button>
-											<button type="button" class="btn btn-default"
-												data-dismiss="modal">
-												关闭
-											</button>
-										</div>
-									</form>
-								</div>
-
-							</div>
-						</div>
-					</div>
-					<!-- 添加编辑原材料采购对话框 -->
+								<!-- 添加编辑辅料采购单对话框 -->
 
 					<!-- 选择样品对话框 -->
 					<div class="modal fade" id="sampleDialog">

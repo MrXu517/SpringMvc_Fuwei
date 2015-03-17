@@ -58,7 +58,7 @@
 					</ul>
 				</div>
 				<div class="body">
-					<div class="container-fluid materialorderWidget">
+					<div class="container-fluid coloringorderWidget">
 						<div class="row">
 							<form class="saveform">
 								<input type="hidden" id="sampleId" name="sampleId"/>
@@ -172,6 +172,25 @@
 																</select>
 															</div>
 														</div>
+														<div class="form-group col-md-6">
+															<label for="charge_user" class="col-sm-3 control-label">
+																跟单人
+															</label>
+															<div class="col-sm-8">
+																<select name="charge_user" id="charge_user"
+																	class="form-control">
+																	<%
+																		for (User item : SystemCache.userlist) {
+																	%>
+																	<option value="<%=item.getId()%>"><%=item.getName()%></option>
+																	<%
+																		}
+																	%>
+																</select>
+
+															</div>
+															<div class="col-sm-1"></div>
+														</div>
 													</fieldset>
 
 
@@ -274,7 +293,7 @@
 														</label>
 														<div class="col-sm-8">
 															<input type="text" name="standardyarn" id="standardyarn"
-																class="form-control require" />
+																class="form-control" />
 														</div>
 														<div class="col-sm-1"></div>
 													</div>

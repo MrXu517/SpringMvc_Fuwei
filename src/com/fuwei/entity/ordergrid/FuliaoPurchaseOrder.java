@@ -44,7 +44,21 @@ public class FuliaoPurchaseOrder extends BaseTableOrder{
 	private String img_s;// 中等缩略图
 	private String img_ss;// 缩略图
 	
+	//2015-3-17 增加跟单人字段
+	private Integer charge_user;// 打样人 ，跟单人
 	
+	
+	
+	
+	
+	
+	public Integer getCharge_user() {
+		return charge_user;
+	}
+
+	public void setCharge_user(Integer charge_user) {
+		this.charge_user = charge_user;
+	}
 	
 	
 	public String getImg_s() {

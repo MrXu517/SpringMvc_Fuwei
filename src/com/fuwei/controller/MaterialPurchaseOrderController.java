@@ -26,6 +26,7 @@ import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
+import com.fuwei.entity.ordergrid.FuliaoPurchaseOrder;
 import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
 import com.fuwei.entity.ordergrid.MaterialPurchaseOrderDetail;
 import com.fuwei.entity.ordergrid.PlanOrder;
@@ -221,6 +222,7 @@ public class MaterialPurchaseOrderController extends BaseController {
 				tableOrder.setKehu(order.getKehu());
 				tableOrder.setSampleId(order.getSampleId());
 				tableOrder.setOrderNumber(order.getOrderNumber());
+				tableOrder.setCharge_user(order.getCharge_user());//2015/3/17 添加跟单人
 				
 				List<MaterialPurchaseOrderDetail> detaillist = SerializeTool
 						.deserializeList(details,
@@ -274,6 +276,27 @@ public class MaterialPurchaseOrderController extends BaseController {
 		}
 		MaterialPurchaseOrder materialPurchaseOrder = materialPurchaseOrderService.get(id);
 		return materialPurchaseOrder;
+	}
+	
+	@RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView detail(@PathVariable Integer id, HttpSession session,
+			HttpServletRequest request) throws Exception {
+		if (id == null) {
+			throw new Exception("缺少原材料采购单ID");
+		}
+		String lcode = "fuliao_purchase_order/detail";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有查看原材料采购单详情的权限", null);
+		}	
+		MaterialPurchaseOrder materialPurchaseOrder = materialPurchaseOrderService.get(id);
+		List<MaterialPurchaseOrder> materialPurchaseOrderList = new ArrayList<MaterialPurchaseOrder>();
+		materialPurchaseOrderList.add(materialPurchaseOrder);
+		request.setAttribute("materialPurchaseOrderList", materialPurchaseOrderList);
+		Map<String,Object> data = new HashMap<String,Object>();  
+	    data.put("gridName","materialpurchaseorder");  
+		return new ModelAndView("printorder/preview",data);
 	}
 	
 	@RequestMapping(value = "/put/{tableOrderId}", method = RequestMethod.GET)

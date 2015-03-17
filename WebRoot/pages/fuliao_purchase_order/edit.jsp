@@ -7,17 +7,17 @@
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
-<%@page import="com.fuwei.entity.ordergrid.MaterialPurchaseOrderDetail"%>
-<%@page import="com.fuwei.entity.ordergrid.MaterialPurchaseOrder"%>
+<%@page import="com.fuwei.entity.ordergrid.FuliaoPurchaseOrderDetail"%>
+<%@page import="com.fuwei.entity.ordergrid.FuliaoPurchaseOrder"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	MaterialPurchaseOrder materialPurchaseOrder = (MaterialPurchaseOrder)request.getAttribute("materialPurchaseOrder");
-	List<MaterialPurchaseOrderDetail> detaillist = materialPurchaseOrder.getDetaillist();
+	FuliaoPurchaseOrder fuliaoPurchaseOrder = (FuliaoPurchaseOrder)request.getAttribute("fuliaoPurchaseOrder");
+	List<FuliaoPurchaseOrderDetail> detaillist = fuliaoPurchaseOrder.getDetaillist();
 	if(detaillist == null){
-		detaillist = new ArrayList<MaterialPurchaseOrderDetail>();
+		detaillist = new ArrayList<FuliaoPurchaseOrderDetail>();
 	}
 %>
 <!DOCTYPE html>
@@ -46,7 +46,7 @@
 
 		<link href="css/order/tablelist.css" rel="stylesheet" type="text/css" />
 		<script src="js/order/ordergrid.js" type="text/javascript"></script>
-		<script src="js/material_purchase_order/add.js" type="text/javascript"></script>
+		<script src="js/fuliao_purchase_order/add.js" type="text/javascript"></script>
 
 	</head>
 	<body>
@@ -60,10 +60,10 @@
 							<a href="user/index">首页</a>
 						</li>
 						<li>
-							<a href="material_purchase_order/index">原材料采购单列表</a>
+							<a href="material_purchase_order/index">辅料采购单列表</a>
 						</li>
 						<li class="active">
-							编辑原材料采购单
+							编辑辅料采购单
 						</li>
 					</ul>
 				</div>
@@ -72,9 +72,9 @@
 						<div class="row">
 							<form class="saveform">
 								<input type="hidden" id="id" name="id"
-									value="<%=materialPurchaseOrder.getId()%>" class="require" />
+									value="<%=fuliaoPurchaseOrder.getId()%>" class="require" />
 								<input type="hidden" id="sampleId" name="sampleId"
-									value="<%=materialPurchaseOrder.getSampleId()%>" class="require" />
+									value="<%=fuliaoPurchaseOrder.getSampleId()%>" class="require" />
 								<button type="submit"
 									class="pull-right btn btn-danger saveTable"
 									data-loading-text="正在保存...">
@@ -85,7 +85,7 @@
 								<div class="col-md-12 tablewidget">
 									<table class="table">
 										<caption>
-											桐庐富伟针织厂原材料采购单
+											桐庐富伟针织厂辅料采购单
 										</caption>
 
 										<tbody>
@@ -102,7 +102,7 @@
 															<div class="col-sm-8">
 																<a href="#" class="thumbnail" id="sampleImgA"> <img
 																		id="sampleImg" alt="350 x 100%"
-																		src="/<%=materialPurchaseOrder.getImg_s()%>"> </a>
+																		src="/<%=fuliaoPurchaseOrder.getImg_s()%>"> </a>
 															</div>
 															<div class="col-sm-1"></div>
 														</div>
@@ -114,7 +114,7 @@
 															<div class="col-sm-8">
 																<input readonly type="text" name="name" id="name"
 																	class="form-control"
-																	value="<%=materialPurchaseOrder.getName() == null ? "" : materialPurchaseOrder.getName()%>" />
+																	value="<%=fuliaoPurchaseOrder.getName() == null ? "" : fuliaoPurchaseOrder.getName()%>" />
 
 															</div>
 															<div class="col-sm-1"></div>
@@ -127,7 +127,7 @@
 															<div class="col-sm-8">
 																<input readonly type="text" name="productNumber"
 																	id="productNumber" class="form-control"
-																	value="<%=materialPurchaseOrder.getProductNumber() == null ? "" : materialPurchaseOrder
+																	value="<%=fuliaoPurchaseOrder.getProductNumber() == null ? "" : fuliaoPurchaseOrder
 					.getProductNumber()%>" />
 
 															</div>
@@ -135,7 +135,7 @@
 														</div>
 														<div class="form-group col-md-6">
 															<label for="factoryId" class="col-sm-3 control-label">
-																采购单位
+																供货方
 															</label>
 															<div class="col-sm-8">
 																<select class="form-control require"
@@ -145,7 +145,7 @@
 																	</option>
 																	<%
 																		for (Factory factory : SystemCache.factorylist) {
-																			if(factory.getId() == materialPurchaseOrder.getFactoryId()){
+																			if(factory.getId() == fuliaoPurchaseOrder.getFactoryId()){
 																	%>
 																	<option value="<%=factory.getId()%>" selected='selected'><%=factory.getName()%></option>
 																	<%}else{ %>
@@ -160,17 +160,6 @@
 															<div class="col-sm-1"></div>
 														</div>
 
-														<div class="form-group col-md-6">
-															<label for="purchase_at" class="col-sm-3 control-label">
-																订购日期
-															</label>
-															<div class="col-sm-8">
-																<input class="form-control date require" type="text"
-																	name="purchase_at" id="purchase_at"
-																	value="<%=DateTool.formatDateYMD(materialPurchaseOrder.getPurchase_at())%>" />
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
 
 														<div class="form-group col-md-6">
 															<label for="kehu" class="col-sm-3 control-label">
@@ -179,7 +168,7 @@
 															<div class="col-sm-8">
 																<input disabled type="text" class="form-control"
 																	name="kehu" id="kehu"
-																	value="<%=materialPurchaseOrder.getKehu() == null ? "" : materialPurchaseOrder.getKehu()%>">
+																	value="<%=fuliaoPurchaseOrder.getKehu() == null ? "" : fuliaoPurchaseOrder.getKehu()%>">
 															</div>
 															<div class="col-sm-1"></div>
 														</div>
@@ -195,8 +184,8 @@
 																	</option>
 																	<%
 																		for (Company company : SystemCache.companylist) {
-																			if (materialPurchaseOrder.getCompanyId() != null
-																					&& company.getId() == materialPurchaseOrder.getCompanyId()) {
+																			if (fuliaoPurchaseOrder.getCompanyId() != null
+																					&& company.getId() == fuliaoPurchaseOrder.getCompanyId()) {
 																	%>
 																	<option value="<%=company.getId()%>" selected><%=company.getFullname()%></option>
 																	<%
@@ -210,14 +199,39 @@
 																</select>
 															</div>
 														</div>
-														
+														<div class="form-group col-md-6">
+															<label for="charge_user" class="col-sm-3 control-label">
+																跟单人
+															</label>
+															<div class="col-sm-8">
+																<select name="charge_user" id="charge_user"
+																	class="form-control">
+																	<%
+																		for (User item : SystemCache.userlist) {
+																			if (fuliaoPurchaseOrder.getCharge_user() != null
+																					&& item.getId() == fuliaoPurchaseOrder.getCharge_user()) {
+																	%>
+																	<option value="<%=item.getId()%>" selected><%=item.getName()%></option>
+																	<%
+																		} else {
+																	%>
+																	<option value="<%=item.getId()%>"><%=item.getName()%></option>
+																	<%
+																		}
+																		}
+																	%>
+																</select>
+
+															</div>
+															<div class="col-sm-1"></div>
+														</div>
 														<div class="form-group col-md-6">
 															<label for="orderNumber" class="col-sm-3 control-label">
 																生产单号
 															</label>
 															<div class="col-sm-8">
 																<input disabled type="text" class="form-control" name="orderNumber"
-																	id="orderNumber" value="<%=materialPurchaseOrder.getOrderNumber() == null ? "" : materialPurchaseOrder.getOrderNumber()%>">
+																	id="orderNumber" value="<%=fuliaoPurchaseOrder.getOrderNumber() == null ? "" : fuliaoPurchaseOrder.getOrderNumber()%>">
 															</div>
 															<div class="col-sm-1"></div>
 														</div>
@@ -234,45 +248,45 @@
 																class="btn btn-primary addRow pull-left">
 																添加一行
 															</button>
-															材料列表
+															采购列表
 														</caption>
 														<thead>
 															<tr>
 																<th width="15%">
-																	材料品种
-																</th>
-																<th width="15%">
-																	规格
-																</th>
-																<th width="15%">
-																	数量
-																</th>
-																<th width="15%">
-																	批次号
-																</th>
-																<th width="15%">
-																	价格（含税）
-																</th>
-																<th width="15%">
-																	操作
-																</th>
+																				辅料类型
+																			</th>
+																			<th width="15%">
+																				标准样
+																			</th>
+																			<th width="15%">
+																				数量
+																			</th>
+																			<th width="15%">
+																				价格
+																			</th>
+																			<th width="15%">
+																				交期
+																			</th>
+																			<th width="15%">
+																				操作
+																			</th>
 															</tr>
 														</thead>
 														<tbody>
 															<%
-																			for (MaterialPurchaseOrderDetail detail : detaillist) {
+																			for (FuliaoPurchaseOrderDetail detail : detaillist) {
 																		%>
 																		<tr class="tr"
 																			data='<%=SerializeTool.serialize(detail)%>'>
-																			<td class="material"><%=detail.getMaterial()%>
+																			<td class="style"><%=detail.getStyle()%>
 																			</td>
-																			<td class="scale"><%=detail.getScale()%>
+																			<td class="standardsample"><%=detail.getStandardsample()%>
 																			</td>
 																			<td class="quantity"><%=detail.getQuantity()%>
 																			</td>
-																			<td class="batch_number"><%=detail.getBatch_number()%>
-																			</td>
 																			<td class="price"><%=detail.getPrice()%>
+																			</td>
+																			<td class="end_at"><%=detail.getEnd_at()%>
 																			</td>
 																			<td class="_handle">
 																				<a class='editRow' href='#'>修改</a> |
@@ -296,92 +310,91 @@
 							</form>
 						</div>
 					</div>
-					<!--
-						 			添加编辑原材料采购对话框 -->
-					<div class="modal fade tableRowDialog" id="materialpurchaseDialog">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal">
-										<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-									</button>
-									<h4 class="modal-title">
-										添加一行
-									</h4>
+					
+<!--
+						 添加编辑辅料采购单对话框 -->
+								<div class="modal fade tableRowDialog" id="fuliaopurchaseDialog">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal">
+													<span aria-hidden="true">&times;</span><span
+														class="sr-only">Close</span>
+												</button>
+												<h4 class="modal-title">
+													添加一行
+												</h4>
+											</div>
+											<div class="modal-body">
+												<form class="form-horizontal rowform" role="form">
+													<div class="form-group col-md-12">
+														<label for="style" class="col-sm-3 control-label">
+															辅料类型
+														</label>
+														<div class="col-sm-8">
+															<input type="text" name="style" id="style"
+																class="form-control require" />
+														</div>
+														<div class="col-sm-1"></div>
+													</div>
+													<div class="form-group col-md-12">
+														<label for="standardsample" class="col-sm-3 control-label">
+															标准样
+														</label>
+														<div class="col-sm-8">
+															<input type="text" name="standardsample"
+																id="standardsample" class="form-control require" />
+														</div>
+														<div class="col-sm-1"></div>
+													</div>
+													<div class="form-group col-md-12">
+														<label for="quantity" class="col-sm-3 control-label">
+															数量
+														</label>
+														<div class="col-sm-8">
+															<input type="text" name="quantity" id="quantity"
+																class="form-control int require" />
+														</div>
+														<div class="col-sm-1"></div>
+													</div>
+													<div class="form-group col-md-12">
+														<label for="price" class="col-sm-3 control-label">
+															价格
+														</label>
+														<div class="col-sm-8">
+															<input type="text" name="price" id="price"
+																class="form-control double require" />
+														</div>
+														<div class="col-sm-1"></div>
+													</div>
+													<div class="form-group col-md-12">
+														<label for="end_at" class="col-sm-3 control-label">
+															交期
+														</label>
+														<div class="col-sm-8">
+															<input type="text" name="end_at" id="end_at"
+																class="form-control date require" />
+														</div>
+														<div class="col-sm-1"></div>
+													</div>
+
+													<div class="modal-footer">
+														<button type="submit" class="btn btn-primary"
+															data-loading-text="正在保存...">
+															保存
+														</button>
+														<button type="button" class="btn btn-default"
+															data-dismiss="modal">
+															关闭
+														</button>
+													</div>
+												</form>
+											</div>
+
+										</div>
+									</div>
 								</div>
-								<div class="modal-body">
-									<form class="form-horizontal rowform" role="form">
-										<div class="form-group col-md-12">
-											<label for="material" class="col-sm-3 control-label">
-												材料品种
-											</label>
-											<div class="col-sm-8">
-												<input type="text" name="material" id="material"
-													class="form-control require" />
-											</div>
-											<div class="col-sm-1"></div>
-										</div>
-										<div class="form-group col-md-12">
-											<label for="scale" class="col-sm-3 control-label">
-												规格
-											</label>
-											<div class="col-sm-8">
-												<input type="text" name="scale" id="scale"
-													class="form-control require" />
-											</div>
-											<div class="col-sm-1"></div>
-										</div>
-										<div class="form-group col-md-12">
-											<label for="quantity" class="col-sm-3 control-label">
-												数量
-											</label>
-											<div class="col-sm-8">
-												<input type="text" name="quantity" id="quantity"
-													class="form-control int require" />
-											</div>
-											<div class="col-sm-1"></div>
-										</div>
-										<div class="form-group col-md-12">
-											<label for="color" class="col-sm-3 control-label">
-												批次号
-											</label>
-											<div class="col-sm-8">
-												<input type="text" name="batch_number" id="batch_number"
-													class="form-control" />
-											</div>
-											<div class="col-sm-1"></div>
-										</div>
-
-
-										<div class="form-group col-md-12">
-											<label for="price" class="col-sm-3 control-label">
-												价格（含税）
-											</label>
-											<div class="col-sm-8">
-												<input type="text" name="price" id="price"
-													class="form-control double require" />
-											</div>
-											<div class="col-sm-1"></div>
-										</div>
-
-
-										<div class="modal-footer">
-											<button type="submit" class="btn btn-primary"
-												data-loading-text="正在保存...">
-												保存
-											</button>
-											<button type="button" class="btn btn-default"
-												data-dismiss="modal">
-												关闭
-											</button>
-										</div>
-									</form>
-								</div>
-
-							</div>
-						</div>
-					</div>
-					<!-- 添加编辑原材料采购对话框 -->
+								<!-- 添加编辑辅料采购单对话框 -->
 
 					<!-- 选择样品对话框 -->
 					<div class="modal fade" id="sampleDialog">

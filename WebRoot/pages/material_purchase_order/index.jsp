@@ -56,7 +56,7 @@
 
 	//权限相关
 	Boolean has_order_detail = SystemCache.hasAuthority(session,
-			"material_purchase_order/index");
+			"material_purchase_order/detail");
 	Boolean has_order_edit = SystemCache.hasAuthority(session,
 			"material_purchase_order/edit");
 	

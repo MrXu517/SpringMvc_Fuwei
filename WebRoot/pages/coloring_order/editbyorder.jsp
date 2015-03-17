@@ -68,7 +68,7 @@
 					</ul>
 				</div>
 				<div class="body">
-					<div class="container-fluid materialorderWidget">
+					<div class="container-fluid coloringorderWidget">
 						<div class="row">
 							<form class="saveform">
 								<input type="hidden" id="id" name="id"
@@ -201,7 +201,19 @@
 																</select>
 															</div>
 														</div>
-														
+														<div class="form-group col-md-6">
+															<label for="charge_user" class="col-sm-3 control-label">
+																跟单人
+															</label>
+															<div class="col-sm-8">
+																<select disabled name="charge_user" id="charge_user"
+																	class="form-control">
+																	<option value="<%=coloringOrder.getCharge_user()%>" selected><%=SystemCache.getUserName(coloringOrder.getCharge_user())%></option>
+																</select>
+
+															</div>
+															<div class="col-sm-1"></div>
+														</div>
 														<div class="form-group col-md-6">
 															<label for="orderNumber" class="col-sm-3 control-label">
 																生产单号
@@ -334,7 +346,7 @@
 														</label>
 														<div class="col-sm-8">
 															<input type="text" name="standardyarn" id="standardyarn"
-																class="form-control require" />
+																class="form-control" />
 														</div>
 														<div class="col-sm-1"></div>
 													</div>

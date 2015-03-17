@@ -2,6 +2,7 @@ package com.fuwei.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +23,11 @@ import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
+import com.fuwei.constant.OrderStatus;
 import com.fuwei.entity.Order;
+import com.fuwei.entity.OrderDetail;
+import com.fuwei.entity.OrderProduceStatus;
+import com.fuwei.entity.OrderStep;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
 import com.fuwei.entity.ordergrid.FuliaoPurchaseOrder;
@@ -217,6 +222,7 @@ public class FuliaoPurchaseOrderController extends BaseController {
 				tableOrder.setKehu(order.getKehu());
 				tableOrder.setSampleId(order.getSampleId());
 				tableOrder.setOrderNumber(order.getOrderNumber());
+				tableOrder.setCharge_user(order.getCharge_user());//2015/3/17 添加跟单人
 				
 				List<FuliaoPurchaseOrderDetail> detaillist = SerializeTool
 						.deserializeList(details,
@@ -272,7 +278,29 @@ public class FuliaoPurchaseOrderController extends BaseController {
 		return fuliaoPurchaseOrder;
 	}
 	
-	@RequestMapping(value = "/put/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView detail(@PathVariable Integer id, HttpSession session,
+			HttpServletRequest request) throws Exception {
+		if (id == null) {
+			throw new Exception("缺少辅料采购单ID");
+		}
+		String lcode = "fuliao_purchase_order/detail";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有查看辅料采购单详情的权限", null);
+		}	
+		FuliaoPurchaseOrder fuliaoPurchaseOrder = fuliaoPurchaseOrderService.get(id);
+		
+		List<FuliaoPurchaseOrder> fuliaoPurchaseOrderList = new ArrayList<FuliaoPurchaseOrder>();
+		fuliaoPurchaseOrderList.add(fuliaoPurchaseOrder);
+		request.setAttribute("fuliaoPurchaseOrderList", fuliaoPurchaseOrderList);
+		Map<String,Object> data = new HashMap<String,Object>();  
+	    data.put("gridName","fuliaopurchaseorder");  
+		return new ModelAndView("printorder/preview",data);
+	}
+	
+	@RequestMapping(value = "/put/{tableOrderId}", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView update(@PathVariable Integer tableOrderId,
 			HttpSession session, HttpServletRequest request,

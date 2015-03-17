@@ -14,9 +14,11 @@
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	MaterialPurchaseOrder materialPurchaseOrder = (MaterialPurchaseOrder)request.getAttribute("materialPurchaseOrder");
-	List<MaterialPurchaseOrderDetail> detaillist = materialPurchaseOrder.getDetaillist();
-	if(detaillist == null){
+	MaterialPurchaseOrder materialPurchaseOrder = (MaterialPurchaseOrder) request
+			.getAttribute("materialPurchaseOrder");
+	List<MaterialPurchaseOrderDetail> detaillist = materialPurchaseOrder
+			.getDetaillist();
+	if (detaillist == null) {
 		detaillist = new ArrayList<MaterialPurchaseOrderDetail>();
 	}
 %>
@@ -74,7 +76,8 @@
 								<input type="hidden" id="id" name="id"
 									value="<%=materialPurchaseOrder.getId()%>" class="require" />
 								<input type="hidden" id="sampleId" name="sampleId"
-									value="<%=materialPurchaseOrder.getSampleId()%>" class="require" />
+									value="<%=materialPurchaseOrder.getSampleId()%>"
+									class="require" />
 								<button type="submit"
 									class="pull-right btn btn-danger saveTable"
 									data-loading-text="正在保存...">
@@ -114,7 +117,8 @@
 															<div class="col-sm-8">
 																<input readonly type="text" name="name" id="name"
 																	class="form-control"
-																	value="<%=materialPurchaseOrder.getName() == null ? "" : materialPurchaseOrder.getName()%>" />
+																	value="<%=materialPurchaseOrder.getName() == null ? ""
+					: materialPurchaseOrder.getName()%>" />
 
 															</div>
 															<div class="col-sm-1"></div>
@@ -127,8 +131,8 @@
 															<div class="col-sm-8">
 																<input readonly type="text" name="productNumber"
 																	id="productNumber" class="form-control"
-																	value="<%=materialPurchaseOrder.getProductNumber() == null ? "" : materialPurchaseOrder
-					.getProductNumber()%>" />
+																	value="<%=materialPurchaseOrder.getProductNumber() == null ? ""
+							: materialPurchaseOrder.getProductNumber()%>" />
 
 															</div>
 															<div class="col-sm-1"></div>
@@ -138,17 +142,20 @@
 																采购单位
 															</label>
 															<div class="col-sm-8">
-																<select class="form-control require"
-																	name="factoryId" id="factoryId">
+																<select class="form-control require" name="factoryId"
+																	id="factoryId">
 																	<option value="">
 																		未选择
 																	</option>
 																	<%
 																		for (Factory factory : SystemCache.factorylist) {
-																			if(factory.getId() == materialPurchaseOrder.getFactoryId()){
+																			if (factory.getId() == materialPurchaseOrder.getFactoryId()) {
 																	%>
-																	<option value="<%=factory.getId()%>" selected='selected'><%=factory.getName()%></option>
-																	<%}else{ %>
+																	<option value="<%=factory.getId()%>"
+																		selected='selected'><%=factory.getName()%></option>
+																	<%
+																		} else {
+																	%>
 																	<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
 																	<%
 																		}
@@ -167,7 +174,8 @@
 															<div class="col-sm-8">
 																<input class="form-control date require" type="text"
 																	name="purchase_at" id="purchase_at"
-																	value="<%=DateTool.formatDateYMD(materialPurchaseOrder.getPurchase_at())%>" />
+																	value="<%=DateTool.formatDateYMD(materialPurchaseOrder
+							.getPurchase_at())%>" />
 															</div>
 															<div class="col-sm-1"></div>
 														</div>
@@ -179,7 +187,8 @@
 															<div class="col-sm-8">
 																<input disabled type="text" class="form-control"
 																	name="kehu" id="kehu"
-																	value="<%=materialPurchaseOrder.getKehu() == null ? "" : materialPurchaseOrder.getKehu()%>">
+																	value="<%=materialPurchaseOrder.getKehu() == null ? ""
+					: materialPurchaseOrder.getKehu()%>">
 															</div>
 															<div class="col-sm-1"></div>
 														</div>
@@ -196,7 +205,8 @@
 																	<%
 																		for (Company company : SystemCache.companylist) {
 																			if (materialPurchaseOrder.getCompanyId() != null
-																					&& company.getId() == materialPurchaseOrder.getCompanyId()) {
+																					&& company.getId() == materialPurchaseOrder
+																							.getCompanyId()) {
 																	%>
 																	<option value="<%=company.getId()%>" selected><%=company.getFullname()%></option>
 																	<%
@@ -210,14 +220,41 @@
 																</select>
 															</div>
 														</div>
-														
+														<div class="form-group col-md-6">
+															<label for="charge_user" class="col-sm-3 control-label">
+																跟单人
+															</label>
+															<div class="col-sm-8">
+																<select name="charge_user" id="charge_user"
+																	class="form-control">
+																	<%
+																		for (User item : SystemCache.userlist) {
+																			if (materialPurchaseOrder.getCharge_user() != null
+																					&& item.getId() == materialPurchaseOrder.getCharge_user()) {
+																	%>
+																	<option value="<%=item.getId()%>" selected><%=item.getName()%></option>
+																	<%
+																		} else {
+																	%>
+																	<option value="<%=item.getId()%>"><%=item.getName()%></option>
+																	<%
+																		}
+																		}
+																	%>
+																</select>
+
+															</div>
+															<div class="col-sm-1"></div>
+														</div>
 														<div class="form-group col-md-6">
 															<label for="orderNumber" class="col-sm-3 control-label">
 																生产单号
 															</label>
 															<div class="col-sm-8">
-																<input disabled type="text" class="form-control" name="orderNumber"
-																	id="orderNumber" value="<%=materialPurchaseOrder.getOrderNumber() == null ? "" : materialPurchaseOrder.getOrderNumber()%>">
+																<input disabled type="text" class="form-control"
+																	name="orderNumber" id="orderNumber"
+																	value="<%=materialPurchaseOrder.getOrderNumber() == null ? ""
+					: materialPurchaseOrder.getOrderNumber()%>">
 															</div>
 															<div class="col-sm-1"></div>
 														</div>
@@ -260,29 +297,29 @@
 														</thead>
 														<tbody>
 															<%
-																			for (MaterialPurchaseOrderDetail detail : detaillist) {
-																		%>
-																		<tr class="tr"
-																			data='<%=SerializeTool.serialize(detail)%>'>
-																			<td class="material"><%=detail.getMaterial()%>
-																			</td>
-																			<td class="scale"><%=detail.getScale()%>
-																			</td>
-																			<td class="quantity"><%=detail.getQuantity()%>
-																			</td>
-																			<td class="batch_number"><%=detail.getBatch_number()%>
-																			</td>
-																			<td class="price"><%=detail.getPrice()%>
-																			</td>
-																			<td class="_handle">
-																				<a class='editRow' href='#'>修改</a> |
-																				<a class='deleteRow' href='#'>删除</a>
-																			</td>
-																		</tr>
+																for (MaterialPurchaseOrderDetail detail : detaillist) {
+															%>
+															<tr class="tr"
+																data='<%=SerializeTool.serialize(detail)%>'>
+																<td class="material"><%=detail.getMaterial()%>
+																</td>
+																<td class="scale"><%=detail.getScale()%>
+																</td>
+																<td class="quantity"><%=detail.getQuantity()%>
+																</td>
+																<td class="batch_number"><%=detail.getBatch_number()%>
+																</td>
+																<td class="price"><%=detail.getPrice()%>
+																</td>
+																<td class="_handle">
+																	<a class='editRow' href='#'>修改</a> |
+																	<a class='deleteRow' href='#'>删除</a>
+																</td>
+															</tr>
 
-																		<%
-																			}
-																		%>
+															<%
+																}
+															%>
 														</tbody>
 													</table>
 													<div id="navigator"></div>

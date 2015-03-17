@@ -175,7 +175,7 @@
 										</div>
 
 										<div class="form-group col-md-6">
-											<label for="memo" class="col-sm-3 control-label">
+											<label for="charge_user" class="col-sm-3 control-label">
 												跟单人
 											</label>
 											<div class="col-sm-8">

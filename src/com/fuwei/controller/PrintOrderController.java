@@ -143,20 +143,20 @@ public class PrintOrderController extends BaseController {
 			
 			//获取原材料采购单
 			if(printAll || gridName.indexOf("materialpurchaseorder") > -1){
-				MaterialPurchaseOrder materialPurchaseOrder = materialPurchaseOrderService.getByOrder(orderId);
-				if(materialPurchaseOrder!=null){
+				List<MaterialPurchaseOrder> materialPurchaseOrderList = materialPurchaseOrderService.getByOrder(orderId);
+				if(materialPurchaseOrderList!=null && materialPurchaseOrderList.size() > 0){
 					grids += "materialpurchaseorder,";
-					request.setAttribute("materialPurchaseOrder", materialPurchaseOrder);
+					request.setAttribute("materialPurchaseOrderList", materialPurchaseOrderList);
 				}	
 			}
 			
 			
 			//获取染色单
 			if(printAll || gridName.indexOf("coloringorder") > -1){
-				ColoringOrder coloringOrder = coloringOrderService.getByOrder(orderId);
-				if(coloringOrder!=null){
+				List<ColoringOrder> coloringOrderList = coloringOrderService.getByOrder(orderId);
+				if(coloringOrderList!=null && coloringOrderList.size() > 0){
 					grids += "coloringorder,";
-					request.setAttribute("coloringOrder", coloringOrder);
+					request.setAttribute("coloringOrderList", coloringOrderList);
 				}	
 			}
 			
@@ -173,10 +173,10 @@ public class PrintOrderController extends BaseController {
 			
 			//获取辅料采购单
 			if(printAll || gridName.indexOf("fuliaopurchaseorder") > -1){
-				FuliaoPurchaseOrder fuliaoPurchaseOrder = fuliaoPurchaseOrderService.getByOrder(orderId);
-				if(fuliaoPurchaseOrder!=null){
+				List<FuliaoPurchaseOrder> fuliaoPurchaseOrderList = fuliaoPurchaseOrderService.getByOrder(orderId);
+				if(fuliaoPurchaseOrderList!=null && fuliaoPurchaseOrderList.size() > 0){
 					grids += "fuliaopurchaseorder,";
-					request.setAttribute("fuliaoPurchaseOrder", fuliaoPurchaseOrder);
+					request.setAttribute("fuliaoPurchaseOrderList", fuliaoPurchaseOrderList);
 				}	
 			}
 			

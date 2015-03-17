@@ -1826,7 +1826,7 @@
 														</label>
 														<div class="col-sm-8">
 															<input type="text" name="standardyarn" id="standardyarn"
-																class="form-control require" />
+																class="form-control" />
 														</div>
 														<div class="col-sm-1"></div>
 													</div>

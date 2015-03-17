@@ -1,24 +1,21 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
-<%@page import="com.fuwei.entity.OrderDetail"%>
-<%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.entity.ordergrid.MaterialPurchaseOrder"%>
 <%@page import="com.fuwei.entity.ordergrid.MaterialPurchaseOrderDetail"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%
-	Order order = (Order) request.getAttribute("order");
 	//原材料采购单
-	MaterialPurchaseOrder materialPurchaseOrder = (MaterialPurchaseOrder) request
-			.getAttribute("materialPurchaseOrder");
-	List<MaterialPurchaseOrderDetail> materialPurchaseOrderDetailList = materialPurchaseOrder == null ? new ArrayList<MaterialPurchaseOrderDetail>()
-			: materialPurchaseOrder.getDetaillist();
+	List<MaterialPurchaseOrder> materialPurchaseOrderList = (List<MaterialPurchaseOrder>) request
+			.getAttribute("materialPurchaseOrderList");
+	materialPurchaseOrderList = materialPurchaseOrderList == null? new ArrayList<MaterialPurchaseOrder>()
+			: materialPurchaseOrderList;
+	
 %>
 <!DOCTYPE html>
 <html>
 	<head>
-
 		<title>原材料采购单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
@@ -27,6 +24,10 @@
 		<!-- 为了让IE浏览器运行最新的渲染模式 -->
 	</head>
 	<body>
+		<%for(MaterialPurchaseOrder materialPurchaseOrder : materialPurchaseOrderList){ 
+			List<MaterialPurchaseOrderDetail> materialPurchaseOrderDetailList = materialPurchaseOrder == null ? new ArrayList<MaterialPurchaseOrderDetail>()
+			: materialPurchaseOrder.getDetaillist();
+		%>
 		<div class="container-fluid gridTab auto_container">
 			<div class="row">
 				<div class="col-md-12 tablewidget">
@@ -178,5 +179,6 @@
 
 			</div>
 		</div>
+	<%} %>
 	</body>
 </html>

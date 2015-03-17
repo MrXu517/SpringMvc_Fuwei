@@ -41,7 +41,7 @@ function OrderGrid(settings){
 	this.init = function(){
 		//2015-1-8添加设置打印按钮的href
 		this.orderId = this.$content.find("input[name='orderId']").val();
-		this.gridName = this.$content.attr("id");
+		this.gridName = this.$content.closest(".tab-pane").attr("id");
 		this.$content.find("a.printBtn").attr("href","printorder/print?orderId="+this.orderId+"&gridName=" + this.gridName );
 		if(this.tbOptions){
 			Object.TableInstance = TableTools.createTableInstance(Object.tbOptions);
