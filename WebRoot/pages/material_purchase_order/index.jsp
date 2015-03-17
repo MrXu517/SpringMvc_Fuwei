@@ -297,7 +297,7 @@
 												<%
 													if (has_order_detail) {
 												%>
-												<a href="material_purchase_order/detail/<%=materialPurchaseOrder.getId()%>">详情</a>
+												<a target="_blank" href="material_purchase_order/detail/<%=materialPurchaseOrder.getId()%>">详情</a>
 												<%
 													}
 												%>

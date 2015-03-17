@@ -297,7 +297,7 @@
 												<%
 													if (has_order_detail) {
 												%>
-												<a href="coloring_order/detail/<%=coloringOrder.getId()%>">详情</a>
+												<a target="_blank" href="coloring_order/detail/<%=coloringOrder.getId()%>">详情</a>
 												<%
 													}
 												%>

@@ -297,7 +297,7 @@
 												<%
 													if (has_order_detail) {
 												%>
-												<a href="fuliao_purchase_order/detail/<%=fuliaoPurchaseOrder.getId()%>">详情</a>
+												<a target="_blank" href="fuliao_purchase_order/detail/<%=fuliaoPurchaseOrder.getId()%>">详情</a>
 												<%
 													}
 												%>
