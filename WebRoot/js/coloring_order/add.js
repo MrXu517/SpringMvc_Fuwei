@@ -1,6 +1,6 @@
 $(document).ready( function() {
 	/* 设置当前选中的页 */
-	var $a = $("#left li a[href='coloring_order/index']");
+	var $a = $("#left li a[href='coloring_order/add']");
 	setActiveLeft($a.parent("li"));
 	/* 设置当前选中的页 */
 
@@ -52,6 +52,9 @@ $(document).ready( function() {
 			url:"coloring_order/add",
 			postUrl:"coloring_order/put",
 			$content:$(".coloringorderWidget"),
+			donecall:function(){
+				location.href = "coloring_order/index";
+			},
 			tbOptions:{
 				colnames : [
 				        {

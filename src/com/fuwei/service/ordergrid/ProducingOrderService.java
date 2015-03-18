@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
 import com.fuwei.entity.ordergrid.CarFixRecordOrder;
+import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
 import com.fuwei.entity.ordergrid.ProducingOrder;
 import com.fuwei.service.BaseService;
 import com.fuwei.util.DateTool;
@@ -185,7 +186,11 @@ public class ProducingOrderService extends BaseService {
 	// 删除生产单
 	public int remove(int id) throws Exception {
 		try{
-			return dao.update("delete from tb_producingorder WHERE  id = ?  and status !=6", id);
+			ProducingOrder temp = this.get(id);
+			if(!temp.deletable()){
+				throw new Exception("单据已执行完成，无法删除 ");
+			}
+			return dao.update("delete from tb_producingorder WHERE  id = ?", id);
 		}catch(Exception e){
 			SQLException sqlException = (java.sql.SQLException)e.getCause();
 			if(sqlException!=null && sqlException.getErrorCode() == 1451){//外键约束

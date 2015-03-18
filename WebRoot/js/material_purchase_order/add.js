@@ -1,6 +1,6 @@
 $(document).ready( function() {
 	/* 设置当前选中的页 */
-	var $a = $("#left li a[href='material_purchase_order/index']");
+	var $a = $("#left li a[href='material_purchase_order/add']");
 	setActiveLeft($a.parent("li"));
 	/* 设置当前选中的页 */
 
@@ -52,6 +52,9 @@ $(document).ready( function() {
 			url:"material_purchase_order/add",
 			postUrl:"material_purchase_order/put",
 			$content:$(".materialorderWidget"),
+			donecall:function(){
+				location.href = "material_purchase_order/index";
+			},
 			tbOptions:{
 				colnames : [
 						{

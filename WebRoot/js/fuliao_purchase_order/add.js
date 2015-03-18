@@ -1,6 +1,6 @@
 $(document).ready( function() {
 	/* 设置当前选中的页 */
-	var $a = $("#left li a[href='fuliao_purchase_order/index']");
+	var $a = $("#left li a[href='fuliao_purchase_order/add']");
 	setActiveLeft($a.parent("li"));
 	/* 设置当前选中的页 */
 
@@ -52,6 +52,9 @@ $(document).ready( function() {
 			url:"fuliao_purchase_order/add",
 			postUrl:"fuliao_purchase_order/put",
 			$content:$(".fuliaoorderWidget"),
+			donecall:function(){
+				location.href = "fuliao_purchase_order/index";
+			},
 			tbOptions:{
 				colnames : [
 							{

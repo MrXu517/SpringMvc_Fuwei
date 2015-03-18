@@ -15,6 +15,7 @@ import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
 import com.fuwei.entity.ordergrid.CarFixRecordOrder;
 import com.fuwei.entity.ordergrid.ColoringOrder;
+import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
 import com.fuwei.service.BaseService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
@@ -146,7 +147,11 @@ public class ColoringOrderService extends BaseService {
 	// 删除染色单
 	public int remove(int id) throws Exception {
 		try {
-			return dao.update("delete from tb_coloringorder WHERE  id = ?  and status !=6", id);
+			ColoringOrder temp = this.get(id);
+			if(!temp.deletable()){
+				throw new Exception("单据已执行完成，无法删除 ");
+			}
+			return dao.update("delete from tb_coloringorder WHERE  id = ?", id);
 		} catch (Exception e) {
 			SQLException sqlException = (java.sql.SQLException) e.getCause();
 			if (sqlException != null && sqlException.getErrorCode() == 1451) {// 外键约束

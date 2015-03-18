@@ -1,5 +1,7 @@
 function OrderGrid(settings){
 	var Object = this;
+	Object.donecall = settings.donecall;//2015-3-18添加
+	Object.tipText = settings.tipText;//2015-3-18添加
 	this.$content = settings.$content || null;
 	this.tbOptions = settings.tbOptions || null;
 	if(this.tbOptions){

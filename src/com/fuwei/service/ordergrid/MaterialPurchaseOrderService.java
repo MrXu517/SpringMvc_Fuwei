@@ -148,8 +148,12 @@ public class MaterialPurchaseOrderService extends BaseService {
 	// 删除原材料采购单
 	public int remove(int id) throws Exception {
 		try {
+			MaterialPurchaseOrder temp = this.get(id);
+			if(!temp.deletable()){
+				throw new Exception("单据已执行完成，无法删除 ");
+			}
 			return dao.update(
-					"delete from tb_materialpurchaseorder WHERE  id = ? and status !=6", id);
+					"delete from tb_materialpurchaseorder WHERE  id = ?", id);
 		} catch (Exception e) {
 			SQLException sqlException = (java.sql.SQLException) e.getCause();
 			if (sqlException != null && sqlException.getErrorCode() == 1451) {// 外键约束

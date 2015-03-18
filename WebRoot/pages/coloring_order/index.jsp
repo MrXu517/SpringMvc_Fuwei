@@ -59,6 +59,8 @@
 			"coloring_order/detail");
 	Boolean has_order_edit = SystemCache.hasAuthority(session,
 			"coloring_order/edit");
+	Boolean has_order_delete = SystemCache.hasAuthority(session,
+			"coloring_order/delete");
 	
 	//权限相关
 %>
@@ -82,7 +84,7 @@
 		<script src="js/plugins/bootstrap.min.js" type="text/javascript"></script>
 		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
-	
+
 		<link href="css/order/index.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
@@ -162,7 +164,7 @@
 												</select>
 											</div>
 										</div>
-										
+
 										<div class="form-group timegroup">
 											<label class="col-sm-3 control-label">
 												创建时间
@@ -237,9 +239,9 @@
 												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
-									
+
 								</div>
-								
+
 								<table class="table table-responsive">
 									<thead>
 										<tr>
@@ -297,7 +299,8 @@
 												<%
 													if (has_order_detail) {
 												%>
-												<a target="_blank" href="coloring_order/detail/<%=coloringOrder.getId()%>">详情</a>
+												<a target="_blank"
+													href="coloring_order/detail/<%=coloringOrder.getId()%>">详情</a>
 												<%
 													}
 												%>
@@ -305,12 +308,21 @@
 												
 													if (has_order_edit && coloringOrder.isEdit()) {
 												%>
-													|
-													<a href="coloring_order/put/<%=coloringOrder.getId()%>">编辑</a>
-													<%
+												|
+												<a href="coloring_order/put/<%=coloringOrder.getId()%>">编辑</a>
+												<%
 														}
 													%>
-													
+												<%
+												
+													if (has_order_delete && coloringOrder.deletable()) {
+												%>
+												|
+												<a href="#" data-cid="<%=coloringOrder.getId() %>"
+													class="delete">删除</a>
+												<%
+														}
+													%>
 
 											</td>
 										</tr>
@@ -328,9 +340,32 @@
 		</div>
 
 		<script type="text/javascript">
-			/*设置当前选中的页*/
-			var $a = $("#left li a[href='material_purchase_order/index']");
-			setActiveLeft($a.parent("li"));
-		</script>
+	/*设置当前选中的页*/
+	var $a = $("#left li a[href='coloring_order/index']");
+	setActiveLeft($a.parent("li"));
+	//删除单据 -- 开始
+	$(".delete").click( function() {
+		var id = $(this).attr("data-cid");
+		if (!confirm("确定要删除该单据吗？")) {
+			return false;
+		}
+		$.ajax( {
+			url :"coloring_order/delete/" + id,
+			type :'POST'
+		}).done( function(result) {
+			if (result.success) {
+				Common.Tip("删除单据成功", function() {
+					location.reload();
+				});
+			}
+		}).fail( function(result) {
+			Common.Error("删除单据失败：" + result.responseText);
+		}).always( function() {
+
+		});
+		return false;
+	});
+	//删除单据  -- 结束
+</script>
 	</body>
 </html>
