@@ -9,12 +9,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fuwei.entity.ordergrid.CarFixRecordOrder;
 import com.fuwei.entity.ordergrid.HeadBankOrder;
 import com.fuwei.entity.ordergrid.HeadBankOrderDetail;
 import com.fuwei.entity.ordergrid.PlanOrder;
 import com.fuwei.entity.ordergrid.ProducingOrder;
-import com.fuwei.entity.ordergrid.StoreOrder;
-//import com.fuwei.entity.ProducingOrderDetail;
+import com.fuwei.entity.ordergrid.StoreOrder; //import com.fuwei.entity.ProducingOrderDetail;
 //import com.fuwei.entity.ProducingOrderMaterialDetail;
 import com.fuwei.service.BaseService;
 import com.fuwei.service.QuoteOrderDetailService;
@@ -35,18 +35,20 @@ public class StoreOrderService extends BaseService {
 					|| storeOrder.getDetaillist().size() <= 0) {
 				throw new Exception("原材料仓库中至少得有一条材料列表记录");
 			} else {
-					storeOrder.setDetail_json(SerializeTool
-							.serialize(storeOrder.getDetaillist()));
-//					storeOrder
-//							.setDetail_2_json(SerializeTool
-//									.serialize(storeOrder
-//											.getDetail_2_list()));
+				storeOrder.setStatus(0);
+				storeOrder.setState("新建");
+				storeOrder.setDetail_json(SerializeTool.serialize(storeOrder
+						.getDetaillist()));
+				// storeOrder
+				// .setDetail_2_json(SerializeTool
+				// .serialize(storeOrder
+				// .getDetail_2_list()));
 
-					Integer storeOrderId = this.insert(storeOrder);
+				Integer storeOrderId = this.insert(storeOrder);
 
-					storeOrder.setId(storeOrderId);
+				storeOrder.setId(storeOrderId);
 
-					return storeOrderId;
+				return storeOrderId;
 			}
 		} catch (Exception e) {
 
@@ -62,19 +64,23 @@ public class StoreOrderService extends BaseService {
 					|| storeOrder.getDetaillist().size() <= 0) {
 				throw new Exception("原材料仓库中至少得有一条材料列表记录");
 			} else {
-					String details = SerializeTool.serialize(storeOrder
-							.getDetaillist());
-					storeOrder.setDetail_json(details);
-					
-//					storeOrder.setDetail_2_json(SerializeTool
-//							.serialize(storeOrder
-//									.getDetail_2_list()));
+				StoreOrder temp = this.get(storeOrder.getId());
+				if (!temp.isEdit()) {
+					throw new Exception("单据已执行完成，或已被取消，无法编辑 ");
+				}
+				String details = SerializeTool.serialize(storeOrder
+						.getDetaillist());
+				storeOrder.setDetail_json(details);
 
-					// 更新表
-					this.update(storeOrder, "id",
-							"created_user,created_at,orderId", true);
+				// storeOrder.setDetail_2_json(SerializeTool
+				// .serialize(storeOrder
+				// .getDetail_2_list()));
 
-					return storeOrder.getId();
+				// 更新表
+				this.update(storeOrder, "id",
+						"created_user,created_at,orderId", true);
+
+				return storeOrder.getId();
 			}
 		} catch (Exception e) {
 			throw e;
@@ -106,5 +112,28 @@ public class StoreOrderService extends BaseService {
 		}
 	}
 
+	@Transactional
+	public int completeByOrder(int orderId) throws Exception {
+		try {
+			return dao
+					.update(
+							"UPDATE tb_storeorder SET status=?,state=? WHERE orderId = ?",
+							6, "执行完成", orderId);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	@Transactional
+	public int updateStatus(int tableOrderId, int status, String state)
+			throws Exception {
+		try {
+			return dao.update(
+					"UPDATE tb_storeorder SET status=?,state=? WHERE id = ?",
+					status, state, tableOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 
 }

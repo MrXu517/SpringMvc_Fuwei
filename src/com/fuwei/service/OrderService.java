@@ -21,6 +21,17 @@ import com.fuwei.entity.ProductionNotification;
 import com.fuwei.entity.QuoteOrder;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
+import com.fuwei.service.ordergrid.CarFixRecordOrderService;
+import com.fuwei.service.ordergrid.CheckRecordOrderService;
+import com.fuwei.service.ordergrid.ColoringOrderService;
+import com.fuwei.service.ordergrid.FuliaoPurchaseOrderService;
+import com.fuwei.service.ordergrid.HalfCheckRecordOrderService;
+import com.fuwei.service.ordergrid.HeadBankOrderService;
+import com.fuwei.service.ordergrid.IroningRecordOrderService;
+import com.fuwei.service.ordergrid.MaterialPurchaseOrderService;
+import com.fuwei.service.ordergrid.PlanOrderService;
+import com.fuwei.service.ordergrid.ProducingOrderService;
+import com.fuwei.service.ordergrid.StoreOrderService;
 import com.fuwei.util.CreateNumberUtil;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
@@ -41,7 +52,33 @@ public class OrderService extends BaseService {
 	OrderProduceStatusService orderProduceStatusService;
 	@Autowired
 	ProductionNotificationService productionNotificationService;
-
+	
+	//2015-3-18添加
+	@Autowired
+	HeadBankOrderService headBankOrderService;
+	@Autowired
+	ProducingOrderService producingOrderService;
+	@Autowired
+	PlanOrderService planOrderService;
+	@Autowired
+	StoreOrderService storeOrderService;
+	@Autowired
+	HalfCheckRecordOrderService halfCheckRecordOrderService;
+	@Autowired
+	CheckRecordOrderService checkRecordOrderService;
+	@Autowired
+	ColoringOrderService coloringOrderService;
+	@Autowired
+	MaterialPurchaseOrderService materialPurchaseOrderService;
+	@Autowired
+	FuliaoPurchaseOrderService fuliaoPurchaseOrderService;
+	@Autowired
+	CarFixRecordOrderService carFixRecordOrderService;
+	@Autowired
+	IroningRecordOrderService ironingRecordOrderService;
+	//2015-3-18添加
+	
+	
 	// 获取订单列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,
 			Integer companyId, Integer salesmanId, Integer status,
@@ -302,6 +339,21 @@ public class OrderService extends BaseService {
 			// 若当前执行发货步骤，则修改订单的发货时间
 			if (status == OrderStatus.DELIVERING.ordinal()) {
 				order.setDelivery_at(DateTool.now());
+				
+				//2015-3-18添加，若当前执行发货步骤，则将所有表格status设为6
+				headBankOrderService.completeByOrder(orderId);
+				carFixRecordOrderService.completeByOrder(orderId);
+				checkRecordOrderService.completeByOrder(orderId);
+				coloringOrderService.completeByOrder(orderId);
+				fuliaoPurchaseOrderService.completeByOrder(orderId);
+				halfCheckRecordOrderService.completeByOrder(orderId);
+				ironingRecordOrderService.completeByOrder(orderId);
+				materialPurchaseOrderService.completeByOrder(orderId);
+				planOrderService.completeByOrder(orderId);
+				producingOrderService.completeByOrder(orderId);
+				storeOrderService.completeByOrder(orderId);
+				//2015-3-18添加，若当前执行发货步骤，则将所有表格status设为6
+				
 			}
 
 			// 2014-11-10 删除if，因为去掉了动态步骤

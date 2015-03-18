@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
+import com.fuwei.entity.ordergrid.CarFixRecordOrder;
 import com.fuwei.entity.ordergrid.FuliaoPurchaseOrder;
 import com.fuwei.service.BaseService;
 import com.fuwei.util.DateTool;
@@ -32,14 +33,16 @@ public class FuliaoPurchaseOrderService extends BaseService {
 					|| tableOrder.getDetaillist().size() <= 0) {
 				throw new Exception("辅料采购单中至少得有一条采购记录");
 			} else {
-				tableOrder.setDetail_json(SerializeTool
-							.serialize(tableOrder.getDetaillist()));
+				tableOrder.setStatus(0);
+				tableOrder.setState("新建");
+				tableOrder.setDetail_json(SerializeTool.serialize(tableOrder
+						.getDetaillist()));
 
-					Integer tableOrderId = this.insert(tableOrder);
+				Integer tableOrderId = this.insert(tableOrder);
 
-					tableOrder.setId(tableOrderId);
+				tableOrder.setId(tableOrderId);
 
-					return tableOrderId;
+				return tableOrderId;
 			}
 		} catch (Exception e) {
 
@@ -55,15 +58,19 @@ public class FuliaoPurchaseOrderService extends BaseService {
 					|| tableOrder.getDetaillist().size() <= 0) {
 				throw new Exception("辅料采购单中至少得有一条采购记录");
 			} else {
-					String details = SerializeTool.serialize(tableOrder
-							.getDetaillist());
-					tableOrder.setDetail_json(details);
+				FuliaoPurchaseOrder temp = this.get(tableOrder.getId());
+				if (!temp.isEdit()) {
+					throw new Exception("单据已执行完成，或已被取消，无法编辑 ");
+				}
+				String details = SerializeTool.serialize(tableOrder
+						.getDetaillist());
+				tableOrder.setDetail_json(details);
 
-					// 更新表
-					this.update(tableOrder, "id",
-							"created_user,created_at,orderId", true);
+				// 更新表
+				this.update(tableOrder, "id",
+						"created_user,created_at,orderId", true);
 
-					return tableOrder.getId();
+				return tableOrder.getId();
 			}
 		} catch (Exception e) {
 			throw e;
@@ -94,14 +101,14 @@ public class FuliaoPurchaseOrderService extends BaseService {
 			throw e;
 		}
 	}
-	
+
 	// 获取辅料采购单列表
-	public Pager getList(Pager pager, Date start_time, Date end_time, 
+	public Pager getList(Pager pager, Date start_time, Date end_time,
 			List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
 			String seq = "WHERE ";
-			
+
 			sql.append("select * from tb_fuliaopurchaseorder ");
 
 			if (start_time != null) {
@@ -115,8 +122,6 @@ public class FuliaoPurchaseOrderService extends BaseService {
 						+ "'");
 				seq = " AND ";
 			}
-			
-			
 
 			if (sortlist != null && sortlist.size() > 0) {
 
@@ -136,14 +141,15 @@ public class FuliaoPurchaseOrderService extends BaseService {
 			throw e;
 		}
 	}
-	
+
 	// 删除辅料采购单
 	public int remove(int id) throws Exception {
-		try{
-			return dao.update("delete from tb_fuliaopurchaseorder WHERE  id = ?", id);
-		}catch(Exception e){
-			SQLException sqlException = (java.sql.SQLException)e.getCause();
-			if(sqlException!=null && sqlException.getErrorCode() == 1451){//外键约束
+		try {
+			return dao.update(
+					"delete from tb_fuliaopurchaseorder WHERE  id = ?  and status !=6", id);
+		} catch (Exception e) {
+			SQLException sqlException = (java.sql.SQLException) e.getCause();
+			if (sqlException != null && sqlException.getErrorCode() == 1451) {// 外键约束
 				log.error(e);
 				throw new Exception("已被引用，无法删除，请先删除与辅料采购单有关的引用");
 			}
@@ -151,5 +157,29 @@ public class FuliaoPurchaseOrderService extends BaseService {
 		}
 	}
 
+	@Transactional
+	public int completeByOrder(int orderId) throws Exception {
+		try {
+			return dao
+					.update(
+							"UPDATE tb_fuliaopurchaseorder SET status=?,state=? WHERE orderId = ?",
+							6, "执行完成", orderId);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	@Transactional
+	public int updateStatus(int tableOrderId, int status, String state)
+			throws Exception {
+		try {
+			return dao
+					.update(
+							"UPDATE tb_fuliaopurchaseorder SET status=?,state=? WHERE id = ?",
+							status, state, tableOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 
 }

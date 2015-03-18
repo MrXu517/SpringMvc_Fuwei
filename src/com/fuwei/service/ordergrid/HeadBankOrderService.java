@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fuwei.entity.ordergrid.CarFixRecordOrder;
 import com.fuwei.entity.ordergrid.HeadBankOrder;
 import com.fuwei.entity.ordergrid.HeadBankOrderDetail;
 import com.fuwei.service.BaseService;
@@ -26,24 +27,28 @@ public class HeadBankOrderService extends BaseService {
 	@Transactional
 	public int add(HeadBankOrder headbankOrder) throws Exception {
 		try {
-//			if (headbankOrder.getDetaillist() == null
-//					|| headbankOrder.getDetaillist().size() <= 0) {
-//				throw new Exception("头带质量记录单中至少得有一条详情记录");
-//			} else {
-				
-//				headbankOrder.setDetail_json(SerializeTool.serialize(headbankOrder.getDetaillist()));
-				
-				Integer headbankOrderId = this.insert(headbankOrder);
+			headbankOrder.setStatus(0);
+			headbankOrder.setState("新建");
+			// if (headbankOrder.getDetaillist() == null
+			// || headbankOrder.getDetaillist().size() <= 0) {
+			// throw new Exception("头带质量记录单中至少得有一条详情记录");
+			// } else {
 
-				headbankOrder.setId(headbankOrderId);
+			//headbankOrder.setDetail_json(SerializeTool.serialize(headbankOrder
+			// .getDetaillist()));
 
-//				for (HeadBankOrderDetail detail : headbankOrder.getDetaillist()) {
-//					detail.setHeadBankOrderId(headbankOrderId);
-//				}
-//				addDetailList(headbankOrder.getDetaillist());
+			Integer headbankOrderId = this.insert(headbankOrder);
 
-				return headbankOrderId;
-//			}
+			headbankOrder.setId(headbankOrderId);
+
+			// for (HeadBankOrderDetail detail : headbankOrder.getDetaillist())
+			// {
+			// detail.setHeadBankOrderId(headbankOrderId);
+			// }
+			// addDetailList(headbankOrder.getDetaillist());
+
+			return headbankOrderId;
+			// }
 		} catch (Exception e) {
 
 			throw e;
@@ -54,63 +59,71 @@ public class HeadBankOrderService extends BaseService {
 	@Transactional
 	public int update(HeadBankOrder headBankOrder) throws Exception {
 		try {
-//			if (headBankOrder.getDetaillist() == null
-//					|| headBankOrder.getDetaillist().size() <= 0) {
-//				throw new Exception("头带质量记录单中至少得有一条详情记录");
-//			} else {
-//				String details = SerializeTool.serialize(headBankOrder.getDetaillist());
-//				headBankOrder.setDetail_json(details);
-				
-				// 更新表
-				this.update(headBankOrder, "id",
-						"created_user,created_at,orderId", true);
+			// if (headBankOrder.getDetaillist() == null
+			// || headBankOrder.getDetaillist().size() <= 0) {
+			// throw new Exception("头带质量记录单中至少得有一条详情记录");
+			// } else {
+			// String details =
+			// SerializeTool.serialize(headBankOrder.getDetaillist());
+			// headBankOrder.setDetail_json(details);
+			HeadBankOrder temp = this.get(headBankOrder.getId());
+			if (!temp.isEdit()) {
+				throw new Exception("单据已执行完成，或已被取消，无法编辑 ");
+			}
+			// 更新表
+			this.update(headBankOrder, "id", "created_user,created_at,orderId",
+					true);
 
-//				// 删除原来单子的detail
-//				deleteDetailList(headBankOrder.getId());
-//				// 再添加新的detail]
-//				for (HeadBankOrderDetail detail : headBankOrder.getDetaillist()) {
-//					detail.setHeadBankOrderId(headBankOrder.getId());
-//				}
-//				addDetailList(headBankOrder.getDetaillist());
+			// // 删除原来单子的detail
+			// deleteDetailList(headBankOrder.getId());
+			// // 再添加新的detail]
+			// for (HeadBankOrderDetail detail : headBankOrder.getDetaillist())
+			// {
+			// detail.setHeadBankOrderId(headBankOrder.getId());
+			// }
+			// addDetailList(headBankOrder.getDetaillist());
 
-				return headBankOrder.getId();
-//			}
+			return headBankOrder.getId();
+			// }
 		} catch (Exception e) {
 			throw e;
 		}
 
 	}
+
 	// 获取头套记录单
 	public HeadBankOrder getByOrder(int orderId) throws Exception {
 		try {
 			HeadBankOrder order = dao.queryForBean(
 					"select * from tb_headbankorder where orderId = ?",
 					HeadBankOrder.class, orderId);
-			if(order == null){
+			if (order == null) {
 				return null;
 			}
-//			if(order.getDetail_json() == null){
-//				order.setDetaillist(new ArrayList<HeadBankOrderDetail>());
-//				return order;
-//			}
-//			order.setDetaillist(SerializeTool.deserializeList(order.getDetail_json(), HeadBankOrderDetail.class));
+			// if(order.getDetail_json() == null){
+			// order.setDetaillist(new ArrayList<HeadBankOrderDetail>());
+			// return order;
+			// }
+			// order.setDetaillist(SerializeTool.deserializeList(order.
+			// getDetail_json(), HeadBankOrderDetail.class));
 			return order;
 		} catch (Exception e) {
 			throw e;
 		}
 	}
-	
+
 	// 获取头套记录单
 	public HeadBankOrder get(int id) throws Exception {
 		try {
 			HeadBankOrder order = dao.queryForBean(
 					"select * from tb_headbankorder where id = ?",
 					HeadBankOrder.class, id);
-//			if(order.getDetail_json() == null){
-//				order.setDetaillist(new ArrayList<HeadBankOrderDetail>());
-//				return order;
-//			}
-//			order.setDetaillist(SerializeTool.deserializeList(order.getDetail_json(), HeadBankOrderDetail.class));
+			// if(order.getDetail_json() == null){
+			// order.setDetaillist(new ArrayList<HeadBankOrderDetail>());
+			// return order;
+			// }
+			// order.setDetaillist(SerializeTool.deserializeList(order.
+			// getDetail_json(), HeadBankOrderDetail.class));
 			return order;
 		} catch (Exception e) {
 			throw e;
@@ -118,19 +131,21 @@ public class HeadBankOrderService extends BaseService {
 	}
 
 	// 获取订单详情列表
-//	public List<HeadBankOrderDetail> getDetailList(int headBankOrderId)
-//			throws Exception {
-//		try {
-//			HeadBankOrder order = dao.queryForBean(
-//					"select * from tb_headbankorder where id = ?",
-//					HeadBankOrder.class, headBankOrderId);
-//			
-//			List<HeadBankOrderDetail> detailList = SerializeTool.deserializeList(order.getDetail_json(), HeadBankOrderDetail.class);
-//			return detailList;
-//		} catch (Exception e) {
-//			throw e;
-//		}
-//	}
+	// public List<HeadBankOrderDetail> getDetailList(int headBankOrderId)
+	// throws Exception {
+	// try {
+	// HeadBankOrder order = dao.queryForBean(
+	// "select * from tb_headbankorder where id = ?",
+	// HeadBankOrder.class, headBankOrderId);
+	//			
+	// List<HeadBankOrderDetail> detailList =
+	// SerializeTool.deserializeList(order.getDetail_json(),
+	// HeadBankOrderDetail.class);
+	// return detailList;
+	// } catch (Exception e) {
+	// throw e;
+	// }
+	// }
 
 	// 添加头套质量记录单详情
 	@Transactional
@@ -154,6 +169,31 @@ public class HeadBankOrderService extends BaseService {
 					.update(
 							"delete from tb_headbankorder_detail WHERE  headBankOrderId =?",
 							headBankOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	@Transactional
+	public int completeByOrder(int orderId) throws Exception {
+		try {
+			return dao
+					.update(
+							"UPDATE tb_headbankorder SET status=?,state=? WHERE orderId = ?",
+							6, "执行完成", orderId);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	@Transactional
+	public int updateStatus(int tableOrderId, int status, String state)
+			throws Exception {
+		try {
+			return dao
+					.update(
+							"UPDATE tb_headbankorder SET status=?,state=? WHERE id = ?",
+							status, state, tableOrderId);
 		} catch (Exception e) {
 			throw e;
 		}

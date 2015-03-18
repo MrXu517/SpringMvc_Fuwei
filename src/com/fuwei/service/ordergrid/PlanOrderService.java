@@ -9,11 +9,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fuwei.entity.ordergrid.CarFixRecordOrder;
 import com.fuwei.entity.ordergrid.HeadBankOrder;
 import com.fuwei.entity.ordergrid.HeadBankOrderDetail;
 import com.fuwei.entity.ordergrid.PlanOrder;
-import com.fuwei.entity.ordergrid.ProducingOrder;
-//import com.fuwei.entity.ProducingOrderDetail;
+import com.fuwei.entity.ordergrid.ProducingOrder; //import com.fuwei.entity.ProducingOrderDetail;
 //import com.fuwei.entity.ProducingOrderMaterialDetail;
 import com.fuwei.service.BaseService;
 import com.fuwei.service.QuoteOrderDetailService;
@@ -34,23 +34,25 @@ public class PlanOrderService extends BaseService {
 					|| planOrder.getDetaillist().size() <= 0) {
 				throw new Exception("计划单中至少得有一条颜色及数量详情记录");
 			} else {
-//				if (planOrder.getDetail_2_list() == null
-//						|| planOrder.getDetail_2_list().size() <= 0) {
-//					throw new Exception("计划单中至少得有一条生产计划详情记录");
-//				} else {
-					planOrder.setDetail_json(SerializeTool
-							.serialize(planOrder.getDetaillist()));
-//					planOrder
-//							.setDetail_2_json(SerializeTool
-//									.serialize(planOrder
-//											.getDetail_2_list()));
+				// if (planOrder.getDetail_2_list() == null
+				// || planOrder.getDetail_2_list().size() <= 0) {
+				// throw new Exception("计划单中至少得有一条生产计划详情记录");
+				// } else {
+				planOrder.setStatus(0);
+				planOrder.setState("新建");
+				planOrder.setDetail_json(SerializeTool.serialize(planOrder
+						.getDetaillist()));
+				// planOrder
+				// .setDetail_2_json(SerializeTool
+				// .serialize(planOrder
+				// .getDetail_2_list()));
 
-					Integer planOrderId = this.insert(planOrder);
+				Integer planOrderId = this.insert(planOrder);
 
-					planOrder.setId(planOrderId);
+				planOrder.setId(planOrderId);
 
-					return planOrderId;
-//				}
+				return planOrderId;
+				// }
 			}
 		} catch (Exception e) {
 
@@ -66,24 +68,28 @@ public class PlanOrderService extends BaseService {
 					|| planOrder.getDetaillist().size() <= 0) {
 				throw new Exception("计划单中至少得有一条颜色及数量详情记录");
 			} else {
-//				if (planOrder.getDetail_2_list() == null
-//						|| planOrder.getDetail_2_list().size() <= 0) {
-//					throw new Exception("计划单中至少得有一条生产计划详情记录");
-//				} else {
-					String details = SerializeTool.serialize(planOrder
-							.getDetaillist());
-					planOrder.setDetail_json(details);
-					
-//					planOrder.setDetail_2_json(SerializeTool
-//							.serialize(planOrder
-//									.getDetail_2_list()));
+				PlanOrder temp = this.get(planOrder.getId());
+				if (!temp.isEdit()) {
+					throw new Exception("单据已执行完成，或已被取消，无法编辑 ");
+				}
+				// if (planOrder.getDetail_2_list() == null
+				// || planOrder.getDetail_2_list().size() <= 0) {
+				// throw new Exception("计划单中至少得有一条生产计划详情记录");
+				// } else {
+				String details = SerializeTool.serialize(planOrder
+						.getDetaillist());
+				planOrder.setDetail_json(details);
 
-					// 更新表
-					this.update(planOrder, "id",
-							"created_user,created_at,orderId", true);
+				// planOrder.setDetail_2_json(SerializeTool
+				// .serialize(planOrder
+				// .getDetail_2_list()));
 
-					return planOrder.getId();
-//				}
+				// 更新表
+				this.update(planOrder, "id", "created_user,created_at,orderId",
+						true);
+
+				return planOrder.getId();
+				// }
 			}
 		} catch (Exception e) {
 			throw e;
@@ -107,19 +113,41 @@ public class PlanOrderService extends BaseService {
 	public PlanOrder get(int id) throws Exception {
 		try {
 			PlanOrder order = dao.queryForBean(
-					"select * from tb_planorder where id = ?",
-					PlanOrder.class, id);
-//			if (order.getDetail_json() == null) {
-//				order.setDetaillist(new ArrayList<HeadBankOrderDetail>());
-//				return order;
-//			}
-//			order.setDetaillist(SerializeTool.deserializeList(order
-//					.getDetail_json(), HeadBankOrderDetail.class));
+					"select * from tb_planorder where id = ?", PlanOrder.class,
+					id);
+			// if (order.getDetail_json() == null) {
+			// order.setDetaillist(new ArrayList<HeadBankOrderDetail>());
+			// return order;
+			// }
+			// order.setDetaillist(SerializeTool.deserializeList(order
+			// .getDetail_json(), HeadBankOrderDetail.class));
 			return order;
 		} catch (Exception e) {
 			throw e;
 		}
 	}
 
+	@Transactional
+	public int completeByOrder(int orderId) throws Exception {
+		try {
+			return dao
+					.update(
+							"UPDATE tb_planorder SET status=?,state=? WHERE orderId = ?",
+							6, "执行完成", orderId);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 
+	@Transactional
+	public int updateStatus(int tableOrderId, int status, String state)
+			throws Exception {
+		try {
+			return dao.update(
+					"UPDATE tb_planorder SET status=?,state=? WHERE id = ?",
+					status, state, tableOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 }

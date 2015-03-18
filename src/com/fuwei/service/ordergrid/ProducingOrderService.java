@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
+import com.fuwei.entity.ordergrid.CarFixRecordOrder;
 import com.fuwei.entity.ordergrid.ProducingOrder;
 import com.fuwei.service.BaseService;
 import com.fuwei.util.DateTool;
@@ -36,6 +37,8 @@ public class ProducingOrderService extends BaseService {
 						|| producingOrder.getDetail_2_list().size() <= 0) {
 					throw new Exception("生产单中至少得有一条生产材料详情记录");
 				} else {
+					producingOrder.setStatus(0);
+					producingOrder.setState("新建");
 					producingOrder.setDetail_json(SerializeTool
 							.serialize(producingOrder.getDetaillist()));
 					producingOrder
@@ -68,6 +71,10 @@ public class ProducingOrderService extends BaseService {
 						|| producingOrder.getDetail_2_list().size() <= 0) {
 					throw new Exception("生产单中至少得有一条生产材料详情记录");
 				} else {
+					ProducingOrder temp = this.get(producingOrder.getId());
+					if (!temp.isEdit()) {
+						throw new Exception("单据已执行完成，或已被取消，无法编辑 ");
+					}
 					String details = SerializeTool.serialize(producingOrder
 							.getDetaillist());
 					producingOrder.setDetail_json(details);
@@ -178,13 +185,31 @@ public class ProducingOrderService extends BaseService {
 	// 删除生产单
 	public int remove(int id) throws Exception {
 		try{
-			return dao.update("delete from tb_producingorder WHERE  id = ?", id);
+			return dao.update("delete from tb_producingorder WHERE  id = ?  and status !=6", id);
 		}catch(Exception e){
 			SQLException sqlException = (java.sql.SQLException)e.getCause();
 			if(sqlException!=null && sqlException.getErrorCode() == 1451){//外键约束
 				log.error(e);
 				throw new Exception("已被引用，无法删除，请先删除与生产单有关的引用");
 			}
+			throw e;
+		}
+	}
+	
+	@Transactional 
+	public int completeByOrder(int orderId) throws Exception {
+		try {
+			return dao.update("UPDATE tb_producingorder SET status=?,state=? WHERE orderId = ?", 6,"执行完成", orderId);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	@Transactional 
+	public int updateStatus(int tableOrderId ,int status,String state) throws Exception {
+		try {
+			return dao.update("UPDATE tb_producingorder SET status=?,state=? WHERE id = ?", status,state, tableOrderId);
+		} catch (Exception e) {
 			throw e;
 		}
 	}
