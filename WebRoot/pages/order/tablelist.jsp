@@ -2,7 +2,7 @@
 	contentType="text/html; charset=utf-8"%>
 <%@page import="com.fuwei.entity.OrderDetail"%>
 <%@page import="com.fuwei.entity.Order"%>
-
+<%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.entity.ordergrid.HeadBankOrder"%>
 <%@page import="com.fuwei.entity.ordergrid.HeadBankOrderDetail"%>
 <%@page import="com.fuwei.entity.ordergrid.ProducingOrder"%>
@@ -931,6 +931,9 @@
 																			总数量
 																		</th>
 																		<th width="15%">
+																			领取人
+																		</th>
+																		<th width="15%">
 																			标准样纱
 																		</th>
 																		<th width="15%">
@@ -949,6 +952,8 @@
 																		<td class="material"><%=detail.getMaterial()%>
 																		</td>
 																		<td class="quantity"><%=detail.getQuantity()%>
+																		</td>
+																		<td class="factoryId"><%=SystemCache.getFactoryName(detail.getFactoryId())%>
 																		</td>
 																		<td class="yarn"><%=detail.getYarn()%>
 																		</td>
@@ -1023,6 +1028,27 @@
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
+													<div class="form-group col-md-12">
+															<label for="factoryId" class="col-sm-3 control-label">
+																领取人
+															</label>
+															<div class="col-sm-8">
+																<select class="form-control require" name="factoryId"
+																	id="factoryId">
+																	<option value="">
+																		未选择
+																	</option>
+																	<%
+																		for (Factory factory : SystemCache.factorylist) {
+																	%>
+																	<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
+																	<%
+																		}
+																	%>
+																</select>
+															</div>
+															<div class="col-sm-1"></div>
+														</div>
 													<div class="form-group col-md-12">
 														<label for="yarn" class="col-sm-3 control-label">
 															标准样纱

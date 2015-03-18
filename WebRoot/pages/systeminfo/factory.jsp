@@ -36,7 +36,7 @@
 		<script src="js/systeminfo/factory.js" type="text/javascript"></script>
 
 	</head>
-	<body>
+	<body>&nbsp; 
 		<%@ include file="../common/head.jsp"%>
 		<div id="Content">
 			<div id="main">
@@ -167,9 +167,9 @@
 													<td><%=factory.getAddress()%></td>
 													<td>
 														<a class="editFactory" href="#"
-															data-cid="<%=factory.getId()%>">编辑</a> |
-														<a class="deleteFactory" href="#"
-															data-cid="<%=factory.getId()%>">删除</a>
+															data-cid="<%=factory.getId()%>">编辑</a>
+														<!-- | <a class="deleteFactory" href="#"
+															data-cid="<%=factory.getId()%>">删除</a> -->
 													</td>
 												</tr>
 												<%

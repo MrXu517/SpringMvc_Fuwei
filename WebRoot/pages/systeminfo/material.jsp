@@ -129,9 +129,9 @@
 													<td><%=temp.getName()%></td>
 													<td>
 														<a class="editMaterial" href="#"
-															data-cid="<%=temp.getId()%>">编辑</a> |
-														<a class="deleteMaterial" href="#"
-															data-cid="<%=temp.getId()%>">删除</a>
+															data-cid="<%=temp.getId()%>">编辑</a>
+														<!-- | <a class="deleteMaterial" href="#"
+															data-cid="<%=temp.getId()%>">删除</a>  -->
 													</td>
 												</tr>
 												<%

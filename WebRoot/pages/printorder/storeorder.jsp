@@ -106,6 +106,9 @@
 												总数量
 											</th>
 											<th width="15%">
+												领取人
+											</th>
+											<th width="15%">
 												标准样纱
 											</th>
 										</tr>
@@ -120,6 +123,8 @@
 											<td class="material"><%=detail.getMaterial()%>
 											</td>
 											<td class="quantity"><%=detail.getQuantity()%>
+											</td>
+											<td class="factoryId"><%=SystemCache.getFactoryName(detail.getFactoryId())%>
 											</td>
 											<td class="yarn"><%=detail.getYarn()%>
 											</td>

@@ -154,6 +154,11 @@ $(document).ready(function() {
 						width :'15%'
 					},
 					{
+						name :'factoryId',
+						colname :'领取人',
+						width :'15%'
+					},
+					{
 						name :'yarn',
 						colname :'标准样纱',
 						width :'15%'
