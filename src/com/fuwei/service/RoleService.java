@@ -69,7 +69,7 @@ public class RoleService extends BaseService {
 	// 编辑角色
 	public int update(Role role) throws Exception {
 		try{
-			return this.update(role, "id", null);
+			return this.update(role, "id", null,true);
 		}catch(Exception e){
 			throw e;
 		}

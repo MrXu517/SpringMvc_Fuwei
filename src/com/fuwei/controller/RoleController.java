@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
@@ -32,6 +33,20 @@ public class RoleController extends BaseController {
 	RoleService roleService;
 	@Autowired
 	AuthorityService authorityService;
+	
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView List(HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		String lcode = "role";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有角色管理的权限", null);
+		}
+		request.setAttribute("rolelist", SystemCache.rolelist);
+		return new ModelAndView("systeminfo/role");
+
+	}
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
@@ -82,10 +97,10 @@ public class RoleController extends BaseController {
 	public Role get(@PathVariable int id,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		
-		String lcode = "role/index";
+		String lcode = "role";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有查看角色列表的权限", null);
+			throw new PermissionDeniedDataAccessException("没有查看角色的权限", null);
 		}
 		
 		Role role = roleService.get(id);

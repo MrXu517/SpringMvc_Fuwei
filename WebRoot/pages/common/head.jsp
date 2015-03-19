@@ -46,6 +46,8 @@
 	Boolean h_has_systeminfo_factory = SystemCache.hasAuthority(session,"factory");
 	Boolean h_has_systeminfo_gongxu = SystemCache.hasAuthority(session,"gongxu");
 	Boolean h_has_systeminfo_user = SystemCache.hasAuthority(session,"user");
+	//角色管理
+	Boolean h_has_systeminfo_role = SystemCache.hasAuthority(session,"role");
 	
 	//染色单
 	Boolean h_has_coloring_order_index = SystemCache.hasAuthority(session,"coloring_order/index");//染色单
@@ -53,6 +55,9 @@
 	//辅料采购单
 	Boolean h_has_fuliao_purchase_order_index = SystemCache.hasAuthority(session,"fuliao_purchase_order/index");//辅料采购单
 	Boolean h_has_fuliao_purchase_order_add = SystemCache.hasAuthority(session,"fuliao_purchase_order/add");//辅料采购单
+	
+	
+	
 	
 	//权限相关
 	
@@ -316,6 +321,11 @@
 							<%if(h_has_systeminfo_user){ %>
 							<li>
 								<a href="user/list">用户管理</a>
+							</li>
+							<%} %>
+							<%if(h_has_systeminfo_role){ %>
+							<li>
+								<a href="role/list">角色管理</a>
 							</li>
 							<%} %>
 						
