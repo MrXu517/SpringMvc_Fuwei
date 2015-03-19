@@ -2,13 +2,13 @@ package com.fuwei.entity.ordergrid;
 
 public class ColoringOrderDetail {
 	private String color;//色号
-	private String material ; //材料
+	private Integer material ; //材料
 	private int quantity;//数量
 	private String standardyarn;//标准样纱
-	public String getMaterial() {
+	public Integer getMaterial() {
 		return material;
 	}
-	public void setMaterial(String material) {
+	public void setMaterial(Integer material) {
 		this.material = material;
 	}
 	public int getQuantity() {

@@ -3,6 +3,7 @@
 <%@page import="com.fuwei.entity.OrderDetail"%>
 <%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.entity.Factory"%>
+<%@page import="com.fuwei.entity.Material"%>
 <%@page import="com.fuwei.entity.ordergrid.HeadBankOrder"%>
 <%@page import="com.fuwei.entity.ordergrid.HeadBankOrderDetail"%>
 <%@page import="com.fuwei.entity.ordergrid.ProducingOrder"%>
@@ -319,7 +320,7 @@
 																		</td>
 																		<td class="weight"><%=detail.getWeight()%>
 																		</td>
-																		<td class="yarn"><%=detail.getYarn()%>
+																		<td class="yarn_name"><%=SystemCache.getMaterialName(detail.getYarn())%>
 																		</td>
 																		<td class="size"><%=detail.getSize()%>
 																		</td>
@@ -495,7 +496,7 @@
 																		</td>
 																		<td class="weight"><%=detail.getWeight()%>
 																		</td>
-																		<td class="yarn"><%=detail.getYarn()%>
+																		<td class="yarn_name"><%=SystemCache.getMaterialName(detail.getYarn())%>
 																		</td>
 																		<td class="size"><%=detail.getSize()%>
 																		</td>
@@ -554,7 +555,7 @@
 																	%>
 																	<tr class="tr"
 																		data='<%=SerializeTool.serialize(detail)%>'>
-																		<td class="material"><%=detail.getMaterial()%>
+																		<td class="material_name"><%=SystemCache.getMaterialName(detail.getMaterial())%>
 																		</td>
 																		<td class="color"><%=detail.getColor()%>
 																		</td>
@@ -608,8 +609,12 @@
 															材料
 														</label>
 														<div class="col-sm-8">
-															<input type="text" name="material" id="material"
-																class="form-control require" />
+															<select name="material" id="material" class="form-control require">
+																<option value="">未选择</option>
+																<%for(Material material : SystemCache.materiallist){ %>
+																	<option value="<%=material.getId() %>" ><%=material.getName() %></option>
+																<%} %>
+															</select>
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -787,7 +792,7 @@
 																		</td>
 																		<td class="weight"><%=detail.getWeight()%>
 																		</td>
-																		<td class="yarn"><%=detail.getYarn()%>
+																		<td class="yarn_name"><%=SystemCache.getMaterialName(detail.getYarn())%>
 																		</td>
 																		<td class="size"><%=detail.getSize()%>
 																		</td>
@@ -949,11 +954,11 @@
 																		data='<%=SerializeTool.serialize(detail)%>'>
 																		<td class="color"><%=detail.getColor()%>
 																		</td>
-																		<td class="material"><%=detail.getMaterial()%>
+																		<td class="material_name"><%=SystemCache.getMaterialName(detail.getMaterial())%>
 																		</td>
 																		<td class="quantity"><%=detail.getQuantity()%>
 																		</td>
-																		<td class="factoryId"><%=SystemCache.getFactoryName(detail.getFactoryId())%>
+																		<td class="factory_name"><%=SystemCache.getFactoryName(detail.getFactoryId())%>
 																		</td>
 																		<td class="yarn"><%=detail.getYarn()%>
 																		</td>
@@ -1013,8 +1018,12 @@
 															材料
 														</label>
 														<div class="col-sm-8">
-															<input type="text" name="material" id="material"
-																class="form-control require" />
+															<select name="material" id="material" class="form-control require">
+																<option value="">未选择</option>
+																<%for(Material material : SystemCache.materiallist){ %>
+																	<option value="<%=material.getId() %>" ><%=material.getName() %></option>
+																<%} %>
+															</select>
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -1055,7 +1064,7 @@
 														</label>
 														<div class="col-sm-8">
 															<input type="text" name="yarn" id="yarn"
-																class="form-control require" />
+																class="form-control" />
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -1206,7 +1215,7 @@
 																		</td>
 																		<td class="weight"><%=detail.getWeight()%>
 																		</td>
-																		<td class="yarn"><%=detail.getYarn()%>
+																		<td class="yarn_name"><%=SystemCache.getMaterialName(detail.getYarn())%>
 																		</td>
 																		<td class="size"><%=detail.getSize()%>
 																		</td>
@@ -1256,7 +1265,7 @@
 																	%>
 																	<tr class="tr"
 																		data='<%=SerializeTool.serialize(detail)%>'>
-																		<td class="material"><%=detail.getMaterial()%>
+																		<td class="material_name"><%=SystemCache.getMaterialName(detail.getMaterial())%>
 																		</td>
 																		<td class="color"><%=detail.getColor()%>
 																		</td>
@@ -1306,8 +1315,12 @@
 															材料
 														</label>
 														<div class="col-sm-8">
-															<input type="text" name="material" id="material"
-																class="form-control require" />
+															<select name="material" id="material" class="form-control require">
+																<option value="">未选择</option>
+																<%for(Material material : SystemCache.materiallist){ %>
+																	<option value="<%=material.getId() %>" ><%=material.getName() %></option>
+																<%} %>
+															</select>
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -1411,8 +1424,25 @@
 																			<td width="20%">
 																				采购单位
 																			</td>
-																			<td class="orderproperty"><%=SystemCache.getFactoryName(materialPurchaseOrder
-								.getFactoryId())%>
+																			<td class="orderproperty">
+																				<select class="form-control require"
+																	name="factoryId" id="factoryId">
+																	<option value="">
+																		未选择
+																	</option>
+																	<%
+																		for (Factory factory : SystemCache.factorylist) {
+																			if(factory.getId() == materialPurchaseOrder.getFactoryId()){
+																	%>
+																	<option value="<%=factory.getId()%>" selected='selected'><%=factory.getName()%></option>
+																	<%}else{ %>
+																	<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
+																	<%
+																		}
+																		}
+																	%>
+
+																</select>
 																			</td>
 
 																		</tr>
@@ -1498,7 +1528,7 @@
 																		%>
 																		<tr class="tr"
 																			data='<%=SerializeTool.serialize(detail)%>'>
-																			<td class="material"><%=detail.getMaterial()%>
+																			<td class="material_name"><%=SystemCache.getMaterialName(detail.getMaterial())%>
 																			</td>
 																			<td class="scale"><%=detail.getScale()%>
 																			</td>
@@ -1557,8 +1587,12 @@
 															材料品种
 														</label>
 														<div class="col-sm-8">
-															<input type="text" name="material" id="material"
-																class="form-control require" />
+															<select name="material" id="material" class="form-control require">
+																<option value="">未选择</option>
+																<%for(Material material : SystemCache.materiallist){ %>
+																	<option value="<%=material.getId() %>" ><%=material.getName() %></option>
+																<%} %>
+															</select>
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -1687,10 +1721,24 @@
 																				染色单位
 																			</td>
 																			<td class="orderproperty">
-																				<input class="form-control require" type="text"
-																					name="company"
-																					value="<%=SystemCache.getFactoryName(coloringOrder
-								.getFactoryId())%>" />
+																				<select class="form-control require"
+																	name="factoryId" id="factoryId">
+																	<option value="">
+																		未选择
+																	</option>
+																	<%
+																		for (Factory factory : SystemCache.factorylist) {
+																			if(factory.getId() == coloringOrder.getFactoryId()){
+																	%>
+																	<option value="<%=factory.getId()%>" selected='selected'><%=factory.getName()%></option>
+																	<%}else{ %>
+																	<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
+																	<%
+																		}
+																		}
+																	%>
+
+																</select>
 																			</td>
 
 																		</tr>
@@ -1766,7 +1814,7 @@
 																			data='<%=SerializeTool.serialize(detail)%>'>
 																			<td class="color"><%=detail.getColor()%>
 																			</td>
-																			<td class="material"><%=detail.getMaterial()%>
+																			<td class="material_name"><%=SystemCache.getMaterialName(detail.getMaterial())%>
 																			</td>
 																			<td class="quantity"><%=detail.getQuantity()%>
 																			</td>
@@ -1831,8 +1879,12 @@
 															材料
 														</label>
 														<div class="col-sm-8">
-															<input type="text" name="material" id="material"
-																class="form-control require" />
+															<select name="material" id="material" class="form-control require">
+																<option value="">未选择</option>
+																<%for(Material material : SystemCache.materiallist){ %>
+																	<option value="<%=material.getId() %>" ><%=material.getName() %></option>
+																<%} %>
+															</select>
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -2005,7 +2057,7 @@
 																		</td>
 																		<td class="weight"><%=detail.getWeight()%>
 																		</td>
-																		<td class="yarn"><%=detail.getYarn()%>
+																		<td class="yarn_name"><%=SystemCache.getMaterialName(detail.getYarn())%>
 																		</td>
 																		<td class="size"><%=detail.getSize()%>
 																		</td>
@@ -2098,10 +2150,24 @@
 																				供货方
 																			</td>
 																			<td class="orderproperty">
-																				<input class="form-control require" type="text"
-																					name="company"
-																					value="<%=SystemCache.getFactoryName(fuliaoPurchaseOrder
-								.getFactoryId())%>" />
+																					<select class="form-control require"
+																	name="factoryId" id="factoryId">
+																	<option value="">
+																		未选择
+																	</option>
+																	<%
+																		for (Factory factory : SystemCache.factorylist) {
+																			if(factory.getId() == fuliaoPurchaseOrder.getFactoryId()){
+																	%>
+																	<option value="<%=factory.getId()%>" selected='selected'><%=factory.getName()%></option>
+																	<%}else{ %>
+																	<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
+																	<%
+																		}
+																		}
+																	%>
+
+																</select>
 																			</td>
 																		</tr>
 
@@ -2184,7 +2250,7 @@
 																		%>
 																		<tr class="tr"
 																			data='<%=SerializeTool.serialize(detail)%>'>
-																			<td class="style"><%=detail.getStyle()%>
+																			<td class="style_name"><%= SystemCache.getMaterialName(detail.getStyle())%>
 																			</td>
 																			<td class="standardsample"><%=detail.getStandardsample()%>
 																			</td>
@@ -2244,8 +2310,12 @@
 															辅料类型
 														</label>
 														<div class="col-sm-8">
-															<input type="text" name="style" id="style"
-																class="form-control require" />
+															<select name="style" id="style" class="form-control require">
+																<option value="">未选择</option>
+																<%for(Material material : SystemCache.materiallist){ %>
+																	<option value="<%=material.getId() %>" ><%=material.getName() %></option>
+																<%} %>
+															</select>
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -2255,7 +2325,7 @@
 														</label>
 														<div class="col-sm-8">
 															<input type="text" name="standardsample"
-																id="standardsample" class="form-control require" />
+																id="standardsample" class="form-control" />
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -2437,7 +2507,7 @@
 																		</td>
 																		<td class="weight"><%=detail.getWeight()%>
 																		</td>
-																		<td class="yarn"><%=detail.getYarn()%>
+																		<td class="yarn_name"><%=SystemCache.getMaterialName(detail.getYarn())%>
 																		</td>
 																		<td class="size"><%=detail.getSize()%>
 																		</td>
@@ -2595,7 +2665,7 @@
 																		</td>
 																		<td class="weight"><%=detail.getWeight()%>
 																		</td>
-																		<td class="yarn"><%=detail.getYarn()%>
+																		<td class="yarn_name"><%=SystemCache.getMaterialName(detail.getYarn())%>
 																		</td>
 																		<td class="size"><%=detail.getSize()%>
 																		</td>
@@ -2636,5 +2706,6 @@
 
 
 			</div>
+		</div>
 	</body>
 </html>

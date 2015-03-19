@@ -63,7 +63,7 @@ $(document).ready( function() {
 				        	width :'15%'
 				        },
 						{
-							name :'material',
+							name :'material_name',
 							colname :'材料',
 							width :'15%'
 						},

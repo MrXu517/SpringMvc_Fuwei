@@ -1814,7 +1814,7 @@ TableTools.defaultConfig.getTrData = function(tr) {
         if ($valueEle.hasClass(ValueClass)) {
             property_value = $valueEle.val();
         } else {
-            property_value = $valueEle.text();
+            property_value = $valueEle.text().trim();
         }
         if ($valueEle[0].type == "checkbox") {
             property_value = $valueEle[0].checked;

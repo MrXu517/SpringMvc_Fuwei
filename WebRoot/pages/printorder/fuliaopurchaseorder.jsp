@@ -100,7 +100,7 @@
 											<td>
 												跟单
 											</td>
-											<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+											<td><%=SystemCache.getUserName(fuliaoPurchaseOrder.getCharge_user())%></td>
 										</tr>
 									</table>
 								</td>
@@ -139,7 +139,7 @@
 											for (FuliaoPurchaseOrderDetail detail : fuliaoPurchaseOrderDetailList) {
 										%>
 										<tr class="tr">
-											<td class="style"><%=detail.getStyle()%>
+											<td class="style_name"><%=SystemCache.getMaterialName(detail.getStyle())%>
 											</td>
 											<td class="standardsample"><%=detail.getStandardsample()%>
 											</td>

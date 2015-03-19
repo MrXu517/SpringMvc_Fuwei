@@ -1,15 +1,15 @@
 package com.fuwei.entity.ordergrid;
 
 public class FuliaoPurchaseOrderDetail {
-	private String style ; //辅料类型
+	private Integer style ; //辅料类型
 	private String standardsample;//标准样
 	private int quantity;//数量
 	private double price;//价格
 	private String end_at;//交期
-	public String getStyle() {
+	public Integer getStyle() {
 		return style;
 	}
-	public void setStyle(String style) {
+	public void setStyle(Integer style) {
 		this.style = style;
 	}
 	public String getStandardsample() {

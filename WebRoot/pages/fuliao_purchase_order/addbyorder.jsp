@@ -2,6 +2,7 @@
 	contentType="text/html; charset=utf-8"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.entity.Company"%>
+<%@page import="com.fuwei.entity.Material"%>
 <%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
@@ -292,8 +293,12 @@
 															辅料类型
 														</label>
 														<div class="col-sm-8">
-															<input type="text" name="style" id="style"
-																class="form-control require" />
+															<select name="style" id="style" class="form-control require">
+																<option value="">未选择</option>
+																<%for(Material material : SystemCache.materiallist){ %>
+																	<option value="<%=material.getId() %>" ><%=material.getName() %></option>
+																<%} %>
+															</select>
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -303,7 +308,7 @@
 														</label>
 														<div class="col-sm-8">
 															<input type="text" name="standardsample"
-																id="standardsample" class="form-control require" />
+																id="standardsample" class="form-control" />
 														</div>
 														<div class="col-sm-1"></div>
 													</div>

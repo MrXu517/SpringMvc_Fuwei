@@ -14,7 +14,7 @@ $(document).ready( function() {
 			tbOptions:{
 				colnames : [
 						{
-							name :'material',
+							name :'material_name',
 							colname :'材料品种',
 							width :'15%'
 						},

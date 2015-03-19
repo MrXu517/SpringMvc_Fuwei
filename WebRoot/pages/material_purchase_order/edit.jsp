@@ -2,6 +2,7 @@
 	contentType="text/html; charset=utf-8"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.entity.Company"%>
+<%@page import="com.fuwei.entity.Material"%>
 <%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
@@ -301,7 +302,7 @@
 															%>
 															<tr class="tr"
 																data='<%=SerializeTool.serialize(detail)%>'>
-																<td class="material"><%=detail.getMaterial()%>
+																<td class="material_name"><%=SystemCache.getMaterialName(detail.getMaterial())%>
 																</td>
 																<td class="scale"><%=detail.getScale()%>
 																</td>
@@ -353,8 +354,12 @@
 												材料品种
 											</label>
 											<div class="col-sm-8">
-												<input type="text" name="material" id="material"
-													class="form-control require" />
+												<select name="material" id="material" class="form-control require">
+																<option value="">未选择</option>
+																<%for(Material material : SystemCache.materiallist){ %>
+																	<option value="<%=material.getId() %>" ><%=material.getName() %></option>
+																<%} %>
+															</select>
 											</div>
 											<div class="col-sm-1"></div>
 										</div>

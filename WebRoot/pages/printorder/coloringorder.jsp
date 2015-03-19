@@ -130,7 +130,7 @@
 										<tr class="tr">
 											<td class="color"><%=detail.getColor()%>
 											</td>
-											<td class="material"><%=detail.getMaterial()%>
+											<td class="material_name"><%=SystemCache.getMaterialName(detail.getMaterial()) %>
 											</td>
 											<td class="quantity"><%=detail.getQuantity()%>
 											</td>

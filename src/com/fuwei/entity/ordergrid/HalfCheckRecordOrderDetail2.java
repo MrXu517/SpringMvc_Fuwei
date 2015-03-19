@@ -3,13 +3,13 @@ package com.fuwei.entity.ordergrid;
 import java.io.Serializable;
 
 public class HalfCheckRecordOrderDetail2 implements Serializable {
-	private String material;//材料
+	private Integer material;//材料
 	private String color;//色号
 	private String colorsample;//标准色样
-	public String getMaterial() {
+	public Integer getMaterial() {
 		return material;
 	}
-	public void setMaterial(String material) {
+	public void setMaterial(Integer material) {
 		this.material = material;
 	}
 	public String getColor() {

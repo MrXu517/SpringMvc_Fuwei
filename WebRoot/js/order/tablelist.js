@@ -36,7 +36,7 @@ $(document).ready(function() {
 							width :'15%'
 						},
 						{
-							name :'yarn',
+							name :'yarn_name',
 							colname :'纱线种类',
 							width :'15%'
 						},
@@ -62,7 +62,7 @@ $(document).ready(function() {
 			tbOptions2:{
 				colnames : [
 				        {
-				        	name :'material',
+				        	name :'material_name',
 				        	colname :'材料',
 				        	width :'20%'
 				        },
@@ -114,7 +114,7 @@ $(document).ready(function() {
 						width :'15%'
 					},
 					{
-						name :'yarn',
+						name :'yarn_name',
 						colname :'纱线种类',
 						width :'15%'
 					},
@@ -144,7 +144,7 @@ $(document).ready(function() {
 						width :'15%'
 					},
 					{
-						name :'material',
+						name :'material_name',
 						colname :'材料',
 						width :'15%'
 					},
@@ -154,7 +154,7 @@ $(document).ready(function() {
 						width :'15%'
 					},
 					{
-						name :'factoryId',
+						name :'factory_name',
 						colname :'领取人',
 						width :'15%'
 					},
@@ -183,7 +183,7 @@ $(document).ready(function() {
 		tbOptions2:{
 			colnames : [
 			        {
-			        	name :'material',
+			        	name :'material_name',
 			        	colname :'材料',
 			        	width :'20%'
 			        },
@@ -221,7 +221,7 @@ $(document).ready(function() {
 			tbOptions:{
 				colnames : [
 						{
-							name :'material',
+							name :'material_name',
 							colname :'材料品种',
 							width :'15%'
 						},
@@ -275,7 +275,7 @@ $(document).ready(function() {
 				        	width :'15%'
 				        },
 						{
-							name :'material',
+							name :'material_name',
 							colname :'材料',
 							width :'15%'
 						},
@@ -321,7 +321,7 @@ $(document).ready(function() {
 			tbOptions:{
 			colnames : [
 						{
-							name :'style',
+							name :'style_name',
 							colname :'辅料类型',
 							width :'15%'
 						},

@@ -6,6 +6,7 @@
 <%@page import="com.fuwei.entity.Salesman"%>
 <%@page import="com.fuwei.entity.Company"%>
 <%@page import="com.fuwei.entity.Factory"%>
+<%@page import="com.fuwei.entity.Material"%>
 <%@page import="net.sf.json.JSONObject"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
@@ -494,8 +495,13 @@
 									纱线种类
 								</label>
 								<div class="col-sm-8">
-									<input type="text" name="yarn" id="yarn"
-										class="form-control require" />
+									<select name="yarn" id="yarn"
+										class="form-control require">
+										<option value="">未选择</option>
+										<%for(Material material : SystemCache.materiallist){ %>
+											<option value="<%=material.getId() %>" ><%=material.getName() %></option>
+										<%} %>
+									</select>
 								</div>
 								<div class="col-sm-1"></div>
 							</div>

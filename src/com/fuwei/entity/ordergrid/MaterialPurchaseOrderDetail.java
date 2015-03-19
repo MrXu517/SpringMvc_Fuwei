@@ -1,16 +1,16 @@
 package com.fuwei.entity.ordergrid;
 
 public class MaterialPurchaseOrderDetail {
-	private String material ; //材料品种
+	private Integer material ; //材料品种
 	private String scale;//规格
 	private int quantity;//数量
 //	private String color;//颜色
 	private String batch_number;//批次号
 	private double price;//价格
-	public String getMaterial() {
+	public Integer getMaterial() {
 		return material;
 	}
-	public void setMaterial(String material) {
+	public void setMaterial(Integer material) {
 		this.material = material;
 	}
 	public String getScale() {

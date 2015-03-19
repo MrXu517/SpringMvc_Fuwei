@@ -91,7 +91,7 @@ public class PrintOrderController extends BaseController {
 			if(printAll || gridName.indexOf("headbankorder") > -1){
 				HeadBankOrder headBankOrder = headBankOrderService.getByOrder(orderId);
 				if(headBankOrder!=null){
-					if(planOrder!=null){
+					if(planOrder==null){
 						planOrder = planOrderService.getByOrder(orderId);
 					}
 					headBankOrder.setDetaillist(planOrder.getDetaillist());
@@ -185,7 +185,7 @@ public class PrintOrderController extends BaseController {
 			if(printAll || gridName.indexOf("carfixrecordorder") > -1){
 				CarFixRecordOrder carFixRecordOrder = carFixRecordOrderService.getByOrder(orderId);
 				if(carFixRecordOrder!=null){
-					if(planOrder!=null){
+					if(planOrder==null){
 						planOrder = planOrderService.getByOrder(orderId);
 					}
 					carFixRecordOrder.setDetaillist(planOrder.getDetaillist());
@@ -199,7 +199,7 @@ public class PrintOrderController extends BaseController {
 			if(printAll || gridName.indexOf("ironingrecordorder") > -1){
 				IroningRecordOrder ironingRecordOrder = ironingRecordOrderService.getByOrder(orderId);
 				if(ironingRecordOrder!=null){
-					if(planOrder!=null){
+					if(planOrder==null){
 						planOrder = planOrderService.getByOrder(orderId);
 					}
 					ironingRecordOrder.setDetaillist(planOrder.getDetaillist());

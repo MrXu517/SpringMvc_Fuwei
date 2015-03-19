@@ -125,7 +125,7 @@
 											</td>
 											<td class="weight"><%=detail.getWeight()%>
 											</td>
-											<td class="yarn"><%=detail.getYarn()%>
+											<td class="yarn_name"><%=SystemCache.getMaterialName(detail.getYarn()) %>
 											</td>
 											<td class="size"><%=detail.getSize()%>
 											</td>

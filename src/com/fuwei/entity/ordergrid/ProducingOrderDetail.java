@@ -6,7 +6,7 @@ public class ProducingOrderDetail implements Serializable {
 	private int planOrderDetailId;
 	private String color;//颜色
 	private double weight;//克重
-	private String yarn;//纱线种类
+	private Integer yarn;//纱线种类
 	private String size;//尺寸
 	private int quantity;//生产数量
 	private double price;//单价
@@ -30,10 +30,10 @@ public class ProducingOrderDetail implements Serializable {
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
-	public String getYarn() {
+	public Integer getYarn() {
 		return yarn;
 	}
-	public void setYarn(String yarn) {
+	public void setYarn(Integer yarn) {
 		this.yarn = yarn;
 	}
 	public String getSize() {

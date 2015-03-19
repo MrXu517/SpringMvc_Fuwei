@@ -126,7 +126,7 @@
 											for (MaterialPurchaseOrderDetail detail : materialPurchaseOrderDetailList) {
 										%>
 										<tr class="tr">
-											<td class="material"><%=detail.getMaterial()%>
+											<td class="material_name"><%=SystemCache.getMaterialName(detail.getMaterial()) %>
 											</td>
 											<td class="scale"><%=detail.getScale()%>
 											</td>

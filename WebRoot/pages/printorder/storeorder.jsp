@@ -120,11 +120,11 @@
 										<tr class="tr">
 											<td class="color"><%=detail.getColor()%>
 											</td>
-											<td class="material"><%=detail.getMaterial()%>
+											<td class="material_name"><%=SystemCache.getMaterialName(detail.getMaterial()) %>
 											</td>
 											<td class="quantity"><%=detail.getQuantity()%>
 											</td>
-											<td class="factoryId"><%=SystemCache.getFactoryName(detail.getFactoryId())%>
+											<td class="factory_name"><%=SystemCache.getFactoryName(detail.getFactoryId())%>
 											</td>
 											<td class="yarn"><%=detail.getYarn()%>
 											</td>

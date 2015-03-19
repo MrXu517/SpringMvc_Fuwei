@@ -30,7 +30,7 @@ $(document).ready( function() {
 							width :'15%'
 						},
 						{
-							name :'yarn',
+							name :'yarn_name',
 							colname :'纱线种类',
 							width :'15%'
 						},

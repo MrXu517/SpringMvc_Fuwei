@@ -14,7 +14,7 @@ $(document).ready( function() {
 			tbOptions:{
 				colnames : [
 							{
-								name :'style',
+								name :'style_name',
 								colname :'辅料类型',
 								width :'15%'
 							},
