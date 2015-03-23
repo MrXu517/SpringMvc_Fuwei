@@ -34,6 +34,9 @@
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
+<%@page import="com.fuwei.entity.ordergrid.ProductionScheduleOrder"%>
+<%@page import="com.fuwei.entity.ordergrid.FinalStoreOrder"%>
+<%@page import="com.fuwei.entity.ordergrid.ShopRecordOrder"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -95,6 +98,13 @@
 	IroningRecordOrder ironingRecordOrder = (IroningRecordOrder) request
 			.getAttribute("ironingRecordOrder");
 
+	//2015-3-23添加新表格 生产进度单
+	ProductionScheduleOrder productionScheduleOrder = (ProductionScheduleOrder) request
+			.getAttribute("productionscheduleorder");
+	FinalStoreOrder finalStoreOrder = (FinalStoreOrder) request
+			.getAttribute("finalstoreorder");
+	ShopRecordOrder shopRecordOrder = (ShopRecordOrder) request
+			.getAttribute("shoprecordorder");
 
 	List<OrderDetail> DetailList = order == null ? new ArrayList<OrderDetail>()
 			: order.getDetaillist();
@@ -164,6 +174,12 @@
 								<a href="#producingorder" role="tab" data-toggle="tab">生产单</a>
 							</li>
 							<li>
+								<a href="#productionscheduleorder" role="tab" data-toggle="tab">生产进度单</a>
+							</li>
+							<li>
+								<a href="#finalstorerecordorder" role="tab" data-toggle="tab">成品仓库记录单</a>
+							</li>
+							<li>
 								<a href="#materialpurchaseorder" role="tab" data-toggle="tab">原材料采购单</a>
 							</li>
 							<li>
@@ -174,6 +190,9 @@
 							</li>
 							<li>
 								<a href="#storeorder" role="tab" data-toggle="tab">原材料仓库</a>
+							</li>
+							<li>
+								<a href="#shoprecordorder" role="tab" data-toggle="tab">车间记录单</a>
 							</li>
 							<li>
 								<a href="#halfcheckrecordorder" role="tab" data-toggle="tab">半检记录单</a>
@@ -204,11 +223,7 @@
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
 
-											<button type="submit"
-												class="pull-right btn btn-danger saveTable"
-												data-loading-text="正在保存...">
-												保存对当前表格的修改
-											</button>
+											
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
 												data-loading-text="正在打印..."> 打印 </a>
@@ -555,7 +570,8 @@
 																	%>
 																	<tr class="tr"
 																		data='<%=SerializeTool.serialize(detail)%>'>
-																		<td class="material_name"><%=SystemCache.getMaterialName(detail.getMaterial())%>
+																		<td class="material_name"><%=SystemCache.getMaterialName(detail
+											.getMaterial())%>
 																		</td>
 																		<td class="color"><%=detail.getColor()%>
 																		</td>
@@ -609,11 +625,18 @@
 															材料
 														</label>
 														<div class="col-sm-8">
-															<select name="material" id="material" class="form-control require">
-																<option value="">未选择</option>
-																<%for(Material material : SystemCache.materiallist){ %>
-																	<option value="<%=material.getId() %>" ><%=material.getName() %></option>
-																<%} %>
+															<select name="material" id="material"
+																class="form-control require">
+																<option value="">
+																	未选择
+																</option>
+																<%
+																	for (Material material : SystemCache.materiallist) {
+																%>
+																<option value="<%=material.getId()%>"><%=material.getName()%></option>
+																<%
+																	}
+																%>
 															</select>
 														</div>
 														<div class="col-sm-1"></div>
@@ -666,6 +689,8 @@
 								</div>
 								<!-- 添加编辑生产单对话框 -->
 							</div>
+
+
 
 							<!-- 计划单  -->
 							<div class="tab-pane" id="planorder" role="tabpanel">
@@ -1018,11 +1043,18 @@
 															材料
 														</label>
 														<div class="col-sm-8">
-															<select name="material" id="material" class="form-control require">
-																<option value="">未选择</option>
-																<%for(Material material : SystemCache.materiallist){ %>
-																	<option value="<%=material.getId() %>" ><%=material.getName() %></option>
-																<%} %>
+															<select name="material" id="material"
+																class="form-control require">
+																<option value="">
+																	未选择
+																</option>
+																<%
+																	for (Material material : SystemCache.materiallist) {
+																%>
+																<option value="<%=material.getId()%>"><%=material.getName()%></option>
+																<%
+																	}
+																%>
 															</select>
 														</div>
 														<div class="col-sm-1"></div>
@@ -1038,26 +1070,26 @@
 														<div class="col-sm-1"></div>
 													</div>
 													<div class="form-group col-md-12">
-															<label for="factoryId" class="col-sm-3 control-label">
-																领取人
-															</label>
-															<div class="col-sm-8">
-																<select class="form-control require" name="factoryId"
-																	id="factoryId">
-																	<option value="">
-																		未选择
-																	</option>
-																	<%
-																		for (Factory factory : SystemCache.factorylist) {
-																	%>
-																	<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
-																	<%
-																		}
-																	%>
-																</select>
-															</div>
-															<div class="col-sm-1"></div>
+														<label for="factoryId" class="col-sm-3 control-label">
+															领取人
+														</label>
+														<div class="col-sm-8">
+															<select class="form-control require" name="factoryId"
+																id="factoryId">
+																<option value="">
+																	未选择
+																</option>
+																<%
+																	for (Factory factory : SystemCache.factorylist) {
+																%>
+																<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
+																<%
+																	}
+																%>
+															</select>
 														</div>
+														<div class="col-sm-1"></div>
+													</div>
 													<div class="form-group col-md-12">
 														<label for="yarn" class="col-sm-3 control-label">
 															标准样纱
@@ -1315,11 +1347,18 @@
 															材料
 														</label>
 														<div class="col-sm-8">
-															<select name="material" id="material" class="form-control require">
-																<option value="">未选择</option>
-																<%for(Material material : SystemCache.materiallist){ %>
-																	<option value="<%=material.getId() %>" ><%=material.getName() %></option>
-																<%} %>
+															<select name="material" id="material"
+																class="form-control require">
+																<option value="">
+																	未选择
+																</option>
+																<%
+																	for (Material material : SystemCache.materiallist) {
+																%>
+																<option value="<%=material.getId()%>"><%=material.getName()%></option>
+																<%
+																	}
+																%>
 															</select>
 														</div>
 														<div class="col-sm-1"></div>
@@ -1426,23 +1465,26 @@
 																			</td>
 																			<td class="orderproperty">
 																				<select class="form-control require"
-																	name="factoryId" id="factoryId">
-																	<option value="">
-																		未选择
-																	</option>
-																	<%
-																		for (Factory factory : SystemCache.factorylist) {
-																			if(factory.getId() == materialPurchaseOrder.getFactoryId()){
-																	%>
-																	<option value="<%=factory.getId()%>" selected='selected'><%=factory.getName()%></option>
-																	<%}else{ %>
-																	<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
-																	<%
-																		}
-																		}
-																	%>
+																					name="factoryId" id="factoryId">
+																					<option value="">
+																						未选择
+																					</option>
+																					<%
+																						for (Factory factory : SystemCache.factorylist) {
+																								if (factory.getId() == materialPurchaseOrder.getFactoryId()) {
+																					%>
+																					<option value="<%=factory.getId()%>"
+																						selected='selected'><%=factory.getName()%></option>
+																					<%
+																						} else {
+																					%>
+																					<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
+																					<%
+																						}
+																							}
+																					%>
 
-																</select>
+																				</select>
 																			</td>
 
 																		</tr>
@@ -1528,7 +1570,8 @@
 																		%>
 																		<tr class="tr"
 																			data='<%=SerializeTool.serialize(detail)%>'>
-																			<td class="material_name"><%=SystemCache.getMaterialName(detail.getMaterial())%>
+																			<td class="material_name"><%=SystemCache.getMaterialName(detail
+											.getMaterial())%>
 																			</td>
 																			<td class="scale"><%=detail.getScale()%>
 																			</td>
@@ -1587,11 +1630,18 @@
 															材料品种
 														</label>
 														<div class="col-sm-8">
-															<select name="material" id="material" class="form-control require">
-																<option value="">未选择</option>
-																<%for(Material material : SystemCache.materiallist){ %>
-																	<option value="<%=material.getId() %>" ><%=material.getName() %></option>
-																<%} %>
+															<select name="material" id="material"
+																class="form-control require">
+																<option value="">
+																	未选择
+																</option>
+																<%
+																	for (Material material : SystemCache.materiallist) {
+																%>
+																<option value="<%=material.getId()%>"><%=material.getName()%></option>
+																<%
+																	}
+																%>
 															</select>
 														</div>
 														<div class="col-sm-1"></div>
@@ -1722,23 +1772,26 @@
 																			</td>
 																			<td class="orderproperty">
 																				<select class="form-control require"
-																	name="factoryId" id="factoryId">
-																	<option value="">
-																		未选择
-																	</option>
-																	<%
-																		for (Factory factory : SystemCache.factorylist) {
-																			if(factory.getId() == coloringOrder.getFactoryId()){
-																	%>
-																	<option value="<%=factory.getId()%>" selected='selected'><%=factory.getName()%></option>
-																	<%}else{ %>
-																	<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
-																	<%
-																		}
-																		}
-																	%>
+																					name="factoryId" id="factoryId">
+																					<option value="">
+																						未选择
+																					</option>
+																					<%
+																						for (Factory factory : SystemCache.factorylist) {
+																								if (factory.getId() == coloringOrder.getFactoryId()) {
+																					%>
+																					<option value="<%=factory.getId()%>"
+																						selected='selected'><%=factory.getName()%></option>
+																					<%
+																						} else {
+																					%>
+																					<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
+																					<%
+																						}
+																							}
+																					%>
 
-																</select>
+																				</select>
 																			</td>
 
 																		</tr>
@@ -1814,7 +1867,8 @@
 																			data='<%=SerializeTool.serialize(detail)%>'>
 																			<td class="color"><%=detail.getColor()%>
 																			</td>
-																			<td class="material_name"><%=SystemCache.getMaterialName(detail.getMaterial())%>
+																			<td class="material_name"><%=SystemCache.getMaterialName(detail
+											.getMaterial())%>
 																			</td>
 																			<td class="quantity"><%=detail.getQuantity()%>
 																			</td>
@@ -1879,11 +1933,18 @@
 															材料
 														</label>
 														<div class="col-sm-8">
-															<select name="material" id="material" class="form-control require">
-																<option value="">未选择</option>
-																<%for(Material material : SystemCache.materiallist){ %>
-																	<option value="<%=material.getId() %>" ><%=material.getName() %></option>
-																<%} %>
+															<select name="material" id="material"
+																class="form-control require">
+																<option value="">
+																	未选择
+																</option>
+																<%
+																	for (Material material : SystemCache.materiallist) {
+																%>
+																<option value="<%=material.getId()%>"><%=material.getName()%></option>
+																<%
+																	}
+																%>
 															</select>
 														</div>
 														<div class="col-sm-1"></div>
@@ -1941,11 +2002,7 @@
 					.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
-											<button type="submit"
-												class="pull-right btn btn-danger saveTable"
-												data-loading-text="正在保存...">
-												保存对当前表格的修改
-											</button>
+											
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
 												data-loading-text="正在打印..."> 打印 </a>
@@ -2150,24 +2207,27 @@
 																				供货方
 																			</td>
 																			<td class="orderproperty">
-																					<select class="form-control require"
-																	name="factoryId" id="factoryId">
-																	<option value="">
-																		未选择
-																	</option>
-																	<%
-																		for (Factory factory : SystemCache.factorylist) {
-																			if(factory.getId() == fuliaoPurchaseOrder.getFactoryId()){
-																	%>
-																	<option value="<%=factory.getId()%>" selected='selected'><%=factory.getName()%></option>
-																	<%}else{ %>
-																	<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
-																	<%
-																		}
-																		}
-																	%>
+																				<select class="form-control require"
+																					name="factoryId" id="factoryId">
+																					<option value="">
+																						未选择
+																					</option>
+																					<%
+																						for (Factory factory : SystemCache.factorylist) {
+																								if (factory.getId() == fuliaoPurchaseOrder.getFactoryId()) {
+																					%>
+																					<option value="<%=factory.getId()%>"
+																						selected='selected'><%=factory.getName()%></option>
+																					<%
+																						} else {
+																					%>
+																					<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
+																					<%
+																						}
+																							}
+																					%>
 
-																</select>
+																				</select>
 																			</td>
 																		</tr>
 
@@ -2181,7 +2241,7 @@
 																				公司
 																			</td>
 																			<td><%=SystemCache.getCompanyName(fuliaoPurchaseOrder
-										.getCompanyId())%></td>
+								.getCompanyId())%></td>
 																		</tr>
 																		<tr>
 																			<td>
@@ -2250,7 +2310,7 @@
 																		%>
 																		<tr class="tr"
 																			data='<%=SerializeTool.serialize(detail)%>'>
-																			<td class="style_name"><%= SystemCache.getMaterialName(detail.getStyle())%>
+																			<td class="style_name"><%=SystemCache.getMaterialName(detail.getStyle())%>
 																			</td>
 																			<td class="standardsample"><%=detail.getStandardsample()%>
 																			</td>
@@ -2310,11 +2370,18 @@
 															辅料类型
 														</label>
 														<div class="col-sm-8">
-															<select name="style" id="style" class="form-control require">
-																<option value="">未选择</option>
-																<%for(Material material : SystemCache.materiallist){ %>
-																	<option value="<%=material.getId() %>" ><%=material.getName() %></option>
-																<%} %>
+															<select name="style" id="style"
+																class="form-control require">
+																<option value="">
+																	未选择
+																</option>
+																<%
+																	for (Material material : SystemCache.materiallist) {
+																%>
+																<option value="<%=material.getId()%>"><%=material.getName()%></option>
+																<%
+																	}
+																%>
 															</select>
 														</div>
 														<div class="col-sm-1"></div>
@@ -2391,11 +2458,7 @@
 					.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
-											<button type="submit"
-												class="pull-right btn btn-danger saveTable"
-												data-loading-text="正在保存...">
-												保存对当前表格的修改
-											</button>
+											
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
 												data-loading-text="正在打印..."> 打印 </a>
@@ -2549,11 +2612,7 @@
 					.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
-											<button type="submit"
-												class="pull-right btn btn-danger saveTable"
-												data-loading-text="正在保存...">
-												保存对当前表格的修改
-											</button>
+											
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
 												data-loading-text="正在打印..."> 打印 </a>
@@ -2697,6 +2756,424 @@
 
 							</div>
 
+							<!-- 2015-3-23添加生产进度单 -->
+							<div class="tab-pane" id="productionscheduleorder"
+								role="tabpanel">
+								<div class="container-fluid">
+									<div class="row">
+										<form class="saveform">
+											<input type="hidden" name="id"
+												value="<%=productionScheduleOrder == null ? ""
+					: productionScheduleOrder.getId()%>" />
+											<input type="hidden" name="orderId"
+												value="<%=order.getId()%>" />
+											
+											<a target="_blank" type="button"
+												class="pull-right btn btn-success printBtn"
+												data-loading-text="正在打印..."> 打印 </a>
+										</form>
+
+										<div class="clear"></div>
+										<div class="col-md-12 tablewidget">
+											<table class="table">
+												<caption>
+													桐庐富伟针织厂生产进度单
+												</caption>
+												<thead>
+													<tr>
+														<td colspan="3" class="pull-right orderNumber">
+															№：<%=order.getOrderNumber()%></td>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>
+															<table
+																class="table table-responsive table-bordered tableTb">
+																<tbody>
+																	<tr>
+																		<td rowspan="7" width="50%">
+																			<a href="/<%=order.getImg()%>" class="thumbnail"
+																				target="_blank"> <img id="previewImg"
+																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
+																			</a>
+																		</td>
+																		<td>
+																			公司
+																		</td>
+																		<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+																	</tr>
+
+
+																	<tr>
+																		<td>
+																			客户
+																		</td>
+																		<td><%=order.getKehu()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			货号
+																		</td>
+																		<td><%=order.getProductNumber()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			款名
+																		</td>
+																		<td><%=order.getName()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			跟单
+																		</td>
+																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																	</tr>
+																	<tr>
+																		<td colspan="2" class="center">
+																			订单数量
+																		</td>
+																	</tr>
+																	<%
+																		for (OrderDetail detail : DetailList) {
+																	%>
+																	<tr>
+																		<td><%=detail.getColor()%></td>
+																		<td><%=detail.getQuantity()%></td>
+																	</tr>
+																	<%
+																		}
+																	%>
+																</tbody>
+															</table>
+
+														</td>
+													</tr>
+													<tr>
+														
+													</tr>
+												</tbody>
+											</table>
+
+										</div>
+
+
+									</div>
+								</div>
+								<!--
+						 添加编辑生产进度单对话框 -->
+
+								<!-- 添加编辑生产进度单对话框 -->
+
+							</div>
+
+							<!-- 成品仓库记录单 -->
+							<div class="tab-pane" id="finalstorerecordorder" role="tabpanel">
+								<div class="container-fluid">
+									<div class="row">
+										<form class="saveform">
+											<input type="hidden" name="id"
+												value="<%=finalStoreOrder == null ? "" : finalStoreOrder
+					.getId()%>" />
+											<input type="hidden" name="orderId"
+												value="<%=order.getId()%>" />
+											
+											<a target="_blank" type="button"
+												class="pull-right btn btn-success printBtn"
+												data-loading-text="正在打印..."> 打印 </a>
+										</form>
+
+										<div class="clear"></div>
+										<div class="col-md-12 tablewidget">
+											<table class="table">
+												<caption>
+													桐庐富伟针织厂成品仓库记录单
+												</caption>
+												<thead>
+													<tr>
+														<td colspan="3" class="pull-right orderNumber">
+															№：<%=order.getOrderNumber()%></td>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>
+															<table
+																class="table table-responsive table-bordered tableTb">
+																<tbody>
+																	<tr>
+																		<td rowspan="7" width="50%">
+																			<a href="/<%=order.getImg()%>" class="thumbnail"
+																				target="_blank"> <img id="previewImg"
+																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
+																			</a>
+																		</td>
+																		<td width="20%">
+																			生产单位
+																		</td>
+																		<td class="orderproperty"></td>
+																	</tr>
+
+																	<tr>
+																		<td colspan="2" class="center">
+																			订单信息
+																		</td>
+																	</tr>
+																	<tr>
+																		<td>
+																			公司
+																		</td>
+																		<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			客户
+																		</td>
+																		<td><%=order.getKehu()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			货号
+																		</td>
+																		<td><%=order.getProductNumber()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			款名
+																		</td>
+																		<td><%=order.getName()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			跟单
+																		</td>
+																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																	</tr>
+																</tbody>
+															</table>
+
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<table class="table table-responsive detailTb">
+																<caption>
+																	颜色及数量
+																</caption>
+																<thead>
+																	<tr>
+																		<th width="15%">
+																			颜色
+																		</th>
+																		<th width="15%">
+																			克重(g)
+																		</th>
+																		<th width="15%">
+																			纱线种类
+																		</th>
+																		<th width="15%">
+																			尺寸
+																		</th>
+																		<th width="15%">
+																			生产数量
+																		</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<%
+																		for (PlanOrderDetail detail : planOrderDetailList) {
+																	%>
+																	<tr class="tr"
+																		data='<%=SerializeTool.serialize(detail)%>'>
+																		<td class="color"><%=detail.getColor()%>
+																		</td>
+																		<td class="weight"><%=detail.getWeight()%>
+																		</td>
+																		<td class="yarn_name"><%=SystemCache.getMaterialName(detail.getYarn())%>
+																		</td>
+																		<td class="size"><%=detail.getSize()%>
+																		</td>
+																		<td class="quantity"><%=detail.getQuantity()%>
+																		</td>
+																	</tr>
+
+																	<%
+																		}
+																	%>
+
+																</tbody>
+															</table>
+															<div id="navigator"></div>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+
+										</div>
+
+
+									</div>
+								</div>
+								<!--
+						 添加编辑抽检记录单对话框 -->
+
+								<!-- 添加编辑抽检记录单对话框 -->
+
+							</div>
+
+							<!-- 车间记录单 -->
+							<div class="tab-pane" id="shoprecordorder" role="tabpanel">
+								<div class="container-fluid">
+									<div class="row">
+										<form class="saveform">
+											<input type="hidden" name="id"
+												value="<%=shopRecordOrder == null ? "" : shopRecordOrder
+					.getId()%>" />
+											<input type="hidden" name="orderId"
+												value="<%=order.getId()%>" />
+											
+											<a target="_blank" type="button"
+												class="pull-right btn btn-success printBtn"
+												data-loading-text="正在打印..."> 打印 </a>
+										</form>
+
+										<div class="clear"></div>
+										<div class="col-md-12 tablewidget">
+											<table class="table">
+												<caption>
+													桐庐富伟针织厂车间记录单
+												</caption>
+												<thead>
+													<tr>
+														<td colspan="3" class="pull-right orderNumber">
+															№：<%=order.getOrderNumber()%></td>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>
+															<table
+																class="table table-responsive table-bordered tableTb">
+																<tbody>
+																	<tr>
+																		<td rowspan="7" width="50%">
+																			<a href="/<%=order.getImg()%>" class="thumbnail"
+																				target="_blank"> <img id="previewImg"
+																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
+																			</a>
+																		</td>
+																		<td width="20%">
+																			生产单位
+																		</td>
+																		<td class="orderproperty"></td>
+																	</tr>
+
+																	<tr>
+																		<td colspan="2" class="center">
+																			订单信息
+																		</td>
+																	</tr>
+																	<tr>
+																		<td>
+																			公司
+																		</td>
+																		<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			客户
+																		</td>
+																		<td><%=order.getKehu()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			货号
+																		</td>
+																		<td><%=order.getProductNumber()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			款名
+																		</td>
+																		<td><%=order.getName()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			跟单
+																		</td>
+																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																	</tr>
+																</tbody>
+															</table>
+
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<table class="table table-responsive detailTb">
+																<caption>
+																	颜色及数量
+																</caption>
+																<thead>
+																	<tr>
+																		<th width="15%">
+																			颜色
+																		</th>
+																		<th width="15%">
+																			克重(g)
+																		</th>
+																		<th width="15%">
+																			纱线种类
+																		</th>
+																		<th width="15%">
+																			尺寸
+																		</th>
+																		<th width="15%">
+																			生产数量
+																		</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<%
+																		for (PlanOrderDetail detail : planOrderDetailList) {
+																	%>
+																	<tr class="tr"
+																		data='<%=SerializeTool.serialize(detail)%>'>
+																		<td class="color"><%=detail.getColor()%>
+																		</td>
+																		<td class="weight"><%=detail.getWeight()%>
+																		</td>
+																		<td class="yarn_name"><%=SystemCache.getMaterialName(detail.getYarn())%>
+																		</td>
+																		<td class="size"><%=detail.getSize()%>
+																		</td>
+																		<td class="quantity"><%=detail.getQuantity()%>
+																		</td>
+																	</tr>
+
+																	<%
+																		}
+																	%>
+
+																</tbody>
+															</table>
+															<div id="navigator"></div>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+
+										</div>
+
+
+									</div>
+								</div>
+								<!--
+						 添加编辑抽检记录单对话框 -->
+
+								<!-- 添加编辑抽检记录单对话框 -->
+
+							</div>
 
 						</div>
 

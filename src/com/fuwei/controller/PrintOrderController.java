@@ -19,6 +19,7 @@ import com.fuwei.entity.User;
 import com.fuwei.entity.ordergrid.CarFixRecordOrder;
 import com.fuwei.entity.ordergrid.CheckRecordOrder;
 import com.fuwei.entity.ordergrid.ColoringOrder;
+import com.fuwei.entity.ordergrid.FinalStoreOrder;
 import com.fuwei.entity.ordergrid.FuliaoPurchaseOrder;
 import com.fuwei.entity.ordergrid.HalfCheckRecordOrder;
 import com.fuwei.entity.ordergrid.HeadBankOrder;
@@ -26,11 +27,14 @@ import com.fuwei.entity.ordergrid.IroningRecordOrder;
 import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
 import com.fuwei.entity.ordergrid.PlanOrder;
 import com.fuwei.entity.ordergrid.ProducingOrder;
+import com.fuwei.entity.ordergrid.ProductionScheduleOrder;
+import com.fuwei.entity.ordergrid.ShopRecordOrder;
 import com.fuwei.entity.ordergrid.StoreOrder;
 import com.fuwei.service.OrderService;
 import com.fuwei.service.ordergrid.CarFixRecordOrderService;
 import com.fuwei.service.ordergrid.CheckRecordOrderService;
 import com.fuwei.service.ordergrid.ColoringOrderService;
+import com.fuwei.service.ordergrid.FinalStoreOrderService;
 import com.fuwei.service.ordergrid.FuliaoPurchaseOrderService;
 import com.fuwei.service.ordergrid.HalfCheckRecordOrderService;
 import com.fuwei.service.ordergrid.HeadBankOrderService;
@@ -38,6 +42,8 @@ import com.fuwei.service.ordergrid.IroningRecordOrderService;
 import com.fuwei.service.ordergrid.MaterialPurchaseOrderService;
 import com.fuwei.service.ordergrid.PlanOrderService;
 import com.fuwei.service.ordergrid.ProducingOrderService;
+import com.fuwei.service.ordergrid.ProductionScheduleOrderService;
+import com.fuwei.service.ordergrid.ShopRecordOrderService;
 import com.fuwei.service.ordergrid.StoreOrderService;
 
 @RequestMapping("/printorder")
@@ -68,6 +74,15 @@ public class PrintOrderController extends BaseController {
 	CarFixRecordOrderService carFixRecordOrderService;
 	@Autowired
 	IroningRecordOrderService ironingRecordOrderService;
+	
+	/*2015-3-23添加 新表格*/
+	@Autowired
+	ProductionScheduleOrderService productionScheduleOrderService;
+	@Autowired
+	FinalStoreOrderService finalStoreOrderService;
+	@Autowired
+	ShopRecordOrderService shopRecordOrderService;
+	
 	@RequestMapping(value = "/print", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView print(Integer orderId,String gridName, HttpSession session,
@@ -207,6 +222,41 @@ public class PrintOrderController extends BaseController {
 					request.setAttribute("ironingRecordOrder", ironingRecordOrder);
 				}	
 			}
+			
+			/*2015-3-23添加 新表格*/
+			//获取生产进度单
+			if(printAll || gridName.indexOf("productionscheduleorder") > -1){
+				ProductionScheduleOrder productionScheduleOrder = productionScheduleOrderService.getByOrder(orderId);
+				if(productionScheduleOrder!=null){
+					grids += "productionscheduleorder,";
+					request.setAttribute("productionScheduleOrder", productionScheduleOrder);
+				}	
+			}
+			//获取成品仓库记录单
+			if(printAll || gridName.indexOf("finalstorerecordorder") > -1){
+				FinalStoreOrder finalStoreOrder = finalStoreOrderService.getByOrder(orderId);
+				if(finalStoreOrder!=null){
+					if(planOrder==null){
+						planOrder = planOrderService.getByOrder(orderId);
+					}
+					finalStoreOrder.setDetaillist(planOrder.getDetaillist());
+					grids += "finalstorerecordorder,";
+					request.setAttribute("finalStoreOrder", finalStoreOrder);
+				}
+			}
+			//获取车间记录单
+			if(printAll || gridName.indexOf("shoprecordorder") > -1){
+				ShopRecordOrder shopRecordOrder = shopRecordOrderService.getByOrder(orderId);
+				if(shopRecordOrder!=null){
+					if(planOrder==null){
+						planOrder = planOrderService.getByOrder(orderId);
+					}
+					shopRecordOrder.setDetaillist(planOrder.getDetaillist());
+					grids += "shoprecordorder,";
+					request.setAttribute("shopRecordOrder", shopRecordOrder);
+				}
+			}
+			
 			if(grids.indexOf(",") <= -1){
 				throw new Exception("请先创建表格，再打印");
 			}

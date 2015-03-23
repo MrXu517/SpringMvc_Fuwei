@@ -372,6 +372,22 @@ $(document).ready(function() {
 		$content:$("#ironingrecordorder"),
 	});
 	
+	//2015-3-23添加新表格
+	//生产进度单
+	var productionScheduleGrid = new OrderGrid({
+		$content:$("#productionscheduleorder")
+	});
+	
+	//成品仓库记录单
+	var finalStoreGrid = new OrderGrid({
+		$content:$("#finalstorerecordorder")
+	});
+	
+	//车间记录单
+	var shopRecordGrid = new OrderGrid({
+		$content:$("#shoprecordorder")
+	});
+	
 	$("#createProducingorderBtn").click(function(){
 		
 	});

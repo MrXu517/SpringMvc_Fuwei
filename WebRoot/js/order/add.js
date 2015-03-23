@@ -227,6 +227,23 @@ function OrderGrid(settings){
 						return false;
 					}
 					var formdata = $(this).serializeJson();
+					var $material = $(this).find("select#material");
+					if($material.length > 0){
+						formdata.material_name = $material.find("option:selected").text();
+					}
+					var $yarn = $(this).find("select#yarn");
+					if($yarn.length > 0){
+						formdata.yarn_name = $yarn.find("option:selected").text();
+					}
+					var $factoryId = $(this).find("select#factoryId");
+					if($factoryId.length > 0){
+						formdata.factory_name = $factoryId.find("option:selected").text();
+					}
+					var $styleId = $(this).find("select#style");
+					if($styleId.length > 0){
+						formdata.style_name = $styleId.find("option:selected").text();
+					}
+					
 					Object.TableInstance.addRow(formdata);
 					Object.$dialog.modal("hide");
 					return false;
@@ -246,6 +263,23 @@ function OrderGrid(settings){
 				}
 				// 修改一行
 				var formdata = $(this).serializeJson();
+				var $material = $(this).find("select#material");
+				if($material.length > 0){
+					formdata.material_name = $material.find("option:selected").text();
+				}
+				var $yarn = $(this).find("select#yarn");
+				if($yarn.length > 0){
+					formdata.yarn_name = $yarn.find("option:selected").text();
+				}
+				var $factoryId = $(this).find("select#factoryId");
+				if($factoryId.length > 0){
+					formdata.factory_name = $factoryId.find("option:selected").text();
+				}
+				var $styleId = $(this).find("select#style");
+				if($styleId.length > 0){
+					formdata.style_name = $styleId.find("option:selected").text();
+				}
+				
 				Object.TableInstance.updateRow(formdata,$tr[0]);
 				Object.$dialog.modal("hide");
 				return false;
