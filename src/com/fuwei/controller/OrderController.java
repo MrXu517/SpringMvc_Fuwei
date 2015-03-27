@@ -48,6 +48,8 @@ import com.fuwei.entity.ordergrid.CheckRecordOrder;
 import com.fuwei.entity.ordergrid.CheckRecordOrderDetail;
 import com.fuwei.entity.ordergrid.ColoringOrder;
 import com.fuwei.entity.ordergrid.ColoringOrderDetail;
+import com.fuwei.entity.ordergrid.ColoringProcessOrder;
+import com.fuwei.entity.ordergrid.ColoringProcessOrderDetail;
 import com.fuwei.entity.ordergrid.FinalStoreOrder;
 import com.fuwei.entity.ordergrid.FuliaoPurchaseOrder;
 import com.fuwei.entity.ordergrid.FuliaoPurchaseOrderDetail;
@@ -84,6 +86,7 @@ import com.fuwei.service.SampleService;
 import com.fuwei.service.ordergrid.CarFixRecordOrderService;
 import com.fuwei.service.ordergrid.CheckRecordOrderService;
 import com.fuwei.service.ordergrid.ColoringOrderService;
+import com.fuwei.service.ordergrid.ColoringProcessOrderService;
 import com.fuwei.service.ordergrid.FinalStoreOrderService;
 import com.fuwei.service.ordergrid.FuliaoPurchaseOrderService;
 import com.fuwei.service.ordergrid.HalfCheckRecordOrderService;
@@ -152,6 +155,8 @@ public class OrderController extends BaseController {
 	FinalStoreOrderService finalStoreOrderService;
 	@Autowired
 	ShopRecordOrderService shopRecordOrderService;
+	@Autowired
+	ColoringProcessOrderService coloringProcessOrderService;
 	
 	@Autowired
 	SampleService sampleService;
@@ -310,6 +315,14 @@ public class OrderController extends BaseController {
 			productionScheduleOrder.setUpdated_at(DateTool.now());// 设置更新时间
 			productionScheduleOrder.setCreated_user(user.getId());// 设置创建人
 			productionScheduleOrderService.add(productionScheduleOrder);
+			
+			//染色进度单
+			ColoringProcessOrder coloringProcessOrder = new ColoringProcessOrder();
+			coloringProcessOrder.setOrderId(orderId);
+			coloringProcessOrder.setCreated_at(DateTool.now());// 设置创建时间
+			coloringProcessOrder.setUpdated_at(DateTool.now());// 设置更新时间
+			coloringProcessOrder.setCreated_user(user.getId());// 设置创建人
+			coloringProcessOrderService.add(coloringProcessOrder);
 			
 			// 2015-3-4创建订单时自动创建半检记录单、抽检记录单
 
@@ -627,6 +640,43 @@ public class OrderController extends BaseController {
 			// 获取整烫记录单
 			IroningRecordOrder ironingRecordOrder = ironingRecordOrderService
 					.getByOrder(orderId);
+			
+			//2015-3-24添加新表格
+			//生产进度单
+			ProductionScheduleOrder productionScheduleOrder = productionScheduleOrderService.getByOrder(orderId);
+			request.setAttribute("productionScheduleOrder",productionScheduleOrder);
+	
+			//成品仓库记录单
+			FinalStoreOrder finalStoreOrder = finalStoreOrderService.getByOrder(orderId);
+			request.setAttribute("finalStoreOrder",finalStoreOrder);
+			
+			//车间记录单
+			ShopRecordOrder shopRecordOrder = shopRecordOrderService.getByOrder(orderId);
+			request.setAttribute("shopRecordOrder",shopRecordOrder);
+			
+			//染色进度单
+			ColoringProcessOrder coloringProcessOrder = coloringProcessOrderService.getByOrder(orderId);	
+			if(coloringProcessOrder!=null){
+				List<ColoringProcessOrderDetail> coloringProcessOrderDetailList = new ArrayList<ColoringProcessOrderDetail>();
+				for(ColoringOrder coloringOrder : coloringOrderList){
+					Integer factoryId = coloringOrder.getFactoryId();
+					List<ColoringOrderDetail> detaillist = coloringOrder.getDetaillist() == null ?  new ArrayList<ColoringOrderDetail>() : coloringOrder.getDetaillist();
+					for(ColoringOrderDetail detail : detaillist){
+						ColoringProcessOrderDetail temp = new ColoringProcessOrderDetail();
+						temp.setColor(detail.getColor());
+						temp.setFactoryId(factoryId);
+						temp.setMaterial(detail.getMaterial());
+						temp.setQuantity(detail.getQuantity());
+						coloringProcessOrderDetailList.add(temp);
+					}
+					
+					
+				}
+				coloringProcessOrder.setDetaillist(coloringProcessOrderDetailList);
+				request.setAttribute("coloringProcessOrder",coloringProcessOrder);
+			}
+			
+			
 
 			request.setAttribute("order", order);
 			request.setAttribute("headBankOrder", headBankOrder);

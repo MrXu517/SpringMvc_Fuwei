@@ -388,6 +388,11 @@ $(document).ready(function() {
 		$content:$("#shoprecordorder")
 	});
 	
+	//染色进度单
+	var coloringProcessGrid = new OrderGrid({
+		$content:$("#coloringprocessorder")
+	});
+	
 	$("#createProducingorderBtn").click(function(){
 		
 	});

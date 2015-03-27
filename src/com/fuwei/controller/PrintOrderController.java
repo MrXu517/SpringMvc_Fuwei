@@ -1,5 +1,6 @@
 package com.fuwei.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,9 @@ import com.fuwei.entity.User;
 import com.fuwei.entity.ordergrid.CarFixRecordOrder;
 import com.fuwei.entity.ordergrid.CheckRecordOrder;
 import com.fuwei.entity.ordergrid.ColoringOrder;
+import com.fuwei.entity.ordergrid.ColoringOrderDetail;
+import com.fuwei.entity.ordergrid.ColoringProcessOrder;
+import com.fuwei.entity.ordergrid.ColoringProcessOrderDetail;
 import com.fuwei.entity.ordergrid.FinalStoreOrder;
 import com.fuwei.entity.ordergrid.FuliaoPurchaseOrder;
 import com.fuwei.entity.ordergrid.HalfCheckRecordOrder;
@@ -34,6 +38,7 @@ import com.fuwei.service.OrderService;
 import com.fuwei.service.ordergrid.CarFixRecordOrderService;
 import com.fuwei.service.ordergrid.CheckRecordOrderService;
 import com.fuwei.service.ordergrid.ColoringOrderService;
+import com.fuwei.service.ordergrid.ColoringProcessOrderService;
 import com.fuwei.service.ordergrid.FinalStoreOrderService;
 import com.fuwei.service.ordergrid.FuliaoPurchaseOrderService;
 import com.fuwei.service.ordergrid.HalfCheckRecordOrderService;
@@ -82,6 +87,9 @@ public class PrintOrderController extends BaseController {
 	FinalStoreOrderService finalStoreOrderService;
 	@Autowired
 	ShopRecordOrderService shopRecordOrderService;
+	@Autowired
+	ColoringProcessOrderService coloringProcessOrderService;
+	
 	
 	@RequestMapping(value = "/print", method = RequestMethod.GET)
 	@ResponseBody
@@ -92,6 +100,7 @@ public class PrintOrderController extends BaseController {
 		try {
 			Order order = orderService.get(orderId);
 			PlanOrder planOrder = null;
+			List<ColoringOrder> coloringOrderList = null;
 			
 			request.setAttribute("order", order);
 			
@@ -168,7 +177,7 @@ public class PrintOrderController extends BaseController {
 			
 			//获取染色单
 			if(printAll || gridName.indexOf("coloringorder") > -1){
-				List<ColoringOrder> coloringOrderList = coloringOrderService.getByOrder(orderId);
+				coloringOrderList = coloringOrderService.getByOrder(orderId);
 				if(coloringOrderList!=null && coloringOrderList.size() > 0){
 					grids += "coloringorder,";
 					request.setAttribute("coloringOrderList", coloringOrderList);
@@ -256,6 +265,33 @@ public class PrintOrderController extends BaseController {
 					request.setAttribute("shopRecordOrder", shopRecordOrder);
 				}
 			}
+			//获取染色进度单
+			if(printAll || gridName.indexOf("coloringprocessorder") > -1){
+				ColoringProcessOrder coloringProcessOrder = coloringProcessOrderService.getByOrder(orderId);
+				if(coloringProcessOrder!=null){
+					if(coloringOrderList==null){
+						coloringOrderList = coloringOrderService.getByOrder(orderId);
+					}
+					List<ColoringProcessOrderDetail> coloringProcessOrderDetailList = new ArrayList<ColoringProcessOrderDetail>();
+					for(ColoringOrder coloringOrder : coloringOrderList){
+						Integer factoryId = coloringOrder.getFactoryId();
+						List<ColoringOrderDetail> detaillist = coloringOrder.getDetaillist() == null ?  new ArrayList<ColoringOrderDetail>() : coloringOrder.getDetaillist();
+						for(ColoringOrderDetail detail : detaillist){
+							ColoringProcessOrderDetail temp = new ColoringProcessOrderDetail();
+							temp.setColor(detail.getColor());
+							temp.setFactoryId(factoryId);
+							temp.setMaterial(detail.getMaterial());
+							temp.setQuantity(detail.getQuantity());
+							coloringProcessOrderDetailList.add(temp);
+						}
+					}
+					coloringProcessOrder.setDetaillist(coloringProcessOrderDetailList);
+					grids += "coloringprocessorder,";
+					request.setAttribute("coloringProcessOrder", coloringProcessOrder);
+				}	
+			}
+			
+			
 			
 			if(grids.indexOf(",") <= -1){
 				throw new Exception("请先创建表格，再打印");

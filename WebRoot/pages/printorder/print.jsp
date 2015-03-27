@@ -43,7 +43,17 @@
 			<%@ include file="../printorder/producingorder.jsp"%>
 			</div>
 		<%} %>
-		
+
+		<%
+		/*2015-3-23添加新表格*/
+		//获取染色进度单
+			if(gridName.indexOf("coloringprocessorder") > -1){
+		 %>
+			<div style="page-break-after: always">
+			<%@ include file="../printorder/coloringprocessorder.jsp"%>
+			</div>
+		<%} %>
+
 		<%
 		/*2015-3-23添加新表格*/
 		//获取生产进度单

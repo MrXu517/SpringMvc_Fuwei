@@ -26,7 +26,7 @@
 	Boolean h_has_order_index = SystemCache.hasAuthority(session,"order/index");
 	
 	Boolean h_has_materialsys = SystemCache.hasAuthority(session,"materialsys");
-	Boolean h_has_materialsys_sample = SystemCache.hasAuthority(session,"materialsys/sample");//打样
+	//Boolean h_has_materialsys_sample = SystemCache.hasAuthority(session,"materialsys/sample");//打样
 	Boolean h_has_material_index = SystemCache.hasAuthority(session,"material/index");
 	
 	Boolean h_has_materialsys_purchase = SystemCache.hasAuthority(session,"material_purchase_order/index");//原材料采购单
@@ -225,11 +225,7 @@
 						<a href="#"><i class="fa fa-barcode"></i>材料系统<i
 							class="fa fa-angle-down"></i> </a>
 						<ul class="submenu">
-							<%if(h_has_materialsys_sample){ %>
-							<li>
-								<a href="materialsys/sample"><i class="fa fa-plus"></i>打样</a>
-							</li>
-							<%} %>
+						
 							<%if(h_has_materialsys_purchase){ %>
 							<li>
 								<a href="material_purchase_order/index"><i class="fa fa-sign-in"></i>原材料采购单</a>

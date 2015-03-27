@@ -45,6 +45,26 @@
 		<%} %>
 		
 		<%
+		/*2015-3-23添加新表格*/
+		//获取染色进度单
+			if(gridName.indexOf("coloringprocessorder") > -1){
+		 %>
+			<div style="page-break-after: always">
+			<%@ include file="../printorder/coloringprocessorder.jsp"%>
+			</div>
+		<%} %>
+
+		<%
+		/*2015-3-23添加新表格*/
+		//获取生产进度单
+			if(gridName.indexOf("productionscheduleorder") > -1){
+		 %>
+			<div style="page-break-after: always">
+			<%@ include file="../printorder/productionscheduleorder.jsp"%>
+			</div>
+		<%} %>
+
+		<%
 		//获取计划单
 			if(gridName.indexOf("planorder") > -1){
 		 %>
@@ -52,6 +72,16 @@
 			<%@ include file="../printorder/planorder.jsp"%>
 			</div>
 		<%} %>
+	
+		<%
+		/*2015-3-23添加新表格*/
+		//获取成品仓库记录单
+			if(gridName.indexOf("finalstorerecordorder") > -1){
+		 %>
+			<div style="page-break-after: always">
+			<%@ include file="../printorder/finalstoreorder.jsp"%>
+			</div>
+		<%} %>	
 
 		<%
 		//获取原材料仓库单
@@ -61,6 +91,16 @@
 			<%@ include file="../printorder/storeorder.jsp"%>
 			</div>
 		<%} %>
+	
+		<%
+		/*2015-3-23添加新表格*/
+		//获取车间记录单
+			if(gridName.indexOf("shoprecordorder") > -1){
+		 %>
+			<div style="page-break-after: always">
+			<%@ include file="../printorder/shoprecordorder.jsp"%>
+			</div>
+		<%} %>	
 
 		<%
 		//获取半检记录单
