@@ -2,6 +2,7 @@ function OrderGrid(settings){
 	var Object = this;
 	Object.donecall = settings.donecall;//2015-3-18添加
 	Object.tipText = settings.tipText;//2015-3-18添加
+	
 	this.$content = settings.$content || null;
 	this.tbOptions = settings.tbOptions || null;
 	if(this.tbOptions){
@@ -264,6 +265,40 @@ function OrderGrid(settings){
 			}
 
 		});
+		return false;
+	});
+	
+	Object.deleteUrl = settings.deleteUrl;//2015-3-31添加
+	this.$content.find(".deleteTableBtn").click(function(){
+		var $thisBtn = $(this);
+		if(Object.deleteUrl!=undefined && Object.deleteUrl!=null && Object.deleteUrl!=""){
+			var tableOrderId = Object.$content.find(".saveform [name='id']").val();
+			if(tableOrderId == undefined || tableOrderId==""){
+				return false;
+			}
+			if (!confirm("确定要删除该单据吗？")) {
+				return false;
+			}
+			$.ajax( {
+				url :Object.deleteUrl + "/" + tableOrderId,
+				type :'POST',
+				success : function(result) {
+					if (result.success) {
+						Common.Tip("删除单据成功", function() {
+							if(Object.donecall){
+								Object.donecall(result);
+							}
+						});
+					}
+					$thisBtn.button('reset');
+				},
+				error : function(result) {
+					Common.Error("删除单据失败：" + result.responseText);
+					$thisBtn.button('reset');
+				}
+
+			});
+		}	
 		return false;
 	});
 

@@ -100,7 +100,7 @@
 																样品图片
 															</label>
 															<div class="col-sm-8">
-																<a href="#" class="thumbnail" id="sampleImgA"> <img
+																<a class="thumbnail" id="sampleImgA"> <img
 																		id="sampleImg" alt="350 x 100%"
 																		src="/<%=order.getImg_s()%>"> </a>
 															</div>

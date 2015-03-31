@@ -22,7 +22,13 @@ $(document).ready(function() {
 		var $content = $(this);
 		var producingGrid = new OrderGrid({
 			url:"order/producingorder",
+			deleteUrl:"order/delete_producingorder",
 			$content:$content,
+			donecall:function(){
+				var params = Common.urlParams();
+				params.tab = "producingorder";
+				location.href = location.pathname + "?" + $.param(params);
+			},
 			tbOptions:{
 				colnames : [
 						{
@@ -102,7 +108,9 @@ $(document).ready(function() {
 		url:"order/planorder",
 		$content:$("#planorder"),
 		donecall:function(){
-			location.reload();
+			var params = Common.urlParams();
+			params.tab = "planorder";
+			location.href = location.pathname + "?" + $.param(params);
 		},
 		tbOptions:{
 			colnames : [
@@ -139,6 +147,11 @@ $(document).ready(function() {
 	var storeGrid = new OrderGrid({
 		url:"order/storeorder",
 		$content:$("#storeorder"),
+		donecall:function(){
+			var params = Common.urlParams();
+			params.tab = "storeorder";
+			location.href = location.pathname + "?" + $.param(params);
+		},
 		tbOptions:{
 			colnames : [
 					{
@@ -183,6 +196,11 @@ $(document).ready(function() {
 	var halfcheckrecordGrid = new OrderGrid({
 		url:"order/halfcheckrecordorder",
 		$content:$("#halfcheckrecordorder"),
+		donecall:function(){
+			var params = Common.urlParams();
+			params.tab = "halfcheckrecordorder";
+			location.href = location.pathname + "?" + $.param(params);
+		},
 		tbOptions2:{
 			colnames : [
 			        {
@@ -219,8 +237,14 @@ $(document).ready(function() {
 	$materialpurchaseorderTab.each(function(){
 		var $content = $(this);
 		var materialPurchaseGrid = new OrderGrid({
-			url:"order/materialpurchaseorder",
+			url:"material_purchase_order/put",
+			deleteUrl:"material_purchase_order/delete",
 			$content:$content,
+			donecall:function(){
+				var params = Common.urlParams();
+				params.tab = "materialpurchaseorder";
+				location.href = location.pathname + "?" + $.param(params);
+			},
 			tbOptions:{
 				colnames : [
 						{
@@ -268,8 +292,14 @@ $(document).ready(function() {
 	$coloringorderTab.each(function(){
 		var $content = $(this);
 		var coloringGrid = new OrderGrid({
-			url:"order/coloringorder",
+			url:"coloring_order/put",
+			deleteUrl:"coloring_order/delete",
 			$content:$content,
+			donecall:function(){
+				var params = Common.urlParams();
+				params.tab = "coloringorder";
+				location.href = location.pathname + "?" + $.param(params);
+			},
 			tbOptions:{
 				colnames : [
 				        {
@@ -319,8 +349,14 @@ $(document).ready(function() {
 	$fuliaoorderTab.each(function(){
 		var $content = $(this);
 		var fuliaoPurchaseGrid = new OrderGrid({
-			url:"order/fuliaopurchaseorder",
+			url:"fuliao_purchase_order/put",
+			deleteUrl:"fuliao_purchase_order/delete",
 			$content:$content,
+			donecall:function(){
+			var params = Common.urlParams();
+			params.tab = "fuliaopurchaseorder";
+			location.href = location.pathname + "?" + $.param(params);
+			},
 			tbOptions:{
 			colnames : [
 						{

@@ -826,6 +826,22 @@ public class OrderController extends BaseController {
 
 	}
 
+	//2015-3-31 删除生产单
+	@RequestMapping(value = "/delete_producingorder/{id}", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> delete_producingorder(@PathVariable int id,HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/producing/delete";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有删除生产单的权限", null);
+		}
+		int success = producingOrderService.remove(id);
+		
+		return this.returnSuccess();
+		
+	}
 	
 	// 添加或保存计划单
 
@@ -1124,69 +1140,69 @@ public class OrderController extends BaseController {
 	
 
 
-//	// 添加或保存半检记录单
-//	@RequestMapping(value = "/halfcheckrecordorder", method = RequestMethod.POST)
-//	@ResponseBody
-//	public Map<String, Object> halfcheckrecordorder(
-//			HalfCheckRecordOrder tableOrder, String details_2,
-//			HttpSession session, HttpServletRequest request,
-//			HttpServletResponse response) throws Exception {
-//		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-//		String lcode = "order/halfcheckrecord";
-//		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
-//		if (!hasAuthority) {
-//			throw new PermissionDeniedDataAccessException("没有创建或编辑半检记录单的权限",
-//					null);
-//		}
-//		try {
-//			Integer tableOrderId = tableOrder.getId();
-//
-//			if (tableOrderId == null || tableOrderId == 0) {
-//				// 添加
-//				if (tableOrder.getOrderId() == null
-//						|| tableOrder.getOrderId() == 0) {
-//					throw new PermissionDeniedDataAccessException(
-//							"半检记录单必须属于一张订单", null);
-//				} else {
-//					HalfCheckRecordOrder temp = halfCheckRecordOrderService
-//							.getByOrder(tableOrder.getOrderId());
-//					if (temp != null) {
-//						throw new PermissionDeniedDataAccessException(
-//								"该订单已经存在半检记录单", null);
-//					}
-//				}
-//
-//				tableOrder.setCreated_at(DateTool.now());// 设置创建时间
-//				tableOrder.setUpdated_at(DateTool.now());// 设置更新时间
-//				tableOrder.setCreated_user(user.getId());// 设置创建人
-//
-//				// List<HalfCheckRecordOrderDetail> detaillist =
-//				// SerializeTool.deserializeList(details,
-//				// HalfCheckRecordOrderDetail.class);
-//				List<HalfCheckRecordOrderDetail2> detaillist2 = SerializeTool
-//						.deserializeList(details_2,
-//								HalfCheckRecordOrderDetail2.class);
-//				// tableOrder.setDetaillist(detaillist);
-//				tableOrder.setDetail_2_list(detaillist2);
-//				tableOrderId = halfCheckRecordOrderService.add(tableOrder);
-//			} else {// 编辑
-//				tableOrder.setUpdated_at(DateTool.now());
-//				// List<HalfCheckRecordOrderDetail> detaillist =
-//				// SerializeTool.deserializeList(details,
-//				// HalfCheckRecordOrderDetail.class);
-//				List<HalfCheckRecordOrderDetail2> detaillist2 = SerializeTool
-//						.deserializeList(details_2,
-//								HalfCheckRecordOrderDetail2.class);
-//				// tableOrder.setDetaillist(detaillist);
-//				tableOrder.setDetail_2_list(detaillist2);
-//				tableOrderId = halfCheckRecordOrderService.update(tableOrder);
-//			}
-//			return this.returnSuccess("id", tableOrderId);
-//		} catch (Exception e) {
-//			throw e;
-//		}
-//
-//	}
+	// 添加或保存半检记录单
+	@RequestMapping(value = "/halfcheckrecordorder", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> halfcheckrecordorder(
+			HalfCheckRecordOrder tableOrder, String details_2,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/halfcheckrecord";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有创建或编辑半检记录单的权限",
+					null);
+		}
+		try {
+			Integer tableOrderId = tableOrder.getId();
+
+			if (tableOrderId == null || tableOrderId == 0) {
+				// 添加
+				if (tableOrder.getOrderId() == null
+						|| tableOrder.getOrderId() == 0) {
+					throw new PermissionDeniedDataAccessException(
+							"半检记录单必须属于一张订单", null);
+				} else {
+					HalfCheckRecordOrder temp = halfCheckRecordOrderService
+							.getByOrder(tableOrder.getOrderId());
+					if (temp != null) {
+						throw new PermissionDeniedDataAccessException(
+								"该订单已经存在半检记录单", null);
+					}
+				}
+
+				tableOrder.setCreated_at(DateTool.now());// 设置创建时间
+				tableOrder.setUpdated_at(DateTool.now());// 设置更新时间
+				tableOrder.setCreated_user(user.getId());// 设置创建人
+
+				// List<HalfCheckRecordOrderDetail> detaillist =
+				// SerializeTool.deserializeList(details,
+				// HalfCheckRecordOrderDetail.class);
+				List<HalfCheckRecordOrderDetail2> detaillist2 = SerializeTool
+						.deserializeList(details_2,
+								HalfCheckRecordOrderDetail2.class);
+				// tableOrder.setDetaillist(detaillist);
+				tableOrder.setDetail_2_list(detaillist2);
+				tableOrderId = halfCheckRecordOrderService.add(tableOrder);
+			} else {// 编辑
+				tableOrder.setUpdated_at(DateTool.now());
+				// List<HalfCheckRecordOrderDetail> detaillist =
+				// SerializeTool.deserializeList(details,
+				// HalfCheckRecordOrderDetail.class);
+				List<HalfCheckRecordOrderDetail2> detaillist2 = SerializeTool
+						.deserializeList(details_2,
+								HalfCheckRecordOrderDetail2.class);
+				// tableOrder.setDetaillist(detaillist);
+				tableOrder.setDetail_2_list(detaillist2);
+				tableOrderId = halfCheckRecordOrderService.update(tableOrder);
+			}
+			return this.returnSuccess("id", tableOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
 	/*
 	 * @RequestMapping(value = "/headbank", method = RequestMethod.POST)
 	 * 

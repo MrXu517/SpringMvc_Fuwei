@@ -88,3 +88,7 @@ a.thumbnail{
 	width: 150px;
 	line-height: 50px;
 }
+.deleteTableBtn{
+	margin-top: 10px;
+  	margin-right: 20px;
+}

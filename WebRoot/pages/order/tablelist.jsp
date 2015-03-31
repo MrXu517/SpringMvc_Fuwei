@@ -123,6 +123,16 @@
 	if (DetailList == null) {
 		DetailList = new ArrayList<OrderDetail>();
 	}
+	
+	//2015-3-31添加
+	Boolean has_material_purchase_order_delete = SystemCache.hasAuthority(session,
+			"material_purchase_order/delete");
+	Boolean has_coloring_order_delete = SystemCache.hasAuthority(session,
+			"coloring_order/delete");
+	Boolean has_fuliao_purchase_order_delete = SystemCache.hasAuthority(session,
+			"fuliao_purchase_order/delete");
+	Boolean has_producing_order_delete = SystemCache.hasAuthority(session,
+			"order/producing/delete");
 %>
 <!DOCTYPE html>
 <html>
@@ -410,11 +420,18 @@
 						.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
-											<button type="submit"
+											<%if(producingOrder.isEdit()){ %>
+												<button type="submit"
 												class="pull-right btn btn-danger saveTable"
 												data-loading-text="正在保存...">
 												保存对当前表格的修改
 											</button>
+												<%if(has_producing_order_delete){ %>
+													<a target="_blank" type="button"
+													class="pull-right btn btn-default deleteTableBtn"
+													data-loading-text="正在删除..."> 删除 </a>
+												<%} %>
+											<%} %>
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
 												data-loading-text="正在打印..."> 打印 </a>
@@ -1466,14 +1483,24 @@
 						: materialPurchaseOrder.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
-											<button type="submit"
+											<%if(materialPurchaseOrder.isEdit()){ %>
+												<button type="submit"
 												class="pull-right btn btn-danger saveTable"
 												data-loading-text="正在保存...">
 												保存对当前表格的修改
 											</button>
+												<%if(has_material_purchase_order_delete){ %>
+													<a target="_blank" type="button"
+													class="pull-right btn btn-default deleteTableBtn"
+													data-loading-text="正在删除..."> 删除 </a>
+												<%} %>
+											<%} %>
+											
+											
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
 												data-loading-text="正在打印..."> 打印 </a>
+											
 											<div class="clear"></div>
 											<div class="col-md-12 tablewidget">
 												<table class="table">
@@ -1509,7 +1536,7 @@
 																						未选择
 																					</option>
 																					<%
-																						for (Factory factory : SystemCache.produce_factorylist) {
+																						for (Factory factory : SystemCache.purchase_factorylist) {
 																								if (factory.getId() == materialPurchaseOrder.getFactoryId()) {
 																					%>
 																					<option value="<%=factory.getId()%>"
@@ -1773,11 +1800,18 @@
 						.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
-											<button type="submit"
+											<%if(coloringOrder.isEdit()){ %>
+												<button type="submit"
 												class="pull-right btn btn-danger saveTable"
 												data-loading-text="正在保存...">
 												保存对当前表格的修改
 											</button>
+												<%if(has_coloring_order_delete){ %>
+													<a target="_blank" type="button"
+													class="pull-right btn btn-default deleteTableBtn"
+													data-loading-text="正在删除..."> 删除 </a>
+												<%} %>
+											<%} %>
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
 												data-loading-text="正在打印..."> 打印 </a>
@@ -2215,11 +2249,18 @@
 						: fuliaoPurchaseOrder.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
-											<button type="submit"
+											<%if(fuliaoPurchaseOrder.isEdit()){ %>
+												<button type="submit"
 												class="pull-right btn btn-danger saveTable"
 												data-loading-text="正在保存...">
 												保存对当前表格的修改
 											</button>
+												<%if(has_fuliao_purchase_order_delete){ %>
+													<a target="_blank" type="button"
+													class="pull-right btn btn-default deleteTableBtn"
+													data-loading-text="正在删除..."> 删除 </a>
+												<%} %>
+											<%} %>
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
 												data-loading-text="正在打印..."> 打印 </a>
