@@ -48,6 +48,8 @@
 	Boolean h_has_systeminfo_user = SystemCache.hasAuthority(session,"user");
 	//角色管理
 	Boolean h_has_systeminfo_role = SystemCache.hasAuthority(session,"role");
+	//客户管理
+	Boolean h_has_systeminfo_customer = SystemCache.hasAuthority(session,"customer");
 	
 	//染色单
 	Boolean h_has_coloring_order_index = SystemCache.hasAuthority(session,"coloring_order/index");//染色单
@@ -66,7 +68,7 @@
 	<link href="css/common/head.css" rel="stylesheet" type="text/css" />
 	<script src="js/common/head.js" type="text/javascript"></script>
 	<script type="text/javascript">
-		version = 2015031701;
+		version = 2015033101;
 	</script>
 	<div style="display: none;" class="background"></div>
 	<div style="display: none;" class="loading">
@@ -322,6 +324,11 @@
 							<%if(h_has_systeminfo_role){ %>
 							<li>
 								<a href="role/list">角色管理</a>
+							</li>
+							<%} %>
+							<%if(h_has_systeminfo_customer){ %>
+							<li>
+								<a href="customer/index">客户管理</a>
 							</li>
 							<%} %>
 						

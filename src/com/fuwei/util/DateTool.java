@@ -40,7 +40,8 @@ public class DateTool {
 	
 	public static String formatDateYMD(Date date) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-		return sdf.format(date);
+		String dateStr = sdf.format(date);
+		return dateStr;
 	}
 	public static String formatDateYMD(Date date,String sep) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy"+sep+"MM"+sep+"dd");

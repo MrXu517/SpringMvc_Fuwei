@@ -28,10 +28,22 @@ public class HalfCheckRecordOrder extends BaseTableOrder{
 //	private List<HalfCheckRecordOrderDetail> detaillist ;
 	
 	@Temporary
+	private List<PlanOrderDetail> detaillist ;//2015-3-31添加
+	
+	@Temporary
 	private List<HalfCheckRecordOrderDetail2> detail_2_list ;
 
 	private Integer status;// 订单状态 -1刚创建  , 6执行完成 ， 7取消
 	private String state;// 订单状态描述
+	
+	
+	
+	public List<PlanOrderDetail> getDetaillist() {
+		return detaillist;
+	}
+	public void setDetaillist(List<PlanOrderDetail> detaillist) {
+		this.detaillist = detaillist;
+	}
 	public Integer getStatus() {
 		return status;
 	}

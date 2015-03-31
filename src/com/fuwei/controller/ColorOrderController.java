@@ -154,7 +154,7 @@ public class ColorOrderController extends BaseController {
 				Sample sample = sampleService.get(sampleId);
 				coloringOrder.setImg(sample.getImg());
 				coloringOrder.setProductNumber(sample.getProductNumber());
-				coloringOrder.setMaterial(sample.getMaterial());
+				coloringOrder.setMaterialId(sample.getMaterialId());
 				coloringOrder.setSize(sample.getSize());
 				coloringOrder.setWeight(sample.getWeight());
 				coloringOrder.setName(sample.getName());
@@ -211,12 +211,12 @@ public class ColorOrderController extends BaseController {
 				tableOrder.setImg_s(order.getImg_s());
 				tableOrder.setImg_ss(order.getImg_ss());
 				tableOrder.setProductNumber(order.getProductNumber());
-				tableOrder.setMaterial(order.getMaterial());
+				tableOrder.setMaterialId(order.getMaterialId());
 				tableOrder.setSize(order.getSize());
 				tableOrder.setWeight(order.getWeight());
 				tableOrder.setName(order.getName());
 				tableOrder.setCompanyId(order.getCompanyId());
-				tableOrder.setKehu(order.getKehu());
+				tableOrder.setCustomerId(order.getCustomerId());
 				tableOrder.setSampleId(order.getSampleId());
 				tableOrder.setOrderNumber(order.getOrderNumber());
 				tableOrder.setCharge_user(order.getCharge_user());//2015/3/17 添加跟单人

@@ -3,6 +3,7 @@
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.entity.Company"%>
 <%@page import="com.fuwei.entity.Material"%>
+<%@page import="com.fuwei.entity.Customer"%>
 <%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
@@ -62,7 +63,7 @@
 					<div class="container-fluid coloringorderWidget">
 						<div class="row">
 							<form class="saveform">
-								<input type="hidden" id="sampleId" name="sampleId"/>
+								<input type="hidden" id="sampleId" name="sampleId" />
 								<button type="submit"
 									class="pull-right btn btn-danger saveTable"
 									data-loading-text="正在保存...">
@@ -132,7 +133,7 @@
 																		未选择
 																	</option>
 																	<%
-																		for (Factory factory : SystemCache.factorylist) {
+																		for (Factory factory : SystemCache.coloring_factorylist) {
 																	%>
 																	<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
 																	<%
@@ -148,8 +149,19 @@
 																客户
 															</label>
 															<div class="col-sm-8">
-																<input type="text" class="form-control" name="kehu"
-																	id="kehu">
+																<select class="form-control" name="customerId"
+																	id="customerId">
+																	<option value="">
+																		未选择
+																	</option>
+																	<%
+																		for (Customer customer : SystemCache.customerlist) {
+																	%>
+																	<option value="<%=customer.getId()%>"><%=customer.getName()%></option>
+																	<%
+																		}
+																	%>
+																</select>
 															</div>
 															<div class="col-sm-1"></div>
 														</div>
@@ -210,20 +222,20 @@
 														<thead>
 															<tr>
 																<th width="15%">
-																				色号
-																			</th>
-																			<th width="15%">
-																				材料
-																			</th>
-																			<th width="15%">
-																				数量
-																			</th>
-																			<th width="15%">
-																				标准样纱
-																			</th>
-																			<th width="15%">
-																				操作
-																			</th>
+																	色号
+																</th>
+																<th width="15%">
+																	材料
+																</th>
+																<th width="15%">
+																	数量
+																</th>
+																<th width="15%">
+																	标准样纱
+																</th>
+																<th width="15%">
+																	操作
+																</th>
 															</tr>
 														</thead>
 														<tbody>
@@ -241,86 +253,92 @@
 							</form>
 						</div>
 					</div>
-					
+
 					<!--
 						 			添加编辑染色单对话框 -->
-								<div class="modal fade tableRowDialog" id="coloringDialog">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-header">
-												<button type="button" class="close" data-dismiss="modal">
-													<span aria-hidden="true">&times;</span><span
-														class="sr-only">Close</span>
-												</button>
-												<h4 class="modal-title">
-													添加一行
-												</h4>
-											</div>
-											<div class="modal-body">
-												<form class="form-horizontal rowform" role="form">
-													<div class="form-group col-md-12">
-														<label for="color" class="col-sm-3 control-label">
-															颜色
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="color" id="color"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="material" class="col-sm-3 control-label">
-															材料
-														</label>
-														<div class="col-sm-8">
-															<select name="material" id="material" class="form-control require">
-																<option value="">未选择</option>
-																<%for(Material material : SystemCache.materiallist){ %>
-																	<option value="<%=material.getId() %>" ><%=material.getName() %></option>
-																<%} %>
-															</select>
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="quantity" class="col-sm-3 control-label">
-															数量
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="quantity" id="quantity"
-																class="form-control int require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="standardyarn" class="col-sm-3 control-label">
-															标准样纱
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="standardyarn" id="standardyarn"
-																class="form-control" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-
-
-													<div class="modal-footer">
-														<button type="submit" class="btn btn-primary"
-															data-loading-text="正在保存...">
-															保存
-														</button>
-														<button type="button" class="btn btn-default"
-															data-dismiss="modal">
-															关闭
-														</button>
-													</div>
-												</form>
-											</div>
-
-										</div>
-									</div>
+					<div class="modal fade tableRowDialog" id="coloringDialog">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">
+										<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+									</button>
+									<h4 class="modal-title">
+										添加一行
+									</h4>
 								</div>
-								<!-- 添加编辑染色单对话框 -->
+								<div class="modal-body">
+									<form class="form-horizontal rowform" role="form">
+										<div class="form-group col-md-12">
+											<label for="color" class="col-sm-3 control-label">
+												颜色
+											</label>
+											<div class="col-sm-8">
+												<input type="text" name="color" id="color"
+													class="form-control require" />
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+										<div class="form-group col-md-12">
+											<label for="material" class="col-sm-3 control-label">
+												材料
+											</label>
+											<div class="col-sm-8">
+												<select name="material" id="material"
+													class="form-control require">
+													<option value="">
+														未选择
+													</option>
+													<%
+														for (Material material : SystemCache.materiallist) {
+													%>
+													<option value="<%=material.getId()%>"><%=material.getName()%></option>
+													<%
+														}
+													%>
+												</select>
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+										<div class="form-group col-md-12">
+											<label for="quantity" class="col-sm-3 control-label">
+												数量
+											</label>
+											<div class="col-sm-8">
+												<input type="text" name="quantity" id="quantity"
+													class="form-control int require" />
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+										<div class="form-group col-md-12">
+											<label for="standardyarn" class="col-sm-3 control-label">
+												标准样纱
+											</label>
+											<div class="col-sm-8">
+												<input type="text" name="standardyarn" id="standardyarn"
+													class="form-control" />
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+
+
+										<div class="modal-footer">
+											<button type="submit" class="btn btn-primary"
+												data-loading-text="正在保存...">
+												保存
+											</button>
+											<button type="button" class="btn btn-default"
+												data-dismiss="modal">
+												关闭
+											</button>
+										</div>
+									</form>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<!-- 添加编辑染色单对话框 -->
 
 					<!-- 选择样品对话框 -->
 					<div class="modal fade" id="sampleDialog">

@@ -2,13 +2,17 @@
 	contentType="text/html; charset=utf-8"%>
 <%@page import="com.fuwei.entity.Sample"%>
 <%@page import="com.fuwei.entity.User"%>
+<%@page import="com.fuwei.entity.Material" %>
+<%@page import="com.fuwei.entity.Factory" %>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	List<User> userlist = (List<User>) request.getAttribute("userlist");
+	List<User> userlist = SystemCache.userlist;
+	List<Material> materiallist = SystemCache.materiallist;
+	List<Factory> factorylist = SystemCache.produce_factorylist;
 
 	Sample sample = (Sample) request.getAttribute("sample");
 %>
@@ -140,9 +144,23 @@
 														材料
 													</label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control require"
-															id="material" name="material" placeholder="材料"
-															value="<%=sample.getMaterial()%>">
+														<select class="form-control require" name="materialId"
+															id="materialId">
+															<option value="">未选择</option>
+															<%
+																for (Material material : materiallist) {
+																	if (sample.getMaterialId()!=null && material.getId() == sample.getMaterialId()) {
+															%>
+															<option value="<%=material.getId()%>" selected="selected"><%=material.getName()%></option>
+															<%
+																} else {
+															%>
+															<option value="<%=material.getId()%>"><%=material.getName()%></option>
+															<%
+																}
+																}
+															%>
+														</select>
 													</div>
 													<div class="col-sm-1"></div>
 												</div>
@@ -175,9 +193,24 @@
 														机织
 													</label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control require"
-															name="machine" id="machine" placeholder="机织"
-															value="<%=sample.getMachine()%>">
+														<select class="form-control" name="factoryId"
+															id="factoryId">
+															<option value="">未选择</option>
+															<%
+																for (Factory factory : factorylist) {
+																	if (sample.getFactoryId()!=null && factory.getId() == sample.getFactoryId()) {
+															%>
+															<option value="<%=factory.getId()%>" selected="selected"><%=factory.getName()%></option>
+															<%
+																} else {
+															%>
+															<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
+															<%
+																}
+																}
+															%>
+														</select>
+													
 													</div>
 													<div class="col-sm-1"></div>
 												</div>

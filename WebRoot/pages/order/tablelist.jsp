@@ -52,6 +52,12 @@
 			.getAttribute("producingOrderList");
 	producingOrderList = producingOrderList == null ? new ArrayList<ProducingOrder>()
 			: producingOrderList;
+	String productfactoryStr = "";
+	String seq = "";
+	for(ProducingOrder producingOrder : producingOrderList){
+		productfactoryStr += seq + SystemCache.getFactoryName(producingOrder.getFactoryId());
+		seq = " | ";
+	}
 
 	PlanOrder planOrder = (PlanOrder) request.getAttribute("planOrder");
 	List<PlanOrderDetail> planOrderDetailList = planOrder == null ? new ArrayList<PlanOrderDetail>()
@@ -204,10 +210,10 @@
 								<a href="#shoprecordorder" role="tab" data-toggle="tab">车间记录单</a>
 							</li>
 							<li>
-								<a href="#halfcheckrecordorder" role="tab" data-toggle="tab">半检记录单</a>
+								<a href="#checkrecordorder" role="tab" data-toggle="tab">抽检记录单</a>
 							</li>
 							<li>
-								<a href="#checkrecordorder" role="tab" data-toggle="tab">抽检记录单</a>
+								<a href="#halfcheckrecordorder" role="tab" data-toggle="tab">半检记录单</a>
 							</li>
 							<li>
 								<a href="#headbankorder" role="tab" data-toggle="tab">质量记录单</a>
@@ -257,7 +263,7 @@
 																class="table table-responsive table-bordered tableTb">
 																<tbody>
 																	<tr>
-																		<td rowspan="7" width="50%">
+																		<td rowspan="8" width="50%">
 																			<a href="/<%=order.getImg()%>" class="thumbnail"
 																				target="_blank"> <img id="previewImg"
 																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
@@ -266,7 +272,7 @@
 																		<td width="20%">
 																			生产单位
 																		</td>
-																		<td class="orderproperty"></td>
+																		<td class="orderproperty"><%=productfactoryStr %></td>
 																	</tr>
 
 																	<tr>
@@ -284,7 +290,7 @@
 																		<td>
 																			客户
 																		</td>
-																		<td><%=order.getKehu()%></td>
+																		<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -303,6 +309,12 @@
 																			跟单
 																		</td>
 																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			发货时间
+																		</td>
+																		<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
 																	</tr>
 																</tbody>
 															</table>
@@ -456,7 +468,7 @@
 																		<td>
 																			客户
 																		</td>
-																		<td><%=order.getKehu()%></td>
+																		<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -739,7 +751,7 @@
 																class="table table-responsive table-bordered tableTb">
 																<tbody>
 																	<tr>
-																		<td rowspan="7" width="50%">
+																		<td rowspan="8" width="50%">
 																			<a href="/<%=order.getImg()%>" class="thumbnail"
 																				target="_blank"> <img id="previewImg"
 																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
@@ -748,7 +760,7 @@
 																		<td width="20%">
 																			生产单位
 																		</td>
-																		<td class="orderproperty"></td>
+																		<td class="orderproperty"><%=productfactoryStr %></td>
 																	</tr>
 
 																	<tr>
@@ -766,7 +778,7 @@
 																		<td>
 																			客户
 																		</td>
-																		<td><%=order.getKehu()%></td>
+																		<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -785,6 +797,12 @@
 																			跟单
 																		</td>
 																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			发货时间
+																		</td>
+																		<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
 																	</tr>
 																</tbody>
 															</table>
@@ -896,7 +914,7 @@
 																class="table table-responsive table-bordered tableTb">
 																<tbody>
 																	<tr>
-																		<td rowspan="7" width="50%">
+																		<td rowspan="8" width="50%">
 																			<a href="/<%=order.getImg()%>" class="thumbnail"
 																				target="_blank"> <img id="previewImg"
 																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
@@ -905,7 +923,7 @@
 																		<td width="20%">
 																			生产单位
 																		</td>
-																		<td class="orderproperty"></td>
+																		<td class="orderproperty"><%=productfactoryStr %></td>
 																	</tr>
 
 																	<tr>
@@ -923,7 +941,7 @@
 																		<td>
 																			客户
 																		</td>
-																		<td><%=order.getKehu()%></td>
+																		<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -942,6 +960,12 @@
 																			跟单
 																		</td>
 																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			发货时间
+																		</td>
+																		<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
 																	</tr>
 																</tbody>
 															</table>
@@ -1169,7 +1193,7 @@
 																class="table table-responsive table-bordered tableTb">
 																<tbody>
 																	<tr>
-																		<td rowspan="7" width="50%">
+																		<td rowspan="8" width="50%">
 																			<a href="/<%=order.getImg()%>" class="thumbnail"
 																				target="_blank"> <img id="previewImg"
 																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
@@ -1178,7 +1202,7 @@
 																		<td width="20%">
 																			生产单位
 																		</td>
-																		<td class="orderproperty"></td>
+																		<td class="orderproperty"><%=productfactoryStr %></td>
 																	</tr>
 
 																	<tr>
@@ -1196,7 +1220,7 @@
 																		<td>
 																			客户
 																		</td>
-																		<td><%=order.getKehu()%></td>
+																		<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -1215,6 +1239,12 @@
 																			跟单
 																		</td>
 																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			发货时间
+																		</td>
+																		<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
 																	</tr>
 																</tbody>
 															</table>
@@ -1248,7 +1278,7 @@
 																</thead>
 																<tbody>
 																	<%
-																		for (OrderDetail detail : DetailList) {
+																		for (PlanOrderDetail detail : planOrderDetailList) {
 																	%>
 																	<tr class="tr"
 																		data='<%=SerializeTool.serialize(detail)%>'>
@@ -1453,7 +1483,7 @@
 													<thead>
 														<tr>
 															<td colspan="3" class="pull-right orderNumber">
-																№：<%=order.getOrderNumber()%></td>
+																№：<%=materialPurchaseOrder.getOrderNumber()%></td>
 														</tr>
 													</thead>
 													<tbody>
@@ -1464,9 +1494,9 @@
 																	<tbody>
 																		<tr>
 																			<td rowspan="7" width="50%">
-																				<a href="/<%=order.getImg()%>" class="thumbnail"
+																				<a href="/<%=materialPurchaseOrder.getImg()%>" class="thumbnail"
 																					target="_blank"> <img id="previewImg"
-																						alt="200 x 100%" src="/<%=order.getImg_s()%>">
+																						alt="200 x 100%" src="/<%=materialPurchaseOrder.getImg_s()%>">
 																				</a>
 																			</td>
 																			<td width="20%">
@@ -1479,7 +1509,7 @@
 																						未选择
 																					</option>
 																					<%
-																						for (Factory factory : SystemCache.factorylist) {
+																						for (Factory factory : SystemCache.produce_factorylist) {
 																								if (factory.getId() == materialPurchaseOrder.getFactoryId()) {
 																					%>
 																					<option value="<%=factory.getId()%>"
@@ -1515,26 +1545,26 @@
 																			<td>
 																				公司
 																			</td>
-																			<td><%=SystemCache.getCompanyName(order
+																			<td><%=SystemCache.getCompanyName(materialPurchaseOrder
 										.getCompanyId())%></td>
 																		</tr>
 																		<tr>
 																			<td>
 																				客户
 																			</td>
-																			<td><%=order.getKehu()%></td>
+																			<td><%=SystemCache.getCustomerName(materialPurchaseOrder.getCustomerId())%></td>
 																		</tr>
 																		<tr>
 																			<td>
 																				货号
 																			</td>
-																			<td><%=order.getProductNumber()%></td>
+																			<td><%=materialPurchaseOrder.getProductNumber()%></td>
 																		</tr>
 																		<tr>
 																			<td>
 																				款名
 																			</td>
-																			<td><%=order.getName()%></td>
+																			<td><%=materialPurchaseOrder.getName()%></td>
 																		</tr>
 																	</tbody>
 																</table>
@@ -1760,7 +1790,7 @@
 													<thead>
 														<tr>
 															<td colspan="3" class="pull-right orderNumber">
-																№：<%=order.getOrderNumber()%></td>
+																№：<%=coloringOrder.getOrderNumber()%></td>
 														</tr>
 													</thead>
 													<tbody>
@@ -1771,9 +1801,9 @@
 																	<tbody>
 																		<tr>
 																			<td rowspan="7" width="50%">
-																				<a href="/<%=order.getImg()%>" class="thumbnail"
+																				<a href="/<%=coloringOrder.getImg()%>" class="thumbnail"
 																					target="_blank"> <img id="previewImg"
-																						alt="200 x 100%" src="/<%=order.getImg_s()%>">
+																						alt="200 x 100%" src="/<%=coloringOrder.getImg_s()%>">
 																				</a>
 																			</td>
 																			<td width="20%">
@@ -1786,7 +1816,7 @@
 																						未选择
 																					</option>
 																					<%
-																						for (Factory factory : SystemCache.factorylist) {
+																						for (Factory factory : SystemCache.coloring_factorylist) {
 																								if (factory.getId() == coloringOrder.getFactoryId()) {
 																					%>
 																					<option value="<%=factory.getId()%>"
@@ -1813,26 +1843,26 @@
 																			<td>
 																				公司
 																			</td>
-																			<td><%=SystemCache.getCompanyName(order
+																			<td><%=SystemCache.getCompanyName(coloringOrder
 										.getCompanyId())%></td>
 																		</tr>
 																		<tr>
 																			<td>
 																				客户
 																			</td>
-																			<td><%=order.getKehu()%></td>
+																			<td><%=SystemCache.getCustomerName(coloringOrder.getCustomerId())%></td>
 																		</tr>
 																		<tr>
 																			<td>
 																				货号
 																			</td>
-																			<td><%=order.getProductNumber()%></td>
+																			<td><%=coloringOrder.getProductNumber()%></td>
 																		</tr>
 																		<tr>
 																			<td>
 																				款名
 																			</td>
-																			<td><%=order.getName()%></td>
+																			<td><%=coloringOrder.getName()%></td>
 																		</tr>
 																	</tbody>
 																</table>
@@ -2036,7 +2066,7 @@
 																class="table table-responsive table-bordered tableTb">
 																<tbody>
 																	<tr>
-																		<td rowspan="7" width="50%">
+																		<td rowspan="8" width="50%">
 																			<a href="/<%=order.getImg()%>" class="thumbnail"
 																				target="_blank"> <img id="previewImg"
 																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
@@ -2045,7 +2075,7 @@
 																		<td width="20%">
 																			生产单位
 																		</td>
-																		<td class="orderproperty"></td>
+																		<td class="orderproperty"><%=productfactoryStr %></td>
 																	</tr>
 
 																	<tr>
@@ -2063,7 +2093,7 @@
 																		<td>
 																			客户
 																		</td>
-																		<td><%=order.getKehu()%></td>
+																		<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -2082,6 +2112,12 @@
 																			跟单
 																		</td>
 																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			发货时间
+																		</td>
+																		<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
 																	</tr>
 																</tbody>
 															</table>
@@ -2196,7 +2232,7 @@
 													<thead>
 														<tr>
 															<td colspan="3" class="pull-right orderNumber">
-																№：<%=order.getOrderNumber()%></td>
+																№：<%=fuliaoPurchaseOrder.getOrderNumber()%></td>
 														</tr>
 													</thead>
 													<tbody>
@@ -2207,9 +2243,9 @@
 																	<tbody>
 																		<tr>
 																			<td rowspan="7" width="50%">
-																				<a href="/<%=order.getImg()%>" class="thumbnail"
+																				<a href="/<%=fuliaoPurchaseOrder.getImg()%>" class="thumbnail"
 																					target="_blank"> <img id="previewImg"
-																						alt="200 x 100%" src="/<%=order.getImg_s()%>">
+																						alt="200 x 100%" src="/<%=fuliaoPurchaseOrder.getImg_s()%>">
 																				</a>
 																			</td>
 																			<td width="20%">
@@ -2222,7 +2258,7 @@
 																						未选择
 																					</option>
 																					<%
-																						for (Factory factory : SystemCache.factorylist) {
+																						for (Factory factory : SystemCache.purchase_factorylist) {
 																								if (factory.getId() == fuliaoPurchaseOrder.getFactoryId()) {
 																					%>
 																					<option value="<%=factory.getId()%>"
@@ -2256,7 +2292,7 @@
 																			<td>
 																				客户
 																			</td>
-																			<td><%=fuliaoPurchaseOrder.getKehu()%></td>
+																			<td><%=SystemCache.getCustomerName(fuliaoPurchaseOrder.getCustomerId())%></td>
 																		</tr>
 																		<tr>
 																			<td>
@@ -2274,7 +2310,7 @@
 																			<td>
 																				跟单
 																			</td>
-																			<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																			<td><%=SystemCache.getUserName(fuliaoPurchaseOrder.getCharge_user())%></td>
 																		</tr>
 																	</tbody>
 																</table>
@@ -2492,7 +2528,7 @@
 																class="table table-responsive table-bordered tableTb">
 																<tbody>
 																	<tr>
-																		<td rowspan="7" width="50%">
+																		<td rowspan="8" width="50%">
 																			<a href="/<%=order.getImg()%>" class="thumbnail"
 																				target="_blank"> <img id="previewImg"
 																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
@@ -2501,7 +2537,7 @@
 																		<td width="20%">
 																			生产单位
 																		</td>
-																		<td class="orderproperty"></td>
+																		<td class="orderproperty"><%=productfactoryStr %></td>
 																	</tr>
 
 																	<tr>
@@ -2519,7 +2555,7 @@
 																		<td>
 																			客户
 																		</td>
-																		<td><%=order.getKehu()%></td>
+																		<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -2538,6 +2574,12 @@
 																			跟单
 																		</td>
 																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			发货时间
+																		</td>
+																		<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
 																	</tr>
 																</tbody>
 															</table>
@@ -2646,7 +2688,7 @@
 																class="table table-responsive table-bordered tableTb">
 																<tbody>
 																	<tr>
-																		<td rowspan="7" width="50%">
+																		<td rowspan="8" width="50%">
 																			<a href="/<%=order.getImg()%>" class="thumbnail"
 																				target="_blank"> <img id="previewImg"
 																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
@@ -2655,7 +2697,7 @@
 																		<td width="20%">
 																			生产单位
 																		</td>
-																		<td class="orderproperty"></td>
+																		<td class="orderproperty"><%=productfactoryStr %></td>
 																	</tr>
 
 																	<tr>
@@ -2673,7 +2715,7 @@
 																		<td>
 																			客户
 																		</td>
-																		<td><%=order.getKehu()%></td>
+																		<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -2692,6 +2734,12 @@
 																			跟单
 																		</td>
 																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			发货时间
+																		</td>
+																		<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
 																	</tr>
 																</tbody>
 															</table>
@@ -2801,7 +2849,7 @@
 																class="table table-responsive table-bordered tableTb">
 																<tbody>
 																	<tr>
-																		<td rowspan="7" width="50%">
+																		<td rowspan="<%=7+DetailList.size() %>" width="50%">
 																			<a href="/<%=order.getImg()%>" class="thumbnail"
 																				target="_blank"> <img id="previewImg"
 																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
@@ -2818,7 +2866,7 @@
 																		<td>
 																			客户
 																		</td>
-																		<td><%=order.getKehu()%></td>
+																		<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -2837,6 +2885,12 @@
 																			跟单
 																		</td>
 																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			发货时间
+																		</td>
+																		<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
 																	</tr>
 																	<tr>
 																		<td colspan="2" class="center">
@@ -2911,7 +2965,7 @@
 																class="table table-responsive table-bordered tableTb">
 																<tbody>
 																	<tr>
-																		<td rowspan="7" width="50%">
+																		<td rowspan="8" width="50%">
 																			<a href="/<%=order.getImg()%>" class="thumbnail"
 																				target="_blank"> <img id="previewImg"
 																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
@@ -2920,7 +2974,7 @@
 																		<td width="20%">
 																			生产单位
 																		</td>
-																		<td class="orderproperty"></td>
+																		<td class="orderproperty"><%=productfactoryStr %></td>
 																	</tr>
 
 																	<tr>
@@ -2938,7 +2992,7 @@
 																		<td>
 																			客户
 																		</td>
-																		<td><%=order.getKehu()%></td>
+																		<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -2957,6 +3011,12 @@
 																			跟单
 																		</td>
 																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			发货时间
+																		</td>
+																		<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
 																	</tr>
 																</tbody>
 															</table>
@@ -3065,7 +3125,7 @@
 																class="table table-responsive table-bordered tableTb">
 																<tbody>
 																	<tr>
-																		<td rowspan="7" width="50%">
+																		<td rowspan="8" width="50%">
 																			<a href="/<%=order.getImg()%>" class="thumbnail"
 																				target="_blank"> <img id="previewImg"
 																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
@@ -3074,7 +3134,7 @@
 																		<td width="20%">
 																			生产单位
 																		</td>
-																		<td class="orderproperty"></td>
+																		<td class="orderproperty"><%=productfactoryStr %></td>
 																	</tr>
 
 																	<tr>
@@ -3092,7 +3152,7 @@
 																		<td>
 																			客户
 																		</td>
-																		<td><%=order.getKehu()%></td>
+																		<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -3111,6 +3171,12 @@
 																			跟单
 																		</td>
 																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			发货时间
+																		</td>
+																		<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
 																	</tr>
 																</tbody>
 															</table>
@@ -3220,7 +3286,7 @@
 																class="table table-responsive table-bordered tableTb">
 																<tbody>
 																	<tr>
-																		<td rowspan="7" width="50%">
+																		<td rowspan="6" width="50%">
 																			<a href="/<%=order.getImg()%>" class="thumbnail"
 																				target="_blank"> <img id="previewImg"
 																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
@@ -3237,7 +3303,7 @@
 																		<td>
 																			客户
 																		</td>
-																		<td><%=order.getKehu()%></td>
+																		<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -3258,20 +3324,12 @@
 																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
 																	</tr>
 																	<tr>
-																		<td colspan="2" class="center">
-																			订单数量
+																		<td>
+																			发货时间
 																		</td>
+																		<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
 																	</tr>
-																	<%
-																		for (OrderDetail detail : DetailList) {
-																	%>
-																	<tr>
-																		<td><%=detail.getColor()%></td>
-																		<td><%=detail.getQuantity()%></td>
-																	</tr>
-																	<%
-																		}
-																	%>
+																	
 																</tbody>
 															</table>
 

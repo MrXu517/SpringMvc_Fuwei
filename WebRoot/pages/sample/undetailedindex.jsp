@@ -209,7 +209,7 @@
 									</td>
 									<td><%=sample.getName()%></td>
 									<td><%=sample.getProductNumber()%></td>
-									<td><%=sample.getMaterial()%></td>
+									<td><%=SystemCache.getMaterialName(sample.getMaterialId())%></td>
 									<td><%=sample.getWeight()%></td>
 									<td><%=sample.getSize()%></td>
 									<td><%=SystemCache.getUserName(sample.getCharge_user())%></td>

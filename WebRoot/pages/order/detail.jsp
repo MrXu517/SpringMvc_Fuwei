@@ -249,7 +249,7 @@
 												<td>
 													客户
 												</td>
-												<td><%=order.getKehu()%></td>
+												<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
 											</tr>
 
 											<tr>
@@ -334,7 +334,8 @@
 													<td>
 														材料
 													</td>
-													<td><%=order.getMaterial()%></td>
+													<td><%= SystemCache.getMaterialName(order
+					.getMaterialId())%></td>
 												</tr>
 												<tr>
 													<td>
@@ -356,13 +357,7 @@
 													<td>
 														<span class="RMB">￥</span><%=order.getCost()%></td>
 												</tr>
-												<tr>
-													<td>
-														机织
-													</td>
-													<td><%=order.getMachine()%></td>
-												</tr>
-
+											
 
 
 											</tbody>

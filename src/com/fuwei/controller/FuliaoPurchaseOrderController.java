@@ -160,7 +160,7 @@ public class FuliaoPurchaseOrderController extends BaseController {
 				Sample sample = sampleService.get(sampleId);
 				fuliaoPurchaseOrder.setImg(sample.getImg());
 				fuliaoPurchaseOrder.setProductNumber(sample.getProductNumber());
-				fuliaoPurchaseOrder.setMaterial(sample.getMaterial());
+				fuliaoPurchaseOrder.setMaterialId(sample.getMaterialId());
 				fuliaoPurchaseOrder.setSize(sample.getSize());
 				fuliaoPurchaseOrder.setWeight(sample.getWeight());
 				fuliaoPurchaseOrder.setName(sample.getName());
@@ -217,12 +217,12 @@ public class FuliaoPurchaseOrderController extends BaseController {
 				tableOrder.setImg_s(order.getImg_s());
 				tableOrder.setImg_ss(order.getImg_ss());
 				tableOrder.setProductNumber(order.getProductNumber());
-				tableOrder.setMaterial(order.getMaterial());
+				tableOrder.setMaterialId(order.getMaterialId());
 				tableOrder.setSize(order.getSize());
 				tableOrder.setWeight(order.getWeight());
 				tableOrder.setName(order.getName());
 				tableOrder.setCompanyId(order.getCompanyId());
-				tableOrder.setKehu(order.getKehu());
+				tableOrder.setCustomerId(order.getCustomerId());
 				tableOrder.setSampleId(order.getSampleId());
 				tableOrder.setOrderNumber(order.getOrderNumber());
 				tableOrder.setCharge_user(order.getCharge_user());//2015/3/17 添加跟单人

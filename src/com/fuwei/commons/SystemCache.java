@@ -14,6 +14,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.fuwei.entity.Authority;
 import com.fuwei.entity.Company;
+import com.fuwei.entity.Customer;
 import com.fuwei.entity.Factory;
 import com.fuwei.entity.GongXu;
 import com.fuwei.entity.Material;
@@ -21,6 +22,7 @@ import com.fuwei.entity.Role;
 import com.fuwei.entity.Salesman;
 import com.fuwei.entity.User;
 import com.fuwei.service.CompanyService;
+import com.fuwei.service.CustomerService;
 import com.fuwei.service.FactoryService;
 import com.fuwei.service.GongXuService;
 import com.fuwei.service.MaterialService;
@@ -44,6 +46,8 @@ public class SystemCache {
 	
 	MaterialService materialService;
 	
+	CustomerService customerService;
+	
 	public SystemCache() {
 		companyService = (CompanyService) SystemContextUtils
 				.getBean(CompanyService.class);
@@ -59,6 +63,8 @@ public class SystemCache {
 		.getBean(FactoryService.class);
 		materialService = (MaterialService)SystemContextUtils
 		.getBean(MaterialService.class);
+		customerService = (CustomerService)SystemContextUtils
+		.getBean(CustomerService.class);
 	}
 
 
@@ -79,9 +85,15 @@ public class SystemCache {
 
 	//缓存加工工厂
 	public static List<Factory> factorylist = new ArrayList<Factory>();
+	public static List<Factory> purchase_factorylist = new ArrayList<Factory>();
+	public static List<Factory> coloring_factorylist = new ArrayList<Factory>();
+	public static List<Factory> produce_factorylist = new ArrayList<Factory>();
 	
 	//缓存材料
 	public static List<Material> materiallist = new ArrayList<Material>();
+	
+	//缓存客户
+	public static List<Customer> customerlist = new ArrayList<Customer>();
 
 	public static void addCompany(Company company) {
 		companylist.add(company);
@@ -103,6 +115,7 @@ public class SystemCache {
 		initRoleList();
 		initFactoryList();
 		initMaterialList();
+		initCustomerList();
 	}
 
 	public void reload() throws Exception {
@@ -131,13 +144,58 @@ public class SystemCache {
 	
 	public void initFactoryList() throws Exception {
 		SystemCache.factorylist = factoryService.getList(); // userlist;
+		for (int i = 0; i < SystemCache.factorylist.size(); ++i) {
+			Factory temp = SystemCache.factorylist.get(i);
+			Integer type = temp.getType();
+			if(type == null || type == 0){
+				SystemCache.produce_factorylist.add(temp);
+			}
+			if(type == 1){
+				SystemCache.purchase_factorylist.add(temp);
+			}
+			if(type == 2){
+				SystemCache.coloring_factorylist.add(temp);
+			}
+		}
+		
 	}
 	public void initMaterialList() throws Exception {
 		SystemCache.materiallist = materialService.getList(); // userlist;
 	}
+	public void initCustomerList() throws Exception {
+		SystemCache.customerlist = customerService.getList(); // customerlist;
+	}
 	
-	public static String getMaterialName(int materialId) {
-
+	public static String getCustomerName(Integer customerId) {
+		if(customerId == null){
+			return "";
+		}
+		for (int i = 0; i < SystemCache.customerlist.size(); ++i) {
+			Customer temp = SystemCache.customerlist.get(i);
+			if (temp.getId() == customerId) {
+				return temp.getName();
+			}
+		}
+		return "";
+	}
+	
+	public static Customer getCustomer(Integer customerId) {
+		if(customerId == null){
+			return null;
+		}
+		for (int i = 0; i < SystemCache.customerlist.size(); ++i) {
+			Customer temp = SystemCache.customerlist.get(i);
+			if (temp.getId() == customerId) {
+				return temp;
+			}
+		}
+		return null;
+	}
+	
+	public static String getMaterialName(Integer materialId) {
+		if(materialId==null){
+			return "";
+		}
 		for (int i = 0; i < SystemCache.materiallist.size(); ++i) {
 			Material temp = SystemCache.materiallist.get(i);
 			if (temp.getId() == materialId) {
@@ -147,8 +205,10 @@ public class SystemCache {
 		return "";
 	}
 	
-	public static Material getMaterial(int materialId) {
-
+	public static Material getMaterial(Integer materialId) {
+		if(materialId==null){
+			return null;
+		}
 		for (int i = 0; i < SystemCache.materiallist.size(); ++i) {
 			Material temp = SystemCache.materiallist.get(i);
 			if (temp.getId() == materialId) {

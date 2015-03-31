@@ -289,7 +289,7 @@
 											<td><%=SystemCache.getFactoryName(fuliaoPurchaseOrder.getFactoryId())%></td>
 											<td><%=SystemCache.getCompanyName(fuliaoPurchaseOrder
 										.getCompanyId())%></td>
-											<td><%=fuliaoPurchaseOrder.getKehu()%></td>
+											<td><%=SystemCache.getCustomerName(fuliaoPurchaseOrder.getCustomerId())%></td>
 											<td><%=fuliaoPurchaseOrder.getProductNumber()%></td>
 											<td><%=fuliaoPurchaseOrder.getOrderId() == null ? "":fuliaoPurchaseOrder.getOrderId()%></td>
 											<td><%=SystemCache.getUserName(fuliaoPurchaseOrder

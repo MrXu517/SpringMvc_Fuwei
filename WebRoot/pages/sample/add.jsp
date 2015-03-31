@@ -1,12 +1,16 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
+<%@page import="com.fuwei.entity.Material" %>
+<%@page import="com.fuwei.entity.Factory" %>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	List<User> userlist = (List<User>) request.getAttribute("userlist");
+	List<User> userlist = SystemCache.userlist;
+	List<Material> materiallist = SystemCache.materiallist;
+	List<Factory> factorylist = SystemCache.produce_factorylist;
 %>
 <!DOCTYPE html>
 <html>
@@ -124,8 +128,16 @@
 														材料
 													</label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control require"
-															id="material" name="material" placeholder="材料">
+														<select class="form-control require" name="materialId"
+															id="materialId">
+															<%
+																for (Material material : materiallist) {
+															%>
+															<option value="<%=material.getId()%>"><%=material.getName()%></option>
+															<%
+																}
+															%>
+														</select>
 													</div>
 													<div class="col-sm-1"></div>
 												</div>
@@ -156,8 +168,17 @@
 														机织
 													</label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control require"
-															name="machine" id="machine" placeholder="机织">
+														<select class="form-control" name="factoryId"
+															id="factoryId">
+															<option value="">未选择</option>
+															<%
+																for (Factory factory : factorylist) {
+															%>
+															<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
+															<%
+																}
+															%>
+														</select>
 													</div>
 													<div class="col-sm-1"></div>
 												</div>

@@ -60,7 +60,10 @@ $(document).ajaxComplete(
 ( function($) {
 	$.fn.serializeJson = function() {
 		var serializeObj = {};
+		var $disabledformeles = this.find("[disabled][formele='true']");
+		$disabledformeles.removeAttr("disabled");
 		var array = this.serializeArray();
+		$disabledformeles.attr("disabled",true);
 		$(array).each(
 				function() {
 					if (serializeObj[this.name]) {
@@ -80,7 +83,10 @@ $(document).ajaxComplete(
 ( function($) {
 	$.fn.serializeJson_Number = function() {
 		var serializeObj = {};
+		var $disabledformeles = this.find("[disabled][formele='true']");
+		$disabledformeles.removeAttr("disabled");
 		var array = this.serializeArray();
+		$disabledformeles.attr("disabled",true);
 		$(array).each(
 				function() {
 					var number_value = Number(this.value);

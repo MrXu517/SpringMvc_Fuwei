@@ -95,13 +95,13 @@ public class QuoteOrderController extends BaseController {
 				detail.setImg(sample.getImg());
 				detail.setImg_s(sample.getImg_s());
 				detail.setImg_ss(sample.getImg_ss());
-				detail.setMaterial(sample.getMaterial());
-				detail.setMachine(sample.getMachine());
+//				detail.setMaterial(sample.getMaterial());
+//				detail.setMachine(sample.getMachine());
 				detail.setWeight(sample.getWeight());
 				detail.setSize(sample.getSize());
 				detail.setCost(sample.getCost());
 				detail.setProductNumber(sample.getProductNumber());
-				detail.setMachine(sample.getMachine());
+//				detail.setMachine(sample.getMachine());
 				detail.setCharge_user(sample.getCharge_user());
 				detail.setDetail(sample.getDetail());
 				detaillist.add(detail);

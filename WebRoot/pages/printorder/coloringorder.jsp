@@ -11,6 +11,7 @@
 			.getAttribute("coloringOrderList");
 	coloringOrderList = coloringOrderList == null? new ArrayList<ColoringOrder>()
 			: coloringOrderList;	
+	String productfactoryStr = (String)request.getAttribute("productfactoryStr");
 %>
 <!DOCTYPE html>
 <html>
@@ -28,6 +29,7 @@
 			List<ColoringOrderDetail> coloringOrderDetailList = coloringOrder == null ? new ArrayList<ColoringOrderDetail>()
 			: coloringOrder.getDetaillist();
 		%>
+		<div style="page-break-after: always">
 		<div class="container-fluid gridTab auto_container">
 			<div class="row">
 				<div class="col-md-12 tablewidget">
@@ -88,7 +90,7 @@
 												<span><%=coloringOrder.getProductNumber()%></span>
 											</td>
 											<td class="center">
-												<span><%=coloringOrder.getKehu()%></span>
+												<span><%=SystemCache.getCustomerName(coloringOrder.getCustomerId())%></span>
 											</td>
 											<td class="center">
 												<span><%=coloringOrder.getName()%></span>
@@ -177,6 +179,7 @@
 				</div>
 
 			</div>
+		</div>
 		</div>
 		<%} %>
 	</body>

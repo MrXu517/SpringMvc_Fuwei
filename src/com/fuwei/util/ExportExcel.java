@@ -324,7 +324,7 @@ public class ExportExcel {
 							sheet.addCell(new Label(0, index + 11 + number,
 									"机织:", content_center2));
 							sheet.addCell(new Label(1, index + 11 + number,
-									sample.getMachine(), content_center));
+									SystemCache.getFactoryName(sample.getFactoryId()), content_center));
 
 							sheet.addCell(new Label(0, index + 13 + number,
 									"时间:", content_center2));
@@ -380,7 +380,7 @@ public class ExportExcel {
 							sheet.addCell(new Label(0, index + 11 + number,
 									"机织:", content_center2));
 							sheet.addCell(new Label(1, index + 11 + number,
-									sample.getMachine(), content_center));
+									SystemCache.getFactoryName(sample.getFactoryId()), content_center));
 
 							sheet.addCell(new Label(0, index + 13 + number,
 									"时间:", content_center2));
@@ -442,7 +442,7 @@ public class ExportExcel {
 							sheet.addCell(new Label(0, index + 11 + number,
 									"机织:", content_center2));
 							sheet.addCell(new Label(1, index + 11 + number,
-									sample.getMachine(), content_center));
+									SystemCache.getFactoryName(sample.getFactoryId()), content_center));
 
 							sheet.addCell(new Label(0, index + 13 + number,
 									"时间:", content_center2));
@@ -526,7 +526,7 @@ public class ExportExcel {
 							sheet.addCell(new Label(0, index + 12 + number,
 									"机织:", content_center2));
 							sheet.addCell(new Label(1, index + 12 + number,
-									sample.getMachine(), content_center));
+									SystemCache.getFactoryName(sample.getFactoryId()), content_center));
 
 							sheet.addCell(new Label(0, index + 14 + number,
 									"时间:", content_center2));
@@ -589,7 +589,7 @@ public class ExportExcel {
 							sheet.addCell(new Label(0, index + 12 + number,
 									"机织:", content_center2));
 							sheet.addCell(new Label(1, index + 12 + number,
-									sample.getMachine(), content_center));
+									SystemCache.getFactoryName(sample.getFactoryId()), content_center));
 
 							sheet.addCell(new Label(0, index + 14 + number,
 									"时间:", content_center2));
@@ -656,7 +656,7 @@ public class ExportExcel {
 							sheet.addCell(new Label(0, index + 12 + number,
 									"机织:", content_center2));
 							sheet.addCell(new Label(1, index + 12 + number,
-									sample.getMachine(), content_center));
+									SystemCache.getFactoryName(sample.getFactoryId()), content_center));
 
 							sheet.addCell(new Label(0, index + 14 + number,
 									"时间:", content_center2));
@@ -730,8 +730,8 @@ public class ExportExcel {
 									sample.getMaterial().substring(8, 16),
 									content_center));
 							sheet.addCell(new Label(1, index + 9 + number,
-									sample.getMaterial().substring(16,
-											sample.getMaterial().length()),
+									SystemCache.getFactoryName(sample.getFactoryId()).substring(16,
+											SystemCache.getFactoryName(sample.getFactoryId()).length()),
 									content_center));
 
 							sheet.addCell(new Label(0, index + 11 + number,
@@ -742,7 +742,7 @@ public class ExportExcel {
 							sheet.addCell(new Label(0, index + 13 + number,
 									"机织:", content_center2));
 							sheet.addCell(new Label(1, index + 13 + number,
-									sample.getMachine(), content_center));
+									SystemCache.getFactoryName(sample.getFactoryId()), content_center));
 
 							sheet.addCell(new Label(0, index + 15 + number,
 									"时间:", content_center2));
@@ -807,7 +807,7 @@ public class ExportExcel {
 							sheet.addCell(new Label(0, index + 13 + number,
 									"机织:", content_center2));
 							sheet.addCell(new Label(1, index + 13 + number,
-									sample.getMachine(), content_center));
+									SystemCache.getFactoryName(sample.getFactoryId()), content_center));
 
 							sheet.addCell(new Label(0, index + 15 + number,
 									"时间:", content_center2));
@@ -876,7 +876,7 @@ public class ExportExcel {
 							sheet.addCell(new Label(0, index + 13 + number,
 									"机织:", content_center2));
 							sheet.addCell(new Label(1, index + 13 + number,
-									sample.getMachine(), content_center));
+									SystemCache.getFactoryName(sample.getFactoryId()), content_center));
 
 							sheet.addCell(new Label(0, index + 15 + number,
 									"时间:", content_center2));
@@ -941,8 +941,7 @@ public class ExportExcel {
 
 						sheet.addCell(new Label(0, index + 12 + number, "机织:",
 								content_center2));
-						sheet.addCell(new Label(1, index + 12 + number, sample
-								.getMachine(), content_center));
+						sheet.addCell(new Label(1, index + 12 + number, SystemCache.getFactoryName(sample.getFactoryId()), content_center));
 
 						sheet.addCell(new Label(0, index + 14 + number, "时间:",
 								content_center2));
@@ -990,8 +989,7 @@ public class ExportExcel {
 
 						sheet.addCell(new Label(0, index + 11 + number, "机织:",
 								content_center2));
-						sheet.addCell(new Label(1, index + 11 + number, sample
-								.getMachine(), content_center));
+						sheet.addCell(new Label(1, index + 11 + number, SystemCache.getFactoryName(sample.getFactoryId()), content_center));
 
 						sheet.addCell(new Label(0, index + 13 + number, "时间:",
 								content_center2));
@@ -1041,8 +1039,7 @@ public class ExportExcel {
 
 						sheet.addCell(new Label(0, index + 12 + number, "机织:",
 								content_center2));
-						sheet.addCell(new Label(1, index + 12 + number, sample
-								.getMachine(), content_center));
+						sheet.addCell(new Label(1, index + 12 + number, SystemCache.getFactoryName(sample.getFactoryId()), content_center));
 
 						sheet.addCell(new Label(0, index + 14 + number, "时间:",
 								content_center2));
@@ -1097,8 +1094,7 @@ public class ExportExcel {
 
 						sheet.addCell(new Label(0, index + 12 + number, "机织:",
 								content_center2));
-						sheet.addCell(new Label(1, index + 12 + number, sample
-								.getMachine(), content_center));
+						sheet.addCell(new Label(1, index + 12 + number, SystemCache.getFactoryName(sample.getFactoryId()), content_center));
 
 						sheet.addCell(new Label(0, index + 14 + number, "时间:",
 								content_center2));
@@ -1140,8 +1136,7 @@ public class ExportExcel {
 
 						sheet.addCell(new Label(0, index + 12 + number, "机织:",
 								content_center2));
-						sheet.addCell(new Label(1, index + 12 + number, sample
-								.getMachine(), content_center));
+						sheet.addCell(new Label(1, index + 12 + number, SystemCache.getFactoryName(sample.getFactoryId()), content_center));
 
 						sheet.addCell(new Label(0, index + 14 + number, "时间:",
 								content_center2));
@@ -1359,7 +1354,7 @@ public class ExportExcel {
 					sample_detail_content_center));
 			sheet.addCell(new Label(1, 6, sample.getMaterial(),
 					sample_detail_content_center));
-			sheet.addCell(new Label(1, 7, sample.getMachine(),
+			sheet.addCell(new Label(1, 7, SystemCache.getFactoryName(sample.getFactoryId()),
 					sample_detail_content_center));
 			sheet.addCell(new Label(1, 8, DateTool.formateDate(sample
 					.getCreated_at()), sample_detail_content_center));

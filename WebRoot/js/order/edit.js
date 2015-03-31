@@ -157,8 +157,7 @@ $(document)
 										type :'GET',
 										success : function(sample) {
 											sample.sampleId = sample.id;
-											Common.fillForm($(".orderform")[0],
-													sample);
+											Common.fillForm($(".orderform #sampleInfoWidget")[0], sample);
 											$("#sampleImgA").attr("href",
 													"/" + sample.img);
 											$("#sampleImg").attr("src",

@@ -4,6 +4,7 @@
 <%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.entity.ordergrid.HalfCheckRecordOrder"%>
 <%@page import="com.fuwei.entity.ordergrid.HalfCheckRecordOrderDetail2"%>
+<%@page import="com.fuwei.entity.ordergrid.PlanOrderDetail"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
@@ -14,11 +15,9 @@
 			.getAttribute("halfCheckRecordOrder");
 	List<HalfCheckRecordOrderDetail2> halfCheckRecordOrderDetailList2 = halfCheckRecordOrder == null ? new ArrayList<HalfCheckRecordOrderDetail2>()
 			: halfCheckRecordOrder.getDetail_2_list();
-	List<OrderDetail> DetailList = order == null ? new ArrayList<OrderDetail>()
-			: order.getDetaillist();
-	if(DetailList == null){
-		DetailList = new ArrayList<OrderDetail>();
-	}
+	List<PlanOrderDetail> carFixRecordOrderDetailList = halfCheckRecordOrder == null ? new ArrayList<PlanOrderDetail>()
+			: halfCheckRecordOrder.getDetaillist();
+	String productfactoryStr = (String)request.getAttribute("productfactoryStr");
 %>
 <!DOCTYPE html>
 <html>
@@ -45,14 +44,14 @@
 					<table id="orderTb" class="tableTb">
 						<tbody>
 							<tr>
-								<td align="center" rowspan="7" width="50%">
+								<td align="center" rowspan="8" width="50%">
 									<img id="previewImg" alt="200 x 100%"
 										src="/<%=order.getImg_s()%>">
 								</td>
 								<td width="20%">
 									生产单位
 								</td>
-								<td class="orderproperty"></td>
+								<td class="orderproperty"><%=productfactoryStr %></td>
 							</tr>
 
 							<tr>
@@ -70,7 +69,7 @@
 								<td>
 									客户
 								</td>
-								<td><%=order.getKehu()%></td>
+								<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
 							</tr>
 							<tr>
 								<td>
@@ -89,6 +88,12 @@
 									跟单
 								</td>
 								<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+							</tr>
+							<tr>
+								<td>
+									发货时间
+								</td>
+								<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
 							</tr>
 						</tbody>
 					</table>
@@ -121,7 +126,7 @@
 									</thead>
 									<tbody>
 										<%
-											for (OrderDetail detail : DetailList) {
+											for (PlanOrderDetail detail : carFixRecordOrderDetailList) {
 										%>
 										<tr class="tr">
 											<td class="color"><%=detail.getColor()%>
@@ -139,6 +144,7 @@
 										<%
 											}
 										%>
+
 									</tbody>
 								</table>
 							</td>

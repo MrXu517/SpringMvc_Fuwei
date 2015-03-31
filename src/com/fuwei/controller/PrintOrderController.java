@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
@@ -102,6 +103,19 @@ public class PrintOrderController extends BaseController {
 			PlanOrder planOrder = null;
 			List<ColoringOrder> coloringOrderList = null;
 			
+			List<ProducingOrder> producingOrderList = producingOrderService.getByOrder(orderId);	
+			String productfactoryStr = "";
+			String seq = "";
+			if(producingOrderList!=null){
+				for(ProducingOrder producingOrder : producingOrderList){
+					productfactoryStr += seq + SystemCache.getFactoryName(producingOrder.getFactoryId());
+					seq = " | ";
+				}
+			}
+			request.setAttribute("productfactoryStr", productfactoryStr);
+			
+			
+			
 			request.setAttribute("order", order);
 			
 			Boolean printAll = false;
@@ -128,7 +142,7 @@ public class PrintOrderController extends BaseController {
 			
 			//获取生产单
 			if(printAll || gridName.indexOf("producingorder") > -1){
-				List<ProducingOrder> producingOrderList = producingOrderService.getByOrder(orderId);		
+//				List<ProducingOrder> producingOrderList = producingOrderService.getByOrder(orderId);		
 				if(producingOrderList!=null){
 					grids += "producingorder,";
 					request.setAttribute("producingOrderList", producingOrderList);
@@ -159,8 +173,13 @@ public class PrintOrderController extends BaseController {
 			if(printAll || gridName.indexOf("halfcheckrecordorder") > -1){
 				HalfCheckRecordOrder halfCheckRecordOrder = halfCheckRecordOrderService.getByOrder(orderId);
 				if(halfCheckRecordOrder!=null){
+					if(planOrder==null){
+						planOrder = planOrderService.getByOrder(orderId);
+					}
+					halfCheckRecordOrder.setDetaillist(planOrder.getDetaillist());
 					grids += "halfcheckrecordorder,";
-					request.setAttribute("halfCheckRecordOrder", halfCheckRecordOrder);
+					request.setAttribute("halfCheckRecordOrder", halfCheckRecordOrder);			
+					
 				}	
 			}
 			

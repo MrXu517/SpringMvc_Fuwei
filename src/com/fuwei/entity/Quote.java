@@ -1,6 +1,5 @@
 package com.fuwei.entity;
 
-import java.beans.Transient;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -111,9 +110,9 @@ public class Quote implements Serializable{
 	public void setSimg(String img){
 		sample.setImg(img);
 	}
-	public void setSmaterial(String material){
-		sample.setMaterial(material);
-	}
+//	public void setSmaterial(String material){
+//		sample.setMaterial(material);
+//	}
 	public void setSweight(Double weight){
 		sample.setWeight(weight);
 	}
@@ -126,9 +125,9 @@ public class Quote implements Serializable{
 	public void setSproductNumber(String productNumber){
 		sample.setProductNumber(productNumber);
 	}
-	public void setSmachine(String machine){
-		sample.setMachine(machine);
-	}
+//	public void setSmachine(String machine){
+//		sample.setMachine(machine);
+//	}
 	public void setSmemo(String memo){
 		sample.setMemo(memo);
 	}

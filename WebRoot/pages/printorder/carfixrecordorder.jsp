@@ -14,6 +14,7 @@
 			.getAttribute("carFixRecordOrder");
 	List<PlanOrderDetail> carFixRecordOrderDetailList = carFixRecordOrder == null ? new ArrayList<PlanOrderDetail>()
 			: carFixRecordOrder.getDetaillist();
+	String productfactoryStr = (String)request.getAttribute("productfactoryStr");
 %>
 <!DOCTYPE html>
 <html>
@@ -40,14 +41,14 @@
 					<table id="orderTb" class="tableTb">
 						<tbody>
 							<tr>
-								<td align="center" rowspan="7" width="30%">
+								<td align="center" rowspan="8" width="30%">
 									<img id="previewImg" alt="200 x 100%"
 										src="/<%=order.getImg_s()%>">
 								</td>
 								<td width="20%">
 									生产单位
 								</td>
-								<td width="20%" class="orderproperty"></td>
+								<td width="20%" class="orderproperty"><%=productfactoryStr %></td>
 								<td class="orderproperty center" width="30%">样标</td>
 							</tr>
 
@@ -55,7 +56,7 @@
 								<td colspan="2" class="center">
 									订单信息
 								</td>
-								<td align="center" rowspan="6" width="30%">
+								<td align="center" rowspan="7" width="30%">
 									
 								</td>
 							</tr>
@@ -69,7 +70,7 @@
 								<td>
 									客户
 								</td>
-								<td><%=order.getKehu()%></td>
+								<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
 							</tr>
 							<tr>
 								<td>
@@ -88,6 +89,12 @@
 									跟单
 								</td>
 								<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+							</tr>
+							<tr>
+								<td>
+									发货时间
+								</td>
+								<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
 							</tr>
 						</tbody>
 					</table>

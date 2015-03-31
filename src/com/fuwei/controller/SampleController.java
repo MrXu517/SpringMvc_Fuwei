@@ -195,7 +195,6 @@ public class SampleController extends BaseController {
 	@ResponseBody
 	public ModelAndView add(HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
-		request.setAttribute("userlist", SystemCache.userlist);
 		return new ModelAndView("sample/add");
 		
 	}
@@ -268,7 +267,6 @@ public class SampleController extends BaseController {
 			HttpServletResponse response) throws Exception{
 		
 		Sample sample = sampleService.get(id);
-		request.setAttribute("userlist", SystemCache.userlist);
 		request.setAttribute("sample", sample);
 		return new ModelAndView("sample/edit");
 		

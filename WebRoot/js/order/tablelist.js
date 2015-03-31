@@ -101,6 +101,9 @@ $(document).ready(function() {
 	var planGrid = new OrderGrid({
 		url:"order/planorder",
 		$content:$("#planorder"),
+		donecall:function(){
+			location.reload();
+		},
 		tbOptions:{
 			colnames : [
 					{

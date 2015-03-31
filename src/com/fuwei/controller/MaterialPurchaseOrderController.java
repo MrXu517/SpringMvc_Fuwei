@@ -157,7 +157,7 @@ public class MaterialPurchaseOrderController extends BaseController {
 				Sample sample = sampleService.get(sampleId);
 				materialPurchaseOrder.setImg(sample.getImg());
 				materialPurchaseOrder.setProductNumber(sample.getProductNumber());
-				materialPurchaseOrder.setMaterial(sample.getMaterial());
+				materialPurchaseOrder.setMaterialId(sample.getMaterialId());
 				materialPurchaseOrder.setSize(sample.getSize());
 				materialPurchaseOrder.setWeight(sample.getWeight());
 				materialPurchaseOrder.setName(sample.getName());
@@ -214,12 +214,12 @@ public class MaterialPurchaseOrderController extends BaseController {
 				tableOrder.setImg_s(order.getImg_s());
 				tableOrder.setImg_ss(order.getImg_ss());
 				tableOrder.setProductNumber(order.getProductNumber());
-				tableOrder.setMaterial(order.getMaterial());
+				tableOrder.setMaterialId(order.getMaterialId());
 				tableOrder.setSize(order.getSize());
 				tableOrder.setWeight(order.getWeight());
 				tableOrder.setName(order.getName());
 				tableOrder.setCompanyId(order.getCompanyId());
-				tableOrder.setKehu(order.getKehu());
+				tableOrder.setCustomerId(order.getCustomerId());
 				tableOrder.setSampleId(order.getSampleId());
 				tableOrder.setOrderNumber(order.getOrderNumber());
 				tableOrder.setCharge_user(order.getCharge_user());//2015/3/17 添加跟单人

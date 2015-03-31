@@ -14,13 +14,13 @@ public class Sample implements Serializable {
 	private String name;//样品名称
 	
 	private String img;//图片
-	private String material;//材料
+	private Integer materialId;//材料
 	private double weight;//克重
 	private String size;//尺寸
 
 	private double cost;//成本
 	private String productNumber;//产品编号
-	private String machine;//机织
+	private Integer factoryId;//机织
 	private String memo;
 	
 	private Date created_at;// 创建时间
@@ -99,11 +99,12 @@ public class Sample implements Serializable {
 		this.memo = memo;
 	}
 
-	public String getMachine() {
-		return machine;
+	
+	public Integer getFactoryId() {
+		return factoryId;
 	}
-	public void setMachine(String machine) {
-		this.machine = machine;
+	public void setFactoryId(Integer factoryId) {
+		this.factoryId = factoryId;
 	}
 	public String getProductNumber() {
 		return productNumber;
@@ -119,11 +120,11 @@ public class Sample implements Serializable {
 		this.id = id;
 	}
 	
-	public String getMaterial() {
-		return material;
+	public Integer getMaterialId() {
+		return materialId;
 	}
-	public void setMaterial(String material) {
-		this.material = material;
+	public void setMaterialId(Integer materialId) {
+		this.materialId = materialId;
 	}
 	public double getWeight() {
 		return weight;

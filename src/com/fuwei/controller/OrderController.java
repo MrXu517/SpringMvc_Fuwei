@@ -274,32 +274,14 @@ public class OrderController extends BaseController {
 
 			List<PlanOrderDetail> plandetaillist = SerializeTool
 					.deserializeList(details, PlanOrderDetail.class);
-			for(int i = 0 ; i<detaillist.size();++i){
-				detaillist.get(i).setId(i+1);
+			for(int i = 0 ; i<plandetaillist.size();++i){
+				plandetaillist.get(i).setId(i+1);
 			}
 			planOrder.setDetaillist(plandetaillist);
 			int planOrderId = planOrderService.add(planOrder);
 			// 2015-3-2添加 创建订单时 自动创建计划单
 
-			// 2015-3-4创建订单时自动创建半检记录单、抽检记录单
-			// 半检记录单
-			HalfCheckRecordOrder halfCheckRecordOrder = new HalfCheckRecordOrder();
-			halfCheckRecordOrder.setOrderId(orderId);
-			halfCheckRecordOrder.setCreated_at(DateTool.now());// 设置创建时间
-			halfCheckRecordOrder.setUpdated_at(DateTool.now());// 设置更新时间
-			halfCheckRecordOrder.setCreated_user(user.getId());// 设置创建人
-			List<HalfCheckRecordOrderDetail2> halfCheckRecordOrderDetaillist2 = new ArrayList<HalfCheckRecordOrderDetail2>();
-			for (OrderDetail detail : detaillist) {
-				HalfCheckRecordOrderDetail2 temp = new HalfCheckRecordOrderDetail2();
-				temp.setMaterial(detail.getYarn());
-				temp.setColor(detail.getColor());
-				temp.setColorsample("");
-				halfCheckRecordOrderDetaillist2.add(temp);
-			}
-			halfCheckRecordOrder
-					.setDetail_2_list(halfCheckRecordOrderDetaillist2);
-			halfCheckRecordOrderService.add(halfCheckRecordOrder);
-
+			// 2015-3-4创建订单时自动创建抽检记录单
 			// 抽检记录单
 			CheckRecordOrder checkRecordOrder = new CheckRecordOrder();
 			checkRecordOrder.setOrderId(orderId);
@@ -326,7 +308,7 @@ public class OrderController extends BaseController {
 			
 			// 2015-3-4创建订单时自动创建半检记录单、抽检记录单
 
-			// 2015-3-4创建计划单后，自动创建 质量记录单、车缝记录单、整烫记录单
+			// 2015-3-4创建计划单后，自动创建 质量记录单、车缝记录单、整烫记录单，2015-3-31添加 计划单创建后，自动创建半检记录单
 			// 质量记录单
 			HeadBankOrder headBankOrder = new HeadBankOrder();
 			headBankOrder.setOrderId(orderId);
@@ -350,7 +332,26 @@ public class OrderController extends BaseController {
 			ironingRecordOrder.setUpdated_at(DateTool.now());// 设置更新时间
 			ironingRecordOrder.setCreated_user(user.getId());// 设置创建人
 			ironingRecordOrderService.add(ironingRecordOrder);
-			// 2015-3-4创建计划单后，自动创建 质量记录单、车缝记录单、整烫记录单
+			
+			// 半检记录单
+			HalfCheckRecordOrder halfCheckRecordOrder = new HalfCheckRecordOrder();
+			halfCheckRecordOrder.setOrderId(orderId);
+			halfCheckRecordOrder.setCreated_at(DateTool.now());// 设置创建时间
+			halfCheckRecordOrder.setUpdated_at(DateTool.now());// 设置更新时间
+			halfCheckRecordOrder.setCreated_user(user.getId());// 设置创建人
+			List<HalfCheckRecordOrderDetail2> halfCheckRecordOrderDetaillist2 = new ArrayList<HalfCheckRecordOrderDetail2>();
+			for (OrderDetail detail : detaillist) {
+				HalfCheckRecordOrderDetail2 temp = new HalfCheckRecordOrderDetail2();
+				temp.setMaterial(detail.getYarn());
+				temp.setColor(detail.getColor());
+				temp.setColorsample("");
+				halfCheckRecordOrderDetaillist2.add(temp);
+			}
+			halfCheckRecordOrder
+					.setDetail_2_list(halfCheckRecordOrderDetaillist2);
+			halfCheckRecordOrderService.add(halfCheckRecordOrder);
+			
+			// 2015-3-4创建计划单后，自动创建 质量记录单、车缝记录单、整烫记录单，2015-3-31添加 计划单创建后，自动创建半检记录单
 			
 			/*2015-3-23添加 新表格*/
 			//成品仓库记录单

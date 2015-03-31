@@ -3,6 +3,7 @@
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.entity.Company"%>
 <%@page import="com.fuwei.entity.Material"%>
+<%@page import="com.fuwei.entity.Customer"%>
 <%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
@@ -143,7 +144,7 @@
 																		未选择
 																	</option>
 																	<%
-																		for (Factory factory : SystemCache.factorylist) {
+																		for (Factory factory : SystemCache.coloring_factorylist) {
 																	%>
 																	<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
 																	<%
@@ -161,9 +162,26 @@
 																客户
 															</label>
 															<div class="col-sm-8">
-																<input disabled type="text" class="form-control"
-																	name="kehu" id="kehu"
-																	value="<%=order.getKehu() == null ? "" : order.getKehu()%>">
+																<select class="form-control" name="customerId"
+																	id="customerId" disabled formele=true>
+																	<option value="">
+																		未选择
+																	</option>
+																	<%
+																		for (Customer customer : SystemCache.customerlist) {
+																			if (order.getCustomerId() != null
+																					&& order.getCustomerId() == customer.getId()) {
+																	%>
+																	<option value="<%=customer.getId()%>" selected><%=customer.getName()%></option>
+																	<%
+																		} else {
+																	%>
+																	<option value="<%=customer.getId()%>"><%=customer.getName()%></option>
+																	<%
+																		}
+																		}
+																	%>
+																</select>
 															</div>
 															<div class="col-sm-1"></div>
 														</div>

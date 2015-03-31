@@ -14,6 +14,7 @@
 			.getAttribute("producingOrderList");
 	producingOrderList = producingOrderList == null? new ArrayList<ProducingOrder>()
 			: producingOrderList;
+	String productfactoryStr = (String)request.getAttribute("productfactoryStr");
 %>
 <!DOCTYPE html>
 <html>
@@ -27,12 +28,14 @@
 		<!-- 为了让IE浏览器运行最新的渲染模式 -->
 	</head>
 	<body>
+
 		<%for(ProducingOrder producingOrder : producingOrderList){ 
 			List<ProducingOrderDetail> producingOrderDetailList = producingOrder == null ? new ArrayList<ProducingOrderDetail>()
 			: producingOrder.getDetaillist();
 			List<ProducingOrderMaterialDetail> producingOrderMaterialDetailList = producingOrder == null ? new ArrayList<ProducingOrderMaterialDetail>()
 			: producingOrder.getDetail_2_list();
 		%>
+		<div style="page-break-after: always">
 		<div class="container-fluid gridTab auto_container">
 			<div class="row">
 				<div class="col-md-12 tablewidget">
@@ -72,7 +75,7 @@
 								<td>
 									客户
 								</td>
-								<td><%=order.getKehu()%></td>
+								<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
 							</tr>
 							<tr>
 								<td>
@@ -238,6 +241,7 @@
 				</div>
 
 			</div>
+		</div>
 		</div>
 		<%} %>
 	</body>

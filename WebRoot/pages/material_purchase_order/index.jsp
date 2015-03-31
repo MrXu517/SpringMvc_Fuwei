@@ -289,7 +289,7 @@
 											<td><%=SystemCache.getFactoryName(materialPurchaseOrder.getFactoryId())%></td>
 											<td><%=SystemCache.getCompanyName(materialPurchaseOrder
 										.getCompanyId())%></td>
-											<td><%=materialPurchaseOrder.getKehu()%></td>
+											<td><%=SystemCache.getCustomerName(materialPurchaseOrder.getCustomerId())%></td>
 											<td><%=materialPurchaseOrder.getProductNumber()%></td>
 											<td><%=materialPurchaseOrder.getOrderId() == null ? "":materialPurchaseOrder.getOrderId()%></td>
 											<td><%=SystemCache.getUserName(materialPurchaseOrder

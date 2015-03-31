@@ -14,6 +14,7 @@
 			.getAttribute("fuliaoPurchaseOrderList");
 	fuliaoPurchaseOrderList = fuliaoPurchaseOrderList == null? new ArrayList<FuliaoPurchaseOrder>()
 			: fuliaoPurchaseOrderList;	
+	String productfactoryStr = (String)request.getAttribute("productfactoryStr");
 	
 %>
 <!DOCTYPE html>
@@ -33,6 +34,7 @@
 			List<FuliaoPurchaseOrderDetail> fuliaoPurchaseOrderDetailList = fuliaoPurchaseOrder == null ? new ArrayList<FuliaoPurchaseOrderDetail>()
 			: fuliaoPurchaseOrder.getDetaillist();
 		%>
+		<div style="page-break-after: always">
 		<div class="container-fluid gridTab auto_container">
 			<div class="row">
 				<div class="col-md-12 tablewidget">
@@ -82,7 +84,7 @@
 											<td>
 												客户
 											</td>
-											<td><%=fuliaoPurchaseOrder.getKehu()%></td>
+											<td><%=SystemCache.getCustomerName(fuliaoPurchaseOrder.getCustomerId())%></td>
 										</tr>
 										<tr>
 											<td>
@@ -217,6 +219,7 @@
 				</div>
 
 			</div>
+		</div>
 		</div>
 		<%} %>
 	</body>

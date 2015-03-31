@@ -32,7 +32,8 @@ public class Order implements Serializable {
 	private int created_user;// 创建用户
 	private Integer salesmanId;// 业务员ID
 	private Integer companyId;// 公司ID
-	private String kehu;// 客户
+//	private String kehu;// 客户
+	private Integer customerId;
 
 	// 以下为2014-11-3 添加的，假定一个订单只有一个样品，因此去除了以前的orderDetailList
 //	private Integer factoryId;// 生产单位
@@ -47,13 +48,13 @@ public class Order implements Serializable {
 	private String name;// 样品名称
 
 	private String img;// 图片
-	private String material;// 材料
+	private Integer materialId;// 材料
 	private double weight;// 克重
 	private String size;// 尺寸
 
 	private double cost;// 成本
 	private String productNumber;// 产品编号
-	private String machine;// 机织
+	//private Integer machineId;// 机织
 	private Integer charge_user;// 打样人 ，跟单人
 	private String detail;// 报价详情
 
@@ -84,16 +85,26 @@ public class Order implements Serializable {
 		this.in_use = in_use;
 	}
 
-	public String getKehu() {
-		return kehu;
-	}
-
-	public void setKehu(String kehu) {
-		this.kehu = kehu;
-	}
+//	public String getKehu() {
+//		return kehu;
+//	}
+//
+//	public void setKehu(String kehu) {
+//		this.kehu = kehu;
+//	}
+	
+	
 
 	public List<OrderStep> getStepList() {
 		return stepList;
+	}
+
+	public Integer getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
 	}
 
 	public String getDetail_json() {
@@ -352,12 +363,13 @@ public class Order implements Serializable {
 		this.img = img;
 	}
 
-	public String getMaterial() {
-		return material;
+
+	public Integer getMaterialId() {
+		return materialId;
 	}
 
-	public void setMaterial(String material) {
-		this.material = material;
+	public void setMaterialId(Integer materialId) {
+		this.materialId = materialId;
 	}
 
 	public double getWeight() {
@@ -392,13 +404,15 @@ public class Order implements Serializable {
 		this.productNumber = productNumber;
 	}
 
-	public String getMachine() {
-		return machine;
-	}
+	
 
-	public void setMachine(String machine) {
-		this.machine = machine;
-	}
+//	public Integer getMachineId() {
+//		return machineId;
+//	}
+//
+//	public void setMachineId(Integer machineId) {
+//		this.machineId = machineId;
+//	}
 
 	public Integer getCharge_user() {
 		return charge_user;

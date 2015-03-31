@@ -4,6 +4,9 @@ $(document).ready(function(){
 		tipText:"生产单",
 		url:"order/producingorder",
 		$content:$(".body"),
+		donecall:function(){
+		$(".breadcrumb li.active").prev().children("a").click();
+		},
 		tbOptions:{
 			colnames : [
 					{

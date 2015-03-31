@@ -20,6 +20,8 @@
 	if (DetailList == null) {
 		DetailList = new ArrayList<OrderDetail>();
 	}
+	String productfactoryStr = (String) request
+			.getAttribute("productfactoryStr");
 %>
 <!DOCTYPE html>
 <html>
@@ -49,7 +51,7 @@
 					<table id="orderTb" class="tableTb">
 						<tbody>
 							<tr>
-								<td align="center" rowspan="7" width="50%">
+								<td align="center" rowspan="6" width="50%">
 									<img id="previewImg" alt="200 x 100%"
 										src="/<%=order.getImg_s()%>">
 								</td>
@@ -62,7 +64,7 @@
 								<td>
 									客户
 								</td>
-								<td><%=order.getKehu()%></td>
+								<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
 							</tr>
 							<tr>
 								<td>
@@ -83,20 +85,11 @@
 								<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
 							</tr>
 							<tr>
-								<td colspan="2" class="center">
-									订单数量
+								<td>
+									发货时间
 								</td>
+								<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
 							</tr>
-							<%
-								for (OrderDetail detail : DetailList) {
-							%>
-							<tr>
-								<td><%=detail.getColor()%></td>
-								<td><%=detail.getQuantity()%></td>
-							</tr>
-							<%
-								}
-							%>
 						</tbody>
 					</table>
 
@@ -104,7 +97,9 @@
 						<tr>
 							<td colspan="2">
 								<table class="detailTb">
-									<caption>纱线信息</caption>
+									<caption>
+										纱线信息
+									</caption>
 									<thead>
 										<tr>
 											<th width="15%">
@@ -206,7 +201,7 @@
 
 								</table>
 							</td>
-						
+
 						</tr>
 					</table>
 

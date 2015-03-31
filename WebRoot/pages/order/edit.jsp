@@ -8,6 +8,7 @@
 <%@page import="com.fuwei.entity.Company"%>
 <%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.entity.Material"%>
+<%@page import="com.fuwei.entity.Customer"%>
 <%@page import="net.sf.json.JSONObject"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
@@ -76,8 +77,7 @@
 						<div class="row">
 							<div class="col-md-12 formwidget">
 								<form class="form-horizontal orderform" role="form">
-									<input type="hidden" id="sampleId" name="sampleId"
-										value="<%=order.getSampleId()%>" class="require" />
+									
 									<div class="form-group col-md-6">
 										<div class="col-sm-offset-3 col-sm-5">
 											<button type="submit" class="btn btn-primary"
@@ -94,10 +94,12 @@
 										<div class="col-sm-1"></div>
 									</div>
 									<div class="clear"></div>
-									<fieldset>
+									<fieldset id="sampleInfoWidget">
 										<legend>
 											样品信息
 										</legend>
+										<input type="hidden" id="sampleId" name="sampleId"
+										value="<%=order.getSampleId()%>" class="require" />
 										<div class="form-group col-md-6">
 											<label for="img" class="col-sm-3 control-label">
 												样品图片
@@ -145,10 +147,23 @@
 												材料
 											</label>
 											<div class="col-sm-8">
-												<input readonly type="text" name="material" id="material"
-													class="form-control"
-													value="<%=order.getMaterial() == null ? "" : order
-					.getMaterial()%>" />
+												<select class="form-control require" name="materialId"
+															id="materialId" disabled formele=true>
+															<option value="">未选择</option>
+															<%
+																for (Material material : SystemCache.materiallist) {
+																	if (order.getMaterialId()!=null && material.getId() == order.getMaterialId()) {
+															%>
+															<option value="<%=material.getId()%>" selected="selected"><%=material.getName()%></option>
+															<%
+																} else {
+															%>
+															<option value="<%=material.getId()%>"><%=material.getName()%></option>
+															<%
+																}
+																}
+															%>
+														</select>
 
 											</div>
 											<div class="col-sm-1"></div>
@@ -313,9 +328,26 @@
 												客户
 											</label>
 											<div class="col-sm-8">
-												<input disabled type="text" class="form-control" name="kehu"
-													id="kehu"
-													value="<%=order.getKehu() == null ? "" : order.getKehu()%>">
+												<select class="form-control" name="customerId"
+													id="customerId" disabled formele=true>
+													<option value="">
+														未选择
+													</option>
+													<%
+														for (Customer customer : SystemCache.customerlist) {
+															if (order.getCustomerId() != null
+																	&& order.getCustomerId() == customer.getId()) {
+													%>
+													<option value="<%=customer.getId()%>" selected><%=customer.getName()%></option>
+													<%
+														} else {
+													%>
+													<option value="<%=customer.getId()%>"><%=customer.getName()%></option>
+													<%
+														}
+														}
+													%>
+												</select>
 											</div>
 											<div class="col-sm-1"></div>
 										</div>

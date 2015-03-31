@@ -133,7 +133,7 @@
 																			未选择
 																		</option>
 																		<%
-																			for (Factory factory : SystemCache.factorylist) {
+																			for (Factory factory : SystemCache.produce_factorylist) {
 																		%>
 																		<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
 																		<%
@@ -158,7 +158,7 @@
 																<td>
 																	客户
 																</td>
-																<td><%=order.getKehu()%></td>
+																<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
 															</tr>
 															<tr>
 																<td>

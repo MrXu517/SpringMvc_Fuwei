@@ -11,6 +11,7 @@
 			.getAttribute("materialPurchaseOrderList");
 	materialPurchaseOrderList = materialPurchaseOrderList == null? new ArrayList<MaterialPurchaseOrder>()
 			: materialPurchaseOrderList;
+	String productfactoryStr = (String)request.getAttribute("productfactoryStr");
 	
 %>
 <!DOCTYPE html>
@@ -28,6 +29,7 @@
 			List<MaterialPurchaseOrderDetail> materialPurchaseOrderDetailList = materialPurchaseOrder == null ? new ArrayList<MaterialPurchaseOrderDetail>()
 			: materialPurchaseOrder.getDetaillist();
 		%>
+		<div style="page-break-after: always">
 		<div class="container-fluid gridTab auto_container">
 			<div class="row">
 				<div class="col-md-12 tablewidget">
@@ -74,7 +76,7 @@
 									客户：
 								</td>
 								<td class="center underline">
-									<span><%=materialPurchaseOrder.getKehu()%></span>
+									<span><%=SystemCache.getCustomerName(materialPurchaseOrder.getCustomerId())%></span>
 								</td>
 							</tr>
 							<tr height="10px"><td></td><td></td><td></td><td></td><td></td></tr>
@@ -178,6 +180,7 @@
 				</div>
 
 			</div>
+		</div>
 		</div>
 	<%} %>
 	</body>

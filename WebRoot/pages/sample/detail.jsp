@@ -141,7 +141,7 @@
 										<td>
 											材料
 										</td>
-										<td><%=sample.getMaterial()%></td>
+										<td><%=SystemCache.getMaterialName(sample.getMaterialId()) %></td>
 									</tr>
 									<tr>
 										<td>
@@ -167,7 +167,7 @@
 										<td>
 											机织
 										</td>
-										<td><%=sample.getMachine()%></td>
+										<td><%=SystemCache.getFactoryName(sample.getFactoryId()) %></td>
 									</tr>
 									<tr>
 										<td>

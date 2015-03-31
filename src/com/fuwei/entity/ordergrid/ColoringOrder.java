@@ -28,14 +28,16 @@ public class ColoringOrder extends BaseTableOrder{
 	private int factoryId;//染色单位
 
 	private Integer companyId;// 公司ID
-	private String kehu;// 客户
+//	private String kehu;// 客户
+	private Integer customerId;
+	
 	// 接下来的Sample的属性
 	private Integer sampleId;// 样品ID
 	
 	private String name;// 样品名称
 
 	private String img;// 图片
-	private String material;// 材料
+	private Integer materialId;// 材料
 	private double weight;// 克重
 	private String size;// 尺寸
 	private String productNumber;// 产品编号
@@ -112,14 +114,14 @@ public class ColoringOrder extends BaseTableOrder{
 		this.companyId = companyId;
 	}
 
-	public String getKehu() {
-		return kehu;
-	}
+	
 
-	public void setKehu(String kehu) {
-		this.kehu = kehu;
+	public Integer getCustomerId() {
+		return customerId;
 	}
-
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
+	}
 	public Integer getSampleId() {
 		return sampleId;
 	}
@@ -144,14 +146,14 @@ public class ColoringOrder extends BaseTableOrder{
 		this.img = img;
 	}
 
-	public String getMaterial() {
-		return material;
-	}
+	
 
-	public void setMaterial(String material) {
-		this.material = material;
+	public Integer getMaterialId() {
+		return materialId;
 	}
-
+	public void setMaterialId(Integer materialId) {
+		this.materialId = materialId;
+	}
 	public double getWeight() {
 		return weight;
 	}

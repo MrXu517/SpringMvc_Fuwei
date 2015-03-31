@@ -289,7 +289,7 @@
 											<td><%=SystemCache.getFactoryName(coloringOrder.getFactoryId())%></td>
 											<td><%=SystemCache.getCompanyName(coloringOrder
 										.getCompanyId())%></td>
-											<td><%=coloringOrder.getKehu()%></td>
+											<td><%=SystemCache.getCustomerName(coloringOrder.getCustomerId())%></td>
 											<td><%=coloringOrder.getProductNumber()%></td>
 											<td><%=coloringOrder.getOrderId() == null ? "":coloringOrder.getOrderId()%></td>
 											<td><%=SystemCache.getUserName(coloringOrder
