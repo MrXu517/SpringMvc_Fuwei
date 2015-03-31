@@ -22,8 +22,18 @@ public class Role implements Serializable {
 	
 	private Integer created_user;//创建用户
 	
+	private Boolean built_in = false;//是否是内建角色，内建角色（比如：系统管理员是不能被删或者注销的）
 	
 	
+	
+	public Boolean getBuilt_in() {
+		return built_in;
+	}
+
+	public void setBuilt_in(Boolean built_in) {
+		this.built_in = built_in;
+	}
+
 	public Integer getCreated_user() {
 		return created_user;
 	}

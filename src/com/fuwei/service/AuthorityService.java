@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.fuwei.entity.Authority;
 import com.fuwei.entity.QuoteOrderDetail;
 import com.fuwei.entity.Role_Authority;
+import com.fuwei.entity.User;
 @Component
 public class AuthorityService extends BaseService {
 	private Logger log = org.apache.log4j.LogManager.getLogger(AuthorityService.class);
@@ -79,6 +80,10 @@ public class AuthorityService extends BaseService {
 	
 	public Boolean checkLcode(int userId,String lcode) throws Exception{
 		try{
+			User user = userService.get(userId);
+			if(user.getBuilt_in()){
+				return true;
+			}
 			Authority entity= dao.queryForBean("select au.* from tb_role_authority ra,tb_user us,tb_authority au WHERE ra.roleId = us.roleId AND ra.authorityId = au.id AND us.id = ? AND au.lcode=?",Authority.class, userId,lcode);
 			if(entity!=null){
 				return true;

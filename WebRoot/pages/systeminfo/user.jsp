@@ -93,7 +93,7 @@
 													</label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control require"
-															name="username" id="username" placeholder="用户名">
+															name="username" id="username" placeholder="用户名必须唯一">
 													</div>
 													<div class="col-sm-1"></div>
 												</div>
@@ -172,6 +172,9 @@
 														序号
 													</th>
 													<th>
+														用户名
+													</th>
+													<th>
 														姓名
 													</th>
 													<th>
@@ -192,6 +195,7 @@
 												%>
 												<tr>
 													<td><%=u_i%></td>
+													<td><%=i_user.getUsername() %></td>
 													<td><%=i_user.getName()%></td>
 													<td><%=i_user.getHelp_code()%></td>
 													<td><%=i_user.getRoleId() == null ? "" : SystemCache

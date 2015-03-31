@@ -385,6 +385,9 @@ public class SystemCache {
 	}
 	
 	public static Boolean hasAuthority(LoginedUser loginUser, int authorityId){
+		if(loginUser.getLoginedUser().getBuilt_in()){
+			return true;
+		}
 		List<Authority> authorityList = loginUser.getAuthoritylist();
 		if(authorityList == null || authorityList.size()<=0){
 			return false;
@@ -398,6 +401,9 @@ public class SystemCache {
 	}
 	
 	public static Boolean hasAuthority(LoginedUser loginUser,String lcode){
+		if(loginUser.getLoginedUser().getBuilt_in()){
+			return true;
+		}
 		List<Authority> authorityList = loginUser.getAuthoritylist();
 		if(authorityList == null || authorityList.size()<=0){
 			return false;

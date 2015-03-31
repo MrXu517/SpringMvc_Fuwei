@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.entity.Company;
 import com.fuwei.entity.Role;
+import com.fuwei.entity.User;
 
 @Component
 public class RoleService extends BaseService {
@@ -55,6 +56,10 @@ public class RoleService extends BaseService {
 	// 删除角色
 	public int remove(int id) throws Exception {
 		try{
+			Role role = this.get(id);
+			if(role.getBuilt_in()){
+				throw new Exception("系统角色，不能删除");
+			}
 			return dao.update("delete from tb_role WHERE  id = ?", id);
 		}catch(Exception e){
 			SQLException sqlException = (java.sql.SQLException)e.getCause();

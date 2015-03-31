@@ -296,6 +296,11 @@
 						<a href="#"><i class="fa fa-list-alt"></i>系统信息管理<i
 							class="fa fa-angle-down"></i> </a>
 						<ul class="submenu">
+							<%if(h_has_systeminfo_customer){ %>
+							<li>
+								<a href="customer/index">客户管理</a>
+							</li>
+							<%} %>
 							<%if(h_has_systeminfo_salesman){ %>
 							<li>
 								<a href="salesman/index">公司和业务员</a>
@@ -326,11 +331,7 @@
 								<a href="role/list">角色管理</a>
 							</li>
 							<%} %>
-							<%if(h_has_systeminfo_customer){ %>
-							<li>
-								<a href="customer/index">客户管理</a>
-							</li>
-							<%} %>
+							
 						
 						</ul>
 					</li>
