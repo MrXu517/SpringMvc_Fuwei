@@ -396,7 +396,7 @@
 
 							<!-- 生产单  -->
 							<div class="tab-pane" id="producingorder" role="tabpanel">
-
+								<%if(!order.isDelivered()){ %>
 								<div class="emptyrecordwidget">
 									<p>
 										如果您要创建生产单，请点击下方的按钮
@@ -404,6 +404,7 @@
 									<a href="order/<%=order.getId()%>/addproducingorder"
 										class="btn btn-primary" id="createProducingorderBtn">创建生产单</a>
 								</div>
+								<%} %>
 
 								<%
 									for (ProducingOrder producingOrder : producingOrderList) {
@@ -739,11 +740,13 @@
 												value="<%=planOrder == null ? "" : planOrder.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
+											<%if(planOrder.isEdit()){ %>
 											<button type="submit"
 												class="pull-right btn btn-danger saveTable"
 												data-loading-text="正在保存...">
 												保存对当前表格的修改
 											</button>
+											<%} %>
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
 												data-loading-text="正在打印..."> 打印 </a>
@@ -902,11 +905,13 @@
 												value="<%=storeOrder == null ? "" : storeOrder.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
+											<%if(storeOrder!=null && storeOrder.isEdit()){ %>
 											<button type="submit"
 												class="pull-right btn btn-danger saveTable"
 												data-loading-text="正在保存...">
 												保存对当前表格的修改
 											</button>
+											<%} %>
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
 												data-loading-text="正在打印..."> 打印 </a>
@@ -1181,11 +1186,13 @@
 					: halfCheckRecordOrder.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
+											<%if(halfCheckRecordOrder.isEdit()){ %>
 											<button type="submit"
 												class="pull-right btn btn-danger saveTable"
 												data-loading-text="正在保存...">
 												保存对当前表格的修改
 											</button>
+											<%} %>
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
 												data-loading-text="正在打印..."> 打印 </a>
@@ -1461,6 +1468,7 @@
 
 							<!-- 原材料采购单 -->
 							<div class="tab-pane" id="materialpurchaseorder" role="tabpanel">
+								<%if(!order.isDelivered()){ %>
 								<div class="emptyrecordwidget">
 									<p>
 										如果您要创建原材料采购单，请点击下方的按钮
@@ -1468,6 +1476,7 @@
 									<a href="material_purchase_order/add/<%=order.getId()%>"
 										class="btn btn-primary" id="createProducingorderBtn">创建原材料采购单</a>
 								</div>
+								<%} %>
 
 								<%
 									for (MaterialPurchaseOrder materialPurchaseOrder : materialPurchaseOrderList) {
@@ -1779,6 +1788,7 @@
 							<!-- 染色单 -->
 
 							<div class="tab-pane" id="coloringorder" role="tabpanel">
+								<%if(!order.isDelivered()){ %>
 								<div class="emptyrecordwidget">
 									<p>
 										如果您要创建染色单，请点击下方的按钮
@@ -1786,6 +1796,7 @@
 									<a href="coloring_order/add/<%=order.getId()%>"
 										class="btn btn-primary" id="createProducingorderBtn">创建原材料染色单</a>
 								</div>
+								<%} %>
 
 								<%
 									for (ColoringOrder coloringOrder : coloringOrderList) {
@@ -2228,6 +2239,7 @@
 							<!-- 辅料采购单 -->
 
 							<div class="tab-pane" id="fuliaopurchaseorder" role="tabpanel">
+								<%if(!order.isDelivered()){ %>
 								<div class="emptyrecordwidget">
 									<p>
 										如果您要创建辅料采购单，请点击下方的按钮
@@ -2235,6 +2247,7 @@
 									<a href="fuliao_purchase_order/add/<%=order.getId()%>"
 										class="btn btn-primary" id="createProducingorderBtn">创建辅料采购单</a>
 								</div>
+								<%} %>
 
 								<%
 									for (FuliaoPurchaseOrder fuliaoPurchaseOrder : fuliaoPurchaseOrderList) {

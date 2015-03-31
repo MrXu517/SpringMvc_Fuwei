@@ -24,6 +24,8 @@ import com.fuwei.entity.User;
 import com.fuwei.service.ordergrid.CarFixRecordOrderService;
 import com.fuwei.service.ordergrid.CheckRecordOrderService;
 import com.fuwei.service.ordergrid.ColoringOrderService;
+import com.fuwei.service.ordergrid.ColoringProcessOrderService;
+import com.fuwei.service.ordergrid.FinalStoreOrderService;
 import com.fuwei.service.ordergrid.FuliaoPurchaseOrderService;
 import com.fuwei.service.ordergrid.HalfCheckRecordOrderService;
 import com.fuwei.service.ordergrid.HeadBankOrderService;
@@ -31,6 +33,8 @@ import com.fuwei.service.ordergrid.IroningRecordOrderService;
 import com.fuwei.service.ordergrid.MaterialPurchaseOrderService;
 import com.fuwei.service.ordergrid.PlanOrderService;
 import com.fuwei.service.ordergrid.ProducingOrderService;
+import com.fuwei.service.ordergrid.ProductionScheduleOrderService;
+import com.fuwei.service.ordergrid.ShopRecordOrderService;
 import com.fuwei.service.ordergrid.StoreOrderService;
 import com.fuwei.util.CreateNumberUtil;
 import com.fuwei.util.DateTool;
@@ -77,6 +81,16 @@ public class OrderService extends BaseService {
 	@Autowired
 	IroningRecordOrderService ironingRecordOrderService;
 	//2015-3-18添加
+	
+	/*2015-3-31添加 新表格*/
+	@Autowired
+	ProductionScheduleOrderService productionScheduleOrderService;
+	@Autowired
+	FinalStoreOrderService finalStoreOrderService;
+	@Autowired
+	ShopRecordOrderService shopRecordOrderService;
+	@Autowired
+	ColoringProcessOrderService coloringProcessOrderService;
 	
 	
 	// 获取订单列表
@@ -353,6 +367,12 @@ public class OrderService extends BaseService {
 				producingOrderService.completeByOrder(orderId);
 				storeOrderService.completeByOrder(orderId);
 				//2015-3-18添加，若当前执行发货步骤，则将所有表格status设为6
+				//2015-3-31添加 新单据
+				productionScheduleOrderService.completeByOrder(orderId);
+				coloringProcessOrderService.completeByOrder(orderId);
+				shopRecordOrderService.completeByOrder(orderId);
+				finalStoreOrderService.completeByOrder(orderId);
+				//2015-3-31添加 新单据
 				
 			}
 

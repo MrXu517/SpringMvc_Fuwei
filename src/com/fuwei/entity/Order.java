@@ -452,6 +452,10 @@ public class Order implements Serializable {
 		return this.status < OrderStatus.DELIVERED.ordinal();// 2014-11-10修改：
 																// 在已发货之前都可以修改订单
 	}
+	public Boolean isDelivered() {
+		return this.status >= OrderStatus.DELIVERED.ordinal();// 2014-11-10修改：
+																// 在已发货之前都可以创建单据
+	}
 	
 	//是否可取消订单
 	public Boolean isCancelable(){
