@@ -905,7 +905,7 @@
 												value="<%=storeOrder == null ? "" : storeOrder.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
-											<%if(storeOrder!=null && storeOrder.isEdit()){ %>
+											<%if(storeOrder==null || storeOrder.isEdit()){ %>
 											<button type="submit"
 												class="pull-right btn btn-danger saveTable"
 												data-loading-text="正在保存...">

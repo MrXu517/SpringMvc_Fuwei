@@ -747,7 +747,7 @@ public class OrderController extends BaseController {
 				producingorderdetail.setColor(planOrderDetail.getColor());
 				producingorderdetail.setPlanOrderDetailId(planOrderDetail.getId());
 				producingorderdetail.setSize(planOrderDetail.getSize());
-				producingorderdetail.setPrice(planOrderDetail.getPrice());
+				producingorderdetail.setPrice(0);
 				producingorderdetail.setWeight(planOrderDetail.getWeight());
 				producingorderdetail.setYarn(planOrderDetail.getYarn());
 				Integer quantity = hashmap.get(planOrderDetail.getId());

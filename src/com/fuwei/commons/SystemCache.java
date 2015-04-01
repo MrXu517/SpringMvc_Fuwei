@@ -144,6 +144,9 @@ public class SystemCache {
 	
 	public void initFactoryList() throws Exception {
 		SystemCache.factorylist = factoryService.getList(); // userlist;
+		purchase_factorylist = new ArrayList<Factory>();
+		coloring_factorylist = new ArrayList<Factory>();
+		produce_factorylist = new ArrayList<Factory>();
 		for (int i = 0; i < SystemCache.factorylist.size(); ++i) {
 			Factory temp = SystemCache.factorylist.get(i);
 			Integer type = temp.getType();

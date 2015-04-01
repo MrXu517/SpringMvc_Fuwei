@@ -227,7 +227,7 @@
 														</div>
 														<div class="form-group col-md-6">
 															<label for="orderNumber" class="col-sm-3 control-label">
-																生产单号
+																订单号
 															</label>
 															<div class="col-sm-8">
 																<input disabled type="text" class="form-control" name="orderNumber"

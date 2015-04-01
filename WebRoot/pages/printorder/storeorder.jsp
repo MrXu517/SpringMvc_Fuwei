@@ -115,14 +115,16 @@
 											<th width="15%">
 												领取人
 											</th>
-											<th width="15%">
-												标准样纱
-											</th>
+											
 										</tr>
 									</thead>
 									<tbody>
 										<%
-											for (StoreOrderDetail detail : storeOrderDetailList) {
+											int i = 0 ;
+											int length = storeOrderDetailList.size();
+											int middle = (int)(Math.ceil(length/2.0));
+											for(;i < middle;++i){
+												StoreOrderDetail detail = storeOrderDetailList.get(i);
 										%>
 										<tr class="tr">
 											<td class="color"><%=detail.getColor()%>
@@ -133,8 +135,7 @@
 											</td>
 											<td class="factory_name"><%=SystemCache.getFactoryName(detail.getFactoryId())%>
 											</td>
-											<td class="yarn"><%=detail.getYarn()%>
-											</td>
+										
 										</tr>
 
 										<%
@@ -144,9 +145,69 @@
 									</tbody>
 								</table>
 							</td>
+							<td>
+								<table class="detailTb">
+									<caption>
+										材料列表
+									</caption>
+									<thead>
+										<tr>
+											<th width="15%">
+												色号
+											</th>
+											<th width="15%">
+												材料
+											</th>
+											<th width="15%">
+												总数量
+											</th>
+											<th width="15%">
+												领取人
+											</th>
+										
+										</tr>
+									</thead>
+									<tbody>
+										<%
+											for(i = 0;i < middle;++i){
+												if(i + middle < length){
+												StoreOrderDetail detail = storeOrderDetailList.get(i + middle);
+										%>
+										<tr class="tr">
+											<td class="color"><%=detail.getColor()%>
+											</td>
+											<td class="material_name"><%=SystemCache.getMaterialName(detail.getMaterial()) %>
+											</td>
+											<td class="quantity"><%=detail.getQuantity()%>
+											</td>
+											<td class="factory_name"><%=SystemCache.getFactoryName(detail.getFactoryId())%>
+											</td>
+										
+										</tr>
+										<%
+											}else{
+											
+										%>
+											<tr class="tr">
+											<td class="color">&nbsp;
+											</td>
+											<td class="material_name">
+											</td>
+											<td class="quantity">
+											</td>
+											<td class="factory_name">
+											</td>
+											
+										</tr>
+										<%} 
+										}%>
+
+									</tbody>
+								</table>
+							</td>
 						</tr>
 						<tr>
-							<td>
+							<td colspan="2">
 								<table class="auto_height stickedTb">
 									<caption>
 										材料出入情况列表
