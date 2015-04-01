@@ -37,7 +37,7 @@ $(document).ready( function() {
 			success : function(result) {
 				if (result.success) {
 					Common.Tip("添加成功", function() {
-						location = "sample/undetailedindex";
+						location = "sample/index";
 					});
 				}
 				$submitBtn.button('reset');

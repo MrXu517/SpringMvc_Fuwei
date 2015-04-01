@@ -30,16 +30,20 @@ public class SampleService extends BaseService {
 			List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
-			sql.append("select * from tb_sample where has_detail=1");
+			sql.append("select * from tb_sample ");
+			String seq = " where ";
 			if (start_time != null) {
-				sql.append(" AND created_at>='" + DateTool.formateDate(start_time) + "'");
+				sql.append(seq + "created_at>='" + DateTool.formateDate(start_time) + "'");
+				seq = " AND ";
 			}
 			if (end_time != null) {
 				
-				sql.append(" AND created_at<='" +  DateTool.formateDate(DateTool.addDay(end_time, 1))+"'");
+				sql.append(seq + "created_at<='" +  DateTool.formateDate(DateTool.addDay(end_time, 1))+"'");
+				seq = " AND ";
 			}
 			if(charge_user!=null){
-				sql.append(" AND charge_user='" +  charge_user +"'");
+				sql.append(seq + "charge_user='" +  charge_user +"'");
+				seq = " AND ";
 			}
 			if (sortlist != null && sortlist.size() > 0) {
 
@@ -98,7 +102,7 @@ public class SampleService extends BaseService {
 	public List<Sample> getList() throws Exception {
 		try {
 			List<Sample> sampleList = dao.queryForBeanList(
-					"SELECT * FROM tb_sample WHERE has_detail=1 order by created_at desc", Sample.class);
+					"SELECT * FROM tb_sample order by created_at desc", Sample.class);
 			return sampleList;
 		} catch (Exception e) {
 			throw e;
@@ -160,15 +164,17 @@ public class SampleService extends BaseService {
 			List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
-			sql.append("select * from tb_sample where has_detail=1");
-			
+			sql.append("select * from tb_sample ");
+			String seq = " where ";
 			if (name != null ) {
 				if(!name.equals("")){
-					sql.append(" AND name like %'" + name + "'");
+					sql.append(seq + "name like %'" + name + "'");
+					seq = " AND ";
 				}
 			}
 			if(charge_user!=null){
-				sql.append(" AND charge_user='" +  charge_user +"'");
+				sql.append(seq + "charge_user='" +  charge_user +"'");
+				seq = " AND ";
 			}
 			if (sortlist != null && sortlist.size() > 0) {
 

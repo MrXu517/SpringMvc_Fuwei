@@ -251,10 +251,10 @@ public class SampleController extends BaseController {
 			HttpServletResponse response) throws Exception{
 		
 		String lcode = "sample/detail";
-		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
-		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有查看样品详情的权限", null);
-		}
+//		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+//		if(!hasAuthority){
+//			throw new PermissionDeniedDataAccessException("没有查看样品详情的权限", null);
+//		}
 		
 		Sample sample = sampleService.get(id);
 		return sample;

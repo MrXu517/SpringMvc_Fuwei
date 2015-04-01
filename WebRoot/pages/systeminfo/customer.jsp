@@ -34,7 +34,7 @@
 		<script src="js/systeminfo/customer.js" type="text/javascript"></script>
 
 	</head>
-	<body>&nbsp; 
+	<body>
 		<%@ include file="../common/head.jsp"%>
 		<div id="Content">
 			<div id="main">
