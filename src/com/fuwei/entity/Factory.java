@@ -70,7 +70,7 @@ public class Factory {
 	
 	public String getTypeName() {
 		Integer type = this.type;
-		if(type == null || type == 0){
+		if(type == 0){
 			return "机织";
 		}
 		if(type == 1){

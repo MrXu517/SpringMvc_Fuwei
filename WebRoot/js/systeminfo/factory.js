@@ -4,6 +4,11 @@ $(document).ready(function(){
 	setActiveLeft($a.parent("li"));
 	/*设置当前选中的页*/
 	
+	/*2015-4-2添加*/
+	$("#filterform #type").change(function(){
+		$("#filterform").submit();
+	});
+	
 	//工厂 -- 开始
 	setAddFactory();
 	$(".deleteFactory").click(function(){
@@ -54,7 +59,7 @@ $(document).ready(function(){
 
 
 function setAddFactory(){
-	var $form = $("#factory form");
+	var $form = $("#factory .formwidget form");
 	Common.resetForm($form[0]);
 	$form.removeClass("edit");
 	var $submitBtn = $form.find("[type='submit']");
@@ -90,7 +95,7 @@ function setAddFactory(){
 	});
 }
 function setUpdateFactory(result){
-	var $form = $("#factory form");
+	var $form = $("#factory .formwidget form");
 	Common.resetForm($form[0]);
 	Common.fillForm($("#factory form")[0],result);
 	$form.addClass("edit");

@@ -36,14 +36,27 @@ public class FactoryController extends BaseController {
 	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView Index(HttpSession session, HttpServletRequest request,
+	public ModelAndView Index(HttpSession session,Integer type, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		String lcode = "factory";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有工厂管理的权限", null);
 		}
-		request.setAttribute("factorylist", SystemCache.factorylist);
+		if(type == null){
+			request.setAttribute("factorylist", SystemCache.factorylist);
+		} 
+		else if(type == 0){
+			request.setAttribute("factorylist", SystemCache.produce_factorylist);
+		}
+		else if(type == 1){
+			request.setAttribute("factorylist", SystemCache.purchase_factorylist);
+		}
+		else if(type == 2){
+			request.setAttribute("factorylist", SystemCache.coloring_factorylist);
+		}else{
+			request.setAttribute("factorylist", SystemCache.factorylist);
+		}
 		return new ModelAndView("systeminfo/factory");
 
 	}

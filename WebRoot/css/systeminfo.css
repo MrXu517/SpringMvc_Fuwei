@@ -10,3 +10,7 @@
 form.edit .switch_add{
 	display:inline;
 }
+#filterform{
+	margin-top: 10px; 
+	border-bottom: 1px solid #ccc;
+}

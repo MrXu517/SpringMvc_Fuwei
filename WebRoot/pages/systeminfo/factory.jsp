@@ -11,6 +11,11 @@
 			.getAttribute("factorylist");
 
 	String tabname = (String) request.getParameter("tab");
+	String typeStr = request.getParameter("type");
+	Integer type = null;
+	if(typeStr!=null && !typeStr.equals("")){
+		type =Integer.parseInt(typeStr);
+	}
 %>
 <!DOCTYPE html>
 <html>
@@ -83,11 +88,16 @@
 														类型
 													</label>
 													<div class="col-sm-8">
-														<select class="form-control require"
-															name="type" id="type">
-															<option value="0">机织</option>
-															<option value="1">采购</option>
-															<option value="2">染色</option>
+														<select class="form-control require" name="type" id="type">	
+															<option value="0">
+																机织
+															</option>
+															<option value="1">
+																采购
+															</option>
+															<option value="2">
+																染色
+															</option>
 														</select>
 													</div>
 													<div class="col-sm-1"></div>
@@ -129,7 +139,51 @@
 										<div class="panel-heading">
 											加工工厂列表
 										</div>
+										<form class="form-horizontal" role="form" id="filterform" action="factory/index">
+											<div class="form-group col-sm-6">
+												<label for="name" class="col-sm-3 control-label">
+													类型
+												</label>
+												<div class="col-sm-8">
+													<select class="form-control require" name="type" id="type">
+														<option value="">
+															所有
+														</option>
+														<%if(type!=null && type == 0){ %>
+															<option value="0" selected>
+																机织
+															</option>
+														<%}else{ %>
+															<option value="0">
+																机织
+															</option>
+														<%} %>
+														<%if(type!=null && type == 1){ %>
+															<option value="1" selected>
+																采购
+															</option>
+														<%}else{ %>
+															<option value="1">
+																采购
+															</option>
+														<%} %>
+														<%if(type!=null && type == 2){ %>
+															<option value="2" selected>
+																染色
+															</option>
+														<%}else{ %>
+															<option value="2">
+																染色
+															</option>
+														<%} %>
+													</select>
+												</div>
+												<div class="col-sm-1"></div>
+											</div>
 
+
+											<div class="clear"></div>
+										</form>
 										<!-- Table -->
 										<table class="table table-responsive">
 											<thead>

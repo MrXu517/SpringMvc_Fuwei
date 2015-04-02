@@ -150,7 +150,7 @@ public class SystemCache {
 		for (int i = 0; i < SystemCache.factorylist.size(); ++i) {
 			Factory temp = SystemCache.factorylist.get(i);
 			Integer type = temp.getType();
-			if(type == null || type == 0){
+			if(type == 0){
 				SystemCache.produce_factorylist.add(temp);
 			}
 			if(type == 1){
