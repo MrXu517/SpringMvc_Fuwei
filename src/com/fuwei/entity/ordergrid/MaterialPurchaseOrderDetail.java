@@ -3,7 +3,7 @@ package com.fuwei.entity.ordergrid;
 public class MaterialPurchaseOrderDetail {
 	private Integer material ; //材料品种
 	private String scale;//规格
-	private int quantity;//数量
+	private double quantity;//数量
 //	private String color;//颜色
 	private String batch_number;//批次号
 	private double price;//价格
@@ -19,13 +19,14 @@ public class MaterialPurchaseOrderDetail {
 	public void setScale(String scale) {
 		this.scale = scale;
 	}
-	public int getQuantity() {
+	
+	
+	public double getQuantity() {
 		return quantity;
 	}
-	public void setQuantity(int quantity) {
+	public void setQuantity(double quantity) {
 		this.quantity = quantity;
 	}
-	
 	public String getBatch_number() {
 		return batch_number;
 	}

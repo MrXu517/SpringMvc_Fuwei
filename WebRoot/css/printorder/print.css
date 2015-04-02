@@ -47,7 +47,6 @@ table.noborder>tr>td , table.noborder>caption,table.noborder>tbody>tr>td{
 	height:200px;
 }
 #orderTb{
-	margin-bottom:20px;
 }
 th{
 	font-weight:normal;
@@ -84,4 +83,7 @@ p#sign{
 	margin:0;
 	height: 40px;
 	line-height: 40px;
+}
+#receiver_user{
+	padding-right:150px;
 }

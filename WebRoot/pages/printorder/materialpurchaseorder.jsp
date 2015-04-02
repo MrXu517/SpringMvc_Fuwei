@@ -38,63 +38,62 @@
 							桐庐富伟针织厂原材料采购单
 						</caption>
 						<tr><td colspan="3" class="pull-right">№：<%=materialPurchaseOrder.getOrderNumber() %></td></tr>
-						<tr height="10px"></tr>
 					</table>
 
 					<table id="orderTb" class="tableTb noborder">
 						<tbody>
 							<tr>
 								<td width="15%">
-									采购单位：
+									供货单位：
 								</td>
-								<td class="center orderproperty underline">
-									<span><%=materialPurchaseOrder == null ? ""
-					: (SystemCache.getFactoryName(materialPurchaseOrder.getFactoryId()))%></span>
+								<td class="orderproperty">
+									<span><%=materialPurchaseOrder == null ? "" : (SystemCache.getFactoryName(materialPurchaseOrder.getFactoryId()))%></span>
 								</td>
-								<td width="15%"></td>
+								<td width="15%">业务员：</td>
 
 								<td width="15%">
-									订购日期：
+									<span><%=materialPurchaseOrder == null ? "" : (SystemCache.getFactoryName((materialPurchaseOrder.getCharge_user())))%></span>
 								</td>
-								<td class="center orderproperty underline">
-									<span><%=materialPurchaseOrder == null ? ""
-					: (materialPurchaseOrder.getPurchase_at() == null ? ""
-							: materialPurchaseOrder.getPurchase_at())%></span>
+								<td>
 								</td>
 
 							</tr>
-							<tr height="10px"><td></td><td></td><td></td><td></td><td></td></tr>
+							
 							<tr>
-								<td width="15%">
-									公司：
-								</td>
-								<td class="center underline">
-									<span><%=SystemCache.getCompanyName(materialPurchaseOrder.getCompanyId())%></span>
-								</td>
-								<td width="15%"></td>
-								<td width="15%">
-									客户：
-								</td>
-								<td class="center underline">
-									<span><%=SystemCache.getCustomerName(materialPurchaseOrder.getCustomerId())%></span>
+								<td colspan="5">
+									<table>
+										<tr>
+											<td class="center" width="15%">
+												公司
+											</td>
+											<td class="center" width="15%">
+												货号
+											</td>
+											<td class="center" width="15%">
+												客户
+											</td>
+											<td class="center" width="15%">
+												品名
+											</td>
+										</tr>
+										<tr>
+											<td class="center">
+												<span><%=SystemCache.getCompanyShortName(materialPurchaseOrder.getCompanyId())%></span>
+											</td>
+											<td class="center">
+												<span><%=materialPurchaseOrder.getProductNumber()%></span>
+											</td>
+											<td class="center">
+												<span><%=SystemCache.getCustomerName(materialPurchaseOrder.getCustomerId())%></span>
+											</td>
+											<td class="center">
+												<span><%=materialPurchaseOrder.getName()%></span>
+											</td>
+										</tr>
+									</table>
 								</td>
 							</tr>
-							<tr height="10px"><td></td><td></td><td></td><td></td><td></td></tr>
-							<tr>
-								<td width="15%">
-									货号：
-								</td>
-								<td class="center underline">
-									<span><%=materialPurchaseOrder.getProductNumber()%></span>
-								</td>
-								<td width="15%"></td>
-								<td width="15%">
-									生产单号：
-								</td>
-								<td class="center underline">
-									<span><%=materialPurchaseOrder.getOrderNumber()%></span>
-								</td>
-							</tr>
+
 						</tbody>
 					</table>
 
@@ -109,16 +108,10 @@
 												材料品种
 											</th>
 											<th width="15%">
-												规格
+												数量(kg)
 											</th>
-											<th width="15%">
-												数量
-											</th>
-											<th width="15%">
-												批次号
-											</th>
-											<th width="15%">
-												价格（含税）
+											<th width="30%">
+												备注
 											</th>
 
 										</tr>
@@ -130,24 +123,31 @@
 										<tr class="tr">
 											<td class="material_name"><%=SystemCache.getMaterialName(detail.getMaterial()) %>
 											</td>
-											<td class="scale"><%=detail.getScale()%>
-											</td>
 											<td class="quantity"><%=detail.getQuantity()%>
 											</td>
-											<td class="batch_number"><%=detail.getBatch_number()%>
-											</td>
-											<td class="price"><%=detail.getPrice()%>
+											<td class="memo">
 											</td>
 										</tr>
 
 										<%
 											}
+											int i = materialPurchaseOrderList.size();
+											for(; i < 6 ; ++i){
 										%>
-
+												<tr class="tr">
+													<td class="material_name">&nbsp;
+													</td>
+													<td class="quantity">
+													</td>
+													<td class="memo">
+													</td>
+												</tr>
+										<%}
+										 %>
 									</tbody>
 								</table>
 
-								<table class="detailTb auto_height stickedTb">
+							<!-- 	<table class="detailTb auto_height stickedTb">
 									<tbody>
 										<tr>
 											<td></td>
@@ -157,7 +157,7 @@
 											<td></td>
 										</tr>
 									</tbody>
-								</table>
+								</table> -->
 							</td>
 						</tr>
 					</table>
@@ -173,6 +173,8 @@
 					</p>
 					<p class="pull-right auto_bottom">
 						<span id="created_user">制单人：<%=SystemCache.getUserName(materialPurchaseOrder.getCreated_user()) %></span>
+						<span id="receiver_user">收货人：</span>
+						<span id="date"> 日期：<%=DateTool.formatDateYMD(materialPurchaseOrder.getCreated_at()) %></span>
 					</p>
 
 

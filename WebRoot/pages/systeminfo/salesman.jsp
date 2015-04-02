@@ -294,6 +294,9 @@ for(Company company : companylist){
 															<th>
 																拼音
 															</th>
+															<th>
+																公司
+															</th>
 															<th style="display: none;">
 																创建人
 															</th>
@@ -311,6 +314,7 @@ for(Company company : companylist){
 															<td><%=s_i%></td>
 															<td><%=salesman.getName()%></td>
 															<td><%=salesman.getHelp_code()%></td>
+															<td><%=SystemCache.getCompanyName(salesman.getCompanyId()) %></td>
 															<td style="display: none;"><%=SystemCache.getUserName(salesman.getCreated_user()) %></td>
 															<td>
 																<a class="editSalesman" href="#"

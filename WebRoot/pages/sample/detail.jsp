@@ -198,7 +198,7 @@
 									报价详情
 								</legend>
 								<textarea readonly class="form-control" id="detail"
-									name="detail" placeholder="报价详情"><%=sample.getDetail()%></textarea>
+									name="detail"><%=sample.getDetail()==null?"":sample.getDetail()%></textarea>
 							</fieldset>
 						</div>
 						<%}%>

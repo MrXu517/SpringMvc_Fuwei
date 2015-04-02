@@ -865,22 +865,22 @@ TableTools.defaultConfig.init_initCss = function() {
 TableTools.defaultConfig.init_bindEvent = function() {
     var TableInstance = this;
     //数字验证，整数
-    $(TableInstance.tableEle).find("tbody").on("keyup", "td.int input[type='text']", function(event) {
+    $(TableInstance.tableEle).find("tbody").on("input propertychange", "td.int input[type='text']", function(event) {
         Common.intCheck_Rewrite(this, this.value);
     });
     //数字验证，整数
 
     //数字验证，没有小数点
-    $(TableInstance.tableEle).find("tbody").on("keyup", "td.positive_int input[type='text']", function(event) {
+    $(TableInstance.tableEle).find("tbody").on("input propertychange", "td.positive_int input[type='text']", function(event) {
         Common.positive_intCheck_Rewrite(this, this.value);
     });
     //数字验证，没有小数点
     //数字验证，包括小数点
-    $(TableInstance.tableEle).find("tbody").on("keyup", "td.double input[type='text']", function(event) {
+    $(TableInstance.tableEle).find("tbody").on("input propertychange", "td.double input[type='text']", function(event) {
         Common.doubleCheck_Rewrite(this, this.value);
     });
     //数字验证，包括小数点
-    $(TableInstance.tableEle).find("tbody").on("input propertchange", "input.oninput_change_property", function() {
+    $(TableInstance.tableEle).find("tbody").on("input propertychange", "input.oninput_change_property", function() {
         //先验证
         var $td = $(this).closest('td');
         if ($td.hasClass('double')) {

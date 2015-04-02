@@ -593,7 +593,7 @@
 																			色号
 																		</th>
 																		<th width="20%">
-																			数量
+																			数量(kg)
 																		</th>
 																		<th width="25%">
 																			标准色样
@@ -692,11 +692,11 @@
 													</div>
 													<div class="form-group col-md-12">
 														<label for="quantity" class="col-sm-3 control-label">
-															数量
+															数量(kg)
 														</label>
 														<div class="col-sm-8">
 															<input type="text" name="quantity" id="quantity"
-																class="form-control int require" />
+																class="form-control double require" />
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -1013,7 +1013,7 @@
 																			材料
 																		</th>
 																		<th width="15%">
-																			总数量
+																			总数量(kg)
 																		</th>
 																		<th width="15%">
 																			领取人
@@ -1116,11 +1116,11 @@
 													</div>
 													<div class="form-group col-md-12">
 														<label for="quantity" class="col-sm-3 control-label">
-															总数量
+															总数量(kg)
 														</label>
 														<div class="col-sm-8">
 															<input type="text" name="quantity" id="quantity"
-																class="form-control int require" />
+																class="form-control double require" />
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -1626,7 +1626,7 @@
 																				规格
 																			</th>
 																			<th width="15%">
-																				数量
+																				数量(kg)
 																			</th>
 																			<th width="15%">
 																				批次号
@@ -1733,11 +1733,11 @@
 													</div>
 													<div class="form-group col-md-12">
 														<label for="quantity" class="col-sm-3 control-label">
-															数量
+															数量(kg)
 														</label>
 														<div class="col-sm-8">
 															<input type="text" name="quantity" id="quantity"
-																class="form-control int require" />
+																class="form-control double require" />
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -1933,7 +1933,7 @@
 																				材料
 																			</th>
 																			<th width="15%">
-																				数量
+																				数量(kg)
 																			</th>
 																			<th width="15%">
 																				标准样纱
@@ -2035,11 +2035,11 @@
 													</div>
 													<div class="form-group col-md-12">
 														<label for="quantity" class="col-sm-3 control-label">
-															数量
+															数量(kg)
 														</label>
 														<div class="col-sm-8">
 															<input type="text" name="quantity" id="quantity"
-																class="form-control int require" />
+																class="form-control double require" />
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -2390,7 +2390,7 @@
 																				标准样
 																			</th>
 																			<th width="15%">
-																				数量
+																				数量(kg)
 																			</th>
 																			<th width="15%">
 																				价格
@@ -2497,11 +2497,11 @@
 													</div>
 													<div class="form-group col-md-12">
 														<label for="quantity" class="col-sm-3 control-label">
-															数量
+															数量(kg)
 														</label>
 														<div class="col-sm-8">
 															<input type="text" name="quantity" id="quantity"
-																class="form-control int require" />
+																class="form-control double require" />
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -2588,17 +2588,11 @@
 																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
 																			</a>
 																		</td>
-																		<td width="20%">
-																			生产单位
-																		</td>
-																		<td class="orderproperty"><%=productfactoryStr %></td>
-																	</tr>
-
-																	<tr>
 																		<td colspan="2" class="center">
 																			订单信息
 																		</td>
 																	</tr>
+
 																	<tr>
 																		<td>
 																			公司
@@ -2748,17 +2742,11 @@
 																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
 																			</a>
 																		</td>
-																		<td width="20%">
-																			生产单位
-																		</td>
-																		<td class="orderproperty"><%=productfactoryStr %></td>
-																	</tr>
-
-																	<tr>
 																		<td colspan="2" class="center">
 																			订单信息
 																		</td>
 																	</tr>
+
 																	<tr>
 																		<td>
 																			公司
@@ -3404,7 +3392,7 @@
 																			颜色
 																		</th>
 																		<th width="15%">
-																			数量
+																			数量(kg)
 																		</th>
 																		<th width="15%">
 																			染色单位

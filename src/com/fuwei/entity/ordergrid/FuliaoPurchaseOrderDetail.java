@@ -3,7 +3,7 @@ package com.fuwei.entity.ordergrid;
 public class FuliaoPurchaseOrderDetail {
 	private Integer style ; //辅料类型
 	private String standardsample;//标准样
-	private int quantity;//数量
+	private double quantity;//数量
 	private double price;//价格
 	private String end_at;//交期
 	public Integer getStyle() {
@@ -18,10 +18,11 @@ public class FuliaoPurchaseOrderDetail {
 	public void setStandardsample(String standardsample) {
 		this.standardsample = standardsample;
 	}
-	public int getQuantity() {
+	
+	public double getQuantity() {
 		return quantity;
 	}
-	public void setQuantity(int quantity) {
+	public void setQuantity(double quantity) {
 		this.quantity = quantity;
 	}
 	public double getPrice() {

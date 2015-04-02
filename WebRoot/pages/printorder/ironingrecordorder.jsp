@@ -46,22 +46,16 @@
 									<img id="previewImg" alt="200 x 100%"
 										src="/<%=order.getImg_s()%>">
 								</td>
-								<td width="20%">
-									生产单位
-								</td>
-								<td class="orderproperty"><%=productfactoryStr %></td>
-							</tr>
-
-							<tr>
 								<td colspan="2" class="center">
 									订单信息
 								</td>
 							</tr>
+
 							<tr>
 								<td>
 									公司
 								</td>
-								<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+								<td><%=SystemCache.getCompanyShortName(order.getCompanyId())%></td>
 							</tr>
 							<tr>
 								<td>

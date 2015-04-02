@@ -3,7 +3,7 @@ package com.fuwei.entity.ordergrid;
 public class ColoringProcessOrderDetail {
 	private String color;//色号
 	private Integer material ; //材料
-	private int quantity;//数量
+	private double quantity;//数量
 	private int factoryId;//染色单位
 	public String getColor() {
 		return color;
@@ -17,10 +17,11 @@ public class ColoringProcessOrderDetail {
 	public void setMaterial(Integer material) {
 		this.material = material;
 	}
-	public int getQuantity() {
+	
+	public double getQuantity() {
 		return quantity;
 	}
-	public void setQuantity(int quantity) {
+	public void setQuantity(double quantity) {
 		this.quantity = quantity;
 	}
 	public int getFactoryId() {

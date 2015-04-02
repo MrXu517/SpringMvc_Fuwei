@@ -45,27 +45,22 @@
 									<img id="previewImg" alt="200 x 100%"
 										src="/<%=order.getImg_s()%>">
 								</td>
-								<td width="20%">
-									生产单位
+								<td colspan="2" class="center">
+									订单信息
 								</td>
-								<td width="20%" class="orderproperty"><%=productfactoryStr %></td>
 								<td class="orderproperty center" width="30%">样标</td>
 							</tr>
 
 							<tr>
-								<td colspan="2" class="center">
-									订单信息
+								<td>
+									公司
 								</td>
+								<td><%=SystemCache.getCompanyShortName(order.getCompanyId())%></td>
 								<td align="center" rowspan="7" width="30%">
 									
 								</td>
 							</tr>
-							<tr>
-								<td>
-									公司
-								</td>
-								<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
-							</tr>
+							
 							<tr>
 								<td>
 									客户

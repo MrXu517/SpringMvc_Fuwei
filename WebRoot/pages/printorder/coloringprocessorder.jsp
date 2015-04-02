@@ -58,7 +58,7 @@
 								<td>
 									公司
 								</td>
-								<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+								<td><%=SystemCache.getCompanyShortName(order.getCompanyId())%></td>
 							</tr>
 							<tr>
 								<td>
@@ -109,7 +109,7 @@
 												颜色
 											</th>
 											<th width="15%">
-												数量
+												数量(kg)
 											</th>
 											<th width="15%">
 												染色单位
@@ -155,7 +155,7 @@
 												颜色
 											</th>
 											<th width="25%">
-												数量
+												数量(kg)
 											</th>
 										</tr>
 									</thead>
@@ -185,7 +185,7 @@
 												颜色
 											</th>
 											<th width="25%">
-												数量
+												数量(kg)
 											</th>
 										</tr>
 									</thead>

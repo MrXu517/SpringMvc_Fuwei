@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fuwei.commons.Sort;
 import com.fuwei.entity.Company;
 import com.fuwei.entity.Salesman;
 
@@ -22,13 +23,13 @@ public class SalesmanService extends BaseService  {
 	public List<Salesman> getList() throws Exception {
 		try {
 			List<Salesman> salesmanList = dao.queryForBeanList(
-					"SELECT * FROM tb_salesman", Salesman.class);
+					"SELECT * FROM tb_salesman order by companyId desc , created_at desc", Salesman.class);
 			return salesmanList;
 		} catch (Exception e) {
 			throw e;
 		}
 	}
-
+	
 	// 添加公司
 	@Transactional
 	public int add(Salesman salesman) throws Exception {

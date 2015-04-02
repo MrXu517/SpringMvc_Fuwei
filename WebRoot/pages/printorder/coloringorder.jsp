@@ -58,13 +58,7 @@
 								</td>
 
 							</tr>
-							<tr height="20px">
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
+							
 							<tr>
 								<td colspan="5">
 									<table>
@@ -84,7 +78,7 @@
 										</tr>
 										<tr>
 											<td class="center">
-												<span><%=SystemCache.getCompanyName(coloringOrder.getCompanyId())%></span>
+												<span><%=SystemCache.getCompanyShortName(coloringOrder.getCompanyId())%></span>
 											</td>
 											<td class="center">
 												<span><%=coloringOrder.getProductNumber()%></span>
@@ -117,7 +111,7 @@
 												材料
 											</th>
 											<th width="15%">
-												数量
+												数量(kg)
 											</th>
 											<th width="15%">
 												标准样纱
@@ -141,12 +135,25 @@
 
 										<%
 											}
+											int i = coloringOrderDetailList.size();
+											for(; i < 6 ; ++i){
 										%>
+												<tr class="tr">
+													<td class="color">&nbsp;
+													</td>
+													<td class="material_name">
+													</td>
+													<td class="quantity">
+													</td>
+													<td class="standardyarn">
+												</tr>
+										<%}
+										 %>
 
 									</tbody>
 								</table>
 
-								<table class="detailTb auto_height stickedTb">
+								<!-- <table class="detailTb auto_height stickedTb">
 									<tbody>
 										<tr>
 											<td></td>
@@ -155,7 +162,7 @@
 											<td></td>
 										</tr>
 									</tbody>
-								</table>
+								</table>  -->
 							</td>
 						</tr>
 					</table>
@@ -171,6 +178,7 @@
 					</p>
 					<p class="pull-right auto_bottom">
 						<span id="created_user">制单人：<%=SystemCache.getUserName(coloringOrder.getCreated_user()) %></span>
+						<span id="receiver_user">收货人：</span>
 						<span id="date"> 日期：<%=DateTool.formatDateYMD(coloringOrder.getCreated_at()) %></span>
 					</p>
 

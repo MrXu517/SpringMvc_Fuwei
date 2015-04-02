@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class ProducingOrderMaterialDetail implements Serializable {
 	private Integer material;//材料
 	private String color;//色号
-	private int quantity;//数量
+	private double quantity;//数量
 	private String colorsample;//标准色样
 	public Integer getMaterial() {
 		return material;
@@ -19,10 +19,11 @@ public class ProducingOrderMaterialDetail implements Serializable {
 	public void setColor(String color) {
 		this.color = color;
 	}
-	public int getQuantity() {
+	
+	public double getQuantity() {
 		return quantity;
 	}
-	public void setQuantity(int quantity) {
+	public void setQuantity(double quantity) {
 		this.quantity = quantity;
 	}
 	public String getColorsample() {

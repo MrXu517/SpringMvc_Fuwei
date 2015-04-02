@@ -66,7 +66,7 @@
 									<td>
 										公司
 									</td>
-									<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+									<td><%=SystemCache.getCompanyShortName(order.getCompanyId())%></td>
 								</tr>
 								<tr>
 									<td>

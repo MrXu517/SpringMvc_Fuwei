@@ -69,7 +69,7 @@
 								<td>
 									公司
 								</td>
-								<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+								<td><%=SystemCache.getCompanyShortName(order.getCompanyId())%></td>
 							</tr>
 							<tr>
 								<td>
@@ -170,7 +170,7 @@
 												色号
 											</th>
 											<th width="20%">
-												数量
+												数量(kg)
 											</th>
 											<th width="25%">
 												标准色样

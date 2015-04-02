@@ -59,7 +59,7 @@
 								<td>
 									公司
 								</td>
-								<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+								<td><%=SystemCache.getCompanyShortName(order.getCompanyId())%></td>
 							</tr>
 							<tr>
 								<td>
@@ -110,7 +110,7 @@
 												材料
 											</th>
 											<th width="15%">
-												总数量
+												总数量(kg)
 											</th>
 											<th width="15%">
 												领取人
@@ -159,7 +159,7 @@
 												材料
 											</th>
 											<th width="15%">
-												总数量
+												总数量(kg)
 											</th>
 											<th width="15%">
 												领取人
@@ -224,7 +224,7 @@
 												入库/出库
 											</th>
 											<th width="15%">
-												数量
+												数量(kg)
 											</th>
 											<th width="15%">
 												日期

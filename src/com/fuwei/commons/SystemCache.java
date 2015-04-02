@@ -265,6 +265,16 @@ public class SystemCache {
 		}
 		return "";
 	}
+	public static String getCompanyShortName(int companyId) {
+
+		for (int i = 0; i < SystemCache.companylist.size(); ++i) {
+			Company temp = SystemCache.companylist.get(i);
+			if (temp.getId() == companyId) {
+				return temp.getShortname();
+			}
+		}
+		return "";
+	}
 	
 	public static Company getCompanyById(int companyId) {
 
@@ -288,8 +298,10 @@ public class SystemCache {
 		return "";
 	}
 	
-	public static Factory getFactory(int factoryId) {
-
+	public static Factory getFactory(Integer factoryId) {
+		if(factoryId == null){
+			return null;
+		}
 		for (int i = 0; i < SystemCache.factorylist.size(); ++i) {
 			Factory temp = SystemCache.factorylist.get(i);
 			if (temp.getId() == factoryId) {
@@ -299,8 +311,10 @@ public class SystemCache {
 		return null;
 	}
 	
-	public static String getFactoryName(int factoryId) {
-
+	public static String getFactoryName(Integer factoryId) {
+		if(factoryId == null){
+			return "";
+		}
 		for (int i = 0; i < SystemCache.factorylist.size(); ++i) {
 			Factory temp = SystemCache.factorylist.get(i);
 			if (temp.getId() == factoryId) {

@@ -278,7 +278,7 @@
 																				材料
 																			</th>
 																			<th width="15%">
-																				数量
+																				数量(kg)
 																			</th>
 																			<th width="15%">
 																				标准样纱
@@ -366,11 +366,11 @@
 													</div>
 													<div class="form-group col-md-12">
 														<label for="quantity" class="col-sm-3 control-label">
-															数量
+															数量(kg)
 														</label>
 														<div class="col-sm-8">
 															<input type="text" name="quantity" id="quantity"
-																class="form-control int require" />
+																class="form-control double require" />
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
