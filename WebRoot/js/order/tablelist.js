@@ -245,43 +245,6 @@ $(document).ready(function() {
 				params.tab = "materialpurchaseorder";
 				location.href = location.pathname + "?" + $.param(params);
 			},
-			tbOptions:{
-				colnames : [
-						{
-							name :'material_name',
-							colname :'材料品种',
-							width :'15%'
-						},
-						{
-							name :'scale',
-							colname :'规格',
-							width :'15%'
-						},
-						{
-							name :'quantity',
-							colname :'数量',
-							width :'15%'
-						},
-						{
-							name :'batch_number',
-							colname :'批次号',
-							width :'15%'
-						},
-						{
-							name :'price',
-							colname :'价格（含税）',
-							width :'15%'
-						},
-						{
-							name :'_handle',
-							colname :'操作',
-							width :'15%',
-							displayValue : function(value, rowdata) {
-								return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
-							}
-						} ],
-						$dialog:$("#materialpurchaseDialog")
-			}
 			
 		});
 	});
@@ -300,39 +263,6 @@ $(document).ready(function() {
 				params.tab = "coloringorder";
 				location.href = location.pathname + "?" + $.param(params);
 			},
-			tbOptions:{
-				colnames : [
-				        {
-				        	name :'color',
-				        	colname :'色号',
-				        	width :'15%'
-				        },
-						{
-							name :'material_name',
-							colname :'材料',
-							width :'15%'
-						},
-						{
-							name :'quantity',
-							colname :'数量',
-							width :'15%'
-						},
-						
-						{
-							name :'standardyarn',
-							colname :'标准样纱',
-							width :'15%'
-						},
-						{
-							name :'_handle',
-							colname :'操作',
-							width :'15%',
-							displayValue : function(value, rowdata) {
-								return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
-							}
-						} ],
-						$dialog:$("#coloringDialog")
-			}
 			
 		});
 	});
@@ -353,48 +283,10 @@ $(document).ready(function() {
 			deleteUrl:"fuliao_purchase_order/delete",
 			$content:$content,
 			donecall:function(){
-			var params = Common.urlParams();
-			params.tab = "fuliaopurchaseorder";
-			location.href = location.pathname + "?" + $.param(params);
+				var params = Common.urlParams();
+				params.tab = "fuliaopurchaseorder";
+				location.href = location.pathname + "?" + $.param(params);
 			},
-			tbOptions:{
-			colnames : [
-						{
-							name :'style_name',
-							colname :'辅料类型',
-							width :'15%'
-						},
-						{
-							name :'standardsample',
-							colname :'标准样',
-							width :'15%'
-						},
-						{
-							name :'quantity',
-							colname :'数量',
-							width :'15%'
-						},
-						{
-							name :'price',
-							colname :'价格(/个)',
-							width :'15%'
-						},
-						{
-							name :'end_at',
-							colname :'交期',
-							width :'15%'
-						},
-						{
-							name :'_handle',
-							colname :'操作',
-							width :'15%',
-							displayValue : function(value, rowdata) {
-								return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
-							}
-						} ],
-						$dialog:$("#fuliaopurchaseDialog"),
-			}
-			
 		});
 	});
 	

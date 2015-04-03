@@ -54,6 +54,17 @@ public class ColoringOrder extends BaseTableOrder{
 	
 	private Integer status;// 订单状态 -1刚创建  , 6执行完成 ， 7取消
 	private String state;// 订单状态描述
+	
+	
+	private String memo;//备注
+	
+	
+	public String getMemo() {
+		return memo;
+	}
+	public void setMemo(String memo) {
+		this.memo = memo;
+	}
 	public Integer getStatus() {
 		return status;
 	}

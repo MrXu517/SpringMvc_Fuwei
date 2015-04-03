@@ -185,7 +185,8 @@ public class PrintOrderController extends BaseController {
 			
 			
 			//获取原材料采购单
-			if(printAll || gridName.indexOf("materialpurchaseorder") > -1){
+			//2015-4-2 修改打印所有的单据时， 不打印 染色单、采购单、辅料单
+			if(!printAll && gridName.indexOf("materialpurchaseorder") > -1){
 				List<MaterialPurchaseOrder> materialPurchaseOrderList = materialPurchaseOrderService.getByOrder(orderId);
 				if(materialPurchaseOrderList!=null && materialPurchaseOrderList.size() > 0){
 					grids += "materialpurchaseorder,";
@@ -195,7 +196,8 @@ public class PrintOrderController extends BaseController {
 			
 			
 			//获取染色单
-			if(printAll || gridName.indexOf("coloringorder") > -1){
+			//2015-4-2 修改打印所有的单据时， 不打印 染色单、采购单、辅料单
+			if(!printAll && gridName.indexOf("coloringorder") > -1){
 				coloringOrderList = coloringOrderService.getByOrder(orderId);
 				if(coloringOrderList!=null && coloringOrderList.size() > 0){
 					grids += "coloringorder,";
@@ -215,7 +217,8 @@ public class PrintOrderController extends BaseController {
 			
 			
 			//获取辅料采购单
-			if(printAll || gridName.indexOf("fuliaopurchaseorder") > -1){
+			//2015-4-2 修改打印所有的单据时， 不打印 染色单、采购单、辅料单
+			if(!printAll && gridName.indexOf("fuliaopurchaseorder") > -1){
 				List<FuliaoPurchaseOrder> fuliaoPurchaseOrderList = fuliaoPurchaseOrderService.getByOrder(orderId);
 				if(fuliaoPurchaseOrderList!=null && fuliaoPurchaseOrderList.size() > 0){
 					grids += "fuliaopurchaseorder,";

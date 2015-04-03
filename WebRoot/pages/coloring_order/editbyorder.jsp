@@ -46,9 +46,9 @@
 		<link href="css/plugins/ui.jqgrid.css" rel="stylesheet"
 			type="text/css" />
 
-		<link href="css/order/tablelist.css" rel="stylesheet" type="text/css" />
+		<link href="css/order/bill.css" rel="stylesheet" type="text/css" />
 		<script src="js/order/ordergrid.js" type="text/javascript"></script>
-		<script src="js/material_purchase_order/addbyorder.js" type="text/javascript"></script>
+		<script src="js/coloring_order/addbyorder.js" type="text/javascript"></script>
 
 	</head>
 	<body>
@@ -88,61 +88,17 @@
 								<div class="clear"></div>
 								<div class="col-md-12 tablewidget">
 									<table class="table">
-										<caption>
+										<caption id="tablename">
 											桐庐富伟针织厂染色单
 										</caption>
-
+									</table>
+									<table class="tableTb noborder">
 										<tbody>
 											<tr>
 												<td>
-													<fieldset>
-														<legend>
-															基本信息
-														</legend>
-														<div class="form-group col-md-6">
-															<label for="img" class="col-sm-3 control-label">
-																样品图片
-															</label>
-															<div class="col-sm-8">
-																<a class="thumbnail" id="sampleImgA"> <img
-																		id="sampleImg" alt="350 x 100%"
-																		src="/<%=coloringOrder.getImg_s()%>"> </a>
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-
-														<div class="form-group col-md-6">
-															<label for="name" class="col-sm-3 control-label">
-																样品名称
-															</label>
-															<div class="col-sm-8">
-																<input readonly type="text" name="name" id="name"
-																	class="form-control"
-																	value="<%=coloringOrder.getName() == null ? "" : coloringOrder.getName()%>" />
-
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-
-														<div class="form-group col-md-6">
-															<label for="productNumber" class="col-sm-3 control-label">
-																货号
-															</label>
-															<div class="col-sm-8">
-																<input readonly type="text" name="productNumber"
-																	id="productNumber" class="form-control"
-																	value="<%=coloringOrder.getProductNumber() == null ? "" : coloringOrder
-					.getProductNumber()%>" />
-
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-														<div class="form-group col-md-6">
-															<label for="factoryId" class="col-sm-3 control-label">
-																染色单位
-															</label>
-															<div class="col-sm-8">
-																<select class="form-control require"
+													<div class="form-group">
+														染色单位：
+														<select class="form-control require"
 																	name="factoryId" id="factoryId">
 																	<option value="">
 																		未选择
@@ -160,44 +116,42 @@
 																	%>
 
 																</select>
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-
-
-														<div class="form-group col-md-6">
-															<label for="kehu" class="col-sm-3 control-label">
-																客户
-															</label>
-															<div class="col-sm-8">
-																<select class="form-control" name="customerId"
-																	id="customerId" disabled formele=true>
-																	<option value="">
-																		未选择
-																	</option>
-																	<%
-																		for (Customer customer : SystemCache.customerlist) {
-																			if (coloringOrder.getCustomerId() != null
-																					&& coloringOrder.getCustomerId() == customer.getId()) {
-																	%>
-																	<option value="<%=customer.getId()%>" selected><%=customer.getName()%></option>
-																	<%
-																		} else {
-																	%>
-																	<option value="<%=customer.getId()%>"><%=customer.getName()%></option>
-																	<%
-																		}
-																		}
-																	%>
+													</div>
+													<div class="form-group">
+														业务员：
+														<select disabled name="charge_user" id="charge_user"
+																	class="form-control">
+																	<option value="<%=coloringOrder.getCharge_user()%>" selected><%=SystemCache.getUserName(coloringOrder.getCharge_user())%></option>
 																</select>
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-														<div class="form-group col-md-6">
-															<label for="companyId" class="col-sm-3 control-label">
+													</div>
+
+												</td>
+												<td>
+													<div class="form-group pull-right">
+														№：
+													</div>
+												</td>
+											</tr>
+
+											<tr>
+												<td colspan="2">
+													<table class="table table-responsive table-bordered">
+														<tr>
+															<td class="center" width="15%">
 																公司
-															</label>
-															<div class="col-sm-8">
+															</td>
+															<td class="center" width="15%">
+																货号
+															</td>
+															<td class="center" width="15%">
+																客户
+															</td>
+															<td class="center" width="15%">
+																品名
+															</td>
+														</tr>
+														<tr>
+															<td class="center">
 																<select disabled class="form-control require"
 																	name="companyId" id="companyId" placeholder="公司">
 																	<option value="">
@@ -218,36 +172,50 @@
 																		}
 																	%>
 																</select>
-															</div>
-														</div>
-														<div class="form-group col-md-6">
-															<label for="charge_user" class="col-sm-3 control-label">
-																跟单人
-															</label>
-															<div class="col-sm-8">
-																<select disabled name="charge_user" id="charge_user"
-																	class="form-control">
-																	<option value="<%=coloringOrder.getCharge_user()%>" selected><%=SystemCache.getUserName(coloringOrder.getCharge_user())%></option>
+															</td>
+															<td class="center">
+																<input readonly type="text" name="productNumber"
+																	id="productNumber" class="form-control"
+																	value="<%=coloringOrder.getProductNumber() == null ? "" : coloringOrder
+					.getProductNumber()%>" />
+															</td>
+															<td class="center">
+																<select class="form-control" name="customerId"
+																	id="customerId" disabled formele=true>
+																	<option value="">
+																		未选择
+																	</option>
+																	<%
+																		for (Customer customer : SystemCache.customerlist) {
+																			if (coloringOrder.getCustomerId() != null
+																					&& coloringOrder.getCustomerId() == customer.getId()) {
+																	%>
+																	<option value="<%=customer.getId()%>" selected><%=customer.getName()%></option>
+																	<%
+																		} else {
+																	%>
+																	<option value="<%=customer.getId()%>"><%=customer.getName()%></option>
+																	<%
+																		}
+																		}
+																	%>
 																</select>
+															</td>
+															<td class="center">
+																<input readonly type="text" name="name" id="name"
+																	class="form-control"
+																	value="<%=coloringOrder.getName() == null ? "" : coloringOrder.getName()%>" />
 
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-														<div class="form-group col-md-6">
-															<label for="orderNumber" class="col-sm-3 control-label">
-																订单号
-															</label>
-															<div class="col-sm-8">
-																<input disabled type="text" class="form-control" name="orderNumber"
-																	id="orderNumber" value="<%=coloringOrder.getOrderNumber() == null ? "" : coloringOrder.getOrderNumber()%>">
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-													</fieldset>
-
-
+															</td>
+														</tr>
+													</table>
 												</td>
 											</tr>
+
+										</tbody>
+									</table>
+									<table>
+										<tbody>
 											<tr>
 												<td>
 													<table class="table table-responsive detailTb">

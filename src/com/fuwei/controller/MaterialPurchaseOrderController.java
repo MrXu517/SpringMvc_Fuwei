@@ -23,6 +23,8 @@ import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
+import com.fuwei.constant.Constants;
+import com.fuwei.constant.ERROR;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
@@ -167,6 +169,9 @@ public class MaterialPurchaseOrderController extends BaseController {
 			List<MaterialPurchaseOrderDetail> detaillist = SerializeTool
 						.deserializeList(details,
 								MaterialPurchaseOrderDetail.class);
+			if(detaillist.size() >Constants.MAX_DETAIL_LENGTH ){
+				throw new Exception(ERROR.MAX_DETAIL_LENGTH_ERROR);
+			}
 			materialPurchaseOrder.setDetaillist(detaillist);
 			Integer tableOrderId = materialPurchaseOrderService.add(materialPurchaseOrder);
 			return this.returnSuccess("id", tableOrderId);
@@ -227,6 +232,9 @@ public class MaterialPurchaseOrderController extends BaseController {
 				List<MaterialPurchaseOrderDetail> detaillist = SerializeTool
 						.deserializeList(details,
 								MaterialPurchaseOrderDetail.class);
+				if(detaillist.size() >Constants.MAX_DETAIL_LENGTH ){
+					throw new Exception(ERROR.MAX_DETAIL_LENGTH_ERROR);
+				}
 				tableOrder.setDetaillist(detaillist);
 				tableOrderId = materialPurchaseOrderService.add(tableOrder);
 			} else {// 编辑
@@ -239,6 +247,9 @@ public class MaterialPurchaseOrderController extends BaseController {
 				List<MaterialPurchaseOrderDetail> detaillist = SerializeTool
 						.deserializeList(details,
 								MaterialPurchaseOrderDetail.class);
+				if(detaillist.size() >Constants.MAX_DETAIL_LENGTH ){
+					throw new Exception(ERROR.MAX_DETAIL_LENGTH_ERROR);
+				}
 				tableOrder.setDetaillist(detaillist);
 				tableOrderId = materialPurchaseOrderService.update(tableOrder);
 			}
@@ -342,6 +353,9 @@ public class MaterialPurchaseOrderController extends BaseController {
 		List<MaterialPurchaseOrderDetail> detaillist = SerializeTool
 				.deserializeList(details,
 						MaterialPurchaseOrderDetail.class);
+		if(detaillist.size() >Constants.MAX_DETAIL_LENGTH ){
+			throw new Exception(ERROR.MAX_DETAIL_LENGTH_ERROR);
+		}
 		materialPurchaseOrder.setDetaillist(detaillist);
 		Integer tableOrderId = materialPurchaseOrderService.update(materialPurchaseOrder);
 		return this.returnSuccess("id", tableOrderId);

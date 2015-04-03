@@ -41,7 +41,7 @@
 		<link href="css/plugins/ui.jqgrid.css" rel="stylesheet"
 			type="text/css" />
 
-		<link href="css/order/tablelist.css" rel="stylesheet" type="text/css" />
+		<link href="css/order/bill.css" rel="stylesheet" type="text/css" />
 		<script src="js/order/ordergrid.js" type="text/javascript"></script>
 		<script src="js/fuliao_purchase_order/addbyorder.js" type="text/javascript"></script>
 
@@ -84,113 +84,65 @@
 								<div class="clear"></div>
 								<div class="col-md-12 tablewidget">
 									<table class="table">
-										<caption>
+										<caption id="tablename">
 											桐庐富伟针织厂辅料采购单
 										</caption>
-
+									</table>
+									<table class="tableTb noborder">
 										<tbody>
 											<tr>
 												<td>
-													<fieldset>
-														<legend>
-															基本信息
-														</legend>
-														<div class="form-group col-md-6">
-															<label for="img" class="col-sm-3 control-label">
-																样品图片
-															</label>
-															<div class="col-sm-8">
-																<a href="#" class="thumbnail" id="sampleImgA"> <img
-																		id="sampleImg" alt="350 x 100%"
-																		src="/<%=order.getImg_s()%>"> </a>
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
+													<div class="form-group">
+														供货单位：
+														<select class="form-control require" name="factoryId"
+															id="factoryId">
+															<option value="">
+																未选择
+															</option>
+															<%
+																for (Factory factory : SystemCache.purchase_factorylist) {
+															%>
+															<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
+															<%
+																}
+															%>
+														</select>
+													</div>
+													<div class="form-group">
+														业务员：
+														<select disabled name="charge_user" id="charge_user"
+															class="form-control">
+															<option value="<%=order.getCharge_user()%>" selected><%=SystemCache.getUserName(order.getCharge_user())%></option>
+														</select>
+													</div>
 
-														<div class="form-group col-md-6">
-															<label for="name" class="col-sm-3 control-label">
-																样品名称
-															</label>
-															<div class="col-sm-8">
-																<input readonly type="text" name="name" id="name"
-																	class="form-control"
-																	value="<%=order.getName() == null ? "" : order.getName()%>" />
+												</td>
+												<td>
+													<div class="form-group pull-right">
+														№：<%=order.getOrderNumber() %>
+													</div>
+												</td>
+											</tr>
 
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-
-														<div class="form-group col-md-6">
-															<label for="productNumber" class="col-sm-3 control-label">
-																货号
-															</label>
-															<div class="col-sm-8">
-																<input readonly type="text" name="productNumber"
-																	id="productNumber" class="form-control"
-																	value="<%=order.getProductNumber() == null ? "" : order
-					.getProductNumber()%>" />
-
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-														<div class="form-group col-md-6">
-															<label for="factoryId" class="col-sm-3 control-label">
-																供货方
-															</label>
-															<div class="col-sm-8">
-																<select class="form-control require"
-																	name="factoryId" id="factoryId">
-																	<option value="">
-																		未选择
-																	</option>
-																	<%
-																		for (Factory factory : SystemCache.purchase_factorylist) {
-																	%>
-																	<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
-																	<%
-																		}
-																	%>
-
-																</select>
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-
-														
-
-														<div class="form-group col-md-6">
-															<label for="kehu" class="col-sm-3 control-label">
-																客户
-															</label>
-															<div class="col-sm-8">
-																<select class="form-control" name="customerId"
-																	id="customerId" disabled formele=true>
-																	<option value="">
-																		未选择
-																	</option>
-																	<%
-																		for (Customer customer : SystemCache.customerlist) {
-																			if (order.getCustomerId() != null
-																					&& order.getCustomerId() == customer.getId()) {
-																	%>
-																	<option value="<%=customer.getId()%>" selected><%=customer.getName()%></option>
-																	<%
-																		} else {
-																	%>
-																	<option value="<%=customer.getId()%>"><%=customer.getName()%></option>
-																	<%
-																		}
-																		}
-																	%>
-																</select>
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-														<div class="form-group col-md-6">
-															<label for="companyId" class="col-sm-3 control-label">
+											<tr>
+												<td colspan="2">
+													<table class="table table-responsive table-bordered">
+														<tr>
+															<td class="center" width="15%">
 																公司
-															</label>
-															<div class="col-sm-8">
+															</td>
+															<td class="center" width="15%">
+																货号
+															</td>
+															<td class="center" width="15%">
+																客户
+															</td>
+															<td class="center" width="15%">
+																品名
+															</td>
+														</tr>
+														<tr>
+															<td class="center">
 																<select disabled class="form-control require"
 																	name="companyId" id="companyId" placeholder="公司">
 																	<option value="">
@@ -211,78 +163,103 @@
 																		}
 																	%>
 																</select>
-															</div>
-														</div>
-														
-														<div class="form-group col-md-6">
-															<label for="charge_user" class="col-sm-3 control-label">
-																跟单人
-															</label>
-															<div class="col-sm-8">
-																<select disabled name="charge_user" id="charge_user"
-																	class="form-control">
-																	<option value="<%=order.getCharge_user()%>" selected><%=SystemCache.getUserName(order.getCharge_user())%></option>
+															</td>
+															<td class="center">
+																<input readonly type="text" name="productNumber"
+																	id="productNumber" class="form-control"
+																	value="<%=order.getProductNumber() == null ? "" : order
+					.getProductNumber()%>" />
+
+															</td>
+															<td class="center">
+																<select class="form-control" name="customerId"
+																	id="customerId" disabled formele=true>
+																	<option value="">
+																		未选择
+																	</option>
+																	<%
+																		for (Customer customer : SystemCache.customerlist) {
+																			if (order.getCustomerId() != null
+																					&& order.getCustomerId() == customer.getId()) {
+																	%>
+																	<option value="<%=customer.getId()%>" selected><%=customer.getName()%></option>
+																	<%
+																		} else {
+																	%>
+																	<option value="<%=customer.getId()%>"><%=customer.getName()%></option>
+																	<%
+																		}
+																		}
+																	%>
 																</select>
-
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-														<div class="form-group col-md-6">
-															<label for="orderNumber" class="col-sm-3 control-label">
-																生产单号
-															</label>
-															<div class="col-sm-8">
-																<input disabled type="text" class="form-control" name="orderNumber"
-																	id="orderNumber" value="<%=order.getOrderNumber() == null ? "" : order.getOrderNumber()%>">
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-													</fieldset>
-
-
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<table class="table table-responsive detailTb">
-														<caption>
-															<button type="button"
-																class="btn btn-primary addRow pull-left">
-																添加一行
-															</button>
-															采购列表
-														</caption>
-														<thead>
-															<tr>
-																<th width="15%">
-																				辅料类型
-																			</th>
-																			<th width="15%">
-																				标准样
-																			</th>
-																			<th width="15%">
-																				数量(kg)
-																			</th>
-																			<th width="15%">
-																				价格
-																			</th>
-																			<th width="15%">
-																				交期
-																			</th>
-																			<th width="15%">
-																				操作
-																			</th>
-															</tr>
-														</thead>
-														<tbody>
-
-														</tbody>
+															</td>
+															<td class="center">
+																<input readonly type="text" name="name" id="name"
+																	class="form-control"
+																	value="<%=order.getName() == null ? "" : order.getName()%>" />
+															</td>
+														</tr>
 													</table>
-													<div id="navigator"></div>
 												</td>
 											</tr>
 
 										</tbody>
+									</table>
+
+									<table id="mainTb"
+										class="table table-responsive table-bordered detailTb">
+										<caption>
+											<button type="button"
+												class="btn btn-primary addRow pull-left">
+												添加一行
+											</button>
+											材料列表
+										</caption>
+										<thead>
+											<tr>
+												<th width="15%">
+													材料品种
+												</th>
+												<th width="15%">
+													数量(kg)
+												</th>
+												<th width="30%">
+													备注
+												</th>
+												<th width="15%">
+													操作
+												</th>
+											</tr>
+										</thead>
+										<tbody>
+
+										</tbody>
+
+									</table>
+
+									<div id="tip" class="auto_bottom">
+										<div>
+											说明：1.此单说明了本次采购的相关内容，请充分阅读并理解，如有疑问及时联系我方
+										</div>
+										<div class="tip_line">
+											2.材料品质及颜色要确保准确，颜色色牢度须达到4级以上。
+										</div>
+										<div class="tip_line">
+											3.不得含有偶氮、PCP、甲醛、APEO。不得有特殊气味，无致敏致癌物质。
+										</div>
+										<div class="tip_line">
+											4.贵单位须妥善保管此单据，结账时须提供此单据
+										</div>
+
+									</div>
+
+									<p class="pull-right auto_bottom">
+										<span id="created_user">制单人：<%=SystemCache.getUserName(SystemContextUtils
+							.getCurrentUser(session).getLoginedUser().getId())%></span>
+										<span id="receiver_user">收货人：</span>
+										<span id="date"> 日期：<%=DateTool.formatDateYMD(DateTool.now())%></span>
+									</p>
+
 									</table>
 
 								</div>
@@ -292,95 +269,7 @@
 					
 <!--
 						 添加编辑辅料采购单对话框 -->
-								<div class="modal fade tableRowDialog" id="fuliaopurchaseDialog">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-header">
-												<button type="button" class="close" data-dismiss="modal">
-													<span aria-hidden="true">&times;</span><span
-														class="sr-only">Close</span>
-												</button>
-												<h4 class="modal-title">
-													添加一行
-												</h4>
-											</div>
-											<div class="modal-body">
-												<form class="form-horizontal rowform" role="form">
-													<div class="form-group col-md-12">
-														<label for="style" class="col-sm-3 control-label">
-															辅料类型
-														</label>
-														<div class="col-sm-8">
-															<select name="style" id="style" class="form-control require">
-																<option value="">未选择</option>
-																<%for(Material material : SystemCache.materiallist){ %>
-																	<option value="<%=material.getId() %>" ><%=material.getName() %></option>
-																<%} %>
-															</select>
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="standardsample" class="col-sm-3 control-label">
-															标准样
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="standardsample"
-																id="standardsample" class="form-control" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="quantity" class="col-sm-3 control-label">
-															数量(kg)
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="quantity" id="quantity"
-																class="form-control double require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="price" class="col-sm-3 control-label">
-															价格
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="price" id="price"
-																class="form-control double require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="end_at" class="col-sm-3 control-label">
-															交期
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="end_at" id="end_at"
-																class="form-control date require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-
-													<div class="modal-footer">
-														<button type="submit" class="btn btn-primary"
-															data-loading-text="正在保存...">
-															保存
-														</button>
-														<button type="button" class="btn btn-default"
-															data-dismiss="modal">
-															关闭
-														</button>
-													</div>
-												</form>
-											</div>
-
-										</div>
-									</div>
-								</div>
-								<!-- 添加编辑辅料采购单对话框 -->
-
-					<!-- 选择样品对话框 -->
-					<div class="modal fade" id="sampleDialog">
+					<div class="modal fade tableRowDialog" id="fuliaopurchaseDialog">
 						<div class="modal-dialog">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -388,24 +277,69 @@
 										<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
 									</button>
 									<h4 class="modal-title">
-										请选择样品
+										添加一行
 									</h4>
 								</div>
 								<div class="modal-body">
-									<iframe id="sampleIframe" name="sampleIframe" frameborder=0></iframe>
+									<form class="form-horizontal rowform" role="form">
+										<div class="form-group col-md-12">
+											<label for="style" class="col-sm-3 control-label">
+												辅料类型
+											</label>
+											<div class="col-sm-8">
+												<select name="style" id="style" class="form-control require">
+													<option value="">
+														未选择
+													</option>
+													<%
+														for (Material material : SystemCache.materiallist) {
+													%>
+													<option value="<%=material.getId()%>"><%=material.getName()%></option>
+													<%
+														}
+													%>
+												</select>
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+										<div class="form-group col-md-12">
+											<label for="quantity" class="col-sm-3 control-label">
+												数量(kg)
+											</label>
+											<div class="col-sm-8">
+												<input type="text" name="quantity" id="quantity"
+													class="form-control double require" />
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+										<div class="form-group col-md-12">
+											<label for="memo" class="col-sm-3 control-label">
+												备注
+											</label>
+											<div class="col-sm-8">
+												<input type="text" name="memo" id="memo"
+													class="form-control" />
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+
+										<div class="modal-footer">
+											<button type="submit" class="btn btn-primary"
+												data-loading-text="正在保存...">
+												保存
+											</button>
+											<button type="button" class="btn btn-default"
+												data-dismiss="modal">
+												关闭
+											</button>
+										</div>
+									</form>
 								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-default"
-										data-dismiss="modal">
-										关闭
-									</button>
-								</div>
+
 							</div>
-							<!-- /.modal-content -->
 						</div>
-						<!-- /.modal-dialog -->
 					</div>
-					<!-- 选择样品对话框 -->
+					<!-- 添加编辑辅料采购单对话框 -->
 
 				</div>
 			</div>

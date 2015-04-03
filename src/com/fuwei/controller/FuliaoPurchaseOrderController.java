@@ -23,6 +23,8 @@ import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
+import com.fuwei.constant.Constants;
+import com.fuwei.constant.ERROR;
 import com.fuwei.constant.OrderStatus;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.OrderDetail;
@@ -149,9 +151,7 @@ public class FuliaoPurchaseOrderController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有添加辅料采购单的权限", null);
 		}
 		try {	
-			if(fuliaoPurchaseOrder.getSampleId() == null){
-				throw new Exception("缺少样品ID");
-			}
+			
 			fuliaoPurchaseOrder.setCreated_at(DateTool.now());// 设置创建时间
 			fuliaoPurchaseOrder.setUpdated_at(DateTool.now());// 设置更新时间
 			fuliaoPurchaseOrder.setCreated_user(user.getId());// 设置创建人
@@ -170,6 +170,9 @@ public class FuliaoPurchaseOrderController extends BaseController {
 			List<FuliaoPurchaseOrderDetail> detaillist = SerializeTool
 						.deserializeList(details,
 								FuliaoPurchaseOrderDetail.class);
+			if(detaillist.size() >Constants.MAX_DETAIL_LENGTH ){
+				throw new Exception(ERROR.MAX_DETAIL_LENGTH_ERROR);
+			}
 			fuliaoPurchaseOrder.setDetaillist(detaillist);
 			Integer tableOrderId = fuliaoPurchaseOrderService.add(fuliaoPurchaseOrder);
 			return this.returnSuccess("id", tableOrderId);
@@ -230,6 +233,9 @@ public class FuliaoPurchaseOrderController extends BaseController {
 				List<FuliaoPurchaseOrderDetail> detaillist = SerializeTool
 						.deserializeList(details,
 								FuliaoPurchaseOrderDetail.class);
+				if(detaillist.size() >Constants.MAX_DETAIL_LENGTH ){
+					throw new Exception(ERROR.MAX_DETAIL_LENGTH_ERROR);
+				}
 				tableOrder.setDetaillist(detaillist);
 				tableOrderId = fuliaoPurchaseOrderService.add(tableOrder);
 			} else {// 编辑
@@ -242,6 +248,9 @@ public class FuliaoPurchaseOrderController extends BaseController {
 				List<FuliaoPurchaseOrderDetail> detaillist = SerializeTool
 						.deserializeList(details,
 								FuliaoPurchaseOrderDetail.class);
+				if(detaillist.size() >Constants.MAX_DETAIL_LENGTH ){
+					throw new Exception(ERROR.MAX_DETAIL_LENGTH_ERROR);
+				}
 				tableOrder.setDetaillist(detaillist);
 				tableOrderId = fuliaoPurchaseOrderService.update(tableOrder);
 			}
@@ -346,6 +355,9 @@ public class FuliaoPurchaseOrderController extends BaseController {
 		List<FuliaoPurchaseOrderDetail> detaillist = SerializeTool
 				.deserializeList(details,
 						FuliaoPurchaseOrderDetail.class);
+		if(detaillist.size() >Constants.MAX_DETAIL_LENGTH ){
+			throw new Exception(ERROR.MAX_DETAIL_LENGTH_ERROR);
+		}
 		fuliaoPurchaseOrder.setDetaillist(detaillist);
 		Integer tableOrderId = fuliaoPurchaseOrderService.update(fuliaoPurchaseOrder);
 		return this.returnSuccess("id", tableOrderId);

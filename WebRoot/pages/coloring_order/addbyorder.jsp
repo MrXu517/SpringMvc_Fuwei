@@ -41,7 +41,7 @@
 		<link href="css/plugins/ui.jqgrid.css" rel="stylesheet"
 			type="text/css" />
 
-		<link href="css/order/tablelist.css" rel="stylesheet" type="text/css" />
+		<link href="css/order/bill.css" rel="stylesheet" type="text/css" />
 		<script src="js/order/ordergrid.js" type="text/javascript"></script>
 		<script src="js/coloring_order/addbyorder.js" type="text/javascript"></script>
 
@@ -60,7 +60,8 @@
 							<a href="order/detail/<%=order.getId()%>">订单详情</a>
 						</li>
 						<li>
-							<a href="order/tablelist?orderId=<%=order.getId()%>&tab=coloringorder">表格</a>
+							<a
+								href="order/tablelist?orderId=<%=order.getId()%>&tab=coloringorder">表格</a>
 						</li>
 						<li class="active">
 							创建染色单
@@ -84,112 +85,66 @@
 								<div class="clear"></div>
 								<div class="col-md-12 tablewidget">
 									<table class="table">
-										<caption>
+										<caption id="tablename">
 											桐庐富伟针织厂染色单
 										</caption>
-
+									</table>
+									<table class="tableTb noborder">
 										<tbody>
 											<tr>
 												<td>
-													<fieldset>
-														<legend>
-															基本信息
-														</legend>
-														<div class="form-group col-md-6">
-															<label for="img" class="col-sm-3 control-label">
-																样品图片
-															</label>
-															<div class="col-sm-8">
-																<a href="#" class="thumbnail" id="sampleImgA"> <img
-																		id="sampleImg" alt="350 x 100%"
-																		src="/<%=order.getImg_s()%>"> </a>
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
+													<div class="form-group">
+														染色单位：
+														<select class="form-control require" name="factoryId"
+															id="factoryId">
+															<option value="">
+																未选择
+															</option>
+															<%
+																for (Factory factory : SystemCache.coloring_factorylist) {
+															%>
+															<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
+															<%
+																}
+															%>
 
-														<div class="form-group col-md-6">
-															<label for="name" class="col-sm-3 control-label">
-																样品名称
-															</label>
-															<div class="col-sm-8">
-																<input readonly type="text" name="name" id="name"
-																	class="form-control"
-																	value="<%=order.getName() == null ? "" : order.getName()%>" />
+														</select>
+													</div>
+													<div class="form-group">
+														业务员：
+														<select disabled name="charge_user" id="charge_user"
+															class="form-control">
+															<option value="<%=order.getCharge_user()%>" selected><%=SystemCache.getUserName(order.getCharge_user())%></option>
+														</select>
+													</div>
 
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
+												</td>
+												<td>
+													<div class="form-group pull-right">
+														№：
+													</div>
+												</td>
+											</tr>
 
-														<div class="form-group col-md-6">
-															<label for="productNumber" class="col-sm-3 control-label">
-																货号
-															</label>
-															<div class="col-sm-8">
-																<input readonly type="text" name="productNumber"
-																	id="productNumber" class="form-control"
-																	value="<%=order.getProductNumber() == null ? "" : order
-					.getProductNumber()%>" />
-
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-														<div class="form-group col-md-6">
-															<label for="factoryId" class="col-sm-3 control-label">
-																染色单位
-															</label>
-															<div class="col-sm-8">
-																<select class="form-control require"
-																	name="factoryId" id="factoryId">
-																	<option value="">
-																		未选择
-																	</option>
-																	<%
-																		for (Factory factory : SystemCache.coloring_factorylist) {
-																	%>
-																	<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
-																	<%
-																		}
-																	%>
-
-																</select>
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-
-
-														<div class="form-group col-md-6">
-															<label for="kehu" class="col-sm-3 control-label">
-																客户
-															</label>
-															<div class="col-sm-8">
-																<select class="form-control" name="customerId"
-																	id="customerId" disabled formele=true>
-																	<option value="">
-																		未选择
-																	</option>
-																	<%
-																		for (Customer customer : SystemCache.customerlist) {
-																			if (order.getCustomerId() != null
-																					&& order.getCustomerId() == customer.getId()) {
-																	%>
-																	<option value="<%=customer.getId()%>" selected><%=customer.getName()%></option>
-																	<%
-																		} else {
-																	%>
-																	<option value="<%=customer.getId()%>"><%=customer.getName()%></option>
-																	<%
-																		}
-																		}
-																	%>
-																</select>
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-														<div class="form-group col-md-6">
-															<label for="companyId" class="col-sm-3 control-label">
+											<tr>
+												<td colspan="2">
+													<table class="table table-responsive table-bordered">
+														<tr>
+															<td class="center" width="15%">
 																公司
-															</label>
-															<div class="col-sm-8">
+															</td>
+															<td class="center" width="15%">
+																货号
+															</td>
+															<td class="center" width="15%">
+																客户
+															</td>
+															<td class="center" width="15%">
+																品名
+															</td>
+														</tr>
+														<tr>
+															<td class="center">
 																<select disabled class="form-control require"
 																	name="companyId" id="companyId" placeholder="公司">
 																	<option value="">
@@ -210,36 +165,49 @@
 																		}
 																	%>
 																</select>
-															</div>
-														</div>
-														<div class="form-group col-md-6">
-															<label for="charge_user" class="col-sm-3 control-label">
-																跟单人
-															</label>
-															<div class="col-sm-8">
-																<select disabled name="charge_user" id="charge_user"
-																	class="form-control">
-																	<option value="<%=order.getCharge_user()%>" selected><%=SystemCache.getUserName(order.getCharge_user())%></option>
+															</td>
+															<td class="center">
+																<input readonly type="text" name="productNumber"
+																	id="productNumber" class="form-control"
+																	value="<%=order.getProductNumber() == null ? "" : order
+					.getProductNumber()%>" />
+															</td>
+															<td class="center">
+																<select class="form-control" name="customerId"
+																	id="customerId" disabled formele=true>
+																	<option value="">
+																		未选择
+																	</option>
+																	<%
+																		for (Customer customer : SystemCache.customerlist) {
+																			if (order.getCustomerId() != null
+																					&& order.getCustomerId() == customer.getId()) {
+																	%>
+																	<option value="<%=customer.getId()%>" selected><%=customer.getName()%></option>
+																	<%
+																		} else {
+																	%>
+																	<option value="<%=customer.getId()%>"><%=customer.getName()%></option>
+																	<%
+																		}
+																		}
+																	%>
 																</select>
-
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-														<div class="form-group col-md-6">
-															<label for="orderNumber" class="col-sm-3 control-label">
-																订单号
-															</label>
-															<div class="col-sm-8">
-																<input disabled type="text" class="form-control" name="orderNumber"
-																	id="orderNumber" value="<%=order.getOrderNumber() == null ? "" : order.getOrderNumber()%>">
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-													</fieldset>
-
-
+															</td>
+															<td class="center">
+																<input readonly type="text" name="name" id="name"
+																	class="form-control"
+																	value="<%=order.getName() == null ? "" : order.getName()%>" />
+															</td>
+														</tr>
+													</table>
 												</td>
 											</tr>
+
+										</tbody>
+									</table>
+									<table>
+										<tbody>
 											<tr>
 												<td>
 													<table class="table table-responsive detailTb">
@@ -253,20 +221,20 @@
 														<thead>
 															<tr>
 																<th width="15%">
-																				色号
-																			</th>
-																			<th width="15%">
-																				材料
-																			</th>
-																			<th width="15%">
-																				数量(kg)
-																			</th>
-																			<th width="15%">
-																				标准样纱
-																			</th>
-																			<th width="15%">
-																				操作
-																			</th>
+																	色号
+																</th>
+																<th width="15%">
+																	材料
+																</th>
+																<th width="15%">
+																	数量(kg)
+																</th>
+																<th width="15%">
+																	标准样纱
+																</th>
+																<th width="15%">
+																	操作
+																</th>
 															</tr>
 														</thead>
 														<tbody>
@@ -286,86 +254,7 @@
 					</div>
 
 					<!-- 添加编辑染色单对话框 -->
-								<div class="modal fade tableRowDialog" id="coloringDialog">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-header">
-												<button type="button" class="close" data-dismiss="modal">
-													<span aria-hidden="true">&times;</span><span
-														class="sr-only">Close</span>
-												</button>
-												<h4 class="modal-title">
-													添加一行
-												</h4>
-											</div>
-											<div class="modal-body">
-												<form class="form-horizontal rowform" role="form">
-													<div class="form-group col-md-12">
-														<label for="color" class="col-sm-3 control-label">
-															颜色
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="color" id="color"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="material" class="col-sm-3 control-label">
-															材料
-														</label>
-														<div class="col-sm-8">
-															<select name="material" id="material" class="form-control require">
-																<option value="">未选择</option>
-																<%for(Material material : SystemCache.materiallist){ %>
-																	<option value="<%=material.getId() %>" ><%=material.getName() %></option>
-																<%} %>
-															</select>
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="quantity" class="col-sm-3 control-label">
-															数量(kg)
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="quantity" id="quantity"
-																class="form-control double require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="standardyarn" class="col-sm-3 control-label">
-															标准样纱
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="standardyarn" id="standardyarn"
-																class="form-control" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-
-
-													<div class="modal-footer">
-														<button type="submit" class="btn btn-primary"
-															data-loading-text="正在保存...">
-															保存
-														</button>
-														<button type="button" class="btn btn-default"
-															data-dismiss="modal">
-															关闭
-														</button>
-													</div>
-												</form>
-											</div>
-
-										</div>
-									</div>
-								</div>
-								<!-- 添加编辑染色单对话框 -->
-
-					<!-- 选择样品对话框 -->
-					<div class="modal fade" id="sampleDialog">
+					<div class="modal fade tableRowDialog" id="coloringDialog">
 						<div class="modal-dialog">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -373,24 +262,81 @@
 										<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
 									</button>
 									<h4 class="modal-title">
-										请选择样品
+										添加一行
 									</h4>
 								</div>
 								<div class="modal-body">
-									<iframe id="sampleIframe" name="sampleIframe" frameborder=0></iframe>
+									<form class="form-horizontal rowform" role="form">
+										<div class="form-group col-md-12">
+											<label for="color" class="col-sm-3 control-label">
+												颜色
+											</label>
+											<div class="col-sm-8">
+												<input type="text" name="color" id="color"
+													class="form-control require" />
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+										<div class="form-group col-md-12">
+											<label for="material" class="col-sm-3 control-label">
+												材料
+											</label>
+											<div class="col-sm-8">
+												<select name="material" id="material"
+													class="form-control require">
+													<option value="">
+														未选择
+													</option>
+													<%
+														for (Material material : SystemCache.materiallist) {
+													%>
+													<option value="<%=material.getId()%>"><%=material.getName()%></option>
+													<%
+														}
+													%>
+												</select>
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+										<div class="form-group col-md-12">
+											<label for="quantity" class="col-sm-3 control-label">
+												数量(kg)
+											</label>
+											<div class="col-sm-8">
+												<input type="text" name="quantity" id="quantity"
+													class="form-control double require" />
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+										<div class="form-group col-md-12">
+											<label for="standardyarn" class="col-sm-3 control-label">
+												标准样纱
+											</label>
+											<div class="col-sm-8">
+												<input type="text" name="standardyarn" id="standardyarn"
+													class="form-control" />
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+
+
+										<div class="modal-footer">
+											<button type="submit" class="btn btn-primary"
+												data-loading-text="正在保存...">
+												保存
+											</button>
+											<button type="button" class="btn btn-default"
+												data-dismiss="modal">
+												关闭
+											</button>
+										</div>
+									</form>
 								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-default"
-										data-dismiss="modal">
-										关闭
-									</button>
-								</div>
+
 							</div>
-							<!-- /.modal-content -->
 						</div>
-						<!-- /.modal-dialog -->
 					</div>
-					<!-- 选择样品对话框 -->
+					<!-- 添加编辑染色单对话框 -->
 
 				</div>
 			</div>

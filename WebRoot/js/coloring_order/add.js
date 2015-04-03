@@ -56,6 +56,15 @@ $(document).ready( function() {
 				location.href = "coloring_order/index";
 			},
 			tbOptions:{
+				beforeAdd:function(){
+					var TableInstance = this;
+					var length = $(TableInstance.tableEle).find("tbody tr").length;
+					if(length >= 6){
+						Common.Tip("不能再添加行，一张染色单最多只能填6条材料信息。您可以保存当前染色单后，再创建一张染色单");
+						return false;
+					}
+					return true;
+				},
 				colnames : [
 				        {
 				        	name :'color',

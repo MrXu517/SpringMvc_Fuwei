@@ -49,6 +49,11 @@ function OrderGrid(settings){
 		if(this.tbOptions){
 			Object.TableInstance = TableTools.createTableInstance(Object.tbOptions);
 			this.$content.find(".detailTb .addRow").click( function() {
+				if(Object.TableInstance.beforeAdd){
+					if (!Object.TableInstance.beforeAdd()) {
+						return false;
+					}
+				}
 				Common.resetForm(Object.$form[0]);
 				Object.$dialog.find(".modal-title").text("添加一行");
 				Object.$dialog.modal();
@@ -83,6 +88,11 @@ function OrderGrid(settings){
 					});
 			});
 			this.$content.find(".detailTb").on("click", ".editRow", function() {
+				if(Object.TableInstance.beforeEdit){
+					if (!Object.TableInstance.beforeEdit()) {
+						return false;
+					}
+				}
 				Common.resetForm(Object.$form[0]);
 				Object.$dialog.find(".modal-title").text("编辑");
 				var $tr = $(this).closest("tr");
@@ -130,6 +140,11 @@ function OrderGrid(settings){
 		if(Object.tbOptions2){
 			Object.TableInstance2 = TableTools.createTableInstance(Object.tbOptions2);
 			this.$content.find(".detailTb2 .addRow").click( function() {
+				if(Object.TableInstance2.beforeAdd){
+					if (!Object.TableInstance2.beforeAdd()) {
+						return false;
+					}
+				}
 				Common.resetForm(Object.$form2[0]);
 				Object.$dialog2.find(".modal-title").text("添加一行");
 				Object.$dialog2.modal();
@@ -164,6 +179,11 @@ function OrderGrid(settings){
 					});
 			});
 			this.$content.find(".detailTb2").on("click", ".editRow", function() {
+				if(Object.TableInstance2.beforeEdit){
+					if (!Object.TableInstance2.beforeEdit()) {
+						return false;
+					}
+				}
 				Common.resetForm(Object.$form2[0]);
 				Object.$dialog2.find(".modal-title").text("编辑");
 				var $tr = $(this).closest("tr");

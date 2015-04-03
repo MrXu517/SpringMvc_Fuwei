@@ -68,5 +68,7 @@ public class Constants {
 	
 	public static final String LOGIN_URL = "/login.jsp";
 	
+	public static final int MAX_DETAIL_LENGTH = 6;//辅料单、采购单、染色单最多可填一条明细
+	
 	
 }

@@ -56,15 +56,19 @@ $(document).ready( function() {
 				location.href = "fuliao_purchase_order/index";
 			},
 			tbOptions:{
+				beforeAdd:function(){
+					var TableInstance = this;
+					var length = $(TableInstance.tableEle).find("tbody tr").length;
+					if(length >= 6){
+						Common.Tip("不能再添加行，一张采购单最多只能填6条材料信息。您可以保存当前采购单后，再创建一张采购单");
+						return false;
+					}
+					return true;
+				},
 				colnames : [
 							{
 								name :'style_name',
-								colname :'辅料类型',
-								width :'15%'
-							},
-							{
-								name :'standardsample',
-								colname :'标准样',
+								colname :'材料品种',
 								width :'15%'
 							},
 							{
@@ -73,14 +77,9 @@ $(document).ready( function() {
 								width :'15%'
 							},
 							{
-								name :'price',
-								colname :'价格(/个)',
-								width :'15%'
-							},
-							{
-								name :'end_at',
-								colname :'交期',
-								width :'15%'
+								name :'memo',
+								colname :'备注',
+								width :'30%'
 							},
 							{
 								name :'_handle',

@@ -1493,16 +1493,14 @@
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
 											<%if(materialPurchaseOrder.isEdit()){ %>
-												<button type="submit"
-												class="pull-right btn btn-danger saveTable"
-												data-loading-text="正在保存...">
-												保存对当前表格的修改
-											</button>
 												<%if(has_material_purchase_order_delete){ %>
 													<a target="_blank" type="button"
 													class="pull-right btn btn-default deleteTableBtn"
 													data-loading-text="正在删除..."> 删除 </a>
 												<%} %>
+												<a href="material_purchase_order/put/<%=materialPurchaseOrder.getId() %>" target="_blank" type="button"
+													class="pull-right btn btn-default"
+													data-loading-text="正在跳转页面......"> 编辑 </a>
 											<%} %>
 											
 											
@@ -1512,168 +1510,144 @@
 											
 											<div class="clear"></div>
 											<div class="col-md-12 tablewidget">
-												<table class="table">
-													<caption>
-														桐庐富伟针织厂原材料采购单
-													</caption>
-													<thead>
-														<tr>
-															<td colspan="3" class="pull-right orderNumber">
-																№：<%=materialPurchaseOrder.getOrderNumber()%></td>
-														</tr>
-													</thead>
-													<tbody>
-														<tr>
-															<td>
-																<table
-																	class="table table-responsive table-bordered tableTb">
-																	<tbody>
-																		<tr>
-																			<td rowspan="7" width="50%">
-																				<a href="/<%=materialPurchaseOrder.getImg()%>" class="thumbnail"
-																					target="_blank"> <img id="previewImg"
-																						alt="200 x 100%" src="/<%=materialPurchaseOrder.getImg_s()%>">
-																				</a>
-																			</td>
-																			<td width="20%">
-																				采购单位
-																			</td>
-																			<td class="orderproperty">
-																				<select class="form-control require"
-																					name="factoryId" id="factoryId">
-																					<option value="">
-																						未选择
-																					</option>
-																					<%
-																						for (Factory factory : SystemCache.purchase_factorylist) {
-																								if (factory.getId() == materialPurchaseOrder.getFactoryId()) {
-																					%>
-																					<option value="<%=factory.getId()%>"
-																						selected='selected'><%=factory.getName()%></option>
-																					<%
-																						} else {
-																					%>
-																					<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
-																					<%
-																						}
-																							}
-																					%>
+												<table class="table noborder">
+							<caption id="tablename">
+								桐庐富伟针织厂原材料采购单
+							</caption>
+						</table>
 
-																				</select>
-																			</td>
+						<table class="table tableTb noborder">
+							<tbody>
+								<tr>
+									<td>
 
-																		</tr>
-																		<tr>
-																			<td width="20%">
-																				订购日期
-																			</td>
-																			<td class="orderproperty"><%=materialPurchaseOrder == null ? ""
-						: (materialPurchaseOrder.getPurchase_at() == null ? ""
-								: materialPurchaseOrder.getPurchase_at())%>
-																			</td>
-																		</tr>
-																		<tr>
-																			<td colspan="2" class="center">
-																				订单信息
-																			</td>
-																		</tr>
-																		<tr>
-																			<td>
-																				公司
-																			</td>
-																			<td><%=SystemCache.getCompanyName(materialPurchaseOrder
-										.getCompanyId())%></td>
-																		</tr>
-																		<tr>
-																			<td>
-																				客户
-																			</td>
-																			<td><%=SystemCache.getCustomerName(materialPurchaseOrder.getCustomerId())%></td>
-																		</tr>
-																		<tr>
-																			<td>
-																				货号
-																			</td>
-																			<td><%=materialPurchaseOrder.getProductNumber()%></td>
-																		</tr>
-																		<tr>
-																			<td>
-																				款名
-																			</td>
-																			<td><%=materialPurchaseOrder.getName()%></td>
-																		</tr>
-																	</tbody>
-																</table>
+										供货单位：
+										<span><%=materialPurchaseOrder == null ? ""
+						: (SystemCache.getFactoryName(materialPurchaseOrder
+								.getFactoryId()))%></span>
 
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<table class="table table-responsive detailTb">
-																	<caption>
-																		<button type="button"
-																			class="btn btn-primary addRow pull-left">
-																			添加一行
-																		</button>
-																		材料列表
-																	</caption>
-																	<thead>
-																		<tr>
-																			<th width="15%">
-																				材料品种
-																			</th>
-																			<th width="15%">
-																				规格
-																			</th>
-																			<th width="15%">
-																				数量(kg)
-																			</th>
-																			<th width="15%">
-																				批次号
-																			</th>
-																			<th width="15%">
-																				价格（含税）
-																			</th>
-																			<th width="15%">
-																				操作
-																			</th>
-																		</tr>
-																	</thead>
-																	<tbody>
-																		<%
-																			for (MaterialPurchaseOrderDetail detail : materialPurchaseOrderDetailList) {
-																		%>
-																		<tr class="tr"
-																			data='<%=SerializeTool.serialize(detail)%>'>
-																			<td class="material_name"><%=SystemCache.getMaterialName(detail
+									</td>
+									<td>
+										业务员：
+										<span><%=materialPurchaseOrder == null ? ""
+						: (SystemCache.getUserName((materialPurchaseOrder
+								.getCharge_user())))%></span>
+									</td>
+									<td class="pull-right">
+
+										№：<%=materialPurchaseOrder.getOrderNumber()%>
+
+									</td>
+
+								</tr>
+
+								<tr>
+									<td colspan="3">
+										<table class="table table-responsive table-bordered">
+											<tr>
+												<td class="center" width="15%">
+													公司
+												</td>
+												<td class="center" width="15%">
+													货号
+												</td>
+												<td class="center" width="15%">
+													客户
+												</td>
+												<td class="center" width="15%">
+													品名
+												</td>
+											</tr>
+											<tr>
+												<td class="center">
+													<span><%=SystemCache.getCompanyShortName(materialPurchaseOrder
+								.getCompanyId())%></span>
+												</td>
+												<td class="center">
+													<span><%=materialPurchaseOrder.getProductNumber()%></span>
+												</td>
+												<td class="center">
+													<span><%=SystemCache.getCustomerName(materialPurchaseOrder
+								.getCustomerId())%></span>
+												</td>
+												<td class="center">
+													<span><%=materialPurchaseOrder.getName()%></span>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+
+							</tbody>
+						</table>
+
+						<table class="noborder table">
+							<tr>
+								<td>
+									<table class="table table-responsive table-bordered">
+
+										<thead>
+											<tr>
+												<th width="15%">
+													材料品种
+												</th>
+												<th width="15%">
+													数量(kg)
+												</th>
+												<th width="30%">
+													备注
+												</th>
+
+											</tr>
+										</thead>
+										<tbody>
+											<%
+												for (MaterialPurchaseOrderDetail detail : materialPurchaseOrderDetailList) {
+											%>
+											<tr class="tr">
+												<td class="material_name"><%=SystemCache.getMaterialName(detail
 											.getMaterial())%>
-																			</td>
-																			<td class="scale"><%=detail.getScale()%>
-																			</td>
-																			<td class="quantity"><%=detail.getQuantity()%>
-																			</td>
-																			<td class="batch_number"><%=detail.getBatch_number()%>
-																			</td>
-																			<td class="price"><%=detail.getPrice()%>
-																			</td>
-																			<td class="_handle">
-																				<a class='editRow' href='#'>修改</a> |
-																				<a class='deleteRow' href='#'>删除</a>
-																			</td>
-																		</tr>
+												</td>
+												<td class="quantity"><%=detail.getQuantity()%>
+												</td>
+												<td class="memo"><%=detail.getMemo() == null ? "" : detail
+							.getMemo()%>
+												</td>
+											</tr>
 
-																		<%
-																			}
-																		%>
+											<%
+												}
+													int i = materialPurchaseOrderDetailList.size();
+													for (; i < 6; ++i) {
+											%>
+											<tr class="tr">
+												<td class="material_name">
+													&nbsp;
+												</td>
+												<td class="quantity">
+												</td>
+												<td class="memo">
+												</td>
+											</tr>
+											<%
+												}
+											%>
+										</tbody>
+									</table>
 
-																	</tbody>
-																</table>
-																<div id="navigator"></div>
-															</td>
-														</tr>
+									
+								</td>
+							</tr>
+						</table>
 
-													</tbody>
-												</table>
+						<p class="pull-right auto_bottom">
+							<span id="created_user">制单人：<%=SystemCache.getUserName(materialPurchaseOrder
+								.getCreated_user())%></span>
+							<span id="receiver_user">收货人：</span>
+							<span id="date"> 日期：<%=DateTool.formatDateYMD(materialPurchaseOrder
+								.getCreated_at())%></span>
+						</p>
+
 
 											</div>
 										</form>
@@ -1721,16 +1695,7 @@
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
-													<div class="form-group col-md-12">
-														<label for="scale" class="col-sm-3 control-label">
-															规格
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="scale" id="scale"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
+												
 													<div class="form-group col-md-12">
 														<label for="quantity" class="col-sm-3 control-label">
 															数量(kg)
@@ -1741,25 +1706,14 @@
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
+												
 													<div class="form-group col-md-12">
-														<label for="color" class="col-sm-3 control-label">
-															批次号
+														<label for="memo" class="col-sm-3 control-label">
+															备注
 														</label>
 														<div class="col-sm-8">
-															<input type="text" name="batch_number" id="batch_number"
+															<input type="text" name="memo" id="memo"
 																class="form-control" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-
-
-													<div class="form-group col-md-12">
-														<label for="price" class="col-sm-3 control-label">
-															价格（含税）
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="price" id="price"
-																class="form-control double require" />
 														</div>
 														<div class="col-sm-1"></div>
 													</div>
@@ -1812,169 +1766,152 @@
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
 											<%if(coloringOrder.isEdit()){ %>
-												<button type="submit"
-												class="pull-right btn btn-danger saveTable"
-												data-loading-text="正在保存...">
-												保存对当前表格的修改
-											</button>
 												<%if(has_coloring_order_delete){ %>
 													<a target="_blank" type="button"
 													class="pull-right btn btn-default deleteTableBtn"
 													data-loading-text="正在删除..."> 删除 </a>
 												<%} %>
+												<a href="coloring_order/put/<%=coloringOrder.getId() %>" target="_blank" type="button"
+													class="pull-right btn btn-default"
+													data-loading-text="正在跳转页面......"> 编辑 </a>
 											<%} %>
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
 												data-loading-text="正在打印..."> 打印 </a>
 											<div class="clear"></div>
 											<div class="col-md-12 tablewidget">
-												<table class="table">
-													<caption>
-														桐庐富伟针织厂染色单
-													</caption>
-													<thead>
-														<tr>
-															<td colspan="3" class="pull-right orderNumber">
-																№：<%=coloringOrder.getOrderNumber()%></td>
-														</tr>
-													</thead>
-													<tbody>
-														<tr>
-															<td>
-																<table
-																	class="table table-responsive table-bordered tableTb">
-																	<tbody>
-																		<tr>
-																			<td rowspan="7" width="50%">
-																				<a href="/<%=coloringOrder.getImg()%>" class="thumbnail"
-																					target="_blank"> <img id="previewImg"
-																						alt="200 x 100%" src="/<%=coloringOrder.getImg_s()%>">
-																				</a>
-																			</td>
-																			<td width="20%">
-																				染色单位
-																			</td>
-																			<td class="orderproperty">
-																				<select class="form-control require"
-																					name="factoryId" id="factoryId">
-																					<option value="">
-																						未选择
-																					</option>
-																					<%
-																						for (Factory factory : SystemCache.coloring_factorylist) {
-																								if (factory.getId() == coloringOrder.getFactoryId()) {
-																					%>
-																					<option value="<%=factory.getId()%>"
-																						selected='selected'><%=factory.getName()%></option>
-																					<%
-																						} else {
-																					%>
-																					<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
-																					<%
-																						}
-																							}
-																					%>
+												<table class="table noborder">
+							<caption id="tablename">
+								桐庐富伟针织厂染色单
+							</caption>
 
-																				</select>
-																			</td>
+						</table>
 
-																		</tr>
-																		<tr>
-																			<td colspan="2" class="center">
-																				订单信息
-																			</td>
-																		</tr>
-																		<tr>
-																			<td>
-																				公司
-																			</td>
-																			<td><%=SystemCache.getCompanyName(coloringOrder
-										.getCompanyId())%></td>
-																		</tr>
-																		<tr>
-																			<td>
-																				客户
-																			</td>
-																			<td><%=SystemCache.getCustomerName(coloringOrder.getCustomerId())%></td>
-																		</tr>
-																		<tr>
-																			<td>
-																				货号
-																			</td>
-																			<td><%=coloringOrder.getProductNumber()%></td>
-																		</tr>
-																		<tr>
-																			<td>
-																				款名
-																			</td>
-																			<td><%=coloringOrder.getName()%></td>
-																		</tr>
-																	</tbody>
-																</table>
+						<table class="tableTb noborder table">
+							<tbody>
+								<tr>
+									<td>
+										供货单位：
+										<span><%=coloringOrder == null ? ""
+						: (SystemCache.getFactoryName(coloringOrder
+								.getFactoryId()))%></span>
 
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<table class="table table-responsive detailTb">
-																	<caption>
-																		<button type="button"
-																			class="btn btn-primary addRow pull-left">
-																			添加一行
-																		</button>
-																		材料列表
-																	</caption>
-																	<thead>
-																		<tr>
-																			<th width="15%">
-																				色号
-																			</th>
-																			<th width="15%">
-																				材料
-																			</th>
-																			<th width="15%">
-																				数量(kg)
-																			</th>
-																			<th width="15%">
-																				标准样纱
-																			</th>
-																			<th width="15%">
-																				操作
-																			</th>
-																		</tr>
-																	</thead>
-																	<tbody>
-																		<%
-																			for (ColoringOrderDetail detail : coloringOrderDetailList) {
-																		%>
-																		<tr class="tr"
-																			data='<%=SerializeTool.serialize(detail)%>'>
-																			<td class="color"><%=detail.getColor()%>
-																			</td>
-																			<td class="material_name"><%=SystemCache.getMaterialName(detail
+									</td>
+									<td>
+										业务员：
+										<span><%=coloringOrder == null ? ""
+						: (SystemCache.getUserName((coloringOrder
+								.getCharge_user())))%></span>
+									</td>
+									<td class="pull-right">
+
+										№：<%=coloringOrder.getOrderNumber()%>
+
+									</td>
+
+								</tr>
+
+
+								<tr>
+									<td colspan="3">
+										<table class="table table-responsive table-bordered">
+											<tr>
+												<td class="center" width="15%">
+													公司
+												</td>
+												<td class="center" width="15%">
+													货号
+												</td>
+												<td class="center" width="15%">
+													客户
+												</td>
+												<td class="center" width="40%" colspan="2">
+													品名
+												</td>
+											</tr>
+											<tr>
+												<td class="center">
+													<span><%=SystemCache.getCompanyShortName(coloringOrder
+								.getCompanyId())%></span>
+												</td>
+												<td class="center">
+													<span><%=coloringOrder.getProductNumber()%></span>
+												</td>
+												<td class="center">
+													<span><%=SystemCache.getCustomerName(coloringOrder
+								.getCustomerId())%></span>
+												</td>
+												<td class="center" width="30%">
+													<span><%=coloringOrder.getName()%></span>
+												</td>
+												<td class="center" width="10%">备注</td>
+												
+											</tr>
+									
+											<tr class="tr">
+												<td width="15%">
+													色号
+												</td>
+												<td width="15%">
+													材料
+												</td>
+												<td width="15%">
+													数量(kg)
+												</td>
+												<td width="15%">
+													标准样纱
+												</td>
+												<td class="center" rowspan="7">
+													<span><%=coloringOrder.getMemo() == null ?"":coloringOrder.getMemo()%></span>
+												</td>
+											</tr>
+									
+											<%
+												for (ColoringOrderDetail detail : coloringOrderDetailList) {
+											%>
+											<tr class="tr">
+												<td class="color"><%=detail.getColor()%>
+												</td>
+												<td class="material_name"><%=SystemCache.getMaterialName(detail
 											.getMaterial())%>
-																			</td>
-																			<td class="quantity"><%=detail.getQuantity()%>
-																			</td>
-																			<td class="standardyarn"><%=detail.getStandardyarn()%>
-																			<td class="_handle">
-																				<a class='editRow' href='#'>修改</a> |
-																				<a class='deleteRow' href='#'>删除</a>
-																			</td>
-																		</tr>
+												</td>
+												<td class="quantity"><%=detail.getQuantity()%>
+												</td>
+												<td class="standardyarn"><%=detail.getStandardyarn()%>
+											</tr>
 
-																		<%
-																			}
-																		%>
+											<%
+												}
+													int i = coloringOrderDetailList.size();
+													for (; i < 6; ++i) {
+											%>
+											<tr class="tr">
+												<td class="color">
+													&nbsp;
+												</td>
+												<td class="material_name">
+												</td>
+												<td class="quantity">
+												</td>
+												<td class="standardyarn">
+											</tr>
+											<%
+												}
+											%>
 
-																	</tbody>
-																</table>
-																<div id="navigator"></div>
-															</td>
-														</tr>
+										</table>
+									</td>
+								</tr>
 
-													</tbody>
-												</table>
+							</tbody>
+						</table>
+						<p class="pull-right auto_bottom">
+							<span id="created_user">制单人：<%=SystemCache.getUserName(coloringOrder
+								.getCreated_user())%></span>
+							<span id="receiver_user">收货人：</span>
+							<span id="date"> 日期：<%=DateTool.formatDateYMD(coloringOrder
+										.getCreated_at())%></span>
+						</p>
 
 											</div>
 										</form>
@@ -2263,179 +2200,155 @@
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
 											<%if(fuliaoPurchaseOrder.isEdit()){ %>
-												<button type="submit"
-												class="pull-right btn btn-danger saveTable"
-												data-loading-text="正在保存...">
-												保存对当前表格的修改
-											</button>
 												<%if(has_fuliao_purchase_order_delete){ %>
 													<a target="_blank" type="button"
 													class="pull-right btn btn-default deleteTableBtn"
 													data-loading-text="正在删除..."> 删除 </a>
 												<%} %>
+												<a href="fuliao_purchase_order/put/<%=fuliaoPurchaseOrder.getId() %>" target="_blank" type="button"
+													class="pull-right btn btn-default"
+													data-loading-text="正在跳转页面......"> 编辑 </a>
 											<%} %>
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
 												data-loading-text="正在打印..."> 打印 </a>
 											<div class="clear"></div>
 											<div class="col-md-12 tablewidget">
-												<table class="table">
-													<caption>
-														桐庐富伟针织厂辅料采购单
-													</caption>
-													<thead>
-														<tr>
-															<td colspan="3" class="pull-right orderNumber">
-																№：<%=fuliaoPurchaseOrder.getOrderNumber()%></td>
-														</tr>
-													</thead>
-													<tbody>
-														<tr>
-															<td>
-																<table
-																	class="table table-responsive table-bordered tableTb">
-																	<tbody>
-																		<tr>
-																			<td rowspan="7" width="50%">
-																				<a href="/<%=fuliaoPurchaseOrder.getImg()%>" class="thumbnail"
-																					target="_blank"> <img id="previewImg"
-																						alt="200 x 100%" src="/<%=fuliaoPurchaseOrder.getImg_s()%>">
-																				</a>
-																			</td>
-																			<td width="20%">
-																				供货方
-																			</td>
-																			<td class="orderproperty">
-																				<select class="form-control require"
-																					name="factoryId" id="factoryId">
-																					<option value="">
-																						未选择
-																					</option>
-																					<%
-																						for (Factory factory : SystemCache.purchase_factorylist) {
-																								if (factory.getId() == fuliaoPurchaseOrder.getFactoryId()) {
-																					%>
-																					<option value="<%=factory.getId()%>"
-																						selected='selected'><%=factory.getName()%></option>
-																					<%
-																						} else {
-																					%>
-																					<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
-																					<%
-																						}
-																							}
-																					%>
+												<table class="table noborder">
+							<caption id="tablename">
+								桐庐富伟针织厂辅料采购单
+							</caption>
+						</table>
 
-																				</select>
-																			</td>
-																		</tr>
+						<table class="table tableTb noborder">
+							<tbody>
+								<tr>
+									<td>
 
-																		<tr>
-																			<td colspan="2" class="center">
-																				订单信息
-																			</td>
-																		</tr>
-																		<tr>
-																			<td>
-																				公司
-																			</td>
-																			<td><%=SystemCache.getCompanyName(fuliaoPurchaseOrder
-								.getCompanyId())%></td>
-																		</tr>
-																		<tr>
-																			<td>
-																				客户
-																			</td>
-																			<td><%=SystemCache.getCustomerName(fuliaoPurchaseOrder.getCustomerId())%></td>
-																		</tr>
-																		<tr>
-																			<td>
-																				货号
-																			</td>
-																			<td><%=fuliaoPurchaseOrder.getProductNumber()%></td>
-																		</tr>
-																		<tr>
-																			<td>
-																				款名
-																			</td>
-																			<td><%=fuliaoPurchaseOrder.getName()%></td>
-																		</tr>
-																		<tr>
-																			<td>
-																				跟单
-																			</td>
-																			<td><%=SystemCache.getUserName(fuliaoPurchaseOrder.getCharge_user())%></td>
-																		</tr>
-																	</tbody>
-																</table>
+										供货单位：
+										<span><%=fuliaoPurchaseOrder == null ? ""
+						: (SystemCache.getFactoryName(fuliaoPurchaseOrder
+								.getFactoryId()))%></span>
 
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<table class="table table-responsive detailTb">
-																	<caption>
-																		<button type="button"
-																			class="btn btn-primary addRow pull-left">
-																			添加一行
-																		</button>
-																		采购列表
-																	</caption>
-																	<thead>
-																		<tr>
-																			<th width="15%">
-																				辅料类型
-																			</th>
-																			<th width="15%">
-																				标准样
-																			</th>
-																			<th width="15%">
-																				数量(kg)
-																			</th>
-																			<th width="15%">
-																				价格
-																			</th>
-																			<th width="15%">
-																				交期
-																			</th>
-																			<th width="15%">
-																				操作
-																			</th>
-																		</tr>
-																	</thead>
-																	<tbody>
-																		<%
-																			for (FuliaoPurchaseOrderDetail detail : fuliaoPurchaseOrderDetailList) {
-																		%>
-																		<tr class="tr"
-																			data='<%=SerializeTool.serialize(detail)%>'>
-																			<td class="style_name"><%=SystemCache.getMaterialName(detail.getStyle())%>
-																			</td>
-																			<td class="standardsample"><%=detail.getStandardsample()%>
-																			</td>
-																			<td class="quantity"><%=detail.getQuantity()%>
-																			</td>
-																			<td class="price"><%=detail.getPrice()%>
-																			</td>
-																			<td class="end_at"><%=detail.getEnd_at()%>
-																			</td>
-																			<td class="_handle">
-																				<a class='editRow' href='#'>修改</a> |
-																				<a class='deleteRow' href='#'>删除</a>
-																			</td>
-																		</tr>
+									</td>
+									<td>
+										业务员：
+										<span><%=fuliaoPurchaseOrder == null ? ""
+						: (SystemCache.getUserName((fuliaoPurchaseOrder
+								.getCharge_user())))%></span>
+									</td>
+									<td class="pull-right">
 
-																		<%
-																			}
-																		%>
+										№：<%=fuliaoPurchaseOrder.getOrderNumber()%>
 
-																	</tbody>
-																</table>
-																<div id="navigator"></div>
-															</td>
-														</tr>
-													</tbody>
-												</table>
+									</td>
+
+								</tr>
+
+
+								<tr>
+									<td colspan="5">
+										<table class="table table-bordered">
+											<tr>
+												<td class="center" width="15%">
+													公司
+												</td>
+												<td class="center" width="15%">
+													货号
+												</td>
+												<td class="center" width="15%">
+													客户
+												</td>
+												<td class="center" width="15%">
+													品名
+												</td>
+											</tr>
+											<tr>
+												<td class="center">
+													<span><%=SystemCache.getCompanyShortName(fuliaoPurchaseOrder
+								.getCompanyId())%></span>
+												</td>
+												<td class="center">
+													<span><%=fuliaoPurchaseOrder.getProductNumber()%></span>
+												</td>
+												<td class="center">
+													<span><%=SystemCache.getCustomerName(fuliaoPurchaseOrder
+								.getCustomerId())%></span>
+												</td>
+												<td class="center">
+													<span><%=fuliaoPurchaseOrder.getName()%></span>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+
+							</tbody>
+						</table>
+
+						<table id="mainTb" class="noborder table">
+							<tr>
+								<td>
+									<table class="table table-responsive table-bordered">
+
+										<thead>
+											<tr>
+												<th width="15%">
+													材料
+												</th>
+												<th width="15%">
+													数量(kg)
+												</th>
+												<th width="30%">
+													备注
+												</th>
+											</tr>
+										</thead>
+										<tbody>
+											<%
+												for (FuliaoPurchaseOrderDetail detail : fuliaoPurchaseOrderDetailList) {
+											%>
+											<tr class="tr">
+												<td class="style_name"><%=SystemCache.getMaterialName(detail.getStyle())%>
+												</td>
+												<td class="quantity"><%=detail.getQuantity()%>
+												</td>
+												<td class="memo"><%=detail.getMemo() == null ? "" : detail
+							.getMemo()%>
+												</td>
+											</tr>
+
+											<%
+												}
+													int i = fuliaoPurchaseOrderDetailList.size();
+													for (; i < 6; ++i) {
+											%>
+											<tr>
+												<td class="style_name">
+													&nbsp;
+												</td>
+												<td class="quantity">
+												</td>
+												<td class="memo">
+												</td>
+											</tr>
+											<%
+												}
+											%>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</table>
+
+						<p class="pull-right auto_bottom">
+							<span id="created_user">制单人：<%=SystemCache.getUserName(fuliaoPurchaseOrder
+								.getCreated_user())%></span>
+							<span id="receiver_user">收货人：</span>
+							<span id="date"> 日期：<%=DateTool.formatDateYMD(fuliaoPurchaseOrder
+								.getCreated_at())%></span>
+						</p>
+												
 
 											</div>
 										</form>
@@ -2486,16 +2399,6 @@
 														<div class="col-sm-1"></div>
 													</div>
 													<div class="form-group col-md-12">
-														<label for="standardsample" class="col-sm-3 control-label">
-															标准样
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="standardsample"
-																id="standardsample" class="form-control" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
 														<label for="quantity" class="col-sm-3 control-label">
 															数量(kg)
 														</label>
@@ -2506,22 +2409,12 @@
 														<div class="col-sm-1"></div>
 													</div>
 													<div class="form-group col-md-12">
-														<label for="price" class="col-sm-3 control-label">
-															价格
+														<label for="memo" class="col-sm-3 control-label">
+															备注
 														</label>
 														<div class="col-sm-8">
-															<input type="text" name="price" id="price"
-																class="form-control double require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="end_at" class="col-sm-3 control-label">
-															交期
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="end_at" id="end_at"
-																class="form-control date require" />
+															<input type="text" name="memo" id="memo"
+																class="form-control" />
 														</div>
 														<div class="col-sm-1"></div>
 													</div>

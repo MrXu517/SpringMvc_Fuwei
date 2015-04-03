@@ -39,7 +39,7 @@
 		<link href="css/plugins/ui.jqgrid.css" rel="stylesheet"
 			type="text/css" />
 
-		<link href="css/order/tablelist.css" rel="stylesheet" type="text/css" />
+		<link href="css/order/bill.css" rel="stylesheet" type="text/css" />
 		<script src="js/order/ordergrid.js" type="text/javascript"></script>
 		<script src="js/coloring_order/add.js" type="text/javascript"></script>
 
@@ -73,61 +73,18 @@
 								<div class="clear"></div>
 								<div class="col-md-12 tablewidget">
 									<table class="table">
-										<caption>
+										<caption id="tablename">
 											桐庐富伟针织厂染色单
 										</caption>
+									</table>
 
+									<table class="tableTb noborder">
 										<tbody>
 											<tr>
 												<td>
-													<fieldset>
-														<legend>
-															基本信息
-														</legend>
-														<div class="form-group col-md-6">
-															<label for="img" class="col-sm-3 control-label">
-																样品图片
-															</label>
-															<div class="col-sm-8">
-																<a href="#" class="thumbnail" id="sampleImgA"> <img
-																		id="sampleImg" alt="350 x 100%"
-																		src="<%="css/images/settings-bg_2.png"%>"> </a>
-																<button type="button" id="chooseSampleBtn">
-																	选择样品
-																</button>
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-
-														<div class="form-group col-md-6">
-															<label for="name" class="col-sm-3 control-label">
-																样品名称
-															</label>
-															<div class="col-sm-8">
-																<input readonly type="text" name="name" id="name"
-																	class="form-control" />
-
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-
-														<div class="form-group col-md-6">
-															<label for="productNumber" class="col-sm-3 control-label">
-																货号
-															</label>
-															<div class="col-sm-8">
-																<input readonly type="text" name="productNumber"
-																	id="productNumber" class="form-control" />
-
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-														<div class="form-group col-md-6">
-															<label for="factoryId" class="col-sm-3 control-label">
-																染色单位
-															</label>
-															<div class="col-sm-8">
-																<select class="form-control require" name="factoryId"
+													<div class="form-group">
+													染色单位：
+													<select class="form-control require" name="factoryId"
 																	id="factoryId">
 																	<option value="">
 																		未选择
@@ -139,16 +96,62 @@
 																	<%
 																		}
 																	%>
-																</select>
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
+																</select></div>
+													<div class="form-group">
+														业务员：
+													<select name="charge_user" id="charge_user"
+														class="form-control">
+														<%
+															for (User item : SystemCache.userlist) {
+														%>
+														<option value="<%=item.getId()%>"><%=item.getName()%></option>
+														<%
+															}
+														%>
+													</select>
+													</div>
+													
+												</td><td><div class="form-group pull-right">№：</div></td>
+											</tr>
 
-														<div class="form-group col-md-6">
-															<label for="kehu" class="col-sm-3 control-label">
+											<tr>
+												<td colspan="2">
+													<table class="table table-responsive table-bordered">
+														<tr>
+															<td class="center" width="15%">
+																公司
+															</td>
+															<td class="center" width="15%">
+																货号
+															</td>
+															<td class="center" width="15%">
 																客户
-															</label>
-															<div class="col-sm-8">
+															</td>
+															<td class="center" width="15%">
+																品名
+															</td>
+														</tr>
+														<tr>
+															<td class="center">
+																<select class="form-control require" name="companyId"
+																	id="companyId">
+																	<option value="">
+																		未选择
+																	</option>
+																	<%
+																		for (Company company : SystemCache.companylist) {
+																	%>
+																	<option value="<%=company.getId()%>"><%=company.getFullname()%></option>
+																	<%
+																		}
+																	%>
+																</select>
+															</td>
+															<td class="center">
+																<input type="text" name="productNumber"
+																	id="productNumber" class="form-control require" />
+															</td>
+															<td class="center">
 																<select class="form-control" name="customerId"
 																	id="customerId">
 																	<option value="">
@@ -162,53 +165,23 @@
 																		}
 																	%>
 																</select>
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-														<div class="form-group col-md-6">
-															<label for="companyId" class="col-sm-3 control-label">
-																公司
-															</label>
-															<div class="col-sm-8">
-																<select class="form-control require" name="companyId"
-																	id="companyId" placeholder="公司">
-																	<option value="">
-																		未选择
-																	</option>
-																	<%
-																		for (Company company : SystemCache.companylist) {
-																	%>
-																	<option value="<%=company.getId()%>"><%=company.getFullname()%></option>
-																	<%
-																		}
-																	%>
-																</select>
-															</div>
-														</div>
-														<div class="form-group col-md-6">
-															<label for="charge_user" class="col-sm-3 control-label">
-																跟单人
-															</label>
-															<div class="col-sm-8">
-																<select name="charge_user" id="charge_user"
-																	class="form-control">
-																	<%
-																		for (User item : SystemCache.userlist) {
-																	%>
-																	<option value="<%=item.getId()%>"><%=item.getName()%></option>
-																	<%
-																		}
-																	%>
-																</select>
-
-															</div>
-															<div class="col-sm-1"></div>
-														</div>
-													</fieldset>
-
-
+															</td>
+															<td class="center">
+																<input type="text" name="name" id="name"
+																	class="form-control require" />
+															</td>
+														</tr>
+													</table>
 												</td>
 											</tr>
+
+										</tbody>
+									</table>
+									
+
+									<table>
+										<tbody>
+										
 											<tr>
 												<td>
 													<table class="table table-responsive detailTb">
@@ -340,33 +313,6 @@
 					</div>
 					<!-- 添加编辑染色单对话框 -->
 
-					<!-- 选择样品对话框 -->
-					<div class="modal fade" id="sampleDialog">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal">
-										<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-									</button>
-									<h4 class="modal-title">
-										请选择样品
-									</h4>
-								</div>
-								<div class="modal-body">
-									<iframe id="sampleIframe" name="sampleIframe" frameborder=0></iframe>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-default"
-										data-dismiss="modal">
-										关闭
-									</button>
-								</div>
-							</div>
-							<!-- /.modal-content -->
-						</div>
-						<!-- /.modal-dialog -->
-					</div>
-					<!-- 选择样品对话框 -->
 
 				</div>
 			</div>

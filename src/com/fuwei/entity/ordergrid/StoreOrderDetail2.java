@@ -4,7 +4,7 @@ public class StoreOrderDetail2 {
 	private String color;//色号
 	private String material;//材料
 	private int in_out ;//入库/出库
-	private Integer quantity;//数量
+	private double quantity;//数量
 	private String date;//入库、出库日期
 	private String sign;//签字
 	public String getColor() {
@@ -25,10 +25,10 @@ public class StoreOrderDetail2 {
 	public void setIn_out(int in_out) {
 		this.in_out = in_out;
 	}
-	public Integer getQuantity() {
+	public double getQuantity() {
 		return quantity;
 	}
-	public void setQuantity(Integer quantity) {
+	public void setQuantity(double quantity) {
 		this.quantity = quantity;
 	}
 	public String getDate() {
