@@ -620,6 +620,7 @@ Common.Error = function(message, callback) {
 	var $dialog = $model.find('.modal-dialog');
 	var paddingtop = 0;
 	$model.show();
+	
 	paddingtop = ($model.height() - $dialog.outerHeight()) / 2;
 	if (paddingtop < 30) {
 		paddingtop = 30;
@@ -627,12 +628,16 @@ Common.Error = function(message, callback) {
 	$dialog.css("padding-top", paddingtop);
 	$model.hide();
 	$model.modal({keyboard:true});
-
+	
 	$model.on('hidden.bs.modal', function(e) {
 		if(callback!=undefined){
 			callback(e);
 		}
 	});
+	$model.on('shown.bs.modal', function () {
+		$model.find(".modal-footer button").first().focus();
+	});
+	
 };
 Common.Tip = function(message, callback) {
 	var $model = $('#alert_tip>div.modal');
@@ -642,6 +647,7 @@ Common.Tip = function(message, callback) {
 	var $dialog = $model.find('.modal-dialog');
 	var paddingtop = 0;
 	$model.show();
+	$model.find(".modal-footer button").first().focus();
 	paddingtop = ($model.height() - $dialog.outerHeight()) / 2;
 	if (paddingtop < 30) {
 		paddingtop = 30;
@@ -672,6 +678,7 @@ Common.openModal = function($modal){//打开对话框并高度居中
 	$dialog.css("padding-top", 0);
 	var paddingtop = 0;
 	$modal.show();
+	
 	margintop = ($modal.height() - $dialog.outerHeight()) / 2;
 	if (margintop < 30) {
 		margintop = 30;
@@ -679,7 +686,11 @@ Common.openModal = function($modal){//打开对话框并高度居中
 	//$dialog.css("padding-top", 0);
 	$dialog.css("margin-top", margintop);
 	$modal.hide();
+	$modal.on('shown.bs.modal', function () {
+		$modal.find("input[type='text'],select").first().focus();
+	});
 	$modal.modal({keyboard:true});
+	
 }
 Common.closeModal = function($modal){//关闭对话框
 	$modal.modal('hide');

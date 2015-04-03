@@ -48,6 +48,11 @@ function OrderGrid(settings){
 		this.$content.find("a.printBtn").attr("href","printorder/print?orderId="+this.orderId+"&gridName=" + this.gridName );
 		if(this.tbOptions){
 			Object.TableInstance = TableTools.createTableInstance(Object.tbOptions);
+			if(Object.$dialog){
+				Object.$dialog.on('shown.bs.modal', function () {
+					Object.$dialog.find("input[type='text'],select").first().focus();
+				});
+			}
 			this.$content.find(".detailTb .addRow").click( function() {
 				if(Object.TableInstance.beforeAdd){
 					if (!Object.TableInstance.beforeAdd()) {
@@ -139,6 +144,12 @@ function OrderGrid(settings){
 		
 		if(Object.tbOptions2){
 			Object.TableInstance2 = TableTools.createTableInstance(Object.tbOptions2);
+			if(Object.$dialog2){
+				Object.$dialog2.on('shown.bs.modal', function () {
+					Object.$dialog2.find("input[type='text'],select").first().focus();
+				});
+			}
+			
 			this.$content.find(".detailTb2 .addRow").click( function() {
 				if(Object.TableInstance2.beforeAdd){
 					if (!Object.TableInstance2.beforeAdd()) {

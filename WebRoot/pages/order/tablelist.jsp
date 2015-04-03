@@ -190,32 +190,31 @@
 					<div id="tab">
 						<ul class="nav nav-pills nav-stacked" role="tablist">
 							<li>
-								<a href="#planorder" role="tab" data-toggle="tab">计划单</a>
-							</li>
-							<li>
-								<a href="#producingorder" role="tab" data-toggle="tab">生产单</a>
-							</li>
-							<li>
-								<a href="#coloringprocessorder" role="tab" data-toggle="tab">染色进度单</a>
-							</li>
-							<li>
-								<a href="#productionscheduleorder" role="tab" data-toggle="tab">生产进度单</a>
-							</li>
-							<li>
-								<a href="#finalstorerecordorder" role="tab" data-toggle="tab">成品仓库记录单</a>
+								<a href="#coloringorder" role="tab" data-toggle="tab">染色单</a>
 							</li>
 							<li>
 								<a href="#materialpurchaseorder" role="tab" data-toggle="tab">原材料采购单</a>
 							</li>
 							<li>
-								<a href="#fuliaopurchaseorder" role="tab" data-toggle="tab">辅料采购单</a>
-							</li>
-							<li>
-								<a href="#coloringorder" role="tab" data-toggle="tab">染色单</a>
+								<a href="#producingorder" role="tab" data-toggle="tab">生产单</a>
 							</li>
 							<li>
 								<a href="#storeorder" role="tab" data-toggle="tab">原材料仓库</a>
 							</li>
+							<li>
+								<a href="#planorder" role="tab" data-toggle="tab">计划单</a>
+							</li>
+							<li>
+								<a href="#productionscheduleorder" role="tab" data-toggle="tab">生产进度单</a>
+							</li>
+							
+							<li>
+								<a href="#coloringprocessorder" role="tab" data-toggle="tab">染色进度单</a>
+							</li>
+							<li>
+								<a href="#finalstorerecordorder" role="tab" data-toggle="tab">成品仓库记录单</a>
+							</li>
+											
 							<li>
 								<a href="#shoprecordorder" role="tab" data-toggle="tab">车间记录单</a>
 							</li>
@@ -233,6 +232,10 @@
 							</li>
 							<li>
 								<a href="#ironingrecordorder" role="tab" data-toggle="tab">整烫记录单</a>
+							</li>
+
+							<li>
+								<a href="#fuliaopurchaseorder" role="tab" data-toggle="tab">辅料采购单</a>
 							</li>
 						</ul>
 

@@ -20,7 +20,7 @@
 	border:none;
 }
 .tablewidget .thumbnail img{
-	width:300px;
+	max-width:300px;
 }
 .tablewidget>table>tbody>tr>td{
 	border:none;

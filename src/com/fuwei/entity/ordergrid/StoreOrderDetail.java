@@ -3,7 +3,7 @@ package com.fuwei.entity.ordergrid;
 public class StoreOrderDetail {
 	private String color;//色号
 	private Integer material;//材料
-	private int quantity;//总数量
+	private double quantity;//总数量
 	private String yarn;//标准样纱
 	private Integer factoryId;//领取人 ，必填 （工厂）
 	
@@ -26,10 +26,11 @@ public class StoreOrderDetail {
 	public void setMaterial(Integer material) {
 		this.material = material;
 	}
-	public int getQuantity() {
+	
+	public double getQuantity() {
 		return quantity;
 	}
-	public void setQuantity(int quantity) {
+	public void setQuantity(double quantity) {
 		this.quantity = quantity;
 	}
 	public String getYarn() {

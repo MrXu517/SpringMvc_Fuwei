@@ -282,7 +282,7 @@
 											<th>
 												序号
 											</th>
-
+											<th>样品</th>
 											<th>
 												订单号
 											</th>
@@ -325,6 +325,13 @@
 										%>
 										<tr orderId="<%=order.getId()%>">
 											<td><%=++i%></td>
+											<td
+												style="max-width: 120px; height: 120px; max-height: 120px;">
+												<a target="_blank" class="cellimg"
+													href="/<%=order.getImg()%>"><img
+														style="max-width: 120px; height: 120px; max-height: 120px;"
+														src="/<%=order.getImg_ss()%>"> </a>
+											</td>
 											<td><%=order.getOrderNumber()%></td>
 											<td><%if(order.getStatus() == OrderStatus.CANCEL.ordinal()){ %>
 												<span class="label label-default">已取消</span>

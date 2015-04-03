@@ -215,6 +215,11 @@ function OrderGrid(settings){
 	
 	this.init = function(){
 		Object.TableInstance = TableTools.createTableInstance(Object.tbOptions);
+		if(Object.$dialog){
+			Object.$dialog.on('shown.bs.modal', function () {
+				Object.$dialog.find("input[type='text'],select").first().focus();
+			});
+		}
 		this.$content.find(".detailTb .addRow").click( function() {
 			Common.resetForm(Object.$form[0]);
 			Object.$dialog.find(".modal-title").text("添加一行");

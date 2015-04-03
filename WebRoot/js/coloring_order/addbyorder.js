@@ -3,6 +3,10 @@ $(document).ready( function() {
 	var $a = $("#left li a[href='order/index']");
 	setActiveLeft($a.parent("li"));
 	/* 设置当前选中的页 */
+	
+	//2015-4-3 添加自动focus到第一个可输入input、select
+	$("form").find("input[type='text'],select").not("[readonly],[disabled]").first().focus();
+	//2015-4-3 添加自动focus到第一个可输入input、select
 
 		var materialPurchaseGrid = new OrderGrid({
 			tipText:"染色单",

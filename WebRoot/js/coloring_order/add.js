@@ -3,7 +3,11 @@ $(document).ready( function() {
 	var $a = $("#left li a[href='coloring_order/add']");
 	setActiveLeft($a.parent("li"));
 	/* 设置当前选中的页 */
-
+	
+	//2015-4-3 添加自动focus到第一个可输入input、select
+	$("form").find("input[type='text'],select").not("[readonly],[disabled]").first().focus();
+	//2015-4-3 添加自动focus到第一个可输入input、select
+	
 	// 重置按钮
 		$("button.reset").click( function() {
 			$form = $(this).closest("form");

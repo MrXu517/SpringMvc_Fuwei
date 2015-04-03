@@ -3,11 +3,22 @@ $(document).ready(function(){
 	var $a = $("#left li a[href='salesman/index']");
 	setActiveLeft($a.parent("li"));
 	/*设置当前选中的页*/
+	
+	//2015-4-3 添加自动focus到第一个可输入input、select
+	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+		$(".tab-content .tab-pane.active form").find("input[type='text'],select").not("[readonly],[disabled]").first().focus();
+	});
+	//2015-4-3 添加自动focus到第一个可输入input、select
+	
 	var tabname = Common.urlParams().tab;
 	if (tabname == null || tabname == undefined) {
 		$('#tab a:first').tab('show') // Select first tab
+		$(".tab-content .tab-pane.active form").find("input[type='text'],select").not("[readonly],[disabled]").first().focus();
+	}else{
+		$("#tab a[href='#" + tabname + "']").tab('show') // Select tab by name
+		$(".tab-content .tab-pane.active form").find("input[type='text'],select").not("[readonly],[disabled]").first().focus();
 	}
-	$("#tab a[href='#" + tabname + "']").tab('show') // Select tab by name
+	
 	
 	
 	//公司 -- 开始
