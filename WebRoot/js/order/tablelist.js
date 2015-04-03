@@ -9,6 +9,36 @@ $(document).ready(function() {
 	}
 	$("#tab a[href='#" + tabname + "']").tab('show') // Select tab by name
 	
+	//2015-4-3添加打印表格时要勾选
+	$(".printcheck").click(function(e){
+		e.stopPropagation();
+		//return false;
+	});
+	$(".printAll").click(function(){
+		var href = $(this).attr("href");
+		var $checkeds = $(".printcheck:checked").not("[disabled]");
+		var gridName = "";
+		$checkeds.each(function(){
+			var tempgridname = $(this).parent("a[role='tab']").attr("href");
+			if(tempgridname!=undefined){
+				tempgridname = tempgridname.substring(1);
+				if(tempgridname!=""){
+					gridName += "," + tempgridname;
+				}
+			}
+		});
+		if(gridName != ""){
+			gridName = gridName.substring(1);
+			$("#printAlla").attr("href",href+"&gridName="+gridName);
+			$("#printAlla span").click();
+			return false;
+		}else{
+			alert("请至少选中一种单据");
+			return false;
+		}
+	});
+	//$("#printAlla").click(function(){return true;});
+	//2015-4-3添加打印表格时要勾选
 	
 	//质量记录单
 	var headBankGrid = new OrderGrid({

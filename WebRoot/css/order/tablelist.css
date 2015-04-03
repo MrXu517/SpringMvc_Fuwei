@@ -118,3 +118,8 @@ a.thumbnail{
 	margin-top:10px;
 	margin-right:10px;
 }
+input.printcheck{
+	margin-right: 10px;
+ 	zoom: 1.4;
+  	vertical-align: bottom;
+}

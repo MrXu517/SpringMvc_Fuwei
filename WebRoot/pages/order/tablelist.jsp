@@ -182,60 +182,60 @@
 					</ul>
 				</div>
 				<div class="body">
-					<a href="printorder/print?orderId=<%=order.getId()%>"
-						target="_blank" type="button" class="btn btn-success printAll"
-						data-loading-text="正在打印..."> 打印所有的表格 </a>
+					<a href="printorder/print?orderId=<%=order.getId() %>" target="_blank" type="button" class="btn btn-success printAll"
+						data-loading-text="正在打印..."> 打印选中的表格 </a>
+					<a href="printorder/print?orderId=<%=order.getId() %>" id="printAlla"  target="_blank" ><span></span></a>
 					<div class="clear"></div>
 
 					<div id="tab">
 						<ul class="nav nav-pills nav-stacked" role="tablist">
 							<li>
-								<a href="#coloringorder" role="tab" data-toggle="tab">染色单</a>
+								<a href="#coloringorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" disabled/>染色单</a>
 							</li>
 							<li>
-								<a href="#materialpurchaseorder" role="tab" data-toggle="tab">原材料采购单</a>
+								<a href="#materialpurchaseorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" disabled/>原材料采购单</a>
 							</li>
 							<li>
-								<a href="#producingorder" role="tab" data-toggle="tab">生产单</a>
+								<a href="#producingorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>生产单</a>
 							</li>
 							<li>
-								<a href="#storeorder" role="tab" data-toggle="tab">原材料仓库</a>
+								<a href="#storeorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>原材料仓库</a>
 							</li>
 							<li>
-								<a href="#planorder" role="tab" data-toggle="tab">计划单</a>
+								<a href="#planorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>计划单</a>
 							</li>
 							<li>
-								<a href="#productionscheduleorder" role="tab" data-toggle="tab">生产进度单</a>
+								<a href="#productionscheduleorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>生产进度单</a>
 							</li>
 							
 							<li>
-								<a href="#coloringprocessorder" role="tab" data-toggle="tab">染色进度单</a>
+								<a href="#coloringprocessorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>染色进度单</a>
 							</li>
 							<li>
-								<a href="#finalstorerecordorder" role="tab" data-toggle="tab">成品仓库记录单</a>
+								<a href="#finalstorerecordorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>成品仓库记录单</a>
 							</li>
 											
 							<li>
-								<a href="#shoprecordorder" role="tab" data-toggle="tab">车间记录单</a>
+								<a href="#shoprecordorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked />车间记录单</a>
 							</li>
 							<li>
-								<a href="#checkrecordorder" role="tab" data-toggle="tab">抽检记录单</a>
+								<a href="#checkrecordorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>抽检记录单</a>
 							</li>
 							<li>
-								<a href="#halfcheckrecordorder" role="tab" data-toggle="tab">半检记录单</a>
+								<a href="#halfcheckrecordorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>半检记录单</a>
 							</li>
 							<li>
-								<a href="#headbankorder" role="tab" data-toggle="tab">质量记录单</a>
+								<a href="#headbankorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>质量记录单</a>
 							</li>
 							<li>
-								<a href="#carfixrecordorder" role="tab" data-toggle="tab">车缝记录单</a>
+								<a href="#carfixrecordorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>车缝记录单</a>
 							</li>
 							<li>
-								<a href="#ironingrecordorder" role="tab" data-toggle="tab">整烫记录单</a>
+								<a href="#ironingrecordorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>整烫记录单</a>
 							</li>
 
 							<li>
-								<a href="#fuliaopurchaseorder" role="tab" data-toggle="tab">辅料采购单</a>
+								<a href="#fuliaopurchaseorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" disabled/>辅料采购单</a>
 							</li>
 						</ul>
 
