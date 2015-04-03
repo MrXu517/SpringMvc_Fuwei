@@ -296,7 +296,7 @@ public class MaterialPurchaseOrderController extends BaseController {
 		if (id == null) {
 			throw new Exception("缺少原材料采购单ID");
 		}
-		String lcode = "fuliao_purchase_order/detail";
+		String lcode = "material_purchase_order/detail";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		if (!hasAuthority) {
 			throw new PermissionDeniedDataAccessException("没有查看原材料采购单详情的权限", null);
@@ -360,6 +360,27 @@ public class MaterialPurchaseOrderController extends BaseController {
 		Integer tableOrderId = materialPurchaseOrderService.update(materialPurchaseOrder);
 		return this.returnSuccess("id", tableOrderId);
 		
+	}
+	
+	@RequestMapping(value = "/print/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView print(@PathVariable Integer id, HttpSession session,
+			HttpServletRequest request) throws Exception {
+		if (id == null) {
+			throw new Exception("缺少原材料采购单ID");
+		}
+//		String lcode = "material_purchase_order/detail";
+//		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+//		if (!hasAuthority) {
+//			throw new PermissionDeniedDataAccessException("没有查看原材料采购单详情的权限", null);
+//		}	
+		MaterialPurchaseOrder materialPurchaseOrder = materialPurchaseOrderService.get(id);
+		List<MaterialPurchaseOrder> materialPurchaseOrderList = new ArrayList<MaterialPurchaseOrder>();
+		materialPurchaseOrderList.add(materialPurchaseOrder);
+		request.setAttribute("materialPurchaseOrderList", materialPurchaseOrderList);
+		Map<String,Object> data = new HashMap<String,Object>();  
+	    data.put("gridName","materialpurchaseorder");  
+		return new ModelAndView("printorder/print",data);
 	}
 	
 	

@@ -1480,7 +1480,9 @@
 										class="btn btn-primary" id="createProducingorderBtn">创建原材料采购单</a>
 								</div>
 								<%} %>
-
+								<a  href="printorder/print?orderId=<%=order.getId() %>&gridName=materialpurchaseorder" target="_blank" type="button"
+												class="printBtn btn btn-success"
+												data-loading-text="正在打印..."> 打印原材料采购单 </a>
 								<%
 									for (MaterialPurchaseOrder materialPurchaseOrder : materialPurchaseOrderList) {
 										List<MaterialPurchaseOrderDetail> materialPurchaseOrderDetailList = materialPurchaseOrder == null ? new ArrayList<MaterialPurchaseOrderDetail>()
@@ -1507,8 +1509,8 @@
 											<%} %>
 											
 											
-											<a target="_blank" type="button"
-												class="pull-right btn btn-success printBtn"
+											<a href="material_purchase_order/print/<%=materialPurchaseOrder.getId() %>" target="_blank" type="button"
+												class="pull-right btn btn-success"
 												data-loading-text="正在打印..."> 打印 </a>
 											
 											<div class="clear"></div>
@@ -1751,15 +1753,18 @@
 										如果您要创建染色单，请点击下方的按钮
 									</p>
 									<a href="coloring_order/add/<%=order.getId()%>"
-										class="btn btn-primary" id="createProducingorderBtn">创建原材料染色单</a>
+										class="btn btn-primary" id="createProducingorderBtn">创建染色单</a>
 								</div>
 								<%} %>
-
+								<a  href="printorder/print?orderId=<%=order.getId() %>&gridName=coloringorder" target="_blank" type="button"
+												class="printBtn btn btn-success"
+												data-loading-text="正在打印..."> 打印染色单 </a>
 								<%
 									for (ColoringOrder coloringOrder : coloringOrderList) {
 										List<ColoringOrderDetail> coloringOrderDetailList = coloringOrder == null ? new ArrayList<ColoringOrderDetail>()
 												: coloringOrder.getDetaillist();
 								%>
+								
 								<div class="container-fluid coloringorderWidget">
 									<div class="row">
 										<form class="saveform">
@@ -1778,8 +1783,8 @@
 													class="pull-right btn btn-default"
 													data-loading-text="正在跳转页面......"> 编辑 </a>
 											<%} %>
-											<a target="_blank" type="button"
-												class="pull-right btn btn-success printBtn"
+											<a  href="coloring_order/print/<%=coloringOrder.getId() %>" target="_blank" type="button"
+												class="pull-right btn btn-success"
 												data-loading-text="正在打印..."> 打印 </a>
 											<div class="clear"></div>
 											<div class="col-md-12 tablewidget">
@@ -2188,7 +2193,9 @@
 										class="btn btn-primary" id="createProducingorderBtn">创建辅料采购单</a>
 								</div>
 								<%} %>
-
+								<a  href="printorder/print?orderId=<%=order.getId() %>&gridName=fuliaopurchaseorder" target="_blank" type="button"
+												class="printBtn btn btn-success"
+												data-loading-text="正在打印..."> 打印辅料采购单 </a>
 								<%
 									for (FuliaoPurchaseOrder fuliaoPurchaseOrder : fuliaoPurchaseOrderList) {
 										List<FuliaoPurchaseOrderDetail> fuliaoPurchaseOrderDetailList = fuliaoPurchaseOrder == null ? new ArrayList<FuliaoPurchaseOrderDetail>()
@@ -2212,8 +2219,8 @@
 													class="pull-right btn btn-default"
 													data-loading-text="正在跳转页面......"> 编辑 </a>
 											<%} %>
-											<a target="_blank" type="button"
-												class="pull-right btn btn-success printBtn"
+											<a href="fuliao_purchase_order/print/<%=fuliaoPurchaseOrder.getId() %>" target="_blank" type="button"
+												class="pull-right btn btn-success"
 												data-loading-text="正在打印..."> 打印 </a>
 											<div class="clear"></div>
 											<div class="col-md-12 tablewidget">

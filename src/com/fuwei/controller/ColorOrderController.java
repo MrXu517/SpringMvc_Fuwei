@@ -362,5 +362,28 @@ public class ColorOrderController extends BaseController {
 		
 	}
 	
+	@RequestMapping(value = "/print/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView print(@PathVariable Integer id, HttpSession session,
+			HttpServletRequest request) throws Exception {
+		
+		if (id == null) {
+			throw new Exception("缺少染色单ID");
+		}		
+//		String lcode = "fuliao_purchase_order/detail";
+//		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+//		if (!hasAuthority) {
+//			throw new PermissionDeniedDataAccessException("没有查看染色单详情的权限", null);
+//		}
+		
+		ColoringOrder coloringOrder = coloringOrderService.get(id);
+		
+		List<ColoringOrder> coloringOrderList = new ArrayList<ColoringOrder>();
+		coloringOrderList.add(coloringOrder);
+		request.setAttribute("coloringOrderList", coloringOrderList);
+		Map<String,Object> data = new HashMap<String,Object>();  
+	    data.put("gridName","coloringorder");  
+		return new ModelAndView("printorder/print",data);
+	}
 	
 }

@@ -118,7 +118,7 @@
 									
 									<div class="pull-right">
 										<a href="order/tablelist?orderId=<%=order.getId()%>"
-											class="btn btn-default" type="button"> 查看表格 </a>
+											class="btn btn-default" type="button"> 进入生产系统 </a>
 									</div>
 									<div class="pull-right">
 										<a href="printorder/print?orderId=<%=order.getId()%>"
