@@ -41,7 +41,7 @@ import com.fuwei.service.QuoteService;
 import com.fuwei.service.SampleService;
 import com.fuwei.util.CompressUtil;
 import com.fuwei.util.DateTool;
-import com.fuwei.util.ExportExcel;
+//import com.fuwei.util.ExportExcel;
 import com.fuwei.util.HanyuPinyinUtil;
 import com.fuwei.util.SerializeTool;
 
@@ -58,47 +58,47 @@ public class SampleController extends BaseController {
 	@Autowired
 	AuthorityService authorityService;
 	
-	//生成样品标签
-	@RequestMapping(value="/print_sign/{id}",method = RequestMethod.GET)
-	@ResponseBody
-	public Map<String,Object> printSign(@PathVariable Integer id,HttpSession session,HttpServletRequest request) throws Exception{
-		String lcode = "sample/print_sign";
-		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
-		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有生成样品标签的权限", null);
-		}
-		
-		Sample sample = sampleService.get(id);
-		String excelfile_name = Constants.UPLOADEXCEL_Sample_temp + "样品标签" + sample.getId() + "_"
-		+ DateTool.formateDate(new Date(), "yyyyMMddHHmmss") + ".xls";
-		String uploadSite = Constants.UPLOADSite;
-		List<Sample> samplelist = new ArrayList<Sample>();
-		samplelist.add(sample);
-		ExportExcel.exportSampleSignExcel(samplelist,excelfile_name, uploadSite );
-		PrintExcel.printExcel(uploadSite + excelfile_name, true);
-		return this.returnSuccess();
-	}
+//	//生成样品标签
+//	@RequestMapping(value="/print_sign/{id}",method = RequestMethod.GET)
+//	@ResponseBody
+//	public Map<String,Object> printSign(@PathVariable Integer id,HttpSession session,HttpServletRequest request) throws Exception{
+//		String lcode = "sample/print_sign";
+//		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+//		if(!hasAuthority){
+//			throw new PermissionDeniedDataAccessException("没有生成样品标签的权限", null);
+//		}
+//		
+//		Sample sample = sampleService.get(id);
+//		String excelfile_name = Constants.UPLOADEXCEL_Sample_temp + "样品标签" + sample.getId() + "_"
+//		+ DateTool.formateDate(new Date(), "yyyyMMddHHmmss") + ".xls";
+//		String uploadSite = Constants.UPLOADSite;
+//		List<Sample> samplelist = new ArrayList<Sample>();
+//		samplelist.add(sample);
+//		ExportExcel.exportSampleSignExcel(samplelist,excelfile_name, uploadSite );
+//		PrintExcel.printExcel(uploadSite + excelfile_name, true);
+//		return this.returnSuccess();
+//	}
 	
-	//打印样品价格详情
-	@RequestMapping(value="/printDetail/{quotePriceId}",method = RequestMethod.GET)
-	@ResponseBody
-	public Map<String,Object> printDetail(@PathVariable Integer quotePriceId,HttpSession session,HttpServletRequest request) throws Exception{
-		String lcode = "quoteprice/print";
-		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
-		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有打印价格详情的权限", null);
-		}
-		
-		QuotePrice quotePrice = quotePriceService.get(quotePriceId);
-		Sample sample = sampleService.get(quotePrice.getSampleId());
-		String excelfile_name = Constants.UPLOADEXCEL_Sample_temp + "样品详情" + sample.getId() + "_"
-		+ DateTool.formateDate(new Date(), "yyyyMMddHHmmss") + ".xls";
-		String uploadSite = Constants.UPLOADSite;
-
-		ExportExcel.exportSampleDetailExcel(sample,quotePrice,uploadSite,excelfile_name,uploadSite );
-		PrintExcel.printExcel(uploadSite + excelfile_name, true);
-		return this.returnSuccess();
-	}
+//	//打印样品价格详情
+//	@RequestMapping(value="/printDetail/{quotePriceId}",method = RequestMethod.GET)
+//	@ResponseBody
+//	public Map<String,Object> printDetail(@PathVariable Integer quotePriceId,HttpSession session,HttpServletRequest request) throws Exception{
+//		String lcode = "quoteprice/print";
+//		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+//		if(!hasAuthority){
+//			throw new PermissionDeniedDataAccessException("没有打印价格详情的权限", null);
+//		}
+//		
+//		QuotePrice quotePrice = quotePriceService.get(quotePriceId);
+//		Sample sample = sampleService.get(quotePrice.getSampleId());
+//		String excelfile_name = Constants.UPLOADEXCEL_Sample_temp + "样品详情" + sample.getId() + "_"
+//		+ DateTool.formateDate(new Date(), "yyyyMMddHHmmss") + ".xls";
+//		String uploadSite = Constants.UPLOADSite;
+//
+//		ExportExcel.exportSampleDetailExcel(sample,quotePrice,uploadSite,excelfile_name,uploadSite );
+//		PrintExcel.printExcel(uploadSite + excelfile_name, true);
+//		return this.returnSuccess();
+//	}
 	
 	//样品详情
 	@RequestMapping(value="/detail/{id}",method = RequestMethod.GET)

@@ -44,7 +44,7 @@ import com.fuwei.constant.OrderStatusUtil;
 @Component
 public class OrderService extends BaseService {
 	private Logger log = org.apache.log4j.LogManager
-			.getLogger(QuoteOrderService.class);
+			.getLogger(OrderService.class);
 	@Autowired
 	JdbcTemplate jdbc;
 

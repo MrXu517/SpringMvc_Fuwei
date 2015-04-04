@@ -123,7 +123,7 @@
 											value="<%=pager.getPageNo()%>" />
 										<div class="form-group">
 											<label for="status" class="col-sm-3 control-label">
-												订单状态
+												状态
 											</label>
 											<div class="col-sm-9">
 												<select class="form-control" name="status" id="status">
@@ -244,7 +244,7 @@
 
 										<li class="active">
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%><span
+												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
 												class="sr-only"></span> </a>
 										</li>
 										<li>
@@ -320,7 +320,7 @@
 									</thead>
 									<tbody>
 										<%
-											int i = 0;
+											int i = (pager.getPageNo()-1) * pager.getPageSize() + 0;
 											for (Order order : orderlist) {
 										%>
 										<tr orderId="<%=order.getId()%>">

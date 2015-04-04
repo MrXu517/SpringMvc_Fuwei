@@ -94,4 +94,17 @@ public class AuthorityService extends BaseService {
 			throw e;
 		}
 	}
+	
+	//2015-4-4添加 获取拥有某权限的所有用户
+	public List<User> getListByLcode(String lcode) throws Exception{
+		if(lcode == null || lcode.equals("")){
+			return null;
+		}
+		try{
+			List<User> userlist = dao.queryForBeanList("SELECT u.* FROM tb_user as u,tb_role_authority as ra, tb_authority as a  where a.lcode=? and a.id = ra.authorityId and u.roleId = ra.roleId", User.class,lcode);
+			return userlist;
+		}catch(Exception e){
+			throw e;
+		}
+	}
 }

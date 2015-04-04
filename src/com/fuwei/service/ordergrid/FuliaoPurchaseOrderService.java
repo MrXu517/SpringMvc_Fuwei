@@ -40,8 +40,10 @@ public class FuliaoPurchaseOrderService extends BaseService {
 						.getDetaillist()));
 
 				Integer tableOrderId = this.insert(tableOrder);
-
+				
 				tableOrder.setId(tableOrderId);
+				tableOrder.setNumber(tableOrder.createNumber());
+				this.update(tableOrder, "id", null);
 
 				return tableOrderId;
 			}
@@ -69,7 +71,7 @@ public class FuliaoPurchaseOrderService extends BaseService {
 
 				// 更新表
 				this.update(tableOrder, "id",
-						"created_user,created_at,orderId", true);
+						"created_user,created_at,orderId,number", true);
 
 				return tableOrder.getId();
 			}
@@ -104,7 +106,7 @@ public class FuliaoPurchaseOrderService extends BaseService {
 	}
 
 	// 获取辅料采购单列表
-	public Pager getList(Pager pager, Date start_time, Date end_time,
+	public Pager getList(Pager pager, Date start_time, Date end_time,Integer companyId, Integer factoryId,
 			List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
@@ -123,7 +125,15 @@ public class FuliaoPurchaseOrderService extends BaseService {
 						+ "'");
 				seq = " AND ";
 			}
-
+			if (companyId != null) {
+				sql.append(seq + " companyId='" + companyId + "'");
+				seq = " AND ";
+			}
+			if (factoryId != null) {
+				sql.append(seq + " factoryId='" + factoryId + "'");
+				seq = " AND ";
+			}
+			
 			if (sortlist != null && sortlist.size() > 0) {
 
 				for (int i = 0; i < sortlist.size(); ++i) {

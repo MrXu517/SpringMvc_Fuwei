@@ -78,7 +78,7 @@
 									<td>
 										货号
 									</td>
-									<td><%=order.getProductNumber()%></td>
+									<td><%=order.getCompany_productNumber()%></td>
 								</tr>
 								<tr>
 									<td>
@@ -214,7 +214,7 @@
 								<td>
 									<table class="auto_height stickedTb">
 										<caption>
-											<%=order.getProductNumber() + order.getName()%>
+											<%=order.getCompany_productNumber() + order.getName()%>
 											检验包装记录单
 										</caption>
 										<thead>

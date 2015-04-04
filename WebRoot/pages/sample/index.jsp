@@ -167,7 +167,7 @@
 
 										<li class="active">
 											<a
-												href="sample/index?charge_user=<%=charge_user_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%><span
+												href="sample/index?charge_user=<%=charge_user_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
 												class="sr-only"></span> </a>
 										</li>
 										<li>
@@ -259,7 +259,7 @@
 									</thead>
 									<tbody>
 										<%
-											int i = 0;
+											int i = (pager.getPageNo()-1) * pager.getPageSize() + 0;
 											for (Sample sample : samplelist) {
 										%>
 										<tr sampleId="<%=sample.getId()%>">

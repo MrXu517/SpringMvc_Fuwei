@@ -111,7 +111,7 @@
 													</select>
 													</div>
 													
-												</td><td><div class="form-group pull-right">№：</div></td>
+												</td><td><div class="form-group pull-right">№：<input class="form-control" disabled type="text" value="自动生成" /></div></td>
 											</tr>
 
 											<tr>
@@ -122,7 +122,7 @@
 																公司
 															</td>
 															<td class="center" width="15%">
-																货号
+																公司货号
 															</td>
 															<td class="center" width="15%">
 																客户
@@ -148,8 +148,8 @@
 																</select>
 															</td>
 															<td class="center">
-																<input type="text" name="productNumber"
-																	id="productNumber" class="form-control require" />
+																<input type="text" name="company_productNumber"
+																	id="company_productNumber" class="form-control require" />
 															</td>
 															<td class="center">
 																<select class="form-control" name="customerId"
@@ -171,9 +171,18 @@
 																	class="form-control require" />
 															</td>
 														</tr>
+														<tr><td class="center vertical-center memo_label">备注</td><td colspan="3">
+																
+																		<input type="text" class="form-control"
+																			name="memo" id="memo" placeholder="备注">
+																	</div>
+																	
+															</td>
+														</tr>
 													</table>
 												</td>
 											</tr>
+											
 
 										</tbody>
 									</table>

@@ -93,6 +93,7 @@ public class UserController extends BaseController {
 				//更新缓存
 				new SystemCache().initUserList();
 			}
+			loginUser.reloadMessage();
 			//登录成功，若该用户的locked为true,则改为false
 			session.setAttribute(Constants.LOGIN_SESSION_NAME, loginUser);
 			return this.returnSuccess();

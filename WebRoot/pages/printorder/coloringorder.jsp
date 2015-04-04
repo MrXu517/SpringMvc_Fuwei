@@ -47,23 +47,21 @@
 								<tr>
 									<td>
 										供货单位：
-										<span><%=coloringOrder == null ? ""
-						: (SystemCache.getFactoryName(coloringOrder
-								.getFactoryId()))%></span>
+										<span><%=coloringOrder == null ? "" : (SystemCache
+						.getFactoryName(coloringOrder.getFactoryId()))%></span>
 
 									</td>
 									<td>
 										业务员：
-										<span><%=coloringOrder == null ? ""
-						: (SystemCache.getUserName((coloringOrder
-								.getCharge_user())))%></span>
+										<span><%=coloringOrder == null ? "" : (SystemCache
+						.getUserName((coloringOrder.getCharge_user())))%></span>
 									</td>
 									<td class="pull-right">
 
-										№：<%=coloringOrder.getOrderNumber()%>
+										№：<%=coloringOrder.getNumber()%>
 
 									</td>
-
+									<td></td>
 								</tr>
 
 
@@ -90,7 +88,7 @@
 								.getCompanyId())%></span>
 												</td>
 												<td class="center">
-													<span><%=coloringOrder.getProductNumber()%></span>
+													<span><%=coloringOrder.getCompany_productNumber()%></span>
 												</td>
 												<td class="center">
 													<span><%=SystemCache.getCustomerName(coloringOrder
@@ -99,10 +97,12 @@
 												<td class="center" width="30%">
 													<span><%=coloringOrder.getName()%></span>
 												</td>
-												<td class="center" width="10%">备注</td>
-												
+												<td class="center" width="10%">
+													备注
+												</td>
+
 											</tr>
-									
+
 											<tr class="tr">
 												<td width="15%">
 													色号
@@ -117,10 +117,11 @@
 													标准样纱
 												</td>
 												<td class="center" rowspan="7">
-													<span><%=coloringOrder.getMemo() == null ?"":coloringOrder.getMemo()%></span>
+													<span><%=coloringOrder.getMemo() == null ? ""
+						: coloringOrder.getMemo()%></span>
 												</td>
 											</tr>
-									
+
 											<%
 												for (ColoringOrderDetail detail : coloringOrderDetailList) {
 											%>
@@ -156,26 +157,31 @@
 
 										</table>
 									</td>
+									<td></td>
 								</tr>
+								<tr>
+									<td style="padding-top: 0;" colspan="3">
+										<div id="tip" class="auto_bottom">
+											<div>
+												说明：1.此单说明了本次采购的相关内容，请充分阅读并理解，如有疑问及时联系我方
+											</div>
+											<div class="tip_line">
+												2.材料品质及颜色要确保准确，颜色色牢度须达到4级以上。
+											</div>
+											<div class="tip_line">
+												3.不得含有偶氮、PCP、甲醛、APEO。不得有特殊气味，无致敏致癌物质。
+											</div>
+											<div class="tip_line">
+												4.贵单位须妥善保管此单据，结账时须提供此单据
+											</div>
 
+										</div>
+									</td>
+									<td></td>
+								</tr>
 							</tbody>
 						</table>
 
-						<div id="tip" class="auto_bottom">
-							<div>
-								说明：1.此单说明了本次采购的相关内容，请充分阅读并理解，如有疑问及时联系我方
-							</div>
-							<div class="tip_line">
-								2.材料品质及颜色要确保准确，颜色色牢度须达到4级以上。
-							</div>
-							<div class="tip_line">
-								3.不得含有偶氮、PCP、甲醛、APEO。不得有特殊气味，无致敏致癌物质。
-							</div>
-							<div class="tip_line">
-								4.贵单位须妥善保管此单据，结账时须提供此单据
-							</div>
-
-						</div>
 
 						<p class="pull-right auto_bottom">
 							<span id="created_user">制单人：<%=SystemCache.getUserName(coloringOrder

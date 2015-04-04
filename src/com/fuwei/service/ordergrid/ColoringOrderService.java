@@ -17,6 +17,7 @@ import com.fuwei.entity.ordergrid.CarFixRecordOrder;
 import com.fuwei.entity.ordergrid.ColoringOrder;
 import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
 import com.fuwei.service.BaseService;
+import com.fuwei.util.CreateNumberUtil;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
 
@@ -41,8 +42,10 @@ public class ColoringOrderService extends BaseService {
 						.getDetaillist()));
 
 				Integer tableOrderId = this.insert(tableOrder);
-
+				
 				tableOrder.setId(tableOrderId);
+				tableOrder.setNumber(tableOrder.createNumber());
+				this.update(tableOrder, "id", null);
 
 				return tableOrderId;
 			}
@@ -70,7 +73,7 @@ public class ColoringOrderService extends BaseService {
 
 				// 更新表
 				this.update(tableOrder, "id",
-						"created_user,created_at,orderId", true);
+						"created_user,created_at,orderId,number", true);
 
 				return tableOrder.getId();
 			}
@@ -105,7 +108,7 @@ public class ColoringOrderService extends BaseService {
 	}
 
 	// 获取染色单列表
-	public Pager getList(Pager pager, Date start_time, Date end_time,
+	public Pager getList(Pager pager, Date start_time, Date end_time,Integer companyId, Integer factoryId,
 			List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
@@ -122,6 +125,14 @@ public class ColoringOrderService extends BaseService {
 				sql.append(seq + " created_at<='"
 						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
 						+ "'");
+				seq = " AND ";
+			}
+			if (companyId != null) {
+				sql.append(seq + " companyId='" + companyId + "'");
+				seq = " AND ";
+			}
+			if (factoryId != null) {
+				sql.append(seq + " factoryId='" + factoryId + "'");
 				seq = " AND ";
 			}
 

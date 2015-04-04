@@ -1,9 +1,12 @@
 package com.fuwei.entity.ordergrid;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
 import com.fuwei.constant.OrderStatus;
+import com.fuwei.util.DateTool;
+import com.fuwei.util.NumberUtil;
 import com.fuwei.util.SerializeTool;
 
 import net.keepsoft.commons.annotation.IdentityId;
@@ -57,6 +60,28 @@ public class MaterialPurchaseOrder extends BaseTableOrder{
 	
 	private Integer status;// 订单状态 -1刚创建  , 6执行完成 ， 7取消
 	private String state;// 订单状态描述
+	
+	private String number ; //单据number属性
+	
+	
+	//2015-4-4 添加 样品的公司货号
+	private String company_productNumber;//样品的公司货号
+	
+	
+	
+	public String getCompany_productNumber() {
+		return company_productNumber;
+	}
+
+	public void setCompany_productNumber(String company_productNumber) {
+		this.company_productNumber = company_productNumber;
+	}
+	public String getNumber() {
+		return number;
+	}
+	public void setNumber(String number) {
+		this.number = number;
+	}
 	public Integer getStatus() {
 		return status;
 	}
@@ -276,4 +301,7 @@ public class MaterialPurchaseOrder extends BaseTableOrder{
 		this.purchase_at = purchase_at;
 	}
 	
+	public String createNumber() throws ParseException{
+		return DateTool.getYear2() + "CG" + NumberUtil.appendZero(this.id, 4);
+	}
 }

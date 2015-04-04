@@ -76,6 +76,19 @@ public class Order implements Serializable {
 	//2015-3-4增加
 	private Boolean in_use;//是否取消
 	
+	
+	//2015-4-4 添加 样品的公司货号
+	private String company_productNumber;//样品的公司货号
+	
+	
+	
+	public String getCompany_productNumber() {
+		return company_productNumber;
+	}
+
+	public void setCompany_productNumber(String company_productNumber) {
+		this.company_productNumber = company_productNumber;
+	}
 
 	public Boolean getIn_use() {
 		return in_use;

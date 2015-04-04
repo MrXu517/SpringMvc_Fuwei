@@ -142,7 +142,7 @@
 												</td>
 												<td>
 													<div class="form-group pull-right">
-														№：
+														№：<%=coloringOrder.getNumber() %>
 													</div>
 												</td>
 											</tr>
@@ -155,7 +155,7 @@
 																公司
 															</td>
 															<td class="center" width="15%">
-																货号
+																公司货号
 															</td>
 															<td class="center" width="15%">
 																客户
@@ -188,10 +188,10 @@
 																</select>
 															</td>
 															<td class="center">
-																<input type="text" name="productNumber"
-																	id="productNumber" class="form-control"
-																	value="<%=coloringOrder.getProductNumber() == null ? ""
-					: coloringOrder.getProductNumber()%>" />
+																<input type="text" name="company_productNumber"
+																	id="company_productNumber" class="form-control"
+																	value="<%=coloringOrder.getCompany_productNumber() == null ? ""
+					: coloringOrder.getCompany_productNumber()%>" />
 															</td>
 															<td class="center">
 																<select class="form-control" name="customerId"
@@ -221,6 +221,14 @@
 																	value="<%=coloringOrder.getName() == null ? "" : coloringOrder
 					.getName()%>" />
 
+															</td>
+														</tr>
+														<tr><td class="center vertical-center memo_label">备注</td><td colspan="3">
+																
+																		<input type="text" class="form-control"
+																			name="memo" id="memo" placeholder="备注" value="<%=coloringOrder.getMemo() == null ? "" : coloringOrder.getMemo()%>">
+																	</div>
+																	
 															</td>
 														</tr>
 													</table>

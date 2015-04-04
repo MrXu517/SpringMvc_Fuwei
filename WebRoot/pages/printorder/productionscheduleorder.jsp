@@ -62,7 +62,7 @@
 								<td>
 									货号
 								</td>
-								<td><%=order.getProductNumber()%></td>
+								<td><%=order.getCompany_productNumber()%></td>
 							</tr>
 							<tr>
 								<td>

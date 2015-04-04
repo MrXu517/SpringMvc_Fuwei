@@ -12,4 +12,8 @@ public class NumberUtil {
 	public static int ceil(double value){
 		return (int)Math.ceil(value);
 	}
+	
+	public static String appendZero(int num,int total){
+		return String.format("%0"+total+"d",num);
+	}
 }

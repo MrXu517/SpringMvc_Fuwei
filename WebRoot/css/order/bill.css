@@ -85,6 +85,10 @@ p#sign{
 	width:200px;
 	display: inline-block;
 }
+.saveform .form-group input{
+	display: inline-block;
+	width: 200px;
+}
 .body{
 	width: 1100px;
   	margin: auto;
@@ -104,4 +108,13 @@ p#sign{
 }
 .addRow {
   margin-bottom: 5px;
+}
+.coloringorderWidget #memo{
+	display:inline-block;
+}
+.vertical-center{
+	vertical-align:middle !important;
+}
+.memo_label{
+	font-size: 15px;
 }

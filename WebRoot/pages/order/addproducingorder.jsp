@@ -29,6 +29,8 @@
 	if (detaillist == null) {
 		detaillist = new ArrayList<ProducingOrderDetail>();
 	}
+	
+	Boolean has_order_producing_price_edit = SystemCache.hasAuthority(session,"order/producing/price_edit");
 %>
 <!DOCTYPE html>
 <html>
@@ -207,9 +209,11 @@
 																<th width="15%">
 																	生产数量
 																</th>
+																<%if(has_order_producing_price_edit){ %>
 																<th width="15%">
 																	价格(/个)
 																</th>
+																<%} %>
 																<th width="15%">
 																	操作
 																</th>
@@ -233,10 +237,12 @@
 																	<input type="text" class="form-control quantity value"
 																		value="<%=detail.getQuantity()%>" />
 																</td>
+																<%if(has_order_producing_price_edit){ %>
 																<td class="double">
 																	<input type="text" class="form-control price value"
 																		value="<%=detail.getPrice()%>" />
 																</td>
+																<%} %>
 																<td class="_handle">
 																	<a href="#" class="delete"><i class="fa fa-trash-o"></i>
 																	</a>
@@ -373,6 +379,7 @@
 											</div>
 											<div class="col-sm-1"></div>
 										</div>
+										<%if(has_order_producing_price_edit){ %>
 										<div class="form-group col-md-12">
 											<label for="price" class="col-sm-3 control-label">
 												单价
@@ -383,6 +390,7 @@
 											</div>
 											<div class="col-sm-1"></div>
 										</div>
+										<%} %>
 										<div class="modal-footer">
 											<button type="submit" class="btn btn-primary"
 												data-loading-text="正在保存...">

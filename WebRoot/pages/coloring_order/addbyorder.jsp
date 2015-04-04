@@ -121,7 +121,7 @@
 												</td>
 												<td>
 													<div class="form-group pull-right">
-														№：
+														№：<input class="form-control" disabled type="text" value="自动生成" />
 													</div>
 												</td>
 											</tr>
@@ -134,7 +134,7 @@
 																公司
 															</td>
 															<td class="center" width="15%">
-																货号
+																公司货号
 															</td>
 															<td class="center" width="15%">
 																客户
@@ -167,10 +167,10 @@
 																</select>
 															</td>
 															<td class="center">
-																<input readonly type="text" name="productNumber"
-																	id="productNumber" class="form-control"
-																	value="<%=order.getProductNumber() == null ? "" : order
-					.getProductNumber()%>" />
+																<input readonly type="text" name="company_productNumber"
+																	id="company_productNumber" class="form-control"
+																	value="<%=order.getCompany_productNumber() == null ? "" : order
+					.getCompany_productNumber()%>" />
 															</td>
 															<td class="center">
 																<select class="form-control" name="customerId"
@@ -198,6 +198,14 @@
 																<input readonly type="text" name="name" id="name"
 																	class="form-control"
 																	value="<%=order.getName() == null ? "" : order.getName()%>" />
+															</td>
+														</tr>
+														<tr><td class="center vertical-center memo_label">备注</td><td colspan="3">
+																
+																		<input type="text" class="form-control"
+																			name="memo" id="memo" placeholder="备注">
+																	</div>
+																	
 															</td>
 														</tr>
 													</table>

@@ -59,10 +59,10 @@
 									</td>
 									<td class="pull-right">
 
-										№：<%=materialPurchaseOrder.getOrderNumber()%>
+										№：<%=materialPurchaseOrder.getNumber()%>
 
 									</td>
-
+									<td></td>
 								</tr>
 
 								<tr>
@@ -88,7 +88,7 @@
 								.getCompanyId())%></span>
 												</td>
 												<td class="center">
-													<span><%=materialPurchaseOrder.getProductNumber()%></span>
+													<span><%=materialPurchaseOrder.getCompany_productNumber()%></span>
 												</td>
 												<td class="center">
 													<span><%=SystemCache.getCustomerName(materialPurchaseOrder
@@ -100,66 +100,62 @@
 											</tr>
 										</table>
 									</td>
+									<td></td>
 								</tr>
+								<tr>
+									<td colspan="3">
+										<table class="detailTb">
 
-							</tbody>
-						</table>
+											<thead>
+												<tr>
+													<th width="15%" class="pull-left">
+														材料品种
+													</th>
+													<th width="15%" class="pull-left">
+														数量(kg)
+													</th>
+													<th width="30%" class="pull-left">
+														备注
+													</th>
 
-						<table id="mainTb" class="noborder">
-							<tr>
-								<td>
-									<table class="detailTb">
-
-										<thead>
-											<tr>
-												<th width="15%">
-													材料品种
-												</th>
-												<th width="15%">
-													数量(kg)
-												</th>
-												<th width="30%">
-													备注
-												</th>
-
-											</tr>
-										</thead>
-										<tbody>
-											<%
-												for (MaterialPurchaseOrderDetail detail : materialPurchaseOrderDetailList) {
-											%>
-											<tr class="tr">
-												<td class="material_name"><%=SystemCache.getMaterialName(detail
+												</tr>
+											</thead>
+											<tbody>
+												<%
+													for (MaterialPurchaseOrderDetail detail : materialPurchaseOrderDetailList) {
+												%>
+												<tr class="tr">
+													<td class="material_name"><%=SystemCache.getMaterialName(detail
 											.getMaterial())%>
-												</td>
-												<td class="quantity"><%=detail.getQuantity()%>
-												</td>
-												<td class="memo"><%=detail.getMemo() == null ? "" : detail
+													</td>
+													<td class="quantity"><%=detail.getQuantity()%>
+													</td>
+													<td class="memo"><%=detail.getMemo() == null ? "" : detail
 							.getMemo()%>
-												</td>
-											</tr>
+													</td>
+												</tr>
 
-											<%
-												}
-													int i = materialPurchaseOrderDetailList.size();
-													for (; i < 6; ++i) {
-											%>
-											<tr class="tr">
-												<td class="material_name">
-													&nbsp;
-												</td>
-												<td class="quantity">
-												</td>
-												<td class="memo">
-												</td>
-											</tr>
-											<%
-												}
-											%>
-										</tbody>
-									</table>
+												<%
+													}
+														int i = materialPurchaseOrderDetailList.size();
+														for (; i < 6; ++i) {
+												%>
+												<tr class="tr">
+													<td class="material_name">
+														&nbsp;
+													</td>
+													<td class="quantity">
+													</td>
+													<td class="memo">
+													</td>
+												</tr>
+												<%
+													}
+												%>
+											</tbody>
+										</table>
 
-									<!-- 	<table class="detailTb auto_height stickedTb">
+										<!-- 	<table class="detailTb auto_height stickedTb">
 									<tbody>
 										<tr>
 											<td></td>
@@ -170,25 +166,37 @@
 										</tr>
 									</tbody>
 								</table> -->
-								</td>
-							</tr>
+									</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td colspan="3">
+										<div id="tip" class="auto_bottom">
+											<div>
+												说明：1.此单说明了本次采购的相关内容，请充分阅读并理解，如有疑问及时联系我方
+											</div>
+											<div class="tip_line">
+												2.材料品质及颜色要确保准确，颜色色牢度须达到4级以上。
+											</div>
+											<div class="tip_line">
+												3.不得含有偶氮、PCP、甲醛、APEO。不得有特殊气味，无致敏致癌物质。
+											</div>
+											<div class="tip_line">
+												4.贵单位须妥善保管此单据，结账时须提供此单据
+											</div>
+
+										</div>
+									</td>
+									<td></td>
+								</tr>
+							</tbody>
 						</table>
 
-						<div id="tip" class="auto_bottom">
-							<div>
-								说明：1.此单说明了本次采购的相关内容，请充分阅读并理解，如有疑问及时联系我方
-							</div>
-							<div class="tip_line">
-								2.材料品质及颜色要确保准确，颜色色牢度须达到4级以上。
-							</div>
-							<div class="tip_line">
-								3.不得含有偶氮、PCP、甲醛、APEO。不得有特殊气味，无致敏致癌物质。
-							</div>
-							<div class="tip_line">
-								4.贵单位须妥善保管此单据，结账时须提供此单据
-							</div>
+						<table id="mainTb" class="noborder">
 
-						</div>
+						</table>
+
+
 
 						<p class="pull-right auto_bottom">
 							<span id="created_user">制单人：<%=SystemCache.getUserName(materialPurchaseOrder

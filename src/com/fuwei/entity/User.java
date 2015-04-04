@@ -5,6 +5,7 @@ import java.util.Date;
 
 import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
+import net.keepsoft.commons.annotation.Temporary;
 
 @Table("tb_user")
 public class User implements Serializable {
@@ -40,6 +41,19 @@ public class User implements Serializable {
 	
 	private Boolean built_in = false;//是否是内建用户，内建用户（比如：系统管理员是不能被删或者注销的）
 	
+	@Temporary
+	private Boolean need_message_cache_update = false;//是否需要更新 消息缓存,暂时数据，不存放在数据库
+	
+	 
+	
+	public Boolean getNeed_message_cache_update() {
+		return need_message_cache_update;
+	}
+
+	public void setNeed_message_cache_update(Boolean need_message_cache_update) {
+		this.need_message_cache_update = need_message_cache_update;
+	}
+
 	public Boolean getBuilt_in() {
 		return built_in;
 	}

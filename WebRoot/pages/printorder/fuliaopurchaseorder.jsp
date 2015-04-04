@@ -51,28 +51,27 @@
 									<td>
 
 										供货单位：
-										<span><%=fuliaoPurchaseOrder == null ? ""
-						: (SystemCache.getFactoryName(fuliaoPurchaseOrder
-								.getFactoryId()))%></span>
+										<span><%=fuliaoPurchaseOrder == null ? "" : (SystemCache
+						.getFactoryName(fuliaoPurchaseOrder.getFactoryId()))%></span>
 
 									</td>
 									<td>
 										业务员：
-										<span><%=fuliaoPurchaseOrder == null ? ""
-						: (SystemCache.getUserName((fuliaoPurchaseOrder
-								.getCharge_user())))%></span>
+										<span><%=fuliaoPurchaseOrder == null ? "" : (SystemCache
+						.getUserName((fuliaoPurchaseOrder.getCharge_user())))%></span>
 									</td>
 									<td class="pull-right">
 
-										№：<%=fuliaoPurchaseOrder.getOrderNumber()%>
+										№：<%=fuliaoPurchaseOrder.getNumber()%>
 
 									</td>
+									<td></td>
 
 								</tr>
 
 
 								<tr>
-									<td colspan="5">
+									<td colspan="3">
 										<table>
 											<tr>
 												<td class="center" width="15%">
@@ -94,7 +93,7 @@
 								.getCompanyId())%></span>
 												</td>
 												<td class="center">
-													<span><%=fuliaoPurchaseOrder.getProductNumber()%></span>
+													<span><%=fuliaoPurchaseOrder.getCompany_productNumber()%></span>
 												</td>
 												<td class="center">
 													<span><%=SystemCache.getCustomerName(fuliaoPurchaseOrder
@@ -106,93 +105,86 @@
 											</tr>
 										</table>
 									</td>
+									<td></td>
 								</tr>
+								<tr>
+									<td colspan="3">
+										<table class="detailTb">
 
+											<thead>
+												<tr>
+													<th width="15%">
+														材料
+													</th>
+													<th width="15%">
+														数量(kg)
+													</th>
+													<th width="30%">
+														备注
+													</th>
+												</tr>
+											</thead>
+											<tbody>
+												<%
+													for (FuliaoPurchaseOrderDetail detail : fuliaoPurchaseOrderDetailList) {
+												%>
+												<tr class="tr">
+													<td class="style_name"><%=SystemCache.getMaterialName(detail.getStyle())%>
+													</td>
+													<td class="quantity"><%=detail.getQuantity()%>
+													</td>
+													<td class="memo"><%=detail.getMemo() == null ? "" : detail
+							.getMemo()%>
+													</td>
+												</tr>
+
+												<%
+													}
+														int i = fuliaoPurchaseOrderDetailList.size();
+														for (; i < 6; ++i) {
+												%>
+												<tr>
+													<td class="style_name">
+														&nbsp;
+													</td>
+													<td class="quantity">
+													</td>
+													<td class="memo">
+													</td>
+												</tr>
+												<%
+													}
+												%>
+											</tbody>
+										</table>
+
+
+									</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td colspan="3">
+										<div id="tip" class="auto_bottom">
+											<div>
+												说明：1.此单说明了本次采购的相关内容，请充分阅读并理解，如有疑问及时联系我方
+											</div>
+											<div class="tip_line">
+												2.材料品质及颜色要确保准确，颜色色牢度须达到4级以上。
+											</div>
+											<div class="tip_line">
+												3.不得含有偶氮、PCP、甲醛、APEO。不得有特殊气味，无致敏致癌物质。
+											</div>
+											<div class="tip_line">
+												4.贵单位须妥善保管此单据，结账时须提供此单据
+											</div>
+
+										</div>
+									</td>
+									<td></td>
+								</tr>
 							</tbody>
 						</table>
 
-						<table id="mainTb" class="noborder">
-							<tr>
-								<td>
-									<table class="detailTb">
-
-										<thead>
-											<tr>
-												<th width="15%">
-													材料
-												</th>
-												<th width="15%">
-													数量(kg)
-												</th>
-												<th width="30%">
-													备注
-												</th>
-											</tr>
-										</thead>
-										<tbody>
-											<%
-												for (FuliaoPurchaseOrderDetail detail : fuliaoPurchaseOrderDetailList) {
-											%>
-											<tr class="tr">
-												<td class="style_name"><%=SystemCache.getMaterialName(detail.getStyle())%>
-												</td>
-												<td class="quantity"><%=detail.getQuantity()%>
-												</td>
-												<td class="memo"><%=detail.getMemo() == null ? "" : detail
-							.getMemo()%>
-												</td>
-											</tr>
-
-											<%
-												}
-													int i = fuliaoPurchaseOrderDetailList.size();
-													for (; i < 6; ++i) {
-											%>
-											<tr>
-												<td class="style_name">
-													&nbsp;
-												</td>
-												<td class="quantity">
-												</td>
-												<td class="memo">
-												</td>
-											</tr>
-											<%
-												}
-											%>
-										</tbody>
-									</table>
-
-									<!-- 	<table class="detailTb auto_height stickedTb">
-									<tbody>
-										<tr>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-										</tr>
-									</tbody>
-								</table> -->
-								</td>
-							</tr>
-						</table>
-
-						<div id="tip" class="auto_bottom">
-							<div>
-								说明：1.此单说明了本次采购的相关内容，请充分阅读并理解，如有疑问及时联系我方
-							</div>
-							<div class="tip_line">
-								2.材料品质及颜色要确保准确，颜色色牢度须达到4级以上。
-							</div>
-							<div class="tip_line">
-								3.不得含有偶氮、PCP、甲醛、APEO。不得有特殊气味，无致敏致癌物质。
-							</div>
-							<div class="tip_line">
-								4.贵单位须妥善保管此单据，结账时须提供此单据
-							</div>
-
-						</div>
 
 						<p class="pull-right auto_bottom">
 							<span id="created_user">制单人：<%=SystemCache.getUserName(fuliaoPurchaseOrder

@@ -6,6 +6,7 @@ package com.fuwei.filter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -85,7 +86,19 @@ public class CheckUserLoginFilter implements Filter {
 							redirectTo(request, response, LOGIN_URL,true,full_url);
 							return;
 						}
+						//2015-4-4添加 用户是否需要更新缓存 未读信息
+						if(user.getNeed_message_cache_update()){
+							try {
+								sessionUser.reloadMessage();
+								//SystemCache.setUserCacheUpdate(sessionUser.getLoginedUser().getId(),false);
+							} catch (Exception e) {
+								session.removeAttribute(Constants.LOGIN_SESSION_NAME);
+								redirectTo(request, response, LOGIN_URL,false,full_url);
+								return;
+							}
+						}
 					}
+					
 				}
 				chain.doFilter(servletRequest, servletResponse);
 			}

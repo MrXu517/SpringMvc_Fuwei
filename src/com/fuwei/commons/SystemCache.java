@@ -12,12 +12,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import com.fuwei.constant.Constants;
 import com.fuwei.entity.Authority;
 import com.fuwei.entity.Company;
 import com.fuwei.entity.Customer;
 import com.fuwei.entity.Factory;
 import com.fuwei.entity.GongXu;
 import com.fuwei.entity.Material;
+import com.fuwei.entity.Message;
 import com.fuwei.entity.Role;
 import com.fuwei.entity.Salesman;
 import com.fuwei.entity.User;
@@ -26,6 +28,7 @@ import com.fuwei.service.CustomerService;
 import com.fuwei.service.FactoryService;
 import com.fuwei.service.GongXuService;
 import com.fuwei.service.MaterialService;
+import com.fuwei.service.MessageService;
 import com.fuwei.service.RoleService;
 import com.fuwei.service.SalesmanService;
 import com.fuwei.service.UserService;
@@ -48,6 +51,7 @@ public class SystemCache {
 	
 	CustomerService customerService;
 	
+	
 	public SystemCache() {
 		companyService = (CompanyService) SystemContextUtils
 				.getBean(CompanyService.class);
@@ -65,6 +69,7 @@ public class SystemCache {
 		.getBean(MaterialService.class);
 		customerService = (CustomerService)SystemContextUtils
 		.getBean(CustomerService.class);
+		
 	}
 
 
@@ -94,6 +99,7 @@ public class SystemCache {
 	
 	//缓存客户
 	public static List<Customer> customerlist = new ArrayList<Customer>();
+	
 
 	public static void addCompany(Company company) {
 		companylist.add(company);
@@ -433,4 +439,13 @@ public class SystemCache {
 		return false;
 	}
 	/*权限相关*/
+	
+	//2015-4-4添加设置某用户的数据
+	public static void setUserCacheUpdate(int userId,Boolean need_message_cache_update){
+		for(com.fuwei.entity.User user : SystemCache.userlist){
+			if(user.getId() == userId){
+				user.setNeed_message_cache_update(need_message_cache_update);
+			}
+		}
+	}
 }

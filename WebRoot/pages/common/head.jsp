@@ -158,6 +158,12 @@
 				</ul>
 			</div>
 		</div>
+		<div class="messagenav">
+			<a href="message/unread" type="button" class="btn btn-danger"><i class="fa fa-envelope"></i>
+		<%if(loginedUser.getMessage_count() > 0){ %>
+<span><%=loginedUser.getMessage_count()%></span>
+		<%} %>
+		</a> </div>
 		<div class="logo">
 			<a href="user/index"><small> <i class="fa fa-leaf"></i>
 					桐庐富伟针织厂管理系统 </small> </a>

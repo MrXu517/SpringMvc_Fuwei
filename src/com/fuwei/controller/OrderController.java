@@ -81,7 +81,7 @@ import com.fuwei.service.OrderProduceStatusService;
 import com.fuwei.service.OrderService;
 import com.fuwei.service.ProductionNotificationService;
 import com.fuwei.service.QuoteOrderDetailService;
-import com.fuwei.service.QuoteOrderService;
+//import com.fuwei.service.QuoteOrderService;
 import com.fuwei.service.SampleService;
 import com.fuwei.service.ordergrid.CarFixRecordOrderService;
 import com.fuwei.service.ordergrid.CheckRecordOrderService;
@@ -99,7 +99,7 @@ import com.fuwei.service.ordergrid.ProductionScheduleOrderService;
 import com.fuwei.service.ordergrid.ShopRecordOrderService;
 import com.fuwei.service.ordergrid.StoreOrderService;
 import com.fuwei.util.DateTool;
-import com.fuwei.util.ExportExcel;
+//import com.fuwei.util.ExportExcel;
 import com.fuwei.util.HanyuPinyinUtil;
 import com.fuwei.util.NumberUtil;
 import com.fuwei.util.SerializeTool;
@@ -115,8 +115,8 @@ public class OrderController extends BaseController {
 	OrderHandleService orderHandleService;
 	@Autowired
 	AuthorityService authorityService;
-	@Autowired
-	QuoteOrderService quoteOrderService;
+//	@Autowired
+//	QuoteOrderService quoteOrderService;
 	@Autowired
 	QuoteOrderDetailService quoteOrderDetailService;
 	@Autowired
@@ -177,15 +177,15 @@ public class OrderController extends BaseController {
 			order.setAmount(0);// 设置订单总金额
 			List<OrderDetail> orderDetaillist = new ArrayList<OrderDetail>();// 设置订单详情
 			double amount = 0;
-			if (quoteOrderId != null) {
-				QuoteOrder quoteOrder = quoteOrderService.get(quoteOrderId);
-				List<QuoteOrderDetail> quoteOrderDetaillist = quoteOrderDetailService
-						.getListByQuoteOrder(quoteOrderId);
-				order.setCompanyId(SystemCache.getSalesman(
-						quoteOrder.getSalesmanId()).getCompanyId());// 设置订单公司
-				order.setSalesmanId(quoteOrder.getSalesmanId());// 设置订单业务员
-
-			}
+//			if (quoteOrderId != null) {
+//				QuoteOrder quoteOrder = quoteOrderService.get(quoteOrderId);
+//				List<QuoteOrderDetail> quoteOrderDetaillist = quoteOrderDetailService
+//						.getListByQuoteOrder(quoteOrderId);
+//				order.setCompanyId(SystemCache.getSalesman(
+//						quoteOrder.getSalesmanId()).getCompanyId());// 设置订单公司
+//				order.setSalesmanId(quoteOrder.getSalesmanId());// 设置订单业务员
+//
+//			}
 			order.setAmount(NumberUtil.formateDouble(amount, 3));// 设置订单总金额
 			// order.setDetaillist(orderDetaillist);//设置订单详情
 			request.setAttribute("order", order);
@@ -411,10 +411,10 @@ public class OrderController extends BaseController {
 		sortList.add(sort);
 		pager = orderService.getList(pager, start_time_d, end_time_d,
 				companyId, salesmanId, status, sortList);
-		if (pager != null & pager.getResult() != null) {
-			List<FuliaoPurchaseOrder> orderlist = (List<FuliaoPurchaseOrder>) pager.getResult();
-		}
-
+//		if (pager != null & pager.getResult() != null) {
+//			List<FuliaoPurchaseOrder> orderlist = (List<FuliaoPurchaseOrder>) pager.getResult();
+//		}
+		
 		request.setAttribute("start_time", start_time_d);
 		request.setAttribute("end_time", end_time_d);
 		request.setAttribute("salesmanId", salesmanId);
@@ -762,6 +762,9 @@ public class OrderController extends BaseController {
 			throw e;
 		}
 	}
+	
+	
+	
 	// 添加或保存生产单
 	@RequestMapping(value = "/producingorder", method = RequestMethod.POST)
 	@ResponseBody

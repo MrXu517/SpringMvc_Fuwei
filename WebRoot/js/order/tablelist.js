@@ -40,6 +40,73 @@ $(document).ready(function() {
 	//$("#printAlla").click(function(){return true;});
 	//2015-4-3添加打印表格时要勾选
 	
+	//2015-4-4添加 生产单 请求划价 、完成划价功能
+	$(".priceRequestBtn").click(function(){
+		$button = $(this);
+		var orderId = $(this).attr("orderid");
+		if(orderId == undefined || orderId == null || orderId == ""){
+			Common.Error("缺少订单ID");
+			return false;
+		}
+		var orderNumber = $(this).attr("ordernumber");
+		if(orderNumber == undefined || orderNumber == null || orderNumber == ""){
+			Common.Error("缺少订单号");
+			return false;
+		}
+		$button.button('loading');
+		$.ajax( {
+			url :"producing_order/price_request/"+orderId,
+			type :'POST',
+			data :{orderNumber:orderNumber},
+			success : function(result) {
+				if (result.success) {
+					Common.Tip("请求划价成功", function() {
+						
+					});
+				}
+				$button.button('reset');
+			},
+			error : function(result) {
+				Common.Error("请求划价失败：" + result.responseText);
+				$button.button('reset');
+			}
+		});
+	});
+	
+	$(".priceCompletedBtn").click(function(){
+		$button = $(this);
+		var orderId = $(this).attr("orderid");
+		if(orderId == undefined || orderId == null || orderId == ""){
+			Common.Error("缺少订单ID");
+			return false;
+		}
+		var orderNumber = $(this).attr("ordernumber");
+		if(orderNumber == undefined || orderNumber == null || orderNumber == ""){
+			Common.Error("缺少订单号");
+			return false;
+		}
+		$button.button('loading');
+		$.ajax( {
+			url :"producing_order/price_complete/"+orderId,
+			type :'POST',
+			data :{orderNumber:orderNumber},
+			success : function(result) {
+				if (result.success) {
+					Common.Tip("完成划价成功", function() {
+						
+					});
+				}
+				$button.button('reset');
+			},
+			error : function(result) {
+				Common.Error("完成划价失败：" + result.responseText);
+				$button.button('reset');
+			}
+		});
+	});
+	//2015-4-4添加 生产单 请求划价、完成划价功能
+	
+	
 	//质量记录单
 	var headBankGrid = new OrderGrid({
 		url:"order/headbank",

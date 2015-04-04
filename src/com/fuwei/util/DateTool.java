@@ -3,6 +3,7 @@ package com.fuwei.util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import com.alibaba.fastjson.JSON;
 import java.util.Calendar;
@@ -12,7 +13,10 @@ public class DateTool {
 	public static Date now() {
 		return new Date();
 	}
-
+	public static String getYear2()throws ParseException {
+		String yearLast = new SimpleDateFormat("yy",Locale.CHINESE).format(Calendar.getInstance().getTime());
+		return yearLast;
+	}
 	public static String formateDate(Date date) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return sdf.format(date);

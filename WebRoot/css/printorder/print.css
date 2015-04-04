@@ -90,8 +90,6 @@ p#sign{
 div#tip{
 	border: 1px solid #000;
   	border-top: none;
-  	margin: 1px;
-  	margin-top: 0;
 }
 #tip .tip_line{
 	text-indent:3em;
@@ -103,4 +101,7 @@ div#tip{
 	height:auto;
 	width: 21cm;
 	margin: auto;
+}
+.detailTb{
+	text-align:left;
 }

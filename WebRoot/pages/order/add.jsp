@@ -138,6 +138,20 @@
 										</div>
 
 										<div class="form-group col-md-6">
+											<label for="company_productNumber" class="col-sm-3 control-label">
+												公司货号
+											</label>
+											<div class="col-sm-8">
+												<input type="text" name="company_productNumber"
+													id="company_productNumber" class="form-control require"
+													value="<%=order.getCompany_productNumber() == null ? "" : order
+					.getCompany_productNumber()%>" />
+
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+
+										<div class="form-group col-md-6">
 											<label for="material" class="col-sm-3 control-label">
 												材料
 											</label>

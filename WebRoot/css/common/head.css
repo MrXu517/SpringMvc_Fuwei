@@ -477,3 +477,22 @@ body {
 	font-weight: bold;
 	margin-top: 50px;
 }
+.messagenav{
+	width: 45px;
+  	height: 45px;
+  	line-height: 45px;
+  	float: right;
+  	margin-right: 30px;
+  	color: #fff;
+}
+.messagenav>a{
+	width: 60px;
+  	height: 36px;
+}
+.messagenav>a>i{
+	font-size:1.4em;
+}
+.messagenav>a>span{
+	margin-left: 10px;
+  	font-size: 1.3em;
+}

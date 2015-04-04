@@ -83,7 +83,7 @@ fillTree = function(nodes) {
 			nocheckInherit :true,
 			chkboxType : {
 				"Y" :"ps",
-				"N" :"ps"
+				"N" :"s"
 			}
 		}
 

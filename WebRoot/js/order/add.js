@@ -142,10 +142,13 @@ $(document).ready( function() {
 						type :'GET',
 						success : function(sample) {
 							sample.sampleId = sample.id;
+							sample.company_productNumber = sample.productNumber;
 							Common.fillForm($(".orderform #sampleInfoWidget")[0], sample);
 							$("#sampleImgA").attr("href", "/" + sample.img);
 							$("#sampleImg").attr("src", "/" + sample.img_s);
 							$("#sampleDialog").modal('hide');
+							$("#company_productNumber").focus();
+							$("#company_productNumber").select();
 						},
 						error : function(result) {
 							Common.Error("获取订单详情信息失败：" + result.responseText);

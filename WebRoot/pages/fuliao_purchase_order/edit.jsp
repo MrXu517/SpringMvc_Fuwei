@@ -140,7 +140,7 @@
 												</td>
 												<td>
 													<div class="form-group pull-right">
-														№：
+														№：<%=fuliaoPurchaseOrder.getNumber() %>
 													</div>
 												</td>
 											</tr>
@@ -153,7 +153,7 @@
 																公司
 															</td>
 															<td class="center" width="15%">
-																货号
+																公司货号
 															</td>
 															<td class="center" width="15%">
 																客户
@@ -187,10 +187,10 @@
 																</select>
 															</td>
 															<td class="center">
-																<input type="text" name="productNumber"
-																	id="productNumber" class="form-control"
-																	value="<%=fuliaoPurchaseOrder.getProductNumber() == null ? ""
-							: fuliaoPurchaseOrder.getProductNumber()%>" />
+																<input type="text" name="company_productNumber"
+																	id="company_productNumber" class="form-control"
+																	value="<%=fuliaoPurchaseOrder.getCompany_productNumber() == null ? ""
+							: fuliaoPurchaseOrder.getCompany_productNumber()%>" />
 
 															</td>
 															<td class="center">

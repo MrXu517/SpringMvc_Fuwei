@@ -105,7 +105,7 @@ a.thumbnail{
 .materialorderWidget caption,.fuliaoorderWidget caption,.coloringorderWidget caption{
 	margin-bottom:20px;
 }
-#materialpurchaseorder .printBtn,#fuliaopurchaseorder .printBtn,#coloringorder .printBtn{
+#producingorder .printBtn,#materialpurchaseorder .printBtn,#fuliaopurchaseorder .printBtn,#coloringorder .printBtn{
 	margin-left:100px;
 	margin-top:30px;
 }
@@ -126,4 +126,7 @@ input.printcheck{
 	margin-right: 10px;
  	zoom: 1.4;
   	vertical-align: bottom;
+}
+#producingorder .priceRequestBtn ,#producingorder .priceCompletedBtn{
+	margin-top:30px;
 }

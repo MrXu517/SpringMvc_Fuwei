@@ -51,7 +51,7 @@
 	cursor: pointer !important;
 }
 .timegroup{
-	width:400px;
+	
 }
 .timegroup>label{
 	width:80px;
@@ -201,8 +201,11 @@
 .timegroup .control-label+div{
 	width:320px;
 }
-.searchform #companyId{
+.searchform #companyId,.searchform #factoryId{
 	width:150px;
+}
+.searchform .form-group{
+	margin-right:0;
 }
 .searchform #salesmanId{
 	width:100px;

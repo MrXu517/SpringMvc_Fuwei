@@ -1828,11 +1828,15 @@ TableTools.defaultConfig.getTrData = function(tr) {
             continue;
         }
         var $valueEle = $(tr).find("." + property_name);
+        if($valueEle.length <= 0){
+        	continue;
+        }
         if ($valueEle.hasClass(ValueClass)) {
             property_value = $valueEle.val();
         } else {
             property_value = $valueEle.text().trim();
         }
+        
         if ($valueEle[0].type == "checkbox") {
             property_value = $valueEle[0].checked;
         }

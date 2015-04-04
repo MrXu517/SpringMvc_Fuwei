@@ -138,7 +138,7 @@
 												</td>
 												<td>
 													<div class="form-group pull-right">
-														№：<%=materialPurchaseOrder.getOrderNumber() %>
+														№：<%=materialPurchaseOrder.getNumber() %>
 													</div>
 												</td>
 											</tr>
@@ -151,7 +151,7 @@
 																公司
 															</td>
 															<td class="center" width="15%">
-																货号
+																公司货号
 															</td>
 															<td class="center" width="15%">
 																客户
@@ -185,10 +185,10 @@
 																</select>
 															</td>
 															<td class="center">
-																<input readonly type="text" name="productNumber"
-																	id="productNumber" class="form-control"
-																	value="<%=materialPurchaseOrder.getProductNumber() == null ? ""
-							: materialPurchaseOrder.getProductNumber()%>" />
+																<input readonly type="text" name="company_productNumber"
+																	id="company_productNumber" class="form-control"
+																	value="<%=materialPurchaseOrder.getCompany_productNumber() == null ? ""
+							: materialPurchaseOrder.getCompany_productNumber()%>" />
 
 															</td>
 															<td class="center">

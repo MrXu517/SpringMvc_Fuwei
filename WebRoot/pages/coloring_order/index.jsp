@@ -3,6 +3,7 @@
 <%@page import="com.fuwei.entity.ordergrid.ColoringOrder"%>
 <%@page import="com.fuwei.entity.Salesman"%>
 <%@page import="com.fuwei.entity.Company"%>
+<%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.entity.User"%>
 <%@page import="com.fuwei.commons.Pager"%>
 <%@page import="com.fuwei.util.DateTool"%>
@@ -52,6 +53,19 @@
 		status_str = String.valueOf(status);
 	}
 	//订单状态status
+	
+	
+	
+	//2015-4-4添加
+	Integer factoryId = (Integer) request.getAttribute("factoryId");
+	String factory_str = "";
+	if (factoryId != null) {
+		factory_str = String.valueOf(factoryId);
+	}
+	
+	if (factoryId == null) {
+		factoryId = -1;
+	}
 
 
 	//权限相关
@@ -109,35 +123,11 @@
 							<div class="col-md-12 tablewidget">
 								<!-- Table -->
 								<div clas="navbar navbar-default">
-									<form class="form-horizontal searchform form-inline searchform"
+									<form class="form-horizontal form-inline searchform"
 										role="form">
 										<input type="hidden" name="page" id="page"
 											value="<%=pager.getPageNo()%>" />
-										<div class="form-group">
-											<label for="status" class="col-sm-3 control-label">
-												状态
-											</label>
-											<div class="col-sm-9">
-												<select class="form-control" name="status" id="status">
-													<option value="">
-														所有
-													</option>
-													<%
-														for (OrderStatus orderStatus : OrderStatus.values()) {
-															if (status!=null && orderStatus.ordinal() == status) {
-													%>
-													<option value="<%=orderStatus.ordinal()%>" selected><%=orderStatus.getName()%></option>
-													<%
-														} else {
-													%>
-													<option value="<%=orderStatus.ordinal()%>"><%=orderStatus.getName()%></option>
-													<%
-														}
-														}
-													%>
-												</select>
-											</div>
-										</div>
+									
 										<div class="form-group salesgroup">
 											<label for="companyId" class="col-sm-3 control-label">
 												公司
@@ -157,6 +147,31 @@
 														} else {
 													%>
 													<option value="<%=company.getId()%>"><%=company.getFullname()%></option>
+													<%
+														}
+														}
+													%>
+												</select>
+											</div>
+										</div>
+										<div class="form-group salesgroup">
+											<label for="factoryId" class="col-sm-3 control-label">
+												染色单位
+											</label>
+											<div class="col-sm-9">
+												<select class="form-control" name="factoryId" id="factoryId">
+													<option value="">
+														所有
+													</option>
+													<%
+														for (Factory factory : SystemCache.coloring_factorylist) {
+															if (factoryId == factory.getId()) {
+													%>
+													<option value="<%=factory.getId()%>" selected><%=factory.getName()%></option>
+													<%
+														} else {
+													%>
+													<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
 													<%
 														}
 														}
@@ -187,7 +202,7 @@
 									<ul class="pagination">
 										<li>
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
+												href="coloring_order/index?factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
 										</li>
 
 										<%
@@ -195,7 +210,7 @@
 									%>
 										<li class="">
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
+												href="coloring_order/index?factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -210,7 +225,7 @@
 
 										<li class="active">
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%><span
+												href="coloring_order/index?factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
 												class="sr-only"></span> </a>
 										</li>
 										<li>
@@ -220,7 +235,7 @@
 										
 										<li class="">
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
+												href="coloring_order/index?factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -236,7 +251,7 @@
 										</li>
 										<li>
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
+												href="coloring_order/index?factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
 
@@ -250,7 +265,7 @@
 											</th>
 
 											<th>
-												染色单ID
+												染色单号
 											</th>
 											<th>
 												染色单位
@@ -262,10 +277,7 @@
 												客户
 											</th>
 											<th>
-												货号
-											</th>
-											<th>
-												订单ID
+												公司货号
 											</th>
 											<th>
 												创建人
@@ -280,18 +292,18 @@
 									</thead>
 									<tbody>
 										<%
-											int i = 0;
+											int i = (pager.getPageNo()-1) * pager.getPageSize() + 0;
 											for (ColoringOrder coloringOrder : coloringOrderlist) {
 										%>
 										<tr orderId="<%=coloringOrder.getId()%>">
 											<td><%=++i%></td>
-											<td><%=coloringOrder.getId()%></td>
+											<td><%=coloringOrder.getNumber() == null ? "" : coloringOrder.getNumber()%></td>
 											<td><%=SystemCache.getFactoryName(coloringOrder.getFactoryId())%></td>
 											<td><%=SystemCache.getCompanyName(coloringOrder
 										.getCompanyId())%></td>
 											<td><%=SystemCache.getCustomerName(coloringOrder.getCustomerId())%></td>
-											<td><%=coloringOrder.getProductNumber()%></td>
-											<td><%=coloringOrder.getOrderId() == null ? "":coloringOrder.getOrderId()%></td>
+											<td><%=coloringOrder.getCompany_productNumber()%></td>
+											
 											<td><%=SystemCache.getUserName(coloringOrder
 										.getCreated_user())%></td>
 											<td><%=DateTool.formatDateYMD(coloringOrder.getCreated_at())%></td>

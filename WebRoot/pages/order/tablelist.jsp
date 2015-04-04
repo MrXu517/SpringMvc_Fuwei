@@ -133,6 +133,8 @@
 			"fuliao_purchase_order/delete");
 	Boolean has_producing_order_delete = SystemCache.hasAuthority(session,
 			"order/producing/delete");
+	Boolean has_order_producing_price_edit = SystemCache.hasAuthority(session,"order/producing/price_edit");
+	Boolean has_order_producing_price_request = SystemCache.hasAuthority(session,"order/producing/price_request");
 %>
 <!DOCTYPE html>
 <html>
@@ -309,7 +311,7 @@
 																		<td>
 																			货号
 																		</td>
-																		<td><%=order.getProductNumber()%></td>
+																		<td><%=order.getCompany_productNumber()%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -408,7 +410,15 @@
 										class="btn btn-primary" id="createProducingorderBtn">创建生产单</a>
 								</div>
 								<%} %>
-
+								<a  href="printorder/print?orderId=<%=order.getId() %>&gridName=producingorder" target="_blank" type="button"
+												class="printBtn btn btn-success"
+												data-loading-text="正在打印..."> 打印生产单 </a>
+								<%if(!has_order_producing_price_edit && has_order_producing_price_request){ %>
+								<button orderid="<%=order.getId() %>" ordernumber="<%=order.getOrderNumber() %>" type="button" class="priceRequestBtn btn btn-info" data-loading-text="正在请求划价..."> 请求划价  </button>
+								<%} %>
+								<%if(has_order_producing_price_edit){ %>
+								<button orderid="<%=order.getId() %>" ordernumber="<%=order.getOrderNumber() %>" type="button" class="priceCompletedBtn btn btn-info" data-loading-text="正在完成划价..."> 完成划价  </button>
+								<%} %>
 								<%
 									for (ProducingOrder producingOrder : producingOrderList) {
 										List<ProducingOrderDetail> producingOrderDetailList = producingOrder == null ? new ArrayList<ProducingOrderDetail>()
@@ -436,8 +446,8 @@
 													data-loading-text="正在删除..."> 删除 </a>
 												<%} %>
 											<%} %>
-											<a target="_blank" type="button"
-												class="pull-right btn btn-success printBtn"
+											<a href="producing_order/print/<%=producingOrder.getId()%>" target="_blank" type="button"
+												class="pull-right btn btn-success"
 												data-loading-text="正在打印..."> 打印 </a>
 										</form>
 
@@ -495,7 +505,7 @@
 																		<td>
 																			货号
 																		</td>
-																		<td><%=order.getProductNumber()%></td>
+																		<td><%=order.getCompany_productNumber()%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -537,9 +547,11 @@
 																		<th width="15%">
 																			生产数量
 																		</th>
+																		
 																		<th width="15%">
-																			价格(/个)
+																			价格(/个、顶、套)
 																		</th>
+																		
 
 																	</tr>
 																</thead>
@@ -561,10 +573,14 @@
 																			<input class="form-control require quantity value"
 																				value="<%=detail.getQuantity()%>" />
 																		</td>
+																		<%if(has_order_producing_price_edit){ %>
 																		<td class="double">
 																			<input class="form-control require price value"
 																				value="<%=detail.getPrice()%>" />
 																		</td>
+																		<%}else{ %>
+																		<td class="price"><%=detail.getPrice()%></td>
+																		<%} %>
 																	</tr>
 
 																	<%
@@ -807,7 +823,7 @@
 																		<td>
 																			货号
 																		</td>
-																		<td><%=order.getProductNumber()%></td>
+																		<td><%=order.getCompany_productNumber()%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -972,7 +988,7 @@
 																		<td>
 																			货号
 																		</td>
-																		<td><%=order.getProductNumber()%></td>
+																		<td><%=order.getCompany_productNumber()%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -1253,7 +1269,7 @@
 																		<td>
 																			货号
 																		</td>
-																		<td><%=order.getProductNumber()%></td>
+																		<td><%=order.getCompany_productNumber()%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -1540,7 +1556,7 @@
 									</td>
 									<td class="pull-right">
 
-										№：<%=materialPurchaseOrder.getOrderNumber()%>
+										№：<%=materialPurchaseOrder.getNumber()%>
 
 									</td>
 
@@ -1569,7 +1585,7 @@
 								.getCompanyId())%></span>
 												</td>
 												<td class="center">
-													<span><%=materialPurchaseOrder.getProductNumber()%></span>
+													<span><%=materialPurchaseOrder.getCompany_productNumber()%></span>
 												</td>
 												<td class="center">
 													<span><%=SystemCache.getCustomerName(materialPurchaseOrder
@@ -1813,7 +1829,7 @@
 									</td>
 									<td class="pull-right">
 
-										№：<%=coloringOrder.getOrderNumber()%>
+										№：<%=coloringOrder.getNumber()%>
 
 									</td>
 
@@ -1843,7 +1859,7 @@
 								.getCompanyId())%></span>
 												</td>
 												<td class="center">
-													<span><%=coloringOrder.getProductNumber()%></span>
+													<span><%=coloringOrder.getCompany_productNumber()%></span>
 												</td>
 												<td class="center">
 													<span><%=SystemCache.getCustomerName(coloringOrder
@@ -2089,7 +2105,7 @@
 																		<td>
 																			货号
 																		</td>
-																		<td><%=order.getProductNumber()%></td>
+																		<td><%=order.getCompany_productNumber()%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -2249,7 +2265,7 @@
 									</td>
 									<td class="pull-right">
 
-										№：<%=fuliaoPurchaseOrder.getOrderNumber()%>
+										№：<%=fuliaoPurchaseOrder.getNumber()%>
 
 									</td>
 
@@ -2279,7 +2295,7 @@
 								.getCompanyId())%></span>
 												</td>
 												<td class="center">
-													<span><%=fuliaoPurchaseOrder.getProductNumber()%></span>
+													<span><%=fuliaoPurchaseOrder.getCompany_productNumber()%></span>
 												</td>
 												<td class="center">
 													<span><%=SystemCache.getCustomerName(fuliaoPurchaseOrder
@@ -2512,7 +2528,7 @@
 																		<td>
 																			货号
 																		</td>
-																		<td><%=order.getProductNumber()%></td>
+																		<td><%=order.getCompany_productNumber()%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -2666,7 +2682,7 @@
 																		<td>
 																			货号
 																		</td>
-																		<td><%=order.getProductNumber()%></td>
+																		<td><%=order.getCompany_productNumber()%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -2817,7 +2833,7 @@
 																		<td>
 																			货号
 																		</td>
-																		<td><%=order.getProductNumber()%></td>
+																		<td><%=order.getCompany_productNumber()%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -2943,7 +2959,7 @@
 																		<td>
 																			货号
 																		</td>
-																		<td><%=order.getProductNumber()%></td>
+																		<td><%=order.getCompany_productNumber()%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -3103,7 +3119,7 @@
 																		<td>
 																			货号
 																		</td>
-																		<td><%=order.getProductNumber()%></td>
+																		<td><%=order.getCompany_productNumber()%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -3254,7 +3270,7 @@
 																		<td>
 																			货号
 																		</td>
-																		<td><%=order.getProductNumber()%></td>
+																		<td><%=order.getCompany_productNumber()%></td>
 																	</tr>
 																	<tr>
 																		<td>

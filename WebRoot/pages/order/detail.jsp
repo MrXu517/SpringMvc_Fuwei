@@ -25,6 +25,8 @@
 
 	List<OrderDetail> DetailList = order == null || order.getDetaillist() == null ? new ArrayList<OrderDetail>()
 			: order.getDetaillist();
+			
+	Boolean has_order_detail_price = SystemCache.hasAuthority(session,"order/detail/price");
 	//Boolean error_notification = order.getStatus() > OrderStatus.BEFOREPRODUCESAMPLE.ordinal() && order.getStart_produce() == null; //若已经进入生产阶段，但却没有生产单，则显示生成生产单按钮
 %>
 <!DOCTYPE html>
@@ -251,7 +253,7 @@
 												</td>
 												<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
 											</tr>
-
+											<%if(has_order_detail_price){ %>
 											<tr>
 												<td>
 													金额
@@ -265,6 +267,19 @@
 												</td>
 												<td><%=order.getMemo() == null ? "" : order.getMemo()%></td>
 											</tr>
+											<%}else{ %>
+											<tr>
+												<td>
+													备注
+												</td>
+												<td><%=order.getMemo() == null ? "" : order.getMemo()%></td>
+											</tr>
+											<tr>
+												<td colspan="2">&nbsp;
+												</td>
+											</tr>
+											<%} %>
+											
 										</tbody>
 									</table>
 
@@ -323,7 +338,18 @@
 									<div class="sampleData">
 										<table class="table table-responsive">
 											<tbody>
-
+												<tr>
+													<td>
+														公司货号
+													</td>
+													<td><%=order.getCompany_productNumber()%></td>
+												</tr>
+												<tr>
+													<td>
+														货号
+													</td>
+													<td><%=order.getProductNumber()%></td>
+												</tr>
 												<tr>
 													<td>
 														跟单人
@@ -350,6 +376,7 @@
 													</td>
 													<td><%=order.getSize()%></td>
 												</tr>
+												<%if(has_order_detail_price){ %>
 												<tr>
 													<td>
 														成本
@@ -357,6 +384,7 @@
 													<td>
 														<span class="RMB">￥</span><%=order.getCost()%></td>
 												</tr>
+												<%} %>
 											
 
 
@@ -390,16 +418,18 @@
 												<th width="15%">
 													生产数量
 												</th>
+												<%if(has_order_detail_price){ %>
 												<th width="15%">
 													单价
 												</th>
+												<%} %>
 											</tr>
 										</thead>
 										<tbody>
 											<%
 												for (OrderDetail detail : DetailList) {
 											%>
-											<tr class="tr" data='<%=SerializeTool.serialize(detail)%>'>
+											<tr class="tr">
 												<td class="color"><%=detail.getColor()%>
 												</td>
 												<td class="weight"><%=detail.getWeight()%>
@@ -410,8 +440,10 @@
 												</td>
 												<td class="quantity"><%=detail.getQuantity()%>
 												</td>
+												<%if(has_order_detail_price){ %>
 												<td class="price"><%=detail.getPrice()%>
 												</td>
+												<%} %>
 											</tr>
 
 											<%
