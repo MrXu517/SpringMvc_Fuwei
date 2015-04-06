@@ -128,7 +128,7 @@
 													<td class="material_name"><%=SystemCache.getMaterialName(detail
 											.getMaterial())%>
 													</td>
-													<td class="quantity"><%=detail.getQuantity()%>
+													<td class="quantity"><%=(int)detail.getQuantity()%>
 													</td>
 													<td class="memo"><%=detail.getMemo() == null ? "" : detail
 							.getMemo()%>
