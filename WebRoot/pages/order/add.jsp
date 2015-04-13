@@ -263,25 +263,28 @@
 											</caption>
 											<thead>
 												<tr>
-													<th width="15%">
+													<th width="10%">
 														颜色
 													</th>
-													<th width="15%">
+													<th width="10%">
 														克重(g)
 													</th>
-													<th width="15%">
+													<th width="10%">
+														机织克重(g)
+													</th>
+													<th width="10%">
 														纱线种类
 													</th>
-													<th width="15%">
+													<th width="10%">
 														尺寸
 													</th>
-													<th width="15%">
+													<th width="10%">
 														生产数量
 													</th>
-													<th width="15%">
+													<th width="10%">
 														单价
 													</th>
-													<th width="15%">
+													<th width="10%">
 														操作
 													</th>
 												</tr>
@@ -538,6 +541,16 @@
 								<div class="col-sm-1"></div>
 							</div>
 							<div class="form-group col-md-12">
+								<label for="weight" class="col-sm-3 control-label">
+									机织克重(g)
+								</label>
+								<div class="col-sm-8">
+									<input type="text" name="produce_weight" id="produce_weight"
+										class="form-control double require" />
+								</div>
+								<div class="col-sm-1"></div>
+							</div>
+							<div class="form-group col-md-12">
 								<label for="yarn" class="col-sm-3 control-label">
 									纱线种类
 								</label>
@@ -566,9 +579,10 @@
 								<label for="quantity" class="col-sm-3 control-label">
 									生产数量
 								</label>
-								<div class="col-sm-8">
+								<div class="input-group col-md-8">
 									<input type="text" name="quantity" id="quantity"
 										class="form-control int require" />
+									<span class="input-group-btn"><a class="btn btn-default" id="plus15Btn">+15</a></span>
 								</div>
 								<div class="col-sm-1"></div>
 							</div>

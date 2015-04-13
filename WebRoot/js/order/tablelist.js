@@ -134,8 +134,8 @@ $(document).ready(function() {
 							width :'15%'
 						},
 						{
-							name :'weight',
-							colname :'克重(g)',
+							name :'produce_weight',
+							colname :'机织克重(g)',
 							width :'15%'
 						},
 						{

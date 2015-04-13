@@ -135,7 +135,7 @@
 										<tr class="tr">
 											<td class="color"><%=detail.getColor()%>
 											</td>
-											<td class="weight"><%=detail.getWeight()%>
+											<td class="product_weight"><%=detail.getProduce_weight()%>
 											</td>
 											<td class="yarn_name"><%=SystemCache.getMaterialName(detail.getYarn()) %>
 											</td>

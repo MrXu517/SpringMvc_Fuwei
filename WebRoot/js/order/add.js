@@ -12,6 +12,18 @@ $(document).ready( function() {
 		});
 		// 重置按钮
 		
+		//2015-4-7添加 生产数量+15功能
+		$("#plus15Btn").click(function(){
+			var quantity = $(".rowform #quantity").val();
+			if(quantity == ""){
+				return false;
+			}
+			quantity = Number(quantity);
+			$(".rowform #quantity").val(quantity+15);
+			return false;
+		});
+		//2015-4-7添加 生产数量+15功能
+		
 		//2015-2-27添加颜色及数量
 		//订单明细
 		var orderGrid = new OrderGrid({
@@ -22,37 +34,42 @@ $(document).ready( function() {
 						{
 							name :'color',
 							colname :'颜色',
-							width :'15%'
+							width :'10%'
 						},
 						{
 							name :'weight',
 							colname :'克重(g)',
-							width :'15%'
+							width :'10%'
+						},
+						{
+							name :'produce_weight',
+							colname :'机织克重(g)',
+							width :'10%'
 						},
 						{
 							name :'yarn_name',
 							colname :'纱线种类',
-							width :'15%'
+							width :'10%'
 						},
 						{
 							name :'size',
 							colname :'尺寸',
-							width :'15%'
+							width :'10%'
 						},
 						{
 							name :'quantity',
 							colname :'生产数量',
-							width :'15%'
+							width :'10%'
 						},
 						{
 							name :'price',
 							colname :'单价',
-							width :'15%'
+							width :'10%'
 						},
 						{
 							name :'_handle',
 							colname :'操作',
-							width :'15%',
+							width :'10%',
 							displayValue : function(value, rowdata) {
 								return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
 							}

@@ -266,22 +266,25 @@
 											</caption>
 											<thead>
 												<tr>
-													<th width="15%">
+													<th width="10%">
 														颜色
 													</th>
-													<th width="15%">
+													<th width="10%">
 														克重(g)
 													</th>
-													<th width="15%">
+													<th width="10%">
+														机织克重(g)
+													</th>
+													<th width="10%">
 														纱线种类
 													</th>
-													<th width="15%">
+													<th width="10%">
 														尺寸
 													</th>
-													<th width="15%">
+													<th width="10%">
 														生产数量
 													</th>
-													<th width="15%">
+													<th width="10%">
 														单价
 													</th>
 													<!-- 	<th width="15%">
@@ -297,6 +300,8 @@
 													<td class="color"><%=detail.getColor()%>
 													</td>
 													<td class="weight"><%=detail.getWeight()%>
+													</td>
+													<td class="produce_weight"><%=detail.getProduce_weight()%>
 													</td>
 													<td class="yarn_name"><%=SystemCache.getMaterialName(detail.getYarn())%>
 													</td>
@@ -546,6 +551,16 @@
 								</label>
 								<div class="col-sm-8">
 									<input type="text" name="weight" id="weight"
+										class="form-control double require" />
+								</div>
+								<div class="col-sm-1"></div>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="weight" class="col-sm-3 control-label">
+									机织克重(g)
+								</label>
+								<div class="col-sm-8">
+									<input type="text" name="produce_weight" id="produce_weight"
 										class="form-control double require" />
 								</div>
 								<div class="col-sm-1"></div>

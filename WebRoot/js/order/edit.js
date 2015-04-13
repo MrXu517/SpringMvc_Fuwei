@@ -24,33 +24,37 @@ $(document)
 										{
 											name :'color',
 											colname :'颜色',
-											width :'15%'
+											width :'10%'
 										},
 										{
 											name :'weight',
 											colname :'克重(g)',
-											width :'15%'
+											width :'10%'
+										},{
+											name :'produce_weight',
+											colname :'机织克重(g)',
+											width :'10%'
 										},
 										{
 											name :'yarn_name',
 											colname :'纱线种类',
-											width :'15%'
+											width :'10%'
 										},
 										{
 											name :'size',
 											colname :'尺寸',
-											width :'15%'
+											width :'10%'
 										},
 										{
 											name :'quantity',
 											colname :'生产数量',
-											width :'15%',
+											width :'10%',
 											className:"input double"
 										},
 										{
 											name :'price',
 											colname :'单价',
-											width :'15%'
+											width :'10%'
 										},
 //										{
 //											name :'_handle',

@@ -16,7 +16,17 @@ public class OrderDetail {
 	private int quantity;//生产数量
 	private double price;//单价
 	
+	private double produce_weight;//机织克重
 	
+	
+	
+	
+	public double getProduce_weight() {
+		return produce_weight;
+	}
+	public void setProduce_weight(double produce_weight) {
+		this.produce_weight = produce_weight;
+	}
 	public int getId() {
 		return id;
 	}

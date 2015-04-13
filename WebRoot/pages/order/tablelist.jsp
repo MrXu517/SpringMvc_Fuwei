@@ -348,7 +348,7 @@
 																			颜色
 																		</th>
 																		<th width="15%">
-																			克重(g)
+																			机织克重(g)
 																		</th>
 																		<th width="15%">
 																			纱线种类
@@ -369,7 +369,7 @@
 																		data='<%=SerializeTool.serialize(detail)%>'>
 																		<td class="color"><%=detail.getColor()%>
 																		</td>
-																		<td class="weight"><%=detail.getWeight()%>
+																		<td class="produce_weight"><%=detail.getProduce_weight()%>
 																		</td>
 																		<td class="yarn_name"><%=SystemCache.getMaterialName(detail.getYarn())%>
 																		</td>
@@ -536,7 +536,7 @@
 																			颜色
 																		</th>
 																		<th width="15%">
-																			克重(g)
+																			机织克重(g)
 																		</th>
 																		<th width="15%">
 																			纱线种类
@@ -563,7 +563,7 @@
 																		data='<%=SerializeTool.serialize(detail)%>'>
 																		<td class="color"><%=detail.getColor()%>
 																		</td>
-																		<td class="weight"><%=detail.getWeight()%>
+																		<td class="produce_weight"><%=detail.getProduce_weight()%>
 																		</td>
 																		<td class="yarn_name"><%=SystemCache.getMaterialName(detail.getYarn())%>
 																		</td>
@@ -863,6 +863,9 @@
 																			克重(g)
 																		</th>
 																		<th width="15%">
+																			机织克重(g)
+																		</th>
+																		<th width="15%">
 																			纱线种类
 																		</th>
 																		<th width="15%">
@@ -882,6 +885,8 @@
 																		<td class="color"><%=detail.getColor()%>
 																		</td>
 																		<td class="weight"><%=detail.getWeight()%>
+																		</td>
+																		<td class="produce_weight"><%=detail.getProduce_weight()%>
 																		</td>
 																		<td class="yarn_name"><%=SystemCache.getMaterialName(detail.getYarn())%>
 																		</td>

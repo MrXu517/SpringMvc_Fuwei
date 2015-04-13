@@ -750,6 +750,7 @@ public class OrderController extends BaseController {
 				producingorderdetail.setPrice(0);
 				producingorderdetail.setWeight(planOrderDetail.getWeight());
 				producingorderdetail.setYarn(planOrderDetail.getYarn());
+				producingorderdetail.setProduce_weight(planOrderDetail.getProduce_weight());
 				Integer quantity = hashmap.get(planOrderDetail.getId());
 				quantity = quantity == null? 0 : quantity;
 				producingorderdetail.setQuantity(planOrderDetail.getQuantity()- quantity);

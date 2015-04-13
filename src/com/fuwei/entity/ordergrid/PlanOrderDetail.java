@@ -9,7 +9,17 @@ public class PlanOrderDetail {
 	private int quantity;//订单出货数量
 	private double price;
 	
+	private double produce_weight;//机织克重
 	
+	
+	
+	
+	public double getProduce_weight() {
+		return produce_weight;
+	}
+	public void setProduce_weight(double produce_weight) {
+		this.produce_weight = produce_weight;
+	}
 	
 	public double getPrice() {
 		return price;
