@@ -222,6 +222,11 @@ $(document).ready(function() {
 						width :'15%'
 					},
 					{
+						name :'produce_weight',
+						colname :'机织克重(g)',
+						width :'15%'
+					},
+					{
 						name :'yarn_name',
 						colname :'纱线种类',
 						width :'15%'
