@@ -301,7 +301,8 @@
 													</td>
 													<td class="weight"><%=detail.getWeight()%>
 													</td>
-													<td class="produce_weight"><%=detail.getProduce_weight()%>
+													<td><input type="text" class="form-control produce_weight value"
+															value="<%=detail.getProduce_weight()%>" />
 													</td>
 													<td class="yarn_name"><%=SystemCache.getMaterialName(detail.getYarn())%>
 													</td>
