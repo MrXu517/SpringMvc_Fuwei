@@ -71,7 +71,7 @@ $(document).ready( function() {
 							colname :'操作',
 							width :'10%',
 							displayValue : function(value, rowdata) {
-								return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
+								return "<a class='copyRow' href='#'>复制</a> | <a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
 							}
 						} ],
 						changeTotalRow : function() {
@@ -309,6 +309,51 @@ function OrderGrid(settings){
 				Object.$dialog.modal("hide");
 				return false;
 			});
+			return false;
+		});
+		
+		//2015-4-16添加复制一行
+		this.$content.find(".detailTb").on("click", ".copyRow", function() {
+			Common.resetForm(Object.$form[0]);
+			Object.$dialog.find(".modal-title").text("添加一行");
+
+			var $tr = $(this).closest("tr");
+			var rowdata = $.parseJSON($tr.attr("data"));
+			delete rowdata.id;
+			delete rowdata.color;
+			delete rowdata.quantity;
+
+			
+			Common.fillForm(Object.$form[0],rowdata);
+			Object.$dialog.modal();
+			Object.$form.unbind("submit");
+			Object.$form.bind("submit", function() {
+				// 添加一行
+					if (!Common.checkform(this)) {
+						return false;
+					}
+					var formdata = $(this).serializeJson();
+					var $material = $(this).find("select#material");
+					if($material.length > 0){
+						formdata.material_name = $material.find("option:selected").text();
+					}
+					var $yarn = $(this).find("select#yarn");
+					if($yarn.length > 0){
+						formdata.yarn_name = $yarn.find("option:selected").text();
+					}
+					var $factoryId = $(this).find("select#factoryId");
+					if($factoryId.length > 0){
+						formdata.factory_name = $factoryId.find("option:selected").text();
+					}
+					var $styleId = $(this).find("select#style");
+					if($styleId.length > 0){
+						formdata.style_name = $styleId.find("option:selected").text();
+					}
+					
+					Object.TableInstance.addRow(formdata);
+					Object.$dialog.modal("hide");
+					return false;
+				});
 			return false;
 		});
 

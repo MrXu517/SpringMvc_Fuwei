@@ -638,6 +638,7 @@
 																		<td class="colorsample"><%=detail.getColorsample()%>
 																		</td>
 																		<td class="_handle">
+																			<a class='copyRow' href='#'>复制</a> | 
 																			<a class='editRow' href='#'>修改</a> |
 																			<a class='deleteRow' href='#'>删除</a>
 																		</td>
@@ -1069,6 +1070,7 @@
 																		<td class="yarn"><%=detail.getYarn()%>
 																		</td>
 																		<td class="_handle">
+																			<a class='copyRow' href='#'>复制</a> | 
 																			<a class='editRow' href='#'>修改</a> |
 																			<a class='deleteRow' href='#'>删除</a>
 																		</td>
@@ -1393,6 +1395,7 @@
 																		<td class="colorsample"><%=detail.getColorsample()%>
 																		</td>
 																		<td class="_handle">
+																			<a class='copyRow' href='#'>复制</a> | 
 																			<a class='editRow' href='#'>修改</a> |
 																			<a class='deleteRow' href='#'>删除</a>
 																		</td>

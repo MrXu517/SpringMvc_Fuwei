@@ -90,7 +90,7 @@ $(document).ready( function() {
 								colname :'操作',
 								width :'15%',
 								displayValue : function(value, rowdata) {
-									return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
+									return "<a class='copyRow' href='#'>复制</a> | <a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
 								}
 							} ],
 							$dialog:$("#fuliaopurchaseDialog")

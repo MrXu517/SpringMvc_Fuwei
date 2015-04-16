@@ -390,4 +390,17 @@ public class SampleController extends BaseController {
 		return new ModelAndView("sample/search");
 	}
 	
+    
+    @RequestMapping(value = "/util_price", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView util_price(HttpSession session,HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+    	String lcode = "sample/util/price";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有报价工具的权限", null);
+		}
+		return new ModelAndView("sample/util_price");
+		
+	}
 }

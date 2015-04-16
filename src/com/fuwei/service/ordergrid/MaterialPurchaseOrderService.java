@@ -107,14 +107,20 @@ public class MaterialPurchaseOrderService extends BaseService {
 	}
 
 	// 获取采购单列表
-	public Pager getList(Pager pager, Date start_time, Date end_time,Integer companyId, Integer factoryId,
+	public Pager getList(Pager pager, Date start_time, Date end_time,Integer companyId, Integer factoryId,String number,
 			List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
 			String seq = "WHERE ";
 
 			sql.append("select * from tb_materialpurchaseorder ");
-
+			
+			if (number != null && !number.equals("")) {
+				sql.append(seq + " number='"
+						+ number + "'");
+				seq = " AND ";
+			}
+			
 			if (start_time != null) {
 				sql.append(seq + " created_at>='"
 						+ DateTool.formateDate(start_time) + "'");

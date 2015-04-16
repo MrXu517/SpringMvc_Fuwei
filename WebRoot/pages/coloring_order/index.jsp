@@ -66,6 +66,12 @@
 	if (factoryId == null) {
 		factoryId = -1;
 	}
+	
+	//2015-4-16添加orderNumber
+	String number = (String) request.getAttribute("number");
+	if (number == null) {
+		number = "";
+	}
 
 
 	//权限相关
@@ -126,8 +132,15 @@
 									<form class="form-horizontal form-inline searchform"
 										role="form">
 										<input type="hidden" name="page" id="page"
-											value="<%=pager.getPageNo()%>" />
-									
+											value="<%=1%>" />
+										<div class="form-group salesgroup">
+											<label for="number" class="col-sm-3 control-label">
+												单号
+											</label>
+											<div class="col-sm-9">
+												<input class="form-control" type="text" name="number" id="number" value="<%=number %>" />
+											</div>
+										</div>
 										<div class="form-group salesgroup">
 											<label for="companyId" class="col-sm-3 control-label">
 												公司
@@ -202,7 +215,7 @@
 									<ul class="pagination">
 										<li>
 											<a
-												href="coloring_order/index?factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
+												href="coloring_order/index?number=<%=number %>&factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
 										</li>
 
 										<%
@@ -210,7 +223,7 @@
 									%>
 										<li class="">
 											<a
-												href="coloring_order/index?factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
+												href="coloring_order/index?number=<%=number %>&factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -225,7 +238,7 @@
 
 										<li class="active">
 											<a
-												href="coloring_order/index?factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
+												href="coloring_order/index?number=<%=number %>&factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
 												class="sr-only"></span> </a>
 										</li>
 										<li>
@@ -235,7 +248,7 @@
 										
 										<li class="">
 											<a
-												href="coloring_order/index?factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
+												href="coloring_order/index?number=<%=number %>&factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -251,7 +264,7 @@
 										</li>
 										<li>
 											<a
-												href="coloring_order/index?factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
+												href="coloring_order/index?number=<%=number %>&factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
 

@@ -54,7 +54,7 @@ public class ColorOrderController extends BaseController {
 
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView index(Integer page, String start_time, String end_time,Integer companyId, Integer factoryId,
+	public ModelAndView index(Integer page, String start_time, String end_time,Integer companyId, Integer factoryId,String number,
 			String sortJSON, HttpSession session, HttpServletRequest request)
 			throws Exception {
 
@@ -82,7 +82,7 @@ public class ColorOrderController extends BaseController {
 		sort.setDirection("desc");
 		sort.setProperty("created_at");
 		sortList.add(sort);
-		pager = coloringOrderService.getList(pager, start_time_d, end_time_d,companyId,factoryId, sortList);
+		pager = coloringOrderService.getList(pager, start_time_d, end_time_d,companyId,factoryId,number, sortList);
 		if (pager != null & pager.getResult() != null) {
 			List<ColoringOrder> orderlist = (List<ColoringOrder>) pager.getResult();
 		}
@@ -91,6 +91,7 @@ public class ColorOrderController extends BaseController {
 		request.setAttribute("end_time", end_time_d);
 		request.setAttribute("companyId", companyId);
 		request.setAttribute("factoryId", factoryId);
+		request.setAttribute("number", number);
 		request.setAttribute("pager", pager);
 		return new ModelAndView("coloring_order/index");
 	}

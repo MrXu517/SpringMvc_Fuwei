@@ -251,6 +251,17 @@ public class OrderService extends BaseService {
 			throw e;
 		}
 	}
+	
+	// 根据orderNumber获取订单
+	public Order get(String orderNumber) throws Exception {
+		try {
+			Order order = dao.queryForBean(
+					"select * from tb_order where orderNumber = ?", Order.class, orderNumber);
+			return order;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 
 	// 编辑订单
 	@Transactional

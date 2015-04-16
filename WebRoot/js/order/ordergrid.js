@@ -134,6 +134,56 @@ function OrderGrid(settings){
 				});
 				return false;
 			});
+			
+			//2015-4-16添加复制一行
+			this.$content.find(".detailTb").on("click", ".copyRow", function() {
+				if(Object.TableInstance.beforeAdd){
+					if (!Object.TableInstance.beforeAdd()) {
+						return false;
+					}
+				}
+				Common.resetForm(Object.$form[0]);
+				Object.$dialog.find(".modal-title").text("添加一行");
+
+				var $tr = $(this).closest("tr");
+				var rowdata = $.parseJSON($tr.attr("data"));
+				delete rowdata.id;
+				delete rowdata.color;
+				delete rowdata.quantity;
+
+				
+				Common.fillForm(Object.$form[0],rowdata);
+				Object.$dialog.modal();
+				Object.$form.unbind("submit");
+				Object.$form.bind("submit", function() {
+					// 添加一行
+						if (!Common.checkform(this)) {
+							return false;
+						}
+						var formdata = $(this).serializeJson();
+						var $material = $(this).find("select#material");
+						if($material.length > 0){
+							formdata.material_name = $material.find("option:selected").text();
+						}
+						var $yarn = $(this).find("select#yarn");
+						if($yarn.length > 0){
+							formdata.yarn_name = $yarn.find("option:selected").text();
+						}
+						var $factoryId = $(this).find("select#factoryId");
+						if($factoryId.length > 0){
+							formdata.factory_name = $factoryId.find("option:selected").text();
+						}
+						var $styleId = $(this).find("select#style");
+						if($styleId.length > 0){
+							formdata.style_name = $styleId.find("option:selected").text();
+						}
+						
+						Object.TableInstance.addRow(formdata);
+						Object.$dialog.modal("hide");
+						return false;
+					});
+				return false;
+			});
 
 			this.$content.find(".detailTb").on("click", ".deleteRow", function() {
 				$(this).closest("tr").remove();
@@ -231,7 +281,60 @@ function OrderGrid(settings){
 				});
 				return false;
 			});
+			
+			
+			//2015-4-16添加复制一行
+			this.$content.find(".detailTb2").on("click", ".copyRow", function() {
+				if(Object.TableInstance2.beforeAdd){
+					if (!Object.TableInstance2.beforeAdd()) {
+						return false;
+					}
+				}
+				Common.resetForm(Object.$form2[0]);
+				Object.$dialog2.find(".modal-title").text("添加一行");
 
+
+				var $tr = $(this).closest("tr");
+				var rowdata = $.parseJSON($tr.attr("data"));
+				delete rowdata.id;
+				delete rowdata.color;
+				delete rowdata.quantity;
+
+				
+				Common.fillForm(Object.$form2[0],rowdata);
+				Object.$dialog2.modal();
+				
+				Object.$form2.unbind("submit");
+				Object.$form2.bind("submit", function() {
+					// 添加一行
+						if (!Common.checkform(this)) {
+							return false;
+						}
+						var formdata = $(this).serializeJson();
+						var $material = $(this).find("select#material");
+						if($material.length > 0){
+							formdata.material_name = $material.find("option:selected").text();
+						}
+						var $yarn = $(this).find("select#yarn");
+						if($yarn.length > 0){
+							formdata.yarn_name = $yarn.find("option:selected").text();
+						}
+						var $factoryId = $(this).find("select#factoryId");
+						if($factoryId.length > 0){
+							formdata.factory_name = $factoryId.find("option:selected").text();
+						}
+						var $styleId = $(this).find("select#style");
+						if($styleId.length > 0){
+							formdata.style_name = $styleId.find("option:selected").text();
+						}
+						
+						Object.TableInstance2.addRow(formdata);
+						Object.$dialog2.modal("hide");
+						return false;
+					});
+				return false;
+			});
+			
 			this.$content.find(".detailTb2").on("click", ".deleteRow", function() {
 				$(this).closest("tr").remove();
 				return false;

@@ -58,7 +58,8 @@
 	Boolean h_has_fuliao_purchase_order_index = SystemCache.hasAuthority(session,"fuliao_purchase_order/index");//辅料采购单
 	Boolean h_has_fuliao_purchase_order_add = SystemCache.hasAuthority(session,"fuliao_purchase_order/add");//辅料采购单
 	
-	
+	//2015-4-16添加报价工具
+	Boolean h_has_sample_util_price = SystemCache.hasAuthority(session,"sample/util/price");
 	
 	
 	//权限相关
@@ -200,9 +201,15 @@
 							 <li>
 								<a href="sample/undetailedindex"><i class="fa fa-edit"></i>待核价样品</a>
 							</li> 
+							<%}if(h_has_sample_util_price){ %>
+							 <li>
+								<a href="sample/util_price"><i class="fa fa-thumb-tack"></i>报价工具</a>
+							</li> 
 							<%
 							}
 							%>
+
+
 							
 						</ul>
 					</li>

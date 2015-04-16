@@ -201,7 +201,7 @@
 .timegroup .control-label+div{
 	width:320px;
 }
-.searchform #companyId,.searchform #factoryId{
+.searchform #companyId,.searchform #factoryId,.searchform #number{
 	width:150px;
 }
 .searchform .form-group{
