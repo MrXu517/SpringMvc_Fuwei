@@ -41,6 +41,11 @@ $(document)
 												width :'15%'
 											},
 											{
+												name :'factory_name',
+												colname :'领取人',
+												width :'15%'
+											},
+											{
 												name :'memo',
 												colname :'备注',
 												width :'30%'

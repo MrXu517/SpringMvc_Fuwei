@@ -290,6 +290,7 @@
 											<th>
 												公司货号
 											</th>
+											
 											<th>
 												创建人
 											</th>
@@ -314,6 +315,7 @@
 										.getCompanyId())%></td>
 											<td><%=SystemCache.getCustomerName(materialPurchaseOrder.getCustomerId())%></td>
 											<td><%=materialPurchaseOrder.getCompany_productNumber()%></td>
+											
 											<td><%=SystemCache.getUserName(materialPurchaseOrder
 										.getCreated_user())%></td>
 											<td><%=DateTool.formatDateYMD(materialPurchaseOrder.getCreated_at())%></td>

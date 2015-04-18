@@ -78,45 +78,53 @@
 										<caption id="tablename">
 											桐庐富伟针织厂原材料采购单
 										</caption>
-										
+
 									</table>
 
 									<table class="table tableTb noborder">
 										<tbody>
 											<tr>
 												<td>
-													
-													
+
+
 													<div class="form-group">
-													供货单位：
-													<select class="form-control require" name="factoryId"
-														id="factoryId">
-														<option value="">
-															未选择
-														</option>
-														<%
-															for (Factory factory : SystemCache.purchase_factorylist) {
-														%>
-														<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
-														<%
-															}
-														%>
-													</select></div>
+														供货单位：
+														<select class="form-control require" name="factoryId"
+															id="factoryId">
+															<option value="">
+																未选择
+															</option>
+															<%
+																for (Factory factory : SystemCache.purchase_factorylist) {
+															%>
+															<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
+															<%
+																}
+															%>
+														</select>
+													</div>
 													<div class="form-group">
 														业务员：
-													<select name="charge_user" id="charge_user"
-														class="form-control">
-														<%
-															for (User item : SystemCache.userlist) {
-														%>
-														<option value="<%=item.getId()%>"><%=item.getName()%></option>
-														<%
-															}
-														%>
-													</select>
+														<select name="charge_user" id="charge_user"
+															class="form-control">
+															<%
+																for (User item : SystemCache.userlist) {
+															%>
+															<option value="<%=item.getId()%>"><%=item.getName()%></option>
+															<%
+																}
+															%>
+														</select>
 													</div>
-													
-												</td><td><div class="form-group pull-right">№：<input class="form-control" disabled type="text" value="自动生成" /></div></td>
+
+												</td>
+												<td>
+													<div class="form-group pull-right">
+														№：
+														<input class="form-control" disabled type="text"
+															value="自动生成" />
+													</div>
+												</td>
 											</tr>
 
 											<tr>
@@ -183,7 +191,8 @@
 										</tbody>
 									</table>
 
-									<table id="mainTb" class="table table-responsive table-bordered detailTb">
+									<table id="mainTb"
+										class="table table-responsive table-bordered detailTb">
 										<caption>
 											<button type="button"
 												class="btn btn-primary addRow pull-left">
@@ -198,6 +207,9 @@
 												</th>
 												<th width="15%">
 													数量(kg)
+												</th>
+												<th width="15%">
+													染厂
 												</th>
 												<th width="30%">
 													备注
@@ -214,13 +226,21 @@
 									</table>
 
 									<div id="tip" class="auto_bottom">
-										<div>说明：1.此单说明了本次采购的相关内容，请充分阅读并理解，如有疑问及时联系我方		</div>
-      										<div class="tip_line">2.材料品质及颜色要确保准确，颜色色牢度须达到4级以上。		</div>
-     							 			<div class="tip_line">3.不得含有偶氮、PCP、甲醛、APEO。不得有特殊气味，无致敏致癌物质。	</div>
-      										<div class="tip_line">4.贵单位须妥善保管此单据，结账时须提供此单据		</div>
+										<div>
+											说明：1.此单说明了本次采购的相关内容，请充分阅读并理解，如有疑问及时联系我方
+										</div>
+										<div class="tip_line">
+											2.材料品质及颜色要确保准确，颜色色牢度须达到4级以上。
+										</div>
+										<div class="tip_line">
+											3.不得含有偶氮、PCP、甲醛、APEO。不得有特殊气味，无致敏致癌物质。
+										</div>
+										<div class="tip_line">
+											4.贵单位须妥善保管此单据，结账时须提供此单据
+										</div>
 
 									</div>
-								
+
 									<p class="pull-right auto_bottom">
 										<span id="created_user">制单人：<%=SystemCache.getUserName(SystemContextUtils
 							.getCurrentUser(session).getLoginedUser().getId())%></span>
@@ -280,7 +300,27 @@
 											<div class="col-sm-1"></div>
 										</div>
 
-
+										<div class="form-group col-md-12">
+											<label for="factoryId" class="col-sm-3 control-label">
+												染厂
+											</label>
+											<div class="col-sm-8">
+												<select class="form-control require" name="factoryId"
+													id="factoryId">
+													<option value="">
+														未选择
+													</option>
+													<%
+														for (Factory factory : SystemCache.coloring_factorylist) {
+													%>
+													<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
+													<%
+														}
+													%>
+												</select>
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
 										<div class="form-group col-md-12">
 											<label for="memo" class="col-sm-3 control-label">
 												备注

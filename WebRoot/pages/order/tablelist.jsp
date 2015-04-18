@@ -1625,6 +1625,7 @@
 												<th width="15%">
 													数量(kg)
 												</th>
+												<th width="15%">染厂</th>
 												<th width="30%">
 													备注
 												</th>
@@ -1641,6 +1642,8 @@
 												</td>
 												<td class="quantity"><%=detail.getQuantity()%>
 												</td>
+												<td class="factory_name"><%=SystemCache.getFactoryName(detail.getFactoryId())%>
+																		</td>
 												<td class="memo"><%=detail.getMemo() == null ? "" : detail
 							.getMemo()%>
 												</td>
@@ -1656,6 +1659,8 @@
 													&nbsp;
 												</td>
 												<td class="quantity">
+												</td>
+												<td class="factory_name">
 												</td>
 												<td class="memo">
 												</td>

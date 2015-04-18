@@ -245,6 +245,9 @@
 												<th width="15%">
 													数量(kg)
 												</th>
+												<th width="15%">
+													染厂
+												</th>
 												<th width="30%">
 													备注
 												</th>
@@ -262,6 +265,8 @@
 												</td>
 												<td class="quantity"><%=detail.getQuantity()%>
 												</td>
+												<td class="factory_name"><%=SystemCache.getFactoryName(detail.getFactoryId())%>
+																		</td>
 												<td class="memo"><%=detail.getMemo()==null?"":detail.getMemo()%>
 												</td>
 												<td class="_handle">
@@ -353,8 +358,28 @@
 											</div>
 											<div class="col-sm-1"></div>
 										</div>
-
-
+	
+										<div class="form-group col-md-12">
+											<label for="factoryId" class="col-sm-3 control-label">
+												染厂
+											</label>
+											<div class="col-sm-8">
+												<select class="form-control require" name="factoryId"
+													id="factoryId">
+													<option value="">
+														未选择
+													</option>
+													<%
+														for (Factory factory : SystemCache.coloring_factorylist) {
+													%>
+													<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
+													<%
+														}
+													%>
+												</select>
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
 										<div class="form-group col-md-12">
 											<label for="memo" class="col-sm-3 control-label">
 												备注
