@@ -36,7 +36,7 @@
 	//报表
 	Boolean h_has_report = SystemCache.hasAuthority(session,"report");
 	Boolean h_has_report_material = SystemCache.hasAuthority(session,"report/material");//材料库存报表
-	Boolean h_has_report_material_purchase = SystemCache.hasAuthority(session,"report/material_purchase");//材料采购报表
+	Boolean h_has_report_material_purchase = SystemCache.hasAuthority(session,"report/material_purchase");//原材料采购报表
 	Boolean h_has_report_financial = SystemCache.hasAuthority(session,"report/financial");//财务报表
 	
 	//系统信息管理
@@ -290,7 +290,7 @@
 							<%} %>
 							<%if(h_has_report_material_purchase){ %>
 							<li>
-								<a href="report/material_purchase"><i class="fa fa-sign-in"></i>材料采购报表</a>
+								<a href="report/material_purchase"><i class="fa fa-sign-in"></i>原材料采购报表</a>
 							</li>
 							<%} %>
 							<%if(h_has_report_financial){ %>

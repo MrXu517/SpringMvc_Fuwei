@@ -324,7 +324,7 @@
 												染厂
 											</label>
 											<div class="col-sm-8">
-												<select class="form-control require" name="factoryId"
+												<select class="form-control" name="factoryId"
 													id="factoryId">
 													<option value="">
 														未选择

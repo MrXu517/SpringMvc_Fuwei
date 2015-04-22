@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +14,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
+import com.fuwei.commons.SystemCache;
+import com.fuwei.entity.Factory;
+import com.fuwei.entity.Material;
 import com.fuwei.entity.ordergrid.CarFixRecordOrder;
 import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
+import com.fuwei.entity.ordergrid.MaterialPurchaseOrderDetail;
 import com.fuwei.entity.ordergrid.ProducingOrder;
 import com.fuwei.service.BaseService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
-
+import java.util.HashMap;
 @Component
 public class MaterialPurchaseOrderService extends BaseService {
 	private Logger log = org.apache.log4j.LogManager
@@ -199,6 +204,149 @@ public class MaterialPurchaseOrderService extends BaseService {
 					.update(
 							"UPDATE tb_materialpurchaseorder SET status=?,state=? WHERE id = ?",
 							status, state, tableOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	
+	
+	
+	// 获取原材料采购报表数据
+	public HashMap<Factory,HashMap<Material,Double> > material_purchase_report(Date start_time, Date end_time, Integer factoryId,List<Sort> sortlist) throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			String seq = "WHERE ";
+
+			sql.append("select * from tb_materialpurchaseorder ");
+			
+			if (start_time != null) {
+				sql.append(seq + " created_at>='"
+						+ DateTool.formateDate(start_time) + "'");
+				seq = " AND ";
+			}
+			if (end_time != null) {
+				sql.append(seq + " created_at<='"
+						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
+						+ "'");
+				seq = " AND ";
+			}
+			if (factoryId != null) {
+				sql.append(seq + " factoryId='" + factoryId + "'");
+				seq = " AND ";
+			}
+			sql.append(" group by factoryId");
+			
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql.append(" order by " + sortlist.get(i).getProperty()
+								+ " " + sortlist.get(i).getDirection() + " ");
+					} else {
+						sql.append("," + sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			
+			
+//			Map<Long, MaterialPurchaseOrder> result = dao.queryForMaps(sql.toString());
+//			
+//                for (Long key : result.keySet()) {
+//                	System.out.println(key + "," );
+//                        System.out.println(key + " = " + result.get(key).getCreated_at()+ " , " + result.get(key).getCompany_productNumber());
+//                }
+//                System.out.println("----------------------");
+//			
+//			System.out.println(result.size()); 
+			List<MaterialPurchaseOrder> materialPurchaseOrderList = dao.queryForBeanList(
+					sql.toString(), MaterialPurchaseOrder.class);
+			
+			HashMap<Integer,HashMap<Integer,Double> > temp_hashmap = new HashMap<Integer,HashMap<Integer,Double> >();
+			
+			for(MaterialPurchaseOrder materialPurchaseOrder : materialPurchaseOrderList){
+				if(materialPurchaseOrder.getDetail_json() == null || materialPurchaseOrder.getDetail_json().equals("")){
+					continue;
+				}
+				
+				List<MaterialPurchaseOrderDetail> detailList = SerializeTool
+				.deserializeList(materialPurchaseOrder.getDetail_json(),
+						MaterialPurchaseOrderDetail.class);;
+				
+				Integer temp_factoryId = materialPurchaseOrder.getFactoryId();
+				if(temp_factoryId == null){
+					continue;
+				}
+				for(MaterialPurchaseOrderDetail detail : detailList){
+					Integer materialId = detail.getMaterial();
+					if(materialId==null){
+						continue;
+					}
+					Double quantity = detail.getQuantity();
+					
+					if(temp_hashmap.containsKey(temp_factoryId)){
+						HashMap<Integer,Double> factoryTemp = temp_hashmap.get(temp_factoryId);
+						if(factoryTemp.containsKey(materialId)){
+							temp_hashmap.get(temp_factoryId).put(materialId, quantity + temp_hashmap.get(temp_factoryId).get(materialId));
+						}else{
+							temp_hashmap.get(temp_factoryId).put(materialId, quantity);
+						}
+						
+					}else{
+						HashMap<Integer,Double> temp = new HashMap<Integer,Double>();
+						temp.put(materialId,quantity);
+						temp_hashmap.put(materialPurchaseOrder.getFactoryId(), temp);
+					}
+				}
+			}
+			for (Integer key : temp_hashmap.keySet()) {
+            	System.out.println(key + "," );
+            	for (Integer key_m : temp_hashmap.get(key).keySet()) {
+                    System.out.println(key_m+ " = " + temp_hashmap.get(key).get(key_m));
+            	}
+            }
+            System.out.println("----------------------");
+			
+			
+			HashMap<Factory,HashMap<Material,Double> > result = new HashMap<Factory,HashMap<Material,Double> >();
+			if(factoryId == null){
+				for(Factory factory : SystemCache.purchase_factorylist){
+					result.put(factory, new HashMap<Material,Double>());
+					for(Material material : SystemCache.materiallist){	
+						if(temp_hashmap.containsKey(factory.getId()) && temp_hashmap.get(factory.getId()).containsKey(material.getId())){
+							result.get(factory).put(material,temp_hashmap.get(factory.getId()).get(material.getId()));
+						}else{
+							result.get(factory).put(material,0.0);
+						}
+						
+						
+					}
+				}
+			}else{
+				Factory factory = SystemCache.getFactory(factoryId);
+					result.put(factory, new HashMap<Material,Double>());
+					for(Material material : SystemCache.materiallist){	
+						if(temp_hashmap.containsKey(factory.getId()) && temp_hashmap.get(factory.getId()).containsKey(material.getId())){
+							result.get(factory).put(material,temp_hashmap.get(factory.getId()).get(material.getId()));
+						}else{
+							result.get(factory).put(material,0.0);
+						}
+						
+						
+					}
+			}
+			
+			for (Factory key : result.keySet()) {
+            	System.out.println(key.getName() + "," );
+            	for (Material key_m : result.get(key).keySet()) {
+                    System.out.println(key_m.getName() + " = " + result.get(key).get(key_m));
+            	}
+            }
+            System.out.println("----------------------");
+			return result;
+			
 		} catch (Exception e) {
 			throw e;
 		}
