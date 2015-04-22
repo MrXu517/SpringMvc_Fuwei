@@ -235,7 +235,7 @@ public class MaterialPurchaseOrderService extends BaseService {
 				sql.append(seq + " factoryId='" + factoryId + "'");
 				seq = " AND ";
 			}
-			sql.append(" group by factoryId");
+		
 			
 			if (sortlist != null && sortlist.size() > 0) {
 
@@ -317,11 +317,7 @@ public class MaterialPurchaseOrderService extends BaseService {
 					for(Material material : SystemCache.materiallist){	
 						if(temp_hashmap.containsKey(factory.getId()) && temp_hashmap.get(factory.getId()).containsKey(material.getId())){
 							result.get(factory).put(material,temp_hashmap.get(factory.getId()).get(material.getId()));
-						}else{
-							result.get(factory).put(material,0.0);
 						}
-						
-						
 					}
 				}
 			}else{
@@ -330,11 +326,7 @@ public class MaterialPurchaseOrderService extends BaseService {
 					for(Material material : SystemCache.materiallist){	
 						if(temp_hashmap.containsKey(factory.getId()) && temp_hashmap.get(factory.getId()).containsKey(material.getId())){
 							result.get(factory).put(material,temp_hashmap.get(factory.getId()).get(material.getId()));
-						}else{
-							result.get(factory).put(material,0.0);
 						}
-						
-						
 					}
 			}
 			
