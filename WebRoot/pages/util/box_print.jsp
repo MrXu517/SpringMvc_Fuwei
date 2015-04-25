@@ -196,6 +196,7 @@ table td {
 			$(".ASOS_MDA_NUMBER_BARCODE").empty().barcode("<%=ASOS_MDA_NUMBER%>", "code39",{barWidth:2, barHeight:70,fontSize:10,output:"bmp",showHRI:true});
 		//	$(".ASOS_SKU_Number_BARCODE").empty().barcode("<%=ASOS_SKU_Number%>
 	//", "ean8",{barWidth:2, barHeight:35,showHRI:true});
+		window.print();
 </script>
 	</body>
 </html>
