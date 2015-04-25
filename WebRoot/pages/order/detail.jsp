@@ -224,6 +224,11 @@
 											发货时间：
 										</label>
 										<span><%=order.getDevelivery()%></span>
+										<%if(order.isOverEnded()){ %>
+											<span class="label label-danger">已超期</span>
+										<%}else if(order.isPre30()){ %>
+											<span class="label label-warning">交货时间<=30天</span>
+										<%} %>
 									</div>
 
 

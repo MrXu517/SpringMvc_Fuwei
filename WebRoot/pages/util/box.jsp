@@ -12,7 +12,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>装箱工具 -- 桐庐富伟针织厂</title>
+		<title>ASOS箱贴生成器 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -60,7 +60,7 @@
 							<a href="user/index">首页</a>
 						</li>
 						<li class="active">
-							报价工具
+							ASOS箱贴生成器
 						</li>
 					</ul>
 				</div>
@@ -174,5 +174,11 @@
 					</div>
 				</div>
 			</div>
+			<script type="text/javascript">
+				/* 设置当前选中的页 */
+				var $a = $("#left li a[href='util/box']");
+				setActiveLeft($a.parent("li"));
+				/* 设置当前选中的页 */
+			</script>
 	</body>
 </html>

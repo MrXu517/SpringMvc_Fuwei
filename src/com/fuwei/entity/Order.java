@@ -478,5 +478,14 @@ public class Order implements Serializable {
 		return this.status >= OrderStatus.COMPLETED.ordinal();
 	}
 	
+	//2015-4-25添加是否超过截止日期未发货
+	public Boolean isOverEnded() throws ParseException{
+		return !this.isDelivered() && this.end_at.before(DateTool.nowDate());
+	}
+	
+	//2015-4-25添加是否最近30天内要发货
+	public Boolean isPre30() throws ParseException{
+		return !this.isDelivered() && !this.isOverEnded() && !this.end_at.after(DateTool.addDay(DateTool.nowDate(), 30));
+	}
 
 }

@@ -13,6 +13,9 @@ public class DateTool {
 	public static Date now() {
 		return new Date();
 	}
+	public static Date nowDate() throws ParseException {
+		return parse(formatDateYMD(new Date())) ;
+	}
 	public static String getYear2()throws ParseException {
 		String yearLast = new SimpleDateFormat("yy",Locale.CHINESE).format(Calendar.getInstance().getTime());
 		return yearLast;

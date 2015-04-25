@@ -63,6 +63,10 @@
 	
 	//2015--4-24添加装箱工具
 	Boolean h_has_box_util = SystemCache.hasAuthority(session,"util/box");
+	Boolean h_has_util = SystemCache.hasAuthority(session,"util");
+	
+	//2015--4-25添加待发货订单列表
+	Boolean h_has_order_undelivery = SystemCache.hasAuthority(session,"order/undelivery");
 	
 	//权限相关
 	
@@ -71,13 +75,13 @@
 	<link href="css/common/head.css" rel="stylesheet" type="text/css" />
 	<script src="js/common/head.js" type="text/javascript"></script>
 	<script type="text/javascript">
-		version = 2015042501;
-	</script>
+	version = 2015042502;
+</script>
 	<div style="display: none;" class="background"></div>
 	<div style="display: none;" class="loading">
 		数据加载中，请稍等......
 	</div>
-	
+
 	<div id="alert">
 		<div id="alert_tip">
 			<div class="modal fade">
@@ -143,7 +147,8 @@
 	<div id="header">
 		<div class="headnav">
 			<div class="btn-group">
-				<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+				<button type="button" class="btn btn-success dropdown-toggle"
+					data-toggle="dropdown">
 					<%=user.getName()%>
 				</button>
 				<button type="button" class="btn btn-success dropdown-toggle"
@@ -162,11 +167,10 @@
 			</div>
 		</div>
 		<div class="messagenav">
-			<a href="message/unread" type="button" class="btn btn-danger"><i class="fa fa-envelope"></i>
-		<%if(loginedUser.getMessage_count() > 0){ %>
-<span><%=loginedUser.getMessage_count()%></span>
-		<%} %>
-		</a> </div>
+			<a href="message/unread" type="button" class="btn btn-danger"><i
+				class="fa fa-envelope"></i> <%if(loginedUser.getMessage_count() > 0){ %>
+				<span><%=loginedUser.getMessage_count()%></span> <%} %> </a>
+		</div>
 		<div class="logo">
 			<a href="user/index"><small> <i class="fa fa-leaf"></i>
 					桐庐富伟针织厂管理系统 </small> </a>
@@ -200,19 +204,19 @@
 								<a href="sample/add"><i class="fa fa-plus"></i>新增样品</a>
 							</li>
 							<%}if(h_has_sample_undetailedindex){ %>
-							 <li>
+							<li>
 								<a href="sample/undetailedindex"><i class="fa fa-edit"></i>待核价样品</a>
-							</li> 
+							</li>
 							<%}if(h_has_sample_util_price){ %>
-							 <li>
+							<li>
 								<a href="sample/util_price"><i class="fa fa-thumb-tack"></i>报价工具</a>
-							</li> 
+							</li>
 							<%
 							}
 							%>
 
 
-							
+
 						</ul>
 					</li>
 					<%} %>
@@ -227,12 +231,17 @@
 								<a href="order/index"><i class="fa fa-dashboard"></i>订单列表</a>
 							</li>
 							<%} %>
+							<%if(h_has_order_undelivery){ %>
+							<li>
+								<a href="order/undelivery"><i class="fa fa-truck"></i>待发货</a>
+							</li>
+							<%} %>
 							<%if(h_has_order_add){ %>
 							<li>
 								<a href="order/add"><i class="fa fa-plus"></i>创建订单</a>
 							</li>
 							<%} %>
-						
+
 						</ul>
 					</li>
 					<%} %>
@@ -242,10 +251,11 @@
 						<a href="#"><i class="fa fa-barcode"></i>材料系统<i
 							class="fa fa-angle-down"></i> </a>
 						<ul class="submenu">
-						
+
 							<%if(h_has_materialsys_purchase){ %>
 							<li>
-								<a href="material_purchase_order/index"><i class="fa fa-sign-in"></i>原材料采购单</a>
+								<a href="material_purchase_order/index"><i
+									class="fa fa-sign-in"></i>原材料采购单</a>
 							</li>
 							<%} %>
 							<%if(h_has_materialsys_purchase_add){ %>
@@ -256,7 +266,8 @@
 
 							<%if(h_has_fuliao_purchase_order_index){ %>
 							<li>
-								<a href="fuliao_purchase_order/index"><i class="fa fa-sign-in"></i>辅料采购单</a>
+								<a href="fuliao_purchase_order/index"><i
+									class="fa fa-sign-in"></i>辅料采购单</a>
 							</li>
 							<%} %>
 							<%if(h_has_fuliao_purchase_order_add){ %>
@@ -275,7 +286,7 @@
 								<a href="coloring_order/add"><i class="fa fa-plus"></i>创建染色单</a>
 							</li>
 							<%} %>
-						
+
 						</ul>
 					</li>
 					<%} %>
@@ -300,7 +311,7 @@
 								<a href="report/financial"><i class="fa fa-jpy"></i>财务报表</a>
 							</li>
 							<%} %>
-						
+
 						</ul>
 					</li>
 					<%} %>
@@ -346,19 +357,29 @@
 								<a href="role/list">角色管理</a>
 							</li>
 							<%} %>
-							
-						
+
+
 						</ul>
 					</li>
-					<%} 
-					if(h_has_box_util){%>
-					<li>
-						<a href="util/box"><i class="fa fa-truck"></i>装箱工具</a>
+
+
+					<%} %>
+
+					<%if(h_has_util){ %>
+					<li class="li_dropdown">
+						<a href="#"><i class="fa fa-wrench"></i>工具<i
+							class="fa fa-angle-down"></i> </a>
+						<ul class="submenu">
+							<%if(h_has_box_util){%>
+							<li>
+								<a href="util/box"><i class="fa fa-truck"></i>ASOS箱贴生成器</a>
+							</li>
+							<%} %>
+						</ul>
 					</li>
+					<%} %>
 
-
-					<%} 
-					if(h_has_authority){%>
+					<%if(h_has_authority){%>
 					<li>
 						<a href="authority/index"><i class="fa fa-lock"></i>权限设置</a>
 					</li>
@@ -367,7 +388,7 @@
 					}
 					%>
 
-					
+
 				</ul>
 			</div>
 

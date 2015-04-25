@@ -234,3 +234,11 @@
 .addRow{
 	margin-bottom:5px;
 }
+tr.label-danger{
+	color:#d9534f;
+	background:none;
+}
+tr.label-warning{
+	color:#f0ad4e;
+	background:none;
+}

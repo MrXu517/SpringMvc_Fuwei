@@ -160,7 +160,58 @@ public class OrderController extends BaseController {
 	
 	@Autowired
 	SampleService sampleService;
+	
+	
+	@RequestMapping(value = "/undelivery", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView undelivery(Integer page, String start_time, String end_time,
+			Integer companyId, Integer salesmanId,
+			String sortJSON, HttpSession session, HttpServletRequest request)
+			throws Exception {
 
+		String lcode = "order/undelivery";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有查看待发货订单列表的权限", null);
+		}
+
+		Date start_time_d = DateTool.parse(start_time);
+		Date end_time_d = DateTool.parse(end_time);
+		Pager pager = new Pager();
+		if (page != null && page > 0) {
+			pager.setPageNo(page);
+		}
+
+		List<Sort> sortList = null;
+		if (sortJSON != null) {
+			sortList = SerializeTool.deserializeList(sortJSON, Sort.class);
+		}
+		if (sortList == null) {
+			sortList = new ArrayList<Sort>();
+		}
+		Sort sort = new Sort();
+		sort.setDirection("asc");
+		sort.setProperty("end_at");
+		sortList.add(sort);
+		
+		Integer status = OrderStatus.DELIVERING.ordinal();
+		pager = orderService.getList(pager, start_time_d, end_time_d,
+				companyId, salesmanId, status, sortList);
+
+		
+		request.setAttribute("start_time", start_time_d);
+		request.setAttribute("end_time", end_time_d);
+		request.setAttribute("salesmanId", salesmanId);
+		if (companyId == null & salesmanId != null) {
+			companyId = SystemCache.getSalesman(salesmanId).getCompanyId();
+		}
+		request.setAttribute("companyId", companyId);
+		request.setAttribute("status", status);
+		request.setAttribute("pager", pager);
+		return new ModelAndView("order/undelivery");
+	}
+	
+	
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView add(Integer quoteOrderId, HttpSession session,

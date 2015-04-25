@@ -50,13 +50,8 @@
 	if (companyId == null) {
 		companyId = -1;
 	}
-	//订单状态status
-	Integer status = (Integer) request.getAttribute("status");
-	String status_str = "";
-	if (status != null) {
-		status_str = String.valueOf(status);
-	}
-	//订单状态status
+	
+	
 	HashMap<String, List<Salesman>> companySalesmanMap = SystemCache
 			.getCompanySalesmanMap_ID();
 	JSONObject jObject = new JSONObject();
@@ -66,10 +61,6 @@
 	//权限相关
 	Boolean has_order_detail = SystemCache.hasAuthority(session,
 			"order/detail");
-	Boolean has_order_edit = SystemCache.hasAuthority(session,
-			"order/edit");
-	Boolean has_order_cancel = SystemCache.hasAuthority(session,
-			"order/cancel");
 	//权限相关
 %>
 <!DOCTYPE html>
@@ -77,7 +68,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>订单管理 -- 桐庐富伟针织厂</title>
+		<title>待发货订单管理 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -92,7 +83,6 @@
 		<script src="js/plugins/bootstrap.min.js" type="text/javascript"></script>
 		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
-		<script src="js/order/index.js" type="text/javascript"></script>
 		<link href="css/order/index.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
@@ -106,7 +96,7 @@
 							<a href="user/index">首页</a>
 						</li>
 						<li class="active">
-							订单列表
+							待发货列表
 						</li>
 					</ul>
 				</div>
@@ -120,31 +110,6 @@
 									<form class="form-horizontal searchform form-inline searchform"
 										role="form">
 										
-										<div class="form-group">
-											<label for="status" class="col-sm-3 control-label">
-												状态
-											</label>
-											<div class="col-sm-9">
-												<select class="form-control" name="status" id="status">
-													<option value="">
-														所有
-													</option>
-													<%
-														for (OrderStatus orderStatus : OrderStatus.values()) {
-															if (status!=null && orderStatus.ordinal() == status) {
-													%>
-													<option value="<%=orderStatus.ordinal()%>" selected><%=orderStatus.getName()%></option>
-													<%
-														} else {
-													%>
-													<option value="<%=orderStatus.ordinal()%>"><%=orderStatus.getName()%></option>
-													<%
-														}
-														}
-													%>
-												</select>
-											</div>
-										</div>
 										<div class="form-group salesgroup">
 											<label for="companyId" class="col-sm-3 control-label">
 												公司
@@ -220,7 +185,7 @@
 									<ul class="pagination">
 										<li>
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
+												href="order/undelivery?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
 										</li>
 
 										<%
@@ -228,7 +193,7 @@
 									%>
 										<li class="">
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
+												href="order/undelivery?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -243,7 +208,7 @@
 
 										<li class="active">
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
+												href="order/undelivery?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
 												class="sr-only"></span> </a>
 										</li>
 										<li>
@@ -253,7 +218,7 @@
 										
 										<li class="">
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
+												href="order/undelivery?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -269,7 +234,7 @@
 										</li>
 										<li>
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
+												href="order/undelivery?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
 									
@@ -286,12 +251,6 @@
 												订单号
 											</th>
 											<th>
-												订单状态
-											</th>
-											<th>
-												总金额
-											</th>
-											<th>
 												订单信息
 											</th>
 											<th>
@@ -301,17 +260,12 @@
 												业务员
 											</th>
 											<th>
-												创建用户
-											</th>
-											<th>
-												订单生效时间
+												跟单人
 											</th>
 											<th>
 												订单截止时间
 											</th>
-											<th>
-												创建时间
-											</th>
+											<th>是否超期</th>
 											<th>
 												操作
 											</th>
@@ -322,7 +276,13 @@
 											int i = (pager.getPageNo()-1) * pager.getPageSize() + 0;
 											for (Order order : orderlist) {
 										%>
-										<tr orderId="<%=order.getId()%>">
+										<%if(order.isOverEnded()){ %>
+											<tr orderId="<%=order.getId()%>" class="alert-danger">
+										<%}else if(order.isPre30()){ %>
+											<tr orderId="<%=order.getId()%>" class="alert-warning">
+										<%}else{ %>
+											<tr orderId="<%=order.getId()%>">
+										<%} %>
 											<td><%=++i%></td>
 											<td
 												style="max-width: 120px; height: 120px; max-height: 120px;">
@@ -332,50 +292,26 @@
 														src="/<%=order.getImg_ss()%>"> </a>
 											</td>
 											<td><%=order.getOrderNumber()%></td>
-											<td><%if(order.getStatus() == OrderStatus.CANCEL.ordinal()){ %>
-												<span class="label label-default">已取消</span>
-											<%}else if(order.getStatus() == OrderStatus.DELIVERED.ordinal()){ %>
-												<span class="label label-primary">已发货</span>
-											<%}else if(order.isCompleted()){ %>
-												<span class="label label-success">交易已完成</span>
-											<%}else{ %>
-												<%=order.getState()%>
-											<%} %>
-											</td>
-											<td><%=order.getAmount()%></td>
 											<td><%=order.getInfo()%></td>
 											<td><%=SystemCache.getCompanyName(order
 										.getCompanyId())%></td>
 											<td><%=SystemCache.getSalesmanName(order.getSalesmanId())%></td>
 											<td><%=SystemCache.getUserName(order
-										.getCreated_user())%></td>
-											<td><%=DateTool.formatDateYMD(order.getStart_at())%></td>
+										.getCharge_user())%></td>
+										
 											<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
-											<td><%=DateTool.formatDateYMD(order.getCreated_at())%></td>
+											<td><%if(order.isOverEnded()){ %>
+											<span class="label label-danger">已超期</span>
+										<%}else if(order.isPre30()){ %>
+											<span class="label label-warning">交货时间<=30天</span>
+										<%} %>
+											</td>
 											<td>
 												<%
 													if (has_order_detail) {
 												%>
 												<a href="order/detail/<%=order.getId()%>">详情</a>
 												<%
-													}
-												%>
-												<%
-												if(order.getIn_use()){
-													if (has_order_edit && order.isEdit()) {
-												%>
-													|
-													<a href="order/put/<%=order.getId()%>">编辑</a>
-													<%
-														}
-													%>
-													<%
-														if (has_order_cancel && order.isCancelable()) {
-													%>
-													|
-													<a data-cid="<%=order.getId()%>" class="delete" href="#">取消订单</a>
-												<%
-														}
 													}
 												%>
 
@@ -393,5 +329,11 @@
 				</div>
 			</div>
 		</div>
+		<script type="text/javascript">
+				/* 设置当前选中的页 */
+				var $a = $("#left li a[href='order/undelivery']");
+				setActiveLeft($a.parent("li"));
+				/* 设置当前选中的页 */
+			</script>
 	</body>
 </html>
