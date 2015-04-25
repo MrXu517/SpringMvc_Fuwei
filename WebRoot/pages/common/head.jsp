@@ -61,6 +61,8 @@
 	//2015-4-16添加报价工具
 	Boolean h_has_sample_util_price = SystemCache.hasAuthority(session,"sample/util/price");
 	
+	//2015--4-24添加装箱工具
+	Boolean h_has_box_util = SystemCache.hasAuthority(session,"util/box");
 	
 	//权限相关
 	
@@ -347,6 +349,11 @@
 							
 						
 						</ul>
+					</li>
+					<%} 
+					if(h_has_box_util){%>
+					<li>
+						<a href="util/box"><i class="fa fa-truck"></i>装箱工具</a>
 					</li>
 
 
