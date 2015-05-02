@@ -70,8 +70,7 @@
 								<div clas="navbar navbar-default">
 									<form class="form-horizontal searchform form-inline"
 										role="form" action="sample/search">
-										<input type="hidden" name="page" id="page"
-											value="<%=pager.getPageNo()%>">
+										
 										<div class="form-group" style="width: 200px;">
 											<label for="charge_employee" class="col-sm-3 control-label"
 												style="width: 60px;">
