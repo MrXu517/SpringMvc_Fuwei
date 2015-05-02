@@ -67,7 +67,7 @@
 		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
 
-		<link href="css/order/index.css" rel="stylesheet" type="text/css" />
+		<link href="css/report/report.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
 		<%@ include file="../common/head.jsp"%>

@@ -1,0 +1,53 @@
+.searchform .control-label{
+	width:auto;
+}
+.searchform .control-label+div{
+	width:auto;
+}
+.searchform #companyId,.searchform #factoryId,.searchform #number{
+	width:150px;
+}
+.searchform .form-group{
+	margin-right:0;
+}
+.searchform #salesmanId{
+	width:100px;
+}
+.searchform #status{
+	width:120px;
+}
+.searchform label{
+	padding-right:0;
+}
+.searchform {
+	display:inline-block;
+	width:auto;
+	vertical-align:top;
+	padding-right: 20px;
+}
+.salesgroup>*{
+	width:auto;
+}
+.salesgroup>div{
+	width:200px;
+}
+.timegroup{
+	
+}
+.timegroup>label{
+	width:80px;
+}
+.timegroup>div.input-group{
+	width:320px;
+}
+@media(max-width:1366px){  
+	.searchform #status{
+		width:80px;
+	}
+	.searchform #companyId, .searchform #factoryId, .searchform #number{
+		width:80px;
+	}
+	.searchform #salesmanId{
+		width:80px;
+	}
+}
