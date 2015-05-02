@@ -4,6 +4,7 @@
 <%@page import="com.fuwei.entity.Company"%>
 <%@page import="com.fuwei.entity.Material"%>
 <%@page import="com.fuwei.entity.Customer"%>
+<%@page import="com.fuwei.entity.Employee"%>
 <%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
@@ -22,6 +23,12 @@
 			.getDetaillist();
 	if (detaillist == null) {
 		detaillist = new ArrayList<MaterialPurchaseOrderDetail>();
+	}
+	List<Employee> employeelist = new ArrayList<Employee>();
+	for (Employee temp : SystemCache.employeelist) {
+		if (temp.getIs_charge_employee()) {
+			employeelist.add(temp);
+		}
 	}
 %>
 <!DOCTYPE html>
@@ -119,13 +126,13 @@
 													</div>
 													<div class="form-group">
 														业务员：
-														<select name="charge_user" id="charge_user"
+														<select name="charge_employee" id="charge_employee"
 															class="form-control">
 															<%
-																for (User item : SystemCache.userlist) {
-																	if (materialPurchaseOrder.getCharge_user() != null
+																for (Employee item : employeelist) {
+																	if (materialPurchaseOrder.getCharge_employee() != null
 																			&& item.getId() == materialPurchaseOrder
-																					.getCharge_user()) {
+																					.getCharge_employee()) {
 															%>
 															<option value="<%=item.getId()%>" selected><%=item.getName()%></option>
 															<%

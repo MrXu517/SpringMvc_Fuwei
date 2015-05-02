@@ -3,6 +3,7 @@
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.entity.Company"%>
 <%@page import="com.fuwei.entity.Material"%>
+<%@page import="com.fuwei.entity.Employee"%>
 <%@page import="com.fuwei.entity.Customer"%>
 <%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
@@ -14,6 +15,12 @@
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
+	List<Employee> employeelist = new ArrayList<Employee>();
+	for (Employee temp : SystemCache.employeelist) {
+		if (temp.getIs_charge_employee()) {
+			employeelist.add(temp);
+		}
+	}
 %>
 <!DOCTYPE html>
 <html>
@@ -105,10 +112,10 @@
 													</div>
 													<div class="form-group">
 														业务员：
-														<select name="charge_user" id="charge_user"
+														<select name="charge_employee" id="charge_employee"
 															class="form-control">
 															<%
-																for (User item : SystemCache.userlist) {
+																for (Employee item : employeelist) {
 															%>
 															<option value="<%=item.getId()%>"><%=item.getName()%></option>
 															<%

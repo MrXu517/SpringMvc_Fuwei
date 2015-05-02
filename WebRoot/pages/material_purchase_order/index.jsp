@@ -311,7 +311,7 @@
 											<td><%=++i%></td>
 											<td><%=materialPurchaseOrder.getNumber() == null ? "":materialPurchaseOrder.getNumber() %></td>
 											<td><%=SystemCache.getFactoryName(materialPurchaseOrder.getFactoryId())%></td>
-											<td><%=SystemCache.getCompanyName(materialPurchaseOrder
+											<td><%=SystemCache.getCompanyShortName(materialPurchaseOrder
 										.getCompanyId())%></td>
 											<td><%=SystemCache.getCustomerName(materialPurchaseOrder.getCustomerId())%></td>
 											<td><%=materialPurchaseOrder.getCompany_productNumber()%></td>

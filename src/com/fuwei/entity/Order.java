@@ -55,7 +55,7 @@ public class Order implements Serializable {
 	private double cost;// 成本
 	private String productNumber;// 产品编号
 	//private Integer machineId;// 机织
-	private Integer charge_user;// 打样人 ，跟单人
+//	private Integer charge_user;// 打样人 ，跟单人
 	private String detail;// 报价详情
 
 	private String img_s;// 中等缩略图
@@ -80,7 +80,8 @@ public class Order implements Serializable {
 	//2015-4-4 添加 样品的公司货号
 	private String company_productNumber;//样品的公司货号
 	
-	
+	//2015-5-2修改
+	private Integer charge_employee;// 打样人 ，跟单人
 	
 	public String getCompany_productNumber() {
 		return company_productNumber;
@@ -427,16 +428,18 @@ public class Order implements Serializable {
 //		this.machineId = machineId;
 //	}
 
-	public Integer getCharge_user() {
-		return charge_user;
-	}
-
-	public void setCharge_user(Integer charge_user) {
-		this.charge_user = charge_user;
-	}
+	
 
 	public String getDetail() {
 		return detail;
+	}
+
+	public Integer getCharge_employee() {
+		return charge_employee;
+	}
+
+	public void setCharge_employee(Integer charge_employee) {
+		this.charge_employee = charge_employee;
 	}
 
 	public void setDetail(String detail) {

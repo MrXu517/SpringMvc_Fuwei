@@ -20,6 +20,7 @@ public class Department implements Serializable {
 	
 	private Integer created_user;//创建用户
 
+
 	public int getId() {
 		return id;
 	}

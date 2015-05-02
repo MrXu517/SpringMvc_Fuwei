@@ -26,7 +26,7 @@ public class SampleService extends BaseService {
 	@Autowired
 	JdbcTemplate jdbc;
 
-	public Pager getList(Pager pager, Date start_time, Date end_time,Integer charge_user,
+	public Pager getList(Pager pager, Date start_time, Date end_time,Integer charge_employee,
 			List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
@@ -41,8 +41,8 @@ public class SampleService extends BaseService {
 				sql.append(seq + "created_at<='" +  DateTool.formateDate(DateTool.addDay(end_time, 1))+"'");
 				seq = " AND ";
 			}
-			if(charge_user!=null){
-				sql.append(seq + "charge_user='" +  charge_user +"'");
+			if(charge_employee!=null){
+				sql.append(seq + "charge_employee='" +  charge_employee +"'");
 				seq = " AND ";
 			}
 			if (sortlist != null && sortlist.size() > 0) {
@@ -79,18 +79,18 @@ public class SampleService extends BaseService {
 	}
 
 	// 获取待核价列表 has_detail = false
-	public List<Sample> getUnDetailList(Integer charge_user) throws Exception {
+	public List<Sample> getUnDetailList(Integer charge_employee) throws Exception {
 		try {
 			List<Sample> sampleList = new ArrayList<Sample>();
-			if (charge_user == null) {
+			if (charge_employee == null) {
 				sampleList = dao.queryForBeanList(
 						"SELECT * FROM tb_sample WHERE has_detail=0 order by created_at desc",
 						Sample.class);
 			} else {
 				sampleList = dao
 						.queryForBeanList(
-								"SELECT * FROM tb_sample WHERE has_detail=0 and charge_user=? order by created_at desc",
-								Sample.class, charge_user);
+								"SELECT * FROM tb_sample WHERE has_detail=0 and charge_employee=? order by created_at desc",
+								Sample.class, charge_employee);
 			}
 			return sampleList;
 		} catch (Exception e) {
@@ -160,7 +160,7 @@ public class SampleService extends BaseService {
 	}
 	
 	//根据名称等搜索样品
-	public Pager searchList(Pager pager, String name,Integer charge_user,
+	public Pager searchList(Pager pager, String name,Integer charge_employee,
 			List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
@@ -172,8 +172,8 @@ public class SampleService extends BaseService {
 					seq = " AND ";
 				}
 			}
-			if(charge_user!=null){
-				sql.append(seq + "charge_user='" +  charge_user +"'");
+			if(charge_employee!=null){
+				sql.append(seq + "charge_employee='" +  charge_employee +"'");
 				seq = " AND ";
 			}
 			if (sortlist != null && sortlist.size() > 0) {

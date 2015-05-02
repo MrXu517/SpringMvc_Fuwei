@@ -126,12 +126,12 @@
 													</div>
 													<div class="form-group">
 														业务员：
-														<select disabled name="charge_user" id="charge_user"
+														<select disabled name="charge_employee" id="charge_employee"
 															class="form-control">
 															<option
-																value="<%=materialPurchaseOrder.getCharge_user()%>"
-																selected><%=SystemCache.getUserName(materialPurchaseOrder
-							.getCharge_user())%></option>
+																value="<%=materialPurchaseOrder.getCharge_employee()%>"
+																selected><%=SystemCache.getEmployeeName(materialPurchaseOrder
+							.getCharge_employee())%></option>
 														</select>
 													</div>
 

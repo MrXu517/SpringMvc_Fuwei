@@ -119,9 +119,9 @@
 													</div>
 													<div class="form-group">
 														业务员：
-														<select disabled name="charge_user" id="charge_user"
+														<select disabled name="charge_employee" id="charge_employee"
 																	class="form-control">
-																	<option value="<%=coloringOrder.getCharge_user()%>" selected><%=SystemCache.getUserName(coloringOrder.getCharge_user())%></option>
+																	<option value="<%=coloringOrder.getCharge_employee()%>" selected><%=SystemCache.getEmployeeName(coloringOrder.getCharge_employee())%></option>
 																</select>
 													</div>
 

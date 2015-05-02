@@ -31,6 +31,7 @@ import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.constant.Constants;
+import com.fuwei.entity.Employee;
 import com.fuwei.entity.QuotePrice;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
@@ -137,7 +138,7 @@ public class SampleController extends BaseController {
 	//待核价样品列表
 	@RequestMapping(value="/undetailedindex",method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView undetailedindex(Integer charge_user ,HttpSession session,HttpServletRequest request) throws Exception{
+	public ModelAndView undetailedindex(Integer charge_employee ,HttpSession session,HttpServletRequest request) throws Exception{
 		
 		String lcode = "sample/undetailedindex";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
@@ -145,9 +146,17 @@ public class SampleController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有查看待核价样品列表的权限", null);
 		}
 		
-		List<Sample> samplelist = sampleService.getUnDetailList(charge_user);
+		List<Sample> samplelist = sampleService.getUnDetailList(charge_employee);
+		request.setAttribute("charge_employee", charge_employee);
+		List<Employee> employeelist = new ArrayList<Employee>();
+		for(Employee temp : SystemCache.employeelist){
+			if(temp.getIs_charge_employee()){
+				employeelist.add(temp);
+			}		
+		}
+		request.setAttribute("employeelist", employeelist);
 		request.setAttribute("samplelist", samplelist);
-		request.setAttribute("userlist", SystemCache.userlist);
+		
 		request.setAttribute("gongxulist", SystemCache.gongxulist);
 		return new ModelAndView("sample/undetailedindex");
 	}
@@ -156,7 +165,7 @@ public class SampleController extends BaseController {
 	@SuppressWarnings("deprecation")
 	@RequestMapping(value="/index",method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView index(Integer page,String start_time,String end_time,String sortJSON,Integer charge_user,  HttpSession session,HttpServletRequest request) throws Exception{
+	public ModelAndView index(Integer page,String start_time,String end_time,String sortJSON,Integer charge_employee,  HttpSession session,HttpServletRequest request) throws Exception{
 		String lcode = "sample/index";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		if(!hasAuthority){
@@ -181,13 +190,19 @@ public class SampleController extends BaseController {
 		sort.setDirection("desc");
 		sort.setProperty("created_at");
 		sortList.add(sort);
-		pager = sampleService.getList(pager,start_time_d,end_time_d,charge_user,sortList);
+		pager = sampleService.getList(pager,start_time_d,end_time_d,charge_employee,sortList);
 		
 		request.setAttribute("start_time", start_time_d);
 		request.setAttribute("end_time", end_time_d);
 		request.setAttribute("pager", pager);
-		request.setAttribute("charge_user", charge_user);
-		request.setAttribute("userlist", SystemCache.userlist);
+		request.setAttribute("charge_employee", charge_employee);
+		List<Employee> employeelist = new ArrayList<Employee>();
+		for(Employee temp : SystemCache.employeelist){
+			if(temp.getIs_charge_employee()){
+				employeelist.add(temp);
+			}		
+		}
+		request.setAttribute("employeelist", employeelist);
 		return new ModelAndView("sample/index");
 	}
 	
@@ -355,7 +370,7 @@ public class SampleController extends BaseController {
     @SuppressWarnings("deprecation")
 	@RequestMapping(value="/search",method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView search(Integer page,String name,String sortJSON,Integer charge_user,  HttpSession session,HttpServletRequest request) throws Exception{
+	public ModelAndView search(Integer page,String name,String sortJSON,Integer charge_employee,  HttpSession session,HttpServletRequest request) throws Exception{
 //		String lcode = "sample/index";
 //		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 //		if(!hasAuthority){
@@ -381,12 +396,18 @@ public class SampleController extends BaseController {
 		sort.setDirection("desc");
 		sort.setProperty("created_at");
 		sortList.add(sort);
-		pager = sampleService.searchList(pager,name,charge_user,sortList);
+		pager = sampleService.searchList(pager,name,charge_employee,sortList);
 		
 		request.setAttribute("name", name);
 		request.setAttribute("pager", pager);
-		request.setAttribute("charge_user", charge_user);
-		request.setAttribute("userlist", SystemCache.userlist);
+		request.setAttribute("charge_employee", charge_employee);
+		List<Employee> employeelist = new ArrayList<Employee>();
+		for(Employee temp : SystemCache.employeelist){
+			if(temp.getIs_charge_employee()){
+				employeelist.add(temp);
+			}		
+		}
+		request.setAttribute("employeelist", employeelist);
 		return new ModelAndView("sample/search");
 	}
 	

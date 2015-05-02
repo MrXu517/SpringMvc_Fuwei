@@ -178,7 +178,7 @@
 																<td>
 																	跟单
 																</td>
-																<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																<td><%=SystemCache.getEmployeeName(order.getCharge_employee())%></td>
 															</tr>
 														</tbody>
 													</table>

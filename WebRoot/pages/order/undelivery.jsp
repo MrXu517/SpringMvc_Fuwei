@@ -4,6 +4,7 @@
 <%@page import="com.fuwei.entity.Salesman"%>
 <%@page import="com.fuwei.entity.Company"%>
 <%@page import="com.fuwei.entity.User"%>
+<%@page import="com.fuwei.entity.Employee"%>
 <%@page import="com.fuwei.commons.Pager"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.constant.OrderStatus"%>
@@ -63,11 +64,17 @@
 			"order/detail");
 	//权限相关
 	
-	Integer charge_userId = (Integer) request
-			.getAttribute("charge_user");
-	String charge_user_str = "";
-	if (charge_userId != null) {
-		charge_user_str = String.valueOf(charge_userId);
+	List<Employee> employeelist = new ArrayList<Employee>();
+	for (Employee temp : SystemCache.employeelist) {
+		if (temp.getIs_charge_employee()) {
+			employeelist.add(temp);
+		}
+	}
+	Integer charge_employeeId = (Integer) request
+			.getAttribute("charge_employee");
+	String charge_employee_str = "";
+	if (charge_employeeId != null) {
+		charge_employee_str = String.valueOf(charge_employeeId);
 	}
 %>
 <!DOCTYPE html>
@@ -126,19 +133,19 @@
 									<form class="form-horizontal searchform form-inline searchform"
 										role="form">
 										<div class="form-group">
-											<label for="charge_user" class="col-sm-3 control-label"
+											<label for="charge_employee" class="col-sm-3 control-label"
 												style="width: 60px;">
 												跟单人
 											</label>
 											<div class="col-sm-8">
-												<select id="charge_user" name="charge_user"
+												<select id="charge_employee" name="charge_employee"
 													class="form-control">
 													<option value="">
 														所有
 													</option>
 													<%
-														for (User tempU : SystemCache.userlist) {
-															if (charge_userId != null && charge_userId == tempU.getId()) {
+														for (Employee tempU : employeelist) {
+															if (charge_employeeId != null && charge_employeeId == tempU.getId()) {
 													%>
 													<option value="<%=tempU.getId()%>" selected="selected"><%=tempU.getName()%></option>
 													<%
@@ -165,7 +172,7 @@
 													</option>
 													<%
 														for (Company company : SystemCache.companylist) {
-															if (companyId == company.getId()) {
+															if (companyId!=null && companyId == company.getId()) {
 													%>
 													<option value="<%=company.getId()%>" selected><%=company.getFullname()%></option>
 													<%
@@ -191,7 +198,7 @@
 													</option>
 													<%
 														for (Salesman salesman : SystemCache.getSalesmanList(companyId)) {
-															if (salesmanId == salesman.getId()) {
+															if (salesmanId!=null&&salesmanId == salesman.getId()) {
 													%>
 													<option value="<%=salesman.getId()%>" selected><%=salesman.getName()%></option>
 													<%
@@ -227,7 +234,7 @@
 									<ul class="pagination">
 										<li>
 											<a
-												href="order/undelivery?charge_user=<%=charge_user_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
+												href="order/undelivery?charge_employee=<%=charge_employee_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
 										</li>
 
 										<%
@@ -235,7 +242,7 @@
 									%>
 										<li class="">
 											<a
-												href="order/undelivery?charge_user=<%=charge_user_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
+												href="order/undelivery?charge_employee=<%=charge_employee_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -250,7 +257,7 @@
 
 										<li class="active">
 											<a
-												href="order/undelivery?charge_user=<%=charge_user_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
+												href="order/undelivery?charge_employee=<%=charge_employee_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
 												class="sr-only"></span> </a>
 										</li>
 										<li>
@@ -260,7 +267,7 @@
 										
 										<li class="">
 											<a
-												href="order/undelivery?charge_user=<%=charge_user_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
+												href="order/undelivery?charge_employee=<%=charge_employee_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -276,7 +283,7 @@
 										</li>
 										<li>
 											<a
-												href="order/undelivery?charge_user=<%=charge_user_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
+												href="order/undelivery?charge_employee=<%=charge_employee_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
 
@@ -342,8 +349,8 @@
 											<td><%=SystemCache.getCompanyShortName(order
 										.getCompanyId())%></td>
 											<td><%=SystemCache.getSalesmanName(order.getSalesmanId())%></td>
-											<td><%=SystemCache.getUserName(order
-										.getCharge_user())%></td>
+											<td><%=SystemCache.getEmployeeName(order
+										.getCharge_employee())%></td>
 
 											<td><%=DateTool.formatDateYMD(order.getEnd_at())%><br>
 												<%if(order.isOverEnded()){ %>

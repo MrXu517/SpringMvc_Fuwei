@@ -1,14 +1,20 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
-<%@page import="com.fuwei.entity.Material" %>
-<%@page import="com.fuwei.entity.Factory" %>
+<%@page import="com.fuwei.entity.Material"%>
+<%@page import="com.fuwei.entity.Employee"%>
+<%@page import="com.fuwei.entity.Factory"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	List<User> userlist = SystemCache.userlist;
+	List<Employee> employeelist = new ArrayList<Employee>();
+	for (Employee temp : SystemCache.employeelist) {
+		if (temp.getIs_charge_employee()) {
+			employeelist.add(temp);
+		}
+	}
 	List<Material> materiallist = SystemCache.materiallist;
 	List<Factory> factorylist = SystemCache.produce_factorylist;
 %>
@@ -106,14 +112,14 @@
 													<div class="col-sm-1"></div>
 												</div>
 												<div class="form-group">
-													<label for="charge_user" class="col-sm-3 control-label">
+													<label for="charge_employee" class="col-sm-3 control-label">
 														打样人
 													</label>
 													<div class="col-sm-8">
-														<select class="form-control require" name="charge_user"
-															id="charge_user">
+														<select class="form-control require" name="charge_employee"
+															id="charge_employee">
 															<%
-																for (User item : userlist) {
+																for (Employee item : employeelist) {
 															%>
 															<option value="<%=item.getId()%>"><%=item.getName()%></option>
 															<%
@@ -170,7 +176,9 @@
 													<div class="col-sm-8">
 														<select class="form-control" name="factoryId"
 															id="factoryId">
-															<option value="">未选择</option>
+															<option value="">
+																未选择
+															</option>
 															<%
 																for (Factory factory : factorylist) {
 															%>

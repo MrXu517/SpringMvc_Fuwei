@@ -135,7 +135,7 @@
 										<td>
 											打样人
 										</td>
-										<td><%=SystemCache.getUserName(sample.getCharge_user())%></td>
+										<td><%=SystemCache.getEmployeeName(sample.getCharge_employee())%></td>
 									</tr>
 									<tr>
 										<td>

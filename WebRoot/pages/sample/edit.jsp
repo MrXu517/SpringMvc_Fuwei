@@ -1,7 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
 <%@page import="com.fuwei.entity.Sample"%>
-<%@page import="com.fuwei.entity.User"%>
+<%@page import="com.fuwei.entity.Employee"%>
 <%@page import="com.fuwei.entity.Material" %>
 <%@page import="com.fuwei.entity.Factory" %>
 <%@page import="com.fuwei.commons.SystemCache"%>
@@ -10,7 +10,12 @@
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	List<User> userlist = SystemCache.userlist;
+	List<Employee> employeelist = new ArrayList<Employee>();
+	for (Employee temp : SystemCache.employeelist) {
+		if (temp.getIs_charge_employee()) {
+			employeelist.add(temp);
+		}
+	}
 	List<Material> materiallist = SystemCache.materiallist;
 	List<Factory> factorylist = SystemCache.produce_factorylist;
 
@@ -115,16 +120,17 @@
 													<div class="col-sm-1"></div>
 												</div>
 												<div class="form-group">
-													<label for="charge_user" class="col-sm-3 control-label">
+													<label for="charge_employee" class="col-sm-3 control-label">
 														打样人
 													</label>
 													<div class="col-sm-8">
-														<select value="<%=sample.getCharge_user()%>"
-															class="form-control require" name="charge_user"
-															id="charge_user">
+														<select value="<%=sample.getCharge_employee()%>"
+															class="form-control require" name="charge_employee"
+															id="charge_employee">
+															<option value="">未选择</option>
 															<%
-																for (User item : userlist) {
-																	if (item.getId() == sample.getCharge_user()) {
+																for (Employee item : employeelist) {
+																	if (sample.getCharge_employee()!=null && item.getId() == sample.getCharge_employee()) {
 															%>
 															<option value="<%=item.getId()%>" selected="selected"><%=item.getName()%></option>
 															<%

@@ -29,9 +29,9 @@ $(document).ready(function(){
 	//删除 -- 结束
 	
 	//打样人改变事件
-	$("#charge_user").change(function(){
+	$("#charge_employee").change(function(){
 		var value = this.value;
-		location = location.pathname+"?charge_user="+this.value;
+		location = location.pathname+"?charge_employee="+this.value;
 	});
 	//打样人改变事件
 	

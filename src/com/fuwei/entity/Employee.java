@@ -73,8 +73,19 @@ public class Employee implements Serializable {
 	
 	private Date birthday;//出生年月
 	
+	private Boolean is_charge_employee = false;//是否跟单人
 	
 	
+
+
+	public Boolean getIs_charge_employee() {
+		return is_charge_employee;
+	}
+
+	public void setIs_charge_employee(Boolean is_charge_employee) {
+		this.is_charge_employee = is_charge_employee;
+	}
+
 	public Date getBirthday() {
 		return birthday;
 	}
@@ -222,7 +233,7 @@ public class Employee implements Serializable {
 	public Date getAgreement_at() {
 		return agreement_at;
 	}
-
+	
 	public void setAgreement_at(Date agreement_at) {
 		this.agreement_at = agreement_at;
 	}

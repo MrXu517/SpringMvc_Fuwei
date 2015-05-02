@@ -100,7 +100,7 @@
 															</div>
 															<div class="col-sm-1"></div>
 														</div>
-
+														
 														<div class="form-group">
 															<div class="col-sm-offset-3 col-sm-5">
 																<button type="submit" class="btn btn-primary"
@@ -206,6 +206,18 @@
 															<div class="col-sm-8">
 																<input type="text" class="form-control require"
 																	name="name" id="name" placeholder="名称">
+															</div>
+															<div class="col-sm-1"></div>
+														</div>
+														<div class="form-group">
+															<label for="is_charge_employee" class="col-sm-3 control-label">
+																是否跟单人
+															</label>
+															<div class="col-sm-8">
+																<input type="radio" id="is_charge_employee_1"
+																	name="is_charge_employee" value="1" >是
+																<input type="radio" id="is_charge_employee_0"
+																	name="is_charge_employee" value="0" checked>否
 															</div>
 															<div class="col-sm-1"></div>
 														</div>

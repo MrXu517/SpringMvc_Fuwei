@@ -214,6 +214,12 @@ function setAddEmployee(){
 		}
 		$submitBtn.button('loading');
 		var formdata = $(this).serializeJson();
+		if(formdata.agreement_at==""){
+			delete formdata.agreement_at;
+		}
+		if(formdata.agreement_end==""){
+			delete formdata.agreement_end;
+		}
 		delete formdata.id;
 		$.ajax({
             url: "employee/add",
@@ -256,12 +262,19 @@ function setUpdateEmployee(result){
 		if(!Common.checkform(this)){
 			return false;
 		}
+		var formdata = $(this).serializeJson();
+		if(formdata.agreement_at==""){
+			delete formdata.agreement_at;
+		}
+		if(formdata.agreement_end==""){
+			delete formdata.agreement_end;
+		}
 		$submitBtn.button('loading');
-		var formdata = $(this).serialize();
+		
 		$.ajax({
             url: "employee/put",
             type: 'POST',
-            data: formdata,
+            data: $.param(formdata),
         })
             .done(function(result) {
             	if(result.success){

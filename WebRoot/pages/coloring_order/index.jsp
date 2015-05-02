@@ -312,7 +312,7 @@
 											<td><%=++i%></td>
 											<td><%=coloringOrder.getNumber() == null ? "" : coloringOrder.getNumber()%></td>
 											<td><%=SystemCache.getFactoryName(coloringOrder.getFactoryId())%></td>
-											<td><%=SystemCache.getCompanyName(coloringOrder
+											<td><%=SystemCache.getCompanyShortName(coloringOrder
 										.getCompanyId())%></td>
 											<td><%=SystemCache.getCustomerName(coloringOrder.getCustomerId())%></td>
 											<td><%=coloringOrder.getCompany_productNumber()%></td>

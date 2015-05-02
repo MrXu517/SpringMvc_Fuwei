@@ -28,7 +28,7 @@ $(document).ready(function(){
 	//删除 -- 结束
 	
 	//打样人改变事件
-	$("#charge_user").change(function(){
+	$("#charge_employee").change(function(){
 		$(".searchform").submit();
 	});
 	//打样人改变事件

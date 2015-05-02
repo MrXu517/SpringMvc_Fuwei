@@ -141,7 +141,8 @@ public class Quote implements Serializable{
 		sample.setCreated_user(created_user);
 	}
 	public void setScharge_user(Integer charge_user){
-		sample.setCharge_user(charge_user);
+//		sample.setCharge_user(charge_user);
+		sample.setCharge_employee(charge_user);
 	}
 	public void setSdetail(String detail){
 		sample.setDetail(detail);

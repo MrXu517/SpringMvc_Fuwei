@@ -3,6 +3,7 @@
 <%@page import="com.fuwei.entity.Sample"%>
 <%@page import="com.fuwei.entity.Salesman"%>
 <%@page import="com.fuwei.entity.User"%>
+<%@page import="com.fuwei.entity.Employee"%>
 <%@page import="com.fuwei.commons.Pager"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
@@ -11,7 +12,7 @@
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	List<User> userlist = (List<User>) request.getAttribute("userlist");
+	List<Employee> employeelist = (List<Employee>) request.getAttribute("employeelist");
 	Pager pager = (Pager) request.getAttribute("pager");
 	if (pager == null) {
 		pager = new Pager();
@@ -32,11 +33,11 @@
 		end_time_str = DateTool.formatDateYMD(end_time);
 	}
 
-	Integer charge_userId = (Integer) request
-			.getAttribute("charge_user");
-	String charge_user_str = "";
-	if (charge_userId != null) {
-		charge_user_str = String.valueOf(charge_userId);
+	Integer charge_employeeId = (Integer) request
+			.getAttribute("charge_employee");
+	String charge_employee_str = "";
+	if (charge_employeeId != null) {
+		charge_employee_str = String.valueOf(charge_employeeId);
 	}
 
 	//权限相关
@@ -96,25 +97,25 @@
 										<input type="hidden" name="page" id="page"
 											value="<%=pager.getPageNo()%>">
 										<div class="form-group" style="width: 200px;">
-											<label for="charge_user" class="col-sm-3 control-label"
+											<label for="charge_employee" class="col-sm-3 control-label"
 												style="width: 60px;">
 												打样人
 											</label>
 											<div class="col-sm-8">
-												<select id="charge_user" name="charge_user"
+												<select id="charge_employee" name="charge_employee"
 													class="form-control">
 													<option value="">
 														所有
 													</option>
 													<%
-														for (User tempU : userlist) {
-															if (charge_userId != null && charge_userId == tempU.getId()) {
+														for (Employee temp : employeelist) {
+															if (charge_employeeId != null && charge_employeeId == temp.getId()) {
 													%>
-													<option value="<%=tempU.getId()%>" selected="selected"><%=tempU.getName()%></option>
+													<option value="<%=temp.getId()%>" selected="selected"><%=temp.getName()%></option>
 													<%
 														} else {
 													%>
-													<option value="<%=tempU.getId()%>"><%=tempU.getName()%></option>
+													<option value="<%=temp.getId()%>"><%=temp.getName()%></option>
 													<%
 														}
 														}
@@ -144,7 +145,7 @@
 									<ul class="pagination">
 										<li>
 											<a
-												href="sample/index?charge_user=<%=charge_user_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=1">«</a>
+												href="sample/index?charge_employee=<%=charge_employee_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=1">«</a>
 										</li>
 
 										<%
@@ -152,7 +153,7 @@
 										%>
 										<li class="">
 											<a
-												href="sample/index?charge_user=<%=charge_user_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() - 1%>">上一页
+												href="sample/index?charge_employee=<%=charge_employee_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() - 1%>">上一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -167,7 +168,7 @@
 
 										<li class="active">
 											<a
-												href="sample/index?charge_user=<%=charge_user_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
+												href="sample/index?charge_employee=<%=charge_employee_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
 												class="sr-only"></span> </a>
 										</li>
 										<li>
@@ -177,7 +178,7 @@
 										
 										<li class="">
 											<a
-												href="sample/index?charge_user=<%=charge_user_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() + 1%>">下一页
+												href="sample/index?charge_employee=<%=charge_employee_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() + 1%>">下一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -193,13 +194,13 @@
 										</li>
 										<li>
 											<a
-												href="sample/index?charge_user=<%=charge_user_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getTotalPage()%>">»</a>
+												href="sample/index?charge_employee=<%=charge_employee_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
 									<form class="form-inline pageform form-horizontal" role="form"
 										action="sample/index">
-										<input type="hidden" name="charge_user" id="charge_user"
-											value="<%=charge_user_str%>">
+										<input type="hidden" name="charge_employee" id="charge_employee"
+											value="<%=charge_employee_str%>">
 										<input type="hidden" name="start_time" id="start_time"
 											value="<%=start_time_str%>">
 										<input type="hidden" name="end_time" id="end_time"
@@ -276,7 +277,7 @@
 											<td><%=SystemCache.getMaterialName(sample.getMaterialId())%></td>
 											<td><%=sample.getWeight()%></td>
 											<td><%=sample.getSize()%></td>
-											<td><%=SystemCache.getUserName(sample.getCharge_user()) %></td>
+											<td><%=SystemCache.getEmployeeName(sample.getCharge_employee()) %></td>
 											<td><%=sample.getCreated_at()%></td>
 											<td>
 												<%

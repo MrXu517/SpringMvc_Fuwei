@@ -30,7 +30,9 @@ public class Sample implements Serializable {
 	private Integer created_user;//创建用户
 	
 	
-	private Integer charge_user;//打样人
+//	private Integer charge_user;//打样人
+	
+	private Integer charge_employee;//打样人
 	
 	private String detail;//报价详情
 	
@@ -42,6 +44,14 @@ public class Sample implements Serializable {
 	private String img_ss;//缩略图
 	
 	
+	
+	
+	public Integer getCharge_employee() {
+		return charge_employee;
+	}
+	public void setCharge_employee(Integer charge_employee) {
+		this.charge_employee = charge_employee;
+	}
 	public String getHelp_code() {
 		return help_code;
 	}
@@ -157,12 +167,12 @@ public class Sample implements Serializable {
 	public void setCreated_user(Integer created_user) {
 		this.created_user = created_user;
 	}
-	public Integer getCharge_user() {
-		return charge_user;
-	}
-	public void setCharge_user(Integer charge_user) {
-		this.charge_user = charge_user;
-	}
+//	public Integer getCharge_user() {
+//		return charge_user;
+//	}
+//	public void setCharge_user(Integer charge_user) {
+//		this.charge_user = charge_user;
+//	}
 
 }
 

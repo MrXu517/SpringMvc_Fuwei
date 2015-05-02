@@ -159,6 +159,9 @@ $(document).ready( function() {
 						type :'GET',
 						success : function(sample) {
 							sample.sampleId = sample.id;
+							if(sample.charge_employee == null){
+								sample.charge_employee = "";
+							}
 							sample.company_productNumber = sample.productNumber;
 							Common.fillForm($(".orderform #sampleInfoWidget")[0], sample);
 							$("#sampleImgA").attr("href", "/" + sample.img);

@@ -100,7 +100,7 @@
 										</legend>
 										<input type="hidden" id="sampleId" name="sampleId"
 										value="<%=order.getSampleId()%>" class="require" />
-										<div class="form-group col-md-6">
+										<div class="form-group col-md-6 imggroup">
 											<label for="img" class="col-sm-3 control-label">
 												样品图片
 											</label>
@@ -211,15 +211,15 @@
 										</div>
 
 										<div class="form-group col-md-6">
-											<label for="charge_user" class="col-sm-3 control-label">
+											<label for="charge_employee" class="col-sm-3 control-label">
 												跟单人
 											</label>
 											<div class="col-sm-8">
-												<select disabled name="charge_user" id="charge_user"
+												<select disabled name="charge_employee" id="charge_employee"
 													class="form-control">
-													<option value="<%=order.getCharge_user()%>"
-														selected><%=SystemCache.getUserName(order
-							.getCharge_user())%></option>
+													<option value="<%=order.getCharge_employee()%>"
+														selected><%=SystemCache.getEmployeeName(order
+							.getCharge_employee())%></option>
 												</select>
 
 											</div>

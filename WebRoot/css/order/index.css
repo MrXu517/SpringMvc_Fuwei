@@ -258,10 +258,16 @@ tr.label-warning{
 	.searchform #status{
 		width:80px;
 	}
-	.searchform #companyId, .searchform #factoryId, .searchform #number{
+	.searchform #companyId, .searchform #factoryId{
 		width:80px;
 	}
 	.searchform #salesmanId{
 		width:80px;
 	}
+	.searchform #number{
+		width:90px;
+	}
+}
+.imggroup{
+	height:380px;
 }

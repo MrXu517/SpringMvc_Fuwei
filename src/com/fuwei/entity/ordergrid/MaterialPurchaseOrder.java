@@ -53,7 +53,8 @@ public class MaterialPurchaseOrder extends BaseTableOrder{
 	private String img_ss;// 缩略图
 	
 	//2015-3-17 增加跟单人字段
-	private Integer charge_user;// 打样人 ，跟单人
+//	private Integer charge_user;// 打样人 ，跟单人
+	private Integer charge_employee;// 打样人 ，跟单人 2015-5-2修改
 	
 	
 	
@@ -110,12 +111,14 @@ public class MaterialPurchaseOrder extends BaseTableOrder{
 		return this.status != 6;
 	}
 	
-	public Integer getCharge_user() {
-		return charge_user;
+	
+
+	public Integer getCharge_employee() {
+		return charge_employee;
 	}
 
-	public void setCharge_user(Integer charge_user) {
-		this.charge_user = charge_user;
+	public void setCharge_employee(Integer charge_employee) {
+		this.charge_employee = charge_employee;
 	}
 
 	public String getImg_s() {

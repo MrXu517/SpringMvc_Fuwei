@@ -54,7 +54,7 @@
 									<td>
 										业务员：
 										<span><%=coloringOrder == null ? "" : (SystemCache
-						.getUserName((coloringOrder.getCharge_user())))%></span>
+						.getEmployeeName((coloringOrder.getCharge_employee())))%></span>
 									</td>
 									<td class="pull-right">
 

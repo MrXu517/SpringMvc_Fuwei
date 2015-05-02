@@ -323,7 +323,7 @@
 																		<td>
 																			跟单
 																		</td>
-																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																		<td><%=SystemCache.getEmployeeName(order.getCharge_employee())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -517,7 +517,7 @@
 																		<td>
 																			跟单
 																		</td>
-																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																		<td><%=SystemCache.getEmployeeName(order.getCharge_employee())%></td>
 																	</tr>
 																</tbody>
 															</table>
@@ -836,7 +836,7 @@
 																		<td>
 																			跟单
 																		</td>
-																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																		<td><%=SystemCache.getEmployeeName(order.getCharge_employee())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -1008,7 +1008,7 @@
 																		<td>
 																			跟单
 																		</td>
-																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																		<td><%=SystemCache.getEmployeeName(order.getCharge_employee())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -1290,7 +1290,7 @@
 																		<td>
 																			跟单
 																		</td>
-																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																		<td><%=SystemCache.getEmployeeName(order.getCharge_employee())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -1561,8 +1561,8 @@
 									<td>
 										业务员：
 										<span><%=materialPurchaseOrder == null ? ""
-						: (SystemCache.getUserName((materialPurchaseOrder
-								.getCharge_user())))%></span>
+						: (SystemCache.getEmployeeName((materialPurchaseOrder
+								.getCharge_employee())))%></span>
 									</td>
 									<td class="pull-right">
 
@@ -1839,8 +1839,8 @@
 									<td>
 										业务员：
 										<span><%=coloringOrder == null ? ""
-						: (SystemCache.getUserName((coloringOrder
-								.getCharge_user())))%></span>
+						: (SystemCache.getEmployeeName((coloringOrder
+								.getCharge_employee())))%></span>
 									</td>
 									<td class="pull-right">
 
@@ -2132,7 +2132,7 @@
 																		<td>
 																			跟单
 																		</td>
-																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																		<td><%=SystemCache.getEmployeeName(order.getCharge_employee())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -2275,8 +2275,8 @@
 									<td>
 										业务员：
 										<span><%=fuliaoPurchaseOrder == null ? ""
-						: (SystemCache.getUserName((fuliaoPurchaseOrder
-								.getCharge_user())))%></span>
+						: (SystemCache.getEmployeeName((fuliaoPurchaseOrder
+								.getCharge_employee())))%></span>
 									</td>
 									<td class="pull-right">
 
@@ -2555,7 +2555,7 @@
 																		<td>
 																			跟单
 																		</td>
-																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																		<td><%=SystemCache.getEmployeeName(order.getCharge_employee())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -2709,7 +2709,7 @@
 																		<td>
 																			跟单
 																		</td>
-																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																		<td><%=SystemCache.getEmployeeName(order.getCharge_employee())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -2860,7 +2860,7 @@
 																		<td>
 																			跟单
 																		</td>
-																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																		<td><%=SystemCache.getEmployeeName(order.getCharge_employee())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -2986,7 +2986,7 @@
 																		<td>
 																			跟单
 																		</td>
-																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																		<td><%=SystemCache.getEmployeeName(order.getCharge_employee())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -3146,7 +3146,7 @@
 																		<td>
 																			跟单
 																		</td>
-																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																		<td><%=SystemCache.getEmployeeName(order.getCharge_employee())%></td>
 																	</tr>
 																	<tr>
 																		<td>
@@ -3297,7 +3297,7 @@
 																		<td>
 																			跟单
 																		</td>
-																		<td><%=SystemCache.getUserName(order.getCharge_user())%></td>
+																		<td><%=SystemCache.getEmployeeName(order.getCharge_employee())%></td>
 																	</tr>
 																	<tr>
 																		<td>

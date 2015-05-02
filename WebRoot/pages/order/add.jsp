@@ -5,6 +5,7 @@
 <%@page import="com.fuwei.entity.OrderDetail"%>
 <%@page import="com.fuwei.entity.Salesman"%>
 <%@page import="com.fuwei.entity.Company"%>
+<%@page import="com.fuwei.entity.Employee"%>
 <%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.entity.Material"%>
 <%@page import="com.fuwei.entity.Customer"%>
@@ -23,6 +24,12 @@
 	JSONObject jObject = new JSONObject();
 	jObject.put("companySalesmanMap", companySalesmanMap);
 	String companySalesmanMap_str = jObject.toString();
+	List<Employee> employeelist = new ArrayList<Employee>();
+	for (Employee temp : SystemCache.employeelist) {
+		if (temp.getIs_charge_employee()) {
+			employeelist.add(temp);
+		}
+	}
 %>
 <!DOCTYPE html>
 <html>
@@ -95,7 +102,7 @@
 										</legend>
 										<input type="hidden" id="sampleId" name="sampleId"
 										class="require" />
-										<div class="form-group col-md-6">
+										<div class="form-group col-md-6 imggroup">
 											<label for="img" class="col-sm-3 control-label">
 												样品图片
 											</label>
@@ -205,14 +212,15 @@
 										</div>
 
 										<div class="form-group col-md-6">
-											<label for="charge_user" class="col-sm-3 control-label">
+											<label for="charge_employee" class="col-sm-3 control-label">
 												跟单人
 											</label>
 											<div class="col-sm-8">
-												<select name="charge_user" id="charge_user"
-													class="form-control">
+												<select name="charge_employee" id="charge_employee"
+													class="form-control require">
+													<option value="">未选择</option>
 													<%
-														for (User item : SystemCache.userlist) {
+														for (Employee item : employeelist) {
 													%>
 													<option value="<%=item.getId()%>"><%=item.getName()%></option>
 													<%

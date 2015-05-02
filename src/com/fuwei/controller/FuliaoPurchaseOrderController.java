@@ -231,7 +231,7 @@ public class FuliaoPurchaseOrderController extends BaseController {
 				tableOrder.setCustomerId(order.getCustomerId());
 				tableOrder.setSampleId(order.getSampleId());
 				tableOrder.setOrderNumber(order.getOrderNumber());
-				tableOrder.setCharge_user(order.getCharge_user());//2015/3/17 添加跟单人
+				tableOrder.setCharge_employee(order.getCharge_employee());//2015/3/17 添加跟单人
 				
 				List<FuliaoPurchaseOrderDetail> detaillist = SerializeTool
 						.deserializeList(details,

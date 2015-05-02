@@ -158,13 +158,13 @@
 													</option>
 													<%
 														for (Company company : SystemCache.companylist) {
-															if (companyId == company.getId()) {
+															if (companyId!=null&&companyId == company.getId()) {
 													%>
-													<option value="<%=company.getId()%>" selected><%=company.getFullname()%></option>
+													<option value="<%=company.getId()%>" selected><%=company.getShortname()%></option>
 													<%
 														} else {
 													%>
-													<option value="<%=company.getId()%>"><%=company.getFullname()%></option>
+													<option value="<%=company.getId()%>"><%=company.getShortname()%></option>
 													<%
 														}
 														}
@@ -184,7 +184,7 @@
 													</option>
 													<%
 														for (Salesman salesman : SystemCache.getSalesmanList(companyId)) {
-															if (salesmanId == salesman.getId()) {
+															if (salesmanId!=null&&salesmanId == salesman.getId()) {
 													%>
 													<option value="<%=salesman.getId()%>" selected><%=salesman.getName()%></option>
 													<%

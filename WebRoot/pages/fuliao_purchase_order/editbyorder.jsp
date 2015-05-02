@@ -21,6 +21,7 @@
 	if(detaillist == null){
 		detaillist = new ArrayList<FuliaoPurchaseOrderDetail>();
 	}
+	
 %>
 <!DOCTYPE html>
 <html>
@@ -121,12 +122,12 @@
 													</div>
 													<div class="form-group">
 														业务员：
-														<select disabled name="charge_user" id="charge_user"
+														<select disabled name="charge_employee" id="charge_employee"
 															class="form-control">
 															<option
-																value="<%=fuliaoPurchaseOrder.getCharge_user()%>"
-																selected><%=SystemCache.getUserName(fuliaoPurchaseOrder
-							.getCharge_user())%></option>
+																value="<%=fuliaoPurchaseOrder.getCharge_employee()%>"
+																selected><%=SystemCache.getEmployeeName(fuliaoPurchaseOrder
+							.getCharge_employee())%></option>
 														</select>
 													</div>
 

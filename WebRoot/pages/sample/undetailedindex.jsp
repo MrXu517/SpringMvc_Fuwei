@@ -3,22 +3,22 @@
 <%@page import="com.fuwei.entity.Sample"%>
 <%@page import="com.fuwei.entity.GongXu"%>
 <%@page import="com.fuwei.entity.User"%>
+<%@page import="com.fuwei.entity.Employee"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	List<User> userlist = (List<User>) request.getAttribute("userlist");
+	List<Employee> employeelist = (List<Employee>) request.getAttribute("employeelist");
 
 	List<Sample> samplelist = (List<Sample>) request
 			.getAttribute("samplelist");
-	Integer charge_userId = null;
-	try {
-		charge_userId = Integer.valueOf(request
-				.getParameter("charge_user"));
-	} catch (Exception e) {
-		charge_userId = -1;
+	Integer charge_employeeId = (Integer) request
+			.getAttribute("charge_employee");
+	String charge_employee_str = "";
+	if (charge_employeeId != null) {
+		charge_employee_str = String.valueOf(charge_employeeId);
 	}
 	List<GongXu> gongxulist = (List<GongXu>) request
 			.getAttribute("gongxulist");
@@ -133,17 +133,17 @@
 						<form class="form-horizontal sampleform row" role="form"
 							enctype="multipart/form-data">
 							<div class="form-group col-md-4">
-								<label for="charge_user" class="col-sm-3 control-label">
+								<label for="charge_employee" class="col-sm-3 control-label">
 									打样人
 								</label>
 								<div class="col-sm-6">
-									<select id="charge_user" class="form-control">
+									<select id="charge_employee" class="form-control">
 										<option value="">
 											所有
 										</option>
 										<%
-											for (User tempU : userlist) {
-												if (charge_userId == tempU.getId()) {
+											for (Employee tempU : employeelist) {
+												if (charge_employeeId!=null && charge_employeeId == tempU.getId()) {
 										%>
 										<option value="<%=tempU.getId()%>" selected="selected"><%=tempU.getName()%></option>
 										<%
@@ -212,7 +212,7 @@
 									<td><%=SystemCache.getMaterialName(sample.getMaterialId())%></td>
 									<td><%=sample.getWeight()%></td>
 									<td><%=sample.getSize()%></td>
-									<td><%=SystemCache.getUserName(sample.getCharge_user())%></td>
+									<td><%=SystemCache.getEmployeeName(sample.getCharge_employee())%></td>
 									<td><%=sample.getCreated_at()%></td>
 									<td>
 										<%
