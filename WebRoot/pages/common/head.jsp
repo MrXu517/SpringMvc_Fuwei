@@ -68,6 +68,10 @@
 	//2015--4-25添加待发货订单列表
 	Boolean h_has_order_undelivery = SystemCache.hasAuthority(session,"order/undelivery");
 	
+	
+	//2015--4-25添加员工列表
+	Boolean h_has_systeminfo_employee = SystemCache.hasAuthority(session,"employee");
+	
 	//权限相关
 	
 %>
@@ -345,6 +349,11 @@
 							<%if(h_has_systeminfo_material){ %>
 							<li>
 								<a href="material/index">材料</a>
+							</li>
+							<%} %>
+							<%if(h_has_systeminfo_employee){ %>
+							<li>
+								<a href="employee/index">部门和员工</a>
 							</li>
 							<%} %>
 							<%if(h_has_systeminfo_user){ %>

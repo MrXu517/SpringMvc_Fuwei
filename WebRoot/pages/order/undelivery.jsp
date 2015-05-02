@@ -62,6 +62,13 @@
 	Boolean has_order_detail = SystemCache.hasAuthority(session,
 			"order/detail");
 	//权限相关
+	
+	Integer charge_userId = (Integer) request
+			.getAttribute("charge_user");
+	String charge_user_str = "";
+	if (charge_userId != null) {
+		charge_user_str = String.valueOf(charge_userId);
+	}
 %>
 <!DOCTYPE html>
 
@@ -84,6 +91,15 @@
 		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
 		<link href="css/order/index.css" rel="stylesheet" type="text/css" />
+		<style type="text/css">
+.body {
+	min-width: 0;
+}
+
+#breadcrumbs {
+	min-width: 0;
+}
+</style>
 	</head>
 	<body>
 		<%@ include file="../common/head.jsp"%>
@@ -109,7 +125,33 @@
 								<div clas="navbar navbar-default">
 									<form class="form-horizontal searchform form-inline searchform"
 										role="form">
-										
+										<div class="form-group" style="width: 200px;">
+											<label for="charge_user" class="col-sm-3 control-label"
+												style="width: 60px;">
+												跟单人
+											</label>
+											<div class="col-sm-8">
+												<select id="charge_user" name="charge_user"
+													class="form-control">
+													<option value="">
+														所有
+													</option>
+													<%
+														for (User tempU : SystemCache.userlist) {
+															if (charge_userId != null && charge_userId == tempU.getId()) {
+													%>
+													<option value="<%=tempU.getId()%>" selected="selected"><%=tempU.getName()%></option>
+													<%
+														} else {
+													%>
+													<option value="<%=tempU.getId()%>"><%=tempU.getName()%></option>
+													<%
+														}
+														}
+													%>
+												</select>
+											</div>
+										</div>
 										<div class="form-group salesgroup">
 											<label for="companyId" class="col-sm-3 control-label">
 												公司
@@ -237,36 +279,38 @@
 												href="order/undelivery?companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
-									
+
 								</div>
-								
+
 								<table class="table table-responsive">
 									<thead>
 										<tr>
-											<th>
-												序号
+											<th width="20px">
+												No.
 											</th>
-											<th>样品</th>
-											<th>
+											<th width="120px">
+												样品
+											</th>
+											<th width="70px">
 												订单号
 											</th>
-											<th>
+											<th width="110px">
 												订单信息
 											</th>
-											<th>
+											<th width="60px">
 												公司
 											</th>
-											<th>
+											<th width="60px">
 												业务员
 											</th>
-											<th>
+											<th width="60px">
 												跟单人
 											</th>
-											<th>
-												订单截止时间
+											<th width="100px">
+												截止时间
 											</th>
-											<th>是否超期</th>
-											<th>
+											
+											<th width="50px">
 												操作
 											</th>
 										</tr>
@@ -277,12 +321,14 @@
 											for (Order order : orderlist) {
 										%>
 										<%if(order.isOverEnded()){ %>
-											<tr orderId="<%=order.getId()%>" class="alert-danger">
-										<%}else if(order.isPre30()){ %>
-											<tr orderId="<%=order.getId()%>" class="alert-warning">
-										<%}else{ %>
-											<tr orderId="<%=order.getId()%>">
-										<%} %>
+										<tr orderId="<%=order.getId()%>" class="alert-danger">
+											<%}else if(order.isPre30()){ %>
+										
+										<tr orderId="<%=order.getId()%>" class="alert-warning">
+											<%}else{ %>
+										
+										<tr orderId="<%=order.getId()%>">
+											<%} %>
 											<td><%=++i%></td>
 											<td
 												style="max-width: 120px; height: 120px; max-height: 120px;">
@@ -293,19 +339,20 @@
 											</td>
 											<td><%=order.getOrderNumber()%></td>
 											<td><%=order.getInfo()%></td>
-											<td><%=SystemCache.getCompanyName(order
+											<td><%=SystemCache.getCompanyShortName(order
 										.getCompanyId())%></td>
 											<td><%=SystemCache.getSalesmanName(order.getSalesmanId())%></td>
 											<td><%=SystemCache.getUserName(order
 										.getCharge_user())%></td>
-										
-											<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
-											<td><%if(order.isOverEnded()){ %>
-											<span class="label label-danger">已超期</span>
-										<%}else if(order.isPre30()){ %>
-											<span class="label label-warning">交货时间<=30天</span>
-										<%} %>
+
+											<td><%=DateTool.formatDateYMD(order.getEnd_at())%><br>
+												<%if(order.isOverEnded()){ %>
+												<span class="label label-danger">已超期</span>
+												<%}else if(order.isPre30()){ %>
+												<span class="label label-warning">交货时间<=30天</span>
+												<%} %>
 											</td>
+											
 											<td>
 												<%
 													if (has_order_detail) {
@@ -330,10 +377,10 @@
 			</div>
 		</div>
 		<script type="text/javascript">
-				/* 设置当前选中的页 */
-				var $a = $("#left li a[href='order/undelivery']");
-				setActiveLeft($a.parent("li"));
-				/* 设置当前选中的页 */
-			</script>
+	/* 设置当前选中的页 */
+	var $a = $("#left li a[href='order/undelivery']");
+	setActiveLeft($a.parent("li"));
+	/* 设置当前选中的页 */
+</script>
 	</body>
 </html>

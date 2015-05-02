@@ -494,3 +494,11 @@ body {
 	margin-left: 10px;
   	font-size: 1.3em;
 }
+@media(max-width:1280px){  
+	#left{
+		width:190px;
+	}
+	#Content{
+		margin-left:190px;
+	}
+}

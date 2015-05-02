@@ -16,6 +16,8 @@ import com.fuwei.constant.Constants;
 import com.fuwei.entity.Authority;
 import com.fuwei.entity.Company;
 import com.fuwei.entity.Customer;
+import com.fuwei.entity.Department;
+import com.fuwei.entity.Employee;
 import com.fuwei.entity.Factory;
 import com.fuwei.entity.GongXu;
 import com.fuwei.entity.Material;
@@ -25,6 +27,8 @@ import com.fuwei.entity.Salesman;
 import com.fuwei.entity.User;
 import com.fuwei.service.CompanyService;
 import com.fuwei.service.CustomerService;
+import com.fuwei.service.DepartmentService;
+import com.fuwei.service.EmployeeService;
 import com.fuwei.service.FactoryService;
 import com.fuwei.service.GongXuService;
 import com.fuwei.service.MaterialService;
@@ -51,6 +55,10 @@ public class SystemCache {
 	
 	CustomerService customerService;
 	
+	DepartmentService departmentService;
+	
+	EmployeeService employeeService;
+	
 	
 	public SystemCache() {
 		companyService = (CompanyService) SystemContextUtils
@@ -69,6 +77,10 @@ public class SystemCache {
 		.getBean(MaterialService.class);
 		customerService = (CustomerService)SystemContextUtils
 		.getBean(CustomerService.class);
+		departmentService = (DepartmentService)SystemContextUtils
+		.getBean(DepartmentService.class);
+		employeeService = (EmployeeService)SystemContextUtils
+		.getBean(EmployeeService.class);
 		
 	}
 
@@ -100,6 +112,12 @@ public class SystemCache {
 	//缓存客户
 	public static List<Customer> customerlist = new ArrayList<Customer>();
 	
+	//缓存部门
+	public static List<Department> departmentlist = new ArrayList<Department>();
+	
+	//缓存员工
+	public static List<Employee> employeelist = new ArrayList<Employee>();
+	
 
 	public static void addCompany(Company company) {
 		companylist.add(company);
@@ -122,6 +140,8 @@ public class SystemCache {
 		initFactoryList();
 		initMaterialList();
 		initCustomerList();
+		initDepartmentList();
+		initEmployeeList();
 	}
 
 	public void reload() throws Exception {
@@ -175,6 +195,64 @@ public class SystemCache {
 		SystemCache.customerlist = customerService.getList(); // customerlist;
 	}
 	
+	public void initDepartmentList() throws Exception {
+		SystemCache.departmentlist = departmentService.getList(); // departmentlist;
+	}
+	
+	public void initEmployeeList() throws Exception {
+		SystemCache.employeelist = employeeService.getList(); // employeelist;
+	}
+	
+	public static String getDepartmentName(Integer departmentId) {
+		if(departmentId == null){
+			return "";
+		}
+		for (int i = 0; i < SystemCache.departmentlist.size(); ++i) {
+			Department temp = SystemCache.departmentlist.get(i);
+			if (temp.getId() == departmentId) {
+				return temp.getName();
+			}
+		}
+		return "";
+	}
+	
+	public static Department getDepartment(Integer departmentId) {
+		if(departmentId == null){
+			return null;
+		}
+		for (int i = 0; i < SystemCache.departmentlist.size(); ++i) {
+			Department temp = SystemCache.departmentlist.get(i);
+			if (temp.getId() == departmentId) {
+				return temp;
+			}
+		}
+		return null;
+	}
+	public static String getEmployeeName(Integer employeeId) {
+		if(employeeId == null){
+			return "";
+		}
+		for (int i = 0; i < SystemCache.employeelist.size(); ++i) {
+			Employee temp = SystemCache.employeelist.get(i);
+			if (temp.getId() == employeeId) {
+				return temp.getName();
+			}
+		}
+		return "";
+	}
+	
+	public static Employee getEmployee(Integer employeeId) {
+		if(employeeId == null){
+			return null;
+		}
+		for (int i = 0; i < SystemCache.employeelist.size(); ++i) {
+			Employee temp = SystemCache.employeelist.get(i);
+			if (temp.getId() == employeeId) {
+				return temp;
+			}
+		}
+		return null;
+	}
 	public static String getCustomerName(Integer customerId) {
 		if(customerId == null){
 			return "";

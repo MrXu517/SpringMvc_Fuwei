@@ -43,8 +43,8 @@ if(referer != null && !referer.equals("")){
 			<div class="container">
 
 				<div class="row">
-					<div class="col-md-offset-1 col-md-4 png"></div>
-					<div class="col-md-offset-1 col-md-5">
+					<div class="col-sm-offset-1 col-sm-4 png"></div>
+					<div class="col-sm-offset-1 col-sm-5">
 
 						<div class="panel panel-default">
 

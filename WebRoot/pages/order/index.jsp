@@ -278,41 +278,41 @@
 								<table class="table table-responsive">
 									<thead>
 										<tr>
-											<th>
-												序号
+											<th width="20px">
+												No.
 											</th>
-											<th>样品</th>
-											<th>
+											<th width="110px">样品</th>
+											<th width="70px">
 												订单号
 											</th>
-											<th>
-												订单状态
+											<th width="55px">
+												状态
 											</th>
-											<th>
+											<th width="70px">
 												总金额
 											</th>
-											<th>
+											<th width="120px">
 												订单信息
 											</th>
-											<th>
+											<th width="55px">
 												公司
 											</th>
-											<th>
+											<th width="55px">
 												业务员
 											</th>
-											<th>
+											<th width="60px">
 												创建用户
 											</th>
-											<th>
-												订单生效时间
+											<th width="60px">
+												生效时间
 											</th>
-											<th>
-												订单截止时间
+											<th width="60px">
+												截止时间
 											</th>
-											<th>
+											<th width="60px">
 												创建时间
 											</th>
-											<th>
+											<th  width="100px">
 												操作
 											</th>
 										</tr>
@@ -344,7 +344,7 @@
 											</td>
 											<td><%=order.getAmount()%></td>
 											<td><%=order.getInfo()%></td>
-											<td><%=SystemCache.getCompanyName(order
+											<td><%=SystemCache.getCompanyShortName(order
 										.getCompanyId())%></td>
 											<td><%=SystemCache.getSalesmanName(order.getSalesmanId())%></td>
 											<td><%=SystemCache.getUserName(order

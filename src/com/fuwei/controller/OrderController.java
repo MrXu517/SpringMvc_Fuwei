@@ -165,7 +165,7 @@ public class OrderController extends BaseController {
 	@RequestMapping(value = "/undelivery", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView undelivery(Integer page, String start_time, String end_time,
-			Integer companyId, Integer salesmanId,
+			Integer companyId, Integer salesmanId,Integer charge_user,
 			String sortJSON, HttpSession session, HttpServletRequest request)
 			throws Exception {
 
@@ -196,7 +196,7 @@ public class OrderController extends BaseController {
 		
 		Integer status = OrderStatus.DELIVERING.ordinal();
 		pager = orderService.getList(pager, start_time_d, end_time_d,
-				companyId, salesmanId, status, sortList);
+				companyId, salesmanId,charge_user, status, sortList);
 
 		
 		request.setAttribute("start_time", start_time_d);
@@ -208,6 +208,7 @@ public class OrderController extends BaseController {
 		request.setAttribute("companyId", companyId);
 		request.setAttribute("status", status);
 		request.setAttribute("pager", pager);
+		request.setAttribute("charge_user", charge_user);
 		return new ModelAndView("order/undelivery");
 	}
 	
@@ -460,8 +461,9 @@ public class OrderController extends BaseController {
 		sort.setDirection("desc");
 		sort.setProperty("created_at");
 		sortList.add(sort);
+		Integer charge_user = null;
 		pager = orderService.getList(pager, start_time_d, end_time_d,
-				companyId, salesmanId, status, sortList);
+				companyId, salesmanId,charge_user, status, sortList);
 //		if (pager != null & pager.getResult() != null) {
 //			List<FuliaoPurchaseOrder> orderlist = (List<FuliaoPurchaseOrder>) pager.getResult();
 //		}

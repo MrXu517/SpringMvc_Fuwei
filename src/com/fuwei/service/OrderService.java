@@ -95,7 +95,7 @@ public class OrderService extends BaseService {
 	
 	// 获取订单列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,
-			Integer companyId, Integer salesmanId, Integer status,
+			Integer companyId, Integer salesmanId,Integer charge_user, Integer status,
 			List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
@@ -121,6 +121,10 @@ public class OrderService extends BaseService {
 			}
 			if (salesmanId != null) {
 				sql.append(seq + " salesmanId='" + salesmanId + "'");
+				seq = " AND ";
+			}
+			if (charge_user != null) {
+				sql.append(seq + " charge_user='" + charge_user + "'");
 				seq = " AND ";
 			}
 			if (status != null) {

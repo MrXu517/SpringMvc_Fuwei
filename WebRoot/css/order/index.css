@@ -242,3 +242,15 @@ tr.label-warning{
 	color:#f0ad4e;
 	background:none;
 }
+.body{
+	min-width:1200px;
+}
+#breadcrumbs{
+	min-width:1200px;
+}
+.tablewidget>table{
+	  table-layout: fixed;
+}
+.tablewidget>table th,.tablewidget>table td{
+	 text-align: center;
+}
