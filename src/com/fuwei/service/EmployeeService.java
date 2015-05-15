@@ -31,6 +31,23 @@ public class EmployeeService extends BaseService {
 			throw e;
 		}
 	}
+	// 获取列表
+	public List<Employee> getList(Boolean inUse) throws Exception {
+		try {
+			if(inUse == null){
+				List<Employee> employeeList = dao.queryForBeanList(
+						"SELECT * FROM tb_employee", Employee.class);
+				return employeeList;
+			}else{
+				List<Employee> employeeList = dao.queryForBeanList(
+						"SELECT * FROM tb_employee WHERE inUse=?", Employee.class,inUse);
+				return employeeList;
+			}
+			
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 	
 	// 获取列表
 	public List<Employee> getList() throws Exception {

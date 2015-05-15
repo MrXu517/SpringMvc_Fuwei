@@ -65,15 +65,24 @@ public class EmployeeController extends BaseController {
 	//2015-5-10花名册
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView list(HttpSession session, HttpServletRequest request,
+	public ModelAndView list(Boolean inUse,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		String lcode = "renshi/employees";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);		
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有查看花名册的权限", null);
 		}
-		List<Employee> list = employeeService.getInUseList();
-		request.setAttribute("employeelist", list);
+		if(inUse == null){
+			request.setAttribute("employeelist", SystemCache.employeelist);
+		}else{
+			List<Employee> list = new ArrayList<Employee>();
+			for(Employee e : SystemCache.employeelist){
+				if(inUse == e.getInUse()){
+					list.add(e);
+				}
+			}
+			request.setAttribute("employeelist", list);
+		}	
 		return new ModelAndView("employee/list");
 
 	}
@@ -230,13 +239,14 @@ public class EmployeeController extends BaseController {
 	//2015-5-10导出花名册
 	@RequestMapping(value = "/export", method = RequestMethod.GET)
 	@ResponseBody
-	public void export(HttpSession session, HttpServletRequest request,
+	public void export(Boolean inUse,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		   String fileName="花名册";
 	        //填充projects数据	       
 	        ByteArrayOutputStream os = new ByteArrayOutputStream();
 	        try {
-	        	createEmployeesFile(os);
+	        	List<Employee> list = employeeService.getList(inUse); //这个是从数据库中取得要导出的数据 
+	        	createEmployeesFile(list,os);
 	        } catch (IOException e) {
 	            throw e;
 	        }
@@ -265,46 +275,9 @@ public class EmployeeController extends BaseController {
 	            if (bos != null)
 	                bos.close();
 	        }
-	        
-	        
-		//String rootpath = request.getSession().getServletContext().getRealPath(
-		//"/");
-		//String filename = "花名册.xls";
-		//File file = new File(rootpath+filename);
-//		FileOutputStream os = new FileOutputStream();
-//		createEmployeesFile(os);
-//		
-//		response.setContentType("text/html;charset=UTF-8"); 
-//		BufferedInputStream in = null;
-//		BufferedOutputStream out = null;
-//		request.setCharacterEncoding("UTF-8");
-//			
-//		try {
-//			File f = new File(rootpath + filename);
-//			response.setContentType("application/x-excel");
-//			response.setCharacterEncoding("UTF-8");
-//			response.setHeader("Content-Disposition", "attachment; filename="+filename);
-//			response.setHeader("Content-Length",String.valueOf(f.length()));
-//			in = new BufferedInputStream(new FileInputStream(f));
-//			out = new BufferedOutputStream(response.getOutputStream());
-//			byte[] data = new byte[1024];
-//			int len = 0;
-//			while (-1 != (len=in.read(data, 0, data.length))) {
-//				out.write(data, 0, len);
-//			}
-//		} catch (Exception e) {
-//			throw e;
-//		} finally {
-//			if (in != null) {
-//				in.close();
-//			}
-//			if (out != null) {
-//				out.close();
-//			}
-//		}
 	}
 	
-	public void createEmployeesFile(OutputStream os) throws Exception{
+	public void createEmployeesFile(List<Employee> list,OutputStream os) throws Exception{
 			WritableWorkbook wbook = Workbook.createWorkbook(os); //建立excel文件 
 			WritableSheet wsheet = wbook.createSheet("Sheet1", 0); //工作表名称 
 			
@@ -318,7 +291,7 @@ public class EmployeeController extends BaseController {
 			companyFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
 			Label excelCompany = new Label(0, 0, "桐庐富伟针织有限公司员工花名册", companyFormat); 
 			wsheet.addCell(excelCompany); 
-			wsheet.mergeCells(0,0,12,0);
+			wsheet.mergeCells(0,0,13,0);
 			wsheet.setRowView(0, 800);
 			
 			//设置Excel字体 
@@ -339,7 +312,7 @@ public class EmployeeController extends BaseController {
 			titleFormat2.setAlignment(jxl.format.Alignment.CENTRE);   
 			titleFormat2.setBorder(jxl.format.Border.ALL, jxl.format.BorderLineStyle.THIN,jxl.format.Colour.BLACK); //BorderLineStyle边框
 			
-			String[] title = { "编号", "姓名", "性别", "入厂日期","身份证号码","联系方式","岗位","部门","家庭住址","现居住地","合同期限","用工形式" }; 
+			String[] title = { "编号", "姓名", "性别", "入厂日期","身份证号码","联系方式","岗位","部门","家庭住址","现居住地","合同期限","用工形式","离职时间" }; 
 			//设置Excel表头 
 			int col = 0;
 			int merge_col = 0;
@@ -362,7 +335,6 @@ public class EmployeeController extends BaseController {
 			
 			
 			int c = 2; //用于循环时Excel的行号 			
-			List<Employee> list = employeeService.getInUseList(); //这个是从数据库中取得要导出的数据 
 			
 			
 			for(Employee employee : list){
@@ -380,6 +352,7 @@ public class EmployeeController extends BaseController {
 				Label content11 = new Label(10, c, DateTool.formatDateYMD(employee.getAgreement_at()),titleFormat2); 
 				Label content12 = new Label(11, c, DateTool.formatDateYMD(employee.getAgreement_end()),titleFormat2); 
 				Label content13 = new Label(12, c, employee.getEmployee_type(),titleFormat2); 
+				Label content14 = new Label(13, c, DateTool.formatDateYMD(employee.getLeave_at(), "/"),titleFormat2); 
 				
 				wsheet.addCell(content1); 
 				wsheet.addCell(content2); 
@@ -394,6 +367,7 @@ public class EmployeeController extends BaseController {
 				wsheet.addCell(content11); 
 				wsheet.addCell(content12); 
 				wsheet.addCell(content13);
+				wsheet.addCell(content14);
 				
 				int width1 = content1.getContents().getBytes().length;
 				int width2 = content2.getContents().getBytes().length;
@@ -408,6 +382,7 @@ public class EmployeeController extends BaseController {
 				int width11 = content11.getContents().getBytes().length;
 				int width12 = content12.getContents().getBytes().length;
 				int width13 = content13.getContents().getBytes().length;
+				int width14 = content14.getContents().getBytes().length;
 				if(columnBestWidth[0] < width1){
 					columnBestWidth[0] = width1;
 				}if(columnBestWidth[1] < width2){
@@ -434,11 +409,13 @@ public class EmployeeController extends BaseController {
 					columnBestWidth[11] = width12;
 				}if(columnBestWidth[12] < width13){
 					columnBestWidth[12] = width13;
+				}if(columnBestWidth[13] < width14){
+					columnBestWidth[13] = width14;
 				}
 				c++; 
 			} 
 			for(int p = 0 ; p < columnBestWidth.length ; ++p){
-				wsheet.setColumnView(p, columnBestWidth[p]+2);
+				wsheet.setColumnView(p, columnBestWidth[p]+1);
 			}
 			wbook.write(); //写入文件 
 			wbook.close(); 
