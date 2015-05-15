@@ -415,6 +415,10 @@ $(document).ready(function() {
 	var finalStoreGrid = new OrderGrid({
 		$content:$("#finalstorerecordorder")
 	});
+	//2015-5-12添加新表格 成品检验记录单
+	var finalCheckRecordGrid = new OrderGrid({
+		$content:$("#finalcheckrecordorder")
+	});
 	
 	//车间记录单
 	var shopRecordGrid = new OrderGrid({

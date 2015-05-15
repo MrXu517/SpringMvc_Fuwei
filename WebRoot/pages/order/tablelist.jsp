@@ -216,7 +216,9 @@
 							<li>
 								<a href="#finalstorerecordorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>成品仓库记录单</a>
 							</li>
-											
+							<li>
+								<a href="#finalcheckrecordorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>成品检验记录单</a>
+							</li>				
 							<li>
 								<a href="#shoprecordorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked />车间记录单</a>
 							</li>
@@ -3064,6 +3066,158 @@
 
 								<!-- 添加编辑抽检记录单对话框 -->
 
+							</div>
+
+						<!-- 成品检验记录单 -->
+							<div class="tab-pane" id="finalcheckrecordorder" role="tabpanel">
+								<div class="container-fluid">
+									<div class="row">
+										<form class="saveform">
+											<input type="hidden" name="orderId"
+												value="<%=order.getId()%>" />
+											
+											<a target="_blank" type="button"
+												class="pull-right btn btn-success printBtn"
+												data-loading-text="正在打印..."> 打印 </a>
+										</form>
+
+										<div class="clear"></div>
+										<div class="col-md-12 tablewidget">
+											<table class="table">
+												<caption>
+													桐庐富伟针织厂成品检验记录单
+												</caption>
+												<thead>
+													<tr>
+														<td colspan="3" class="pull-right orderNumber">
+															№：<%=order.getOrderNumber()%></td>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>
+															<table
+																class="table table-responsive table-bordered tableTb">
+																<tbody>
+																	<tr>
+																		<td rowspan="8" width="50%">
+																			<a href="/<%=order.getImg()%>" class="thumbnail"
+																				target="_blank"> <img id="previewImg"
+																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
+																			</a>
+																		</td>
+																		<td width="20%">
+																			生产单位
+																		</td>
+																		<td class="orderproperty"><%=productfactoryStr %></td>
+																	</tr>
+
+																	<tr>
+																		<td colspan="2" class="center">
+																			订单信息
+																		</td>
+																	</tr>
+																	<tr>
+																		<td>
+																			公司
+																		</td>
+																		<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			客户
+																		</td>
+																		<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			货号
+																		</td>
+																		<td><%=order.getCompany_productNumber()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			款名
+																		</td>
+																		<td><%=order.getName()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			跟单
+																		</td>
+																		<td><%=SystemCache.getEmployeeName(order.getCharge_employee())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			发货时间
+																		</td>
+																		<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
+																	</tr>
+																</tbody>
+															</table>
+
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<table class="table table-responsive detailTb">
+																<caption>
+																	颜色及数量
+																</caption>
+																<thead>
+																	<tr>
+																		<th width="15%">
+																			颜色
+																		</th>
+																		<th width="15%">
+																			克重(g)
+																		</th>
+																		<th width="15%">
+																			纱线种类
+																		</th>
+																		<th width="15%">
+																			尺寸
+																		</th>
+																		<th width="15%">
+																			生产数量
+																		</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<%
+																		for (PlanOrderDetail detail : planOrderDetailList) {
+																	%>
+																	<tr class="tr"
+																		data='<%=SerializeTool.serialize(detail)%>'>
+																		<td class="color"><%=detail.getColor()%>
+																		</td>
+																		<td class="weight"><%=detail.getWeight()%>
+																		</td>
+																		<td class="yarn_name"><%=SystemCache.getMaterialName(detail.getYarn())%>
+																		</td>
+																		<td class="size"><%=detail.getSize()%>
+																		</td>
+																		<td class="quantity"><%=detail.getQuantity()%>
+																		</td>
+																	</tr>
+
+																	<%
+																		}
+																	%>
+
+																</tbody>
+															</table>
+															<div id="navigator"></div>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+
+										</div>
+
+
+									</div>
+								</div>
 							</div>
 
 							<!-- 车间记录单 -->

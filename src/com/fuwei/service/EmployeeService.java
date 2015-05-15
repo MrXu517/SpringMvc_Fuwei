@@ -1,6 +1,7 @@
 package com.fuwei.service;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -8,14 +9,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.fuwei.constant.OrderStatus;
 import com.fuwei.entity.Employee;
+import com.fuwei.entity.Order;
+import com.fuwei.util.DateTool;
 
 @Component
 public class EmployeeService extends BaseService {
 	private Logger log = org.apache.log4j.LogManager.getLogger(EmployeeService.class);
 	@Autowired
 	JdbcTemplate jdbc;
-
+	
+	//获取花名册 ： 在职的员工
+	public List<Employee> getInUseList() throws Exception {
+		try {
+			List<Employee> employeeList = dao.queryForBeanList(
+					"SELECT * FROM tb_employee WHERE inUse=1 order by departmentId asc,created_at asc", Employee.class);
+			return employeeList;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 	// 获取列表
 	public List<Employee> getList() throws Exception {
 		try {
@@ -31,6 +47,7 @@ public class EmployeeService extends BaseService {
 	@Transactional
 	public int add(Employee employee) throws Exception {
 		try{
+			employee.setInUse(true);
 			return this.insert(employee);
 		}catch(Exception e){
 			throw e;
@@ -54,7 +71,7 @@ public class EmployeeService extends BaseService {
 	// 编辑
 	public int update(Employee employee) throws Exception {
 		try{
-			return this.update(employee, "id", "created_at,created_user",true);
+			return this.update(employee, "id", "created_at,created_user,inUse",true);
 		}catch(Exception e){
 			throw e;
 		}
@@ -69,6 +86,23 @@ public class EmployeeService extends BaseService {
 					id);
 			return employee;
 		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	//员工离职
+	public int cancel(int id,Date leave_at) throws Exception{
+		try{
+			Employee employee = this.get(id);
+			if(!employee.getInUse()){
+				throw new Exception("员工已离职，离职时间：" + DateTool.formateDate(employee.getLeave_at(), "yyyy/MM/dd hh:mm:ss") );
+			}
+			employee.setUpdated_at(DateTool.now());
+			employee.setInUse(false);
+			employee.setLeave_at(leave_at);
+			this.update(employee, "id", null);
+			return employee.getId();
+		}catch(Exception e){
 			throw e;
 		}
 	}

@@ -90,7 +90,7 @@ public class PrintOrderController extends BaseController {
 	ShopRecordOrderService shopRecordOrderService;
 	@Autowired
 	ColoringProcessOrderService coloringProcessOrderService;
-	
+
 	
 	@RequestMapping(value = "/print", method = RequestMethod.GET)
 	@ResponseBody
@@ -207,7 +207,7 @@ public class PrintOrderController extends BaseController {
 			
 			
 			//获取抽检记录单
-			if(printAll || gridName.indexOf("checkrecordorder") > -1){
+			if(printAll || (gridName.indexOf(",checkrecordorder") > -1 || gridName.indexOf("checkrecordorder")==0)){
 				CheckRecordOrder checkRecordOrder = checkRecordOrderService.getByOrder(orderId);
 				if(checkRecordOrder!=null){
 					grids += "checkrecordorder,";
@@ -274,6 +274,14 @@ public class PrintOrderController extends BaseController {
 					grids += "finalstorerecordorder,";
 					request.setAttribute("finalStoreOrder", finalStoreOrder);
 				}
+			}
+			//2015-5-12添加获取成品检验记录单
+			if(printAll || gridName.indexOf("finalcheckrecordorder") > -1){		
+					if(planOrder==null){
+						planOrder = planOrderService.getByOrder(orderId);
+					}
+					grids += "finalcheckrecordorder,";
+					request.setAttribute("planOrder", planOrder);
 			}
 			//获取车间记录单
 			if(printAll || gridName.indexOf("shoprecordorder") > -1){

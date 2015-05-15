@@ -9,7 +9,7 @@ import com.alibaba.fastjson.JSON;
 import java.util.Calendar;
 
 public class DateTool {
-
+	
 	public static Date now() {
 		return new Date();
 	}
@@ -38,6 +38,19 @@ public class DateTool {
 		}
 	}
 	
+	public static Date parse(String strDate,String format) throws ParseException {
+		if(strDate == null || strDate == ""){
+			return null;
+		}
+		try{
+			SimpleDateFormat sdf = new SimpleDateFormat(format);
+			return sdf.parse(strDate);
+		}catch(Exception e){
+			SimpleDateFormat sdf = new SimpleDateFormat(format);
+			return sdf.parse(strDate);
+		}
+	}
+	
 	public static Date addDay(Date date,int day) throws ParseException {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
@@ -46,16 +59,25 @@ public class DateTool {
 	}
 	
 	public static String formatDateYMD(Date date) throws ParseException {
+		if(date == null){
+			return "";
+		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 		String dateStr = sdf.format(date);
 		return dateStr;
 	}
 	public static String formatDateYMD(Date date,String sep) throws ParseException {
+		if(date == null){
+			return "";
+		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy"+sep+"MM"+sep+"dd");
 		return sdf.format(date);
 	}
 	
 	public static String formateDate(Date date,String format)throws ParseException {
+		if(date == null){
+			return "";
+		}
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		return sdf.format(date);
 	}

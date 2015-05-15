@@ -20,7 +20,7 @@ import com.fuwei.service.SalesmanService;
 import com.fuwei.service.UserService;
 
 public class LoginedUser implements Serializable {
-	MessageService messageService;
+	
 	
 	/**
 	 * 
@@ -28,10 +28,11 @@ public class LoginedUser implements Serializable {
 	private static final long serialVersionUID = 7402368945074884653L;
 	
 	public LoginedUser() {
-		messageService = (MessageService) SystemContextUtils
-				.getBean(MessageService.class);	
+		
 	}
 	public void reloadMessage() throws Exception{
+		MessageService messageService= (MessageService) SystemContextUtils
+		.getBean(MessageService.class);	
 		this.message_count = messageService.getReceiveList_UnRead_Count(this.loginedUser.getId());
 		SystemCache.setUserCacheUpdate(this.loginedUser.getId(), false);
 	}

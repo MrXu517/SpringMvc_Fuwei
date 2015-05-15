@@ -1,0 +1,23 @@
+.detailTb{
+	background-color: #f5f5f5;
+	border: 1px solid #ccc;
+}
+
+.body{
+	min-width:1500px;
+}
+#breadcrumbs{
+	min-width:1500px;
+}
+.tablewidget>table{
+	/*  table-layout: fixed;*/
+}
+.tablewidget>table th,.tablewidget>table td{
+	 text-align: center;
+	 white-space: nowrap;
+	
+}
+.export{
+	margin-top: -10px;
+  margin-bottom: 5px;
+}

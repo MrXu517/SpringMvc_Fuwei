@@ -19,6 +19,12 @@
 	if (departmentIdStr != null && !departmentIdStr.equals("")) {
 		departmentId = Integer.parseInt(departmentIdStr);
 	}
+	
+	String inUseStr = request.getParameter("inUse");
+	Boolean inUse = null;
+	if (inUseStr != null && !inUseStr.equals("")) {	
+		inUse = Boolean.valueOf(inUseStr);
+	}
 %>
 <!DOCTYPE html>
 <html>
@@ -65,6 +71,7 @@
 				</div>
 				<div class="body">
 					<div id="tab">
+						
 						<ul class="nav nav-tabs" role="tablist">
 							<li class="active">
 								<a href="#departments" role="tab" data-toggle="tab">部门</a>
@@ -258,7 +265,7 @@
 																电话
 															</label>
 															<div class="col-sm-8">
-																<input type="text" class="form-control require" id="tel"
+																<input type="text" class="form-control" id="tel"
 																	name="tel" placeholder="电话，手机">
 															</div>
 															<div class="col-sm-1"></div>
@@ -465,13 +472,16 @@
 											<div class="panel panel-primary">
 												<!-- Default panel contents -->
 												<div class="panel-heading">
-													员工列表
+													员工列表    <a href="employee/list" style="color: #fff;
+  text-decoration: underline;
+  margin-left: 20px;
+  font-size: 13px;">查看花名册</a>
 												</div>
 												<form class="form-horizontal" role="form" id="filterform"
 													action="employee/index?tab=employees">
 													<input type="hidden" name="tab" value="employees" />
 													<div class="form-group col-sm-6">
-														<label for="name" class="col-sm-3 control-label">
+														<label for="departmentId" class="col-sm-3 control-label">
 															部门
 														</label>
 														<div class="col-sm-8">
@@ -499,8 +509,34 @@
 														<div class="col-sm-1"></div>
 													</div>
 
+													<div class="form-group col-sm-6">
+														<label for="inUse" class="col-sm-3 control-label">
+															状态
+														</label>
+														<div class="col-sm-8">
+															<select class="form-control" name="inUse"
+																id="inUse">
+																<option value="" >
+																	所有
+																</option>
+																<%if(inUse!=null && inUse) {%>
+																<option selected value="true">在职</option>
+																<%}else{ %>
+																	<option value="true">在职</option>
+																<%} %>
+																<%if(inUse!=null && !inUse) {%>
+																<option selected value="false">已离职</option>
+																<%}else{ %>
+																	<option value="false">已离职</option>
+																<%} %>
+																
+															</select>
 
+														</div>
+														<div class="col-sm-1"></div>
+													</div>
 													<div class="clear"></div>
+											
 												</form>
 												<!-- Table -->
 												<table class="table table-responsive">
@@ -508,19 +544,21 @@
 														<tr>
 															<th>
 																序号
+															</th><th>
+																编号
 															</th>
 															<th>
 																姓名
 															</th>
 															<th>
-																拼音
+																入厂日期
 															</th>
 															<th>
-																公司
+																部门
+															</th><th>
+																时薪
 															</th>
-															<th style="display: none;">
-																创建人
-															</th>
+															
 															<th>
 																操作
 															</th>
@@ -533,14 +571,22 @@
 														%>
 														<tr>
 															<td><%=s_i%></td>
-															<td><%=employee.getName()%></td>
-															<td><%=employee.getHelp_code()%></td>
+															<td><%=employee.getNumber()%></td>
+															<td><%=employee.getName()%> <%if(!employee.getInUse()){ %><span class="label label-default">已离职</span><%} %> </td>
+															<td><%=DateTool.formatDateYMD(employee.getEnter_at())%></td>
 															<td><%=SystemCache.getDepartmentName(employee
 								.getDepartmentId())%></td>
-															<td style="display: none;"><%=SystemCache.getUserName(employee.getCreated_user())%></td>
+														<td><%=employee.getHour_salary()%></td>
 															<td>
+																<%if(employee.getInUse()){ %>
 																<a class="edit" href="#"
 																	data-cid="<%=employee.getId()%>">编辑</a> |
+																
+																<a class="cancel" href="#"
+																	data-cid="<%=employee.getId()%>">离职</a> |
+																<%} else{%>
+																<span class="label label-default">离职时间：<%=DateTool.formatDateYMD(employee.getLeave_at()) %></span>
+																<%} %>
 																<a class="delete" href="#"
 																	data-cid="<%=employee.getId()%>">删除</a>
 															</td>
@@ -564,5 +610,53 @@
 				</div>
 			</div>
 		</div>
+
+
+		<div class="modal fade" id="cancelModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+						</button>
+						<h4 class="modal-title">
+							设置离职时间
+						</h4>
+					</div>
+					<div class="modal-body">
+						<form class="form-horizontal cancelform" role="form">
+							<input type="hidden" name="id" id="id" />
+							<div class="row">
+								
+								<div class="form-group">
+									<label class="col-sm-3 control-label">
+										离职时间
+									</label>
+									<div class="col-sm-8">
+										<input type="text" name="leave_at" id="leave_at"
+											class="date form-control require">
+									</div>
+								</div>
+								
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="btn btn-primary"
+									data-loading-text="正在保存...">
+									确定
+								</button>
+								<button type="reset" class="btn btn-default"
+									data-dismiss="modal">
+									取消
+								</button>
+							</div>
+						</form>
+					</div>
+
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
 	</body>
 </html>

@@ -271,7 +271,12 @@ Common.fillForm = function(formEle, data) {
         }
 		var value = (data[name] != null) ? data[name] : "";
 		if (inputEle.type == "radio") {
-			value = (value == true) ? "1" : "0";
+			if(value == true || value == "true"){
+				value = "1";
+			}else if(value == false || value == "false"){
+				value = "0";
+			}
+			
 			if (inputEle.value == value) {
 				inputEle.checked = true;
 			}

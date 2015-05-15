@@ -72,6 +72,16 @@
 	//2015--4-25添加员工列表
 	Boolean h_has_systeminfo_employee = SystemCache.hasAuthority(session,"employee");
 	
+	
+	//2015-5-10添加人事系统
+	Boolean h_has_renshi = SystemCache.hasAuthority(session,"renshi");
+	Boolean h_has_renshi_employees = SystemCache.hasAuthority(session,"renshi/employees");//花名册
+	Boolean h_has_renshi_salarys = SystemCache.hasAuthority(session,"renshi/salarys");//工资表
+	
+	//2015-5-12添加验厂系统
+	Boolean h_has_yanchang = SystemCache.hasAuthority(session,"yanchang");
+	Boolean h_has_yanchang_fake_salary = SystemCache.hasAuthority(session,"yanchang/fake_salary");
+	
 	//权限相关
 	
 %>
@@ -319,7 +329,40 @@
 						</ul>
 					</li>
 					<%} %>
+					
 
+					<%if(h_has_renshi){ %>
+					<li class="li_dropdown">
+						<a href="#"><i class="fa fa-list-alt"></i>人事系统<i
+							class="fa fa-angle-down"></i> </a>
+						<ul class="submenu">
+							<%if(h_has_renshi_employees){ %>
+							<li>
+								<a href="employee/list">花名册</a>
+							</li>
+							<%} %>
+							<%if(h_has_renshi_salarys){ %>
+							<li>
+								<a href="employee/salarys">工资表</a>
+							</li>
+							<%} %>
+						</ul>
+					</li>
+					<%}%>
+
+					<%if(h_has_yanchang){ %>
+					<li class="li_dropdown">
+						<a href="#"><i class="fa fa-list-alt"></i>验厂<i
+							class="fa fa-angle-down"></i> </a>
+						<ul class="submenu">
+							<%if(h_has_yanchang_fake_salary){ %>
+							<li>
+								<a href="yanchang/yan_salarys">计时工资表</a>
+							</li>
+							<%} %>
+						</ul>
+					</li>
+					<%}%>
 
 					<%if(h_has_systeminfo){ %>
 					<li class="li_dropdown">
@@ -373,6 +416,8 @@
 
 
 					<%} %>
+
+						
 
 					<%if(h_has_util){ %>
 					<li class="li_dropdown">

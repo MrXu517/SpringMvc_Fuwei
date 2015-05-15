@@ -19,7 +19,7 @@ $(document).ready(function(){
 		$(".tab-content .tab-pane.active form").find("input[type='text'],select").not("[readonly],[disabled]").first().focus();
 	}
 	
-	$("#filterform #departmentId").change(function(){
+	$("#filterform #departmentId,#filterform #inUse").change(function(){
 		$("#filterform").submit();
 	});
 	
@@ -70,7 +70,7 @@ $(document).ready(function(){
 	});
 	//公司 -- 结束
 	
-	//业务员 -- 开始
+	//员工 -- 开始
 	setAddEmployee();
 	$("#employees .delete").click(function(){
 		var id= $(this).attr("data-cid");
@@ -115,7 +115,41 @@ $(document).ready(function(){
 		//设置
 		return false;
 	});
-	//业务员 -- 结束
+	
+	//离职
+	var $cancelModal = $('#cancelModal');
+	$cancelModal.on('hidden.bs.modal', function (e) {//离职对话框被隐藏之后触发
+		Common.resetForm($(".cancelform")[0]);		
+	});
+	$("#employees .cancel").click(function(){
+		var id= $(this).attr("data-cid");
+		$(".cancelform #id").val(id);
+		Common.openModal($('#cancelModal'));
+		return false;
+	});
+	$(".cancelform").submit(function(){	
+		var formdata = $(this).serializeJson();
+		$.ajax({
+            url: "employee/cancel/"+formdata.id,
+            type: 'POST',
+            data:$.param(formdata)
+        })
+            .done(function(result) {
+            	if(result.success){
+            		Common.Tip("离职成功",function(){
+            			reload();
+            		});
+            	}
+            })
+            .fail(function(result) {
+            	Common.Error("离职失败：" +result.responseText);
+            })
+            .always(function() {
+            	
+            });
+		return false;
+	});
+	//员工 -- 结束
 	
 });
 

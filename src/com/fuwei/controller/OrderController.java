@@ -158,6 +158,7 @@ public class OrderController extends BaseController {
 	@Autowired
 	ColoringProcessOrderService coloringProcessOrderService;
 	
+	
 	@Autowired
 	SampleService sampleService;
 	
@@ -703,6 +704,7 @@ public class OrderController extends BaseController {
 			//成品仓库记录单
 			FinalStoreOrder finalStoreOrder = finalStoreOrderService.getByOrder(orderId);
 			request.setAttribute("finalStoreOrder",finalStoreOrder);
+			
 			
 			//车间记录单
 			ShopRecordOrder shopRecordOrder = shopRecordOrderService.getByOrder(orderId);

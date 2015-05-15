@@ -84,6 +84,16 @@
 		<%} %>
 
 		<%
+		/*2015-5-12添加新表格*/
+		//获取成品检验记录单
+			if(gridName.indexOf("finalcheckrecordorder") > -1){
+		 %>
+			<div style="page-break-after: always">
+			<%@ include file="../printorder/finalcheckrecordorder.jsp"%>
+			</div>
+		<%} %>
+
+		<%
 		//获取原材料仓库单
 			if(gridName.indexOf("storeorder") > -1 ){
 		 %>
@@ -131,7 +141,8 @@
 
 		<%
 		//获取抽检记录单
-			if(gridName.indexOf("checkrecordorder") > -1){
+			int indexOf = gridName.indexOf("checkrecordorder");
+			if(gridName.indexOf(",checkrecordorder") > -1  || indexOf==0){
 		 %>
 			<div style="page-break-after: always">
 			<%@ include file="../printorder/checkrecordorder.jsp"%>

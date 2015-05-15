@@ -82,6 +82,16 @@
 			<%@ include file="../printorder/finalstoreorder.jsp"%>
 			</div>
 		<%} %>	
+	
+		<%
+		/*2015-5-12添加新表格*/
+		//获取成品检验记录单
+			if(gridName.indexOf("finalcheckrecordorder") > -1){
+		 %>
+			<div style="page-break-after: always">
+			<%@ include file="../printorder/finalcheckrecordorder.jsp"%>
+			</div>
+		<%} %>
 
 		<%
 		//获取原材料仓库单
@@ -91,7 +101,7 @@
 			<%@ include file="../printorder/storeorder.jsp"%>
 			</div>
 		<%} %>
-	
+		
 		<%
 		/*2015-3-23添加新表格*/
 		//获取车间记录单

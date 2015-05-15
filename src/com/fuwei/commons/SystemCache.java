@@ -32,7 +32,6 @@ import com.fuwei.service.EmployeeService;
 import com.fuwei.service.FactoryService;
 import com.fuwei.service.GongXuService;
 import com.fuwei.service.MaterialService;
-import com.fuwei.service.MessageService;
 import com.fuwei.service.RoleService;
 import com.fuwei.service.SalesmanService;
 import com.fuwei.service.UserService;
@@ -240,7 +239,19 @@ public class SystemCache {
 		}
 		return "";
 	}
-	
+	public static Employee getEmployee(String name) {
+		if(name == null){
+			return null;
+		}
+		name = name.trim();
+		for (int i = 0; i < SystemCache.employeelist.size(); ++i) {
+			Employee temp = SystemCache.employeelist.get(i);
+			if (temp.getName().trim().equals(name) ) {
+				return temp;
+			}
+		}
+		return null;
+	}
 	public static Employee getEmployee(Integer employeeId) {
 		if(employeeId == null){
 			return null;
