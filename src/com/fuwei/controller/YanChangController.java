@@ -111,7 +111,7 @@ public class YanChangController extends BaseController {
 			salary.setOver_normal_money(salary.getOver_normal() * salary.getHour_salary()*1.5);
 			//设置假日补贴
 			int holiday_day = Holiday.getHoliday(year, month, salary.getLeave_at()) ;
-			salary.setHoliday_reback(holiday_day * 8 * salary.getHour_salary());
+			salary.setHoliday_reback(holiday_day * 8 * salary.getHour_salary() + salary.getSick_leave() * salary.getHour_salary() + salary.getYear_leave() * salary.getHour_salary());
 			salary.setPayable_salary(salary.getOver_holiday_money() + salary.getOver_normal_money() + salary.getOver_weekend_money() + salary.getWork_money()+salary.getHoliday_reback());
 			//设置个税	
 			salary.personal_tax();
@@ -262,7 +262,7 @@ public class YanChangController extends BaseController {
 				salary.setOver_normal_money(salary.getOver_normal() * salary.getHour_salary()*1.5);
 				//设置假日补贴
 				int holiday_day = Holiday.getHoliday(salary.getYear(), salary.getMonth(), salary.getLeave_at()) ;
-				salary.setHoliday_reback(holiday_day * 8 * salary.getHour_salary());
+				salary.setHoliday_reback(holiday_day * 8 * salary.getHour_salary() + salary.getSick_leave() * salary.getHour_salary() + salary.getYear_leave() * salary.getHour_salary());
 				salary.setPayable_salary(salary.getOver_holiday_money() + salary.getOver_normal_money() + salary.getOver_weekend_money() + salary.getWork_money()+salary.getHoliday_reback());
 				//设置个税	
 				salary.personal_tax();
@@ -355,9 +355,32 @@ public class YanChangController extends BaseController {
 					over_holiday = Double.parseDouble(cells[8].getContents().trim());
 				}
 				
+				//事假
+				double compassionate_leave = 0.00;
+				if(cells[9].getType() != CellType.EMPTY){
+					compassionate_leave = Double.parseDouble(cells[9].getContents().trim());
+				}
+				
+				//病假
+				double sick_leave = 0.00;
+				if(cells[10].getType() != CellType.EMPTY){
+					sick_leave = Double.parseDouble(cells[10].getContents().trim());
+				}
+				
+				//年假
+				double year_leave = 0.00;
+				if(cells[11].getType() != CellType.EMPTY){
+					year_leave = Double.parseDouble(cells[11].getContents().trim());
+				}
+				
 				salary.setOver_normal(over_normal);//第7个平时加班时间
 				salary.setOver_weekend(over_weekend);//第8个周末加班时间
 				salary.setOver_holiday(over_holiday);//第9个节假日加班时间
+				
+				salary.setCompassionate_leave(compassionate_leave);
+				salary.setSick_leave(sick_leave);
+				salary.setYear_leave(year_leave);
+				
 				salaryList.add(salary);
 			}
 		}

@@ -21,6 +21,11 @@ public class Salary implements Serializable, Comparable {
 	private double over_normal;// 平时加班
 	private double over_weekend;// 周末加班
 	private double over_holiday;// 节假日加班
+	
+	private double sick_leave; //病假时间（单位：小时）
+	private double compassionate_leave;//事假(单位：小时)
+	private double year_leave ; // 年假(单位：小时)
+	
 	private int year;// 年份
 	private int month;// 月份
 	private double payable_salary; // 应发工资
@@ -45,6 +50,44 @@ public class Salary implements Serializable, Comparable {
 		}
 		return -1;
 	}
+	
+	
+
+	public double getSick_leave() {
+		return sick_leave;
+	}
+
+
+
+	public void setSick_leave(double sick_leave) {
+		this.sick_leave = sick_leave;
+	}
+
+
+
+	public double getCompassionate_leave() {
+		return compassionate_leave;
+	}
+
+
+
+	public void setCompassionate_leave(double compassionate_leave) {
+		this.compassionate_leave = compassionate_leave;
+	}
+
+
+
+	public double getYear_leave() {
+		return year_leave;
+	}
+
+
+
+	public void setYear_leave(double year_leave) {
+		this.year_leave = year_leave;
+	}
+
+
 
 	public Date getLeave_at() {
 		return leave_at;

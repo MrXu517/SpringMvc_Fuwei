@@ -16,6 +16,8 @@
 	Boolean inUse = null;
 	if (inUseStr != null && !inUseStr.equals("")) {	
 		inUse = Boolean.valueOf(inUseStr);
+	}else{
+		inUseStr = "";
 	}
 %>
 <!DOCTYPE html>
