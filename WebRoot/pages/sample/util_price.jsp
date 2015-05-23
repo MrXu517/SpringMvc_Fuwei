@@ -183,7 +183,7 @@
 															<th style="width: 45%;">
 																工序
 															</th>
-															<th style="width: 40%;">
+															<th style="width: 30%;">
 																价格
 															</th>
 															<th>
@@ -210,7 +210,9 @@
 																	class="col-sm-8 double form-control" style="">
 															</td>
 															<td>
+																<button class="multi12" type="button">x12</button>
 																<a class="bj_gongxu_delete fa fa-trash-o"></a>
+																
 															</td>
 														</tr>
 													</tbody>

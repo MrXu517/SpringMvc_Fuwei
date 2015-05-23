@@ -90,7 +90,13 @@ $(document).ready(function(){
     $(".calculateform").on("input propertychange change","input,select",function(){
     	bj_result_fill();
     });
-    
+    //2015-5-23添加 x12 功能
+    $(".multi12").click(function(){
+    	var $bj_price = $(this).closest("tr").find("#bj_price");
+    	$bj_price.val(parseFloat(getDoubleValByVal($bj_price.val()))*12);
+    	bj_result_fill();
+    	return false;
+    });
 	function getDoubleValById(id){
 		var value = $("#"+id).val();
 		if(value == ""){
