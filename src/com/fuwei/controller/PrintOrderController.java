@@ -283,6 +283,14 @@ public class PrintOrderController extends BaseController {
 					grids += "finalcheckrecordorder,";
 					request.setAttribute("planOrder", planOrder);
 			}
+			//2015-5-23添加获取检针记录表
+			if(printAll || gridName.indexOf("needlecheckrecordorder") > -1){		
+					if(planOrder==null){
+						planOrder = planOrderService.getByOrder(orderId);
+					}
+					grids += "needlecheckrecordorder,";
+					request.setAttribute("planOrder", planOrder);
+			}
 			//获取车间记录单
 			if(printAll || gridName.indexOf("shoprecordorder") > -1){
 				ShopRecordOrder shopRecordOrder = shopRecordOrderService.getByOrder(orderId);

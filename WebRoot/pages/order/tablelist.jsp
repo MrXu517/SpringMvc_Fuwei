@@ -218,7 +218,10 @@
 							</li>
 							<li>
 								<a href="#finalcheckrecordorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>成品检验记录单</a>
-							</li>				
+							</li>	
+														<li>
+								<a href="#needlecheckrecordorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>检针记录表</a>
+							</li>			
 							<li>
 								<a href="#shoprecordorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked />车间记录单</a>
 							</li>
@@ -3220,6 +3223,113 @@
 								</div>
 							</div>
 
+							<!-- 检针记录表 -->
+							<div class="tab-pane" id="needlecheckrecordorder" role="tabpanel">
+									<div class="container-fluid">
+									<div class="row">
+										<form class="saveform">
+											<input type="hidden" name="orderId"
+												value="<%=order.getId()%>" />
+											
+											<a target="_blank" type="button"
+												class="pull-right btn btn-success printBtn"
+												data-loading-text="正在打印..."> 打印 </a>
+										</form>
+
+										<div class="clear"></div>
+										<div class="col-md-12 tablewidget">
+											<table class="table">
+												<caption>
+													桐庐富伟针织厂检针记录表
+												</caption>
+												<thead>
+													<tr>
+														<td colspan="3" class="pull-right orderNumber">
+															№：<%=order.getOrderNumber()%></td>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>
+															<table
+																class="table table-responsive table-bordered tableTb">
+																<tbody>
+																	<tr>
+																		<td rowspan="<%=7+DetailList.size() %>" width="50%">
+																			<a href="/<%=order.getImg()%>" class="thumbnail"
+																				target="_blank"> <img id="previewImg"
+																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
+																			</a>
+																		</td>
+																		<td>
+																			公司
+																		</td>
+																		<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
+																	</tr>
+
+
+																	<tr>
+																		<td>
+																			客户
+																		</td>
+																		<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			货号
+																		</td>
+																		<td><%=order.getCompany_productNumber()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			款名
+																		</td>
+																		<td><%=order.getName()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			跟单
+																		</td>
+																		<td><%=SystemCache.getEmployeeName(order.getCharge_employee())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			发货时间
+																		</td>
+																		<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
+																	</tr>
+																	<tr>
+																		<td colspan="2" class="center">
+																			订单数量
+																		</td>
+																	</tr>
+																	<%
+																		for (OrderDetail detail : DetailList) {
+																	%>
+																	<tr>
+																		<td><%=detail.getColor()%></td>
+																		<td><%=detail.getQuantity()%></td>
+																	</tr>
+																	<%
+																		}
+																	%>
+																</tbody>
+															</table>
+
+														</td>
+													</tr>
+													<tr>
+														
+													</tr>
+												</tbody>
+											</table>
+
+										</div>
+
+
+									</div>
+								</div>
+							</div>
 							<!-- 车间记录单 -->
 							<div class="tab-pane" id="shoprecordorder" role="tabpanel">
 								<div class="container-fluid">

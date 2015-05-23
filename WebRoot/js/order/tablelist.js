@@ -419,6 +419,10 @@ $(document).ready(function() {
 	var finalCheckRecordGrid = new OrderGrid({
 		$content:$("#finalcheckrecordorder")
 	});
+	//2015-5-23添加新表格 检针记录表
+	var needleCheckRecordGrid = new OrderGrid({
+		$content:$("#needlecheckrecordorder")
+	});
 	
 	//车间记录单
 	var shopRecordGrid = new OrderGrid({

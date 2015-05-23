@@ -92,6 +92,16 @@
 			<%@ include file="../printorder/finalcheckrecordorder.jsp"%>
 			</div>
 		<%} %>
+		
+		<%
+		/*2015-5-23添加新表格*/
+		//获取检针记录表
+			if(gridName.indexOf("needlecheckrecordorder") > -1){
+		 %>
+			<div style="page-break-after: always">
+			<%@ include file="../printorder/needlecheckrecordorder.jsp"%>
+			</div>
+		<%} %>	
 
 		<%
 		//获取原材料仓库单
