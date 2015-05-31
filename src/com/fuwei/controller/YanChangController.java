@@ -635,11 +635,11 @@ public class YanChangController extends BaseController {
 		cal.set(tempY, tempMon-1, 28);
 		int week = cal.get(Calendar.DAY_OF_WEEK);
 		if(year <= 2015 && month <=2){//2015年2月及之前 是周日放假
-			if(week == 0){//如果是星期天，则工资发放日期 往前移一天
+			if(week == Calendar.SUNDAY){//如果是星期天，则工资发放日期 往前移一天
 				cal.add(Calendar.DAY_OF_MONTH, -1);
 			}
 		}else{
-			if(week == 6){//星期六
+			if(week == Calendar.SATURDAY){//星期六
 				cal.add(Calendar.DAY_OF_MONTH, -1);
 			}
 		}	

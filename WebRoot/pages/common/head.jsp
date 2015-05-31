@@ -37,7 +37,7 @@
 	Boolean h_has_report = SystemCache.hasAuthority(session,"report");
 	Boolean h_has_report_material = SystemCache.hasAuthority(session,"report/material");//材料库存报表
 	Boolean h_has_report_material_purchase = SystemCache.hasAuthority(session,"report/material_purchase");//原材料采购报表
-	Boolean h_has_report_financial = SystemCache.hasAuthority(session,"report/financial");//财务报表
+	
 	
 	//系统信息管理
 	Boolean h_has_systeminfo = SystemCache.hasAuthority(session,"systeminfo");
@@ -82,6 +82,19 @@
 	Boolean h_has_yanchang = SystemCache.hasAuthority(session,"yanchang");
 	Boolean h_has_yanchang_fake_salary = SystemCache.hasAuthority(session,"yanchang/fake_salary");
 	
+	
+	//2015-5-30添加财务相关
+	Boolean h_has_financial = SystemCache.hasAuthority(session,"financial");
+	Boolean h_has_financial_expense = SystemCache.hasAuthority(session,"expense/add");
+	Boolean h_has_financial_income = SystemCache.hasAuthority(session,"income/add");
+	Boolean h_has_financial_purchase_invoice = SystemCache.hasAuthority(session,"purchase_invoice/add");
+	Boolean h_has_financial_sale_invoice = SystemCache.hasAuthority(session,"sale_invoice/add");
+	
+	//2015-5-30添加财务报表
+	Boolean h_has_report_financial_expense = SystemCache.hasAuthority(session,"report/financial/expense");//进项发票报表
+	Boolean h_has_report_financial_income = SystemCache.hasAuthority(session,"report/financial/income");//进项发票报表
+	Boolean h_has_report_financial_purchase_invoice = SystemCache.hasAuthority(session,"report/financial/purchase_invoice");//进项发票报表
+	Boolean h_has_report_financial_sale_invoice = SystemCache.hasAuthority(session,"report/financial/sale_invoice");//进项发票报表
 	//权限相关
 	
 %>
@@ -320,11 +333,7 @@
 								<a href="report/material_purchase"><i class="fa fa-sign-in"></i>原材料采购报表</a>
 							</li>
 							<%} %>
-							<%if(h_has_report_financial){ %>
-							<li>
-								<a href="report/financial"><i class="fa fa-jpy"></i>财务报表</a>
-							</li>
-							<%} %>
+							
 
 						</ul>
 					</li>
@@ -363,7 +372,24 @@
 						</ul>
 					</li>
 					<%}%>
-
+					<%if(h_has_financial){ %>
+					<li class="li_dropdown">
+						<a href="#"><i class="fa fa-list-alt"></i>财务<i
+							class="fa fa-angle-down"></i> </a>
+						<ul class="submenu">
+							<%if(h_has_financial_expense){ %>
+							<li>
+								<a href="financial/expense/add">支出</a>
+							</li>
+							<%} %>
+							<%if(h_has_financial_income){ %>
+							<li>
+								<a href="financial/income/add">收入</a>
+							</li>
+							<%} %>
+						</ul>
+					</li>
+					<%}%>
 					<%if(h_has_systeminfo){ %>
 					<li class="li_dropdown">
 						<a href="#"><i class="fa fa-list-alt"></i>系统信息管理<i

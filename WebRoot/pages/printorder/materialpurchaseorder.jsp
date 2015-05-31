@@ -209,8 +209,8 @@
 							<span id="created_user">制单人：<%=SystemCache.getUserName(materialPurchaseOrder
 								.getCreated_user())%></span>
 							<span id="receiver_user">收货人：</span>
-							<span id="date"> 日期：<%=DateTool.formatDateYMD(materialPurchaseOrder
-								.getCreated_at())%></span>
+							<span id="date"> 日期：<%=DateTool.formatDateYMD(DateTool.getYanDate(materialPurchaseOrder
+								.getCreated_at()))%></span>
 						</p>
 
 

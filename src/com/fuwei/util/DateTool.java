@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import com.alibaba.fastjson.JSON;
+import com.fuwei.constant.Holiday;
+
 import java.util.Calendar;
 
 public class DateTool {
@@ -80,5 +82,17 @@ public class DateTool {
 		}
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		return sdf.format(date);
+	}
+	
+	//验厂日期：往前推找到 最近的 不是周六和节假日的 日子
+	public static Date getYanDate(Date date){		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		
+		while(Holiday.isHoliday(cal) || cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){//如果是节假日或周六
+			//则往前推一天，再进行判断
+			cal.add(Calendar.DAY_OF_MONTH, -1);
+		}
+		return cal.getTime();
 	}
 }

@@ -44,6 +44,28 @@ public class Holiday {
 		}
 		return count;
 	}
+	
+	public static boolean isHoliday(Date date){
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		
+		for(MyDate mydate : holidays){
+			if(mydate.getYear() == cal.get(Calendar.YEAR) && mydate.getMonth() == cal.get(Calendar.MONTH) && mydate.getDay() == cal.get(Calendar.DAY_OF_MONTH)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean isHoliday(Calendar cal){
+		System.out.println(cal.get(Calendar.MONTH));
+		for(MyDate mydate : holidays){
+			if(mydate.getYear() == cal.get(Calendar.YEAR) && mydate.getMonth() == cal.get(Calendar.MONTH)+1 && mydate.getDay() == cal.get(Calendar.DAY_OF_MONTH)){
+				return true;
+			}
+		}
+		return false;
+	}
 }
 
 class MyDate {

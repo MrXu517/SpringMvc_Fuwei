@@ -255,7 +255,7 @@
 						<p class="pull-right auto_bottom">
 							<span id="created_user">制单人：<%=SystemCache
 							.getUserName(shopRecordOrder.getCreated_user())%></span>
-							<span id="date"> 日期：<%=DateTool.formatDateYMD(shopRecordOrder.getCreated_at())%></span>
+							<span id="date"> 日期：<%=DateTool.formatDateYMD(DateTool.getYanDate(shopRecordOrder.getCreated_at()))%></span>
 						</p>
 
 					</div>
