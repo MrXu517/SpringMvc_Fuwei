@@ -1,0 +1,16 @@
+.container-fluid{
+	padding-top:50px;
+}
+.switch_add{
+	display:none;
+	padding-left: 5px;
+	vertical-align: bottom;
+	text-decoration: underline;
+}
+form.edit .switch_add{
+	display:inline;
+}
+#filterform{
+	margin-top: 10px; 
+	border-bottom: 1px solid #ccc;
+}

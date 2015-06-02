@@ -85,6 +85,8 @@
 	
 	//2015-5-30添加财务相关
 	Boolean h_has_financial = SystemCache.hasAuthority(session,"financial");
+	Boolean h_has_financial_bank = SystemCache.hasAuthority(session,"bank/index");
+	Boolean h_has_financial_subject = SystemCache.hasAuthority(session,"subject/index");
 	Boolean h_has_financial_expense = SystemCache.hasAuthority(session,"expense/add");
 	Boolean h_has_financial_income = SystemCache.hasAuthority(session,"income/add");
 	Boolean h_has_financial_purchase_invoice = SystemCache.hasAuthority(session,"purchase_invoice/add");
@@ -379,7 +381,7 @@
 						<ul class="submenu">
 							<%if(h_has_financial_expense){ %>
 							<li>
-								<a href="financial/expense/add">支出</a>
+								<a href="expense/add">支出</a>
 							</li>
 							<%} %>
 							<%if(h_has_financial_income){ %>
@@ -387,6 +389,17 @@
 								<a href="financial/income/add">收入</a>
 							</li>
 							<%} %>
+							<%if(h_has_financial_bank){ %>
+							<li>
+								<a href="bank/index">对方银行账户</a>
+							</li>
+							<%} %>
+							<%if(h_has_financial_subject){ %>
+							<li>
+								<a href="subject/index">科目</a>
+							</li>
+							<%} %>
+							
 						</ul>
 					</li>
 					<%}%>

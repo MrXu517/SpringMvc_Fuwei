@@ -4,7 +4,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Holiday {
-	public static final MyDate[] holidays = { new MyDate(2015, 1, 1),
+	public static final MyDate[] holidays = {new MyDate(2014,4,5),
+		new MyDate(2014,5,1), new MyDate(2014,6,2),
+		new MyDate(2014,9,8), 
+		new MyDate(2014,10,1), new MyDate(2014,10,2),
+		new MyDate(2014,10,3),
+		new MyDate(2015, 1, 1),
 			new MyDate(2015,2,19), new MyDate(2015,2,20),
 			new MyDate(2015,2,21), new MyDate(2015,4,5),
 			new MyDate(2015,5,1), new MyDate(2015,6,20),

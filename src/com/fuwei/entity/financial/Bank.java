@@ -14,14 +14,13 @@ public class Bank implements Serializable {
 	 */
 
 	@IdentityId
-	private int id;// 银行账户ID
+	private int id;// ID
 
-	private String name;// 账户名称
+	private String name;// 名称
 	
 	private String number;//纳税人识别号
 	
-	private Boolean is_enterprise ;//个人或企业
-	private Boolean company_name ;//企业名称
+	private Boolean is_enterprise = true;//个人或企业,默认是企业
 	
 	private String bank_name;//开户行
 	
@@ -34,9 +33,30 @@ public class Bank implements Serializable {
 
 	private String address;// 详细地址：区-镇-街道等
 
-	private String phone;// 城市
 	
 	private Integer created_user;//创建用户
+	
+//	private int company_id; //外贸公司id
+//	private String company_name; //外贸公司名称
+
+	
+
+//
+//	public int getCompany_id() {
+//		return company_id;
+//	}
+//
+//	public void setCompany_id(int company_id) {
+//		this.company_id = company_id;
+//	}
+//
+//	public String getCompany_name() {
+//		return company_name;
+//	}
+//
+//	public void setCompany_name(String company_name) {
+//		this.company_name = company_name;
+//	}
 
 	public int getId() {
 		return id;
@@ -66,14 +86,7 @@ public class Bank implements Serializable {
 		return is_enterprise;
 	}
 
-	public Boolean getCompany_name() {
-		return company_name;
-	}
-
-	public void setCompany_name(Boolean company_name) {
-		this.company_name = company_name;
-	}
-
+	
 	public void setIs_enterprise(Boolean is_enterprise) {
 		this.is_enterprise = is_enterprise;
 	}
@@ -118,13 +131,6 @@ public class Bank implements Serializable {
 		this.address = address;
 	}
 
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
 
 	public Integer getCreated_user() {
 		return created_user;
@@ -135,6 +141,8 @@ public class Bank implements Serializable {
 	}
 	
 	
-	
+	public String getIs_enterpriseString(){
+		return this.is_enterprise?"企业":"个人";
+	}
 	
 }
