@@ -1,4 +1,3 @@
-
 $(document).ajaxError(function(event, jqXHR, ajaxSettings, thrownError) {
     if(jqXHR.responseJSON!=undefined){
     	if(jqXHR.responseJSON.relogin == true){

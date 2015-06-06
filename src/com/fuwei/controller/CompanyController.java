@@ -67,7 +67,7 @@ public class CompanyController extends BaseController {
 		int success = companyService.add(company);
 		
 		//更新缓存
-		new SystemCache().initCompanyList();
+		SystemCache.initCompanyList();
 		
 		return this.returnSuccess();
 		
@@ -86,7 +86,7 @@ public class CompanyController extends BaseController {
 		int success = companyService.remove(id);
 		
 		//更新缓存
-		new SystemCache().initCompanyList();
+		SystemCache.initCompanyList();
 		
 		return this.returnSuccess();
 		
@@ -120,7 +120,7 @@ public class CompanyController extends BaseController {
 		int success = companyService.update(company);
 		
 		//更新缓存
-		new SystemCache().initCompanyList();
+		SystemCache.initCompanyList();
 		
 		return this.returnSuccess();
 		

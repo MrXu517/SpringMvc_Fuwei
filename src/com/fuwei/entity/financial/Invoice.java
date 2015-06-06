@@ -8,7 +8,7 @@ import net.keepsoft.commons.annotation.Table;
 
 //进项发票
 @Table("tb_purchase_invoice")
-public class PurchaseInvoice implements Serializable {
+public class Invoice implements Serializable {
 	@IdentityId
 	private int id;// 发票ID
 	
@@ -22,9 +22,9 @@ public class PurchaseInvoice implements Serializable {
 	
 	private double tax_amount;//税价
 	
-	private Integer partner_id;
+	private Integer bank_id;
 	
-	private String partner_name;//对方账户名称
+	private String bank_name;//对方账户名称
 	
 	private int type ;//发票类型:普通发票、增值税发票
 	
@@ -35,6 +35,16 @@ public class PurchaseInvoice implements Serializable {
 	private Date updated_at;// 最近更新时间
 	
 	private Integer created_user;//创建用户
+
+	private Boolean in_out = false;//进项还是销项发票，  1：进项， 0：销项
+	
+	public Boolean getIn_out() {
+		return in_out;
+	}
+
+	public void setIn_out(Boolean in_out) {
+		this.in_out = in_out;
+	}
 
 	public int getId() {
 		return id;
@@ -84,20 +94,22 @@ public class PurchaseInvoice implements Serializable {
 		this.tax_amount = tax_amount;
 	}
 
-	public Integer getPartner_id() {
-		return partner_id;
+	
+
+	public Integer getBank_id() {
+		return bank_id;
 	}
 
-	public void setPartner_id(Integer partner_id) {
-		this.partner_id = partner_id;
+	public void setBank_id(Integer bank_id) {
+		this.bank_id = bank_id;
 	}
 
-	public String getPartner_name() {
-		return partner_name;
+	public String getBank_name() {
+		return bank_name;
 	}
 
-	public void setPartner_name(String partner_name) {
-		this.partner_name = partner_name;
+	public void setBank_name(String bank_name) {
+		this.bank_name = bank_name;
 	}
 
 	public int getType() {

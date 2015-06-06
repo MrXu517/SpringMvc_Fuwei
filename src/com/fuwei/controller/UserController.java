@@ -91,7 +91,7 @@ public class UserController extends BaseController {
 			if(user.getLocked()){
 				userService.unlock(user.getId());	
 				//更新缓存
-				new SystemCache().initUserList();
+				SystemCache.initUserList();
 			}
 			loginUser.reloadMessage();
 			//登录成功，若该用户的locked为true,则改为false
@@ -161,7 +161,7 @@ public class UserController extends BaseController {
 		int success = userService.add(user);
 		
 		//更新缓存
-		new SystemCache().initUserList();
+		SystemCache.initUserList();
 		
 		return this.returnSuccess();
 		
@@ -182,7 +182,7 @@ public class UserController extends BaseController {
 		int success = userService.remove(id);
 		
 		//更新缓存
-		new SystemCache().initUserList();
+		SystemCache.initUserList();
 		
 		return this.returnSuccess();
 		
@@ -223,7 +223,7 @@ public class UserController extends BaseController {
 		int success = userService.update(user);
 		
 		//更新缓存
-		new SystemCache().initUserList();
+		SystemCache.initUserList();
 		
 		return this.returnSuccess();
 		
@@ -245,7 +245,7 @@ public class UserController extends BaseController {
 		int success = userService.cancel(id);
 		
 		//更新缓存
-		new SystemCache().initUserList();
+		SystemCache.initUserList();
 		
 		return this.returnSuccess();
 		
@@ -267,7 +267,7 @@ public class UserController extends BaseController {
 		int success = userService.enable(id);
 		
 		//更新缓存
-		new SystemCache().initUserList();
+		SystemCache.initUserList();
 		
 		return this.returnSuccess();
 		
@@ -281,7 +281,7 @@ public class UserController extends BaseController {
 //		int success = userService.cancel(user.getId());
 //		
 //		//更新缓存
-//		new SystemCache().initUserList();
+//		SystemCache.initUserList();
 //		
 //		return this.returnSuccess();
 //	}

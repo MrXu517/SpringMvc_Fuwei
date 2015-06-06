@@ -66,7 +66,7 @@ public class MaterialController extends BaseController {
 		int success = materialService.add(material);
 		
 		//更新缓存
-		new SystemCache().initMaterialList();
+		SystemCache.initMaterialList();
 		
 		return this.returnSuccess();
 		
@@ -85,7 +85,7 @@ public class MaterialController extends BaseController {
 		int success = materialService.remove(id);
 		
 		//更新缓存
-		new SystemCache().initMaterialList();
+		SystemCache.initMaterialList();
 		
 		return this.returnSuccess();
 		
@@ -119,7 +119,7 @@ public class MaterialController extends BaseController {
 		int success = materialService.update(material);
 		
 		//更新缓存
-		new SystemCache().initMaterialList();
+		SystemCache.initMaterialList();
 		
 		return this.returnSuccess();
 		

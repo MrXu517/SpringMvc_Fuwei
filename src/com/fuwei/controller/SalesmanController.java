@@ -72,7 +72,7 @@ public class SalesmanController extends BaseController {
 		int success = salesmanService.add(salesman);
 		
 		//更新缓存
-		new SystemCache().initSalesmanList();
+		SystemCache.initSalesmanList();
 		
 		return this.returnSuccess();
 		
@@ -93,7 +93,7 @@ public class SalesmanController extends BaseController {
 		int success = salesmanService.remove(id);
 		
 		//更新缓存
-		new SystemCache().initSalesmanList();
+		SystemCache.initSalesmanList();
 		
 		return this.returnSuccess();
 		
@@ -130,7 +130,7 @@ public class SalesmanController extends BaseController {
 		int success = salesmanService.update(salesman);
 		
 		//更新缓存
-		new SystemCache().initSalesmanList();
+		SystemCache.initSalesmanList();
 		
 		return this.returnSuccess();
 		

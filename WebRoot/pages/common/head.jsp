@@ -91,12 +91,16 @@
 	Boolean h_has_financial_income = SystemCache.hasAuthority(session,"income/add");
 	Boolean h_has_financial_purchase_invoice = SystemCache.hasAuthority(session,"purchase_invoice/add");
 	Boolean h_has_financial_sale_invoice = SystemCache.hasAuthority(session,"sale_invoice/add");
-	
+	//2015-6-4添加财务工作台
+	Boolean h_has_financial_workspace = SystemCache.hasAuthority(session,"financial/workspace");
 	//2015-5-30添加财务报表
 	Boolean h_has_report_financial_expense = SystemCache.hasAuthority(session,"report/financial/expense");//进项发票报表
 	Boolean h_has_report_financial_income = SystemCache.hasAuthority(session,"report/financial/income");//进项发票报表
 	Boolean h_has_report_financial_purchase_invoice = SystemCache.hasAuthority(session,"report/financial/purchase_invoice");//进项发票报表
 	Boolean h_has_report_financial_sale_invoice = SystemCache.hasAuthority(session,"report/financial/sale_invoice");//进项发票报表
+	
+	
+	
 	//权限相关
 	
 %>
@@ -379,6 +383,11 @@
 						<a href="#"><i class="fa fa-list-alt"></i>财务<i
 							class="fa fa-angle-down"></i> </a>
 						<ul class="submenu">
+							<%if(h_has_financial_workspace){ %>
+							<li>
+								<a href="financial/workspace">财务工作台</a>
+							</li>
+							<%} %>
 							<%if(h_has_financial_expense){ %>
 							<li>
 								<a href="expense/add">支出</a>

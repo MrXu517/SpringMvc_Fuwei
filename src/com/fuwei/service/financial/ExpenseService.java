@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fuwei.entity.financial.Expense;
+import com.fuwei.entity.financial.Expense_income;
 import com.fuwei.service.BaseService;
 
 @Component
@@ -18,10 +18,10 @@ public class ExpenseService extends BaseService {
 	JdbcTemplate jdbc;
 
 	// 获取列表
-	public List<Expense> getList() throws Exception {
+	public List<Expense_income> getList() throws Exception {
 		try {
-			List<Expense> expenseList = dao.queryForBeanList(
-					"SELECT * FROM tb_expense", Expense.class);
+			List<Expense_income> expenseList = dao.queryForBeanList(
+					"SELECT * FROM tb_expense_income WHERE in_out=?", Expense_income.class,false);
 			return expenseList;
 		} catch (Exception e) {
 			throw e;
@@ -30,7 +30,8 @@ public class ExpenseService extends BaseService {
 
 	// 添加
 	@Transactional
-	public int add(Expense expense) throws Exception {
+	public int add(Expense_income expense) throws Exception {
+		expense.setIn_out(false);
 		try{
 			return this.insert(expense);
 		}catch(Exception e){
@@ -41,7 +42,7 @@ public class ExpenseService extends BaseService {
 	// 删除
 	public int remove(int id) throws Exception {
 		try{
-			return dao.update("delete from tb_expense WHERE  id = ?", id);
+			return dao.update("delete from tb_expense_income WHERE  id = ?", id);
 		}catch(Exception e){
 			SQLException sqlException = (java.sql.SQLException)e.getCause();
 			if(sqlException!=null && sqlException.getErrorCode() == 1451){//外键约束
@@ -53,8 +54,9 @@ public class ExpenseService extends BaseService {
 	}
 
 	// 编辑
-	public int update(Expense expense) throws Exception {
+	public int update(Expense_income expense) throws Exception {
 		try{
+			expense.setIn_out(false);
 			return this.update(expense, "id", "created_at,created_user",true);
 		}catch(Exception e){
 			throw e;
@@ -63,11 +65,11 @@ public class ExpenseService extends BaseService {
 	}
 
 	// 获取
-	public Expense get(int id) throws Exception {
+	public Expense_income get(int id) throws Exception {
 		try {
-			Expense expense = dao.queryForBean(
-					"select * from tb_expense where id = ?", Expense.class,
-					id);
+			Expense_income expense = dao.queryForBean(
+					"select * from tb_expense_income where id = ? and in_out=?", Expense_income.class,
+					id,false);
 			return expense;
 		} catch (Exception e) {
 			throw e;

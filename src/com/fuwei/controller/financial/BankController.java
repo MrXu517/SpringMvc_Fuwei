@@ -101,6 +101,19 @@ public class BankController extends BaseController {
 		return bank;
 	}
 	
+	@RequestMapping(value = "/list_json", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Bank> get(HttpSession session,HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		String lcode = "bank/index";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有查看账户列表的权限", null);
+		}
+		List<Bank> banklist = bankService.getList();
+		return banklist;
+	}
+	
 	@RequestMapping(value = "/put", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> update(Bank bank,HttpSession session, HttpServletRequest request,

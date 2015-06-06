@@ -3,6 +3,7 @@
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.entity.Company"%>
 <%@page import="com.fuwei.entity.Salesman"%>
+<%@page import="com.fuwei.entity.financial.Bank"%>
 <%@page import="com.fuwei.entity.financial.Subject"%>
 <%@page import="net.sf.json.JSONObject"%>
 <%@page import="com.fuwei.util.DateTool"%>
@@ -12,14 +13,17 @@
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	
+
 	HashMap<String, List<Salesman>> companySalesmanMap = SystemCache
 			.getCompanySalesmanMap_ID();
 	JSONObject jObject = new JSONObject();
 	jObject.put("companySalesmanMap", companySalesmanMap);
 	String companySalesmanMap_str = jObject.toString();
-	
-	List<Subject> subjectlist = (List<Subject>)request.getAttribute("subjectlist"); 
+
+	List<Subject> subjectlist = (List<Subject>) request
+			.getAttribute("subjectlist");
+	List<Bank> banklist = (List<Bank>) request
+		.getAttribute("banklist");
 %>
 <!DOCTYPE html>
 <html>
@@ -38,9 +42,13 @@
 		<link href="css/common/common.css" rel="stylesheet" type="text/css" />
 		<script src="js/plugins/jquery-1.10.2.min.js"></script>
 		<script src="js/plugins/bootstrap.min.js" type="text/javascript"></script>
+		<script src="<%=basePath%>js/plugins/WdatePicker.js"
+			type="text/javascript"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
 		<script src="js/plugins/jquery.form.js" type="text/javascript"></script>
-		<script src="js/sample/add.js" type="text/javascript"></script>
+		<script src="js/expense/add.js" type="text/javascript"></script>
+<script type='text/javascript' src='js/plugins/select2.min.js'></script>
+<link rel="stylesheet" type="text/css" href="css/plugins/select2.min.css" />
 	</head>
 	<body>
 		<%@ include file="../common/head.jsp"%>
@@ -74,109 +82,127 @@
 									<div class="panel-body">
 
 										<form class="form-horizontal form" role="form">
-												<div class="form-group col-md-6">
-											<label for="companyId" class="col-sm-3 control-label">
-												公司
-											</label>
-											<div class="col-sm-8">
-												<select data='<%=companySalesmanMap_str%>'
-													class="form-control" name="company_id"
-													id="companyId">
-													<option value="">
-														未选择
-													</option>
-													<%
-														for (Company company : SystemCache.companylist) {
-													%>
+											<div class="form-group col-md-6">
+												<label for="company_id" class="col-sm-3 control-label">
+													公司
+												</label>
+												<div class="col-sm-8">
+													<select data='<%=companySalesmanMap_str%>'
+														class="form-control" name="company_id" id="company_id">
+														<option value="">
+															未选择
+														</option>
+														<%
+															for (Company company : SystemCache.companylist) {
+														%>
 														<option value="<%=company.getId()%>"><%=company.getFullname()%></option>
-													<%
-														}
-													%>
-												</select>
+														<%
+															}
+														%>
+													</select>
+												</div>
 											</div>
-										</div>
-										<div class="form-group col-md-6">
-											<label for="salesmanId" class="col-sm-3 control-label">
-												业务员
-											</label>
-											<div class="col-sm-8">
-												<select class="form-control" name="salesman_id"
-													id="salesmanId">
-													<option value="">
-														未选择
-													</option>
-												</select>
+											<div class="form-group col-md-6">
+												<label for="salesman_id" class="col-sm-3 control-label">
+													业务员
+												</label>
+												<div class="col-sm-8">
+													<select class="form-control" name="salesman_id"
+														id="salesman_id">
+														<option value="">
+															未选择
+														</option>
+													</select>
+												</div>
 											</div>
-										</div>
 
-										<div class="form-group col-md-6">
-											<label for="subject_id" class="col-sm-3 control-label">
-												科目
-											</label>
-											<div class="col-sm-8">
-												<select class="form-control require" name="subject_id"
-													id="subject_id">
-													<option value="">
-														未选择
-													</option>
-													<%for(Subject subject : subjectlist){ %>
-														<option value="<%=subject.getId() %>"><%=subject.getName() %></option>
+											<div class="form-group col-md-6">
+												<label for="bank_id" class="col-sm-3 control-label">
+													对方账户
+												</label>
+												<div class="col-sm-8">
+													<select class="form-control" name="bank_id" id="bank_id">
+														<option value="">
+															未选择
+														</option>
+														<%for(Bank bank:banklist){ %>
+															<option value="<%=bank.getId() %>"><%=bank.getName() %></option>
 													<%} %>
-												</select>
+													</select>
+												</div>
 											</div>
-										</div>
-												
-												<div class="form-group">
-													<label for="amount" class="col-sm-3 control-label">
-														支出金额
-													</label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control require double"
-															name="amount" id="amount" placeholder="">
-													</div>
-													<div class="col-sm-1"></div>
+
+											<div class="form-group col-md-6">
+												<label for="subject_id" class="col-sm-3 control-label">
+													科目
+												</label>
+												<div class="col-sm-8">
+													<select class="form-control require" name="subject_id"
+														id="subject_id">
+														<option value="">
+															未选择
+														</option>
+														<%
+															for (Subject subject : subjectlist) {
+														%>
+														<option value="<%=subject.getId()%>"><%=subject.getName()%></option>
+														<%
+															}
+														%>
+													</select>
 												</div>
-
-												<div class="form-group col-md-6">
-											<label for="expense_at" class="col-sm-3 control-label">
-												付款时间
-											</label>
-											<div class="col-sm-8">
-												<input disabled type="text" name="expense_at"
-													id="expense_at" class="date form-control require"
-													placeholder=""
-													value="<%=DateTool.formatDateYMD(DateTool.now())%>" />
-
 											</div>
-											<div class="col-sm-1"></div>
-										</div>
 
-												<div class="form-group">
-													<label for="memo" class="col-sm-3 control-label">
-														备注
-													</label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" name="memo"
-															id="memo" placeholder="备注">
-													</div>
-													<div class="col-sm-1"></div>
+											<div class="form-group col-md-6">
+												<label for="amount" class="col-sm-3 control-label">
+													支出金额
+												</label>
+												<div class="col-sm-8">
+													<input type="text" class="form-control require double"
+														name="amount" id="amount" placeholder="">
 												</div>
-												<div class="form-group">
-													<div class="col-sm-offset-3 col-sm-5">
-														<button type="submit" class="btn btn-primary"
-															data-loading-text="正在保存...">
-															确定
-														</button>
+												<div class="col-sm-1"></div>
+											</div>
 
-													</div>
-													<div class="col-sm-3">
-														<button type="reset" class="reset btn btn-default">
-															重置表单
-														</button>
-													</div>
-													<div class="col-sm-1"></div>
+											<div class="form-group col-md-6">
+												<label for="expense_at" class="col-sm-3 control-label">
+													付款时间
+												</label>
+												<div class="col-sm-8">
+													<input type="text" name="expense_at"
+														id="expense_at"  class="date form-control require"
+															value="<%=DateTool.formatDateYMD(DateTool.now())%>" />
+
 												</div>
-										
+												<div class="col-sm-1"></div>
+											</div>
+											<div class="clear"></div>
+											<div class="form-group col-md-6">
+												<label for="memo" class="col-sm-3 control-label">
+													备注
+												</label>
+												<div class="col-sm-8">
+													<input type="text" class="form-control" name="memo"
+														id="memo" placeholder="备注">
+												</div>
+												<div class="col-sm-1"></div>
+											</div>
+											<div class="form-group">
+												<div class="col-sm-offset-3 col-sm-5">
+													<button type="submit" class="btn btn-primary"
+														data-loading-text="正在保存...">
+														确定
+													</button>
+
+												</div>
+												<div class="col-sm-3">
+													<button type="reset" class="reset btn btn-default">
+														重置表单
+													</button>
+												</div>
+												<div class="col-sm-1"></div>
+											</div>
+
 										</form>
 									</div>
 

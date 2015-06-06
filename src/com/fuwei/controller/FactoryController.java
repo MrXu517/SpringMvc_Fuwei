@@ -33,108 +33,116 @@ public class FactoryController extends BaseController {
 	FactoryService factoryService;
 	@Autowired
 	AuthorityService authorityService;
-	
+
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView Index(HttpSession session,Integer type, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public ModelAndView Index(HttpSession session, Integer type,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 		String lcode = "factory";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
-		if(!hasAuthority){
+		if (!hasAuthority) {
 			throw new PermissionDeniedDataAccessException("没有工厂管理的权限", null);
 		}
-		if(type == null){
+		if (type == null) {
 			request.setAttribute("factorylist", SystemCache.factorylist);
-		} 
-		else if(type == 0){
-			request.setAttribute("factorylist", SystemCache.produce_factorylist);
-		}
-		else if(type == 1){
-			request.setAttribute("factorylist", SystemCache.purchase_factorylist);
-		}
-		else if(type == 2){
-			request.setAttribute("factorylist", SystemCache.coloring_factorylist);
-		}else{
+		} else if (type == 0) {
+			request
+					.setAttribute("factorylist",
+							SystemCache.produce_factorylist);
+		} else if (type == 1) {
+			request.setAttribute("factorylist",
+					SystemCache.purchase_factorylist);
+		} else if (type == 2) {
+			request.setAttribute("factorylist",
+					SystemCache.coloring_factorylist);
+		} else {
 			request.setAttribute("factorylist", SystemCache.factorylist);
 		}
 		return new ModelAndView("systeminfo/factory");
 
 	}
-	
+
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> add(Factory factory,HttpSession session, HttpServletRequest request,
-			HttpServletResponse response) throws Exception{
-		
+	public Map<String, Object> add(Factory factory, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
 		String lcode = "factory/add";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
-		if(!hasAuthority){
+		if (!hasAuthority) {
 			throw new PermissionDeniedDataAccessException("没有添加加工工厂的权限", null);
 		}
-		factory.setHelp_code(HanyuPinyinUtil.getFirstSpellByString(factory.getName())) ;
+		factory.setHelp_code(HanyuPinyinUtil.getFirstSpellByString(factory
+				.getName()));
 		factory.setCreated_at(DateTool.now());
 		factory.setUpdated_at(DateTool.now());
 		factory.setCreated_user(user.getId());
 		int success = factoryService.add(factory);
-		
-		//更新缓存
-		new SystemCache().initFactoryList();
-		
+
+		// 更新缓存
+		SystemCache.initFactoryList();
+
 		return this.returnSuccess();
-		
+
 	}
-	
+
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> delete(@PathVariable int id,HttpSession session, HttpServletRequest request,
-			HttpServletResponse response) throws Exception{
+	public Map<String, Object> delete(@PathVariable int id,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
 		String lcode = "factory/delete";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
-		if(!hasAuthority){
+		if (!hasAuthority) {
 			throw new PermissionDeniedDataAccessException("没有删除加工工厂的权限", null);
 		}
 		int success = factoryService.remove(id);
-		
-		//更新缓存
-		new SystemCache().initFactoryList();
-		
+
+		// 更新缓存
+		SystemCache.initFactoryList();
+
 		return this.returnSuccess();
-		
+
 	}
-	
+
 	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public Factory get(@PathVariable int id, HttpSession session,HttpServletRequest request,
-			HttpServletResponse response) throws Exception{
+	public Factory get(@PathVariable int id, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 		String lcode = "factory/index";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
-		if(!hasAuthority){
+		if (!hasAuthority) {
 			throw new PermissionDeniedDataAccessException("没有查看加工工厂列表的权限", null);
 		}
 		Factory Factory = factoryService.get(id);
 		return Factory;
 	}
-	
+
 	@RequestMapping(value = "/put", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> update(Factory Factory,HttpSession session, HttpServletRequest request,
-			HttpServletResponse response) throws Exception{
+	public Map<String, Object> update(Factory Factory, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
 		String lcode = "factory/edit";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
-		if(!hasAuthority){
+		if (!hasAuthority) {
 			throw new PermissionDeniedDataAccessException("没有编辑加工工厂的权限", null);
 		}
-		Factory.setHelp_code(HanyuPinyinUtil.getFirstSpellByString(Factory.getName())) ;
+		Factory.setHelp_code(HanyuPinyinUtil.getFirstSpellByString(Factory
+				.getName()));
 		Factory.setUpdated_at(DateTool.now());
 		int success = factoryService.update(Factory);
-		
-		//更新缓存
-		new SystemCache().initFactoryList();
-		
+
+		// 更新缓存
+		SystemCache.initFactoryList();
+
 		return this.returnSuccess();
-		
+
 	}
 }

@@ -65,7 +65,7 @@ public class RoleController extends BaseController {
 		int success = roleService.add(role);
 		
 		//更新缓存
-		new SystemCache().initRoleList();
+		SystemCache.initRoleList();
 		
 		return this.returnSuccess();
 		
@@ -86,7 +86,7 @@ public class RoleController extends BaseController {
 		int success = roleService.remove(id);
 		
 		//更新缓存
-		new SystemCache().initRoleList();
+		SystemCache.initRoleList();
 		
 		return this.returnSuccess();
 		
@@ -124,7 +124,7 @@ public class RoleController extends BaseController {
 		int success = roleService.update(role);
 		
 		//更新缓存
-		new SystemCache().initRoleList();
+		SystemCache.initRoleList();
 		
 		return this.returnSuccess();
 		

@@ -5,9 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 import net.keepsoft.commons.annotation.IdentityId;
+import net.keepsoft.commons.annotation.Table;
 import net.keepsoft.commons.annotation.Temporary;
 
-public class Expense {
+@Table("tb_expense_income")
+public class Expense_income {
 	@IdentityId
 	private int id;// 明细ID
 	
@@ -19,11 +21,11 @@ public class Expense {
 	
 	private String bank_name;
 	
-	private int company_id;
+	private Integer company_id;
 	
 	private String company_name;//公司
 	
-	private int salesman_id;
+	private Integer salesman_id;
 	
 	private String salesman_name;//业务员
 	
@@ -38,9 +40,21 @@ public class Expense {
 	private Date updated_at;// 最近更新时间
 	
 	private Integer created_user;//创建用户
+	
+	private Boolean in_out = false;//收入还是支出
+	
+	
 		 
-	@Temporary
-	private List<PurchaseInvoice> invoiceList = new ArrayList<PurchaseInvoice>();
+	public Boolean getIn_out() {
+		return in_out;
+	}
+
+	public void setIn_out(Boolean in_out) {
+		this.in_out = in_out;
+	}
+
+//	@Temporary
+//	private List<PurchaseInvoice> invoiceList = new ArrayList<PurchaseInvoice>();
 
 	public int getId() {
 		return id;
@@ -82,11 +96,11 @@ public class Expense {
 		this.bank_name = bank_name;
 	}
 
-	public int getCompany_id() {
+	public Integer getCompany_id() {
 		return company_id;
 	}
 
-	public void setCompany_id(int company_id) {
+	public void setCompany_id(Integer company_id) {
 		this.company_id = company_id;
 	}
 
@@ -98,11 +112,11 @@ public class Expense {
 		this.company_name = company_name;
 	}
 
-	public int getSalesman_id() {
+	public Integer getSalesman_id() {
 		return salesman_id;
 	}
 
-	public void setSalesman_id(int salesman_id) {
+	public void setSalesman_id(Integer salesman_id) {
 		this.salesman_id = salesman_id;
 	}
 
@@ -130,13 +144,13 @@ public class Expense {
 		this.memo = memo;
 	}
 
-	public List<PurchaseInvoice> getInvoiceList() {
-		return invoiceList;
-	}
-
-	public void setInvoiceList(List<PurchaseInvoice> invoiceList) {
-		this.invoiceList = invoiceList;
-	}
+//	public List<PurchaseInvoice> getInvoiceList() {
+//		return invoiceList;
+//	}
+//
+//	public void setInvoiceList(List<PurchaseInvoice> invoiceList) {
+//		this.invoiceList = invoiceList;
+//	}
 
 	public Date getCreated_at() {
 		return created_at;
@@ -170,6 +184,8 @@ public class Expense {
 		this.expense_at = expense_at;
 	}
 	
-	
+	public String getIn_outString(){
+		return this.in_out == true ?"收入":"支出";
+	}
 	
 }

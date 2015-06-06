@@ -38,27 +38,26 @@ import com.fuwei.service.UserService;
 
 public class SystemCache {
 
-	CompanyService companyService;
+	static CompanyService companyService;
 
-	UserService userService;
+	static UserService userService;
 
-	SalesmanService salesmanService;
+	static SalesmanService salesmanService;
 
-	GongXuService gongXuService;
+	static GongXuService gongXuService;
 
-	RoleService roleService;
-	
-	FactoryService factoryService;
-	
-	MaterialService materialService;
-	
-	CustomerService customerService;
-	
-	DepartmentService departmentService;
-	
-	EmployeeService employeeService;
-	
-	
+	static RoleService roleService;
+
+	static FactoryService factoryService;
+
+	static MaterialService materialService;
+
+	static CustomerService customerService;
+
+	static DepartmentService departmentService;
+
+	static EmployeeService employeeService;
+
 	public SystemCache() {
 		companyService = (CompanyService) SystemContextUtils
 				.getBean(CompanyService.class);
@@ -70,19 +69,18 @@ public class SystemCache {
 				.getBean(GongXuService.class);
 		roleService = (RoleService) SystemContextUtils
 				.getBean(RoleService.class);
-		factoryService = (FactoryService)SystemContextUtils
-		.getBean(FactoryService.class);
-		materialService = (MaterialService)SystemContextUtils
-		.getBean(MaterialService.class);
-		customerService = (CustomerService)SystemContextUtils
-		.getBean(CustomerService.class);
-		departmentService = (DepartmentService)SystemContextUtils
-		.getBean(DepartmentService.class);
-		employeeService = (EmployeeService)SystemContextUtils
-		.getBean(EmployeeService.class);
-		
-	}
+		factoryService = (FactoryService) SystemContextUtils
+				.getBean(FactoryService.class);
+		materialService = (MaterialService) SystemContextUtils
+				.getBean(MaterialService.class);
+		customerService = (CustomerService) SystemContextUtils
+				.getBean(CustomerService.class);
+		departmentService = (DepartmentService) SystemContextUtils
+				.getBean(DepartmentService.class);
+		employeeService = (EmployeeService) SystemContextUtils
+				.getBean(EmployeeService.class);
 
+	}
 
 	// 缓存公司
 	public static List<Company> companylist = new ArrayList<Company>();
@@ -99,24 +97,23 @@ public class SystemCache {
 	// 缓存角色
 	public static List<Role> rolelist = new ArrayList<Role>();
 
-	//缓存加工工厂
+	// 缓存加工工厂
 	public static List<Factory> factorylist = new ArrayList<Factory>();
 	public static List<Factory> purchase_factorylist = new ArrayList<Factory>();
 	public static List<Factory> coloring_factorylist = new ArrayList<Factory>();
 	public static List<Factory> produce_factorylist = new ArrayList<Factory>();
-	
-	//缓存材料
+
+	// 缓存材料
 	public static List<Material> materiallist = new ArrayList<Material>();
-	
-	//缓存客户
+
+	// 缓存客户
 	public static List<Customer> customerlist = new ArrayList<Customer>();
-	
-	//缓存部门
+
+	// 缓存部门
 	public static List<Department> departmentlist = new ArrayList<Department>();
-	
-	//缓存员工
+
+	// 缓存员工
 	public static List<Employee> employeelist = new ArrayList<Employee>();
-	
 
 	public static void addCompany(Company company) {
 		companylist.add(company);
@@ -130,7 +127,27 @@ public class SystemCache {
 		companylist.remove(company);
 	}
 
-	public void init() throws Exception {
+	public static void init() throws Exception {
+		companyService = (CompanyService) SystemContextUtils
+				.getBean(CompanyService.class);
+		userService = (UserService) SystemContextUtils
+				.getBean(UserService.class);
+		salesmanService = (SalesmanService) SystemContextUtils
+				.getBean(SalesmanService.class);
+		gongXuService = (GongXuService) SystemContextUtils
+				.getBean(GongXuService.class);
+		roleService = (RoleService) SystemContextUtils
+				.getBean(RoleService.class);
+		factoryService = (FactoryService) SystemContextUtils
+				.getBean(FactoryService.class);
+		materialService = (MaterialService) SystemContextUtils
+				.getBean(MaterialService.class);
+		customerService = (CustomerService) SystemContextUtils
+				.getBean(CustomerService.class);
+		departmentService = (DepartmentService) SystemContextUtils
+				.getBean(DepartmentService.class);
+		employeeService = (EmployeeService) SystemContextUtils
+				.getBean(EmployeeService.class);
 		initCompanyList();
 		initSalesmanList();
 		initGongxuList();
@@ -143,31 +160,31 @@ public class SystemCache {
 		initEmployeeList();
 	}
 
-	public void reload() throws Exception {
+	public static void reload() throws Exception {
 		init();
 	}
 
-	public void initCompanyList() throws Exception {
+	public static void initCompanyList() throws Exception {
 		SystemCache.companylist = companyService.getList(); // companylist;
 	}
 
-	public void initSalesmanList() throws Exception {
+	public static void initSalesmanList() throws Exception {
 		SystemCache.salesmanlist = salesmanService.getList();// salesmanlist;
 	}
 
-	public void initGongxuList() throws Exception {
+	public static void initGongxuList() throws Exception {
 		SystemCache.gongxulist = gongXuService.getList(); // gongxulist;
 	}
 
-	public void initUserList() throws Exception {
+	public static void initUserList() throws Exception {
 		SystemCache.userlist = userService.getList(); // userlist;
 	}
 
-	public void initRoleList() throws Exception {
+	public static void initRoleList() throws Exception {
 		SystemCache.rolelist = roleService.getList(); // userlist;
 	}
-	
-	public void initFactoryList() throws Exception {
+
+	public static void initFactoryList() throws Exception {
 		SystemCache.factorylist = factoryService.getList(); // userlist;
 		purchase_factorylist = new ArrayList<Factory>();
 		coloring_factorylist = new ArrayList<Factory>();
@@ -175,35 +192,38 @@ public class SystemCache {
 		for (int i = 0; i < SystemCache.factorylist.size(); ++i) {
 			Factory temp = SystemCache.factorylist.get(i);
 			Integer type = temp.getType();
-			if(type == 0){
+			if (type == 0) {
 				SystemCache.produce_factorylist.add(temp);
 			}
-			if(type == 1){
+			if (type == 1) {
 				SystemCache.purchase_factorylist.add(temp);
 			}
-			if(type == 2){
+			if (type == 2) {
 				SystemCache.coloring_factorylist.add(temp);
 			}
 		}
-		
+
 	}
-	public void initMaterialList() throws Exception {
+
+	public static void initMaterialList() throws Exception {
 		SystemCache.materiallist = materialService.getList(); // userlist;
 	}
-	public void initCustomerList() throws Exception {
+
+	public static void initCustomerList() throws Exception {
 		SystemCache.customerlist = customerService.getList(); // customerlist;
 	}
-	
-	public void initDepartmentList() throws Exception {
-		SystemCache.departmentlist = departmentService.getList(); // departmentlist;
+
+	public static void initDepartmentList() throws Exception {
+		SystemCache.departmentlist = departmentService.getList(); // departmentlist
+																	// ;
 	}
-	
-	public void initEmployeeList() throws Exception {
+
+	public static void initEmployeeList() throws Exception {
 		SystemCache.employeelist = employeeService.getList(); // employeelist;
 	}
-	
+
 	public static String getDepartmentName(Integer departmentId) {
-		if(departmentId == null){
+		if (departmentId == null) {
 			return "";
 		}
 		for (int i = 0; i < SystemCache.departmentlist.size(); ++i) {
@@ -214,9 +234,9 @@ public class SystemCache {
 		}
 		return "";
 	}
-	
+
 	public static Department getDepartment(Integer departmentId) {
-		if(departmentId == null){
+		if (departmentId == null) {
 			return null;
 		}
 		for (int i = 0; i < SystemCache.departmentlist.size(); ++i) {
@@ -227,8 +247,9 @@ public class SystemCache {
 		}
 		return null;
 	}
+
 	public static String getEmployeeName(Integer employeeId) {
-		if(employeeId == null){
+		if (employeeId == null) {
 			return "";
 		}
 		for (int i = 0; i < SystemCache.employeelist.size(); ++i) {
@@ -239,21 +260,23 @@ public class SystemCache {
 		}
 		return "";
 	}
+
 	public static Employee getEmployee(String name) {
-		if(name == null){
+		if (name == null) {
 			return null;
 		}
 		name = name.trim();
 		for (int i = 0; i < SystemCache.employeelist.size(); ++i) {
 			Employee temp = SystemCache.employeelist.get(i);
-			if (temp.getName().trim().equals(name) ) {
+			if (temp.getName().trim().equals(name)) {
 				return temp;
 			}
 		}
 		return null;
 	}
+
 	public static Employee getEmployee(Integer employeeId) {
-		if(employeeId == null){
+		if (employeeId == null) {
 			return null;
 		}
 		for (int i = 0; i < SystemCache.employeelist.size(); ++i) {
@@ -264,8 +287,9 @@ public class SystemCache {
 		}
 		return null;
 	}
+
 	public static String getCustomerName(Integer customerId) {
-		if(customerId == null){
+		if (customerId == null) {
 			return "";
 		}
 		for (int i = 0; i < SystemCache.customerlist.size(); ++i) {
@@ -276,9 +300,9 @@ public class SystemCache {
 		}
 		return "";
 	}
-	
+
 	public static Customer getCustomer(Integer customerId) {
-		if(customerId == null){
+		if (customerId == null) {
 			return null;
 		}
 		for (int i = 0; i < SystemCache.customerlist.size(); ++i) {
@@ -289,9 +313,9 @@ public class SystemCache {
 		}
 		return null;
 	}
-	
+
 	public static String getMaterialName(Integer materialId) {
-		if(materialId==null){
+		if (materialId == null) {
 			return "";
 		}
 		for (int i = 0; i < SystemCache.materiallist.size(); ++i) {
@@ -302,9 +326,9 @@ public class SystemCache {
 		}
 		return "";
 	}
-	
+
 	public static Material getMaterial(Integer materialId) {
-		if(materialId==null){
+		if (materialId == null) {
 			return null;
 		}
 		for (int i = 0; i < SystemCache.materiallist.size(); ++i) {
@@ -315,8 +339,7 @@ public class SystemCache {
 		}
 		return null;
 	}
-	
-	
+
 	public static String getUserName(int userid) {
 
 		for (int i = 0; i < SystemCache.userlist.size(); ++i) {
@@ -328,8 +351,10 @@ public class SystemCache {
 		return "";
 	}
 
-	public static String getSalesmanName(int salesmanid) {
-
+	public static String getSalesmanName(Integer salesmanid) {
+		if(salesmanid == null){
+			return "";
+		}
 		for (int i = 0; i < SystemCache.salesmanlist.size(); ++i) {
 			Salesman temp = SystemCache.salesmanlist.get(i);
 			if (temp.getId() == salesmanid) {
@@ -338,8 +363,8 @@ public class SystemCache {
 		}
 		return "";
 	}
-	
-	public static Salesman getSalesman(int salesmanid) {
+
+	public static Salesman getSalesman(Integer salesmanid) {
 
 		for (int i = 0; i < SystemCache.salesmanlist.size(); ++i) {
 			Salesman temp = SystemCache.salesmanlist.get(i);
@@ -349,8 +374,8 @@ public class SystemCache {
 		}
 		return null;
 	}
-	
-	public static String getCompanyName(int companyId) {
+
+	public static String getCompanyName(Integer companyId) {
 
 		for (int i = 0; i < SystemCache.companylist.size(); ++i) {
 			Company temp = SystemCache.companylist.get(i);
@@ -360,8 +385,11 @@ public class SystemCache {
 		}
 		return "";
 	}
-	public static String getCompanyShortName(int companyId) {
 
+	public static String getCompanyShortName(Integer companyId) {
+		if(companyId == null){
+			return "";
+		}
 		for (int i = 0; i < SystemCache.companylist.size(); ++i) {
 			Company temp = SystemCache.companylist.get(i);
 			if (temp.getId() == companyId) {
@@ -370,8 +398,8 @@ public class SystemCache {
 		}
 		return "";
 	}
-	
-	public static Company getCompanyById(int companyId) {
+
+	public static Company getCompanyById(Integer companyId) {
 
 		for (int i = 0; i < SystemCache.companylist.size(); ++i) {
 			Company temp = SystemCache.companylist.get(i);
@@ -381,7 +409,7 @@ public class SystemCache {
 		}
 		return null;
 	}
-	
+
 	public static String getGongxuName(int gongxuId) {
 
 		for (int i = 0; i < SystemCache.gongxulist.size(); ++i) {
@@ -392,9 +420,9 @@ public class SystemCache {
 		}
 		return "";
 	}
-	
+
 	public static Factory getFactory(Integer factoryId) {
-		if(factoryId == null){
+		if (factoryId == null) {
 			return null;
 		}
 		for (int i = 0; i < SystemCache.factorylist.size(); ++i) {
@@ -405,9 +433,9 @@ public class SystemCache {
 		}
 		return null;
 	}
-	
+
 	public static String getFactoryName(Integer factoryId) {
-		if(factoryId == null){
+		if (factoryId == null) {
 			return "";
 		}
 		for (int i = 0; i < SystemCache.factorylist.size(); ++i) {
@@ -418,8 +446,8 @@ public class SystemCache {
 		}
 		return "";
 	}
-	
-	public static List<Salesman> getSalesmanList(int companyId){
+
+	public static List<Salesman> getSalesmanList(int companyId) {
 		List<Salesman> salemanlist = new ArrayList<Salesman>();
 		for (int i = 0; i < SystemCache.salesmanlist.size(); ++i) {
 			Salesman temp = SystemCache.salesmanlist.get(i);
@@ -429,8 +457,8 @@ public class SystemCache {
 		}
 		return salemanlist;
 	}
-	
-	public static HashMap<Company, List<Salesman>> getCompanySalesmanMap(){
+
+	public static HashMap<Company, List<Salesman>> getCompanySalesmanMap() {
 		HashMap<Company, List<Salesman>> map = new HashMap<Company, List<Salesman>>();
 		for (int i = 0; i < SystemCache.companylist.size(); ++i) {
 			Company temp = SystemCache.companylist.get(i);
@@ -445,9 +473,8 @@ public class SystemCache {
 		}
 		return map;
 	}
-	
-	
-	public static HashMap<String, List<Salesman>> getCompanySalesmanMap_ID(){
+
+	public static HashMap<String, List<Salesman>> getCompanySalesmanMap_ID() {
 		HashMap<String, List<Salesman>> map = new HashMap<String, List<Salesman>>();
 		for (int i = 0; i < SystemCache.companylist.size(); ++i) {
 			Company temp = SystemCache.companylist.get(i);
@@ -462,7 +489,7 @@ public class SystemCache {
 		}
 		return map;
 	}
-	
+
 	public static String getRoleName(int roleId) {
 
 		for (int i = 0; i < SystemCache.rolelist.size(); ++i) {
@@ -473,7 +500,7 @@ public class SystemCache {
 		}
 		return "";
 	}
-	
+
 	public static Role getRole(int roleId) {
 
 		for (int i = 0; i < SystemCache.rolelist.size(); ++i) {
@@ -484,55 +511,57 @@ public class SystemCache {
 		}
 		return null;
 	}
-	
-	/*权限相关*/
-	public static Boolean hasAuthority(HttpSession session, int authorityId){
+
+	/* 权限相关 */
+	public static Boolean hasAuthority(HttpSession session, int authorityId) {
 		LoginedUser loginUser = SystemContextUtils.getCurrentUser(session);
 		return SystemCache.hasAuthority(loginUser, authorityId);
 	}
-	
-	public static Boolean hasAuthority(HttpSession session,String lcode){
+
+	public static Boolean hasAuthority(HttpSession session, String lcode) {
 		LoginedUser loginUser = SystemContextUtils.getCurrentUser(session);
 		return SystemCache.hasAuthority(loginUser, lcode);
 	}
-	
-	public static Boolean hasAuthority(LoginedUser loginUser, int authorityId){
-		if(loginUser.getLoginedUser().getBuilt_in()){
+
+	public static Boolean hasAuthority(LoginedUser loginUser, int authorityId) {
+		if (loginUser.getLoginedUser().getBuilt_in()) {
 			return true;
 		}
 		List<Authority> authorityList = loginUser.getAuthoritylist();
-		if(authorityList == null || authorityList.size()<=0){
+		if (authorityList == null || authorityList.size() <= 0) {
 			return false;
 		}
-		for(Authority authority : authorityList){
-			if(authority.getId() == authorityId){
+		for (Authority authority : authorityList) {
+			if (authority.getId() == authorityId) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	public static Boolean hasAuthority(LoginedUser loginUser,String lcode){
-		if(loginUser.getLoginedUser().getBuilt_in()){
+
+	public static Boolean hasAuthority(LoginedUser loginUser, String lcode) {
+		if (loginUser.getLoginedUser().getBuilt_in()) {
 			return true;
 		}
 		List<Authority> authorityList = loginUser.getAuthoritylist();
-		if(authorityList == null || authorityList.size()<=0){
+		if (authorityList == null || authorityList.size() <= 0) {
 			return false;
 		}
-		for(Authority authority : authorityList){
-			if(authority.getLcode().trim().equals(lcode.trim())){
+		for (Authority authority : authorityList) {
+			if (authority.getLcode().trim().equals(lcode.trim())) {
 				return true;
 			}
 		}
 		return false;
 	}
-	/*权限相关*/
-	
-	//2015-4-4添加设置某用户的数据
-	public static void setUserCacheUpdate(int userId,Boolean need_message_cache_update){
-		for(com.fuwei.entity.User user : SystemCache.userlist){
-			if(user.getId() == userId){
+
+	/* 权限相关 */
+
+	// 2015-4-4添加设置某用户的数据
+	public static void setUserCacheUpdate(int userId,
+			Boolean need_message_cache_update) {
+		for (com.fuwei.entity.User user : SystemCache.userlist) {
+			if (user.getId() == userId) {
 				user.setNeed_message_cache_update(need_message_cache_update);
 			}
 		}

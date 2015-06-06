@@ -68,7 +68,7 @@ public class GongXuController extends BaseController {
 		int success = gongxuService.add(gongxu);
 		
 		//更新缓存
-		new SystemCache().initGongxuList();
+		SystemCache.initGongxuList();
 		
 		return this.returnSuccess();
 		
@@ -86,7 +86,7 @@ public class GongXuController extends BaseController {
 		}
 		int success = gongxuService.remove(id);
 		//更新缓存
-		new SystemCache().initGongxuList();
+		SystemCache.initGongxuList();
 		
 		return this.returnSuccess();
 		
@@ -120,7 +120,7 @@ public class GongXuController extends BaseController {
 		int success = gongxuService.update(gongxu);
 		
 		//更新缓存
-		new SystemCache().initGongxuList();
+		SystemCache.initGongxuList();
 		
 		return this.returnSuccess();
 		

@@ -1,6 +1,7 @@
 package com.fuwei.controller.financial;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,56 +18,107 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fuwei.commons.Pager;
+import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
-import com.fuwei.constant.OrderStatus;
 import com.fuwei.controller.BaseController;
-import com.fuwei.entity.Order;
-import com.fuwei.entity.OrderDetail;
-import com.fuwei.entity.OrderProduceStatus;
-import com.fuwei.entity.OrderStep;
 import com.fuwei.entity.User;
-import com.fuwei.entity.financial.Expense;
+import com.fuwei.entity.financial.Bank;
+import com.fuwei.entity.financial.Expense_income;
 import com.fuwei.entity.financial.Subject;
 import com.fuwei.service.AuthorityService;
-import com.fuwei.service.financial.ExpenseService;
+import com.fuwei.service.financial.BankService;
+import com.fuwei.service.financial.Expense_incomeService;
 import com.fuwei.service.financial.SubjectService;
 import com.fuwei.util.DateTool;
+import com.fuwei.util.SerializeTool;
 
 @RequestMapping("/expense")
 @Controller
 public class ExpenseController extends BaseController {
 	
 	@Autowired
-	ExpenseService expenseService;
+	Expense_incomeService expense_incomeService;
 	@Autowired
 	AuthorityService authorityService;
 	@Autowired
 	SubjectService subjectService;
+	@Autowired
+	BankService bankService;
 	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView Index(HttpSession session, HttpServletRequest request,
+	public ModelAndView Index(Integer page, String start_time, String end_time,
+			Integer companyId, Integer salesmanId,
+			String sortJSON,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		String lcode = "expense/index";
+		String lcode = "expense_income/index";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有查看支出明细的权限", null);
 		}
-		List<Expense> expenselist = expenseService.getList();
-		request.setAttribute("expenselist", expenselist);
+		Date start_time_d = DateTool.parse(start_time);
+		Date end_time_d = DateTool.parse(end_time);
+		Pager pager = new Pager();
+		if (page != null && page > 0) {
+			pager.setPageNo(page);
+		}
+
+		List<Sort> sortList = null;
+		if (sortJSON != null) {
+			sortList = SerializeTool.deserializeList(sortJSON, Sort.class);
+		}
+		if (sortList == null) {
+			sortList = new ArrayList<Sort>();
+		}
+		Sort sort = new Sort();
+		sort.setDirection("desc");
+		sort.setProperty("expense_at");
+		sortList.add(sort);
+		
+		pager = expense_incomeService.getList(pager, start_time_d, end_time_d,
+				companyId, salesmanId,false,null,null,null,null, sortList);
+
+		
+		request.setAttribute("start_time", start_time_d);
+		request.setAttribute("end_time", end_time_d);
+		request.setAttribute("salesmanId", salesmanId);
+		if (companyId == null & salesmanId != null) {
+			companyId = SystemCache.getSalesman(salesmanId).getCompanyId();
+		}
+		request.setAttribute("companyId", companyId);
+		request.setAttribute("pager", pager);
+		
 		return new ModelAndView("expense/list");
 
 	}
 	
+	@RequestMapping(value = "/add", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView add(HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "expense_income/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有出纳的权限", null);
+		}
+		List<Subject> subjectlist = subjectService.getList(true);
+		request.setAttribute("subjectlist", subjectlist);	
+		List<Bank> banklist = bankService.getList();
+		request.setAttribute("banklist", banklist);
+		return new ModelAndView("expense/add");
+	}
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> add(Expense expense,HttpSession session, HttpServletRequest request,
+	public Map<String,Object> add(Expense_income expense,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "expense/add";
+		String lcode = "expense_income/add";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有出纳的权限", null);
@@ -74,9 +126,9 @@ public class ExpenseController extends BaseController {
 		expense.setCreated_at(DateTool.now());
 		expense.setUpdated_at(DateTool.now());
 		expense.setCreated_user(user.getId());
-		int success = expenseService.add(expense);
-		List<Subject> subjectlist = subjectService.getList(true);
-		request.setAttribute("subjectlist", subjectlist);
+		expense.setIn_out(false);
+		int success = expense_incomeService.add(expense);
+		
 		return this.returnSuccess();
 		
 	}
@@ -86,41 +138,42 @@ public class ExpenseController extends BaseController {
 	public Map<String,Object> delete(@PathVariable int id,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "expense/delete";
+		String lcode = "expense_income/delete";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有删除支出项的权限", null);
 		}
-		int success = expenseService.remove(id);
+		int success = expense_incomeService.remove(id);
 		return this.returnSuccess();
 		
 	}
 	
 	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public Expense get(@PathVariable int id, HttpSession session,HttpServletRequest request,
+	public Expense_income get(@PathVariable int id, HttpSession session,HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
-		String lcode = "expense/index";
+		String lcode = "expense_income/index";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有查看支出明细的权限", null);
 		}
-		Expense expense = expenseService.get(id);
+		Expense_income expense = expense_incomeService.get(id);
 		return expense;
 	}
 	
 	@RequestMapping(value = "/put", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> update(Expense expense,HttpSession session, HttpServletRequest request,
+	public Map<String,Object> update(Expense_income expense,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "expense/edit";
+		String lcode = "expense_income/edit";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有编辑支出项的权限", null);
 		}
 		expense.setUpdated_at(DateTool.now());
-		int success = expenseService.update(expense);
+		expense.setIn_out(false);
+		int success = expense_incomeService.update(expense);
 		
 		return this.returnSuccess();
 		
@@ -131,7 +184,7 @@ public class ExpenseController extends BaseController {
 	@ResponseBody
 	public ModelAndView detail(@PathVariable Integer id, HttpSession session,
 			HttpServletRequest request) throws Exception {
-		String lcode = "expense/index";
+		String lcode = "expense_income/index";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		if (!hasAuthority) {
 			throw new PermissionDeniedDataAccessException("没有查看支出详情的权限", null);
@@ -140,7 +193,7 @@ public class ExpenseController extends BaseController {
 		if (id == null) {
 			throw new Exception("缺少支出明细ID");
 		}
-		Expense expense = expenseService.get(id);
+		Expense_income expense = expense_incomeService.get(id);
 
 		request.setAttribute("expense", expense);
 		return new ModelAndView("expense/detail");

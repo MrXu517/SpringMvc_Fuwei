@@ -130,7 +130,7 @@ public class AuthorityController extends BaseController{
 			}
 			authorityService.update(roleId, role_authoritylist);
 			//更新User缓存
-			new SystemCache().initUserList();
+			SystemCache.initUserList();
 			return this.returnSuccess();
 		}
 		else{

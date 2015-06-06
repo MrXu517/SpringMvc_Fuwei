@@ -65,7 +65,7 @@ public class DepartmentController extends BaseController {
 		int success = departmentService.add(department);
 		
 		//更新缓存
-		new SystemCache().initDepartmentList();
+		SystemCache.initDepartmentList();
 		
 		return this.returnSuccess();
 		
@@ -84,7 +84,7 @@ public class DepartmentController extends BaseController {
 		int success = departmentService.remove(id);
 		
 		//更新缓存
-		new SystemCache().initDepartmentList();
+		SystemCache.initDepartmentList();
 		
 		return this.returnSuccess();
 		
@@ -117,7 +117,7 @@ public class DepartmentController extends BaseController {
 		int success = departmentService.update(department);
 		
 		//更新缓存
-		new SystemCache().initDepartmentList();
+		SystemCache.initDepartmentList();
 		
 		return this.returnSuccess();
 		

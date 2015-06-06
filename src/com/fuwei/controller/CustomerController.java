@@ -63,7 +63,7 @@ public class CustomerController extends BaseController {
 		int success = customerService.add(customer);
 		
 		//更新缓存
-		new SystemCache().initCustomerList();
+		SystemCache.initCustomerList();
 		
 		return this.returnSuccess();
 		
@@ -81,7 +81,7 @@ public class CustomerController extends BaseController {
 		}
 		int success = customerService.remove(id);
 		//更新缓存
-		new SystemCache().initCustomerList();
+		SystemCache.initCustomerList();
 		
 		return this.returnSuccess();
 		
@@ -115,7 +115,7 @@ public class CustomerController extends BaseController {
 		int success = customerService.update(customer);
 		
 		//更新缓存
-		new SystemCache().initCustomerList();
+		SystemCache.initCustomerList();
 		
 		return this.returnSuccess();
 		

@@ -157,7 +157,7 @@ public class EmployeeController extends BaseController {
 		int success = employeeService.add(employee);
 		
 		//更新缓存
-		new SystemCache().initEmployeeList();
+		SystemCache.initEmployeeList();
 		
 		return this.returnSuccess();
 		
@@ -176,7 +176,7 @@ public class EmployeeController extends BaseController {
 		int success = employeeService.remove(id);
 		
 		//更新缓存
-		new SystemCache().initEmployeeList();
+		SystemCache.initEmployeeList();
 		
 		return this.returnSuccess();
 		
@@ -210,7 +210,7 @@ public class EmployeeController extends BaseController {
 		int success = employeeService.update(employee);
 		
 		//更新缓存
-		new SystemCache().initEmployeeList();
+		SystemCache.initEmployeeList();
 		
 		return this.returnSuccess();
 		
@@ -230,7 +230,7 @@ public class EmployeeController extends BaseController {
 		int success = employeeService.cancel(id,leave_at);
 		
 		//更新缓存
-		new SystemCache().initEmployeeList();
+		SystemCache.initEmployeeList();
 		
 		return this.returnSuccess();
 		
