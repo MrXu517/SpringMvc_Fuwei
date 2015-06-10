@@ -342,5 +342,4 @@ public class PrintOrderController extends BaseController {
 			throw e;
 		}
 	}
-	
 }

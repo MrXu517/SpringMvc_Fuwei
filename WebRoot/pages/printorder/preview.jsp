@@ -31,7 +31,7 @@
 			if(gridName.indexOf("headbankorder") > -1){
 		 %>
 			<div style="page-break-after: always">
-			<%@ include file="../printorder/headbankorder.jsp"%>
+			<%@ include file="headbankorder.jsp"%>
 			</div>
 		<%} %>
 	
@@ -40,7 +40,7 @@
 			if(gridName.indexOf("producingorder") > -1){
 		 %>
 			<div style="page-break-after: always">
-			<%@ include file="../printorder/producingorder.jsp"%>
+			<%@ include file="producingorder.jsp"%>
 			</div>
 		<%} %>
 		
@@ -50,7 +50,7 @@
 			if(gridName.indexOf("coloringprocessorder") > -1){
 		 %>
 			<div style="page-break-after: always">
-			<%@ include file="../printorder/coloringprocessorder.jsp"%>
+			<%@ include file="coloringprocessorder.jsp"%>
 			</div>
 		<%} %>
 
@@ -60,7 +60,7 @@
 			if(gridName.indexOf("productionscheduleorder") > -1){
 		 %>
 			<div style="page-break-after: always">
-			<%@ include file="../printorder/productionscheduleorder.jsp"%>
+			<%@ include file="productionscheduleorder.jsp"%>
 			</div>
 		<%} %>
 
@@ -69,7 +69,7 @@
 			if(gridName.indexOf("planorder") > -1){
 		 %>
 			<div style="page-break-after: always">
-			<%@ include file="../printorder/planorder.jsp"%>
+			<%@ include file="planorder.jsp"%>
 			</div>
 		<%} %>
 	
@@ -79,7 +79,7 @@
 			if(gridName.indexOf("finalstorerecordorder") > -1){
 		 %>
 			<div style="page-break-after: always">
-			<%@ include file="../printorder/finalstoreorder.jsp"%>
+			<%@ include file="finalstoreorder.jsp"%>
 			</div>
 		<%} %>	
 	
@@ -89,7 +89,7 @@
 			if(gridName.indexOf("finalcheckrecordorder") > -1){
 		 %>
 			<div style="page-break-after: always">
-			<%@ include file="../printorder/finalcheckrecordorder.jsp"%>
+			<%@ include file="finalcheckrecordorder.jsp"%>
 			</div>
 		<%} %>
 		
@@ -99,7 +99,7 @@
 			if(gridName.indexOf("needlecheckrecordorder") > -1){
 		 %>
 			<div style="page-break-after: always">
-			<%@ include file="../printorder/needlecheckrecordorder.jsp"%>
+			<%@ include file="needlecheckrecordorder.jsp"%>
 			</div>
 		<%} %>	
 
@@ -108,7 +108,7 @@
 			if(gridName.indexOf("storeorder") > -1){
 		 %>
 			<div style="page-break-after: always">
-			<%@ include file="../printorder/storeorder.jsp"%>
+			<%@ include file="storeorder.jsp"%>
 			</div>
 		<%} %>
 		
@@ -118,7 +118,7 @@
 			if(gridName.indexOf("shoprecordorder") > -1){
 		 %>
 			<div style="page-break-after: always">
-			<%@ include file="../printorder/shoprecordorder.jsp"%>
+			<%@ include file="shoprecordorder.jsp"%>
 			</div>
 		<%} %>	
 
@@ -127,7 +127,7 @@
 			if(gridName.indexOf("halfcheckrecordorder") > -1){
 		 %>
 			<div style="page-break-after: always">
-			<%@ include file="../printorder/halfcheckrecordorder.jsp"%>
+			<%@ include file="halfcheckrecordorder.jsp"%>
 			</div>
 		<%} %>
 
@@ -136,7 +136,7 @@
 			if(gridName.indexOf("materialpurchaseorder") > -1){
 		 %>
 			<div style="page-break-after: always">
-			<%@ include file="../printorder/materialpurchaseorder.jsp"%>
+			<%@ include file="materialpurchaseorder.jsp"%>
 			</div>
 		<%} %>
 
@@ -145,7 +145,7 @@
 			if(gridName.indexOf("coloringorder") > -1){
 		 %>
 			<div style="page-break-after: always">
-			<%@ include file="../printorder/coloringorder.jsp"%>
+			<%@ include file="coloringorder.jsp"%>
 			</div>
 		<%} %>
 
@@ -154,7 +154,7 @@
 			if(gridName.indexOf("checkrecordorder") > -1){
 		 %>
 			<div style="page-break-after: always">
-			<%@ include file="../printorder/checkrecordorder.jsp"%>
+			<%@ include file="checkrecordorder.jsp"%>
 			</div>
 		<%} %>
 
@@ -163,7 +163,7 @@
 			if(gridName.indexOf("fuliaopurchaseorder") > -1){
 		 %>
 			<div style="page-break-after: always">
-			<%@ include file="../printorder/fuliaopurchaseorder.jsp"%>
+			<%@ include file="fuliaopurchaseorder.jsp"%>
 			</div>
 		<%} %>
 
@@ -172,7 +172,7 @@
 			if(gridName.indexOf("carfixrecordorder") > -1){
 		 %>
 			<div style="page-break-after: always">
-			<%@ include file="../printorder/carfixrecordorder.jsp"%>
+			<%@ include file="carfixrecordorder.jsp"%>
 			</div>
 		<%} %>
 
@@ -181,7 +181,7 @@
 			if(gridName.indexOf("ironingrecordorder") > -1){
 		 %>
 			<div style="page-break-after: always">
-			<%@ include file="../printorder/ironingrecordorder.jsp"%>
+			<%@ include file="ironingrecordorder.jsp"%>
 			</div>
 		<%} %>
 
