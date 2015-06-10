@@ -45,7 +45,7 @@ public class SubjectController extends BaseController {
 		}
 		List<Subject> subjectlist = subjectService.getList();
 		request.setAttribute("subjectlist", subjectlist);
-		return new ModelAndView("subject/list");
+		return new ModelAndView("financial/subject/list");
 
 	}
 	

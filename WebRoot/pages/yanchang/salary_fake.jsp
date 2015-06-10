@@ -14,7 +14,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>添加样品 -- 桐庐富伟针织厂</title>
+		<title>计时工资表 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -45,7 +45,7 @@
 						</li>
 						<li>
 							<i class=""></i>
-							<a href="sample/index">验厂</a>
+							验厂
 						</li>
 						<li class="active">
 							计时工资表

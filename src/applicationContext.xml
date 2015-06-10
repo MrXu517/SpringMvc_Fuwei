@@ -110,11 +110,12 @@
 			expression="execution(* com.fuwei.service.*.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="businessService" />
 	</aop:config>
-	
+	<tx:annotation-driven />
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
 			<tx:method name="delete*" rollback-for="Exception" />
 			<tx:method name="save*" rollback-for="Exception" />
+			<tx:method name="batch*" rollback-for="Exception" />
 			<tx:method name="update*" rollback-for="Exception" />
 			<tx:method name="add*" rollback-for="Exception" />
 			<tx:method name="remove*" rollback-for="Exception" />

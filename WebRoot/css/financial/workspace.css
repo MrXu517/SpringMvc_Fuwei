@@ -136,3 +136,36 @@ tr.label-warning{
 #tab>.tab-content{
 	margin-top:5px;
 }
+.body {
+  min-width: 1000px;
+}
+#breadcrumbs {
+  min-width: 1000px;
+}
+iframe{
+	border:none;
+	width:100%;
+}
+ul.pagination{
+	float: right;
+}
+#matchDialog .modal-dialog {
+	width: 850px;
+}
+
+#matchDialog iframe {
+	width: 100%;
+	height: 280px;
+}
+#matchDialog .modal-body{
+	padding-bottom:0px;
+	padding-top: 5px;
+	padding-right: 0;
+}
+#matchDialog .modal-footer{
+	padding-top: 10px;
+  padding-bottom: 10px;
+	}
+#tab .tab-content .tab-pane,#tab .tab-content iframe{
+	height:100%;
+}

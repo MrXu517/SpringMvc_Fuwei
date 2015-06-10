@@ -67,6 +67,11 @@ public class EmployeeService extends BaseService {
 			employee.setInUse(true);
 			return this.insert(employee);
 		}catch(Exception e){
+			SQLException sqlException = (java.sql.SQLException)e.getCause();
+			if(sqlException!=null && sqlException.getErrorCode() == 1062){//外键约束
+				log.error(e);
+				throw new Exception("员工姓名必须唯一");
+			}
 			throw e;
 		}
 	}

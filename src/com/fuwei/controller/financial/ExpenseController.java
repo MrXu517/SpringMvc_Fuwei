@@ -2,6 +2,7 @@ package com.fuwei.controller.financial;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,10 +27,14 @@ import com.fuwei.controller.BaseController;
 import com.fuwei.entity.User;
 import com.fuwei.entity.financial.Bank;
 import com.fuwei.entity.financial.Expense_income;
+import com.fuwei.entity.financial.Expense_income_invoice;
+import com.fuwei.entity.financial.Invoice;
 import com.fuwei.entity.financial.Subject;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.financial.BankService;
 import com.fuwei.service.financial.Expense_incomeService;
+import com.fuwei.service.financial.Expense_income_invoiceService;
+import com.fuwei.service.financial.InvoiceService;
 import com.fuwei.service.financial.SubjectService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
@@ -39,7 +44,11 @@ import com.fuwei.util.SerializeTool;
 public class ExpenseController extends BaseController {
 	
 	@Autowired
+	Expense_income_invoiceService expense_income_invoiceService;
+	@Autowired
 	Expense_incomeService expense_incomeService;
+	@Autowired
+	InvoiceService invoiceService;
 	@Autowired
 	AuthorityService authorityService;
 	@Autowired
@@ -90,7 +99,7 @@ public class ExpenseController extends BaseController {
 		request.setAttribute("companyId", companyId);
 		request.setAttribute("pager", pager);
 		
-		return new ModelAndView("expense/list");
+		return new ModelAndView("financial/expense_income/expense_list");
 
 	}
 	
@@ -109,7 +118,7 @@ public class ExpenseController extends BaseController {
 		request.setAttribute("subjectlist", subjectlist);	
 		List<Bank> banklist = bankService.getList();
 		request.setAttribute("banklist", banklist);
-		return new ModelAndView("expense/add");
+		return new ModelAndView("financial/expense_income/expense_add");
 	}
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -127,9 +136,9 @@ public class ExpenseController extends BaseController {
 		expense.setUpdated_at(DateTool.now());
 		expense.setCreated_user(user.getId());
 		expense.setIn_out(false);
-		int success = expense_incomeService.add(expense);
+		int id = expense_incomeService.add(expense);
 		
-		return this.returnSuccess();
+		return this.returnSuccess("id",id);
 		
 	}
 	
@@ -194,9 +203,32 @@ public class ExpenseController extends BaseController {
 			throw new Exception("缺少支出明细ID");
 		}
 		Expense_income expense = expense_incomeService.get(id);
-
-		request.setAttribute("expense", expense);
-		return new ModelAndView("expense/detail");
+		
+		Map<Invoice,Expense_income_invoice> map = new HashMap<Invoice, Expense_income_invoice>();
+		List<Expense_income_invoice> eiilist = expense_income_invoiceService.getListByExpense_incomeId(expense.getId());
+		if(eiilist.size()>0){
+			String invoice_ids = "";
+			for(Expense_income_invoice temp:eiilist){
+				invoice_ids += temp.getInvoice_id()+",";			
+			}
+			
+			invoice_ids = invoice_ids.substring(0, invoice_ids.length()-1);
+			
+			List<Invoice> eilist = invoiceService.getByIds(invoice_ids);
+			
+			for(Invoice invoice : eilist){
+				
+				for(Expense_income_invoice temp:eiilist){
+					if(temp.getInvoice_id() == invoice.getId()){
+						map.put(invoice, temp);
+						break;
+					}
+				}
+			}
+		}		
+		request.setAttribute("map", map);
+		request.setAttribute("expense_income", expense);
+		return new ModelAndView("financial/expense_income/detail");
 	}
 	
 	

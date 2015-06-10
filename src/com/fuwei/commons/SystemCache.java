@@ -365,7 +365,9 @@ public class SystemCache {
 	}
 
 	public static Salesman getSalesman(Integer salesmanid) {
-
+		if(salesmanid == null){
+			return null;
+		}
 		for (int i = 0; i < SystemCache.salesmanlist.size(); ++i) {
 			Salesman temp = SystemCache.salesmanlist.get(i);
 			if (temp.getId() == salesmanid) {
@@ -376,7 +378,9 @@ public class SystemCache {
 	}
 
 	public static String getCompanyName(Integer companyId) {
-
+		if(companyId == null){
+			return "";
+		}
 		for (int i = 0; i < SystemCache.companylist.size(); ++i) {
 			Company temp = SystemCache.companylist.get(i);
 			if (temp.getId() == companyId) {

@@ -93,13 +93,16 @@
 	Boolean h_has_financial_sale_invoice = SystemCache.hasAuthority(session,"sale_invoice/add");
 	//2015-6-4添加财务工作台
 	Boolean h_has_financial_workspace = SystemCache.hasAuthority(session,"financial/workspace");
+
 	//2015-5-30添加财务报表
 	Boolean h_has_report_financial_expense = SystemCache.hasAuthority(session,"report/financial/expense");//进项发票报表
 	Boolean h_has_report_financial_income = SystemCache.hasAuthority(session,"report/financial/income");//进项发票报表
 	Boolean h_has_report_financial_purchase_invoice = SystemCache.hasAuthority(session,"report/financial/purchase_invoice");//进项发票报表
 	Boolean h_has_report_financial_sale_invoice = SystemCache.hasAuthority(session,"report/financial/sale_invoice");//进项发票报表
 	
-	
+	//2015-6-10添加材料、染色报表
+	Boolean h_has_report_material_purchase_detail = SystemCache.hasAuthority(session,"report/material_purchase_detail");
+	Boolean h_has_report_coloring_detail = SystemCache.hasAuthority(session,"report/coloring_detail");
 	
 	//权限相关
 	
@@ -331,15 +334,24 @@
 						<ul class="submenu">
 							<%if(h_has_report_material){ %>
 							<li>
-								<a href="report/material"><i class="fa fa-hdd-o"></i>材料库存报表</a>
+								<a href="report/material">材料库存报表</a>
 							</li>
 							<%} %>
 							<%if(h_has_report_material_purchase){ %>
 							<li>
-								<a href="report/material_purchase"><i class="fa fa-sign-in"></i>原材料采购报表</a>
+								<a href="report/material_purchase">原材料采购汇总报表</a>
 							</li>
 							<%} %>
-							
+							<%if(h_has_report_material_purchase_detail){ %>
+							<li>
+								<a href="report/material_purchase_detail">原材料采购明细报表</a>
+							</li>
+							<%} %>
+							<%if(h_has_report_coloring_detail){ %>
+							<li>
+								<a href="report/coloring_detail">染色明细报表</a>
+							</li>
+							<%} %>
 
 						</ul>
 					</li>
@@ -388,6 +400,11 @@
 								<a href="financial/workspace">财务工作台</a>
 							</li>
 							<%} %>
+							<%if(h_has_financial_purchase_invoice){ %>
+							<li>
+								<a href="purchase_invoice/add">进项发票</a>
+							</li>
+							<%} %>
 							<%if(h_has_financial_expense){ %>
 							<li>
 								<a href="expense/add">支出</a>
@@ -395,7 +412,7 @@
 							<%} %>
 							<%if(h_has_financial_income){ %>
 							<li>
-								<a href="financial/income/add">收入</a>
+								<a href="income/add">收入</a>
 							</li>
 							<%} %>
 							<%if(h_has_financial_bank){ %>

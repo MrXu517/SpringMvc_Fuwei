@@ -51,7 +51,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>原材料采购报表 -- 桐庐富伟针织厂</title>
+		<title>原材料采购汇总报表 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -80,7 +80,7 @@
 							<a href="user/index">首页</a>
 						</li>
 						<li class="active">
-							原材料采购报表
+							原材料采购汇总报表
 						</li>
 					</ul>
 				</div>
@@ -122,7 +122,7 @@
 
 										<div class="form-group timegroup">
 											<label class="col-sm-3 control-label">
-												创建时间
+												订购时间
 											</label>
 
 											<div class="input-group col-md-9">
@@ -190,7 +190,7 @@
 	/*设置当前选中的页*/
 	var $a = $("#left li a[href='report/material_purchase']");
 	setActiveLeft($a.parent("li"));
-
+	
 </script>
 	</body>
 </html>

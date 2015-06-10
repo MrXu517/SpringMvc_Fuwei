@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
+import com.fuwei.entity.Customer;
+import com.fuwei.entity.financial.Expense_income;
 import com.fuwei.entity.financial.Invoice;
 import com.fuwei.service.BaseService;
 import com.fuwei.util.DateTool;
@@ -20,13 +22,46 @@ public class InvoiceService extends BaseService {
 	private Logger log = org.apache.log4j.LogManager.getLogger(InvoiceService.class);
 	@Autowired
 	JdbcTemplate jdbc;
-
-	// 获取列表
+	
+	public List<Invoice> getInvoiceList(Integer bank_id) throws Exception{
+		try {
+			List<Invoice> invoiceList = dao.queryForBeanList(
+					"SELECT * FROM tb_invoice WHERE bank_id=? and amount>match_amount", Invoice.class,bank_id);
+			return invoiceList;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	public List<Invoice> getByIds(String ids) throws Exception{
+		if(ids == null || ids.equals("")){
+			return null;
+		}
+		
+		try {
+			List<Invoice> invoiceList = dao.queryForBeanList(
+					"SELECT * FROM tb_invoice WHERE id in ("+ids+")", Invoice.class);
+			return invoiceList;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	public List<Invoice> getList(Integer bank_id) throws Exception{
+		try {
+			List<Invoice> invoiceList = dao.queryForBeanList(
+					"SELECT * FROM tb_invoice WHERE bank_id=?", Invoice.class,bank_id);
+			return invoiceList;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	// 获取分页列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,
 			Boolean in_out, Integer bank_id ,Double amount_from , Double amount_to, List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
-			String seq = "WHERE ";
+			String seq = " WHERE ";
 			sql.append("select * from tb_invoice");
 			
 			if (start_time != null) {

@@ -7,7 +7,7 @@ import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
 
 //进项发票
-@Table("tb_purchase_invoice")
+@Table("tb_invoice")
 public class Invoice implements Serializable {
 	@IdentityId
 	private int id;// 发票ID
@@ -26,7 +26,7 @@ public class Invoice implements Serializable {
 	
 	private String bank_name;//对方账户名称
 	
-	private int type ;//发票类型:普通发票、增值税发票
+	private int type ;//发票类型:1普通发票、2增值税普通发票、3增值税专用发票
 	
 	private String memo;//备注
 	
@@ -38,6 +38,18 @@ public class Invoice implements Serializable {
 
 	private Boolean in_out = false;//进项还是销项发票，  1：进项， 0：销项
 	
+	private double match_amount;//已匹配金额
+	
+	
+	
+	public double getMatch_amount() {
+		return match_amount;
+	}
+
+	public void setMatch_amount(double match_amount) {
+		this.match_amount = match_amount;
+	}
+
 	public Boolean getIn_out() {
 		return in_out;
 	}
@@ -152,5 +164,20 @@ public class Invoice implements Serializable {
 		this.created_user = created_user;
 	}
 	
+	public String getTypeString(){
+		if(this.type == 1){
+			return "普通发票";
+		}
+		if(this.type == 2){
+			return "增值税普通发票";
+		}
+		if(this.type == 3){
+			return "增值税专用发票";
+		}
+		return "";
+	}
 	
+	public boolean isMatched(){
+		return this.amount == this.match_amount;
+	}
 }

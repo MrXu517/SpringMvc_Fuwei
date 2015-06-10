@@ -344,4 +344,56 @@ public class MaterialPurchaseOrderService extends BaseService {
 		}
 	}
 
+	
+	//原材料采购明细报表
+	public List<MaterialPurchaseOrder> material_purchase_detail_report(Date start_time, Date end_time, Integer factoryId,List<Sort> sortlist) throws Exception{
+		try {
+			StringBuffer sql = new StringBuffer();
+			String seq = "WHERE ";
+
+			sql.append("select * from tb_materialpurchaseorder ");
+			
+			if (start_time != null) {
+				sql.append(seq + " created_at>='"
+						+ DateTool.formateDate(start_time) + "'");
+				seq = " AND ";
+			}
+			if (end_time != null) {
+				sql.append(seq + " created_at<='"
+						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
+						+ "'");
+				seq = " AND ";
+			}
+			if (factoryId != null) {
+				sql.append(seq + " factoryId='" + factoryId + "'");
+				seq = " AND ";
+			}
+		
+			
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql.append(" order by " + sortlist.get(i).getProperty()
+								+ " " + sortlist.get(i).getDirection() + " ");
+					} else {
+						sql.append("," + sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			
+			
+			List<MaterialPurchaseOrder> materialPurchaseOrderList = dao.queryForBeanList(
+					sql.toString(), MaterialPurchaseOrder.class);
+			
+			
+          
+			return materialPurchaseOrderList;
+			
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 }

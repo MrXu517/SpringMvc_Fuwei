@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
 import com.fuwei.entity.financial.Expense_income;
+import com.fuwei.entity.financial.Invoice;
 import com.fuwei.service.BaseService;
 import com.fuwei.util.DateTool;
 
@@ -20,7 +21,50 @@ public class Expense_incomeService extends BaseService {
 	private Logger log = org.apache.log4j.LogManager.getLogger(Expense_incomeService.class);
 	@Autowired
 	JdbcTemplate jdbc;
-
+	
+	public List<Expense_income> getByIds(String ids) throws Exception{
+		if(ids == null || ids.equals("")){
+			return null;
+		}
+		try {
+			List<Expense_income> Expense_incomeList = dao.queryForBeanList(
+					"SELECT * FROM tb_expense_income WHERE id in ("+ids+")", Expense_income.class);
+			return Expense_incomeList;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	public List<Expense_income> getInvoiceList(Integer bank_id,boolean in_out) throws Exception{
+		try {
+			List<Expense_income> Expense_incomeList = dao.queryForBeanList(
+					"SELECT * FROM tb_expense_income WHERE bank_id=? and amount>invoice_amount and in_out=?", Expense_income.class,bank_id,in_out);
+			return Expense_incomeList;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	public List<Expense_income> getList(Integer bank_id) throws Exception{
+		try {
+			List<Expense_income> Expense_incomeList = dao.queryForBeanList(
+					"SELECT * FROM tb_expense_income WHERE bank_id=?", Expense_income.class,bank_id);
+			return Expense_incomeList;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	public Expense_income getByInvoice(int invoiceId) throws Exception {
+		try {
+			Expense_income expense = dao.queryForBean(
+					"select * from tb_expense_income e , tb_invoice b where b.id = ? and b.bank_id = e.bank_id and b.amount = e.amount", Expense_income.class,
+					invoiceId);
+			return expense;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 	// 获取列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,
 			Integer companyId, Integer salesmanId,Boolean in_out, Integer bank_id , Integer subject_id,Double amount_from , Double amount_to, List<Sort> sortlist) throws Exception {

@@ -4,37 +4,23 @@ $(document).ready(function(){
 	setActiveLeft($a.parent("li"));
 	/*设置当前选中的页*/
 	
-	// 公司-业务员级联
-	$("#companyId").change( function() {
-		changeCompany(this.value);
-	});
-	// 公司-业务员级联
 	
 	$('#tab a').click(function (e) {
 		e.preventDefault();
 		$(this).tab('show');
 	});
+//	$('#tab a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+//		$iframe = $($(this).attr("href")).find("iframe");
+//		iFrameHeight($iframe[0]);
+//	});
+//	$("iframe").load(function(){
+//		iFrameHeight(this);
+//	});
 });
-function changeCompany(companyId) {
-	var companyName = $("#companyId").val();
-	var companySalesmanMap = $("#companyId").attr("data");
-	companySalesmanMap = $.parseJSON(companySalesmanMap).companySalesmanMap;
-	var SalesNameList = companySalesmanMap[companyName];
-	$("#salesmanId").empty();
-	var frag = document.createDocumentFragment();
-	var option = document.createElement("option");
-	option.value = "";
-	option.text = "未选择";
-	frag.appendChild(option);
-	if (SalesNameList) {
-		for ( var i = 0; i < SalesNameList.length; ++i) {
-			var salesName = SalesNameList[i];
-			var option = document.createElement("option");
-			option.value = salesName.id;
-			option.text = salesName.name;
-			frag.appendChild(option);
-		}
-	}
-
-	$("#salesmanId").append(frag);
-}
+//function iFrameHeight(iframeEle) {     
+//	var subWeb = $(iframeEle).prop('contentWindow').document;   
+//	if(iframeEle != null && subWeb != null) {
+//		iframeEle.height = subWeb.body.scrollHeight;
+//		iframeEle.width = subWeb.body.scrollWidth;
+//	}   
+//}  

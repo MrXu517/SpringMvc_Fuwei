@@ -17,7 +17,7 @@ public class Expense_income {
 	
 	private String subject_name;
 	
-	private int bank_id;
+	private Integer bank_id;
 	
 	private String bank_name;
 	
@@ -43,8 +43,18 @@ public class Expense_income {
 	
 	private Boolean in_out = false;//收入还是支出
 	
+	private double invoice_amount;//已收发票金额
+	
 	
 		 
+	public double getInvoice_amount() {
+		return invoice_amount;
+	}
+
+	public void setInvoice_amount(double invoice_amount) {
+		this.invoice_amount = invoice_amount;
+	}
+
 	public Boolean getIn_out() {
 		return in_out;
 	}
@@ -80,11 +90,11 @@ public class Expense_income {
 		this.subject_name = subject_name;
 	}
 
-	public int getBank_id() {
+	public Integer getBank_id() {
 		return bank_id;
 	}
 
-	public void setBank_id(int bank_id) {
+	public void setBank_id(Integer bank_id) {
 		this.bank_id = bank_id;
 	}
 
@@ -187,5 +197,7 @@ public class Expense_income {
 	public String getIn_outString(){
 		return this.in_out == true ?"收入":"支出";
 	}
-	
+	public boolean isInvoiced(){
+		return this.amount == this.invoice_amount;
+	}
 }
