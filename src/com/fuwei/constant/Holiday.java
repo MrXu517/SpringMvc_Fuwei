@@ -63,7 +63,6 @@ public class Holiday {
 	}
 	
 	public static boolean isHoliday(Calendar cal){
-		System.out.println(cal.get(Calendar.MONTH));
 		for(MyDate mydate : holidays){
 			if(mydate.getYear() == cal.get(Calendar.YEAR) && mydate.getMonth() == cal.get(Calendar.MONTH)+1 && mydate.getDay() == cal.get(Calendar.DAY_OF_MONTH)){
 				return true;
