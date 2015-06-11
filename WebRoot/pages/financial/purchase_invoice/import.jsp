@@ -14,7 +14,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>批量导入对方银行账户 -- 桐庐富伟针织厂</title>
+		<title>批量导入发票 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -30,7 +30,7 @@
 		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
 		<script src="js/plugins/jquery.form.js" type="text/javascript"></script>
-		<script src="js/financial/bank/import.js" type="text/javascript"></script>
+		<script src="js/financial/purchase_invoice/import.js" type="text/javascript"></script>
 
 	</head>
 	<body>
@@ -45,10 +45,10 @@
 						</li>
 						<li>
 							<i class=""></i>
-							<a href="bank/index">对方银行账户</a>
+							<a href="financial/workspace?tab=purchase_invoices">财务工作台</a>
 						</li>
 						<li class="active">
-							批量导入 对方银行账户
+							批量导入 发票
 						</li>
 					</ul>
 				</div>
@@ -63,17 +63,17 @@
 									</legend>
 
 									<form class="form-horizontal form" role="form"
-										enctype="multipart/form-data" action="bank/import"
+										enctype="multipart/form-data" action="purchase_invoice/import"
 										method="post">
 
 										<div class="col-md-12">
 											<div class="form-group">
-												<a href="bank/import_download" class="btn btn-primary">下载模板</a>
+												<a href="purchase_invoice/import_download" class="btn btn-primary">下载模板</a>
 											</div>
 											<div class="form-group">
 												<label for="file" class="col-sm-3 control-label"
 													style="width: 118px;">
-													银行账户文件
+													发票Excel文件
 												</label>
 												<div class="col-sm-8">
 													<input type="file" name="file" id="file"
@@ -115,8 +115,9 @@
 		</div>
 		<script type="text/javascript">
 	/*设置当前选中的页*/
-	var $a = $("#left li a[href='bank/index']");
+	var $a = $("#left li a[href='financial/workspace']");
 	setActiveLeft($a.parent("li"));
+
 </script>
 	</body>
 </html>

@@ -82,6 +82,7 @@ public class BankController extends BaseController {
 		if (!hasAuthority) {
 			throw new PermissionDeniedDataAccessException("没有添加账户的权限", null);
 		}
+		bank.setName(chinese2English(bank.getName()));
 		bank.setCreated_at(DateTool.now());
 		bank.setUpdated_at(DateTool.now());
 		bank.setCreated_user(user.getId());
@@ -145,6 +146,7 @@ public class BankController extends BaseController {
 		if (!hasAuthority) {
 			throw new PermissionDeniedDataAccessException("没有编辑账户的权限", null);
 		}
+		bank.setName(chinese2English(bank.getName()));
 		bank.setUpdated_at(DateTool.now());
 		int success = bankService.update(bank);
 
@@ -153,7 +155,7 @@ public class BankController extends BaseController {
 	}
 
 	// 下载导入模板
-	@RequestMapping(value = "/import_download", method = RequestMethod.POST)
+	@RequestMapping(value = "/import_download", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> import_download(HttpSession session,
 			HttpServletRequest request, HttpServletResponse response)
@@ -250,7 +252,7 @@ public class BankController extends BaseController {
 		String[] title = { "收款人名称", "开户行", "帐号", "个人0或企业1"};
 		// 设置Excel表头
 		for (int i = 0; i < title.length; i++) {			
-			Label excelTitle = new Label(i, 2, title[i], titleFormat);
+			Label excelTitle = new Label(i, 0, title[i], titleFormat);
 			wsheet.addCell(excelTitle);
 		}
 		wsheet.setRowView(1, 400);
@@ -290,7 +292,7 @@ public class BankController extends BaseController {
 				if (cells[0].getType() == CellType.EMPTY) {
 					continue;// 收款方名称为空的直接跳过
 				} else {
-					name = cells[0].getContents().trim();
+					name = chinese2English(cells[0].getContents().trim());
 					if (name.equals("")) {
 						continue;// 收款方名称为空的直接跳过
 					}
@@ -298,7 +300,7 @@ public class BankController extends BaseController {
 				bank.setName(name);
 				String bank_name = "";
 				if (cells[1].getType() != CellType.EMPTY) {
-					bank_name = cells[1].getContents().trim();
+					bank_name = chinese2English(cells[1].getContents().trim());
 				}
 				bank.setBank_name(bank_name);
 				String bank_no = "";
@@ -324,5 +326,14 @@ public class BankController extends BaseController {
 		is.close();
 		return bankList;
 
+	}
+	
+	public String chinese2English(String str){
+		String[] regs = { "！", "，", "。 ","；","（","）", "!", ",", ".", ";" ,"(",")"};
+		for ( int i = 0; i < regs.length / 2; i++ )
+		{
+		    str = str.replaceAll (regs[i], regs[i + regs.length / 2]);
+		}
+		return str;
 	}
 }

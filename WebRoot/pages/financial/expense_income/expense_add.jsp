@@ -74,7 +74,9 @@
 						<div class="row">
 							<div class="col-md-12 formwidget">
 								<div class="panel panel-primary">
+									
 									<div class="panel-heading">
+										
 										<h3 class="panel-title">
 											创建支出
 										</h3>

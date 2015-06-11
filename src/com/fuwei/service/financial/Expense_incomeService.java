@@ -1,5 +1,6 @@
 package com.fuwei.service.financial;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
+import com.fuwei.entity.financial.Bank;
 import com.fuwei.entity.financial.Expense_income;
 import com.fuwei.entity.financial.Invoice;
 import com.fuwei.service.BaseService;
@@ -178,5 +180,29 @@ public class Expense_incomeService extends BaseService {
 		} catch (Exception e) {
 			throw e;
 		}
+	}
+	
+	@Transactional
+	public boolean batch_add(List<Expense_income> list) throws Exception {
+		String sql = "INSERT INTO tb_expense_income(subject_id,subject_name,bank_id,bank_name,company_id,company_name,salesman_id,salesman_name,amount,memo,expense_at,created_at,updated_at,created_user,in_out,invoice_amount) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+		List<Object[]> batchArgs = new ArrayList<Object[]>();
+		for (Expense_income item : list) {
+			batchArgs.add(new Object[] { item.getSubject_id(), item.getSubject_name(),
+					item.getBank_id(), item.getBank_name(),
+					item.getCompany_id(), item.getCompany_name(),
+					item.getSalesman_id(), item.getSalesman_name(),
+					item.getAmount(),item.getMemo(),item.getExpense_at(),
+					item.getCreated_at(),item.getUpdated_at(),
+					item.getCreated_user(),item.getIn_out(),
+					item.getInvoice_amount() });
+		}
+		try {
+			int result[] = jdbc.batchUpdate(sql, batchArgs);
+			return true;
+		} catch (Exception e) {
+			throw e;
+		}
+
 	}
 }

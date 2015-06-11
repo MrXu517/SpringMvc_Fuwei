@@ -376,7 +376,37 @@ public class SystemCache {
 		}
 		return null;
 	}
-
+	public static Integer getSalesmanIdByName(String name) {
+		if(name == null){
+			return null;
+		}
+		if(name.equals("")){
+			return null;
+		}
+		for (int i = 0; i < SystemCache.salesmanlist.size(); ++i) {
+			Salesman temp = SystemCache.salesmanlist.get(i);
+			if (temp.getName().equals(name)) {
+				return temp.getId();
+			}
+		}
+		return null;
+	}
+	public static Integer getCompanyIdByName(String name) {
+		if(name == null){
+			return null;
+		}
+		if(name.equals("")){
+			return null;
+		}
+		for (int i = 0; i < SystemCache.companylist.size(); ++i) {
+			Company temp = SystemCache.companylist.get(i);
+			if (temp.getFullname().equals(name)) {
+				return temp.getId();
+			}
+		}
+		return null;
+	}
+	
 	public static String getCompanyName(Integer companyId) {
 		if(companyId == null){
 			return "";

@@ -58,7 +58,6 @@ $(document).ready( function() {
 		// 2015-6-4添加账户选择combobox	
 		$("#bank_id").select2();
 		
-
 	});
 function changeCompany(companyId) {
 	var companyName = $("#company_id").val();

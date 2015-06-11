@@ -1,5 +1,6 @@
 package com.fuwei.service.financial;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -157,5 +158,29 @@ public class InvoiceService extends BaseService {
 		} catch (Exception e) {
 			throw e;
 		}
+	}
+	
+	@Transactional
+	public boolean batch_add(List<Invoice> list) throws Exception {
+		String sql = "INSERT INTO tb_invoice(number,print_date,amount,tax,tax_amount,bank_id,bank_name,type,memo,created_at,updated_at,created_user,in_out,match_amount) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+		List<Object[]> batchArgs = new ArrayList<Object[]>();
+		for (Invoice item : list) {
+			batchArgs.add(new Object[] { item.getNumber(), item.getPrint_date(),
+					item.getAmount(), item.getTax(),
+					item.getTax_amount(), item.getBank_id(),
+					item.getBank_name(), item.getType(),
+					item.getMemo(),
+					item.getCreated_at(),item.getUpdated_at(),
+					item.getCreated_user(),item.getIn_out(),
+					item.getMatch_amount() });
+		}
+		try {
+			int result[] = jdbc.batchUpdate(sql, batchArgs);
+			return true;
+		} catch (Exception e) {
+			throw e;
+		}
+
 	}
 }

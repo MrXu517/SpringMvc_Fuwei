@@ -123,6 +123,7 @@
 		<script src="js/financial/workspace/expense_income.js" type="text/javascript"></script>
 		<link href="css/financial/workspace.css" rel="stylesheet"
 			type="text/css" />
+		
 	</head>
 	<body>
 		<div id="Content">
@@ -317,9 +318,10 @@
 
 											</div>
 										</div>
-									</form><button class="btn btn-primary" type="button" id="searchBtn">
+									</form><br><button class="btn btn-primary" type="button" id="searchBtn">
 											搜索
 										</button>
+<a href="expense_income/import" class="btn btn-primary" target="_top">批量导入</a>
 									<ul class="pagination">
 										<li>
 											<a
