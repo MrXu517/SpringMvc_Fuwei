@@ -59,7 +59,7 @@ public class InvoiceService extends BaseService {
 	}
 	// 获取分页列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,
-			Boolean in_out, Integer bank_id ,Double amount_from , Double amount_to, List<Sort> sortlist) throws Exception {
+			Boolean in_out, Integer bank_id ,Double amount_from , Double amount_to,String number, List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
 			String seq = " WHERE ";
@@ -92,6 +92,10 @@ public class InvoiceService extends BaseService {
 			}
 			if (amount_to != null) {
 				sql.append(seq + " amount<='" + amount_to+ "'");
+				seq = " AND ";
+			}
+			if (number != null && !number.equals("")) {
+				sql.append(seq + " number='" + number+ "'");
 				seq = " AND ";
 			}
 

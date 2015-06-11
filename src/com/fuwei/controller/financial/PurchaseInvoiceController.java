@@ -79,7 +79,7 @@ public class PurchaseInvoiceController extends BaseController {
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView Index(Integer page, String start_time, String end_time,Integer bank_id ,Double amount_from , Double amount_to,
-			String sortJSON,HttpSession session, HttpServletRequest request,
+			String number,String sortJSON,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		String lcode = "invoice/index";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
@@ -106,7 +106,7 @@ public class PurchaseInvoiceController extends BaseController {
 		sortList.add(sort);
 		
 		pager = invoiceService.getList(pager, start_time_d, end_time_d,
-				true,bank_id,amount_from,amount_to, sortList);
+				true,bank_id,amount_from,amount_to,number, sortList);
 
 		
 		request.setAttribute("start_time", start_time_d);
@@ -114,6 +114,7 @@ public class PurchaseInvoiceController extends BaseController {
 		request.setAttribute("bank_id", bank_id);
 		request.setAttribute("amount_from", amount_from);
 		request.setAttribute("amount_to", amount_to);
+		request.setAttribute("number", number);
 		request.setAttribute("pager", pager);
 		List<Bank> banklist = bankService.getList();
 		request.setAttribute("banklist", banklist);
