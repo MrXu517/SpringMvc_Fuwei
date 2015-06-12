@@ -1,5 +1,6 @@
 package com.fuwei.controller.financial;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,6 +34,7 @@ import com.fuwei.service.financial.Expense_incomeService;
 import com.fuwei.service.financial.Expense_income_invoiceService;
 import com.fuwei.service.financial.InvoiceService;
 import com.fuwei.util.DateTool;
+import com.fuwei.util.NumberUtil;
 import com.fuwei.util.SerializeTool;
 
 @RequestMapping("/expense_income_invoice")
@@ -82,10 +84,12 @@ public class Expense_income_invoiceController extends BaseController {
 		
 		double invoice_total = 0 ;
 		double expense_income_total = 0 ;
+		for(Expense_income expense_income : Expense_incomeList){
+			expense_income_total += expense_income.getAmount() - expense_income.getInvoice_amount();
+		}
 		for(Invoice invoice : invoiceList){
 			invoice_total += invoice.getAmount() - invoice.getMatch_amount();
 			for(Expense_income expense_income : Expense_incomeList){
-				expense_income_total += expense_income.getAmount() - expense_income.getInvoice_amount();
 				Expense_income_invoice item = new Expense_income_invoice();
 				item.setCreated_at(DateTool.now());
 				item.setUpdated_at(DateTool.now());
@@ -143,21 +147,28 @@ public class Expense_income_invoiceController extends BaseController {
 		List<List<Expense_income>> one_to_many_Result = new ArrayList<List<Expense_income>>();
 		for(int i = 0 ; i < Expense_incomeList.size() ; ++i){
 			List<Expense_income> tempList = new ArrayList<Expense_income>();
-			Expense_incomeNSum(Expense_incomeList,i,0,to_be_match_invoice_amount,tempList,one_to_many_Result);
+			Expense_incomeNSum(Expense_incomeList,i,0,NumberUtil.formateDouble(to_be_match_invoice_amount,2),tempList,one_to_many_Result);
 		}
 		
 		//多张发票 -> 一项支出
 		Map<List<Invoice> , List<Expense_income>> many_to_one_map = new HashMap<List<Invoice> , List<Expense_income>>();
 		List<Invoice> invoiceList = invoiceService.getInvoiceList(bank_id);	
+		
+		for(Invoice tempinvoice : invoiceList){
+			if(tempinvoice.getId() == invoice.getId()){
+				invoiceList.remove(tempinvoice);
+				break;
+			}
+		}
 		for(int i = 0 ; i < Expense_incomeList.size() ; ++i){
 			Expense_income ett = Expense_incomeList.get(i);
 			List<Expense_income> e_templist = new ArrayList<Expense_income>();
 			double to_be_invoiced_amount = ett.getAmount() - ett.getInvoice_amount();
 			e_templist.add(ett);
 			List<List<Invoice>> tempResult = new ArrayList<List<Invoice>>();
-			for(int k = 0 ; i < invoiceList.size() ; ++i){
+			for(int k = 0 ; k < invoiceList.size() ; ++k){
 				List<Invoice> tempList = new ArrayList<Invoice>();
-				invoiceNSum(invoiceList,k,0,to_be_invoiced_amount - to_be_match_invoice_amount,tempList,tempResult);
+				invoiceNSum(invoiceList,k,0,NumberUtil.formateDouble(to_be_invoiced_amount - to_be_match_invoice_amount, 2),tempList,tempResult);
 			}
 			for(List<Invoice> templist : tempResult){
 				templist.add(invoice);
@@ -182,9 +193,14 @@ public class Expense_income_invoiceController extends BaseController {
 	
 	public static void invoiceNSum(List<Invoice> list ,int i, double sum , double value,List<Invoice> templist,List<List<Invoice>> mapResult){
 		for(int j = i ; j < list.size();++j){
-			Invoice item = list.get(i);
+			Invoice item = list.get(j);
 			double un_invoiced_amount = item.getAmount() - item.getMatch_amount();
-			if(sum + un_invoiced_amount == value){//若相等，则找到了
+			un_invoiced_amount = NumberUtil.formateDouble(un_invoiced_amount,2);
+			double temp_sum = sum + un_invoiced_amount;
+			temp_sum = NumberUtil.formateDouble(temp_sum,2);
+			
+			
+			if(temp_sum == value){//若相等，则找到了
 				templist.add(item);
 				mapResult.add(templist);
 				if(templist.size() <= 1){
@@ -196,10 +212,10 @@ public class Expense_income_invoiceController extends BaseController {
 				templist = alist;
 				continue;
 			}
-			if(sum+un_invoiced_amount < value){//若值<value,则继续往下找
+			if(temp_sum < value){//若值<value,则继续往下找
 				templist.add(item);
 				int indexOf = templist.size()-1;
-				invoiceNSum(list,j+1,sum + un_invoiced_amount , value ,templist,mapResult);
+				invoiceNSum(list,j+1,temp_sum, value ,templist,mapResult);
 				
 				if(indexOf <= 0){
 					return ; 
@@ -214,18 +230,21 @@ public class Expense_income_invoiceController extends BaseController {
 				
 				continue;
 			}
-			if(sum+un_invoiced_amount > value){//若值>value,则返回 false
+			if(temp_sum > value){//若值>value,则返回 false
 				continue;
 			}
 		}
 	}
 	
 	
-	public static void Expense_incomeNSum(List<Expense_income> list ,int i, double sum , double value,List<Expense_income> templist,List<List<Expense_income>> mapResult){
+	public static void Expense_incomeNSum(List<Expense_income> list ,int i, double sum ,double value,List<Expense_income> templist,List<List<Expense_income>> mapResult){
 		for(int j = i ; j < list.size();++j){
-			Expense_income item = list.get(i);
-			double un_invoiced_amount = item.getAmount() - item.getInvoice_amount();
-			if(sum + un_invoiced_amount == value){//若相等，则找到了
+			Expense_income item = list.get(j);
+			double un_invoiced_amount = item.getAmount() - item.getInvoice_amount();			
+			un_invoiced_amount = NumberUtil.formateDouble(un_invoiced_amount,2);
+			double temp_sum = sum + un_invoiced_amount;
+			temp_sum = NumberUtil.formateDouble(temp_sum,2);
+			if(temp_sum == value){//若相等，则找到了
 				templist.add(item);
 				mapResult.add(templist);
 				if(templist.size() <= 1){
@@ -237,10 +256,10 @@ public class Expense_income_invoiceController extends BaseController {
 				templist = alist;
 				continue;
 			}
-			if(sum+un_invoiced_amount < value){//若值<value,则继续往下找
+			if(temp_sum < value){//若值<value,则继续往下找
 				templist.add(item);
 				int indexOf = templist.size()-1;
-				Expense_incomeNSum(list,j+1,sum + un_invoiced_amount , value ,templist,mapResult);
+				Expense_incomeNSum(list,j+1,temp_sum , value ,templist,mapResult);
 				
 				if(indexOf <= 0){
 					return ; 
@@ -255,7 +274,7 @@ public class Expense_income_invoiceController extends BaseController {
 				
 				continue;
 			}
-			if(sum+un_invoiced_amount > value){//若值>value,则返回 false
+			if(temp_sum > value){//若值>value,则返回 false
 				continue;
 			}
 		}
