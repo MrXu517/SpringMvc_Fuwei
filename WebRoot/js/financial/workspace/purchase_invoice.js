@@ -36,11 +36,14 @@ $(document).ready(function(){
             	
             });
 		return false;
+		
 	});
 	
 	window.searchback = function(){
 		$("#matchDialog").modal("hide");
 		location.reload();
 	}
+	
+	$("#bank_id").select2();
 	
 });

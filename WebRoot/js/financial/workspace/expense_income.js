@@ -33,7 +33,7 @@ $(document).ready(function(){
             });
 		return false;
 	});
-//	$("#bank_id").select2();
+	$("#bank_id").select2();
 });
 function changeCompany(companyId) {
 	var companyName = $("#companyId").val();

@@ -169,3 +169,9 @@ ul.pagination{
 #tab .tab-content .tab-pane,#tab .tab-content iframe{
 	height:100%;
 }
+.select2-dropdown{
+	width:220px !important;
+}
+#bank_id+.select2.select2-container{
+	width:100px !important;
+}

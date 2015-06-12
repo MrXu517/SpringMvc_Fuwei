@@ -121,6 +121,8 @@
 		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
 		<script src="js/financial/workspace/expense_income.js" type="text/javascript"></script>
+		<script type='text/javascript' src='js/plugins/select2.min.js'></script>
+	<link rel="stylesheet" type="text/css" href="css/plugins/select2.min.css" />
 		<link href="css/financial/workspace.css" rel="stylesheet"
 			type="text/css" />
 		

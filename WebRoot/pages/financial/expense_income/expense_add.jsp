@@ -161,7 +161,7 @@
 												</label>
 												<div class="col-sm-8">
 													<input type="text" class="form-control require double"
-														name="amount" id="amount" placeholder="">
+														name="amount" id="amount" placeholder="最多两位小数">
 												</div>
 												<div class="col-sm-1"></div>
 											</div>

@@ -59,6 +59,7 @@ import com.fuwei.service.financial.Expense_income_invoiceService;
 import com.fuwei.service.financial.InvoiceService;
 import com.fuwei.service.financial.SubjectService;
 import com.fuwei.util.DateTool;
+import com.fuwei.util.NumberUtil;
 import com.fuwei.util.SerializeTool;
 
 @RequestMapping("/purchase_invoice")
@@ -150,6 +151,7 @@ public class PurchaseInvoiceController extends BaseController {
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有收取发票的权限", null);
 		}
+		invoice.setAmount(NumberUtil.formateDouble(invoice.getAmount(), 2));
 		invoice.setCreated_at(DateTool.now());
 		invoice.setUpdated_at(DateTool.now());
 		invoice.setCreated_user(user.getId());

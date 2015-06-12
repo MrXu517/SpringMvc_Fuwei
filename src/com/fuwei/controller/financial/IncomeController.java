@@ -37,6 +37,7 @@ import com.fuwei.service.financial.Expense_income_invoiceService;
 import com.fuwei.service.financial.InvoiceService;
 import com.fuwei.service.financial.SubjectService;
 import com.fuwei.util.DateTool;
+import com.fuwei.util.NumberUtil;
 import com.fuwei.util.SerializeTool;
 
 @RequestMapping("/income")
@@ -132,6 +133,7 @@ public class IncomeController extends BaseController {
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有出纳的权限", null);
 		}
+		expense.setAmount(NumberUtil.formateDouble(expense.getAmount(), 2));
 		expense.setCreated_at(DateTool.now());
 		expense.setUpdated_at(DateTool.now());
 		expense.setCreated_user(user.getId());
