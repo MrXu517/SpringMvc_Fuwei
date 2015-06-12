@@ -66,12 +66,12 @@ public class InvoiceService extends BaseService {
 			sql.append("select * from tb_invoice");
 			
 			if (start_time != null) {
-				sql.append(seq + " print_date>='"
+				sql.append(seq + " created_at>='"
 						+ DateTool.formateDate(start_time) + "'");
 				seq = " AND ";
 			}
 			if (end_time != null) {
-				sql.append(seq + " print_date<='"
+				sql.append(seq + " created_at<='"
 						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
 						+ "'");
 				seq = " AND ";

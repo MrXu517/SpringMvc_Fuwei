@@ -144,7 +144,7 @@
 
 													<div class="form-group timegroup">
 														<label class="col-sm-3 control-label">
-															开票日期
+															记录日期
 														</label>
 
 														<div class="input-group col-md-9">
@@ -181,7 +181,6 @@
 																class="form-control" value="<%=number_str%>" />
 														</div>
 													</div>
-													
 												</form>
 												<br>
 												<button class="btn btn-primary" type="button" id="searchBtn">

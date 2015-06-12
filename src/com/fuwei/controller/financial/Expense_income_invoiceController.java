@@ -87,6 +87,7 @@ public class Expense_income_invoiceController extends BaseController {
 		for(Expense_income expense_income : Expense_incomeList){
 			expense_income_total += expense_income.getAmount() - expense_income.getInvoice_amount();
 		}
+		expense_income_total = NumberUtil.formateDouble(expense_income_total, 2);
 		for(Invoice invoice : invoiceList){
 			invoice_total += invoice.getAmount() - invoice.getMatch_amount();
 			for(Expense_income expense_income : Expense_incomeList){
@@ -101,6 +102,7 @@ public class Expense_income_invoiceController extends BaseController {
 				resultList.add(item);
 			}
 		}
+		invoice_total = NumberUtil.formateDouble(invoice_total, 2);
 		if(invoice_total!=expense_income_total){
 			throw new Exception("匹配失败：发票金额之和 不等于 支出项金额之和 ");
 		}
