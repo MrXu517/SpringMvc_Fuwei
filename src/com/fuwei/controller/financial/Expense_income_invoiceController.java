@@ -147,7 +147,13 @@ public class Expense_income_invoiceController extends BaseController {
 		List<List<Expense_income>> one_to_many_Result = new ArrayList<List<Expense_income>>();
 		for(int i = 0 ; i < Expense_incomeList.size() ; ++i){
 			List<Expense_income> tempList = new ArrayList<Expense_income>();
-			Expense_incomeNSum(Expense_incomeList,i,0,NumberUtil.formateDouble(to_be_match_invoice_amount,2),tempList,one_to_many_Result);
+			double value = NumberUtil.formateDouble(to_be_match_invoice_amount,2);
+			Expense_income temp = Expense_incomeList.get(i);
+			double value_i = NumberUtil.formateDouble(temp.getAmount() - temp.getInvoice_amount(),2);
+			if( value_i > value){
+				continue;
+			}
+			Expense_incomeNSum(Expense_incomeList,i,0,value,tempList,one_to_many_Result);
 		}
 		
 		//多张发票 -> 一项支出
@@ -168,7 +174,13 @@ public class Expense_income_invoiceController extends BaseController {
 			List<List<Invoice>> tempResult = new ArrayList<List<Invoice>>();
 			for(int k = 0 ; k < invoiceList.size() ; ++k){
 				List<Invoice> tempList = new ArrayList<Invoice>();
-				invoiceNSum(invoiceList,k,0,NumberUtil.formateDouble(to_be_invoiced_amount - to_be_match_invoice_amount, 2),tempList,tempResult);
+				double value = NumberUtil.formateDouble(to_be_invoiced_amount - to_be_match_invoice_amount, 2);
+				Invoice temp = invoiceList.get(k);
+				double value_k = NumberUtil.formateDouble(temp.getAmount() - temp.getMatch_amount(),2);
+				if( value_k > value){
+					continue;
+				}
+				invoiceNSum(invoiceList,k,0,value,tempList,tempResult);
 			}
 			for(List<Invoice> templist : tempResult){
 				templist.add(invoice);
