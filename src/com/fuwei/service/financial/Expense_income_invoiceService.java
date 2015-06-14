@@ -28,7 +28,7 @@ public class Expense_income_invoiceService extends BaseService {
 	
 	//匹配
 	@Transactional
-	public Boolean batch_add(String[] expense_income_ids, String[] invoice_ids,List<Expense_income_invoice> list){
+	public Boolean batch_add(Integer company_id , Integer subject_id , String[] expense_income_ids, String[] invoice_ids,List<Expense_income_invoice> list){
 		String sql = "INSERT INTO tb_expense_income_invoice(amount,created_at,created_user,expense_income_id,invoice_id,updated_at) VALUES(?,?,?,?,?,?)";
 
         List<Object[]> batchArgs = new ArrayList<Object[]>();
@@ -46,6 +46,14 @@ public class Expense_income_invoiceService extends BaseService {
         	batchArgs_invoice.add(new Object[]{item,item});
         }
         int[] result_invoice= jdbc.batchUpdate(sql_invoice, batchArgs_invoice);
+        //设置发票的公司 和 科目
+        String sql_invoice_company_subject = "update tb_invoice set company_id=? , subject_id=? where id=?";
+        List<Object[]> batchArgs_invoice_company_subject = new ArrayList<Object[]>();
+        for(String item :invoice_ids) {
+        	batchArgs_invoice_company_subject.add(new Object[]{company_id,subject_id,item});
+        }
+        int[] result_invoice_company_subject= jdbc.batchUpdate(sql_invoice_company_subject, batchArgs_invoice_company_subject);
+        
         
         String sql_expense = "update tb_expense_income set invoice_amount= (select  ROUND(IFNULL(sum(amount),0),2)  from  tb_expense_income_invoice where expense_income_id=?)  where id=?";
         List<Object[]> batchArgs_expense = new ArrayList<Object[]>();
@@ -53,6 +61,9 @@ public class Expense_income_invoiceService extends BaseService {
         	batchArgs_expense.add(new Object[]{item,item});
         }
         int[] result_expense= jdbc.batchUpdate(sql_expense, batchArgs_expense);
+        
+        
+        
         
         return true;
 	}
@@ -162,7 +173,9 @@ public class Expense_income_invoiceService extends BaseService {
 			//修改支出 和 发票的匹配金额
 	        dao.update("update tb_invoice set match_amount= (select  ROUND(IFNULL(sum(amount),0),2)  from  tb_expense_income_invoice where invoice_id=?)  where id=?", temp.getInvoice_id() , temp.getInvoice_id());    
 	        dao.update("update tb_expense_income set invoice_amount= (select  ROUND(IFNULL(sum(amount),0),2)  from  tb_expense_income_invoice where expense_income_id=?)  where id=?", temp.getExpense_income_id(),temp.getExpense_income_id());
-			return result;
+			
+	        
+	        return result;
 		}catch(Exception e){
 			SQLException sqlException = (java.sql.SQLException)e.getCause();
 			if(sqlException!=null && sqlException.getErrorCode() == 1451){//外键约束

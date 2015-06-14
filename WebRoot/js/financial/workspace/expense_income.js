@@ -15,7 +15,7 @@ $(document).ready(function(){
 			return false;
 		}
 		$.ajax({
-            url: "purchase_invoice/delete/"+id,
+            url: "expense_income/delete/"+id,
             type: 'POST'
         })
             .done(function(result) {

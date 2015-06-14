@@ -19,7 +19,22 @@ public class BankService extends BaseService {
 			.getLogger(BankService.class);
 	@Autowired
 	JdbcTemplate jdbc;
-
+	
+	// 获取账户列表
+	public List<Bank> getList(Boolean is_enterprise) throws Exception {
+		try {
+			String sql = "SELECT * FROM tb_bank";
+			if(is_enterprise!=null){
+				sql = sql + " WHERE is_enterprise='"+(is_enterprise == true?"1":0 )+"'";
+			}
+			List<Bank> bankList = dao.queryForBeanList(sql,
+					Bank.class);
+			return bankList;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 	// 获取账户列表
 	public List<Bank> getList() throws Exception {
 		try {

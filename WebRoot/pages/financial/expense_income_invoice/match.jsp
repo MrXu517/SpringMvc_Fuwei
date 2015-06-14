@@ -86,15 +86,12 @@
 						<div class="row">
 							<div class="col-md-12 tablewidget">
 								<!-- Table -->
-								<div clas="navbar navbar-default">
-									<form class="form-horizontal searchform form-inline searchform"
-										role="form">
-
-									</form>
-								<!-- 	<button class="btn btn-primary" type="button" id="searchBtn">
+									<%if((one_to_many_Result==null || one_to_many_Result.size()<=0) && (many_to_one_map==null || many_to_one_map.size()<=0)){ %>
+										<!-- 若匹配不到，则手动匹配 -->
+									<a class="btn btn-primary" type="button" href="expense_income_invoice/match_manual/<%=invoice.getId() %>">
 										手动匹配
-									</button> -->
-								</div>
+									</a>
+									<%} %>
 								<p>
 									<strong>一张发票 对应 一项或多项支出项</strong>
 								</p>
@@ -105,6 +102,8 @@
 											</th>
 											<th width="100px">
 												对方账户
+											</th><th width="40px">
+												公司
 											</th>
 											<th width="60px">
 												总金额
@@ -126,7 +125,7 @@
 									</thead>
 									<tbody>
 										<%if(one_to_many_Result==null || one_to_many_Result.size()<=0){ %>
-										<tr><td colspan="7">未找到符合条件的记录</td></tr>
+										<tr><td colspan="8">未找到符合条件的记录</td></tr>
 										<%}else{
 											for (List<Expense_income> tempList : one_to_many_Result) {
 												String expense_income_ids = "";
@@ -136,7 +135,7 @@
 												expense_income_ids = expense_income_ids.substring(0,expense_income_ids.length()-1);
 										%>
 										<tr class="unit">
-											<td colspan="7">
+											<td colspan="8">
 												<table class="table table-responsive table-bordered">
 													<%int i = 0 ;
 											for(Expense_income item :tempList){
@@ -146,6 +145,7 @@
 															<a href="#" class="match" invoice_ids="<%=invoice.getId() %>" expense_income_ids="<%=expense_income_ids %>">匹配</a>
 														</td><%} %>
 														<td width="100px"><%=item.getBank_name() %></td>
+														<td width="40px"><%=SystemCache.getCompanyShortName(item.getCompany_id()) %></td>
 														<td width="60px"><%=item.getAmount() %></td>
 														<td width="60px"><%=item.getInvoice_amount() %></td>
 														<td width="60px"><%=item.getAmount() - item.getInvoice_amount() %></td>

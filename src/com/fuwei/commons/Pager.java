@@ -1,6 +1,7 @@
 package com.fuwei.commons;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -15,6 +16,26 @@ public class Pager {
 	private String[] flow;//
 	
 	private String risk;
+	
+	private String[] total_colnames ;
+	private Map<String,Object> total ; //统计数据
+
+	
+	public String[] getTotal_colnames() {
+		return total_colnames;
+	}
+
+	public void setTotal_colnames(String[] total_colnames) {
+		this.total_colnames = total_colnames;
+	}
+
+	public Map<String, Object> getTotal() {
+		return total;
+	}
+
+	public void setTotal(Map<String, Object> total) {
+		this.total = total;
+	}
 
 	public Integer getPageNo() {
 		return pageNo;

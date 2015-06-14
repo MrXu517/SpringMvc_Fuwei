@@ -136,7 +136,7 @@ public class Expense_incomeController extends BaseController {
 		return new ModelAndView("financial/expense_income/import");
 	}
 
-	// 批量导入银行账户
+	// 批量导入账户
 	@RequestMapping(value = "/import", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> batch_add(

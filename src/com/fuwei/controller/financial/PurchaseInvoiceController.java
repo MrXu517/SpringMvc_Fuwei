@@ -76,10 +76,12 @@ public class PurchaseInvoiceController extends BaseController {
 	AuthorityService authorityService;
 	@Autowired
 	BankService bankService;
+	@Autowired
+	SubjectService subjectService;
 	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView Index(Integer page, String start_time, String end_time,Integer bank_id ,Double amount_from , Double amount_to,
+	public ModelAndView Index(Integer page, String start_time, String end_time,Integer companyId, Integer subject_id,Integer bank_id ,Double amount_from , Double amount_to,
 			String number,String sortJSON,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		String lcode = "invoice/index";
@@ -106,10 +108,11 @@ public class PurchaseInvoiceController extends BaseController {
 		sort.setProperty("created_at");
 		sortList.add(sort);
 		
-		pager = invoiceService.getList(pager, start_time_d, end_time_d,
+		pager = invoiceService.getList(pager, null,start_time_d, end_time_d,companyId,subject_id,
 				true,bank_id,amount_from,amount_to,number, sortList);
 
-		
+		request.setAttribute("companyId", companyId);
+		request.setAttribute("subject_id", subject_id);
 		request.setAttribute("start_time", start_time_d);
 		request.setAttribute("end_time", end_time_d);
 		request.setAttribute("bank_id", bank_id);
@@ -117,6 +120,8 @@ public class PurchaseInvoiceController extends BaseController {
 		request.setAttribute("amount_to", amount_to);
 		request.setAttribute("number", number);
 		request.setAttribute("pager", pager);
+		List<Subject> subjectlist = SystemCache.getSubjectList(false);
+		request.setAttribute("subjectlist", subjectlist);	
 		List<Bank> banklist = bankService.getList();
 		request.setAttribute("banklist", banklist);
 		
@@ -150,6 +155,9 @@ public class PurchaseInvoiceController extends BaseController {
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有收取发票的权限", null);
+		}
+		if(invoice.getNumber() == null || invoice.getNumber().equals("")){
+			throw new Exception("发票号不能为空");
 		}
 		invoice.setAmount(NumberUtil.formateDouble(invoice.getAmount(), 2));
 		invoice.setCreated_at(DateTool.now());

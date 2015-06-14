@@ -1,4 +1,4 @@
-package com.fuwei.controller;
+package com.fuwei.controller.report;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -39,6 +39,7 @@ import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.constant.OrderStatus;
+import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Factory;
 import com.fuwei.entity.Material;
 import com.fuwei.entity.Order;

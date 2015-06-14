@@ -2,6 +2,8 @@
 	contentType="text/html; charset=utf-8"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.entity.financial.Bank"%>
+<%@page import="com.fuwei.entity.financial.Subject"%>
+<%@page import="com.fuwei.entity.Company"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%
@@ -9,7 +11,7 @@
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-
+	List<Subject> subjectlist = SystemCache.getSubjectList(false);
 	List<Bank> banklist = (List<Bank>) request
 		.getAttribute("banklist");
 %>
@@ -72,6 +74,44 @@
 
 										<form class="form-horizontal form" role="form">
 											<div class="form-group col-md-6">
+												<label for="company_id" class="col-sm-3 control-label">
+													公司
+												</label>
+												<div class="col-sm-8">
+													<select
+														class="form-control" name="company_id" id="company_id">
+														<option value="">
+															未选择
+														</option>
+														<%
+															for (Company company : SystemCache.companylist) {
+														%>
+														<option value="<%=company.getId()%>"><%=company.getFullname()%></option>
+														<%
+															}
+														%>
+													</select>
+												</div>
+											</div><div class="form-group col-md-6">
+												<label for="subject_id" class="col-sm-3 control-label">
+													科目
+												</label>
+												<div class="col-sm-8">
+													<select class="form-control require" name="subject_id"
+														id="subject_id">
+														<option value="">
+															未选择
+														</option>
+														<%
+															for (Subject subject : subjectlist) {
+														%>
+														<option value="<%=subject.getId()%>"><%=subject.getName()%></option>
+														<%
+															}
+														%>
+													</select>
+												</div>
+											</div><div class="form-group col-md-6">
 												<label for="bank_id" class="col-sm-3 control-label">
 													对方账户
 												</label>
@@ -91,7 +131,7 @@
 													发票号
 												</label>
 												<div class="col-sm-8">
-													<input type="text" class="form-control" name="number"
+													<input type="text" class="form-control require" name="number"
 														id="number" placeholder="不能为空">
 												</div>
 											</div>

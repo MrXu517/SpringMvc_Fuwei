@@ -1,0 +1,74 @@
+.searchform .control-label{
+	  padding-left: 25px;
+  padding-right: 0;
+  width: auto;
+}
+.searchform .control-label+div{
+	width:auto;
+}
+.timegroup .control-label+div{
+	width:270px;
+}
+.form-control{
+	height: 30px;
+	padding: 0 6px;
+}
+.detailTb{
+	background-color: #f5f5f5;
+	border: 1px solid #ccc;
+}
+.addRow{
+	margin-bottom:5px;
+}
+tr.label-danger{
+	color:#d9534f;
+	background:none;
+}
+tr.label-warning{
+	color:#f0ad4e;
+	background:none;
+}
+.body{
+	min-width:1000px;
+}
+#breadcrumbs{
+	min-width:1000px;
+}
+.tablewidget>table{
+	  table-layout: fixed;
+}
+.tablewidget>table th,.tablewidget>table td{
+	 text-align: center;
+}
+.searchform select{
+	width:100px;
+}
+.searchform button{
+	margin-bottom:5px;
+	margin-left:40px;
+}
+ul.pagination{
+	float: right;
+	margin-top:0;
+	margin-bottom:10px;
+}
+
+.select2-dropdown{
+	width:220px !important;
+}
+#bank_id+.select2.select2-container{
+	width:100px !important;
+}
+.table>thead>tr>th,.table>tfoot>tr>td{border-color: #fff;background:#B8B5B5;  font-weight: bold;}
+.table>thead>tr>th,.table>tbody>tr>td,.table>tfoot>tr>td{
+	padding:4px 0 ;
+}
+.detailA{
+	  text-decoration: underline;
+}
+@media(max-width:1366px){  
+	
+}
+.searchform>div{
+	
+}

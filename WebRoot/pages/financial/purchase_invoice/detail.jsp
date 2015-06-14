@@ -6,6 +6,7 @@
 <%@page import="com.fuwei.entity.financial.Expense_income_invoice"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
+<%@page import="com.fuwei.util.NumberUtil"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -37,18 +38,8 @@
 		<script src="js/common/common.js" type="text/javascript"></script>
 		<script src="js/financial/purchase_invoice/detail.js"
 			type="text/javascript"></script>
-		<style type="text/css">
-legend span.label {
-	font-size: 14px;
-}
-.table>thead>tr>th{background: #B8B5B5;}
-.propertyTable>tbody>tr>td{width:200px;}
-.propertyTable{width:700px;}
-.table>tbody>tr>td.property{background: #ccc;  width: 100px;}
-#detailTb td,#detailTb th{
-	text-align:center;
-}
-</style>
+		<link rel="stylesheet" type="text/css"
+			href="css/financial/invoice.css" />
 	</head>
 	<body>
 		<%@ include file="../../common/head.jsp"%>
@@ -88,8 +79,8 @@ legend span.label {
 											}
 										%>
 										<%
-										if (invoice.getIn_out()) {
-									%>
+											if (invoice.getIn_out()) {
+										%>
 										<span class="label label-info">进项发票</span>
 										<%
 											} else {
@@ -99,19 +90,82 @@ legend span.label {
 											}
 										%>
 									</legend>
-									<table class="table table-responsive table-bordered propertyTable">
-<tr><td class="property">对方账户</td><td><span ><%=invoice.getBank_name()%></span></td><td class="property">发票号</td><td><span><%=invoice.getNumber()%></span></td></tr>
-<tr><td class="property">发票类型</td><td><span ><%=invoice.getTypeString()%></span></td><td class="property">金额</td><td><span><%=invoice.getAmount()%></span></td></tr>
-<tr><td class="property">开票日期</td><td><span ><%=invoice.getPrint_date()%></span></td><td class="property">已匹配金额</td><td><span><%=invoice.getMatch_amount()%></span></td></tr>
-<tr><td class="property">备注</td><td><span ><%=invoice.getMemo()%></span></td><td class="property">待匹配金额</td><td><span class="label label-danger"><%=invoice.getAmount()-invoice.getMatch_amount()%></span></td></tr>
-</table>
+									<table
+										class="table table-responsive table-bordered propertyTable">
+										<tr>
+											<td class="property">
+												对方账户
+											</td>
+											<td>
+												<span><%=invoice.getBank_name()%></span>
+											</td>
+											<td class="property">
+												发票号
+											</td>
+											<td>
+												<span><%=invoice.getNumber()%></span>
+											</td>
+										</tr>
+										<tr>
+											<td class="property">
+												发票类型
+											</td>
+											<td>
+												<span><%=invoice.getTypeString()%></span>
+											</td>
+											<td class="property">
+												金额
+											</td>
+											<td>
+												<span><%=invoice.getAmount()%></span>
+											</td>
+										</tr>
+										<tr>
+											<td class="property">
+												开票日期
+											</td>
+											<td>
+												<span><%=invoice.getPrint_date()%></span>
+											</td>
+											<td class="property">
+												已匹配金额
+											</td>
+											<td>
+												<span><%=invoice.getMatch_amount()%></span>
+											</td>
+										</tr>
+										<tr>
+											<td class="property">
+												备注
+											</td>
+											<td>
+												<span><%=invoice.getMemo()%></span>
+											</td>
+											<td class="property">
+												待匹配金额
+											</td>
+											<td>
+												<span class="label label-danger"><%=invoice.getAmount() - invoice.getMatch_amount()%></span>
+												<%
+													if (!invoice.isMatched()) {
+												%>
+												<button data-cid="<%=invoice.getId()%>" class="match">
+													匹配
+												</button>
+												<%
+													}
+												%>
+											</td>
+										</tr>
+									</table>
 								</fieldset>
 
 								<fieldset>
 									<legend>
 										所开支出款项
 									</legend>
-									<table class="table table-responsive table-bordered" id="detailTb">
+									<table class="table table-responsive table-bordered"
+										id="detailTb">
 										<thead>
 											<tr>
 												<th width="120px">
@@ -137,7 +191,8 @@ legend span.label {
 												</th>
 											</tr>
 										</thead>
-										<tbody><%
+										<tbody>
+											<%
 												if (map.size() <= 0) {
 											%>
 											<tr>
@@ -149,12 +204,12 @@ legend span.label {
 												}
 											%>
 											<%
-											double total_match_amount = 0;
+												double total_match_amount = 0;
 												for (Expense_income item : map.keySet()) {
 													Expense_income_invoice temp = map.get(item);
 													total_match_amount += temp.getAmount();
 											%>
-											
+
 											<tr>
 												<td><%=item.getBank_name()%></td>
 												<td><%=item.getSubject_name()%></td>
@@ -182,11 +237,26 @@ legend span.label {
 											</tr>
 											<%
 												}
-											%><%
-												if (map.size() > 0) {
 											%>
-											<tr><td>合计</td><td></td><td></td><td></td><td></td><td><%=total_match_amount %></td><td></td></tr>
-											<%} %>
+											<%
+												if (map.size() > 0) {
+													total_match_amount = NumberUtil.formateDouble(
+															total_match_amount, 2);
+											%>
+											<tr>
+												<td>
+													合计
+												</td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td><%=total_match_amount%></td>
+												<td></td>
+											</tr>
+											<%
+												}
+											%>
 										</tbody>
 									</table>
 								</fieldset>
@@ -200,5 +270,29 @@ legend span.label {
 				</div>
 			</div>
 		</div>
+		<!-- 匹配支出对话框 -->
+		<div class="modal fade" id="matchDialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+						</button>
+						<h4 class="modal-title">
+							请选择匹配的支出项
+						</h4>
+					</div>
+					<div class="modal-body">
+						<iframe id="matchIframe" name="matchIframe" frameborder=0></iframe>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">
+							关闭
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 匹配支出对话框 -->
 	</body>
 </html>

@@ -8,6 +8,7 @@
 <%@page import="com.fuwei.entity.financial.Subject"%>
 <%@page import="com.fuwei.commons.Pager"%>
 <%@page import="com.fuwei.util.DateTool"%>
+<%@page import="com.fuwei.util.NumberUtil"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="net.sf.json.JSONObject"%>
 <%
@@ -20,9 +21,17 @@
 		pager = new Pager();
 	}
 	List<Expense_income> Expense_incomelist = new ArrayList<Expense_income>();
+	
+	double total_income = 0 ;
+	double total_expense = 0 ;
+	double total_minus = 0 ;
 	if (pager != null & pager.getResult() != null) {
 		Expense_incomelist = (List<Expense_income>) pager.getResult();
+		total_income = NumberUtil.formateDouble((Double)pager.getTotal().get("income_amount"),2);
+		total_expense = NumberUtil.formateDouble((Double)pager.getTotal().get("expense_amount"),2);
+		total_minus = NumberUtil.formateDouble(total_income-total_expense,2);
 	}
+	
 
 	Date start_time = (Date) request.getAttribute("start_time");
 	String start_time_str = "";
@@ -74,16 +83,7 @@
 	if (subject_id == null) {
 		subject_id = -1;
 	}
-	Double amount_from = (Double) request.getAttribute("amount_from");
-	String amount_from_str = "";
-	if (amount_from != null) {
-		amount_from_str = amount_from.toString();
-	}
-	Double amount_to = (Double) request.getAttribute("amount_to");
-	String amount_to_str = "";
-	if (amount_to != null) {
-		amount_to_str = amount_to.toString();
-	}
+
 
 	HashMap<String, List<Salesman>> companySalesmanMap = SystemCache
 			.getCompanySalesmanMap_ID();
@@ -105,7 +105,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>收入支出 -- 桐庐富伟针织厂</title>
+		<title>收支报表 -- 财务报表 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -123,13 +123,27 @@
 		<script src="js/financial/workspace/expense_income.js" type="text/javascript"></script>
 		<script type='text/javascript' src='js/plugins/select2.min.js'></script>
 	<link rel="stylesheet" type="text/css" href="css/plugins/select2.min.css" />
-		<link href="css/financial/workspace.css" rel="stylesheet"
+		<link href="css/report/financial.css" rel="stylesheet"
 			type="text/css" />
 		
 	</head>
 	<body>
+	<%@ include file="../../common/head.jsp"%>
 		<div id="Content">
 			<div id="main">
+				<div class="breadcrumbs" id="breadcrumbs">
+					<ul class="breadcrumb">
+						<li>
+							<i class="fa fa-home"></i>
+							<a href="user/index">首页</a>
+						</li><li>
+							财务报表
+						</li>
+						<li class="active">
+							收支报表
+						</li>
+					</ul>
+				</div>
 				<div class="body">
 					<div class="container-fluid">
 						<div class="row">
@@ -305,29 +319,15 @@
 											</div>
 										</div>
 
-										<div class="form-group amountgroup">
-											<label class="col-sm-3 control-label">
-												金额
-											</label>
-
-											<div class="input-group col-md-9">
-												<input type="text" name="amount_from" id="amount_from"
-													class="double form-control" value="<%=amount_from_str%>" />
-												<span class="input-group-addon">到</span>
-												<input type="text" name="amount_to" id="amount_to"
-													class="double form-control" value="<%=amount_to_str%>">
-
-
-											</div>
-										</div>
+										
 									</form><br><button class="btn btn-primary" type="button" id="searchBtn">
 											搜索
 										</button>
-<a href="expense_income/import" class="btn btn-primary" target="_top">批量导入</a>
+
 									<ul class="pagination">
 										<li>
 											<a
-												href="financial/workspace/expense_income?bank_id=<%=bank_str%>&subject_id=<%=subject_str%>&amount_from=<%=amount_from_str%>&in_out=<%=in_out_str%>&amount_to=<%=amount_to_str%>&companyId=<%=company_str%>&salesmanId=<%=salesman_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=1">«</a>
+												href="report/financial/expense_income?bank_id=<%=bank_str%>&subject_id=<%=subject_str%>&in_out=<%=in_out_str%>&companyId=<%=company_str%>&salesmanId=<%=salesman_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=1">«</a>
 										</li>
 
 										<%
@@ -335,7 +335,7 @@
 										%>
 										<li class="">
 											<a
-												href="financial/workspace/expense_income?bank_id=<%=bank_str%>&subject_id=<%=subject_str%>&amount_from=<%=amount_from_str%>&in_out=<%=in_out_str%>&amount_to=<%=amount_to_str%>&companyId=<%=company_str%>&salesmanId=<%=salesman_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() - 1%>">上一页
+												href="report/financial/expense_income?bank_id=<%=bank_str%>&subject_id=<%=subject_str%>&in_out=<%=in_out_str%>&companyId=<%=company_str%>&salesmanId=<%=salesman_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() - 1%>">上一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -350,7 +350,7 @@
 
 										<li class="active">
 											<a
-												href="financial/workspace/expense_income?bank_id=<%=bank_str%>&subject_id=<%=subject_str%>&amount_from=<%=amount_from_str%>&in_out=<%=in_out_str%>&amount_to=<%=amount_to_str%>&companyId=<%=company_str%>&salesmanId=<%=salesman_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
+												href="report/financial/expense_income?bank_id=<%=bank_str%>&subject_id=<%=subject_str%>&in_out=<%=in_out_str%>&companyId=<%=company_str%>&salesmanId=<%=salesman_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
 												class="sr-only"></span> </a>
 										</li>
 										<li>
@@ -360,7 +360,7 @@
 										
 										<li class="">
 											<a
-												href="financial/workspace/expense_income?bank_id=<%=bank_str%>&subject_id=<%=subject_str%>&amount_from=<%=amount_from_str%>&in_out=<%=in_out_str%>&amount_to=<%=amount_to_str%>&companyId=<%=company_str%>&salesmanId=<%=salesman_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() + 1%>">下一页
+												href="report/financial/expense_income?bank_id=<%=bank_str%>&subject_id=<%=subject_str%>&in_out=<%=in_out_str%>&companyId=<%=company_str%>&salesmanId=<%=salesman_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() + 1%>">下一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -376,13 +376,13 @@
 										</li>
 										<li>
 											<a
-												href="financial/workspace/expense_income?bank_id=<%=bank_str%>&subject_id=<%=subject_str%>&amount_from=<%=amount_from_str%>&in_out=<%=in_out_str%>&amount_to=<%=amount_to_str%>&companyId=<%=company_str%>&salesmanId=<%=salesman_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getTotalPage()%>">»</a>
+												href="report/financial/expense_income?bank_id=<%=bank_str%>&subject_id=<%=subject_str%>&in_out=<%=in_out_str%>&companyId=<%=company_str%>&salesmanId=<%=salesman_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
 
 								</div>
 
-								<table class="table table-responsive">
+								<table class="table table-responsive table-bordered">
 									<thead>
 										<tr>
 											<th width="20px">
@@ -412,9 +412,6 @@
 											</th>
 											<th width="80px">
 												备注
-											</th>
-											<th width="80px">
-												操作
 											</th>
 										</tr>
 									</thead>
@@ -446,38 +443,17 @@
 											<td><%=SystemCache.getSalesmanName(item.getSalesman_id())%></td>
 											<td><%=DateTool.formatDateYMD(item.getExpense_at())%></td>
 											<td><%=item.getMemo()%></td>
-											
-											<td><%if(!item.getIn_out()&&item.isInvoiced()){ %>
-														<span class="label label-success">发票已收</span>
-													<%}else{ %>
-															<span class="label label-default"><%=item.getInvoice_amount() %></span>
-													<%} %>
-												<%
-													if (item.getIn_out()) {
-												%><a target="_blank" href="income/detail/<%=item.getId()%>">详情</a>
-												<%
-													} else {
-												%><a target="_blank" href="expense/detail/<%=item.getId()%>">详情</a>
-												<%
-													}
-												%>
-
-
-												<%
-													if (has_item_delete) {
-												%>
-												|
-												<a data-cid="<%=item.getId()%>" class="delete" href="#">删除</a>
-												<%
-													}
-												%>
-
-											</td>
+										
 										</tr>
 										<%
 											}
 										%>
-										
+											<%if(Expense_incomelist == null || Expense_incomelist.size() <= 0){ %>
+														<tr><td colspan="8">找不到符合条件的记录</td></tr>
+													<%}else{ %>
+												</tbody><tfoot><tr><td>合计</td><td><%=total_income %></td><td><%=total_expense%></td><td style="text-align:left;padding-left:10px;" colspan="6"> 收入-支出 = <%=total_minus%></td></tr>
+</tfoot>
+											<%} %>
 									</tbody>
 								</table>
 							</div>
@@ -487,5 +463,11 @@
 				</div>
 			</div>
 		</div>
+<script type="text/javascript">
+	/*设置当前选中的页*/
+	var $a = $("#left li a[href='report/financial/expense_income']");
+	setActiveLeft($a.parent("li"));
+
+</script>
 	</body>
 </html>

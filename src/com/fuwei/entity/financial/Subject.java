@@ -13,7 +13,7 @@ public class Subject implements Serializable {
 	
 	private String name;//科目名称
 	
-	private Boolean in_out;//收入还是支出 ， 0 收入 ， 1 支出
+	private Boolean in_out;//收入还是支出 ，1 收入 ， 0 支出
 	
 	private Date created_at;// 创建时间
 
@@ -70,6 +70,6 @@ public class Subject implements Serializable {
 	}
 	
 	public String getInorOutString(){
-		return this.in_out?"支出":"收入";
+		return this.in_out?"收入":"支出";
 	}
 }

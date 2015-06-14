@@ -56,17 +56,11 @@ public class Expense_income_invoiceController extends BaseController {
 	public Map<String,Object> match(String invoice_ids,String expense_income_ids,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "invoice/add";
+		String lcode = "expense_income_invoice/add";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有将发票匹配支出的权限", null);
 		}
-//		Invoice invoice = invoiceService.get(invoiceId);
-//		Integer bank_id = invoice.getBank_id();
-		
-//		String[] t_invoice_ids = invoice_ids.split(",");
-//		String[] t_expense_income_ids = expense_income_ids.split(",");
-		
 		
 		List<Invoice> invoiceList = invoiceService.getByIds(invoice_ids);
 		if(invoiceList==null || invoiceList.size()<=0){
@@ -108,7 +102,20 @@ public class Expense_income_invoiceController extends BaseController {
 		}
 		String[] t_expense_income_ids = expense_income_ids.split(",");
 		String[] t_invoice_ids = invoice_ids.split(",");
-		expense_income_invoiceService.batch_add(t_expense_income_ids,t_invoice_ids,resultList);
+		
+		//判断 支出的公司和科目是否一致
+		Integer companyId = Expense_incomeList.get(0).getCompany_id();
+		Integer subjectId = Expense_incomeList.get(0).getSubject_id();
+		for(Expense_income temp :  Expense_incomeList){
+			if(temp.getCompany_id()!=companyId){
+				throw new Exception("匹配失败：支出项公司不一致 ");
+			}
+			if(temp.getSubject_id()!=subjectId){
+				throw new Exception("匹配失败：支出项科目不一致 ");
+			}
+		}
+		
+		expense_income_invoiceService.batch_add(companyId,subjectId,t_expense_income_ids,t_invoice_ids,resultList);
 		
 		
 		
@@ -135,15 +142,6 @@ public class Expense_income_invoiceController extends BaseController {
 		double to_be_match_invoice_amount = invoice.getAmount() - invoice.getMatch_amount();
 		Integer bank_id = invoice.getBank_id();
 		List<Expense_income> Expense_incomeList = expense_incomeService.getInvoiceList(bank_id,false);
-//		//一张发票 -> 对一项支出
-//		for(Expense_income expense_income : Expense_incomeList){
-//			double un_match_amount = expense_income.getAmount() - expense_income.getInvoice_amount();//支出未匹配金额
-//			if(un_match_amount == to_be_match_invoice_amount){
-//				List<Expense_income> temp= new ArrayList<Expense_income>();
-//				temp.add(expense_income);
-//				map.put(invoice, temp);
-//			}
-//		}
 		
 		//存放 一张发票 -> 一项或多项支出
 		List<List<Expense_income>> one_to_many_Result = new ArrayList<List<Expense_income>>();
@@ -193,15 +191,80 @@ public class Expense_income_invoiceController extends BaseController {
 		request.setAttribute("many_to_one_map", many_to_one_map);
 		request.setAttribute("one_to_many_Result", one_to_many_Result);
 		
-//		for(List<Expense_income> templist : mapResult){
-////			for(Expense_income t : templist){
-//////				System.out.print(t+",");
-////			}
-////			System.out.println("");
-//		}
-		
 		return new ModelAndView("financial/expense_income_invoice/match");
 		
+		
+	}
+	
+	
+	//手动匹配
+	@RequestMapping(value = "/match_manual/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView match_manual(@PathVariable Integer id,HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "expense_income_invoice/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有将发票匹配支出的权限", null);
+		}
+		
+		Map<Invoice , List<Expense_income>> map = new HashMap<Invoice , List<Expense_income>>();
+		
+		Invoice invoice = invoiceService.get(id);
+		//发票待匹配金额
+		Integer bank_id = invoice.getBank_id();
+		List<Expense_income> Expense_incomeList = expense_incomeService.getInvoiceList(bank_id,false);
+
+		request.setAttribute("invoice", invoice);
+		request.setAttribute("Expense_incomeList", Expense_incomeList);
+		
+		return new ModelAndView("financial/expense_income_invoice/match_manual");			
+	}
+	
+	//手动匹配
+	@RequestMapping(value = "/match_manual", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> match_manual(Integer invoice_id,Integer expense_income_id,HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "expense_income_invoice/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有将发票匹配支出的权限", null);
+		}
+		
+		Invoice invoice = invoiceService.get(invoice_id);
+		if(invoice==null){
+			throw new Exception("匹配发票时，请至少提供一张发票");
+		}
+		Expense_income expense_income = expense_incomeService.get(expense_income_id);
+		if(expense_income==null){
+			throw new Exception("匹配发票时，请至少提供一项支出项");
+		}
+		
+		
+		List<Expense_income_invoice> resultList = new ArrayList<Expense_income_invoice>();
+		
+		Expense_income_invoice item = new Expense_income_invoice();
+		item.setCreated_at(DateTool.now());
+		item.setUpdated_at(DateTool.now());
+		item.setCreated_user(user.getId());
+		item.setInvoice_id(invoice.getId());
+		item.setExpense_income_id(expense_income.getId());
+		double amount = Math.min(expense_income.getAmount() - expense_income.getInvoice_amount(), invoice.getAmount() - invoice.getMatch_amount());
+		item.setAmount(amount);
+		resultList.add(item);
+		
+		Integer companyId = expense_income.getCompany_id();
+		Integer subjectId = expense_income.getSubject_id();
+		
+		
+		expense_income_invoiceService.batch_add(companyId,subjectId,new String[]{""+expense_income_id},new String[]{""+invoice_id},resultList);
+		
+		
+		
+		return this.returnSuccess();
 		
 	}
 	

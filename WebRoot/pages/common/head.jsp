@@ -94,10 +94,9 @@
 	Boolean h_has_financial_workspace = SystemCache.hasAuthority(session,"financial/workspace");
 
 	//2015-5-30添加财务报表
-	Boolean h_has_report_financial_expense = SystemCache.hasAuthority(session,"report/financial/expense");//进项发票报表
-	Boolean h_has_report_financial_income = SystemCache.hasAuthority(session,"report/financial/income");//进项发票报表
+	Boolean h_has_report_financial_payable = SystemCache.hasAuthority(session,"report/financial/payable");//应付报表
 	Boolean h_has_report_financial_purchase_invoice = SystemCache.hasAuthority(session,"report/financial/purchase_invoice");//进项发票报表
-	Boolean h_has_report_financial_sale_invoice = SystemCache.hasAuthority(session,"report/financial/sale_invoice");//进项发票报表
+	Boolean h_has_report_financial_expense_income = SystemCache.hasAuthority(session,"report/financial/expense_income");//进项发票报表
 	
 	//2015-6-10添加材料、染色报表
 	Boolean h_has_report_material_purchase_detail = SystemCache.hasAuthority(session,"report/material_purchase_detail");
@@ -349,6 +348,21 @@
 							<%if(h_has_report_coloring_detail){ %>
 							<li>
 								<a href="report/coloring_detail">染色明细报表</a>
+							</li>
+							<%} %>
+							<%if(h_has_report_financial_payable){ %>
+							<li>
+								<a href="report/financial/payable">应付报表</a>
+							</li>
+							<%} %>
+							<%if(h_has_report_financial_expense_income){ %>
+							<li>
+								<a href="report/financial/expense_income">收支报表</a>
+							</li>
+							<%} %>
+							<%if(h_has_report_financial_purchase_invoice){ %>
+							<li>
+								<a href="report/financial/purchase_invoice">进项发票报表</a>
 							</li>
 							<%} %>
 

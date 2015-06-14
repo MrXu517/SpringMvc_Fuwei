@@ -3,6 +3,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import com.fuwei.commons.Sort;
 import com.fuwei.entity.financial.Bank;
 import com.fuwei.entity.financial.Expense_income;
 import com.fuwei.entity.financial.Invoice;
+import com.fuwei.entity.report.Payable;
 import com.fuwei.service.BaseService;
 import com.fuwei.util.DateTool;
 
@@ -72,48 +74,48 @@ public class Expense_incomeService extends BaseService {
 			Integer companyId, Integer salesmanId,Boolean in_out, Integer bank_id , Integer subject_id,Double amount_from , Double amount_to, List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
-			String seq = "WHERE ";
-			if (companyId != null & salesmanId == null) {
-				sql.append("select * from tb_expense_income where company_id='"
-						+ companyId + "'");
+			String seq = " WHERE ";
+			sql.append("select * from tb_expense_income ");
+			
+			StringBuffer sql_condition = new StringBuffer();
+			if (companyId != null) {
+				sql_condition.append(seq + " company_id='" + companyId+ "'");
 				seq = " AND ";
-			} else {
-				sql.append("select * from tb_expense_income ");
 			}
 
 			if (start_time != null) {
-				sql.append(seq + " expense_at>='"
+				sql_condition.append(seq + " expense_at>='"
 						+ DateTool.formateDate(start_time) + "'");
 				seq = " AND ";
 			}
 			if (end_time != null) {
-				sql.append(seq + " expense_at<='"
+				sql_condition.append(seq + " expense_at<='"
 						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
 						+ "'");
 				seq = " AND ";
 			}
 			if (salesmanId != null) {
-				sql.append(seq + " salesman_id='" + salesmanId + "'");
+				sql_condition.append(seq + " salesman_id='" + salesmanId + "'");
 				seq = " AND ";
 			}
 			if (in_out != null) {
-				sql.append(seq + " in_out='" + (in_out == true?"1":0 )+ "'");
+				sql_condition.append(seq + " in_out='" + (in_out == true?"1":0 )+ "'");
 				seq = " AND ";
 			}
 			if (bank_id != null) {
-				sql.append(seq + " bank_id='" + bank_id+ "'");
+				sql_condition.append(seq + " bank_id='" + bank_id+ "'");
 				seq = " AND ";
 			}
 			if (subject_id != null) {
-				sql.append(seq + " subject_id='" + subject_id+ "'");
+				sql_condition.append(seq + " subject_id='" + subject_id+ "'");
 				seq = " AND ";
 			}
 			if (amount_from != null) {
-				sql.append(seq + " amount>='" + amount_from+ "'");
+				sql_condition.append(seq + " amount>='" + amount_from+ "'");
 				seq = " AND ";
 			}
 			if (amount_to != null) {
-				sql.append(seq + " amount<='" + amount_to+ "'");
+				sql_condition.append(seq + " amount<='" + amount_to+ "'");
 				seq = " AND ";
 			}
 
@@ -121,19 +123,78 @@ public class Expense_incomeService extends BaseService {
 
 				for (int i = 0; i < sortlist.size(); ++i) {
 					if (i == 0) {
-						sql.append(" order by " + sortlist.get(i).getProperty()
+						sql_condition.append(" order by " + sortlist.get(i).getProperty()
 								+ " " + sortlist.get(i).getDirection() + " ");
 					} else {
-						sql.append("," + sortlist.get(i).getProperty() + " "
+						sql_condition.append("," + sortlist.get(i).getProperty() + " "
 								+ sortlist.get(i).getDirection() + " ");
 					}
 
 				}
 			}
-			return findPager_T(sql.toString(), Expense_income.class, pager);
+			return findPager_T(sql.append(sql_condition).toString(), Expense_income.class, pager);
 		} catch (Exception e) {
 			throw e;
 		}
+	}
+	
+	public Map<String,Object> getTotal(Pager pager, Date start_time, Date end_time,
+			Integer companyId, Integer salesmanId,Boolean in_out, Integer bank_id , Integer subject_id,Double amount_from , Double amount_to, List<Sort> sortlist) throws Exception {
+		//获取统计数据
+		String [] total_colnames = pager.getTotal_colnames();
+		if(total_colnames == null || total_colnames.length <= 0){
+			return null;
+		}
+		StringBuffer sql = new StringBuffer();
+		sql.append("select ");
+		for(String colname : total_colnames){
+			sql.append("IFNULL(sum(IFNULL(" + colname+",0)),0) " + colname + ",");
+		}	
+		sql = new StringBuffer(sql.substring(0, sql.length()-1));
+		sql.append(" from tb_expense_income");	
+		String seq = " WHERE ";
+		if (companyId != null) {
+			sql.append(seq + " company_id='" + companyId+ "'");
+			seq = " AND ";
+		}
+
+		if (start_time != null) {
+			sql.append(seq + " expense_at>='"
+					+ DateTool.formateDate(start_time) + "'");
+			seq = " AND ";
+		}
+		if (end_time != null) {
+			sql.append(seq + " expense_at<='"
+					+ DateTool.formateDate(DateTool.addDay(end_time, 1))
+					+ "'");
+			seq = " AND ";
+		}
+		if (salesmanId != null) {
+			sql.append(seq + " salesman_id='" + salesmanId + "'");
+			seq = " AND ";
+		}
+		if (in_out != null) {
+			sql.append(seq + " in_out='" + (in_out == true?"1":0 )+ "'");
+			seq = " AND ";
+		}
+		if (bank_id != null) {
+			sql.append(seq + " bank_id='" + bank_id+ "'");
+			seq = " AND ";
+		}
+		if (subject_id != null) {
+			sql.append(seq + " subject_id='" + subject_id+ "'");
+			seq = " AND ";
+		}
+		if (amount_from != null) {
+			sql.append(seq + " amount>='" + amount_from+ "'");
+			seq = " AND ";
+		}
+		if (amount_to != null) {
+			sql.append(seq + " amount<='" + amount_to+ "'");
+			seq = " AND ";
+		}
+		Map<String,Object> total_map = dao.queryForMap(sql.toString(), null);
+		return total_map;
 	}
 
 	// 添加

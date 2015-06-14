@@ -3,6 +3,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,44 +59,62 @@ public class InvoiceService extends BaseService {
 		}
 	}
 	// 获取分页列表
-	public Pager getList(Pager pager, Date start_time, Date end_time,
+	public Pager getList(Pager pager,Boolean unpaid, Date start_time, Date end_time,
+			Integer companyId, Integer subjectId,
 			Boolean in_out, Integer bank_id ,Double amount_from , Double amount_to,String number, List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
 			String seq = " WHERE ";
 			sql.append("select * from tb_invoice");
 			
+			StringBuffer sql_condition = new StringBuffer();
+			if (companyId != null) {
+				sql_condition.append(seq + " company_id='" + companyId+ "'");
+				seq = " AND ";
+			}
+			if (subjectId != null) {
+				sql_condition.append(seq + " subject_id='" + subjectId+ "'");
+				seq = " AND ";
+			}
 			if (start_time != null) {
-				sql.append(seq + " created_at>='"
+				sql_condition.append(seq + " created_at>='"
 						+ DateTool.formateDate(start_time) + "'");
 				seq = " AND ";
 			}
 			if (end_time != null) {
-				sql.append(seq + " created_at<='"
+				sql_condition.append(seq + " created_at<='"
 						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
 						+ "'");
 				seq = " AND ";
 			}
-			
+			if (unpaid != null) {
+				if(unpaid){
+					sql_condition.append(seq + " amount>match_amount");
+					seq = " AND ";
+				}else{
+					sql_condition.append(seq + " amount=match_amount");
+					seq = " AND ";
+				}
+			}
 			if (in_out != null) {
-				sql.append(seq + " in_out='" + (in_out == true?"1":0 )+ "'");
+				sql_condition.append(seq + " in_out='" + (in_out == true?"1":0 )+ "'");
 				seq = " AND ";
 			}
 			if (bank_id != null) {
-				sql.append(seq + " bank_id='" + bank_id+ "'");
+				sql_condition.append(seq + " bank_id='" + bank_id+ "'");
 				seq = " AND ";
 			}
 			
 			if (amount_from != null) {
-				sql.append(seq + " amount>='" + amount_from+ "'");
+				sql_condition.append(seq + " amount>='" + amount_from+ "'");
 				seq = " AND ";
 			}
 			if (amount_to != null) {
-				sql.append(seq + " amount<='" + amount_to+ "'");
+				sql_condition.append(seq + " amount<='" + amount_to+ "'");
 				seq = " AND ";
 			}
 			if (number != null && !number.equals("")) {
-				sql.append(seq + " number='" + number+ "'");
+				sql_condition.append(seq + " number='" + number+ "'");
 				seq = " AND ";
 			}
 
@@ -103,16 +122,32 @@ public class InvoiceService extends BaseService {
 
 				for (int i = 0; i < sortlist.size(); ++i) {
 					if (i == 0) {
-						sql.append(" order by " + sortlist.get(i).getProperty()
+						sql_condition.append(" order by " + sortlist.get(i).getProperty()
 								+ " " + sortlist.get(i).getDirection() + " ");
 					} else {
-						sql.append("," + sortlist.get(i).getProperty() + " "
+						sql_condition.append("," + sortlist.get(i).getProperty() + " "
 								+ sortlist.get(i).getDirection() + " ");
 					}
 
 				}
 			}
-			return findPager_T(sql.toString(), Invoice.class, pager);
+			
+			pager = findPager_T(sql.append(sql_condition).toString(), Invoice.class, pager);
+			//获取统计数据
+			String [] total_colnames = pager.getTotal_colnames();
+			if(total_colnames == null || total_colnames.length <= 0){
+				return pager;
+			}
+			StringBuffer sql_total = new StringBuffer();
+			sql_total.append("select ");
+			for(String colname : total_colnames){
+				sql_total.append("IFNULL(sum(IFNULL(" + colname+",0)),0) " + colname + ",");
+			}
+			sql_total = new StringBuffer(sql_total.substring(0, sql_total.length()-1));
+			sql_total.append(" from tb_invoice");			
+			Map<String,Object> total_map = dao.queryForMap(sql_total.append(sql_condition).toString(),null);
+			pager.setTotal(total_map);
+			return pager;
 		} catch (Exception e) {
 			throw e;
 		}
@@ -187,4 +222,5 @@ public class InvoiceService extends BaseService {
 		}
 
 	}
+	
 }

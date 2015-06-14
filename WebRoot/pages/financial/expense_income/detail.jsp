@@ -6,6 +6,7 @@
 <%@page import="com.fuwei.entity.financial.Expense_income_invoice"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
+<%@page import="com.fuwei.util.NumberUtil"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -181,6 +182,7 @@ legend span.label {
 												}
 											%><%
 												if (map.size() > 0) {
+													total_match_amount = NumberUtil.formateDouble(total_match_amount,2);
 											%>
 											<tr><td>合计</td><td></td><td></td><td></td><td><%=total_match_amount %></td><td></td></tr>
 											<%} %>

@@ -40,8 +40,29 @@ public class Invoice implements Serializable {
 	
 	private double match_amount;//已匹配金额
 	
+	private Integer company_id;
+	
+	private Integer subject_id;
 	
 	
+	
+	
+	public Integer getSubject_id() {
+		return subject_id;
+	}
+
+	public void setSubject_id(Integer subject_id) {
+		this.subject_id = subject_id;
+	}
+
+	public Integer getCompany_id() {
+		return company_id;
+	}
+
+	public void setCompany_id(Integer company_id) {
+		this.company_id = company_id;
+	}
+
 	public double getMatch_amount() {
 		return match_amount;
 	}

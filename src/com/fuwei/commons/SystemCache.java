@@ -25,6 +25,7 @@ import com.fuwei.entity.Message;
 import com.fuwei.entity.Role;
 import com.fuwei.entity.Salesman;
 import com.fuwei.entity.User;
+import com.fuwei.entity.financial.Subject;
 import com.fuwei.service.CompanyService;
 import com.fuwei.service.CustomerService;
 import com.fuwei.service.DepartmentService;
@@ -35,6 +36,7 @@ import com.fuwei.service.MaterialService;
 import com.fuwei.service.RoleService;
 import com.fuwei.service.SalesmanService;
 import com.fuwei.service.UserService;
+import com.fuwei.service.financial.SubjectService;
 
 public class SystemCache {
 
@@ -57,6 +59,8 @@ public class SystemCache {
 	static DepartmentService departmentService;
 
 	static EmployeeService employeeService;
+	
+	static SubjectService subjectService;
 
 	public SystemCache() {
 		companyService = (CompanyService) SystemContextUtils
@@ -79,6 +83,8 @@ public class SystemCache {
 				.getBean(DepartmentService.class);
 		employeeService = (EmployeeService) SystemContextUtils
 				.getBean(EmployeeService.class);
+		subjectService = (SubjectService) SystemContextUtils
+		.getBean(SubjectService.class);
 
 	}
 
@@ -114,6 +120,9 @@ public class SystemCache {
 
 	// 缓存员工
 	public static List<Employee> employeelist = new ArrayList<Employee>();
+	
+	// 缓存科目
+	public static List<Subject> subjectlist = new ArrayList<Subject>();
 
 	public static void addCompany(Company company) {
 		companylist.add(company);
@@ -148,6 +157,8 @@ public class SystemCache {
 				.getBean(DepartmentService.class);
 		employeeService = (EmployeeService) SystemContextUtils
 				.getBean(EmployeeService.class);
+		subjectService = (SubjectService) SystemContextUtils
+		.getBean(SubjectService.class);
 		initCompanyList();
 		initSalesmanList();
 		initGongxuList();
@@ -158,12 +169,15 @@ public class SystemCache {
 		initCustomerList();
 		initDepartmentList();
 		initEmployeeList();
+		initSubjectList();
 	}
 
 	public static void reload() throws Exception {
 		init();
 	}
-
+	public static void initSubjectList() throws Exception {
+		SystemCache.subjectlist = subjectService.getList(); // companylist;
+	}
 	public static void initCompanyList() throws Exception {
 		SystemCache.companylist = companyService.getList(); // companylist;
 	}
@@ -221,7 +235,29 @@ public class SystemCache {
 	public static void initEmployeeList() throws Exception {
 		SystemCache.employeelist = employeeService.getList(); // employeelist;
 	}
-
+	
+	public static List<Subject> getSubjectList(Boolean in_out){
+		List<Subject> templist = new ArrayList<Subject>();
+		for(Subject temp : subjectlist){
+			if(temp.getIn_out() == in_out){
+				templist.add(temp);
+			}
+		}
+		return templist;
+	}
+	
+	public static String getSubjectName(Integer id) {
+		if (id == null) {
+			return "";
+		}
+		for (int i = 0; i < SystemCache.subjectlist.size(); ++i) {
+			Subject temp = SystemCache.subjectlist.get(i);
+			if (temp.getId() == id) {
+				return temp.getName();
+			}
+		}
+		return "";
+	}
 	public static String getDepartmentName(Integer departmentId) {
 		if (departmentId == null) {
 			return "";

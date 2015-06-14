@@ -175,3 +175,7 @@ ul.pagination{
 #bank_id+.select2.select2-container{
 	width:100px !important;
 }
+.form-control{
+	height: 30px;
+	padding: 0 6px;
+}

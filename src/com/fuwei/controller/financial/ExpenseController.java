@@ -115,7 +115,7 @@ public class ExpenseController extends BaseController {
 		if (!hasAuthority) {
 			throw new PermissionDeniedDataAccessException("没有出纳的权限", null);
 		}
-		List<Subject> subjectlist = subjectService.getList(true);
+		List<Subject> subjectlist = SystemCache.getSubjectList(false);
 		request.setAttribute("subjectlist", subjectlist);	
 		List<Bank> banklist = bankService.getList();
 		request.setAttribute("banklist", banklist);
