@@ -1,6 +1,5 @@
 package com.fuwei.entity.ordergrid;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +15,7 @@ public class ProducingOrder extends BaseTableOrder{
 	@IdentityId
 	private int id;
 	private Integer orderId;//订单ID
+	private String orderNumber;//订单编号
 	private Date created_at;// 创建时间
 	private Date updated_at;// 最近更新时间
 	
@@ -36,6 +36,114 @@ public class ProducingOrder extends BaseTableOrder{
 
 	private Integer status;// 订单状态 -1刚创建  , 6执行完成 ， 7取消
 	private String state;// 订单状态描述
+	
+	private Integer companyId;// 公司ID
+//	private String kehu;// 客户
+	private Integer customerId;
+	
+	// 接下来的Sample的属性
+	private Integer sampleId;// 样品ID
+	
+	private String name;// 样品名称
+
+	private String img;// 图片
+	private Integer materialId;// 材料
+	private double weight;//克重
+	private String size;// 尺寸
+	private String productNumber;// 产品编号
+	
+	private String img_s;// 中等缩略图
+	private String img_ss;// 缩略图
+	
+	//2015-3-17 增加跟单人字段
+//	private Integer charge_user;// 打样人 ，跟单人
+	private Integer charge_employee;// 打样人 ，跟单人 2015-5-2修改
+	
+	
+	
+	
+	
+
+	public Integer getCompanyId() {
+		return companyId;
+	}
+	public void setCompanyId(Integer companyId) {
+		this.companyId = companyId;
+	}
+	public Integer getCustomerId() {
+		return customerId;
+	}
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
+	}
+	public Integer getSampleId() {
+		return sampleId;
+	}
+	public void setSampleId(Integer sampleId) {
+		this.sampleId = sampleId;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getImg() {
+		return img;
+	}
+	public void setImg(String img) {
+		this.img = img;
+	}
+	public Integer getMaterialId() {
+		return materialId;
+	}
+	public void setMaterialId(Integer materialId) {
+		this.materialId = materialId;
+	}
+	
+	
+	public double getWeight() {
+		return weight;
+	}
+	public void setWeight(double weight) {
+		this.weight = weight;
+	}
+	public String getSize() {
+		return size;
+	}
+	public void setSize(String size) {
+		this.size = size;
+	}
+	public String getProductNumber() {
+		return productNumber;
+	}
+	public void setProductNumber(String productNumber) {
+		this.productNumber = productNumber;
+	}
+	public String getImg_s() {
+		return img_s;
+	}
+	public void setImg_s(String img_s) {
+		this.img_s = img_s;
+	}
+	public String getImg_ss() {
+		return img_ss;
+	}
+	public void setImg_ss(String img_ss) {
+		this.img_ss = img_ss;
+	}
+	public Integer getCharge_employee() {
+		return charge_employee;
+	}
+	public void setCharge_employee(Integer charge_employee) {
+		this.charge_employee = charge_employee;
+	}
+	public String getOrderNumber() {
+		return orderNumber;
+	}
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
+	}
 	public Integer getStatus() {
 		return status;
 	}

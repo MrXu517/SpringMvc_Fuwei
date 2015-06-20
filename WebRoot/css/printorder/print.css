@@ -105,3 +105,6 @@ div#tip{
 .detailTb{
 	text-align:left;
 }
+.id_barcode{
+	display:inline-block;
+}

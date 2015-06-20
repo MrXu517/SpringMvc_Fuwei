@@ -267,6 +267,12 @@ tr.label-warning{
 	.searchform #number{
 		width:90px;
 	}
+	.body{
+		min-width:1000px;
+	}
+	#breadcrumbs{
+		min-width:1000px;
+	}
 }
 .imggroup{
 	height:380px;

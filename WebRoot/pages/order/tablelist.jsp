@@ -133,6 +133,8 @@
 			"fuliao_purchase_order/delete");
 	Boolean has_producing_order_delete = SystemCache.hasAuthority(session,
 			"order/producing/delete");
+	Boolean has_producing_order_edit = SystemCache.hasAuthority(session,
+			"order/producing");
 	Boolean has_order_producing_price_edit = SystemCache.hasAuthority(session,"order/producing/price_edit");
 	Boolean has_order_producing_price_request = SystemCache.hasAuthority(session,"order/producing/price_request");
 %>
@@ -411,19 +413,17 @@
 									<p>
 										如果您要创建生产单，请点击下方的按钮
 									</p>
-									<a href="order/<%=order.getId()%>/addproducingorder"
+									<a href="producing_order/<%=order.getId()%>/add"
 										class="btn btn-primary" id="createProducingorderBtn">创建生产单</a>
 								</div>
 								<%} %>
 								<a  href="printorder/print?orderId=<%=order.getId() %>&gridName=producingorder" target="_blank" type="button"
 												class="printBtn btn btn-success"
 												data-loading-text="正在打印..."> 打印生产单 </a>
-								<%if(!has_order_producing_price_edit && has_order_producing_price_request){ %>
+								<%if(has_order_producing_price_request){ %>
 								<button orderid="<%=order.getId() %>" ordernumber="<%=order.getOrderNumber() %>" type="button" class="priceRequestBtn btn btn-info" data-loading-text="正在请求划价..."> 请求划价  </button>
 								<%} %>
-								<%if(has_order_producing_price_edit){ %>
-								<button orderid="<%=order.getId() %>" ordernumber="<%=order.getOrderNumber() %>" type="button" class="priceCompletedBtn btn btn-info" data-loading-text="正在完成划价..."> 完成划价  </button>
-								<%} %>
+							
 								<%
 									for (ProducingOrder producingOrder : producingOrderList) {
 										List<ProducingOrderDetail> producingOrderDetailList = producingOrder == null ? new ArrayList<ProducingOrderDetail>()
@@ -438,19 +438,22 @@
 												value="<%=producingOrder == null ? "" : producingOrder
 						.getId()%>" />
 											<input type="hidden" name="orderId"
-												value="<%=order.getId()%>" />
+												value="<%=order.getId()%>" />	
+												
 											<%if(producingOrder.isEdit()){ %>
-												<button type="submit"
-												class="pull-right btn btn-danger saveTable"
-												data-loading-text="正在保存...">
-												保存对当前表格的修改
-											</button>
 												<%if(has_producing_order_delete){ %>
 													<a target="_blank" type="button"
 													class="pull-right btn btn-default deleteTableBtn"
 													data-loading-text="正在删除..."> 删除 </a>
 												<%} %>
+												<%if(has_producing_order_edit){ %>
+												<a href="producing_order/put/<%=producingOrder.getId() %>" target="_blank" type="button"
+													class="pull-right btn btn-default"
+													data-loading-text="正在跳转页面......"> 编辑 </a><%} %>
 											<%} %>
+											<%if(has_order_producing_price_edit){ %>
+												<a target="_blank" href="producing_order/price/<%=producingOrder.getId() %>" type="button" class="pull-right btn btn-success"> 开始划价  </a>
+											 <%} %>
 											<a href="producing_order/print/<%=producingOrder.getId()%>" target="_blank" type="button"
 												class="pull-right btn btn-success"
 												data-loading-text="正在打印..."> 打印 </a>
@@ -574,18 +577,9 @@
 																		</td>
 																		<td class="size"><%=detail.getSize()%>
 																		</td>
-																		<td class="int">
-																			<input class="form-control require quantity value"
-																				value="<%=detail.getQuantity()%>" />
+																		<td class="quantity"><%=detail.getQuantity()%>
 																		</td>
-																		<%if(has_order_producing_price_edit){ %>
-																		<td class="double">
-																			<input class="form-control require price value"
-																				value="<%=detail.getPrice()%>" />
-																		</td>
-																		<%}else{ %>
 																		<td class="price"><%=detail.getPrice()%></td>
-																		<%} %>
 																	</tr>
 
 																	<%
@@ -602,10 +596,7 @@
 														<td>
 															<table class="table table-responsive detailTb2">
 																<caption>
-																	<button type="button"
-																		class="btn btn-primary addRow pull-left">
-																		添加一行
-																	</button>
+																	
 																	生产材料信息
 																</caption>
 																<thead>
@@ -621,9 +612,6 @@
 																		</th>
 																		<th width="25%">
 																			标准色样
-																		</th>
-																		<th width="15%">
-																			操作
 																		</th>
 																	</tr>
 																</thead>
@@ -641,11 +629,6 @@
 																		<td class="quantity"><%=detail.getQuantity()%>
 																		</td>
 																		<td class="colorsample"><%=detail.getColorsample()%>
-																		</td>
-																		<td class="_handle">
-																			<a class='copyRow' href='#'>复制</a> | 
-																			<a class='editRow' href='#'>修改</a> |
-																			<a class='deleteRow' href='#'>删除</a>
 																		</td>
 																	</tr>
 

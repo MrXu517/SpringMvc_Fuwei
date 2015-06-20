@@ -363,11 +363,19 @@ function OrderGrid(settings){
 		
 		var url = Object.url;
 		var tipText = Object.tipText || "当前表格";
+		if(Object.tipTextFunc){
+			tipText = Object.tipTextFunc();
+		}else{
+			if(formdata.id == "" || formdata.id == undefined || formdata.id == null){
+				tipText = "创建" + tipText;
+			}else{
+				tipText = "修改" + tipText;
+			}
+		}
+		
 		if(formdata.id == "" || formdata.id == undefined || formdata.id == null){
 			delete formdata.id;
-			tipText = "创建" + tipText;
 		}else{
-			tipText = "修改" + tipText;
 			url = Object.postUrl || url;
 		}
 		
@@ -394,7 +402,11 @@ function OrderGrid(settings){
 				$submitBtn.button('reset');
 			},
 			error : function(result) {
-				Common.Error(tipText+"失败：" + result.responseText);
+				Common.Error(tipText+"失败：" + result.responseText,function(){
+					if(Object.failcall){
+						Object.failcall(result);
+					}
+				});
 				$submitBtn.button('reset');
 			}
 

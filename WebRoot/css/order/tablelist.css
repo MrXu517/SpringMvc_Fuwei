@@ -98,10 +98,10 @@ a.thumbnail{
 #tip .tip_line{
 	text-indent:3em;
 }
-.materialorderWidget,.fuliaoorderWidget,.coloringorderWidget{
+/*.materialorderWidget,.fuliaoorderWidget,.coloringorderWidget{
 	width:1100px;
 	margin:auto;
-}
+}*/
 .materialorderWidget caption,.fuliaoorderWidget caption,.coloringorderWidget caption{
 	margin-bottom:20px;
 }
@@ -129,4 +129,7 @@ input.printcheck{
 }
 #producingorder .priceRequestBtn ,#producingorder .priceCompletedBtn{
 	margin-top:30px;
+}
+.materialorderWidget table>tbody>tr>td,.fuliaoorderWidget table>tbody>tr>td,.coloringorderWidget table>tbody>tr>td{
+	border-color:#000;
 }

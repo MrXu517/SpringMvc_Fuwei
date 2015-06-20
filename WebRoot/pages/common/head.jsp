@@ -102,6 +102,19 @@
 	Boolean h_has_report_material_purchase_detail = SystemCache.hasAuthority(session,"report/material_purchase_detail");
 	Boolean h_has_report_coloring_detail = SystemCache.hasAuthority(session,"report/coloring_detail");
 	
+	
+	//2015-6-16添加仓储系统
+	Boolean h_has_store = SystemCache.hasAuthority(session,"store");
+	Boolean h_has_store_material = SystemCache.hasAuthority(session,"store/material");
+	Boolean h_has_store_half_product = SystemCache.hasAuthority(session,"store/half_product"); //半成品仓库
+	Boolean h_has_store_product = SystemCache.hasAuthority(session,"store/product"); //成品仓库	
+	
+	//2015-6-18添加生产系统
+	Boolean has_producesystem = SystemCache.hasAuthority(session,"producesystem");
+	Boolean has_producing_order_index = SystemCache.hasAuthority(session,"producing_order/index");
+	//2015-6-18添加未划价生产单
+	Boolean has_order_producing_unprice_list = SystemCache.hasAuthority(session,"order/producing/price_edit") || SystemCache.hasAuthority(session,"order/producing/price_request");
+	
 	//权限相关
 	
 %>
@@ -279,7 +292,32 @@
 						</ul>
 					</li>
 					<%} %>
+					<%if(has_producesystem){ %>
+					<li class="li_dropdown">
+						<a href="#"><i class="fa fa-barcode"></i>生产系统<i
+							class="fa fa-angle-down"></i> </a>
+						<ul class="submenu">
 
+							<%if(has_order_producing_unprice_list){ %>
+							<li>
+								<a href="producing_order/unprice_list"><i class="fa fa-warning"></i>未划价生产单</a>
+							</li>
+							<%} %>
+
+							<%if(has_producing_order_index){ %>
+							<li>
+								<a href="producing_order/index"><i class="fa fa-list"></i>查询生产单</a>
+							</li>
+							<%} %>
+
+							<%if(has_producing_order_index){ %>
+							<li>
+								<a href="producing_order/scan"><i class="fa fa-scan"></i>扫描生产单</a>
+							</li>
+							<%} %>
+						</ul>
+					</li>
+					<%} %>
 					<%if(h_has_materialsys){ %>
 					<li class="li_dropdown">
 						<a href="#"><i class="fa fa-barcode"></i>材料系统<i
@@ -289,30 +327,30 @@
 							<%if(h_has_materialsys_purchase){ %>
 							<li>
 								<a href="material_purchase_order/index"><i
-									class="fa fa-sign-in"></i>原材料采购单</a>
+									class="fa fa-sign-in"></i>原材料采购查询</a>
 							</li>
 							<%} %>
 							<%if(h_has_materialsys_purchase_add){ %>
 							<li>
-								<a href="material_purchase_order/add"><i class="fa fa-plus"></i>创建原材料采购单</a>
+								<a href="material_purchase_order/add"><i class="fa fa-plus"></i>采购原材料</a>
 							</li>
 							<%} %>
 
 							<%if(h_has_fuliao_purchase_order_index){ %>
 							<li>
 								<a href="fuliao_purchase_order/index"><i
-									class="fa fa-sign-in"></i>辅料采购单</a>
+									class="fa fa-sign-in"></i>辅料采购查询</a>
 							</li>
 							<%} %>
 							<%if(h_has_fuliao_purchase_order_add){ %>
 							<li>
-								<a href="fuliao_purchase_order/add"><i class="fa fa-plus"></i>创建辅料采购单</a>
+								<a href="fuliao_purchase_order/add"><i class="fa fa-plus"></i>采购辅料</a>
 							</li>
 							<%} %>
 
 							<%if(h_has_coloring_order_index){ %>
 							<li>
-								<a href="coloring_order/index"><i class="fa fa-sign-in"></i>染色单</a>
+								<a href="coloring_order/index"><i class="fa fa-sign-in"></i>染色单查询</a>
 							</li>
 							<%} %>
 							<%if(h_has_coloring_order_add){ %>
@@ -324,7 +362,45 @@
 						</ul>
 					</li>
 					<%} %>
-
+					<%if(h_has_financial){ %>
+					<li class="li_dropdown">
+						<a href="#"><i class="fa fa-list-alt"></i>财务<i
+							class="fa fa-angle-down"></i> </a>
+						<ul class="submenu">
+							<%if(h_has_financial_workspace){ %>
+							<li>
+								<a href="financial/workspace">财务工作台</a>
+							</li>
+							<%} %>
+							<%if(h_has_financial_purchase_invoice){ %>
+							<li>
+								<a href="purchase_invoice/add">进项发票</a>
+							</li>
+							<%} %>
+							<%if(h_has_financial_expense_income){ %>
+							<li>
+								<a href="expense/add">支出</a>
+							</li>
+							<%} %>
+							<%if(h_has_financial_expense_income){ %>
+							<li>
+								<a href="income/add">收入</a>
+							</li>
+							<%} %>
+							<%if(h_has_financial_bank){ %>
+							<li>
+								<a href="bank/index">对方银行账户</a>
+							</li>
+							<%} %>
+							<%if(h_has_financial_subject){ %>
+							<li>
+								<a href="subject/index">科目</a>
+							</li>
+							<%} %>
+							
+						</ul>
+					</li>
+					<%}%>
 					<%if(h_has_report){ %>
 					<li class="li_dropdown">
 						<a href="#"><i class="fa fa-table"></i>报表中心<i
@@ -403,45 +479,7 @@
 						</ul>
 					</li>
 					<%}%>
-					<%if(h_has_financial){ %>
-					<li class="li_dropdown">
-						<a href="#"><i class="fa fa-list-alt"></i>财务<i
-							class="fa fa-angle-down"></i> </a>
-						<ul class="submenu">
-							<%if(h_has_financial_workspace){ %>
-							<li>
-								<a href="financial/workspace">财务工作台</a>
-							</li>
-							<%} %>
-							<%if(h_has_financial_purchase_invoice){ %>
-							<li>
-								<a href="purchase_invoice/add">进项发票</a>
-							</li>
-							<%} %>
-							<%if(h_has_financial_expense_income){ %>
-							<li>
-								<a href="expense/add">支出</a>
-							</li>
-							<%} %>
-							<%if(h_has_financial_expense_income){ %>
-							<li>
-								<a href="income/add">收入</a>
-							</li>
-							<%} %>
-							<%if(h_has_financial_bank){ %>
-							<li>
-								<a href="bank/index">对方银行账户</a>
-							</li>
-							<%} %>
-							<%if(h_has_financial_subject){ %>
-							<li>
-								<a href="subject/index">科目</a>
-							</li>
-							<%} %>
-							
-						</ul>
-					</li>
-					<%}%>
+					
 					<%if(h_has_systeminfo){ %>
 					<li class="li_dropdown">
 						<a href="#"><i class="fa fa-list-alt"></i>系统信息管理<i

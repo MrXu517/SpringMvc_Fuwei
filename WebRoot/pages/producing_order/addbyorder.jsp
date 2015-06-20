@@ -58,7 +58,7 @@
 
 		<link href="css/order/tablelist.css" rel="stylesheet" type="text/css" />
 		<script src="js/order/ordergrid.js" type="text/javascript"></script>
-		<script src="js/order/addproducingorder.js" type="text/javascript"></script>
+		<script src="js/producing_order/addbyorder.js" type="text/javascript"></script>
 
 	</head>
 	<body>
@@ -75,7 +75,7 @@
 							<a href="order/detail/<%=order.getId()%>">订单详情</a>
 						</li>
 						<li>
-							<a href="order/tablelist?orderId=<%=order.getId()%>">表格</a>
+							<a href="order/tablelist?orderId=<%=order.getId()%>&tab=producingorder">表格</a>
 						</li>
 						<li class="active">
 							创建生产单

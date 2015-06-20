@@ -408,7 +408,7 @@
 												业务员
 											</th>
 											<th width="60px">
-												时间
+												付款时间
 											</th>
 											<th width="80px">
 												备注

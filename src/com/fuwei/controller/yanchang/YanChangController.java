@@ -1,4 +1,4 @@
-package com.fuwei.controller;
+package com.fuwei.controller.yanchang;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -46,6 +46,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.constant.Constants;
 import com.fuwei.constant.Holiday;
+import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Employee;
 import com.fuwei.entity.Salary;
 import com.fuwei.util.CompressUtil;

@@ -9,7 +9,7 @@ import net.keepsoft.commons.ListAdapter;
 
 public class Pager {
 	private Integer pageNo = 1;// 
-	private Integer pageSize = 15;// 
+	private Integer pageSize = 25;// 
 	private Integer totalPage = 0;//
 	private Integer totalCount = 0;//
 	private List<?> result;//

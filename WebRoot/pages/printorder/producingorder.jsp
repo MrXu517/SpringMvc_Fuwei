@@ -25,6 +25,7 @@
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<script src="js/plugins/jquery-barcode.min.js"></script>
 		<!-- 为了让IE浏览器运行最新的渲染模式 -->
 	</head>
 	<body>
@@ -41,9 +42,9 @@
 				<div class="col-md-12 tablewidget">
 					<table class="table noborder">
 						<caption id="tablename">
-							桐庐富伟针织厂生产单
+							桐庐富伟针织厂生产单<div table_id="<%=producingOrder.getId() %>" class="id_barcode"></div>
 						</caption>
-						<tr><td colspan="3" class="pull-right">№：<%=order.getOrderNumber() %></td></tr>
+						<tr><td colspan="3" class="pull-right">№：<%=producingOrder.getOrderNumber() %></td></tr>
 					</table>
 
 					<table id="orderTb" class="tableTb">
@@ -69,13 +70,13 @@
 								<td>
 									公司
 								</td>
-								<td><%=SystemCache.getCompanyShortName(order.getCompanyId())%></td>
+								<td><%=SystemCache.getCompanyShortName(producingOrder.getCompanyId())%></td>
 							</tr>
 							<tr>
 								<td>
 									客户
 								</td>
-								<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
+								<td><%=SystemCache.getCustomerName(producingOrder.getCustomerId())%></td>
 							</tr>
 							<tr>
 								<td>
@@ -87,13 +88,13 @@
 								<td>
 									款名
 								</td>
-								<td><%=order.getName()%></td>
+								<td><%=producingOrder.getName()%></td>
 							</tr>
 							<tr>
 								<td>
 									跟单
 								</td>
-								<td><%=SystemCache.getEmployeeName(order.getCharge_employee())%></td>
+								<td><%=SystemCache.getEmployeeName(producingOrder.getCharge_employee())%></td>
 							</tr>
 						</tbody>
 					</table>
@@ -245,4 +246,11 @@
 		</div>
 		<%} %>
 	</body>
+	<script type="text/javascript">
+		$(".id_barcode").each(function(){
+			var id =$(this).attr("table_id");
+			$(this).barcode(id, "code128",{barWidth:2, barHeight:30,showHRI:false});
+		});
+		
+	</script>
 </html>

@@ -3,10 +3,10 @@ $(document).ready(function(){
 //生产单
 	var producingGrid = new OrderGrid({
 		tipText:"生产单",
-		url:"order/producingorder",
+		url:"producing_order/add",
 		$content:$(".body"),
 		donecall:function(){
-		$(".breadcrumb li.active").prev().children("a").click();
+			$(".breadcrumb li.active").prev().children("a").click();
 		},
 		tbOptions:{
 			colnames : [
@@ -39,8 +39,7 @@ $(document).ready(function(){
 					{
 						name :'price',
 						colname :'价格(/个)',
-						width :'15%',
-						className:"input double"
+						width :'15%'
 					}],
 					$dialog:$("#producingDialog")
 		},
@@ -71,7 +70,7 @@ $(document).ready(function(){
 						colname :'操作',
 						width :'15%',
 						displayValue : function(value, rowdata) {
-							return "<a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
+							return "<a class='copyRow' href='#'>复制</a> | <a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
 						}
 					} 
 					],

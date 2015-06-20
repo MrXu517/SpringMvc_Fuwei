@@ -140,13 +140,42 @@ public class ProducingOrderService extends BaseService {
 		}
 	}
 
+	//获取未划价生产单列表
+	public List<ProducingOrder> getUnpriceList(String orderNumber,List<Sort> sortlist) throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			String seq = " WHERE ";
+			
+			sql.append("select * from tb_producingorder ");
+			if (orderNumber != null && !orderNumber.equals("")) {
+				sql.append(seq + " orderNumber='" + orderNumber+ "'");
+				seq = " AND ";
+			}
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql.append(" order by " + sortlist.get(i).getProperty()
+								+ " " + sortlist.get(i).getDirection() + " ");
+					} else {
+						sql.append("," + sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			return dao.queryForBeanList(sql.toString(), ProducingOrder.class);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 	
 	// 获取生产单列表
-	public Pager getList(Pager pager, Date start_time, Date end_time, 
+	public Pager getList(Pager pager, Date start_time, Date end_time,Integer companyId, Integer factoryId,String orderNumber,
 			List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
-			String seq = "WHERE ";
+			String seq = " WHERE ";
 			
 			sql.append("select * from tb_producingorder ");
 
@@ -161,7 +190,20 @@ public class ProducingOrderService extends BaseService {
 						+ "'");
 				seq = " AND ";
 			}
-			
+			if (orderNumber != null && !orderNumber.equals("")) {
+				sql.append(seq + " orderNumber='"
+						+ orderNumber + "'");
+				seq = " AND ";
+			}
+			if (companyId != null) {
+				sql.append(seq + " companyId='" + companyId + "'");
+				seq = " AND ";
+			}
+			if (factoryId != null) {
+				sql.append(seq + " factoryId='" + factoryId + "'");
+				seq = " AND ";
+			}
+
 			
 
 			if (sortlist != null && sortlist.size() > 0) {

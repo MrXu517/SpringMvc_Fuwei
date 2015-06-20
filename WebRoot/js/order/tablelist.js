@@ -73,37 +73,7 @@ $(document).ready(function() {
 		});
 	});
 	
-	$(".priceCompletedBtn").click(function(){
-		$button = $(this);
-		var orderId = $(this).attr("orderid");
-		if(orderId == undefined || orderId == null || orderId == ""){
-			Common.Error("缺少订单ID");
-			return false;
-		}
-		var orderNumber = $(this).attr("ordernumber");
-		if(orderNumber == undefined || orderNumber == null || orderNumber == ""){
-			Common.Error("缺少订单号");
-			return false;
-		}
-		$button.button('loading');
-		$.ajax( {
-			url :"producing_order/price_complete/"+orderId,
-			type :'POST',
-			data :{orderNumber:orderNumber},
-			success : function(result) {
-				if (result.success) {
-					Common.Tip("完成划价成功", function() {
-						
-					});
-				}
-				$button.button('reset');
-			},
-			error : function(result) {
-				Common.Error("完成划价失败：" + result.responseText);
-				$button.button('reset');
-			}
-		});
-	});
+	
 	//2015-4-4添加 生产单 请求划价、完成划价功能
 	
 	
@@ -117,88 +87,18 @@ $(document).ready(function() {
 	var $producingorderTab = $("#producingorder .producingorderWidget");
 	$producingorderTab.each(function(){
 		var $content = $(this);
-		var producingGrid = new OrderGrid({
-			url:"order/producingorder",
-			deleteUrl:"order/delete_producingorder",
+		var coloringGrid = new OrderGrid({
+			url:"producing_order/put",
+			deleteUrl:"producing_order/delete",
 			$content:$content,
 			donecall:function(){
 				var params = Common.urlParams();
 				params.tab = "producingorder";
 				location.href = location.pathname + "?" + $.param(params);
 			},
-			tbOptions:{
-				colnames : [
-						{
-							name :'color',
-							colname :'颜色',
-							width :'15%'
-						},
-						{
-							name :'produce_weight',
-							colname :'机织克重(g)',
-							width :'15%'
-						},
-						{
-							name :'yarn_name',
-							colname :'纱线种类',
-							width :'15%'
-						},
-						{
-							name :'size',
-							colname :'尺寸',
-							width :'15%'
-						},
-						{
-							name :'quantity',
-							colname :'生产数量',
-							width :'15%',
-							className:"int input"
-						},
-						{
-							name :'price',
-							colname :'价格(/个)',
-							width :'15%',
-							className:"double input"
-						}],
-						$dialog:$("#producingDialog")
-			},
-			tbOptions2:{
-				colnames : [
-				        {
-				        	name :'material_name',
-				        	colname :'材料',
-				        	width :'20%'
-				        },
-						{
-							name :'color',
-							colname :'色号',
-							width :'20%'
-						},
-						{
-							name :'quantity',
-							colname :'数量',
-							width :'20%'
-						},
-						{
-							name :'colorsample',
-							colname :'标准色样',
-							width :'25%'
-						},
-						{
-							name :'_handle',
-							colname :'操作',
-							width :'15%',
-							displayValue : function(value, rowdata) {
-								return "<a class='copyRow' href='#'>复制</a> | <a class='editRow' href='#'>修改</a> | <a class='deleteRow' href='#'>删除</a>";
-							}
-						} 
-						],
-				$dialog:$("#producingDetailDialog")
-			}
 			
 		});
 	});
-
 	
 	//计划单
 	var planGrid = new OrderGrid({

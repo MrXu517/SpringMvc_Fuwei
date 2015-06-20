@@ -1,8 +1,9 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
-<%@page import="com.fuwei.entity.Order"%>
+<%@page import="com.fuwei.entity.ordergrid.ProducingOrder"%>
 <%@page import="com.fuwei.entity.Salesman"%>
 <%@page import="com.fuwei.entity.Company"%>
+<%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.entity.User"%>
 <%@page import="com.fuwei.commons.Pager"%>
 <%@page import="com.fuwei.util.DateTool"%>
@@ -18,9 +19,9 @@
 	if (pager == null) {
 		pager = new Pager();
 	}
-	List<Order> orderlist = new ArrayList<Order>();
+	List<ProducingOrder> producingOrderlist = new ArrayList<ProducingOrder>();
 	if (pager != null & pager.getResult() != null) {
-		orderlist = (List<Order>) pager.getResult();
+		producingOrderlist = (List<ProducingOrder>) pager.getResult();
 	}
 
 	Date start_time = (Date) request.getAttribute("start_time");
@@ -34,19 +35,14 @@
 		end_time_str = DateTool.formatDateYMD(end_time);
 	}
 
-	Integer salesmanId = (Integer) request.getAttribute("salesmanId");
+	
 	Integer companyId = (Integer) request.getAttribute("companyId");
 	String company_str = "";
-	String salesman_str = "";
-	if (salesmanId != null) {
-		salesman_str = String.valueOf(salesmanId);
-	}
+	
 	if (companyId != null) {
 		company_str = String.valueOf(companyId);
 	}
-	if (salesmanId == null) {
-		salesmanId = -1;
-	}
+	
 	if (companyId == null) {
 		companyId = -1;
 	}
@@ -57,19 +53,32 @@
 		status_str = String.valueOf(status);
 	}
 	//订单状态status
-	HashMap<String, List<Salesman>> companySalesmanMap = SystemCache
-			.getCompanySalesmanMap_ID();
-	JSONObject jObject = new JSONObject();
-	jObject.put("companySalesmanMap", companySalesmanMap);
-	String companySalesmanMap_str = jObject.toString();
+	
+	//2015-4-4添加
+	Integer factoryId = (Integer) request.getAttribute("factoryId");
+	String factory_str = "";
+	if (factoryId != null) {
+		factory_str = String.valueOf(factoryId);
+	}
+	
+	if (factoryId == null) {
+		factoryId = -1;
+	}
+	
+	//2015-4-16添加orderNumber
+	String orderNumber = (String) request.getAttribute("orderNumber");
+	if (orderNumber == null) {
+		orderNumber = "";
+	}
 
 	//权限相关
 	Boolean has_order_detail = SystemCache.hasAuthority(session,
-			"order/detail");
+			"producing_order/detail");
 	Boolean has_order_edit = SystemCache.hasAuthority(session,
-			"order/edit");
-	Boolean has_order_cancel = SystemCache.hasAuthority(session,
-			"order/cancel");
+			"order/producing");
+	Boolean has_order_delete = SystemCache.hasAuthority(session,
+			"order/producing/delete");
+	
 	//权限相关
 %>
 <!DOCTYPE html>
@@ -77,7 +86,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>订单管理 -- 桐庐富伟针织厂</title>
+		<title>查询生产单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -92,8 +101,13 @@
 		<script src="js/plugins/bootstrap.min.js" type="text/javascript"></script>
 		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
-		<script src="js/order/index.js" type="text/javascript"></script>
+
 		<link href="css/order/index.css" rel="stylesheet" type="text/css" />
+		<style type="text/css">
+			#orderNumber{
+				width:100px;
+			}
+		</style>
 	</head>
 	<body>
 		<%@ include file="../common/head.jsp"%>
@@ -106,7 +120,7 @@
 							<a href="user/index">首页</a>
 						</li>
 						<li class="active">
-							订单列表
+							查询生产单
 						</li>
 					</ul>
 				</div>
@@ -117,32 +131,16 @@
 							<div class="col-md-12 tablewidget">
 								<!-- Table -->
 								<div clas="navbar navbar-default">
-									<form class="form-horizontal searchform form-inline searchform"
+									<form class="form-horizontal form-inline searchform"
 										role="form">
-										
-										<div class="form-group">
-											<label for="status" class="col-sm-3 control-label">
-												状态
+										<input type="hidden" name="page" id="page"
+											value="<%=1%>" />
+										<div class="form-group salesgroup">
+											<label for="number" class="col-sm-3 control-label">
+												订单号
 											</label>
 											<div class="col-sm-9">
-												<select class="form-control" name="status" id="status">
-													<option value="">
-														所有
-													</option>
-													<%
-														for (OrderStatus orderStatus : OrderStatus.values()) {
-															if (status!=null && orderStatus.ordinal() == status) {
-													%>
-													<option value="<%=orderStatus.ordinal()%>" selected><%=orderStatus.getName()%></option>
-													<%
-														} else {
-													%>
-													<option value="<%=orderStatus.ordinal()%>"><%=orderStatus.getName()%></option>
-													<%
-														}
-														}
-													%>
-												</select>
+												<input class="form-control" type="text" name="orderNumber" id="orderNumber" value="<%=orderNumber %>" />
 											</div>
 										</div>
 										<div class="form-group salesgroup">
@@ -150,21 +148,20 @@
 												公司
 											</label>
 											<div class="col-sm-9">
-												<select data='<%=companySalesmanMap_str%>'
-													class="form-control" name="companyId" id="companyId"
+												<select class="form-control" name="companyId" id="companyId"
 													placeholder="公司">
 													<option value="">
 														所有
 													</option>
 													<%
 														for (Company company : SystemCache.companylist) {
-															if (companyId!=null&&companyId == company.getId()) {
+															if (companyId == company.getId()) {
 													%>
-													<option value="<%=company.getId()%>" selected><%=company.getShortname()%></option>
+													<option value="<%=company.getId()%>" selected><%=company.getFullname()%></option>
 													<%
 														} else {
 													%>
-													<option value="<%=company.getId()%>"><%=company.getShortname()%></option>
+													<option value="<%=company.getId()%>"><%=company.getFullname()%></option>
 													<%
 														}
 														}
@@ -173,24 +170,23 @@
 											</div>
 										</div>
 										<div class="form-group salesgroup">
-											<label for="salesmanId" class="col-sm-4 control-label">
-												业务员
+											<label for="factoryId" class="col-sm-3 control-label">
+												采购单位
 											</label>
-											<div class="col-sm-8">
-												<select class="form-control" name="salesmanId"
-													id="salesmanId" placeholder="业务员">
+											<div class="col-sm-9">
+												<select class="form-control" name="factoryId" id="factoryId">
 													<option value="">
 														所有
 													</option>
 													<%
-														for (Salesman salesman : SystemCache.getSalesmanList(companyId)) {
-															if (salesmanId!=null&&salesmanId == salesman.getId()) {
+														for (Factory factory : SystemCache.purchase_factorylist) {
+															if (factoryId == factory.getId()) {
 													%>
-													<option value="<%=salesman.getId()%>" selected><%=salesman.getName()%></option>
+													<option value="<%=factory.getId()%>" selected><%=factory.getName()%></option>
 													<%
 														} else {
 													%>
-													<option value="<%=salesman.getId()%>"><%=salesman.getName()%></option>
+													<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
 													<%
 														}
 														}
@@ -198,6 +194,7 @@
 												</select>
 											</div>
 										</div>
+
 										<div class="form-group timegroup">
 											<label class="col-sm-3 control-label">
 												创建时间
@@ -217,10 +214,10 @@
 											</div>
 										</div>
 									</form>
-									<ul class="pagination">
+									<ul class="pagination pull-right">
 										<li>
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
+												href="producing_order/index?orderNumber=<%=orderNumber %>&factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
 										</li>
 
 										<%
@@ -228,7 +225,7 @@
 									%>
 										<li class="">
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
+												href="producing_order/index?orderNumber=<%=orderNumber %>&factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -243,7 +240,7 @@
 
 										<li class="active">
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
+												href="producing_order/index?orderNumber=<%=orderNumber %>&factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
 												class="sr-only"></span> </a>
 										</li>
 										<li>
@@ -253,7 +250,7 @@
 										
 										<li class="">
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
+												href="producing_order/index?orderNumber=<%=orderNumber %>&factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -269,50 +266,41 @@
 										</li>
 										<li>
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
+												href="producing_order/index?orderNumber=<%=orderNumber %>&factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
-									
+
 								</div>
-								
+
 								<table class="table table-responsive">
 									<thead>
-										<tr>
-											<th width="20px">
-												No.
+											<tr>
+											<th width="30px">
+												序号
 											</th>
 											<th width="110px">样品</th>
-											<th width="70px">
+											<th width="60px">
+												生产单位
+											</th>
+											<th width="60px">
 												订单号
 											</th>
-											<th width="55px">
-												状态
+											<th width="80px">
+												款名
 											</th>
-											<th width="70px">
-												总金额
-											</th>
-											<th width="120px">
-												订单信息
-											</th>
-											<th width="55px">
+											<th width="50px">
 												公司
 											</th>
-											<th width="55px">
-												业务员
+											<th width="50px">
+												客户
 											</th>
-											<th width="60px">
-												创建用户
-											</th>
-											<th width="60px">
-												生效时间
-											</th>
-											<th width="60px">
-												截止时间
+											<th width="50px">
+												跟单
 											</th>
 											<th width="60px">
 												创建时间
 											</th>
-											<th  width="60px">
+											<th width="70px">
 												操作
 											</th>
 										</tr>
@@ -320,67 +308,61 @@
 									<tbody>
 										<%
 											int i = (pager.getPageNo()-1) * pager.getPageSize() + 0;
-											for (Order order : orderlist) {
+											for (ProducingOrder item : producingOrderlist) {
 										%>
-										<tr orderId="<%=order.getId()%>">
+										<tr orderId="<%=item.getId()%>">
 											<td><%=++i%></td>
 											<td
 												style="max-width: 120px; height: 120px; max-height: 120px;">
 												<a target="_blank" class="cellimg"
-													href="/<%=order.getImg()%>"><img
+													href="/<%=item.getImg()%>"><img
 														style="max-width: 120px; height: 120px; max-height: 120px;"
-														src="/<%=order.getImg_ss()%>"> </a>
+														src="/<%=item.getImg_ss()%>"> </a>
 											</td>
-											<td><%=order.getOrderNumber()%></td>
-											<td><%if(order.getStatus() == OrderStatus.CANCEL.ordinal()){ %>
-												<span class="label label-default">已取消</span>
-											<%}else if(order.getStatus() == OrderStatus.DELIVERED.ordinal()){ %>
-												<span class="label label-primary">已发货</span>
-											<%}else if(order.isCompleted()){ %>
-												<span class="label label-success">交易已完成</span>
-											<%}else{ %>
-												<%=order.getState()%>
-											<%} %>
-											</td>
-											<td><%=order.getAmount()%></td>
-											<td><%=order.getInfo()%></td>
-											<td><%=SystemCache.getCompanyShortName(order
-										.getCompanyId())%></td>
-											<td><%=SystemCache.getSalesmanName(order.getSalesmanId())%></td>
-											<td><%=SystemCache.getUserName(order
-										.getCreated_user())%></td>
-											<td><%=DateTool.formatDateYMD(order.getStart_at())%></td>
-											<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
-											<td><%=DateTool.formatDateYMD(order.getCreated_at())%></td>
+											<td><%=SystemCache.getFactoryName(item.getFactoryId())%></td>
+											<td><a target="_blank"
+													href="order/tablelist?orderId=<%=item.getOrderId()%>&tab=producingorder"><%=item.getOrderNumber() == null ? "":item.getOrderNumber() %></a></td>
+											<td><%=item.getName()%></td>
+											<td><%=SystemCache.getCompanyShortName(item.getCompanyId())%></td>
+											<td><%=SystemCache.getCustomerName(item.getCustomerId())%></td>
+											<td><%=SystemCache.getEmployeeName(item
+										.getCharge_employee())%></td>
+										
+											<td><%=DateTool.formatDateYMD(item.getCreated_at())%></td>
 											<td>
 												<%
 													if (has_order_detail) {
 												%>
-												<a href="order/detail/<%=order.getId()%>">详情</a>
+												<a target="_blank"
+													href="producing_order/detail/<%=item.getId()%>">详情</a>
 												<%
 													}
 												%>
 												<%
-												if(order.getIn_use()){
-													if (has_order_edit && order.isEdit()) {
+												
+													if (has_order_edit && item.isEdit()) {
 												%>
-													<br>
-													<a href="order/put/<%=order.getId()%>">编辑</a>
-													<%
-														}
-													%>
-													<%
-														if (has_order_cancel && order.isCancelable()) {
-													%>
-													<br>
-													<a data-cid="<%=order.getId()%>" class="delete" href="#">取消订单</a>
+												|
+												<a
+													href="producing_order/put/<%=item.getId()%>">编辑</a>
 												<%
 														}
-													}
+													%>
+												<%
+												
+													if (has_order_delete && item.deletable()) {
 												%>
+												|
+												<a href="#" data-cid="<%=item.getId() %>"
+													class="delete">删除</a>
+												<%
+														}
+													%>
 
 											</td>
 										</tr>
+
+									
 										<%
 											}
 										%>
@@ -393,5 +375,34 @@
 				</div>
 			</div>
 		</div>
+
+		<script type="text/javascript">
+	/*设置当前选中的页*/
+	var $a = $("#left li a[href='producing_order/index']");
+	setActiveLeft($a.parent("li"));
+	//删除单据 -- 开始
+	$(".delete").click( function() {
+		var id = $(this).attr("data-cid");
+		if (!confirm("确定要删除该生产单吗？")) {
+			return false;
+		}
+		$.ajax( {
+			url :"producing_order/delete/" + id,
+			type :'POST'
+		}).done( function(result) {
+			if (result.success) {
+				Common.Tip("删除生产单成功", function() {
+					location.reload();
+				});
+			}
+		}).fail( function(result) {
+			Common.Error("删除生产单失败：" + result.responseText);
+		}).always( function() {
+
+		});
+		return false;
+	});
+	//删除单据  -- 结束
+</script>
 	</body>
 </html>

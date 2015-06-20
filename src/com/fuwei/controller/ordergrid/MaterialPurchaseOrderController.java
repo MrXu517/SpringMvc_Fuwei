@@ -1,4 +1,4 @@
-package com.fuwei.controller;
+package com.fuwei.controller.ordergrid;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,29 +25,30 @@ import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.constant.Constants;
 import com.fuwei.constant.ERROR;
-import com.fuwei.constant.OrderStatus;
+import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Order;
-import com.fuwei.entity.OrderDetail;
-import com.fuwei.entity.OrderProduceStatus;
-import com.fuwei.entity.OrderStep;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
 import com.fuwei.entity.ordergrid.FuliaoPurchaseOrder;
-import com.fuwei.entity.ordergrid.FuliaoPurchaseOrderDetail;
 import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
+import com.fuwei.entity.ordergrid.MaterialPurchaseOrderDetail;
+import com.fuwei.entity.ordergrid.PlanOrder;
+import com.fuwei.entity.ordergrid.PlanOrderDetail;
+import com.fuwei.entity.ordergrid.ProducingOrder;
+import com.fuwei.entity.ordergrid.ProducingOrderDetail;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.OrderService;
 import com.fuwei.service.SampleService;
-import com.fuwei.service.ordergrid.FuliaoPurchaseOrderService;
+import com.fuwei.service.ordergrid.MaterialPurchaseOrderService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
 
-@RequestMapping("/fuliao_purchase_order")
+@RequestMapping("/material_purchase_order")
 @Controller
-public class FuliaoPurchaseOrderController extends BaseController {
+public class MaterialPurchaseOrderController extends BaseController {
 	
 	@Autowired
-	FuliaoPurchaseOrderService fuliaoPurchaseOrderService;
+	MaterialPurchaseOrderService materialPurchaseOrderService;
 	@Autowired
 	OrderService orderService;
 	@Autowired
@@ -61,10 +62,10 @@ public class FuliaoPurchaseOrderController extends BaseController {
 			String sortJSON, HttpSession session, HttpServletRequest request)
 			throws Exception {
 
-		String lcode = "fuliao_purchase_order/index";
+		String lcode = "material_purchase_order/index";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有查看辅料采购单列表的权限", null);
+			throw new PermissionDeniedDataAccessException("没有查看原材料采购单列表的权限", null);
 		}
 
 		Date start_time_d = DateTool.parse(start_time);
@@ -85,9 +86,9 @@ public class FuliaoPurchaseOrderController extends BaseController {
 		sort.setDirection("desc");
 		sort.setProperty("created_at");
 		sortList.add(sort);
-		pager = fuliaoPurchaseOrderService.getList(pager, start_time_d, end_time_d,companyId,factoryId,number, sortList);
+		pager = materialPurchaseOrderService.getList(pager, start_time_d, end_time_d,companyId,factoryId,number, sortList);
 		if (pager != null & pager.getResult() != null) {
-			List<FuliaoPurchaseOrder> orderlist = (List<FuliaoPurchaseOrder>) pager.getResult();
+			List<MaterialPurchaseOrder> orderlist = (List<MaterialPurchaseOrder>) pager.getResult();
 		}
 
 		request.setAttribute("start_time", start_time_d);
@@ -96,7 +97,7 @@ public class FuliaoPurchaseOrderController extends BaseController {
 		request.setAttribute("factoryId", factoryId);
 		request.setAttribute("number", number);
 		request.setAttribute("pager", pager);
-		return new ModelAndView("fuliao_purchase_order/index");
+		return new ModelAndView("material_purchase_order/index");
 	}
 	
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
@@ -104,13 +105,13 @@ public class FuliaoPurchaseOrderController extends BaseController {
 	public ModelAndView addproducingorder(HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "fuliao_purchase_order/add";
+		String lcode = "material_purchase_order/add";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有添加辅料采购单的权限", null);
+			throw new PermissionDeniedDataAccessException("没有添加原材料采购单的权限", null);
 		}
 		try {
-			return new ModelAndView("fuliao_purchase_order/add");	
+			return new ModelAndView("material_purchase_order/add");	
 			
 		} catch (Exception e) {
 			throw e;
@@ -124,16 +125,16 @@ public class FuliaoPurchaseOrderController extends BaseController {
 			HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "fuliao_purchase_order/add";
+		String lcode = "material_purchase_order/add";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有添加辅料采购单的权限", null);
+			throw new PermissionDeniedDataAccessException("没有添加原材料采购单的权限", null);
 		}
 		try {
 			if(orderId!=null){
 				Order order = orderService.get(orderId);
 				request.setAttribute("order", order);
-				return new ModelAndView("fuliao_purchase_order/addbyorder");
+				return new ModelAndView("material_purchase_order/addbyorder");
 			}
 			throw new Exception("缺少订单ID");
 			
@@ -144,40 +145,39 @@ public class FuliaoPurchaseOrderController extends BaseController {
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> add(FuliaoPurchaseOrder fuliaoPurchaseOrder, String details,HttpSession session, HttpServletRequest request,
+	public Map<String,Object> add(MaterialPurchaseOrder materialPurchaseOrder, String details,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "fuliao_purchase_order/add";
+		String lcode = "material_purchase_order/add";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有添加辅料采购单的权限", null);
+			throw new PermissionDeniedDataAccessException("没有添加原材料采购单的权限", null);
 		}
 		try {	
-			
-			fuliaoPurchaseOrder.setCreated_at(DateTool.now());// 设置创建时间
-			fuliaoPurchaseOrder.setUpdated_at(DateTool.now());// 设置更新时间
-			fuliaoPurchaseOrder.setCreated_user(user.getId());// 设置创建人
-			Integer sampleId = fuliaoPurchaseOrder.getSampleId();
+			materialPurchaseOrder.setCreated_at(DateTool.now());// 设置创建时间
+			materialPurchaseOrder.setUpdated_at(DateTool.now());// 设置更新时间
+			materialPurchaseOrder.setCreated_user(user.getId());// 设置创建人
+			Integer sampleId = materialPurchaseOrder.getSampleId();
 			if(sampleId != null){
 				Sample sample = sampleService.get(sampleId);
-				fuliaoPurchaseOrder.setImg(sample.getImg());
-				fuliaoPurchaseOrder.setProductNumber(sample.getProductNumber());
-				fuliaoPurchaseOrder.setMaterialId(sample.getMaterialId());
-				fuliaoPurchaseOrder.setSize(sample.getSize());
-				fuliaoPurchaseOrder.setWeight(sample.getWeight());
-				fuliaoPurchaseOrder.setName(sample.getName());
-				fuliaoPurchaseOrder.setImg_s(sample.getImg_s());
-				fuliaoPurchaseOrder.setImg_ss(sample.getImg_ss());
+				materialPurchaseOrder.setImg(sample.getImg());
+				materialPurchaseOrder.setProductNumber(sample.getProductNumber());
+				materialPurchaseOrder.setMaterialId(sample.getMaterialId());
+				materialPurchaseOrder.setSize(sample.getSize());
+				materialPurchaseOrder.setWeight(sample.getWeight());
+				materialPurchaseOrder.setName(sample.getName());
+				materialPurchaseOrder.setImg_s(sample.getImg_s());
+				materialPurchaseOrder.setImg_ss(sample.getImg_ss());
 			}
-			List<FuliaoPurchaseOrderDetail> detaillist = SerializeTool
+			List<MaterialPurchaseOrderDetail> detaillist = SerializeTool
 						.deserializeList(details,
-								FuliaoPurchaseOrderDetail.class);
+								MaterialPurchaseOrderDetail.class);
 			if(detaillist.size() >Constants.MAX_DETAIL_LENGTH ){
 				throw new Exception(ERROR.MAX_DETAIL_LENGTH_ERROR);
 			}
-			fuliaoPurchaseOrder.setDetaillist(detaillist);
-			Integer tableOrderId = fuliaoPurchaseOrderService.add(fuliaoPurchaseOrder);
+			materialPurchaseOrder.setDetaillist(detaillist);
+			Integer tableOrderId = materialPurchaseOrderService.add(materialPurchaseOrder);
 			return this.returnSuccess("id", tableOrderId);
 		} catch (Exception e) {
 			throw e;
@@ -189,14 +189,14 @@ public class FuliaoPurchaseOrderController extends BaseController {
 	@RequestMapping(value = "/addbyorder", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> addbyorder(
-			FuliaoPurchaseOrder tableOrder, String details,
+			MaterialPurchaseOrder tableOrder, String details,
 			HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "order/fuliaopurchase";
+		String lcode = "order/materialpurchase";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有创建或编辑辅料采购单的权限",
+			throw new PermissionDeniedDataAccessException("没有创建或编辑原材料采购单的权限",
 					null);
 		}
 		try {
@@ -207,7 +207,7 @@ public class FuliaoPurchaseOrderController extends BaseController {
 				if (tableOrder.getOrderId() == null
 						|| tableOrder.getOrderId() == 0) {
 					throw new PermissionDeniedDataAccessException(
-							"辅料采购单必须属于一张订单", null);
+							"原材料采购单必须属于一张订单", null);
 				}
 				Order order = orderService.get(tableOrder.getOrderId());
 				if(order == null){
@@ -233,14 +233,14 @@ public class FuliaoPurchaseOrderController extends BaseController {
 				tableOrder.setOrderNumber(order.getOrderNumber());
 				tableOrder.setCharge_employee(order.getCharge_employee());//2015/3/17 添加跟单人
 				
-				List<FuliaoPurchaseOrderDetail> detaillist = SerializeTool
+				List<MaterialPurchaseOrderDetail> detaillist = SerializeTool
 						.deserializeList(details,
-								FuliaoPurchaseOrderDetail.class);
+								MaterialPurchaseOrderDetail.class);
 				if(detaillist.size() >Constants.MAX_DETAIL_LENGTH ){
 					throw new Exception(ERROR.MAX_DETAIL_LENGTH_ERROR);
 				}
 				tableOrder.setDetaillist(detaillist);
-				tableOrderId = fuliaoPurchaseOrderService.add(tableOrder);
+				tableOrderId = materialPurchaseOrderService.add(tableOrder);
 			} else {// 编辑
 				if (tableOrder.getOrderId() == null
 						|| tableOrder.getOrderId() == 0) {
@@ -248,14 +248,14 @@ public class FuliaoPurchaseOrderController extends BaseController {
 							"缺少订单ID", null);
 				}
 				tableOrder.setUpdated_at(DateTool.now());
-				List<FuliaoPurchaseOrderDetail> detaillist = SerializeTool
+				List<MaterialPurchaseOrderDetail> detaillist = SerializeTool
 						.deserializeList(details,
-								FuliaoPurchaseOrderDetail.class);
+								MaterialPurchaseOrderDetail.class);
 				if(detaillist.size() >Constants.MAX_DETAIL_LENGTH ){
 					throw new Exception(ERROR.MAX_DETAIL_LENGTH_ERROR);
 				}
 				tableOrder.setDetaillist(detaillist);
-				tableOrderId = fuliaoPurchaseOrderService.update(tableOrder);
+				tableOrderId = materialPurchaseOrderService.update(tableOrder);
 			}
 			return this.returnSuccess("id", tableOrderId);
 		} catch (Exception e) {
@@ -269,12 +269,12 @@ public class FuliaoPurchaseOrderController extends BaseController {
 	public Map<String,Object> delete(@PathVariable int id,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "fuliao_purchase_order/delete";
+		String lcode = "material_purchase_order/delete";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有删除辅料采购单的权限", null);
+			throw new PermissionDeniedDataAccessException("没有删除原材料采购单的权限", null);
 		}
-		int success = fuliaoPurchaseOrderService.remove(id);
+		int success = materialPurchaseOrderService.remove(id);
 		
 		return this.returnSuccess();
 		
@@ -282,15 +282,15 @@ public class FuliaoPurchaseOrderController extends BaseController {
 	
 	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public FuliaoPurchaseOrder get(@PathVariable int id, HttpSession session,HttpServletRequest request,
+	public MaterialPurchaseOrder get(@PathVariable int id, HttpSession session,HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
-		String lcode = "fuliao_purchase_order/get";
+		String lcode = "material_purchase_order/get";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有查看辅料采购单详情的权限", null);
+			throw new PermissionDeniedDataAccessException("没有查看原材料采购单详情的权限", null);
 		}
-		FuliaoPurchaseOrder fuliaoPurchaseOrder = fuliaoPurchaseOrderService.get(id);
-		return fuliaoPurchaseOrder;
+		MaterialPurchaseOrder materialPurchaseOrder = materialPurchaseOrderService.get(id);
+		return materialPurchaseOrder;
 	}
 	
 	@RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
@@ -298,20 +298,19 @@ public class FuliaoPurchaseOrderController extends BaseController {
 	public ModelAndView detail(@PathVariable Integer id, HttpSession session,
 			HttpServletRequest request) throws Exception {
 		if (id == null) {
-			throw new Exception("缺少辅料采购单ID");
+			throw new Exception("缺少原材料采购单ID");
 		}
-		String lcode = "fuliao_purchase_order/detail";
+		String lcode = "material_purchase_order/detail";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有查看辅料采购单详情的权限", null);
+			throw new PermissionDeniedDataAccessException("没有查看原材料采购单详情的权限", null);
 		}	
-		FuliaoPurchaseOrder fuliaoPurchaseOrder = fuliaoPurchaseOrderService.get(id);
-		
-		List<FuliaoPurchaseOrder> fuliaoPurchaseOrderList = new ArrayList<FuliaoPurchaseOrder>();
-		fuliaoPurchaseOrderList.add(fuliaoPurchaseOrder);
-		request.setAttribute("fuliaoPurchaseOrderList", fuliaoPurchaseOrderList);
+		MaterialPurchaseOrder materialPurchaseOrder = materialPurchaseOrderService.get(id);
+		List<MaterialPurchaseOrder> materialPurchaseOrderList = new ArrayList<MaterialPurchaseOrder>();
+		materialPurchaseOrderList.add(materialPurchaseOrder);
+		request.setAttribute("materialPurchaseOrderList", materialPurchaseOrderList);
 		Map<String,Object> data = new HashMap<String,Object>();  
-	    data.put("gridName","fuliaopurchaseorder");  
+	    data.put("gridName","materialpurchaseorder");  
 		return new ModelAndView("printorder/preview",data);
 	}
 	
@@ -321,19 +320,19 @@ public class FuliaoPurchaseOrderController extends BaseController {
 			HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "fuliao_purchase_order/edit";
+		String lcode = "material_purchase_order/edit";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if (!hasAuthority) {
 			throw new PermissionDeniedDataAccessException("没有添加原材料采购单的权限", null);
 		}
 		try {
 			if(tableOrderId!=null){
-				FuliaoPurchaseOrder fuliaoPurchaseOrder = fuliaoPurchaseOrderService.get(tableOrderId);
-				request.setAttribute("fuliaoPurchaseOrder", fuliaoPurchaseOrder);
-				if(fuliaoPurchaseOrder.getOrderId()!=null){
-					return new ModelAndView("fuliao_purchase_order/editbyorder");
+				MaterialPurchaseOrder materialPurchaseOrder = materialPurchaseOrderService.get(tableOrderId);
+				request.setAttribute("materialPurchaseOrder", materialPurchaseOrder);
+				if(materialPurchaseOrder.getOrderId()!=null){
+					return new ModelAndView("material_purchase_order/editbyorder");
 				}else{
-					return new ModelAndView("fuliao_purchase_order/edit");
+					return new ModelAndView("material_purchase_order/edit");
 				}
 				
 			}
@@ -346,23 +345,23 @@ public class FuliaoPurchaseOrderController extends BaseController {
 	
 	@RequestMapping(value = "/put", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> update(FuliaoPurchaseOrder fuliaoPurchaseOrder, String details,HttpSession session, HttpServletRequest request,
+	public Map<String,Object> update(MaterialPurchaseOrder materialPurchaseOrder, String details,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "fuliao_purchase_order/edit";
+		String lcode = "material_purchase_order/edit";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有编辑辅料采购单的权限", null);
+			throw new PermissionDeniedDataAccessException("没有编辑原材料采购单的权限", null);
 		}
-		fuliaoPurchaseOrder.setUpdated_at(DateTool.now());
-		List<FuliaoPurchaseOrderDetail> detaillist = SerializeTool
+		materialPurchaseOrder.setUpdated_at(DateTool.now());
+		List<MaterialPurchaseOrderDetail> detaillist = SerializeTool
 				.deserializeList(details,
-						FuliaoPurchaseOrderDetail.class);
+						MaterialPurchaseOrderDetail.class);
 		if(detaillist.size() >Constants.MAX_DETAIL_LENGTH ){
 			throw new Exception(ERROR.MAX_DETAIL_LENGTH_ERROR);
 		}
-		fuliaoPurchaseOrder.setDetaillist(detaillist);
-		Integer tableOrderId = fuliaoPurchaseOrderService.update(fuliaoPurchaseOrder);
+		materialPurchaseOrder.setDetaillist(detaillist);
+		Integer tableOrderId = materialPurchaseOrderService.update(materialPurchaseOrder);
 		return this.returnSuccess("id", tableOrderId);
 		
 	}
@@ -372,23 +371,21 @@ public class FuliaoPurchaseOrderController extends BaseController {
 	public ModelAndView print(@PathVariable Integer id, HttpSession session,
 			HttpServletRequest request) throws Exception {
 		if (id == null) {
-			throw new Exception("缺少辅料采购单ID");
+			throw new Exception("缺少原材料采购单ID");
 		}
-		String lcode = "fuliao_purchase_order/detail";
+//		String lcode = "material_purchase_order/detail";
 //		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 //		if (!hasAuthority) {
-//			throw new PermissionDeniedDataAccessException("没有查看辅料采购单详情的权限", null);
+//			throw new PermissionDeniedDataAccessException("没有查看原材料采购单详情的权限", null);
 //		}	
-		FuliaoPurchaseOrder fuliaoPurchaseOrder = fuliaoPurchaseOrderService.get(id);
-		
-		List<FuliaoPurchaseOrder> fuliaoPurchaseOrderList = new ArrayList<FuliaoPurchaseOrder>();
-		fuliaoPurchaseOrderList.add(fuliaoPurchaseOrder);
-		request.setAttribute("fuliaoPurchaseOrderList", fuliaoPurchaseOrderList);
+		MaterialPurchaseOrder materialPurchaseOrder = materialPurchaseOrderService.get(id);
+		List<MaterialPurchaseOrder> materialPurchaseOrderList = new ArrayList<MaterialPurchaseOrder>();
+		materialPurchaseOrderList.add(materialPurchaseOrder);
+		request.setAttribute("materialPurchaseOrderList", materialPurchaseOrderList);
 		Map<String,Object> data = new HashMap<String,Object>();  
-	    data.put("gridName","fuliaopurchaseorder");  
+	    data.put("gridName","materialpurchaseorder");  
 		return new ModelAndView("printorder/print",data);
 	}
 	
 	
 }
-
