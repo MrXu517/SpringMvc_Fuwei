@@ -82,9 +82,9 @@
 													</label>
 													<div class="col-sm-8">
 														<input type="radio" class=""
-															name="in_out" id="in_out1" value="0">收入
+															name="in_out" id="in_out1" value="1">收入
 														<input type="radio" class=""
-															name="in_out" id="in_out2" value="1" checked>支出
+															name="in_out" id="in_out2" value="0" checked>支出
 													</div>
 													<div class="col-sm-1"></div>
 												</div>
