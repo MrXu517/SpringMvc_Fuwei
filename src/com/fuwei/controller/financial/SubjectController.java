@@ -65,7 +65,8 @@ public class SubjectController extends BaseController {
 		subject.setUpdated_at(DateTool.now());
 		subject.setCreated_user(user.getId());
 		int success = subjectService.add(subject);
-		
+		//更新缓存
+		SystemCache.initSubjectList();
 		return this.returnSuccess();
 		
 	}
@@ -81,6 +82,8 @@ public class SubjectController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有删除科目的权限", null);
 		}
 		int success = subjectService.remove(id);
+		//更新缓存
+		SystemCache.initSubjectList();
 		return this.returnSuccess();
 		
 	}
@@ -110,6 +113,8 @@ public class SubjectController extends BaseController {
 		}
 		subject.setUpdated_at(DateTool.now());
 		int success = subjectService.update(subject);
+		//更新缓存
+		SystemCache.initSubjectList();
 		
 		return this.returnSuccess();
 		
