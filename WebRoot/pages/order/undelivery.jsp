@@ -107,6 +107,16 @@
 #breadcrumbs {
 	min-width: 0;
 }
+#Tb{
+	border-color:#000;
+}
+#Tb>thead>tr{
+	  background: #AEADAD;
+}
+#Tb>thead>tr>th,#Tb>tbody>tr>td{
+	border-color:#000;
+	border-bottom-width: 1px;
+}
 </style>
 	</head>
 	<body>
@@ -290,7 +300,7 @@
 
 								</div>
 
-								<table class="table table-responsive">
+								<table class="table table-responsive table-bordered" id="Tb">
 									<thead>
 										<tr>
 											<th width="20px">
