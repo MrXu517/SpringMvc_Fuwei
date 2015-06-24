@@ -11,6 +11,7 @@
 <%@page import="com.fuwei.constant.OrderStatus"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="net.sf.json.JSONObject"%>
+<%@page import="com.fuwei.util.SerializeTool"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -63,6 +64,8 @@
 	//权限相关
 	Boolean has_order_detail = SystemCache.hasAuthority(session,
 			"order/detail");
+	Boolean has_order_memo = SystemCache.hasAuthority(session,
+			"order/edit/memo");
 	//权限相关
 	
 	List<Employee> employeelist = new ArrayList<Employee>();
@@ -98,6 +101,7 @@
 		<script src="js/plugins/bootstrap.min.js" type="text/javascript"></script>
 		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
+		<script src="js/order/undelivery.js" type="text/javascript"></script>
 		<link href="css/order/index.css" rel="stylesheet" type="text/css" />
 		<style type="text/css">
 .body {
@@ -116,6 +120,9 @@
 #Tb>thead>tr>th,#Tb>tbody>tr>td{
 	border-color:#000;
 	border-bottom-width: 1px;
+}
+.memoform #memo{
+	height:200px;
 }
 </style>
 	</head>
@@ -309,7 +316,7 @@
 											<th width="120px">
 												样品
 											</th>
-											<th width="70px">
+											<th width="60px">
 												订单号
 											</th>
 											<th width="110px">
@@ -319,7 +326,7 @@
 											</th><th width="60px">
 												数量
 											</th>
-											<th width="100px">
+											<th width="70px">
 												截止时间
 											</th>
 											<th width="60px">
@@ -331,8 +338,11 @@
 											<th width="60px">
 												跟单人
 											</th>
+											<th width="100px">
+												备注
+											</th>
 											
-											<th width="50px">
+											<th width="60px">
 												操作
 											</th>
 										</tr>
@@ -341,6 +351,7 @@
 										<%
 											int i = (pager.getPageNo()-1) * pager.getPageSize() + 0;
 											for (Order order : orderlist) {
+												String order_json = SerializeTool.serialize(order);
 												List<OrderDetail> detailist = order.getDetaillist();
 												int detailsize = detailist.size();
 												String ordertrclass = "";
@@ -351,7 +362,7 @@
 												}
 										%>
 									
-										<tr orderId="<%=order.getId()%>" class="<%=ordertrclass %>">
+										<tr data='<%=order_json%>' orderId="<%=order.getId()%>" class="<%=ordertrclass %>">
 											<td rowspan="<%=detailsize %>"><%=++i%></td>
 											<td rowspan="<%=detailsize %>"
 												style="max-width: 120px; height: 120px; max-height: 120px;">
@@ -376,12 +387,19 @@
 											<td rowspan="<%=detailsize %>"><%=SystemCache.getSalesmanName(order.getSalesmanId())%></td>
 											<td rowspan="<%=detailsize %>"><%=SystemCache.getEmployeeName(order
 										.getCharge_employee())%></td>
-											
+											<td rowspan="<%=detailsize %>"><%=order.getMemo()%></td>
 											<td rowspan="<%=detailsize %>">
 												<%
 													if (has_order_detail) {
 												%>
 												<a href="order/detail/<%=order.getId()%>">详情</a>
+												<%
+													}
+												%>
+												<br><%
+													if (has_order_memo) {
+												%>
+												<a class="editmemo" href="#">修改备注</a>
 												<%
 													}
 												%>
@@ -404,11 +422,48 @@
 				</div>
 			</div>
 		</div>
-		<script type="text/javascript">
-	/* 设置当前选中的页 */
-	var $a = $("#left li a[href='order/undelivery']");
-	setActiveLeft($a.parent("li"));
-	/* 设置当前选中的页 */
-</script>
+					<!-- 修改备注对话框 -->
+					<div class="modal fade" id="memoDialog">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">
+										<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+									</button>
+									<h4 class="modal-title">
+										修改备注，订单号：<span id="orderNumber"></span>，品名：<span id="sampleName"></span>
+									</h4>
+								</div>
+								<div class="modal-body">
+									<form class="form-horizontal memoform" role="form">
+										<div class="form-group col-md-12">
+											<label for="memo" class="col-sm-3 control-label">
+												备注
+											</label>
+											<div class="col-sm-8">
+												<input type="hidden" name="id"/>
+												<textarea name="memo" id="memo"
+													class="form-control" ></textarea>
+											</div>
+											<div class="col-sm-1"></div>
+										</div>
+
+										<div class="modal-footer">
+											<button type="submit" class="btn btn-primary"
+												data-loading-text="正在保存...">
+												保存
+											</button>
+											<button type="button" class="btn btn-default"
+												data-dismiss="modal">
+												关闭
+											</button>
+										</div>
+									</form>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<!-- 修改备注对话框 -->
 	</body>
 </html>

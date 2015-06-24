@@ -1116,6 +1116,50 @@ public class OrderController extends BaseController {
 		}
 
 	}
+	
+	
+	@RequestMapping(value = "/edit/memo", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> editMemo(Integer id, String memo,HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/edit/memo";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有修改订单备注的权限", null);
+		}
+		if(id == null){
+			throw new Exception("订单号为空");
+		}
+		try {
+			Order db_order = orderService.get(id);
+			
+			if (db_order.getStatus() >= OrderStatus.DELIVERED.ordinal()) {
+				throw new Exception("订单已进入发货阶段，无法编辑");
+			}
+
+			db_order.setUpdated_at(DateTool.now());// 设置订单更新时间
+			memo = memo + "(" + user.getName() + ",于" + DateTool.formatDateYMD(DateTool.now())+ ")" ;//备注  = 备注 + 修改人 + 修改时间
+			db_order.setMemo(memo);//设置新的备注
+			
+			// 添加操作记录
+			OrderHandle handle = new OrderHandle();
+			handle.setOrderId(db_order.getId());
+			handle.setName("待发货列表 -- 修改订单备注");
+			handle.setState(db_order.getState());
+			handle.setStatus(db_order.getStatus());
+			handle.setCreated_at(DateTool.now());
+			handle.setCreated_user(user.getId());
+
+			id = orderService.update(db_order, handle);
+			return this.returnSuccess("id", id);
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+
+	
 	/*
 	 * @RequestMapping(value = "/headbank", method = RequestMethod.POST)
 	 * 
