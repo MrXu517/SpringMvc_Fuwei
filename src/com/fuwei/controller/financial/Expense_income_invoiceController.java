@@ -91,7 +91,8 @@ public class Expense_income_invoiceController extends BaseController {
 				item.setCreated_user(user.getId());
 				item.setInvoice_id(invoice.getId());
 				item.setExpense_income_id(expense_income.getId());
-				double amount = Math.min(expense_income.getAmount() - expense_income.getInvoice_amount(), invoice.getAmount() - invoice.getMatch_amount());
+//				double amount = Math.min(expense_income.getAmount() - expense_income.getInvoice_amount(), invoice.getAmount() - invoice.getMatch_amount());
+				double amount = expense_income.getAmount() - expense_income.getInvoice_amount();
 				item.setAmount(amount);
 				resultList.add(item);
 			}
@@ -150,9 +151,9 @@ public class Expense_income_invoiceController extends BaseController {
 			double value = NumberUtil.formateDouble(to_be_match_invoice_amount,2);
 			Expense_income temp = Expense_incomeList.get(i);
 			double value_i = NumberUtil.formateDouble(temp.getAmount() - temp.getInvoice_amount(),2);
-			if( value_i > value){
-				continue;
-			}
+//			if( value_i > value){
+//				continue;
+//			}
 			Expense_incomeNSum(Expense_incomeList,i,0,value,tempList,one_to_many_Result);
 		}
 		
@@ -352,6 +353,21 @@ public class Expense_income_invoiceController extends BaseController {
 				continue;
 			}
 			if(temp_sum > value){//若值>value,则返回 false
+				templist.add(item);
+				int indexOf = templist.size()-1;
+				Expense_incomeNSum(list,j+1,temp_sum , value ,templist,mapResult);
+				
+				if(indexOf <= 0){
+					return ; 
+				}else{
+					List<Expense_income> alist  = new ArrayList<Expense_income>();
+
+					for(int k = 0; k < indexOf;++k){
+						alist.add(templist.get(k));
+					}
+					templist = alist;
+				}
+				
 				continue;
 			}
 		}

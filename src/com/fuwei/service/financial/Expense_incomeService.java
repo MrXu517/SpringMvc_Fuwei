@@ -41,7 +41,7 @@ public class Expense_incomeService extends BaseService {
 	public List<Expense_income> getInvoiceList(Integer bank_id,boolean in_out) throws Exception{
 		try {
 			List<Expense_income> Expense_incomeList = dao.queryForBeanList(
-					"SELECT * FROM tb_expense_income WHERE bank_id=? and amount>invoice_amount and in_out=?", Expense_income.class,bank_id,in_out);
+					"SELECT * FROM tb_expense_income WHERE bank_id=? and amount<>invoice_amount and in_out=?", Expense_income.class,bank_id,in_out);
 			return Expense_incomeList;
 		} catch (Exception e) {
 			throw e;
