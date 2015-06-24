@@ -1,6 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
 <%@page import="com.fuwei.entity.Order"%>
+<%@page import="com.fuwei.entity.OrderDetail"%>
 <%@page import="com.fuwei.entity.Salesman"%>
 <%@page import="com.fuwei.entity.Company"%>
 <%@page import="com.fuwei.entity.User"%>
@@ -303,6 +304,13 @@
 											</th>
 											<th width="110px">
 												订单信息
+											</th><th width="50px">
+												颜色
+											</th><th width="60px">
+												数量
+											</th>
+											<th width="100px">
+												截止时间
 											</th>
 											<th width="60px">
 												公司
@@ -312,9 +320,6 @@
 											</th>
 											<th width="60px">
 												跟单人
-											</th>
-											<th width="100px">
-												截止时间
 											</th>
 											
 											<th width="50px">
@@ -326,41 +331,43 @@
 										<%
 											int i = (pager.getPageNo()-1) * pager.getPageSize() + 0;
 											for (Order order : orderlist) {
+												List<OrderDetail> detailist = order.getDetaillist();
+												int detailsize = detailist.size();
+												String ordertrclass = "";
+												if(order.isOverEnded()){
+													ordertrclass = "alert-danger";
+												}else if(order.isPre30()){
+													ordertrclass = "alert-warning";
+												}
 										%>
-										<%if(order.isOverEnded()){ %>
-										<tr orderId="<%=order.getId()%>" class="alert-danger">
-											<%}else if(order.isPre30()){ %>
-										
-										<tr orderId="<%=order.getId()%>" class="alert-warning">
-											<%}else{ %>
-										
-										<tr orderId="<%=order.getId()%>">
-											<%} %>
-											<td><%=++i%></td>
-											<td
+									
+										<tr orderId="<%=order.getId()%>" class="<%=ordertrclass %>">
+											<td rowspan="<%=detailsize %>"><%=++i%></td>
+											<td rowspan="<%=detailsize %>"
 												style="max-width: 120px; height: 120px; max-height: 120px;">
 												<a target="_blank" class="cellimg"
 													href="/<%=order.getImg()%>"><img
 														style="max-width: 120px; height: 120px; max-height: 120px;"
 														src="/<%=order.getImg_ss()%>"> </a>
 											</td>
-											<td><%=order.getOrderNumber()%></td>
-											<td><%=order.getInfo()%></td>
-											<td><%=SystemCache.getCompanyShortName(order
-										.getCompanyId())%></td>
-											<td><%=SystemCache.getSalesmanName(order.getSalesmanId())%></td>
-											<td><%=SystemCache.getEmployeeName(order
-										.getCharge_employee())%></td>
+											<td rowspan="<%=detailsize %>"><%=order.getOrderNumber()%></td>
+											<td rowspan="<%=detailsize %>"><%=order.getInfo()%></td>
+											<td><%=detailist.get(0).getColor() %></td><td><%=detailist.get(0).getQuantity() %></td>
 
-											<td><%=DateTool.formatDateYMD(order.getEnd_at())%><br>
+											<td rowspan="<%=detailsize %>"><%=DateTool.formatDateYMD(order.getEnd_at())%><br>
 												<%if(order.isOverEnded()){ %>
 												<span class="label label-danger">已超期</span>
 												<%}else if(order.isPre30()){ %>
 												<span class="label label-warning">交货时间<=30天</span>
 												<%} %>
 											</td>
+											<td rowspan="<%=detailsize %>"><%=SystemCache.getCompanyShortName(order
+										.getCompanyId())%></td>
+											<td rowspan="<%=detailsize %>"><%=SystemCache.getSalesmanName(order.getSalesmanId())%></td>
+											<td rowspan="<%=detailsize %>"><%=SystemCache.getEmployeeName(order
+										.getCharge_employee())%></td>
 											
-											<td>
+											<td rowspan="<%=detailsize %>">
 												<%
 													if (has_order_detail) {
 												%>
@@ -370,7 +377,11 @@
 												%>
 
 											</td>
-										</tr>
+										</tr><%
+										detailist.remove(0);
+										for(OrderDetail detail : detailist){ %>
+										<tr class="<%=ordertrclass %>"><td><%=detail.getColor() %></td><td><%=detail.getQuantity() %></td></tr>
+										<%} %>
 										<%
 											}
 										%>
