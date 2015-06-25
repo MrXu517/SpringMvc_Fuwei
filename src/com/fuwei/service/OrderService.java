@@ -92,7 +92,10 @@ public class OrderService extends BaseService {
 	@Autowired
 	ColoringProcessOrderService coloringProcessOrderService;
 	
-	
+	//获取所有订单
+	public List<Order> getList(){
+		return dao.queryForBeanList("select * from tb_order", Order.class);
+	}
 	// 获取订单列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,
 			Integer companyId, Integer salesmanId,Integer charge_employee, Integer status,

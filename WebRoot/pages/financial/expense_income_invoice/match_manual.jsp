@@ -119,7 +119,7 @@
 									</thead>
 									<tbody>
 										<%if(expense_income_list==null || expense_income_list.size()<=0){ %>
-										<tr><td colspan="7">未找到符合条件的记录</td></tr>
+										<tr><td colspan="8">未找到符合条件的记录</td></tr>
 										<%}else{
 											int i = 0 ;
 											for (Expense_income temp : expense_income_list) {

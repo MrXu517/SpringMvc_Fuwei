@@ -145,7 +145,8 @@
 												待匹配金额
 											</td>
 											<td>
-												<span class="label label-danger"><%=invoice.getAmount() - invoice.getMatch_amount()%></span>
+												<span class="label label-danger"><%=NumberUtil.formateDouble(
+															invoice.getAmount() - invoice.getMatch_amount(), 2)%></span>
 												<%
 													if (!invoice.isMatched()) {
 												%>

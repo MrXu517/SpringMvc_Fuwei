@@ -329,16 +329,16 @@
 											<th width="70px">
 												截止时间
 											</th>
-											<th width="60px">
+											<th width="50px">
 												公司
 											</th>
-											<th width="60px">
+											<th width="50px">
 												业务员
 											</th>
-											<th width="60px">
+											<th width="50px">
 												跟单人
 											</th>
-											<th width="100px">
+											<th width="120px">
 												备注
 											</th>
 											
@@ -399,7 +399,7 @@
 												<br><%
 													if (has_order_memo) {
 												%>
-												<a class="editmemo" href="#">修改备注</a>
+												<a class="editmemo" href="#">添加备注</a>
 												<%
 													}
 												%>

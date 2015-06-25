@@ -1,5 +1,6 @@
 package com.fuwei.controller;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -1139,7 +1140,12 @@ public class OrderController extends BaseController {
 			}
 
 			db_order.setUpdated_at(DateTool.now());// 设置订单更新时间
-			memo = memo + "(" + user.getName() + ",于" + DateTool.formatDateYMD(DateTool.now())+ ")" ;//备注  = 备注 + 修改人 + 修改时间
+			if(db_order.getMemo() == null || db_order.getMemo().equals("")){
+				memo = memo + "(" + user.getName() + "," + DateTool.formatDateYMD(DateTool.now())+ ")" ;//备注  = 备注 + 修改人 + 修改时间
+			}else{
+				memo = db_order.getMemo() + "，<br>" + memo + "(" + user.getName() + ",于" + DateTool.formatDateYMD(DateTool.now())+ ")" ;//备注  = 备注 + 修改人 + 修改时间
+			}
+			
 			db_order.setMemo(memo);//设置新的备注
 			
 			// 添加操作记录
@@ -1160,6 +1166,38 @@ public class OrderController extends BaseController {
 	}
 
 	
+	//判断是否有 色号、材料、领取人 重复  的  原材料仓库单
+	@RequestMapping(value = "/isrepeat", method = RequestMethod.GET)
+	@ResponseBody
+	public void isRepeat(HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		List<StoreOrder> storeOrderlist = storeOrderService.getList();
+		
+		List<StoreOrder> result = new ArrayList<StoreOrder>();
+		for(StoreOrder order : storeOrderlist){
+			List<StoreOrderDetail> detaillist = order.getDetaillist();
+			if(detaillist == null){
+				continue;
+			}
+		
+			for  ( int  i  =   0 ; i  <  detaillist.size()  -   1 ; i ++ )   { 
+				StoreOrderDetail detail_i = detaillist.get(i);
+			    for  ( int  j  =  detaillist.size()  -   1 ; j  >  i; j -- )   { 
+			    	StoreOrderDetail detail_j = detaillist.get(j);
+			    	if(detail_j.getColor().trim().equals(detail_i.getColor().trim()) && detail_j.getMaterial().equals(detail_i.getMaterial())&& detail_j.getFactoryId().equals(detail_i.getFactoryId()))   { 
+			    		result.add(order);
+			    	} 
+			    } 
+			}
+		}
+			PrintWriter printWriter = response.getWriter();
+			for(StoreOrder storeOrder : result){
+				printWriter.write(storeOrder.getOrderId() + ",");
+			}
+		
+		//request.setAttribute("result", "result");
+	}
 	/*
 	 * @RequestMapping(value = "/headbank", method = RequestMethod.POST)
 	 * 

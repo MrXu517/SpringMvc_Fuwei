@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fuwei.entity.Order;
 import com.fuwei.entity.ordergrid.CarFixRecordOrder;
 import com.fuwei.entity.ordergrid.HeadBankOrder;
 import com.fuwei.entity.ordergrid.HeadBankOrderDetail;
@@ -136,4 +137,9 @@ public class StoreOrderService extends BaseService {
 		}
 	}
 
+	//获取所有原材料仓库单
+	public List<StoreOrder> getList(){
+		return dao.queryForBeanList("select * from tb_storeorder", StoreOrder.class);
+	}
+	
 }

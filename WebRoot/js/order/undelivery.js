@@ -15,7 +15,8 @@ $(document).ready(function(){
 		var data= $.parseJSON($(this).closest("tr").attr("data"));
 		$("#memoDialog #orderNumber").text(data.orderNumber);
 		$("#memoDialog #sampleName").text(data.name);
-		Common.fillForm($(".memoform")[0],data);
+		$(".memoform input[name='id']").val(data.id);
+		$(".memoform #memo").val("");
 		$("#memoDialog").modal();	
 		return false;
 	});

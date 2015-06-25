@@ -506,4 +506,27 @@ public class ProducingOrderController extends BaseController {
 			HttpServletRequest request) throws Exception {
 		return detail(id, session, request);
 	}
+
+	@RequestMapping(value = "/print/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView print(@PathVariable Integer id, HttpSession session,
+			HttpServletRequest request) throws Exception {
+		if (id == null) {
+			throw new Exception("缺少生产单ID");
+		}	
+		ProducingOrder producingOrder = producingOrderService.get(id);
+		if(producingOrder == null){
+			throw new Exception("找不到ID为" + id + "的生产单");
+		}
+		Order order = orderService.get(producingOrder.getOrderId());
+		request.setAttribute("order", order);
+
+		List<ProducingOrder> producingOrderList = new ArrayList<ProducingOrder>();
+		producingOrderList.add(producingOrder);
+		request.setAttribute("producingOrderList", producingOrderList);
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("gridName", "producingorder");
+		return new ModelAndView("printorder/print", data);
+	}
+	
 }
