@@ -82,6 +82,13 @@ public class Expense_income_invoiceController extends BaseController {
 			expense_income_total += expense_income.getAmount() - expense_income.getInvoice_amount();
 		}
 		expense_income_total = NumberUtil.formateDouble(expense_income_total, 2);
+		
+		//若一张发票对应 一项或多项支出
+		Boolean one_many = false;
+		if(invoiceList.size() == 1){
+			one_many = true;
+		}
+		//否则是多张发票对应一项支出，则 one_many = false;
 		for(Invoice invoice : invoiceList){
 			invoice_total += invoice.getAmount() - invoice.getMatch_amount();
 			for(Expense_income expense_income : Expense_incomeList){
@@ -92,7 +99,13 @@ public class Expense_income_invoiceController extends BaseController {
 				item.setInvoice_id(invoice.getId());
 				item.setExpense_income_id(expense_income.getId());
 //				double amount = Math.min(expense_income.getAmount() - expense_income.getInvoice_amount(), invoice.getAmount() - invoice.getMatch_amount());
-				double amount = expense_income.getAmount() - expense_income.getInvoice_amount();
+				double amount = 0 ;
+				if(one_many){//若一张发票对应 一项或多项支出 ， 则取支出的amount值
+					amount = expense_income.getAmount() - expense_income.getInvoice_amount();
+				}
+				else{//否则，取发票的值
+					amount = invoice.getAmount() - invoice.getMatch_amount();
+				}
 				item.setAmount(amount);
 				resultList.add(item);
 			}
