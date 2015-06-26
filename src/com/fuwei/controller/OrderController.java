@@ -1158,7 +1158,7 @@ public class OrderController extends BaseController {
 			handle.setCreated_user(user.getId());
 
 			id = orderService.update(db_order, handle);
-			return this.returnSuccess("id", id);
+			return this.returnSuccess("memo", db_order.getMemo());
 		} catch (Exception e) {
 			throw e;
 		}

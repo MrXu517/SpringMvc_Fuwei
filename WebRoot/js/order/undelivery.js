@@ -23,6 +23,8 @@ $(document).ready(function(){
 	var $submitBtn = $(".memoform").find("[type='submit']");
 	$(".memoform").submit(function(){
 		var formdata = $(this).serializeJson();
+		var orderId = formdata.id;
+		var $selectedTr = $("#Tb>tbody>tr[orderId="+orderId+"]");
 			$submitBtn.button('loading');
 			$.ajax( {
 				url :"order/edit/memo",
@@ -31,7 +33,8 @@ $(document).ready(function(){
 				success : function(result) {
 					if (result.success) {
 						Common.Tip("修改备注成功", function() {
-							location.reload();
+							$selectedTr.find("td.memo").html(result.memo);
+							$("#memoDialog").modal("hide");	
 						});
 					}
 					$submitBtn.button('reset');

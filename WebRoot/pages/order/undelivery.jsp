@@ -387,7 +387,7 @@
 											<td rowspan="<%=detailsize %>"><%=SystemCache.getSalesmanName(order.getSalesmanId())%></td>
 											<td rowspan="<%=detailsize %>"><%=SystemCache.getEmployeeName(order
 										.getCharge_employee())%></td>
-											<td rowspan="<%=detailsize %>"><%=order.getMemo()%></td>
+											<td class="memo" rowspan="<%=detailsize %>"><%=order.getMemo()%></td>
 											<td rowspan="<%=detailsize %>">
 												<%
 													if (has_order_detail) {
