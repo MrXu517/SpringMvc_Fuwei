@@ -115,6 +115,13 @@
 	//2015-6-18添加未划价生产单
 	Boolean has_order_producing_unprice_list = SystemCache.hasAuthority(session,"order/producing/price_edit") || SystemCache.hasAuthority(session,"order/producing/price_request");
 	
+	//2015-6-26添加 原材料工作台, 半成品工作台
+	Boolean has_material_workspace = SystemCache.hasAuthority(session,"producesystem/material_workspace");
+	Boolean has_halfstoreorder_workspace = SystemCache.hasAuthority(session,"producesystem/halfstoreorder_workspace");
+	
+	
+	Boolean has_packing_order_index = SystemCache.hasAuthority(session,"packing_order/index");
+	
 	//权限相关
 	
 %>
@@ -297,7 +304,21 @@
 						<a href="#"><i class="fa fa-barcode"></i>生产系统<i
 							class="fa fa-angle-down"></i> </a>
 						<ul class="submenu">
-
+							<%if(has_packing_order_index){ %>
+							<li>
+								<a href="packing_order/index">查询装箱单</a>
+							</li>
+							<%} %>
+							<%if(has_material_workspace){ %>
+							<li>
+								<a href="material_purchase_order/workspace">原材料工作台</a>
+							</li>
+							<%} %>
+							<%if(has_halfstoreorder_workspace){ %>
+							<li>
+								<a href="half_store_order/workspace">半成品工作台</a>
+							</li>
+							<%} %>
 							<%if(has_order_producing_unprice_list){ %>
 							<li>
 								<a href="producing_order/unprice_list"><i class="fa fa-warning"></i>未划价生产单</a>

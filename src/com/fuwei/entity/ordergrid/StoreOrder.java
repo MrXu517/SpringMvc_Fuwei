@@ -22,13 +22,13 @@ public class StoreOrder extends BaseTableOrder{
 	
 	private String detail_json;
 	
-//	private String detail_2_json;
+	private String detail_2_json;
 	
 	@Temporary
 	private List<StoreOrderDetail> detaillist ;
 	
-//	@Temporary
-//	private List<StoreOrderDetail2> detail_2_list ;
+	@Temporary
+	private List<StoreOrderDetail2> detail_2_list ;
 
 	private Integer status;// 订单状态 -1刚创建  , 6执行完成 ， 7取消
 	private String state;// 订单状态描述
@@ -112,17 +112,17 @@ public class StoreOrder extends BaseTableOrder{
 		this.detail_json = detail_json;
 	}
 
-//	public String getDetail_2_json() {
-//		return detail_2_json;
-//	}
-//
-//	public void setDetail_2_json(String detail_2_json) throws Exception {
-//		if(detail_2_json != null && !detail_2_json.equals("")){
-//			this.setDetail_2_list(SerializeTool.deserializeList(detail_2_json,StoreOrderDetail2.class));
-//		}
-//		
-//		this.detail_2_json = detail_2_json;
-//	}
+	public String getDetail_2_json() {
+		return detail_2_json;
+	}
+
+	public void setDetail_2_json(String detail_2_json) throws Exception {
+		if(detail_2_json != null && !detail_2_json.equals("")){
+			this.setDetail_2_list(SerializeTool.deserializeList(detail_2_json,StoreOrderDetail2.class));
+		}
+		
+		this.detail_2_json = detail_2_json;
+	}
 
 	public List<StoreOrderDetail> getDetaillist() {
 		return detaillist;
@@ -132,13 +132,13 @@ public class StoreOrder extends BaseTableOrder{
 		this.detaillist = detaillist;
 	}
 
-//	public List<StoreOrderDetail2> getDetail_2_list() {
-//		return detail_2_list;
-//	}
-//
-//	public void setDetail_2_list(List<StoreOrderDetail2> detail_2_list) {
-//		this.detail_2_list = detail_2_list;
-//	}
+	public List<StoreOrderDetail2> getDetail_2_list() {
+		return detail_2_list;
+	}
+
+	public void setDetail_2_list(List<StoreOrderDetail2> detail_2_list) {
+		this.detail_2_list = detail_2_list;
+	}
 	
 	
 }

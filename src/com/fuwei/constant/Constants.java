@@ -70,4 +70,7 @@ public class Constants {
 	
 	public static final int MAX_DETAIL_LENGTH = 6;//辅料单、采购单、染色单最多可填一条明细
 	
+	//2015-6-27添加 装箱单存放的path
+	public static final String UPLOADEXCEL_Packing = "resource.fuwei.com/excel/packing/";
+	public static final String UPLOADPDF_Packing = "resource.fuwei.com/pdf/packing/";
 }

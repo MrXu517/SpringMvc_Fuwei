@@ -24,6 +24,7 @@
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<script src="js/plugins/jquery-barcode.min.js"></script>
 		<!-- 为了让IE浏览器运行最新的渲染模式 -->
 	</head>
 	<body class="">
@@ -32,7 +33,7 @@
 				<div class="col-md-12 tablewidget">
 					<table class="table noborder">
 						<caption id="tablename">
-							桐庐富伟针织厂原材料记录单
+							桐庐富伟针织厂原材料记录单<div table_id="<%=storeOrder.getId() %>" class="id_barcode"></div>
 						</caption>
 						<tr><td colspan="3" class="pull-right">№：<%=order.getOrderNumber() %></td></tr>
 					</table>
@@ -263,5 +264,11 @@
 
 			</div>
 		</div>
+	<script type="text/javascript">
+		$(".id_barcode").each(function(){
+			var id =$(this).attr("table_id");
+			$(this).barcode(id, "code128",{barWidth:2, barHeight:30,showHRI:false});
+		});		
+	</script>
 	</body>
 </html>

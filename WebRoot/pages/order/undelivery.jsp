@@ -316,10 +316,13 @@
 											<th width="120px">
 												样品
 											</th>
-											<th width="60px">
+											<th width="70px">
+												公司货号
+											</th>
+											<th width="70px">
 												订单号
 											</th>
-											<th width="110px">
+											<th width="90px">
 												订单信息
 											</th><th width="50px">
 												颜色
@@ -371,6 +374,7 @@
 														style="max-width: 120px; height: 120px; max-height: 120px;"
 														src="/<%=order.getImg_ss()%>"> </a>
 											</td>
+											<td rowspan="<%=detailsize %>"><%=order.getCompany_productNumber()%></td>
 											<td rowspan="<%=detailsize %>"><%=order.getOrderNumber()%></td>
 											<td rowspan="<%=detailsize %>"><%=order.getInfo()%></td>
 											<td><%=detailist.get(0).getColor() %></td><td><%=detailist.get(0).getQuantity() %></td>

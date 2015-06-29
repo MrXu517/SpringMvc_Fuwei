@@ -387,5 +387,17 @@ public class MaterialPurchaseOrderController extends BaseController {
 		return new ModelAndView("printorder/print",data);
 	}
 	
+	@RequestMapping(value = "/workspace", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView workspace(HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "material_purchase_order/workspace";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有原材料工作台的权限", null);
+		}
+		return new ModelAndView("material_purchase_order/workspace");
+	}
 	
 }
