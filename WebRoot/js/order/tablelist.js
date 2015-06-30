@@ -9,6 +9,21 @@ $(document).ready(function() {
 	}
 	$("#tab a[href='#" + tabname + "']").tab('show') // Select tab by name
 	
+	
+	//2015-6-30添加 生产数量+15功能
+		$(".plus15Btn").click(function(){
+			var $quantityEle = $(this).closest("tr").find(".quantity");
+			var quantity = $quantityEle.val();
+			if(quantity == ""){
+				return false;
+			}
+			quantity = Number(quantity);
+			$quantityEle.val(quantity+15);
+			return false;
+		});
+		//2015-6-30添加 生产数量+15功能
+	
+		 
 	//2015-4-3添加打印表格时要勾选
 	$(".printcheck").click(function(e){
 		e.stopPropagation();
@@ -144,6 +159,13 @@ $(document).ready(function() {
 					$dialog:$("#planDialog")
 		}
 	});
+	//2015-6-30添加  查看状态下，去掉【保存、修改单据的元素】
+	var $SubmitButton = $("#planorder button.saveTable[type='submit']");
+	if($SubmitButton.length<=0){
+		 $("#planorder [save-widget='true']").remove();
+	}
+	//2015-6-30添加  查看状态下，去掉【保存、修改单据的元素】
+	
 	
 	//原材料仓库单
 	var storeGrid = new OrderGrid({
@@ -194,6 +216,15 @@ $(document).ready(function() {
 		
 	});
 	
+	//2015-6-30添加  查看状态下，去掉【保存、修改单据的元素】
+	var $SubmitButton = $("#storeorder button.saveTable[type='submit']");
+	if($SubmitButton.length<=0){
+		 $("#storeorder [save-widget='true']").remove();
+	}
+	//2015-6-30添加  查看状态下，去掉【保存、修改单据的元素】
+	
+	
+	
 	//半检记录单
 	var halfcheckrecordGrid = new OrderGrid({
 		url:"order/halfcheckrecordorder",
@@ -233,6 +264,13 @@ $(document).ready(function() {
 		}
 		
 	});
+	//2015-6-30添加  查看状态下，去掉【保存、修改单据的元素】
+	var $SubmitButton = $("#halfcheckrecordorder button.saveTable[type='submit']");
+	if($SubmitButton.length<=0){
+		 $("#halfcheckrecordorder [save-widget='true']").remove();
+	}
+	//2015-6-30添加  查看状态下，去掉【保存、修改单据的元素】
+	
 	
 	//原材料采购单
 	var $materialpurchaseorderTab = $("#materialpurchaseorder .materialorderWidget");

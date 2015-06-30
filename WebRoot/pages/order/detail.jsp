@@ -424,7 +424,7 @@
 													尺寸
 												</th>
 												<th width="15%">
-													生产数量
+													订单数量
 												</th>
 												<%if(has_order_detail_price){ %>
 												<th width="15%">

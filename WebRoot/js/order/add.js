@@ -12,17 +12,7 @@ $(document).ready( function() {
 		});
 		// 重置按钮
 		
-		//2015-4-7添加 生产数量+15功能
-		$("#plus15Btn").click(function(){
-			var quantity = $(".rowform #quantity").val();
-			if(quantity == ""){
-				return false;
-			}
-			quantity = Number(quantity);
-			$(".rowform #quantity").val(quantity+15);
-			return false;
-		});
-		//2015-4-7添加 生产数量+15功能
+		
 		
 		//2015-2-27添加颜色及数量
 		//订单明细

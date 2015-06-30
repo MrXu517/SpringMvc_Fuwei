@@ -133,3 +133,6 @@ input.printcheck{
 .materialorderWidget table>tbody>tr>td,.fuliaoorderWidget table>tbody>tr>td,.coloringorderWidget table>tbody>tr>td{
 	border-color:#000;
 }
+.plus15Btn{
+	  line-height: 14px;
+}

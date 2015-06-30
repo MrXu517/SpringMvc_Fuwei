@@ -585,12 +585,11 @@
 							</div>
 							<div class="form-group col-md-12">
 								<label for="quantity" class="col-sm-3 control-label">
-									生产数量
+									订单数量
 								</label>
-								<div class="input-group col-md-8">
+								<div class="col-md-8">
 									<input type="text" name="quantity" id="quantity"
 										class="form-control int require" />
-									<span class="input-group-btn"><a class="btn btn-default" id="plus15Btn">+15</a></span>
 								</div>
 								<div class="col-sm-1"></div>
 							</div>

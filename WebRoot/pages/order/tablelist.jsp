@@ -125,6 +125,22 @@
 	}
 	
 	//2015-3-31添加
+	Boolean has_store_order_save = SystemCache.hasAuthority(session,
+			"order/store");
+	Boolean has_plan_order_save = SystemCache.hasAuthority(session,
+			"order/plan");
+	Boolean has_halfcheckrecord_order_save = SystemCache.hasAuthority(session,
+			"order/halfcheckrecord");
+	Boolean has_fuliaopurchase_order_save = SystemCache.hasAuthority(session,
+			"order/fuliaopurchase");
+	Boolean has_material_purchase_order_save = SystemCache.hasAuthority(session,
+			"order/materialpurchase");
+	Boolean has_coloring_order_save = SystemCache.hasAuthority(session,
+			"order/coloring");
+	Boolean has_order_producing_price = SystemCache.hasAuthority(session,
+			"order/producing/price");
+	
+	
 	Boolean has_material_purchase_order_delete = SystemCache.hasAuthority(session,
 			"material_purchase_order/delete");
 	Boolean has_coloring_order_delete = SystemCache.hasAuthority(session,
@@ -408,7 +424,7 @@
 
 							<!-- 生产单  -->
 							<div class="tab-pane" id="producingorder" role="tabpanel">
-								<%if(!order.isDelivered()){ %>
+								<%if(has_producing_order_edit && !order.isDelivered()){ %>
 								<div class="emptyrecordwidget">
 									<p>
 										如果您要创建生产单，请点击下方的按钮
@@ -556,10 +572,11 @@
 																			生产数量
 																		</th>
 																		
+																		<%if(has_order_producing_price){ %>
 																		<th width="15%">
 																			价格(/个、顶、套)
 																		</th>
-																		
+																		<%} %>
 
 																	</tr>
 																</thead>
@@ -579,7 +596,9 @@
 																		</td>
 																		<td class="quantity"><%=detail.getQuantity()%>
 																		</td>
+																		<%if(has_order_producing_price){ %>
 																		<td class="price"><%=detail.getPrice()%></td>
+																		<%} %>
 																	</tr>
 
 																	<%
@@ -748,7 +767,7 @@
 												value="<%=planOrder == null ? "" : planOrder.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
-											<%if(planOrder.isEdit()){ %>
+											<%if( has_plan_order_save && planOrder.isEdit()){ %>
 											<button type="submit"
 												class="pull-right btn btn-danger saveTable"
 												data-loading-text="正在保存...">
@@ -862,6 +881,8 @@
 																		</th>
 																		<th width="15%">
 																			生产数量
+																		</th><th width="15%" save-widget="true">
+																			
 																		</th>
 																	</tr>
 																</thead>
@@ -887,7 +908,7 @@
 																			<input type="text"
 																				class="form-control quantity value"
 																				value="<%=detail.getQuantity()%>" />
-																		</td>
+																		</td><td save-widget="true"><a class="btn btn-default plus15Btn">+15</a></td>
 																	</tr>
 
 																	<%
@@ -920,7 +941,7 @@
 												value="<%=storeOrder == null ? "" : storeOrder.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
-											<%if(storeOrder==null || storeOrder.isEdit()){ %>
+											<%if(has_store_order_save && (storeOrder==null || storeOrder.isEdit())){ %>
 											<button type="submit"
 												class="pull-right btn btn-danger saveTable"
 												data-loading-text="正在保存...">
@@ -1013,10 +1034,12 @@
 														<td>
 															<table class="table table-responsive detailTb">
 																<caption>
+																	
 																	<button type="button"
-																		class="btn btn-primary addRow pull-left">
+																		class="btn btn-primary addRow pull-left" save-widget="true">
 																		添加一行
 																	</button>
+																	
 																	材料列表
 																</caption>
 																<thead>
@@ -1036,7 +1059,7 @@
 																		<th width="15%">
 																			标准样纱
 																		</th>
-																		<th width="15%">
+																		<th width="15%"  save-widget="true">
 																			操作
 																		</th>
 																	</tr>
@@ -1057,7 +1080,7 @@
 																		</td>
 																		<td class="yarn"><%=detail.getYarn()%>
 																		</td>
-																		<td class="_handle">
+																		<td class="_handle" save-widget="true">
 																			<a class='copyRow' href='#'>复制</a> | 
 																			<a class='editRow' href='#'>修改</a> |
 																			<a class='deleteRow' href='#'>删除</a>
@@ -1202,7 +1225,7 @@
 					: halfCheckRecordOrder.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
-											<%if(halfCheckRecordOrder.isEdit()){ %>
+											<%if(has_halfcheckrecord_order_save && halfCheckRecordOrder.isEdit()){ %>
 											<button type="submit"
 												class="pull-right btn btn-danger saveTable"
 												data-loading-text="正在保存...">
@@ -1348,7 +1371,7 @@
 														<td>
 															<table class="table table-responsive detailTb2">
 																<caption>
-																	<button type="button"
+																	<button save-widget="true" type="button"
 																		class="btn btn-primary addRow pull-left">
 																		添加一行
 																	</button>
@@ -1365,7 +1388,7 @@
 																		<th width="25%">
 																			标准色样
 																		</th>
-																		<th width="15%">
+																		<th width="15%"  save-widget="true">
 																			操作
 																		</th>
 																	</tr>
@@ -1382,7 +1405,7 @@
 																		</td>
 																		<td class="colorsample"><%=detail.getColorsample()%>
 																		</td>
-																		<td class="_handle">
+																		<td class="_handle" save-widget="true">
 																			<a class='copyRow' href='#'>复制</a> | 
 																			<a class='editRow' href='#'>修改</a> |
 																			<a class='deleteRow' href='#'>删除</a>
@@ -1485,7 +1508,7 @@
 
 							<!-- 原材料采购单 -->
 							<div class="tab-pane" id="materialpurchaseorder" role="tabpanel">
-								<%if(!order.isDelivered()){ %>
+								<%if(has_material_purchase_order_save && !order.isDelivered()){ %>
 								<div class="emptyrecordwidget">
 									<p>
 										如果您要创建原材料采购单，请点击下方的按钮
@@ -1766,7 +1789,7 @@
 							<!-- 染色单 -->
 
 							<div class="tab-pane" id="coloringorder" role="tabpanel">
-								<%if(!order.isDelivered()){ %>
+								<%if(has_coloring_order_save && !order.isDelivered()){ %>
 								<div class="emptyrecordwidget">
 									<p>
 										如果您要创建染色单，请点击下方的按钮
@@ -2203,11 +2226,12 @@
 							<!-- 辅料采购单 -->
 
 							<div class="tab-pane" id="fuliaopurchaseorder" role="tabpanel">
-								<%if(!order.isDelivered()){ %>
+								<%if( has_fuliaopurchase_order_save && !order.isDelivered()){ %>
 								<div class="emptyrecordwidget">
 									<p>
 										如果您要创建辅料采购单，请点击下方的按钮
 									</p>
+									
 									<a href="fuliao_purchase_order/add/<%=order.getId()%>"
 										class="btn btn-primary" id="createProducingorderBtn">创建辅料采购单</a>
 								</div>
