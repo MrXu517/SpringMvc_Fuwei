@@ -400,13 +400,15 @@
 												<%
 													}
 												%>
-												<br><%
+												<%
 													if (has_order_memo) {
-												%>
+												%><br><br>
 												<a class="editmemo" href="#">添加备注</a>
 												<%
 													}
-												%>
+												%><br><br>
+												<a href="packing_order/list/<%=order.getId() %>">装箱单</a>
+												
 
 											</td>
 										</tr><%

@@ -364,7 +364,7 @@
 												if(order.getIn_use()){
 													if (has_order_edit && order.isEdit()) {
 												%>
-													<br>
+													<br><br>
 													<a href="order/put/<%=order.getId()%>">编辑</a>
 													<%
 														}
@@ -372,7 +372,7 @@
 													<%
 														if (has_order_cancel && order.isCancelable()) {
 													%>
-													<br>
+													<br><br>
 													<a data-cid="<%=order.getId()%>" class="delete" href="#">取消订单</a>
 												<%
 														}

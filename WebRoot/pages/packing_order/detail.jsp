@@ -18,6 +18,8 @@
 	List<OrderDetail> DetailList = order == null
 			|| order.getDetaillist() == null ? new ArrayList<OrderDetail>()
 			: order.getDetaillist();
+	Boolean has_packing_order_delete = SystemCache.hasAuthority(session,"packing_order/delete");
+	
 %>
 <!DOCTYPE html>
 <html>
@@ -73,7 +75,9 @@
 					<div class="container-fluid">
 
 						<div class="row">
+							<%if(has_packing_order_delete){ %>
 							<button data-cid="<%=packingOrder.getId() %>" class="btn btn-danger delete">删除装箱单</button>
+							<%} %>
 							<div class="col-md-4 left">
 							
 									<h4>上传时间:<%=packingOrder.getCreated_at() %> </h4> 

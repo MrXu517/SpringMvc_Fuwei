@@ -10,6 +10,7 @@
 <%@page import="com.fuwei.constant.OrderStatus"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="net.sf.json.JSONObject"%>
+<%@page import="com.fuwei.entity.ordergrid.MaterialPurchaseOrderDetail"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -103,6 +104,26 @@
 		<script src="js/common/common.js" type="text/javascript"></script>
 
 		<link href="css/order/index.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.body {
+	min-width: 0;
+}
+
+#breadcrumbs {
+	min-width: 0;
+}
+.table{
+	border-color:#000;
+}
+.table>thead>tr{
+	  background: #AEADAD;
+}
+.table>thead>tr>th,.table>tbody>tr>td{
+	border-color:#000;
+	border-bottom-width: 1px;
+	word-break: break-all;
+}
+</style>
 	</head>
 	<body>
 		<%@ include file="../common/head.jsp"%>
@@ -268,36 +289,45 @@
 
 								</div>
 
-								<table class="table table-responsive">
+								<table class="table table-responsive table-bordered">
 									<thead>
 										<tr>
-											<th>
+											<th width="30px">
 												序号
 											</th>
-
-											<th>
+											<th width="55px">
 												采购单号
 											</th>
-											<th>
+											<th width="50px">
 												采购单位
 											</th>
-											<th>
+											<th width="40px">
 												公司
 											</th>
-											<th>
+											<th width="40px">
 												客户
 											</th>
-											<th>
+											<th width="60px">
 												公司货号
 											</th>
-											
-											<th>
+											<th width="70px">
+												品名
+											</th><th width="40px">
+												跟单
+											</th><th width="60px">
+												材料
+											</th><th width="55px">
+												数量
+											</th><th width="50px">
+												染厂
+											</th>
+											<th width="40px">
 												创建人
 											</th>
-											<th>
+											<th width="60px">
 												订购日期
 											</th>
-											<th>
+											<th width="60px">
 												操作
 											</th>
 										</tr>
@@ -306,20 +336,29 @@
 										<%
 											int i = (pager.getPageNo()-1) * pager.getPageSize() + 0;
 											for (MaterialPurchaseOrder materialPurchaseOrder : materialPurchaseOrderlist) {
+												List<MaterialPurchaseOrderDetail> detailist = materialPurchaseOrder.getDetaillist();
+												int detailsize = materialPurchaseOrder.getDetaillist().size();
 										%>
 										<tr orderId="<%=materialPurchaseOrder.getId()%>">
-											<td><%=++i%></td>
-											<td><%=materialPurchaseOrder.getNumber() == null ? "":materialPurchaseOrder.getNumber() %></td>
-											<td><%=SystemCache.getFactoryName(materialPurchaseOrder.getFactoryId())%></td>
-											<td><%=SystemCache.getCompanyShortName(materialPurchaseOrder
+											<td rowspan="<%=detailsize %>"><%=++i%></td>
+											<td rowspan="<%=detailsize %>"><%=materialPurchaseOrder.getNumber() == null ? "":materialPurchaseOrder.getNumber() %></td>
+											<td rowspan="<%=detailsize %>"><%=SystemCache.getFactoryName(materialPurchaseOrder.getFactoryId())%></td>
+											<td rowspan="<%=detailsize %>"><%=SystemCache.getCompanyShortName(materialPurchaseOrder
 										.getCompanyId())%></td>
-											<td><%=SystemCache.getCustomerName(materialPurchaseOrder.getCustomerId())%></td>
-											<td><%=materialPurchaseOrder.getCompany_productNumber()%></td>
-											
-											<td><%=SystemCache.getUserName(materialPurchaseOrder
+											<td rowspan="<%=detailsize %>"><%=SystemCache.getCustomerName(materialPurchaseOrder.getCustomerId())%></td>
+											<td rowspan="<%=detailsize %>"><%=materialPurchaseOrder.getCompany_productNumber()%></td>
+											<td rowspan="<%=detailsize %>"><%=materialPurchaseOrder.getName()%></td>
+											<td rowspan="<%=detailsize %>"><%=SystemCache.getEmployeeName(materialPurchaseOrder.getCharge_employee())%></td>
+									
+
+											<td><%=SystemCache.getMaterialName(detailist.get(0).getMaterial())%></td>
+											<td><%=detailist.get(0).getQuantity()%></td>
+											<td><%=SystemCache.getFactoryName(detailist.get(0).getFactoryId())%></td>
+
+											<td rowspan="<%=detailsize %>"><%=SystemCache.getUserName(materialPurchaseOrder
 										.getCreated_user())%></td>
-											<td><%=DateTool.formatDateYMD(materialPurchaseOrder.getCreated_at())%></td>
-											<td>
+											<td rowspan="<%=detailsize %>"><%=DateTool.formatDateYMD(materialPurchaseOrder.getCreated_at())%></td>
+											<td rowspan="<%=detailsize %>">
 												<%
 													if (has_order_detail) {
 												%>
@@ -351,7 +390,16 @@
 
 
 											</td>
+										</tr><%
+										detailist.remove(0);
+										for(MaterialPurchaseOrderDetail detail : detailist){ %>
+										<tr>
+											<td><%=SystemCache.getMaterialName(detailist.get(0).getMaterial())%></td>
+											<td><%=detailist.get(0).getQuantity()%></td>
+											<td><%=SystemCache.getFactoryName(detailist.get(0).getFactoryId())%></td>
+
 										</tr>
+										<%} %>
 										<%
 											}
 										%>

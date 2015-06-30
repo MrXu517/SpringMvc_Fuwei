@@ -9,6 +9,8 @@
 			+ path + "/";
 	int orderId = (Integer)request.getAttribute("orderId");
 	List<PackingOrder> packingOrderlist = (List<PackingOrder>)request.getAttribute("packingOrderList");
+	Boolean has_packing_order_add = SystemCache.hasAuthority(session,"packing_order/add");
+
 %>
 <!DOCTYPE html>
 <html>
@@ -65,7 +67,9 @@
 				<div class="body">
 
 					<div class="container-fluid">
+						<%if(has_packing_order_add){ %>
 						<a href="packing_order/add/<%=orderId %>" class="btn btn-primary" style="margin-bottom:10px;">上传新的装箱单</a>
+						<%} %>
 						<%if(packingOrderlist.size()<=0){ %>
 							<span>还未创建装箱单</span>
 						<%} %>
