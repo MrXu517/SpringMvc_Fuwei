@@ -71,7 +71,7 @@ public class ProducingOrderController extends BaseController {
 		String lcode = "order/producing/price_edit";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		String lcode2 = "order/producing/price_request";
-		Boolean hasAuthority2 = SystemCache.hasAuthority(session, lcode);
+		Boolean hasAuthority2 = SystemCache.hasAuthority(session, lcode2);
 		if (!hasAuthority && !hasAuthority2) {
 			throw new PermissionDeniedDataAccessException("没有查看待划价生产单列表的权限", null);
 		}
