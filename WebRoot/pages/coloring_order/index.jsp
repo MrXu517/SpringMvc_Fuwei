@@ -10,6 +10,7 @@
 <%@page import="com.fuwei.constant.OrderStatus"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="net.sf.json.JSONObject"%>
+<%@page import="com.fuwei.entity.ordergrid.ColoringOrderDetail"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -106,6 +107,26 @@
 		<script src="js/common/common.js" type="text/javascript"></script>
 
 		<link href="css/order/index.css" rel="stylesheet" type="text/css" />
+		<style type="text/css">
+.body {
+	min-width: 0;
+}
+
+#breadcrumbs {
+	min-width: 0;
+}
+.table{
+	border-color:#000;
+}
+.table>thead>tr{
+	  background: #AEADAD;
+}
+.table>thead>tr>th,.table>tbody>tr>td{
+	border-color:#000;
+	border-bottom-width: 1px;
+	word-break: break-all;
+}
+</style>
 	</head>
 	<body>
 		<%@ include file="../common/head.jsp"%>
@@ -270,35 +291,44 @@
 
 								</div>
 
-								<table class="table table-responsive">
+								<table class="table table-responsive table-bordered">
 									<thead>
 										<tr>
-											<th>
+											<th width="30px">
 												序号
 											</th>
-
-											<th>
+											<th width="55px">
 												染色单号
 											</th>
-											<th>
+											<th width="50px">
 												染色单位
 											</th>
-											<th>
+											<th width="40px">
 												公司
 											</th>
-											<th>
+											<th width="40px">
 												客户
 											</th>
-											<th>
+											<th width="60px">
 												公司货号
+											</th><th width="70px">
+												品名
+											</th><th width="40px">
+												跟单
+											</th><th width="60px">
+												材料名
+											</th><th width="55px">
+												颜色
+											</th><th width="50px">
+												数量(kg)
 											</th>
-											<th>
+											<th width="40px">
 												创建人
 											</th>
-											<th>
+											<th width="60px">
 												订购日期
 											</th>
-											<th>
+											<th width="60px">
 												操作
 											</th>
 										</tr>
@@ -307,20 +337,30 @@
 										<%
 											int i = (pager.getPageNo()-1) * pager.getPageSize() + 0;
 											for (ColoringOrder coloringOrder : coloringOrderlist) {
+												List<ColoringOrderDetail> detailist = coloringOrder.getDetaillist();
+												int detailsize = coloringOrder.getDetaillist().size();
 										%>
 										<tr orderId="<%=coloringOrder.getId()%>">
-											<td><%=++i%></td>
-											<td><%=coloringOrder.getNumber() == null ? "" : coloringOrder.getNumber()%></td>
-											<td><%=SystemCache.getFactoryName(coloringOrder.getFactoryId())%></td>
-											<td><%=SystemCache.getCompanyShortName(coloringOrder
+											<td rowspan="<%=detailsize %>"><%=++i%></td>
+											<td rowspan="<%=detailsize %>"><%=coloringOrder.getNumber() == null ? "" : coloringOrder.getNumber()%></td>
+											<td rowspan="<%=detailsize %>"><%=SystemCache.getFactoryName(coloringOrder.getFactoryId())%></td>
+											<td rowspan="<%=detailsize %>"><%=SystemCache.getCompanyShortName(coloringOrder
 										.getCompanyId())%></td>
-											<td><%=SystemCache.getCustomerName(coloringOrder.getCustomerId())%></td>
-											<td><%=coloringOrder.getCompany_productNumber()%></td>
+											<td rowspan="<%=detailsize %>"><%=SystemCache.getCustomerName(coloringOrder.getCustomerId())%></td>
+											<td rowspan="<%=detailsize %>"><%=coloringOrder.getCompany_productNumber()%></td>
+											<td rowspan="<%=detailsize %>"><%=coloringOrder.getName()%></td>
+											<td rowspan="<%=detailsize %>"><%=SystemCache.getEmployeeName(coloringOrder.getCharge_employee())%></td>
+									
 											
-											<td><%=SystemCache.getUserName(coloringOrder
+											<td><%=SystemCache.getMaterialName(detailist.get(0).getMaterial())%></td>
+											<td><%=detailist.get(0).getColor() %></td>
+											<td><%=detailist.get(0).getQuantity()%></td>
+											
+										
+												<td rowspan="<%=detailsize %>"><%=SystemCache.getUserName(coloringOrder
 										.getCreated_user())%></td>
-											<td><%=DateTool.formatDateYMD(coloringOrder.getCreated_at())%></td>
-											<td>
+											<td rowspan="<%=detailsize %>"><%=DateTool.formatDateYMD(coloringOrder.getCreated_at())%></td>
+											<td rowspan="<%=detailsize %>">
 												<%
 													if (has_order_detail) {
 												%>
@@ -348,12 +388,19 @@
 												<%
 														}
 													%>
-
+													
 											</td>
-										</tr>
+										
+										</tr><%
+										detailist.remove(0);
+										for(ColoringOrderDetail detail : detailist){ %>
+										<tr><td><%=SystemCache.getMaterialName(detail.getMaterial())%></td><td><%=detail.getColor() %></td><td><%=detail.getQuantity() %></td></tr>
+										<%} %>
 										<%
-											}
+										}
 										%>
+
+									
 									</tbody>
 								</table>
 							</div>
