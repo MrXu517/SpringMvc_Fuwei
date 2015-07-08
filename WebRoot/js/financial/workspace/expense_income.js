@@ -9,6 +9,11 @@ $(document).ready(function(){
 		$(".searchform").submit();
 	});
 	
+	$(".table tbody tr").click(function(){
+		$(this).siblings().removeClass("selected");
+		$(this).addClass("selected");
+	});
+	
 	$(".delete").click(function(){
 		var id= $(this).attr("data-cid");
 		if(!confirm("确定要删除该收入支出项吗，请仔细核对？")){

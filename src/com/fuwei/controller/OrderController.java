@@ -3,7 +3,6 @@ package com.fuwei.controller;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,42 +10,30 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
-import com.fuwei.constant.Constants;
 import com.fuwei.constant.OrderStatus;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.OrderDetail;
 import com.fuwei.entity.OrderHandle;
 import com.fuwei.entity.OrderProduceStatus;
 import com.fuwei.entity.OrderStep;
-import com.fuwei.entity.ProductionNotification;
-import com.fuwei.entity.QuoteOrder;
-import com.fuwei.entity.QuoteOrderDetail;
-import com.fuwei.entity.QuotePrice;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
 import com.fuwei.entity.ordergrid.CarFixRecordOrder;
-import com.fuwei.entity.ordergrid.CarFixRecordOrderDetail;
 import com.fuwei.entity.ordergrid.CheckRecordOrder;
-import com.fuwei.entity.ordergrid.CheckRecordOrderDetail;
 import com.fuwei.entity.ordergrid.ColoringOrder;
 import com.fuwei.entity.ordergrid.ColoringOrderDetail;
 import com.fuwei.entity.ordergrid.ColoringProcessOrder;
@@ -60,21 +47,14 @@ import com.fuwei.entity.ordergrid.HalfCheckRecordOrderDetail2;
 import com.fuwei.entity.ordergrid.HeadBankOrder;
 import com.fuwei.entity.ordergrid.HeadBankOrderDetail;
 import com.fuwei.entity.ordergrid.IroningRecordOrder;
-import com.fuwei.entity.ordergrid.IroningRecordOrderDetail;
 import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
-import com.fuwei.entity.ordergrid.MaterialPurchaseOrderDetail;
 import com.fuwei.entity.ordergrid.PlanOrder;
 import com.fuwei.entity.ordergrid.PlanOrderDetail;
-import com.fuwei.entity.ordergrid.PlanOrderProducingDetail;
 import com.fuwei.entity.ordergrid.ProducingOrder;
-import com.fuwei.entity.ordergrid.ProducingOrderDetail;
-import com.fuwei.entity.ordergrid.ProducingOrderMaterialDetail;
 import com.fuwei.entity.ordergrid.ProductionScheduleOrder;
 import com.fuwei.entity.ordergrid.ShopRecordOrder;
 import com.fuwei.entity.ordergrid.StoreOrder;
 import com.fuwei.entity.ordergrid.StoreOrderDetail;
-import com.fuwei.entity.ordergrid.StoreOrderDetail2;
-import com.fuwei.print.PrintExcel;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.OrderDetailService;
 import com.fuwei.service.OrderHandleService;
@@ -82,7 +62,6 @@ import com.fuwei.service.OrderProduceStatusService;
 import com.fuwei.service.OrderService;
 import com.fuwei.service.ProductionNotificationService;
 import com.fuwei.service.QuoteOrderDetailService;
-//import com.fuwei.service.QuoteOrderService;
 import com.fuwei.service.SampleService;
 import com.fuwei.service.ordergrid.CarFixRecordOrderService;
 import com.fuwei.service.ordergrid.CheckRecordOrderService;
@@ -100,8 +79,6 @@ import com.fuwei.service.ordergrid.ProductionScheduleOrderService;
 import com.fuwei.service.ordergrid.ShopRecordOrderService;
 import com.fuwei.service.ordergrid.StoreOrderService;
 import com.fuwei.util.DateTool;
-//import com.fuwei.util.ExportExcel;
-import com.fuwei.util.HanyuPinyinUtil;
 import com.fuwei.util.NumberUtil;
 import com.fuwei.util.SerializeTool;
 
@@ -110,8 +87,8 @@ import com.fuwei.util.SerializeTool;
 public class OrderController extends BaseController {
 	@Autowired
 	OrderService orderService;
-	@Autowired
-	OrderDetailService orderDetailService;
+//	@Autowired
+//	OrderDetailService orderDetailService;
 	@Autowired
 	OrderHandleService orderHandleService;
 	@Autowired
@@ -496,7 +473,7 @@ public class OrderController extends BaseController {
 			throw new Exception("缺少订单ID");
 		}
 		Order order = orderService.get(id);
-		List<OrderDetail> detaillist = orderDetailService.getListByOrder(id);// 获取订单详情
+//		List<OrderDetail> detaillist = orderDetailService.getListByOrder(id);// 获取订单详情
 		// order.setDetaillist(detaillist);//设置订单详情
 		// 获取订单步骤列表
 
@@ -553,7 +530,7 @@ public class OrderController extends BaseController {
 			throws Exception {
 
 		Order order = orderService.get(id);
-		List<OrderDetail> detaillist = orderDetailService.getListByOrder(id);
+//		List<OrderDetail> detaillist = orderDetailService.getListByOrder(id);
 		// order.setDetaillist(detaillist);
 		request.setAttribute("order", order);
 		return new ModelAndView("order/edit");
@@ -845,7 +822,23 @@ public class OrderController extends BaseController {
 								"该订单已经存在原材料仓库单", null);
 					}
 				}
-
+				//2015-7-1添加订单相关属性
+				Order order = orderService.get(storeOrder.getOrderId());
+				storeOrder.setImg(order.getImg());
+				storeOrder.setImg_s(order.getImg_s());
+				storeOrder.setImg_ss(order.getImg_ss());
+				storeOrder.setProductNumber(order.getProductNumber());
+				storeOrder.setMaterialId(order.getMaterialId());
+				storeOrder.setSize(order.getSize());
+				storeOrder.setWeight(order.getWeight());
+				storeOrder.setName(order.getName());
+				storeOrder.setCompanyId(order.getCompanyId());
+				storeOrder.setCustomerId(order.getCustomerId());
+				storeOrder.setSampleId(order.getSampleId());
+				storeOrder.setOrderNumber(order.getOrderNumber());
+				storeOrder.setCharge_employee(order.getCharge_employee());
+				storeOrder.setCompany_productNumber(order.getCompany_productNumber());
+				
 				storeOrder.setCreated_at(DateTool.now());// 设置创建时间
 				storeOrder.setUpdated_at(DateTool.now());// 设置更新时间
 				storeOrder.setCreated_user(user.getId());// 设置创建人

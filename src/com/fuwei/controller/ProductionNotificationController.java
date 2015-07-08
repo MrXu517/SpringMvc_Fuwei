@@ -46,8 +46,8 @@ public class ProductionNotificationController extends BaseController{
 	AuthorityService authorityService;
 	@Autowired
 	OrderService orderService;
-	@Autowired
-	OrderDetailService orderDetailService;
+//	@Autowired
+//	OrderDetailService orderDetailService;
 	
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	@ResponseBody
@@ -60,7 +60,7 @@ public class ProductionNotificationController extends BaseController{
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
 		ProductionNotification ProductionNotification = new ProductionNotification();
 		try {
-			Map<String,Object> orderDetail = orderDetailService.getDetail(orderDetailId);
+//			Map<String,Object> orderDetail = orderDetailService.getDetail(orderDetailId);
 			ProductionNotification.setCreated_at(DateTool.now());//设置创建时间
 			ProductionNotification.setUpdated_at(DateTool.now());//设置更新时间
 			ProductionNotification.setCreated_user(user.getId());//设置创建人
@@ -69,7 +69,7 @@ public class ProductionNotificationController extends BaseController{
 			
 			List<ProductionNotificationDetail> Detaillist = new ArrayList<ProductionNotificationDetail>();
 			ProductionNotification.setDetaillist(Detaillist);//设置详情
-			request.setAttribute("orderDetail", orderDetail);
+//			request.setAttribute("orderDetail", orderDetail);
 			request.setAttribute("productionNotification", ProductionNotification);
 			return new ModelAndView("notification/add");
 		} catch (Exception e) {

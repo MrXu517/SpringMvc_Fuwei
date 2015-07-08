@@ -14,7 +14,6 @@
 <%@page import="com.fuwei.entity.ordergrid.PlanOrderProducingDetail"%>
 <%@page import="com.fuwei.entity.ordergrid.StoreOrder"%>
 <%@page import="com.fuwei.entity.ordergrid.StoreOrderDetail"%>
-<%@page import="com.fuwei.entity.ordergrid.StoreOrderDetail2"%>
 <%@page import="com.fuwei.entity.ordergrid.HalfCheckRecordOrder"%>
 <%@page import="com.fuwei.entity.ordergrid.HalfCheckRecordOrderDetail"%>
 <%@page import="com.fuwei.entity.ordergrid.HalfCheckRecordOrderDetail2"%>

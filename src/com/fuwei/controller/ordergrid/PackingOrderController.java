@@ -164,6 +164,7 @@ public class PackingOrderController extends BaseController {
 						"装箱单必须属于一张订单", null);
 			}
 			Order order = orderService.get(packingOrder.getOrderId());
+			
 			if(order == null){
 				throw new PermissionDeniedDataAccessException(
 						"订单不存在", null);

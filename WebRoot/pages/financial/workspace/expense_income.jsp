@@ -428,13 +428,13 @@
 											<%
 												if (item.getIn_out() == true) {
 											%>
-											<td><%=item.getAmount()%></td>
+											<td><strong><%=item.getAmount()%></strong></td>
 											<td></td>
 											<%
 												} else {
 											%>
 											<td></td>
-											<td><%=item.getAmount()%></td>
+											<td><strong><%=item.getAmount()%></strong></td>
 											<%
 												}
 											%>

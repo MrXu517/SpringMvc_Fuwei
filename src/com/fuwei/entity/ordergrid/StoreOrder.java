@@ -28,10 +28,123 @@ public class StoreOrder extends BaseTableOrder{
 	private List<StoreOrderDetail> detaillist ;
 	
 	@Temporary
-	private List<StoreOrderDetail2> detail_2_list ;
-
+	private List<StoreInOutDetail> detail_2_list ;
+	
 	private Integer status;// 订单状态 -1刚创建  , 6执行完成 ， 7取消
 	private String state;// 订单状态描述
+	
+	
+	
+	
+	// 接下来是Order的属性
+	private Integer companyId;// 公司ID
+	private Integer customerId;
+	private Integer sampleId;// 样品ID
+	
+	private String name;// 样品名称
+
+	private String img;// 图片
+	private Integer materialId;// 材料
+	private double weight;// 克重
+	private String size;// 尺寸
+	private String productNumber;// 产品编号
+	private String orderNumber;//订单编号
+	
+	private String img_s;// 中等缩略图
+	private String img_ss;// 缩略图
+	private Integer charge_employee;// 打样人 
+	private String company_productNumber;//样品的公司货号
+	
+	
+	
+	
+	
+	
+	
+	public Integer getCompanyId() {
+		return companyId;
+	}
+	public void setCompanyId(Integer companyId) {
+		this.companyId = companyId;
+	}
+	public Integer getCustomerId() {
+		return customerId;
+	}
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
+	}
+	public Integer getSampleId() {
+		return sampleId;
+	}
+	public void setSampleId(Integer sampleId) {
+		this.sampleId = sampleId;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getImg() {
+		return img;
+	}
+	public void setImg(String img) {
+		this.img = img;
+	}
+	public Integer getMaterialId() {
+		return materialId;
+	}
+	public void setMaterialId(Integer materialId) {
+		this.materialId = materialId;
+	}
+	public double getWeight() {
+		return weight;
+	}
+	public void setWeight(double weight) {
+		this.weight = weight;
+	}
+	public String getSize() {
+		return size;
+	}
+	public void setSize(String size) {
+		this.size = size;
+	}
+	public String getProductNumber() {
+		return productNumber;
+	}
+	public void setProductNumber(String productNumber) {
+		this.productNumber = productNumber;
+	}
+	public String getOrderNumber() {
+		return orderNumber;
+	}
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
+	}
+	public String getImg_s() {
+		return img_s;
+	}
+	public void setImg_s(String img_s) {
+		this.img_s = img_s;
+	}
+	public String getImg_ss() {
+		return img_ss;
+	}
+	public void setImg_ss(String img_ss) {
+		this.img_ss = img_ss;
+	}
+	public Integer getCharge_employee() {
+		return charge_employee;
+	}
+	public void setCharge_employee(Integer charge_employee) {
+		this.charge_employee = charge_employee;
+	}
+	public String getCompany_productNumber() {
+		return company_productNumber;
+	}
+	public void setCompany_productNumber(String company_productNumber) {
+		this.company_productNumber = company_productNumber;
+	}
 	public Integer getStatus() {
 		return status;
 	}
@@ -118,7 +231,7 @@ public class StoreOrder extends BaseTableOrder{
 
 	public void setDetail_2_json(String detail_2_json) throws Exception {
 		if(detail_2_json != null && !detail_2_json.equals("")){
-			this.setDetail_2_list(SerializeTool.deserializeList(detail_2_json,StoreOrderDetail2.class));
+			this.setDetail_2_list(SerializeTool.deserializeList(detail_2_json,StoreInOutDetail.class));
 		}
 		
 		this.detail_2_json = detail_2_json;
@@ -132,11 +245,11 @@ public class StoreOrder extends BaseTableOrder{
 		this.detaillist = detaillist;
 	}
 
-	public List<StoreOrderDetail2> getDetail_2_list() {
+	public List<StoreInOutDetail> getDetail_2_list() {
 		return detail_2_list;
 	}
 
-	public void setDetail_2_list(List<StoreOrderDetail2> detail_2_list) {
+	public void setDetail_2_list(List<StoreInOutDetail> detail_2_list) {
 		this.detail_2_list = detail_2_list;
 	}
 	

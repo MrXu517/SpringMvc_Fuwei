@@ -22,6 +22,7 @@
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<script src="js/plugins/jquery-barcode.min.js"></script>
 		<!-- 为了让IE浏览器运行最新的渲染模式 -->
 	</head>
 	<body>

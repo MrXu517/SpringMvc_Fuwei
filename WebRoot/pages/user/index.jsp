@@ -32,7 +32,7 @@
 		<div id="Content">
 			<div id="main">
 				<center>
-					欢迎来到富伟桐庐针织厂
+					欢迎来到桐庐富伟针织厂
 				</center>
 			</div>
 		</div>

@@ -394,9 +394,9 @@
 										detailist.remove(0);
 										for(MaterialPurchaseOrderDetail detail : detailist){ %>
 										<tr>
-											<td><%=SystemCache.getMaterialName(detailist.get(0).getMaterial())%></td>
-											<td><%=detailist.get(0).getQuantity()%></td>
-											<td><%=SystemCache.getFactoryName(detailist.get(0).getFactoryId())%></td>
+											<td><%=SystemCache.getMaterialName(detail.getMaterial())%></td>
+											<td><%=detail.getQuantity()%></td>
+											<td><%=SystemCache.getFactoryName(detail.getFactoryId())%></td>
 
 										</tr>
 										<%} %>

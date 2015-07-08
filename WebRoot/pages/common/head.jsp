@@ -311,7 +311,7 @@
 							<%} %>
 							<%if(has_material_workspace){ %>
 							<li>
-								<a href="material_purchase_order/workspace">原材料工作台</a>
+								<a href="workspace/material_workspace">原材料工作台</a>
 							</li>
 							<%} %>
 							<%if(has_halfstoreorder_workspace){ %>

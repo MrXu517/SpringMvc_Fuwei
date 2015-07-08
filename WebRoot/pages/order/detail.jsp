@@ -345,6 +345,12 @@
 											<tbody>
 												<tr>
 													<td>
+														品名
+													</td>
+													<td><%=order.getName()%></td>
+												</tr>
+												<tr>
+													<td>
 														公司货号
 													</td>
 													<td><%=order.getCompany_productNumber()%></td>

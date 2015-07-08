@@ -107,6 +107,10 @@ public class PurchaseInvoiceController extends BaseController {
 		sort.setDirection("desc");
 		sort.setProperty("created_at");
 		sortList.add(sort);
+		Sort sort2 = new Sort();
+		sort2.setDirection("desc");
+		sort2.setProperty("id");
+		sortList.add(sort2);
 		
 		pager = invoiceService.getList(pager, null,start_time_d, end_time_d,companyId,subject_id,
 				true,bank_id,amount_from,amount_to,number, sortList);

@@ -13,9 +13,9 @@ import com.fuwei.entity.GongXu;
 import com.fuwei.entity.OrderDetail;
 
 
-@Component
+//@Component
 public class OrderDetailService extends BaseService {
-	private Logger log = org.apache.log4j.LogManager.getLogger(QuoteOrderDetailService.class);
+	private Logger log = org.apache.log4j.LogManager.getLogger(OrderDetailService.class);
 	@Autowired
 	JdbcTemplate jdbc;
 	

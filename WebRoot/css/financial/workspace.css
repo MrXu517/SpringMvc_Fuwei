@@ -179,3 +179,9 @@ ul.pagination{
 	height: 30px;
 	padding: 0 6px;
 }
+.table tbody tr.selected{
+	background:#ccc;
+}
+.table tbody tr td,.table tbody tr th{
+	padding:8px 0 ;
+}

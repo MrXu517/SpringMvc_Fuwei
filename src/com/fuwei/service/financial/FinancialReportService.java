@@ -18,7 +18,7 @@ import com.fuwei.util.DateTool;
 
 @Component
 public class FinancialReportService extends BaseService {
-	private Logger log = org.apache.log4j.LogManager.getLogger(ExpenseService.class);
+	private Logger log = org.apache.log4j.LogManager.getLogger(FinancialReportService.class);
 	@Autowired
 	JdbcTemplate jdbc;
 

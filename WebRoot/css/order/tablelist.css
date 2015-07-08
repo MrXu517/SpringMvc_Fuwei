@@ -21,6 +21,7 @@
 }
 .tablewidget .thumbnail img{
 	max-width:300px;
+	max-height:250px;
 }
 .tablewidget>table>tbody>tr>td{
 	border:none;
@@ -136,3 +137,6 @@ input.printcheck{
 .plus15Btn{
 	  line-height: 14px;
 }
+.materialorderWidget .table th, .fuliaoorderWidget .table th, .coloringorderWidget .table th{
+  border-color: #000;
+  }

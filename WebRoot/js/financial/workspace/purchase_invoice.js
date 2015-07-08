@@ -1,5 +1,8 @@
 $(document).ready(function(){
-	
+	$(".table tbody tr").click(function(){
+		$(this).siblings().removeClass("selected");
+		$(this).addClass("selected");
+	});
 	$("#searchBtn").click(function(){
 		$(".searchform").submit();
 	});

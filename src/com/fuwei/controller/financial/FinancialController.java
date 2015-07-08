@@ -83,6 +83,10 @@ public class FinancialController extends BaseController {
 		sort.setDirection("desc");
 		sort.setProperty("expense_at");
 		sortList.add(sort);
+		Sort sort2 = new Sort();
+		sort2.setDirection("desc");
+		sort2.setProperty("id");
+		sortList.add(sort2);
 		
 		pager = expense_incomeService.getList(pager, start_time_d, end_time_d,
 				companyId, salesmanId,in_out,bank_id,subject_id,amount_from,amount_to, sortList);

@@ -392,9 +392,9 @@
 										detailist.remove(0);
 										for(FuliaoPurchaseOrderDetail detail : detailist){ %>
 										<tr>
-											<td><%=SystemCache.getMaterialName(detailist.get(0).getStyle())%></td>
-											<td><%=detailist.get(0).getQuantity()%></td>
-											<td><%=detailist.get(0).getMemo()%></td>
+											<td><%=SystemCache.getMaterialName(detail.getStyle())%></td>
+											<td><%=detail.getQuantity()%></td>
+											<td><%=detail.getMemo()%></td>
 
 										</tr>
 										<%} %>

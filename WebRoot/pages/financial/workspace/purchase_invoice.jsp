@@ -370,7 +370,7 @@
 														
 														
 														<td><%=item.getBank_name()%></td>
-														<td><%=item.getAmount()%></td>
+														<td><strong><%=item.getAmount()%><strong></td>
 														<td><%=item.getNumber()%></td>
 														<td><%=SystemCache.getCompanyShortName(item.getCompany_id())%></td>
 														<td><%=SystemCache.getSubjectName(item.getSubject_id())%></td>
