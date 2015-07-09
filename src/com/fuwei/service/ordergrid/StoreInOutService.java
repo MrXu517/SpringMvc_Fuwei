@@ -244,6 +244,9 @@ public class StoreInOutService extends BaseService {
 	public int remove(int id) throws Exception {
 		try {
 			StoreInOut temp = this.get(id);
+			if(temp.getIn_out() == false && temp.getHas_print()){//如果出库单已打印，则不能再删除
+				throw new Exception("已打印出库，无法删除 ");
+			}
 			if(!temp.deletable()){
 				throw new Exception("单据已执行完成，无法删除 ");
 			}
