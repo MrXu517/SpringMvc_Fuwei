@@ -62,9 +62,9 @@ import com.fuwei.util.DateTool;
 import com.fuwei.util.NumberUtil;
 import com.fuwei.util.SerializeTool;
 
-@RequestMapping("/purchase_invoice")
+@RequestMapping("/sale_invoice")
 @Controller
-public class PurchaseInvoiceController extends BaseController {
+public class SaleInvoiceController extends BaseController {
 	
 	@Autowired
 	InvoiceService invoiceService;
@@ -113,7 +113,7 @@ public class PurchaseInvoiceController extends BaseController {
 		sortList.add(sort2);
 		
 		pager = invoiceService.getList(pager, null,start_time_d, end_time_d,companyId,subject_id,
-				true,bank_id,amount_from,amount_to,number, sortList);
+				false,bank_id,amount_from,amount_to,number, sortList);
 
 		request.setAttribute("companyId", companyId);
 		request.setAttribute("subject_id", subject_id);
@@ -129,7 +129,7 @@ public class PurchaseInvoiceController extends BaseController {
 		List<Bank> banklist = bankService.getList();
 		request.setAttribute("banklist", banklist);
 		
-		return new ModelAndView("financial/workspace/purchase_invoice");
+		return new ModelAndView("financial/workspace/sale_invoice");
 
 	}
 	
@@ -142,11 +142,11 @@ public class PurchaseInvoiceController extends BaseController {
 		String lcode = "invoice/add";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有收取发票的权限", null);
+			throw new PermissionDeniedDataAccessException("没有创建销项发票的权限", null);
 		}	
 		List<Bank> banklist = bankService.getList();
 		request.setAttribute("banklist", banklist);
-		return new ModelAndView("financial/purchase_invoice/add");
+		return new ModelAndView("financial/sale_invoice/add");
 	}
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -158,7 +158,7 @@ public class PurchaseInvoiceController extends BaseController {
 		String lcode = "invoice/add";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有收取发票的权限", null);
+			throw new PermissionDeniedDataAccessException("没有创建销项发票的权限", null);
 		}
 		if(invoice.getNumber() == null || invoice.getNumber().equals("")){
 			throw new Exception("发票号不能为空");
@@ -167,7 +167,7 @@ public class PurchaseInvoiceController extends BaseController {
 		invoice.setCreated_at(DateTool.now());
 		invoice.setUpdated_at(DateTool.now());
 		invoice.setCreated_user(user.getId());
-		invoice.setIn_out(true);
+		invoice.setIn_out(false);
 		int id = invoiceService.add(invoice);
 		return this.returnSuccess("id", id);
 		
@@ -198,7 +198,7 @@ public class PurchaseInvoiceController extends BaseController {
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有查看发票明细的权限", null);
 		}
-		Invoice invoice = invoiceService.get(id);
+		Invoice invoice = invoiceService.get(id,false);
 		return invoice;
 	}
 	
@@ -234,7 +234,10 @@ public class PurchaseInvoiceController extends BaseController {
 		if (id == null) {
 			throw new Exception("缺少发票明细ID");
 		}
-		Invoice invoice = invoiceService.get(id);
+		Invoice invoice = invoiceService.get(id,false);
+		if(invoice == null){
+			throw new Exception("找不到ID为" + id + "的销项发票");
+		}
 		Map<Expense_income,Expense_income_invoice> map = new HashMap<Expense_income, Expense_income_invoice>();
 		List<Expense_income_invoice> eiilist = expense_income_invoiceService.getListByInvoiceId(invoice.getId());
 		if(eiilist.size()>0){
@@ -259,7 +262,7 @@ public class PurchaseInvoiceController extends BaseController {
 		}		
 		request.setAttribute("invoice", invoice);	
 		request.setAttribute("map", map);
-		return new ModelAndView("financial/purchase_invoice/detail");
+		return new ModelAndView("financial/sale_invoice/detail");
 	}
 	
 	// 下载导入模板
@@ -313,9 +316,9 @@ public class PurchaseInvoiceController extends BaseController {
 		String lcode = "invoice/import";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有批量导入发票的权限", null);
+			throw new PermissionDeniedDataAccessException("没有批量导入销项发票的权限", null);
 		}
-		return new ModelAndView("financial/purchase_invoice/import");
+		return new ModelAndView("financial/sale_invoice/import");
 	}
 
 	// 批量导入
@@ -329,7 +332,7 @@ public class PurchaseInvoiceController extends BaseController {
 		String lcode = "invoice/import";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有批量导入发票的权限", null);
+			throw new PermissionDeniedDataAccessException("没有批量导入销项发票的权限", null);
 		}
 		List<Invoice> list = readFile(file);
 		List<Bank> banklist = bankService.getList();
@@ -349,7 +352,7 @@ public class PurchaseInvoiceController extends BaseController {
 					throw new Exception("不存在的银行名称：" + item.getBank_name());
 				}
 			}
-			item.setIn_out(true);
+			item.setIn_out(false);
 			item.setMatch_amount(0);
 			item.setCreated_at(DateTool.now());
 			item.setUpdated_at(DateTool.now());

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
 import com.fuwei.entity.financial.Invoice;
+import com.fuwei.entity.ordergrid.ColoringOrder;
 import com.fuwei.entity.report.Payable;
 import com.fuwei.service.BaseService;
 import com.fuwei.util.DateTool;
@@ -24,7 +25,7 @@ public class FinancialReportService extends BaseService {
 
 	// 应付报表
 	public Pager getList(Pager pager,Date start_time, Date end_time,
-			Integer companyId, Integer subjectId,Integer bank_id ,List<Sort> sortlist) throws Exception {
+			Integer companyId, Integer salesmanId,Integer subjectId,Integer bank_id ,List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
 			String seq = " WHERE ";
@@ -33,6 +34,10 @@ public class FinancialReportService extends BaseService {
 			StringBuffer sql_condition = new StringBuffer();
 			if (companyId != null) {
 				sql_condition.append(seq + " company_id='" + companyId+ "'");
+				seq = " AND ";
+			}
+			if (salesmanId != null) {
+				sql_condition.append(seq + " salesman_id='" + salesmanId + "'");
 				seq = " AND ";
 			}
 			if (subjectId != null) {
@@ -100,6 +105,68 @@ public class FinancialReportService extends BaseService {
 			
 			pager.setTotal(total_map);
 			return pager;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	// 应付报表  -- 导出
+	public List<Payable> getList_export(Date start_time, Date end_time,
+			Integer companyId, Integer salesmanId,Integer subjectId,Integer bank_id ,List<Sort> sortlist) throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			String seq = " WHERE ";
+			sql.append("select * from report_payable");
+			
+			StringBuffer sql_condition = new StringBuffer();
+			if (companyId != null) {
+				sql_condition.append(seq + " company_id='" + companyId+ "'");
+				seq = " AND ";
+			}
+			if (salesmanId != null) {
+				sql_condition.append(seq + " salesman_id='" + salesmanId + "'");
+				seq = " AND ";
+			}
+			if (subjectId != null) {
+				sql_condition.append(seq + " subject_id='" + subjectId+ "'");
+				seq = " AND ";
+			}
+			if (start_time != null) {
+				sql_condition.append(seq + " record_at>='"
+						+ DateTool.formateDate(start_time) + "'");
+				seq = " AND ";
+			}
+			if (end_time != null) {
+				sql_condition.append(seq + " record_at<='"
+						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
+						+ "'");
+				seq = " AND ";
+			}
+		
+			
+			if (bank_id != null) {
+				sql_condition.append(seq + " bank_id='" + bank_id+ "'");
+				seq = " AND ";
+			}
+			
+			
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql_condition.append(" order by " + sortlist.get(i).getProperty()
+								+ " " + sortlist.get(i).getDirection() + " ");
+					} else {
+						sql_condition.append("," + sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			
+			List<Payable> result = dao.queryForBeanList(sql.append(sql_condition).toString(), Payable.class); 
+			
+			return result;
 		} catch (Exception e) {
 			throw e;
 		}

@@ -174,7 +174,7 @@ legend span.label {
 													%>
 													|
 													<a data-cid="<%=temp.getId()%>" class="deleteMatch"
-														href="#">取消收发票</a>
+														href="#">取消匹配</a>
 
 												</td>
 											</tr>

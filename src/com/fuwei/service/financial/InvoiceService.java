@@ -199,6 +199,18 @@ public class InvoiceService extends BaseService {
 		}
 	}
 	
+	// 获取
+	public Invoice get(int id,Boolean in_out) throws Exception {
+		try {
+			Invoice invoice = dao.queryForBean(
+					"select * from tb_invoice where id = ? and in_out=?", Invoice.class,
+					id,in_out);
+			return invoice;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 	@Transactional
 	public boolean batch_add(List<Invoice> list) throws Exception {
 		String sql = "INSERT INTO tb_invoice(number,print_date,amount,tax,tax_amount,bank_id,bank_name,type,memo,created_at,updated_at,created_user,in_out,match_amount) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";

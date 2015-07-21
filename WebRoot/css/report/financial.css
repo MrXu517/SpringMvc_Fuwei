@@ -44,8 +44,7 @@ tr.label-warning{
 	width:100px;
 }
 .searchform button{
-	margin-bottom:5px;
-	margin-left:40px;
+	margin-top:5px;
 }
 ul.pagination{
 	float: right;
@@ -71,4 +70,11 @@ ul.pagination{
 }
 .searchform>div{
 	
+}
+.exportBtn{
+	margin-left:30px;
+	margin-top: 5px;
+}
+#in_out{
+	width:70px;
 }

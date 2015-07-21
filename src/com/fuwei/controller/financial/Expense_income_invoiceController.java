@@ -1,6 +1,5 @@
 package com.fuwei.controller.financial;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -59,19 +58,28 @@ public class Expense_income_invoiceController extends BaseController {
 		String lcode = "expense_income_invoice/add";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有将发票匹配支出的权限", null);
+			throw new PermissionDeniedDataAccessException("没有将销项发票匹配收入 和 进项发票匹配支出 的权限", null);
 		}
 		
 		List<Invoice> invoiceList = invoiceService.getByIds(invoice_ids);
 		if(invoiceList==null || invoiceList.size()<=0){
 			throw new Exception("匹配发票时，请至少提供一张发票");
 		}
+		Boolean invoices_in_out = invoiceList.get(0).getIn_out();
+		for(Invoice invoice : invoiceList){
+			if(invoice.getIn_out()!= invoices_in_out){
+				throw new Exception("发票类型不统一， 请统一提交进项发票或销项发票");
+			}
+		}
+		
+		Boolean expense_or_income = !invoices_in_out;//!invoice.getIn_out();
+		
 		List<Expense_income> Expense_incomeList = expense_incomeService.getByIds(expense_income_ids);
 		if(Expense_incomeList==null || Expense_incomeList.size()<=0){
-			throw new Exception("匹配发票时，请至少提供一项支出项");
+			throw new Exception("匹配发票时，请至少提供一项支出项或收入项");
 		}
 		if(invoiceList.size() > 1 && Expense_incomeList.size() > 1){
-			throw new Exception("暂不支持【多张发票匹配多项支出】");
+			throw new Exception("暂不支持【多张发票匹配多项支出或收入】");
 		}
 		
 		List<Expense_income_invoice> resultList = new ArrayList<Expense_income_invoice>();
@@ -112,7 +120,7 @@ public class Expense_income_invoiceController extends BaseController {
 		}
 		invoice_total = NumberUtil.formateDouble(invoice_total, 2);
 		if(invoice_total!=expense_income_total){
-			throw new Exception("匹配失败：发票金额之和 不等于 支出项金额之和 ");
+			throw new Exception("匹配失败：发票金额之和 不等于 收入支出项金额之和 ");
 		}
 		String[] t_expense_income_ids = expense_income_ids.split(",");
 		String[] t_invoice_ids = invoice_ids.split(",");
@@ -121,11 +129,14 @@ public class Expense_income_invoiceController extends BaseController {
 		Integer companyId = Expense_incomeList.get(0).getCompany_id();
 		Integer subjectId = Expense_incomeList.get(0).getSubject_id();
 		for(Expense_income temp :  Expense_incomeList){
+			if(temp.getIn_out()!=expense_or_income){
+				throw new Exception("收入支出项类型不统一， 请统一提交" + (expense_or_income?"收入项":"支出项"));
+			}
 			if(temp.getCompany_id()!=companyId){
-				throw new Exception("匹配失败：支出项公司不一致 ");
+				throw new Exception("匹配失败：收入支出项公司不一致 ");
 			}
 			if(temp.getSubject_id()!=subjectId){
-				throw new Exception("匹配失败：支出项科目不一致 ");
+				throw new Exception("匹配失败：收入支出项科目不一致 ");
 			}
 		}
 		
@@ -146,16 +157,17 @@ public class Expense_income_invoiceController extends BaseController {
 		String lcode = "expense_income_invoice/add";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有将发票匹配支出的权限", null);
+			throw new PermissionDeniedDataAccessException("没有将销项发票匹配收入 和 进项发票匹配支出 的权限", null);
 		}
 		
 		Map<Invoice , List<Expense_income>> map = new HashMap<Invoice , List<Expense_income>>();
 		
 		Invoice invoice = invoiceService.get(id);
+		Boolean expense_or_income = !invoice.getIn_out();
 		//发票待匹配金额
 		double to_be_match_invoice_amount = invoice.getAmount() - invoice.getMatch_amount();
 		Integer bank_id = invoice.getBank_id();
-		List<Expense_income> Expense_incomeList = expense_incomeService.getInvoiceList(bank_id,false);
+		List<Expense_income> Expense_incomeList = expense_incomeService.getInvoiceList(bank_id,expense_or_income);
 		
 		//存放 一张发票 -> 一项或多项支出
 		List<List<Expense_income>> one_to_many_Result = new ArrayList<List<Expense_income>>();
@@ -205,7 +217,12 @@ public class Expense_income_invoiceController extends BaseController {
 		request.setAttribute("many_to_one_map", many_to_one_map);
 		request.setAttribute("one_to_many_Result", one_to_many_Result);
 		
-		return new ModelAndView("financial/expense_income_invoice/match");
+		if(expense_or_income){//true = 收入
+			return new ModelAndView("financial/expense_income_invoice/match_income");
+		}else{
+			return new ModelAndView("financial/expense_income_invoice/match");
+		}
+		
 		
 		
 	}
@@ -220,20 +237,27 @@ public class Expense_income_invoiceController extends BaseController {
 		String lcode = "expense_income_invoice/add";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有将发票匹配支出的权限", null);
+			throw new PermissionDeniedDataAccessException("没有将销项发票匹配收入 和 进项发票匹配支出 的权限", null);
 		}
 		
 		Map<Invoice , List<Expense_income>> map = new HashMap<Invoice , List<Expense_income>>();
 		
 		Invoice invoice = invoiceService.get(id);
+		Boolean expense_or_income = !invoice.getIn_out();
 		//发票待匹配金额
 		Integer bank_id = invoice.getBank_id();
-		List<Expense_income> Expense_incomeList = expense_incomeService.getInvoiceList(bank_id,false);
+		
+		List<Expense_income> Expense_incomeList = expense_incomeService.getInvoiceList(bank_id,expense_or_income);
 
 		request.setAttribute("invoice", invoice);
 		request.setAttribute("Expense_incomeList", Expense_incomeList);
 		
-		return new ModelAndView("financial/expense_income_invoice/match_manual");			
+		if(expense_or_income){
+			return new ModelAndView("financial/expense_income_invoice/match_manual_income");			
+		}
+		else{
+			return new ModelAndView("financial/expense_income_invoice/match_manual");			
+		}
 	}
 	
 	//手动匹配
@@ -245,16 +269,21 @@ public class Expense_income_invoiceController extends BaseController {
 		String lcode = "expense_income_invoice/add";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有将发票匹配支出的权限", null);
+			throw new PermissionDeniedDataAccessException("没有将销项发票匹配收入 和 进项发票匹配支出 的权限", null);
 		}
 		
 		Invoice invoice = invoiceService.get(invoice_id);
+		Boolean expense_or_income = !invoice.getIn_out();
+		
 		if(invoice==null){
 			throw new Exception("匹配发票时，请至少提供一张发票");
 		}
 		Expense_income expense_income = expense_incomeService.get(expense_income_id);
 		if(expense_income==null){
 			throw new Exception("匹配发票时，请至少提供一项支出项");
+		}
+		if(expense_income.getIn_out()!=expense_or_income){
+			throw new Exception("收入支出项类型与发票不一致， 销项发票对应收入，进项发票对应支出");
 		}
 		
 		

@@ -69,6 +69,68 @@ public class Expense_incomeService extends BaseService {
 		}
 	}
 	
+	//获取列表  - 不分页， 收支报表
+	public List<Expense_income> getList_export( Date start_time, Date end_time,
+			Integer companyId, Integer salesmanId,Boolean in_out, Integer bank_id , Integer subject_id, List<Sort> sortlist) throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			String seq = " WHERE ";
+			sql.append("select * from tb_expense_income ");
+			
+			StringBuffer sql_condition = new StringBuffer();
+			if (companyId != null) {
+				sql_condition.append(seq + " company_id='" + companyId+ "'");
+				seq = " AND ";
+			}
+
+			if (start_time != null) {
+				sql_condition.append(seq + " expense_at>='"
+						+ DateTool.formateDate(start_time) + "'");
+				seq = " AND ";
+			}
+			if (end_time != null) {
+				sql_condition.append(seq + " expense_at<='"
+						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
+						+ "'");
+				seq = " AND ";
+			}
+			if (salesmanId != null) {
+				sql_condition.append(seq + " salesman_id='" + salesmanId + "'");
+				seq = " AND ";
+			}
+			if (in_out != null) {
+				sql_condition.append(seq + " in_out='" + (in_out == true?"1":0 )+ "'");
+				seq = " AND ";
+			}
+			if (bank_id != null) {
+				sql_condition.append(seq + " bank_id='" + bank_id+ "'");
+				seq = " AND ";
+			}
+			if (subject_id != null) {
+				sql_condition.append(seq + " subject_id='" + subject_id+ "'");
+				seq = " AND ";
+			}
+		
+
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql_condition.append(" order by " + sortlist.get(i).getProperty()
+								+ " " + sortlist.get(i).getDirection() + " ");
+					} else {
+						sql_condition.append("," + sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			return dao.queryForBeanList(sql.append(sql_condition).toString(), Expense_income.class);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 	// 获取列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,
 			Integer companyId, Integer salesmanId,Boolean in_out, Integer bank_id , Integer subject_id,Double amount_from , Double amount_to, List<Sort> sortlist) throws Exception {

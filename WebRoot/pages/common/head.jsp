@@ -88,8 +88,8 @@
 	Boolean h_has_financial_bank = SystemCache.hasAuthority(session,"bank/index");
 	Boolean h_has_financial_subject = SystemCache.hasAuthority(session,"subject/index");
 	Boolean h_has_financial_expense_income = SystemCache.hasAuthority(session,"expense_income/add");
-	Boolean h_has_financial_purchase_invoice = SystemCache.hasAuthority(session,"invoice/add");
-	Boolean h_has_financial_sale_invoice = SystemCache.hasAuthority(session,"sale_invoice/add");
+	Boolean h_has_financial_invoice = SystemCache.hasAuthority(session,"invoice/add");
+	//Boolean h_has_financial_sale_invoice = SystemCache.hasAuthority(session,"sale_invoice/add");
 	//2015-6-4添加财务工作台
 	Boolean h_has_financial_workspace = SystemCache.hasAuthority(session,"financial/workspace");
 
@@ -121,6 +121,7 @@
 	
 	
 	Boolean has_packing_order_index = SystemCache.hasAuthority(session,"packing_order/index");
+	
 	
 	//权限相关
 	
@@ -393,9 +394,14 @@
 								<a href="financial/workspace">财务工作台</a>
 							</li>
 							<%} %>
-							<%if(h_has_financial_purchase_invoice){ %>
+							<%if(h_has_financial_invoice){ %>
 							<li>
 								<a href="purchase_invoice/add">进项发票</a>
+							</li>
+							<%} %>
+							<%if(h_has_financial_invoice){ %>
+							<li>
+								<a href="sale_invoice/add">销项发票</a>
 							</li>
 							<%} %>
 							<%if(h_has_financial_expense_income){ %>

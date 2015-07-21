@@ -163,7 +163,7 @@
 
 								<fieldset>
 									<legend>
-										所开支出款项
+										所收收入款项
 									</legend>
 									<table class="table table-responsive table-bordered"
 										id="detailTb">
@@ -182,10 +182,10 @@
 													业务员
 												</th>
 												<th width="80px">
-													付款时间
+													收款时间
 												</th>
 												<th width="60px">
-													收票金额
+													开票金额
 												</th>
 												<th width="60px">
 													操作
@@ -198,7 +198,7 @@
 											%>
 											<tr>
 												<td colspan="7">
-													还没有匹配到财务支出项
+													还没有匹配到财务收入项
 												</td>
 											</tr>
 											<%
@@ -232,7 +232,7 @@
 													%>
 													|
 													<a data-cid="<%=temp.getId()%>" class="deleteMatch"
-														href="#">取消收发票</a>
+														href="#">取消开发票</a>
 
 												</td>
 											</tr>
@@ -280,7 +280,7 @@
 							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
 						</button>
 						<h4 class="modal-title">
-							请选择匹配的支出项
+							请选择匹配的收入项
 						</h4>
 					</div>
 					<div class="modal-body">

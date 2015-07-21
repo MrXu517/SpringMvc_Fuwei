@@ -70,6 +70,9 @@
 							<li>
 								<a href="#purchase_invoices" role="tab" data-toggle="tab">进项发票</a>
 							</li>
+							<li>
+								<a href="#sale_invoices" role="tab" data-toggle="tab">销项发票</a>
+							</li>
 						</ul>
 
 
@@ -80,6 +83,9 @@
 							</div>
 							<div class="tab-pane" id="purchase_invoices">
 								<iframe id="purchase_invoiceIframe" name="purchase_invoiceIframe" border="0" src="purchase_invoice/index" > </iframe>
+							</div>
+							<div class="tab-pane" id="sale_invoices">
+								<iframe id="sale_invoiceIframe" name="sale_invoiceIframe" border="0" src="sale_invoice/index" > </iframe>
 							</div>
 						</div>
 					</div>

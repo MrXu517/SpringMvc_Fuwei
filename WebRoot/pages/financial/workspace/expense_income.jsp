@@ -447,8 +447,10 @@
 											<td><%=DateTool.formatDateYMD(item.getExpense_at())%></td>
 											<td><%=item.getMemo()%></td>
 											
-											<td><%if(!item.getIn_out()&&item.isInvoiced()){ %>
-														<span class="label label-success">发票已收</span>
+											<td><%
+												String in_out_string = item.getIn_out()?"发票已开":"发票已收";
+												if(item.isInvoiced()){ %>
+														<span class="label label-success"><%=in_out_string %></span>
 													<%}else{ %>
 															<span class="label label-default"><%=item.getInvoice_amount() %></span>
 													<%} %>

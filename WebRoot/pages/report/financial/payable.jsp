@@ -9,6 +9,8 @@
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.NumberUtil"%>
 <%@page import="com.fuwei.entity.report.Payable"%>
+<%@page import="com.fuwei.entity.Salesman"%>
+<%@page import="net.sf.json.JSONObject"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -54,15 +56,23 @@
 		bank_id = -1;
 	}
 	
-	
+	Integer salesmanId = (Integer) request.getAttribute("salesmanId");
 	Integer companyId = (Integer) request.getAttribute("companyId");
 	String company_str = "";
+	String salesman_str = "";
+	if (salesmanId != null) {
+		salesman_str = String.valueOf(salesmanId);
+	}
 	if (companyId != null) {
 		company_str = String.valueOf(companyId);
+	}
+	if (salesmanId == null) {
+		salesmanId = -1;
 	}
 	if (companyId == null) {
 		companyId = -1;
 	}
+	
 	
 	Integer subject_id = (Integer) request.getAttribute("subject_id");
 	String subject_str = "";
@@ -77,6 +87,12 @@
 			.getAttribute("subjectlist");
 	List<Bank> banklist = (List<Bank>) request.getAttribute("banklist");
 
+	HashMap<String, List<Salesman>> companySalesmanMap = SystemCache
+			.getCompanySalesmanMap_ID();
+	JSONObject jObject = new JSONObject();
+	jObject.put("companySalesmanMap", companySalesmanMap);
+	String companySalesmanMap_str = jObject.toString();
+	
 %>
 <!DOCTYPE html>
 
@@ -98,14 +114,13 @@
 		<script src="js/plugins/bootstrap.min.js" type="text/javascript"></script>
 		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
-		<script src="js/financial/workspace/purchase_invoice.js" type="text/javascript"></script>
 		<script type='text/javascript' src='js/plugins/select2.min.js'></script>
-		<link rel="stylesheet" type="text/css" href="css/plugins/select2.min.css" />
-		<link href="css/report/financial.css" rel="stylesheet"
-			type="text/css" />
+		<link rel="stylesheet" type="text/css"
+			href="css/plugins/select2.min.css" />
+		<link href="css/report/financial.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
-	<%@ include file="../../common/head.jsp"%>
+		<%@ include file="../../common/head.jsp"%>
 		<div id="Content">
 			<div id="main">
 				<div class="breadcrumbs" id="breadcrumbs">
@@ -113,7 +128,8 @@
 						<li>
 							<i class="fa fa-home"></i>
 							<a href="user/index">首页</a>
-						</li><li>
+						</li>
+						<li>
 							财务报表
 						</li>
 						<li class="active">
@@ -123,20 +139,19 @@
 				</div>
 				<div class="body">
 					<div class="container-fluid">
-									<div class="row">
-										<div class="col-md-12 tablewidget">
-											<!-- Table -->
-											<div clas="navbar navbar-default">
-												<form
-													class="form-horizontal searchform form-inline searchform"
-													role="form">
-													<input type="hidden" name="page" value="1">							
-													<div class="form-group salesgroup">
+						<div class="row">
+							<div class="col-md-12 tablewidget">
+								<!-- Table -->
+								<div clas="navbar navbar-default">
+									<form class="form-horizontal searchform form-inline searchform"
+										role="form">
+										<input type="hidden" name="page" value="1">
+										<div class="form-group salesgroup">
 											<label for="companyId" class="col-sm-3 control-label">
 												公司
 											</label>
 											<div class="col-sm-9">
-												<select 
+												<select data='<%=companySalesmanMap_str%>'
 													class="form-control" name="companyId" id="companyId"
 													placeholder="公司">
 													<option value="">
@@ -158,7 +173,32 @@
 												</select>
 											</div>
 										</div>
-										
+										<div class="form-group salesgroup">
+											<label for="salesmanId" class="col-sm-4 control-label">
+												业务员
+											</label>
+											<div class="col-sm-8">
+												<select class="form-control" name="salesmanId"
+													id="salesmanId" placeholder="业务员">
+													<option value="">
+														所有
+													</option>
+													<%
+														for (Salesman salesman : SystemCache.getSalesmanList(companyId)) {
+															if (salesmanId != null && salesmanId == salesman.getId()) {
+													%>
+													<option value="<%=salesman.getId()%>" selected><%=salesman.getName()%></option>
+													<%
+														} else {
+													%>
+													<option value="<%=salesman.getId()%>"><%=salesman.getName()%></option>
+													<%
+														}
+														}
+													%>
+												</select>
+											</div>
+										</div>
 										<div class="form-group salesgroup">
 											<label for="subject_id" class="col-sm-3 control-label">
 												科目
@@ -186,188 +226,258 @@
 
 												</select>
 											</div>
-										</div>			<div class="form-group salesgroup">
-														<label for="bank_id" class="col-sm-3 control-label">
-															对方账户
-														</label>
-														<div class="col-sm-8">
-															<select class="form-control" name="bank_id" id="bank_id">
-																<option value="">
-																	未选择
-																</option>
-																<%
+										</div>
+										<div class="form-group salesgroup">
+											<label for="bank_id" class="col-sm-3 control-label">
+												对方账户
+											</label>
+											<div class="col-sm-8">
+												<select class="form-control" name="bank_id" id="bank_id">
+													<option value="">
+														未选择
+													</option>
+													<%
 																	for (Bank bank : banklist) {
 																		if (bank_id != null && bank_id == bank.getId()) {
 																%>
-																<option value="<%=bank.getId()%>" selected><%=bank.getName()%></option>
-																<%
+													<option value="<%=bank.getId()%>" selected><%=bank.getName()%></option>
+													<%
 																	} else {
 																%>
-																<option value="<%=bank.getId()%>"><%=bank.getName()%></option>
-																<%
+													<option value="<%=bank.getId()%>"><%=bank.getName()%></option>
+													<%
 																	}
 																	}
 																%>
-															</select>
-														</div>
-													</div>
+												</select>
+											</div>
+										</div>
 
-													<div class="form-group timegroup">
-														<label class="col-sm-3 control-label">
-															记录日期
-														</label>
+										<div class="form-group timegroup">
+											<label class="col-sm-3 control-label">
+												记录日期
+											</label>
 
-														<div class="input-group col-md-9">
-															<input type="text" name="start_time" id="start_time"
-																class="date form-control" value="<%=start_time_str%>" />
-															<span class="input-group-addon">到</span>
-															<input type="text" name="end_time" id="end_time"
-																class="date form-control" value="<%=end_time_str%>">
-														</div>
-														
-													</div>
-													
-													<button class="btn btn-primary" type="button" id="searchBtn">
-														搜索
-													</button>
-																								<ul class="pagination">
-													<li>
-														<a
-															href="report/financial/payable?company_id=<%=company_str %>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=1">«</a>
-													</li>
-
-													<%
-														if (pager.getPageNo() > 1) {
-													%>
-													<li class="">
-														<a
-															href="report/financial/payable?company_id=<%=company_str %>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() - 1%>">上一页
-															<span class="sr-only"></span> </a>
-													</li>
-													<%
-														} else {
-													%>
-													<li class="disabled">
-														<a disabled>上一页 <span class="sr-only"></span> </a>
-													</li>
-													<%
-														}
-													%>
-
-													<li class="active">
-														<a
-															href="report/financial/payable?company_id=<%=company_str %>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
-															class="sr-only"></span> </a>
-													</li>
-													<li>
-														<%
-															if (pager.getPageNo() < pager.getTotalPage()) {
-														%>
-													
-													<li class="">
-														<a
-															href="report/financial/payable?company_id=<%=company_str %>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() + 1%>">下一页
-															<span class="sr-only"></span> </a>
-													</li>
-													<%
-														} else {
-													%>
-													<li class="disabled">
-														<a disabled>下一页 <span class="sr-only"></span> </a>
-													</li>
-													<%
-														}
-													%>
-
-													</li>
-													<li>
-														<a
-															href="report/financial/payable?company_id=<%=company_str %>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getTotalPage()%>">»</a>
-													</li>
-												</ul>
-												</form>
-	
-
+											<div class="input-group col-md-9">
+												<input type="text" name="start_time" id="start_time"
+													class="date form-control" value="<%=start_time_str%>" />
+												<span class="input-group-addon">到</span>
+												<input type="text" name="end_time" id="end_time"
+													class="date form-control" value="<%=end_time_str%>">
 											</div>
 
-											<table class="table table-responsive table-bordered">
-												<thead>
-													<tr>
-														<th width="20px">
-															No.
-														</th>
-														<th width="80px">类型</th>
-														<th width="120px">
-															对方账户
-														</th>
-														<th width="60px">
-															应付
-														</th><th width="60px">
-															已付
-														</th>
-														<!-- <th width="60px">
+										</div>
+										<br>
+										<button class="btn btn-primary" type="submit" id="searchBtn">
+											搜索
+										</button><a class="exportBtn btn btn-primary" type="button" href="report/financial/payable/export?company_id=<%=company_str %>&salesmanId=<%=salesman_str%>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>">
+											导出
+										</a>
+										<ul class="pagination">
+											<li>
+												<a
+													href="report/financial/payable?company_id=<%=company_str %>&salesmanId=<%=salesman_str%>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=1">«</a>
+											</li>
+
+											<%
+														if (pager.getPageNo() > 1) {
+													%>
+											<li class="">
+												<a
+													href="report/financial/payable?company_id=<%=company_str %>&salesmanId=<%=salesman_str%>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() - 1%>">上一页
+													<span class="sr-only"></span> </a>
+											</li>
+											<%
+														} else {
+													%>
+											<li class="disabled">
+												<a disabled>上一页 <span class="sr-only"></span> </a>
+											</li>
+											<%
+														}
+													%>
+
+											<li class="active">
+												<a
+													href="report/financial/payable?company_id=<%=company_str %>&salesmanId=<%=salesman_str%>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
+													class="sr-only"></span> </a>
+											</li>
+											<li>
+												<%
+															if (pager.getPageNo() < pager.getTotalPage()) {
+														%>
+											
+											<li class="">
+												<a
+													href="report/financial/payable?company_id=<%=company_str %>&salesmanId=<%=salesman_str%>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() + 1%>">下一页
+													<span class="sr-only"></span> </a>
+											</li>
+											<%
+														} else {
+													%>
+											<li class="disabled">
+												<a disabled>下一页 <span class="sr-only"></span> </a>
+											</li>
+											<%
+														}
+													%>
+
+											</li>
+											<li>
+												<a
+													href="report/financial/payable?company_id=<%=company_str %>&salesmanId=<%=salesman_str%>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getTotalPage()%>">»</a>
+											</li>
+										</ul>
+									</form>
+
+
+								</div>
+
+								<table class="table table-responsive table-bordered">
+									<thead>
+										<tr>
+											<th width="20px">
+												No.
+											</th>
+											<th width="80px">
+												类型
+											</th>
+											<th width="120px">
+												对方账户
+											</th>
+											<th width="60px">
+												应付
+											</th>
+											<th width="60px">
+												已付
+											</th>
+											<!-- <th width="60px">
 															未付
-														</th> --><th width="60px">
-															未收
-														</th>
-														<th width="60px">
-															付款/收票日期
-														</th>
-														<th width="100px">
-															备注
-														</th>
-													</tr>
-												</thead>
-												<tbody>
-													
-													<%
+														</th> -->
+											<th width="60px">
+												未收
+											</th>
+											<th width="60px">
+												付款/收票日期
+											</th>
+											<th width="100px">
+												备注
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+
+										<%
 														int i = (pager.getPageNo() - 1) * pager.getPageSize() + 0;
 														for (Payable item : payablelist) {
 													%>
-													<tr>
-														<td><%=++i%></td>
-														<%if(item.getType().equals("invoice")){ %>
-															<td><a target="_blank" class="detailA" href="purchase_invoice/detail/<%=item.getType_id() %>"><%=item.getTypeString()%>[id:<%=item.getType_id() %>]</a></td>
-															<td><%=item.getBank_name()%></td>
-															<td><%=item.getPayable()%></td>
-															<td></td>
-															
-															<td></td>
-														<%}else{ %>
-															<td><a target="_blank" class="detailA" href="expense/detail/<%=item.getType_id() %>"><%=item.getTypeString()%>[id:<%=item.getType_id() %>]</a></td>
-															<td><%=item.getBank_name()%></td>
-															<td></td>
-															<td><%=item.getPay()%></td>
-														
-															<td><%=item.getUn_invoiced()%></td>
-														<%} %>
-														
-														<td><%=DateTool.formatDateYMD(item.getRecord_at())%></td>
-														<td><%=item.getMemo()%></td>
-									
-													</tr>
-													<%
+										<tr>
+											<td><%=++i%></td>
+											<%if(item.getType().equals("invoice")){ %>
+											<td>
+												<a target="_blank" class="detailA"
+													href="purchase_invoice/detail/<%=item.getType_id() %>"><%=item.getTypeString()%>[id:<%=item.getType_id() %>]</a>
+											</td>
+											<td><%=item.getBank_name()%></td>
+											<td><%=item.getPayable()%></td>
+											<td></td>
+
+											<td></td>
+											<%}else{ %>
+											<td>
+												<a target="_blank" class="detailA"
+													href="expense/detail/<%=item.getType_id() %>"><%=item.getTypeString()%>[id:<%=item.getType_id() %>]</a>
+											</td>
+											<td><%=item.getBank_name()%></td>
+											<td></td>
+											<td><%=item.getPay()%></td>
+
+											<td><%=item.getUn_invoiced()%></td>
+											<%} %>
+
+											<td><%=DateTool.formatDateYMD(item.getRecord_at())%></td>
+											<td><%=item.getMemo()%></td>
+
+										</tr>
+										<%
 														}
 													%>
-													<%if(payablelist == null || payablelist.size() <= 0){ %>
-														<tr><td colspan="8">找不到符合条件的记录</td></tr>
-													<%}else{ %>
-												</tbody><tfoot><tr><td></td><td>合计</td><td></td><td><%=total_payable %></td><td><%=total_pay%></td><td><%=total_uninvoiced%></td><td></td><td></td></tr>
-<tr><td></td><td></td><td></td><td>实际未付：</td><td colspan="4" style="text-align: left;padding-left: 10px;"><%=NumberUtil.formateDouble(total_payable-total_pay,2)%> (应付-已付)  + <%=total_pay_personal %> (支付给个人的无需收发票)  = <%= NumberUtil.formateDouble(total_payable-total_pay + total_pay_personal,2)%></td></tr>
-</tfoot>
-											<%} %>
-											</table>
-										</div>
-									</div>
-									</div>
+										<%if(payablelist == null || payablelist.size() <= 0){ %>
+										<tr>
+											<td colspan="8">
+												找不到符合条件的记录
+											</td>
+										</tr>
+										<%}else{ %>
+									</tbody>
+									<tfoot>
+										<tr>
+											<td></td>
+											<td>
+												合计
+											</td>
+											<td></td>
+											<td><%=total_payable %></td>
+											<td><%=total_pay%></td>
+											<td><%=total_uninvoiced%></td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td>
+												实际未付：
+											</td>
+											<td colspan="4" style="text-align: left; padding-left: 10px;"><%=NumberUtil.formateDouble(total_payable-total_pay,2)%>
+												(应付-已付) +
+												<%=total_pay_personal %>
+												(支付给个人的无需收发票) =
+												<%= NumberUtil.formateDouble(total_payable-total_pay + total_pay_personal,2)%></td>
+										</tr>
+									</tfoot>
+									<%} %>
+								</table>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-<script type="text/javascript">
+		<script type="text/javascript">
 	/*设置当前选中的页*/
 	var $a = $("#left li a[href='report/financial/payable']");
 	setActiveLeft($a.parent("li"));
 
+	// 公司-业务员级联
+	$("#companyId").change( function() {
+		changeCompany(this.value);
+	});
+	// 公司-业务员级联
+	function changeCompany(companyId) {
+		var companyName = $("#companyId").val();
+		var companySalesmanMap = $("#companyId").attr("data");
+		companySalesmanMap = $.parseJSON(companySalesmanMap).companySalesmanMap;
+		var SalesNameList = companySalesmanMap[companyName];
+		$("#salesmanId").empty();
+		var frag = document.createDocumentFragment();
+		var option = document.createElement("option");
+		option.value = "";
+		option.text = "未选择";
+		frag.appendChild(option);
+		if (SalesNameList) {
+			for ( var i = 0; i < SalesNameList.length; ++i) {
+				var salesName = SalesNameList[i];
+				var option = document.createElement("option");
+				option.value = salesName.id;
+				option.text = salesName.name;
+				frag.appendChild(option);
+			}
+		}
+
+		$("#salesmanId").append(frag);
+	}
 </script>
 	</body>
 </html>

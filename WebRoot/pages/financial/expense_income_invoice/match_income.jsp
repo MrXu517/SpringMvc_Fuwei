@@ -25,7 +25,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>发票匹配 -- 桐庐富伟针织厂</title>
+		<title>销项发票匹配 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -93,7 +93,7 @@
 									</a>
 									<%} %>
 								<p>
-									<strong>一张【进项发票】 对应 一项或多项【支出项】</strong>
+									<strong>一张【销项发票】 对应 一项或多项【收入项】</strong>
 								</p>
 								<table class="table table-responsive table-bordered">
 									<thead>
@@ -109,13 +109,13 @@
 												总金额
 											</th>
 											<th width="60px">
-												已开金额
+												已收金额
 											</th>
 											<th width="60px">
-												未开金额
+												未收金额
 											</th>
 											<th width="60px">
-												付款时间
+												收款时间
 											</th>
 											<th width="60px">
 												备注
@@ -161,7 +161,7 @@
 									</tbody>
 								</table>
 								<p>
-									<strong>多张【进项发票】 对应 一项【支出项】</strong>
+									<strong>多张【销项发票】 对应 一项【收入项】</strong>
 								</p>
 								<table class="table table-responsive table-bordered">
 									<thead>
@@ -172,7 +172,7 @@
 												发票属性
 											</th>
 											<th colspan="3">
-												支出项属性
+												收入项属性
 											</th>
 										</tr>
 										<tr>
@@ -192,10 +192,10 @@
 												账户
 											</th>
 											<th width="55px">
-												未开金额
+												未收金额
 											</th>
 											<th width="60px">
-												付款时间
+												收款时间
 											</th>
 
 										</tr>

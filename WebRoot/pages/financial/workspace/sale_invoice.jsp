@@ -92,7 +92,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>进项发票 -- 桐庐富伟针织厂</title>
+		<title>销项发票 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -107,9 +107,9 @@
 		<script src="js/plugins/bootstrap.min.js" type="text/javascript"></script>
 		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
-		<script src="js/financial/workspace/purchase_invoice.js" type="text/javascript"></script>
+		<script src="js/financial/workspace/sale_invoice.js" type="text/javascript"></script>
 		<script type='text/javascript' src='js/plugins/select2.min.js'></script>
-	<link rel="stylesheet" type="text/css" href="css/plugins/select2.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/plugins/select2.min.css" />
 		<link href="css/financial/workspace.css" rel="stylesheet"
 			type="text/css" />
         <style type="text/css">
@@ -264,14 +264,14 @@
 												<button class="btn btn-primary" type="button" id="searchBtn">
 														搜索
 													</button>
-												<a href="purchase_invoice/import" class="btn btn-primary" target="_top">批量导入</a>
+												<a href="sale_invoice/import" class="btn btn-primary" target="_top">批量导入</a>
 												<!-- <button class="btn btn-primary" type="button" id="matchBtn">
 														批量匹配
 													</button> -->
 												<ul class="pagination">
 													<li>
 														<a
-															href="purchase_invoice/index?companyId=<%=company_str %>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&number=<%=number_str%>&amount_from=<%=amount_from_str%>&amount_to=<%=amount_to_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=1">«</a>
+															href="sale_invoice/index?companyId=<%=company_str %>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&number=<%=number_str%>&amount_from=<%=amount_from_str%>&amount_to=<%=amount_to_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=1">«</a>
 													</li>
 
 													<%
@@ -279,7 +279,7 @@
 													%>
 													<li class="">
 														<a
-															href="purchase_invoice/index?companyId=<%=company_str %>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&number=<%=number_str%>&amount_from=<%=amount_from_str%>&amount_to=<%=amount_to_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() - 1%>">上一页
+															href="sale_invoice/index?companyId=<%=company_str %>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&number=<%=number_str%>&amount_from=<%=amount_from_str%>&amount_to=<%=amount_to_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() - 1%>">上一页
 															<span class="sr-only"></span> </a>
 													</li>
 													<%
@@ -294,7 +294,7 @@
 
 													<li class="active">
 														<a
-															href="purchase_invoice/index?companyId=<%=company_str %>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&number=<%=number_str%>&amount_from=<%=amount_from_str%>&amount_to=<%=amount_to_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
+															href="sale_invoice/index?companyId=<%=company_str %>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&number=<%=number_str%>&amount_from=<%=amount_from_str%>&amount_to=<%=amount_to_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
 															class="sr-only"></span> </a>
 													</li>
 													<li>
@@ -304,7 +304,7 @@
 													
 													<li class="">
 														<a
-															href="purchase_invoice/index?companyId=<%=company_str %>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&number=<%=number_str%>&amount_from=<%=amount_from_str%>&amount_to=<%=amount_to_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() + 1%>">下一页
+															href="sale_invoice/index?companyId=<%=company_str %>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&number=<%=number_str%>&amount_from=<%=amount_from_str%>&amount_to=<%=amount_to_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() + 1%>">下一页
 															<span class="sr-only"></span> </a>
 													</li>
 													<%
@@ -320,7 +320,7 @@
 													</li>
 													<li>
 														<a
-															href="purchase_invoice/index?companyId=<%=company_str %>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&number=<%=number_str%>&amount_from=<%=amount_from_str%>&amount_to=<%=amount_to_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getTotalPage()%>">»</a>
+															href="sale_invoice/index?companyId=<%=company_str %>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&number=<%=number_str%>&amount_from=<%=amount_from_str%>&amount_to=<%=amount_to_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getTotalPage()%>">»</a>
 													</li>
 												</ul>
 
@@ -386,7 +386,7 @@
 													<%} %>
 											
 															<a target="_blank"
-																href="purchase_invoice/detail/<%=item.getId()%>">详情</a>
+																href="sale_invoice/detail/<%=item.getId()%>">详情</a>
 
 															<%
 																if (has_item_delete) {
@@ -420,7 +420,7 @@
 							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
 						</button>
 						<h4 class="modal-title">
-							请选择匹配的支出项
+							请选择匹配的收入项
 						</h4>
 					</div>
 					<div class="modal-body">
