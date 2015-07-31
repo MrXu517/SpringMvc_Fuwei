@@ -8,9 +8,9 @@
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.NumberUtil"%>
-<%@page import="com.fuwei.entity.report.Payable"%>
 <%@page import="com.fuwei.entity.Salesman"%>
 <%@page import="net.sf.json.JSONObject"%>
+<%@page import="com.fuwei.entity.report.Receivable"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -20,19 +20,19 @@
 	if (pager == null) {
 		pager = new Pager();
 	}
-	List<Payable> payablelist = new ArrayList<Payable>();
-	double total_payable = 0 ;
-	double total_pay = 0 ;
-	double total_unpay = 0;
+	List<Receivable> receivablelist = new ArrayList<Receivable>();
+	double total_receivable = 0 ;
+	double total_received = 0 ;
+	double total_un_received = 0;
 	double total_uninvoiced = 0;
-	double total_pay_personal = 0;
+	double total_received_personal = 0;
 	if (pager != null & pager.getResult() != null) {
-		payablelist = (List<Payable>) pager.getResult();
-		total_payable = NumberUtil.formateDouble((Double)pager.getTotal().get("payable"),2);
-		total_pay = NumberUtil.formateDouble((Double)pager.getTotal().get("pay"),2);
-		total_unpay = NumberUtil.formateDouble((Double)pager.getTotal().get("un_pay"),2);
+		receivablelist = (List<Receivable>) pager.getResult();
+		total_receivable = NumberUtil.formateDouble((Double)pager.getTotal().get("receivable"),2);
+		total_received = NumberUtil.formateDouble((Double)pager.getTotal().get("received"),2);
+		total_un_received = NumberUtil.formateDouble((Double)pager.getTotal().get("un_received"),2);
 		total_uninvoiced = NumberUtil.formateDouble((Double)pager.getTotal().get("un_invoiced"),2);
-		total_pay_personal = NumberUtil.formateDouble((Double)pager.getTotal().get("pay_personal"),2);
+		total_received_personal = NumberUtil.formateDouble((Double)pager.getTotal().get("received_personal"),2);
 	}
 
 	Date start_time = (Date) request.getAttribute("start_time");
@@ -99,7 +99,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>应付报表 -- 财务报表 -- 桐庐富伟针织厂</title>
+		<title>应收报表 -- 财务报表 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -133,7 +133,7 @@
 							财务报表
 						</li>
 						<li class="active">
-							应付报表
+							应收报表
 						</li>
 					</ul>
 				</div>
@@ -255,7 +255,7 @@
 
 										<div class="form-group timegroup">
 											<label class="col-sm-3 control-label">
-												记录日期
+												开票/收款日期
 											</label>
 
 											<div class="input-group col-md-9">
@@ -270,13 +270,13 @@
 										<br>
 										<button class="btn btn-primary" type="submit" id="searchBtn">
 											搜索
-										</button><a class="exportBtn btn btn-primary" type="button" href="report/financial/payable/export?companyId=<%=company_str %>&salesmanId=<%=salesman_str%>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>">
+										</button><a class="exportBtn btn btn-primary" type="button" href="report/financial/receivable/export?companyId=<%=company_str %>&salesmanId=<%=salesman_str%>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>">
 											导出
 										</a>
 										<ul class="pagination">
 											<li>
 												<a
-													href="report/financial/payable?companyId=<%=company_str %>&salesmanId=<%=salesman_str%>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=1">«</a>
+													href="report/financial/receivable?companyId=<%=company_str %>&salesmanId=<%=salesman_str%>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=1">«</a>
 											</li>
 
 											<%
@@ -284,7 +284,7 @@
 													%>
 											<li class="">
 												<a
-													href="report/financial/payable?companyId=<%=company_str %>&salesmanId=<%=salesman_str%>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() - 1%>">上一页
+													href="report/financial/receivable?companyId=<%=company_str %>&salesmanId=<%=salesman_str%>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() - 1%>">上一页
 													<span class="sr-only"></span> </a>
 											</li>
 											<%
@@ -299,7 +299,7 @@
 
 											<li class="active">
 												<a
-													href="report/financial/payable?companyId=<%=company_str %>&salesmanId=<%=salesman_str%>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
+													href="report/financial/receivable?companyId=<%=company_str %>&salesmanId=<%=salesman_str%>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
 													class="sr-only"></span> </a>
 											</li>
 											<li>
@@ -309,7 +309,7 @@
 											
 											<li class="">
 												<a
-													href="report/financial/payable?companyId=<%=company_str %>&salesmanId=<%=salesman_str%>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() + 1%>">下一页
+													href="report/financial/receivable?companyId=<%=company_str %>&salesmanId=<%=salesman_str%>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() + 1%>">下一页
 													<span class="sr-only"></span> </a>
 											</li>
 											<%
@@ -325,7 +325,7 @@
 											</li>
 											<li>
 												<a
-													href="report/financial/payable?companyId=<%=company_str %>&salesmanId=<%=salesman_str%>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getTotalPage()%>">»</a>
+													href="report/financial/receivable?companyId=<%=company_str %>&salesmanId=<%=salesman_str%>&subject_id=<%=subject_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getTotalPage()%>">»</a>
 											</li>
 										</ul>
 									</form>
@@ -346,19 +346,16 @@
 												对方账户
 											</th>
 											<th width="60px">
-												应付
+												应收
 											</th>
 											<th width="60px">
-												已付
+												已收
 											</th>
-											<!-- <th width="60px">
-															未付
-														</th> -->
 											<th width="60px">
 												未匹配
 											</th>
 											<th width="60px">
-												付款/收票日期
+												收款/开票日期
 											</th>
 											<th width="100px">
 												备注
@@ -368,8 +365,8 @@
 									<tbody>
 
 										<%
-														int i = (pager.getPageNo() - 1) * pager.getPageSize() + 0;
-														for (Payable item : payablelist) {
+											int i = (pager.getPageNo() - 1) * pager.getPageSize() + 0;
+											for (Receivable item : receivablelist) {
 													%>
 										<tr>
 											<td><%=++i%></td>
@@ -379,7 +376,7 @@
 													href="purchase_invoice/detail/<%=item.getType_id() %>"><%=item.getTypeString()%>[id:<%=item.getType_id() %>]</a>
 											</td>
 											<td><%=item.getBank_name()%></td>
-											<td><%=item.getPayable()%></td>
+											<td><%=item.getReceivable()%></td>
 											<td></td>
 
 											<td></td>
@@ -390,54 +387,54 @@
 											</td>
 											<td><%=item.getBank_name()%></td>
 											<td></td>
-											<td><%=item.getPay()%></td>
+											<td><%=item.getReceived()%></td>
 
 											<td><%=item.getUn_invoiced()%></td>
 											<%} %>
 
-											<td><%=DateTool.formatDateYMD(item.getRecord_at())%></td>
+											<td><%=DateTool.formatDateYMD(item.getHappen_at())%></td>
 											<td><%=item.getMemo()%></td>
 
 										</tr>
 										<%
-														}
-													%>
-										<%if(payablelist == null || payablelist.size() <= 0){ %>
+										}
+										%>
+										<%if(receivablelist == null || receivablelist.size() <= 0){ %>
 										<tr>
 											<td colspan="8">
 												找不到符合条件的记录
 											</td>
-										</tr>
-										<%}else{ %>
-									</tbody>
-									<tfoot>
-										<tr>
-											<td></td>
-											<td>
-												合计
-											</td>
-											<td></td>
-											<td><%=total_payable %></td>
-											<td><%=total_pay%></td>
-											<td><%=total_uninvoiced%></td>
-											<td></td>
-											<td></td>
-										</tr>
-										<tr>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td>
-												实际未付：
-											</td>
-											<td colspan="4" style="text-align: left; padding-left: 10px;"><%=NumberUtil.formateDouble(total_payable-total_pay,2)%>
-												(应付-已付) +
-												<%=total_pay_personal %>
-												(支付给个人的无需收发票) =
-												<%= NumberUtil.formateDouble(total_payable-total_pay + total_pay_personal,2)%></td>
-										</tr>
-									</tfoot>
-									<%} %>
+										</tr></tbody>
+										<%}else{%>
+											</tbody>
+											<tfoot>
+												<tr>
+													<td></td>
+													<td>
+														合计
+													</td>
+													<td></td>
+													<td><%=total_receivable %></td>
+													<td><%=total_received%></td>
+													<td><%=total_uninvoiced%></td>
+													<td></td>
+													<td></td>
+												</tr>
+												<tr>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td>
+														实际未收：
+													</td>
+													<td colspan="4" style="text-align: left; padding-left: 10px;"><%=NumberUtil.formateDouble(total_receivable-total_received,2)%>
+												(应收-已收) +
+												<%=total_received_personal %>
+												(收款到本司个人帐号的无需开发票) =
+												<%=NumberUtil.formateDouble(total_receivable-total_received+total_received_personal,2)%></td>
+												</tr>
+											</tfoot>
+										<% }%>
 								</table>
 							</div>
 						</div>
@@ -447,7 +444,7 @@
 		</div>
 		<script type="text/javascript">
 	/*设置当前选中的页*/
-	var $a = $("#left li a[href='report/financial/payable']");
+	var $a = $("#left li a[href='report/financial/receivable']");
 	setActiveLeft($a.parent("li"));
 
 	// 公司-业务员级联

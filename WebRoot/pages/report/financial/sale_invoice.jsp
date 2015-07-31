@@ -51,10 +51,10 @@
 		bank_id = -1;
 	}
 	
-	Boolean un_paid = (Boolean) request.getAttribute("un_paid");
-	String un_paid_str = "";
-	if(un_paid!=null){
-		un_paid_str = un_paid?"1":"0";
+	Boolean un_received = (Boolean) request.getAttribute("un_received");
+	String un_received_str = "";
+	if(un_received!=null){
+		un_received_str = un_received?"1":"0";
 	}
 	
 	Integer companyId = (Integer) request.getAttribute("companyId");
@@ -119,7 +119,7 @@
 							财务报表
 						</li>
 						<li class="active">
-							进项发票报表
+							销项发票报表
 						</li>
 					</ul>
 				</div>
@@ -216,7 +216,7 @@
 
 													<div class="form-group timegroup">
 														<label class="col-sm-3 control-label">
-															记录日期
+															开票日期
 														</label>
 
 														<div class="input-group col-md-9">
@@ -228,16 +228,16 @@
 														</div>
 														
 													</div>
-													<%if(un_paid!=null && un_paid){ %><input checked name="un_paid" type="checkbox" value="1" style="margin-left:10px;">  未付
+													<%if(un_received!=null && un_received){ %><input checked name="un_received" type="checkbox" value="1" style="margin-left:10px;">  未收
 <%}else{ %>
-<input name="un_paid" type="checkbox" value="1" style="margin-left:10px;">  未付<%} %>
+<input name="un_received" type="checkbox" value="1" style="margin-left:10px;">  未收<%} %>
 													<button class="btn btn-primary" type="button" id="searchBtn">
 														搜索
 													</button>
 																								<ul class="pagination">
 													<li>
 														<a
-															href="report/financial/purchase_invoice?companyId=<%=company_str %>&subject_id=<%=subject_str %>&un_paid=<%=un_paid_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=1">«</a>
+															href="report/financial/sale_invoice?companyId=<%=company_str %>&subject_id=<%=subject_str %>&un_received=<%=un_received_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=1">«</a>
 													</li>
 
 													<%
@@ -245,7 +245,7 @@
 													%>
 													<li class="">
 														<a
-															href="report/financial/purchase_invoice?companyId=<%=company_str %>&subject_id=<%=subject_str %>&un_paid=<%=un_paid_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() - 1%>">上一页
+															href="report/financial/sale_invoice?companyId=<%=company_str %>&subject_id=<%=subject_str %>&un_received=<%=un_received_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() - 1%>">上一页
 															<span class="sr-only"></span> </a>
 													</li>
 													<%
@@ -260,7 +260,7 @@
 
 													<li class="active">
 														<a
-															href="report/financial/purchase_invoice?companyId=<%=company_str %>&subject_id=<%=subject_str %>&un_paid=<%=un_paid_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
+															href="report/financial/sale_invoice?companyId=<%=company_str %>&subject_id=<%=subject_str %>&un_received=<%=un_received_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
 															class="sr-only"></span> </a>
 													</li>
 													<li>
@@ -270,7 +270,7 @@
 													
 													<li class="">
 														<a
-															href="report/financial/purchase_invoice?companyId=<%=company_str %>&subject_id=<%=subject_str %>&un_paid=<%=un_paid_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() + 1%>">下一页
+															href="report/financial/sale_invoice?companyId=<%=company_str %>&subject_id=<%=subject_str %>&un_received=<%=un_received_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() + 1%>">下一页
 															<span class="sr-only"></span> </a>
 													</li>
 													<%
@@ -286,7 +286,7 @@
 													</li>
 													<li>
 														<a
-															href="report/financial/purchase_invoice?companyId=<%=company_str %>&subject_id=<%=subject_str %>&un_paid=<%=un_paid_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getTotalPage()%>">»</a>
+															href="report/financial/sale_invoice?companyId=<%=company_str %>&subject_id=<%=subject_str %>&un_received=<%=un_received_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getTotalPage()%>">»</a>
 													</li>
 												</ul>
 												</form>
@@ -366,7 +366,7 @@
 		</div>
 <script type="text/javascript">
 	/*设置当前选中的页*/
-	var $a = $("#left li a[href='report/financial/purchase_invoice']");
+	var $a = $("#left li a[href='report/financial/sale_invoice']");
 	setActiveLeft($a.parent("li"));
 
 </script>

@@ -115,7 +115,7 @@ public class IncomeController extends BaseController {
 		if (!hasAuthority) {
 			throw new PermissionDeniedDataAccessException("没有出纳的权限", null);
 		}
-		List<Subject> subjectlist = SystemCache.getSubjectList(false);
+		List<Subject> subjectlist = SystemCache.getSubjectList(true);
 		request.setAttribute("subjectlist", subjectlist);	
 		List<Bank> banklist = bankService.getList();
 		request.setAttribute("banklist", banklist);

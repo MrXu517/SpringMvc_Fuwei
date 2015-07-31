@@ -1,18 +1,17 @@
 package com.fuwei.entity.report;
-
 import java.util.Date;
 
-public class Payable {
+public class Receivable {
 	private Integer type_id;
 	private String type;
 	private String company_name;
 	private String salesman_name;
 	private String subject_name;
-	private Double payable;//应付
-	private Double pay;//已付
-	private Double un_pay;//未付
+	private Double receivable;//应付
+	private Double received;//已付
+	private Double un_received;//未付
 	private Double un_invoiced ; //支出未收发票
-	private Date record_at;//发票记录时间或付款时间
+	private Date happen_at;//发票记录时间或付款时间
 	
 	private Integer company_id; //公司
 	private Integer subject_id ; //科目
@@ -91,42 +90,44 @@ public class Payable {
 	public void setSubject_name(String subject_name) {
 		this.subject_name = subject_name;
 	}
-	public Double getPayable() {
-		return payable;
-	}
-	public void setPayable(Double payable) {
-		this.payable = payable;
-	}
-	public Double getPay() {
-		return pay;
-	}
-	public void setPay(Double pay) {
-		this.pay = pay;
-	}
-	public Double getUn_pay() {
-		return un_pay;
-	}
-	public void setUn_pay(Double un_pay) {
-		this.un_pay = un_pay;
-	}
+	
 	public Double getUn_invoiced() {
 		return un_invoiced;
 	}
 	public void setUn_invoiced(Double un_invoiced) {
 		this.un_invoiced = un_invoiced;
 	}
-	public Date getRecord_at() {
-		return record_at;
-	}
-	public void setRecord_at(Date record_at) {
-		this.record_at = record_at;
-	}
 	
+	
+	public Date getHappen_at() {
+		return happen_at;
+	}
+	public void setHappen_at(Date happen_at) {
+		this.happen_at = happen_at;
+	}
+	public Double getReceivable() {
+		return receivable;
+	}
+	public void setReceivable(Double receivable) {
+		this.receivable = receivable;
+	}
+	public Double getReceived() {
+		return received;
+	}
+	public void setReceived(Double received) {
+		this.received = received;
+	}
+	public Double getUn_received() {
+		return un_received;
+	}
+	public void setUn_received(Double un_received) {
+		this.un_received = un_received;
+	}
 	public String getTypeString(){
 		if(this.type.equals("invoice")){
-			return "进项发票";
-		}else if(this.type.equals("expense")){
-			return "支出";
+			return "销项发票";
+		}else if(this.type.equals("income")){
+			return "收入";
 		}
 		return "";
 	}

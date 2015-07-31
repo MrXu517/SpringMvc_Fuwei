@@ -19,7 +19,7 @@ $(document).ready(function(){
 		}
 		$submitBtn.button('loading');
 		$(this).ajaxSubmit( {
-			url :"purchase_invoice/import",
+			url :"sale_invoice/import",
 			type :'POST',
 			success : function(result) {
 				if (result.success) {

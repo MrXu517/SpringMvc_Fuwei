@@ -16,6 +16,20 @@ import com.fuwei.commons.SystemCache;
 @RequestMapping("/util")
 @Controller
 public class UtilController extends BaseController {
+	
+	@RequestMapping(value = "/barcode", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView barcode(HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		String lcode = "util/barcode";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有条形码生成器的权限", null);
+		}
+		return new ModelAndView("util/barcode");
+
+	}
+	
 	@RequestMapping(value = "/box", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView box(HttpSession session, HttpServletRequest request,
