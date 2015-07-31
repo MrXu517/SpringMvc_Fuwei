@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fuwei.constant.OrderStatus;
 import com.fuwei.entity.Employee;
 import com.fuwei.entity.Order;
+import com.fuwei.util.CreateNumberUtil;
 import com.fuwei.util.DateTool;
 
 @Component
@@ -65,7 +66,10 @@ public class EmployeeService extends BaseService {
 	public int add(Employee employee) throws Exception {
 		try{
 			employee.setInUse(true);
-			return this.insert(employee);
+			Integer employeeId = this.insert(employee);
+			employee.setId(employeeId);
+			employee.setNumber(employee.createNumber());
+			return this.update(employee, "id", null);
 		}catch(Exception e){
 			SQLException sqlException = (java.sql.SQLException)e.getCause();
 			if(sqlException!=null && sqlException.getErrorCode() == 1062){//外键约束

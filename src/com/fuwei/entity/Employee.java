@@ -1,7 +1,11 @@
 package com.fuwei.entity;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.Date;
+
+import com.fuwei.util.DateTool;
+import com.fuwei.util.NumberUtil;
 
 import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
@@ -326,7 +330,9 @@ public class Employee implements Serializable {
 		this.created_user = created_user;
 	}
 	
-	 
+	public String createNumber() throws ParseException{
+		return "FW1" + NumberUtil.appendZero(this.id, 3);
+	}
 	
 	
 

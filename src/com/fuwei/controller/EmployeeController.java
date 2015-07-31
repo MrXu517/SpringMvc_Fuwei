@@ -312,7 +312,7 @@ public class EmployeeController extends BaseController {
 			titleFormat2.setAlignment(jxl.format.Alignment.CENTRE);   
 			titleFormat2.setBorder(jxl.format.Border.ALL, jxl.format.BorderLineStyle.THIN,jxl.format.Colour.BLACK); //BorderLineStyle边框
 			
-			String[] title = { "编号", "姓名", "性别", "入厂日期","身份证号码","联系方式","岗位","部门","家庭住址","现居住地","合同期限","用工形式","离职时间" }; 
+			String[] title = { "编号", "姓名", "性别", "入厂日期","身份证号码","联系方式","岗位","部门","家庭住址","现居住地","合同期限","用工形式","离职时间" ,"时薪" }; 
 			//设置Excel表头 
 			int col = 0;
 			int merge_col = 0;
@@ -353,6 +353,7 @@ public class EmployeeController extends BaseController {
 				Label content12 = new Label(11, c, DateTool.formatDateYMD(employee.getAgreement_end()),titleFormat2); 
 				Label content13 = new Label(12, c, employee.getEmployee_type(),titleFormat2); 
 				Label content14 = new Label(13, c, DateTool.formatDateYMD(employee.getLeave_at(), "/"),titleFormat2); 
+				Label content15 = new Label(14, c, employee.getHour_salary()==null?"":String.valueOf(employee.getHour_salary()) ,titleFormat2); 
 				
 				wsheet.addCell(content1); 
 				wsheet.addCell(content2); 
@@ -368,6 +369,7 @@ public class EmployeeController extends BaseController {
 				wsheet.addCell(content12); 
 				wsheet.addCell(content13);
 				wsheet.addCell(content14);
+				wsheet.addCell(content15);
 				
 				int width1 = content1.getContents().getBytes().length;
 				int width2 = content2.getContents().getBytes().length;
@@ -383,6 +385,7 @@ public class EmployeeController extends BaseController {
 				int width12 = content12.getContents().getBytes().length;
 				int width13 = content13.getContents().getBytes().length;
 				int width14 = content14.getContents().getBytes().length;
+				int width15 = content15.getContents().getBytes().length;
 				if(columnBestWidth[0] < width1){
 					columnBestWidth[0] = width1;
 				}if(columnBestWidth[1] < width2){
@@ -411,6 +414,9 @@ public class EmployeeController extends BaseController {
 					columnBestWidth[12] = width13;
 				}if(columnBestWidth[13] < width14){
 					columnBestWidth[13] = width14;
+				}
+				if(columnBestWidth[14] < width15){
+					columnBestWidth[14] = width15;
 				}
 				c++; 
 			} 

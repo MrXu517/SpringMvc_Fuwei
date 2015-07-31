@@ -202,7 +202,7 @@
 															</label>
 															<div class="col-sm-8">
 																<input type="text" class="form-control require"
-																	name="number" id="number" placeholder="员工编号">
+																	name="number" id="number" value="自动生成" placeholder="员工编号,自动生成">
 															</div>
 															<div class="col-sm-1"></div>
 														</div>
