@@ -49,6 +49,26 @@ legend span.label {
 #detailTb td,#detailTb th{
 	text-align:center;
 }
+.match {
+	margin-left: 20px;
+}
+#matchDialog .modal-dialog {
+	width: 850px;
+}
+
+#matchDialog iframe {
+	width: 100%;
+	height: 280px;
+}
+#matchDialog .modal-body{
+	padding-bottom:0px;
+	padding-top: 5px;
+	padding-right: 0;
+}
+#matchDialog .modal-footer{
+	padding-top: 10px;
+  padding-bottom: 10px;
+	}
 </style>
 	</head>
 	<body>
@@ -105,7 +125,18 @@ legend span.label {
 <tr><td class="property">业务员</td><td><span ><%=SystemCache.getSalesmanName(expense_income.getSalesman_id())%></span></td><td class="property">科目</td><td><span><%=expense_income.getSubject_name()%></span></td></tr>
 <tr><td class="property">付款时间</td><td><span ><%=expense_income.getExpense_at()%></span></td><td class="property">金额</td><td><span><%=expense_income.getAmount()%></span></td></tr>
 <tr><td class="property">备注</td><td><span ><%=expense_income.getMemo()%></span></td><td class="property">已收金额</td><td><span><%=expense_income.getInvoice_amount()%></span></td></tr>
-<tr><td class="property"></td><td><span ></span></td><td class="property">未收金额</td><td><span class="label label-danger"><%=expense_income.getAmount()-expense_income.getInvoice_amount()%></span></td></tr>
+<tr><td class="property"></td><td><span ></span></td><td class="property">未收金额</td>
+<td><span class="label label-danger"><%=expense_income.getAmount()-expense_income.getInvoice_amount()%></span>
+<%
+													if (!expense_income.isInvoiced() && expense_income.getIn_out()) {
+												%>
+												<button data-cid="<%=expense_income.getId()%>" class="match">
+													匹配
+												</button>
+												<%
+													}
+												%>
+</td></tr>
 </table>
 								</fieldset>
 
@@ -199,5 +230,29 @@ legend span.label {
 				</div>
 			</div>
 		</div>
+		<!-- 匹配支出对话框 -->
+		<div class="modal fade" id="matchDialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+						</button>
+						<h4 class="modal-title">
+							请选择匹配的销项发票
+						</h4>
+					</div>
+					<div class="modal-body">
+						<iframe id="matchIframe" name="matchIframe" frameborder=0></iframe>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">
+							关闭
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 匹配支出对话框 -->
 	</body>
 </html>

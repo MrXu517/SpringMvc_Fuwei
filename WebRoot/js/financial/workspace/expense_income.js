@@ -39,6 +39,18 @@ $(document).ready(function(){
 		return false;
 	});
 	$("#bank_id").select2();
+	
+	$("a.match").click(function(){
+		var data_cid = $(this).attr("data-cid");
+		var src = $("#matchIframe").attr("src");
+		$("#matchIframe").attr("src", "expense_income_invoice/income_match_saleinvoice/"+data_cid);	
+		$("#matchDialog").modal();
+		return false;
+	});
+	window.searchback = function(){
+		$("#matchDialog").modal("hide");
+		location.reload();
+	}
 });
 function changeCompany(companyId) {
 	var companyName = $("#companyId").val();

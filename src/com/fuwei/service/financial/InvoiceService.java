@@ -25,10 +25,10 @@ public class InvoiceService extends BaseService {
 	@Autowired
 	JdbcTemplate jdbc;
 	
-	public List<Invoice> getInvoiceList(Integer bank_id) throws Exception{
+	public List<Invoice> getInvoiceList(Integer bank_id,boolean in_out) throws Exception{
 		try {
 			List<Invoice> invoiceList = dao.queryForBeanList(
-					"SELECT * FROM tb_invoice WHERE bank_id=? and amount<>match_amount", Invoice.class,bank_id);
+					"SELECT * FROM tb_invoice WHERE bank_id=? and amount<>match_amount and in_out=?", Invoice.class,bank_id,in_out);
 			return invoiceList;
 		} catch (Exception e) {
 			throw e;

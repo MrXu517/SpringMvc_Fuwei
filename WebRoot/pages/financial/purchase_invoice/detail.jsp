@@ -92,12 +92,9 @@
 									</legend>
 									<table
 										class="table table-responsive table-bordered propertyTable">
-										<tr>
-											<td class="property">
-												对方账户
-											</td>
+									<tr><td class="property">公司</td>
 											<td>
-												<span><%=invoice.getBank_name()%></span>
+												<span><%=SystemCache.getCompanyName(invoice.getCompany_id()) %></span>
 											</td>
 											<td class="property">
 												发票号
@@ -105,13 +102,14 @@
 											<td>
 												<span><%=invoice.getNumber()%></span>
 											</td>
+											
 										</tr>
 										<tr>
 											<td class="property">
-												发票类型
+												对方账户
 											</td>
 											<td>
-												<span><%=invoice.getTypeString()%></span>
+												<span><%=invoice.getBank_name()%></span>
 											</td>
 											<td class="property">
 												金额
@@ -122,10 +120,10 @@
 										</tr>
 										<tr>
 											<td class="property">
-												开票日期
+												发票类型
 											</td>
 											<td>
-												<span><%=invoice.getPrint_date()%></span>
+												<span><%=invoice.getTypeString()%></span>
 											</td>
 											<td class="property">
 												已匹配金额
@@ -136,11 +134,12 @@
 										</tr>
 										<tr>
 											<td class="property">
-												备注
+												开票日期
 											</td>
 											<td>
-												<span><%=invoice.getMemo()%></span>
+												<span><%=invoice.getPrint_date()%></span>
 											</td>
+											
 											<td class="property">
 												待匹配金额
 											</td>
@@ -157,6 +156,16 @@
 													}
 												%>
 											</td>
+										</tr>
+										<tr>
+											<td class="property">
+												备注
+											</td>
+											<td>
+												<span><%=invoice.getMemo()%></span>
+											</td>
+											<td class="property"></td><td></td>
+											
 										</tr>
 									</table>
 								</fieldset>

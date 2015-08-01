@@ -452,6 +452,8 @@
 												if(item.isInvoiced()){ %>
 														<span class="label label-success"><%=in_out_string %></span>
 													<%}else{ %>
+														<%if(item.getIn_out()){ %>
+													<a data-cid="<%=item.getId()%>" class="match" href="#">匹配</a><%} %>
 															<span class="label label-default"><%=item.getInvoice_amount() %></span>
 													<%} %>
 												<%
@@ -489,5 +491,29 @@
 				</div>
 			</div>
 		</div>
+<!-- 匹配支出对话框 -->
+		<div class="modal fade" id="matchDialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+						</button>
+						<h4 class="modal-title">
+							请选择匹配的销项发票
+						</h4>
+					</div>
+					<div class="modal-body">
+						<iframe id="matchIframe" name="matchIframe" frameborder=0></iframe>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">
+							关闭
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 匹配支出对话框 -->
 	</body>
 </html>

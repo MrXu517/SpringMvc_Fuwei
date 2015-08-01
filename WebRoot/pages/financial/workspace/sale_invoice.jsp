@@ -381,7 +381,7 @@
 														<td>
 													<%if(item.isMatched()){ %>
 														<span class="label label-success">已匹配</span>
-													<%}else{ %><a data-cid="<%=item.getId()%>" class="match" href="#">匹配</a><span class="label label-default"><%=item.getMatch_amount()%></span>
+													<%}else{ %><span class="label label-default"><%=item.getMatch_amount()%></span>
 															|
 													<%} %>
 											

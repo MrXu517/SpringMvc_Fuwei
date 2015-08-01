@@ -67,6 +67,50 @@ public class Expense_income_invoiceService extends BaseService {
         
         return true;
 	}
+	
+	
+	//收入匹配发票
+	@Transactional
+	public Boolean batch_add_incomeMatch(Integer company_id , Integer subject_id , String[] expense_income_ids, String[] invoice_ids,List<Expense_income_invoice> list){
+		String sql = "INSERT INTO tb_expense_income_invoice(amount,created_at,created_user,expense_income_id,invoice_id,updated_at) VALUES(?,?,?,?,?,?)";
+
+        List<Object[]> batchArgs = new ArrayList<Object[]>();
+        for(Expense_income_invoice item :list) {
+            batchArgs.add(new Object[]{item.getAmount(),item.getCreated_at(),item.getCreated_user(),item.getExpense_income_id(),item.getInvoice_id(),item.getUpdated_at()});
+        }
+
+        int result[]= jdbc.batchUpdate(sql, batchArgs);
+        
+        //修改支出 和 发票的匹配金额
+        
+        String sql_invoice = "update tb_invoice set match_amount= (select  ROUND(IFNULL(sum(amount),0),2)  from  tb_expense_income_invoice where invoice_id=?)  where id=?";
+        List<Object[]> batchArgs_invoice = new ArrayList<Object[]>();
+        for(String item :invoice_ids) {
+        	batchArgs_invoice.add(new Object[]{item,item});
+        }
+        int[] result_invoice= jdbc.batchUpdate(sql_invoice, batchArgs_invoice);
+        //设置收入项的公司和科目
+        String sql_expense_income_company_subject = "update tb_expense_income set company_id=? , subject_id=? where id=?";
+        List<Object[]> batchArgs_expense_income_company_subject = new ArrayList<Object[]>();
+        for(String item :expense_income_ids) {
+        	batchArgs_expense_income_company_subject.add(new Object[]{company_id,subject_id,item});
+        }
+        int[] result_expense_income_company_subject= jdbc.batchUpdate(sql_expense_income_company_subject, batchArgs_expense_income_company_subject);
+        
+        
+        String sql_expense = "update tb_expense_income set invoice_amount= (select  ROUND(IFNULL(sum(amount),0),2)  from  tb_expense_income_invoice where expense_income_id=?)  where id=?";
+        List<Object[]> batchArgs_expense = new ArrayList<Object[]>();
+        for(String item :expense_income_ids) {
+        	batchArgs_expense.add(new Object[]{item,item});
+        }
+        int[] result_expense= jdbc.batchUpdate(sql_expense, batchArgs_expense);
+        
+        
+        
+        
+        return true;
+	}
+	
 	public List<Expense_income_invoice> getListByExpense_incomeId(int expense_incomeId) throws Exception{
 		try {
 			List<Expense_income_invoice> result = dao.queryForBeanList("select * from tb_expense_income_invoice where expense_income_id=?", Expense_income_invoice.class,expense_incomeId);

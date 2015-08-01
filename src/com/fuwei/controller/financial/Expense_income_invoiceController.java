@@ -167,7 +167,7 @@ public class Expense_income_invoiceController extends BaseController {
 		//发票待匹配金额
 		double to_be_match_invoice_amount = invoice.getAmount() - invoice.getMatch_amount();
 		Integer bank_id = invoice.getBank_id();
-		List<Expense_income> Expense_incomeList = expense_incomeService.getInvoiceList(bank_id,expense_or_income);
+		List<Expense_income> Expense_incomeList = expense_incomeService.getExpenseIncomeList(bank_id,expense_or_income);
 		
 		//存放 一张发票 -> 一项或多项支出
 		List<List<Expense_income>> one_to_many_Result = new ArrayList<List<Expense_income>>();
@@ -184,7 +184,7 @@ public class Expense_income_invoiceController extends BaseController {
 		
 		//多张发票 -> 一项支出
 		Map<List<Invoice> , List<Expense_income>> many_to_one_map = new HashMap<List<Invoice> , List<Expense_income>>();
-		List<Invoice> invoiceList = invoiceService.getInvoiceList(bank_id);	
+		List<Invoice> invoiceList = invoiceService.getInvoiceList(bank_id,invoice.getIn_out());	
 		
 		for(Invoice tempinvoice : invoiceList){
 			if(tempinvoice.getId() == invoice.getId()){
@@ -247,7 +247,7 @@ public class Expense_income_invoiceController extends BaseController {
 		//发票待匹配金额
 		Integer bank_id = invoice.getBank_id();
 		
-		List<Expense_income> Expense_incomeList = expense_incomeService.getInvoiceList(bank_id,expense_or_income);
+		List<Expense_income> Expense_incomeList = expense_incomeService.getExpenseIncomeList(bank_id,expense_or_income);
 
 		request.setAttribute("invoice", invoice);
 		request.setAttribute("Expense_incomeList", Expense_incomeList);
@@ -311,15 +311,13 @@ public class Expense_income_invoiceController extends BaseController {
 		
 	}
 	
-	public static void invoiceNSum(List<Invoice> list ,int i, double sum , double value,List<Invoice> templist,List<List<Invoice>> mapResult){
+	public static void invoiceNSum(List<Invoice> list ,int i, double sum , double value,List<Invoice> templist,List<List<Invoice>> mapResult){		
 		for(int j = i ; j < list.size();++j){
 			Invoice item = list.get(j);
-			double un_invoiced_amount = item.getAmount() - item.getMatch_amount();
+			double un_invoiced_amount = item.getAmount() - item.getMatch_amount();			
 			un_invoiced_amount = NumberUtil.formateDouble(un_invoiced_amount,2);
 			double temp_sum = sum + un_invoiced_amount;
 			temp_sum = NumberUtil.formateDouble(temp_sum,2);
-			
-			
 			if(temp_sum == value){//若相等，则找到了
 				templist.add(item);
 				mapResult.add(templist);
@@ -335,7 +333,7 @@ public class Expense_income_invoiceController extends BaseController {
 			if(temp_sum < value){//若值<value,则继续往下找
 				templist.add(item);
 				int indexOf = templist.size()-1;
-				invoiceNSum(list,j+1,temp_sum, value ,templist,mapResult);
+				invoiceNSum(list,j+1,temp_sum , value ,templist,mapResult);
 				
 				if(indexOf <= 0){
 					return ; 
@@ -351,6 +349,21 @@ public class Expense_income_invoiceController extends BaseController {
 				continue;
 			}
 			if(temp_sum > value){//若值>value,则返回 false
+				templist.add(item);
+				int indexOf = templist.size()-1;
+				invoiceNSum(list,j+1,temp_sum , value ,templist,mapResult);
+				
+				if(indexOf <= 0){
+					return ; 
+				}else{
+					List<Invoice> alist  = new ArrayList<Invoice>();
+
+					for(int k = 0; k < indexOf;++k){
+						alist.add(templist.get(k));
+					}
+					templist = alist;
+				}
+				
 				continue;
 			}
 		}
@@ -493,5 +506,184 @@ public class Expense_income_invoiceController extends BaseController {
 		return expense_income_invoice;
 	}
 	
+	
+	
+	/*收入匹配销项发票*/
+	//自动匹配
+	@RequestMapping(value = "/income_match_saleinvoice/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView income_match_saleinvoice(@PathVariable Integer id,HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "expense_income_invoice/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有收入匹配销项发票的权限", null);
+		}
+		
+		Map<Invoice , List<Expense_income>> map = new HashMap<Invoice , List<Expense_income>>();
+		Expense_income income=  expense_incomeService.get(id);//id为收入ID
+		if(income.getIn_out()!=true){//如果不是收入
+			throw new Exception("找不到ID为" + id + "的收入项");
+		}
+		//收入待匹配金额
+		double to_be_match_income_amount = income.getAmount() - income.getInvoice_amount();
+		Integer bank_id = income.getBank_id();
+		List<Invoice> invoiceList = invoiceService.getInvoiceList(bank_id,false);
+		//存放 一项收入 -> 一张或多张销项发票
+		List<List<Invoice>> one_to_many_Result = new ArrayList<List<Invoice>>();
+		for(int i = 0 ; i < invoiceList.size() ; ++i){
+			List<Invoice> tempList = new ArrayList<Invoice>();
+			double value = NumberUtil.formateDouble(to_be_match_income_amount,2);
+			Invoice temp = invoiceList.get(i);
+			double value_i = NumberUtil.formateDouble(temp.getAmount() - temp.getMatch_amount(),2);
+			invoiceNSum(invoiceList,i,0,value,tempList,one_to_many_Result);
+		}
+		
+		//多项收入 -> 一张发票
+		Map<List<Expense_income> , List<Invoice>> many_to_one_map = new HashMap<List<Expense_income> , List<Invoice>>();
+		List<Expense_income> expense_incomeList = expense_incomeService.getExpenseIncomeList(bank_id, true);
+		
+		for(Expense_income tempExpenseIncome : expense_incomeList){
+			if(tempExpenseIncome.getId() == income.getId()){
+				expense_incomeList.remove(tempExpenseIncome);
+				break;
+			}
+		}
+		for(int i = 0 ; i < invoiceList.size() ; ++i){
+			Invoice ett = invoiceList.get(i);
+			List<Invoice> e_templist = new ArrayList<Invoice>();
+			double to_be_matched_amount = ett.getAmount() - ett.getMatch_amount();
+			e_templist.add(ett);
+			List<List<Expense_income>> tempResult = new ArrayList<List<Expense_income>>();
+			for(int k = 0 ; k < expense_incomeList.size() ; ++k){
+				List<Expense_income> tempList = new ArrayList<Expense_income>();
+				double value = NumberUtil.formateDouble(to_be_matched_amount - to_be_match_income_amount, 2);
+				Expense_income temp = expense_incomeList.get(k);
+				double value_k = NumberUtil.formateDouble(temp.getAmount() - temp.getInvoice_amount(),2);
+				if( value_k > value){
+					continue;
+				}
+				Expense_incomeNSum(expense_incomeList,k,0,value,tempList,tempResult);
+			}
+			for(List<Expense_income> templist : tempResult){
+				templist.add(income);
+				many_to_one_map.put(templist,e_templist);
+			}
+		}
+		request.setAttribute("income", income);
+		request.setAttribute("many_to_one_map", many_to_one_map);
+		request.setAttribute("one_to_many_Result", one_to_many_Result);	
+		return new ModelAndView("financial/expense_income_invoice/income_match_saleinvoice");		
+	}
+	
+	@RequestMapping(value = "/income_match_saleinvoice", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> income_match_saleinvoice(String invoice_ids,String expense_income_ids,HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "expense_income_invoice/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有将收入匹配销项发票 的权限", null);
+		}
+		List<Expense_income> Expense_incomeList = expense_incomeService.getByIds(expense_income_ids);
+		if(Expense_incomeList==null || Expense_incomeList.size()<=0){
+			throw new Exception("匹配收入项时，请至少提供一项收入项");
+		}
+		List<Invoice> invoiceList = invoiceService.getByIds(invoice_ids);
+		if(invoiceList==null || invoiceList.size()<=0){
+			throw new Exception("匹配收入项时，请至少提供一张发票");
+		}
+		if(invoiceList.size() > 1 && Expense_incomeList.size() > 1){
+			throw new Exception("暂不支持【多项收入匹配多张发票】");
+		}
+		
+		
+		Boolean invoices_in_out = invoiceList.get(0).getIn_out();
+		if(invoices_in_out){
+			throw new Exception("请提交销项发票");
+		}
+		for(Invoice invoice : invoiceList){
+			if(invoice.getIn_out()!= invoices_in_out){
+				throw new Exception("发票类型不统一， 请统一提交销项发票");
+			}
+		}
+		
+		Boolean expense_or_income = !invoices_in_out;//!invoice.getIn_out();
+		
+		List<Expense_income_invoice> resultList = new ArrayList<Expense_income_invoice>();
+		
+		double invoice_total = 0 ;
+		double expense_income_total = 0 ;
+		for(Expense_income expense_income : Expense_incomeList){
+			expense_income_total += expense_income.getAmount() - expense_income.getInvoice_amount();
+		}
+		expense_income_total = NumberUtil.formateDouble(expense_income_total, 2);
+		
+		//若一项收入对应 一项或多项发票
+		Boolean one_many = false;
+		if(Expense_incomeList.size() == 1){
+			one_many = true;
+		}
+		//否则是多项收入对应一张发票，则 one_many = false;
+		
+		for(Invoice invoice : invoiceList){
+			invoice_total += invoice.getAmount() - invoice.getMatch_amount();
+			for(Expense_income expense_income : Expense_incomeList){
+				Expense_income_invoice item = new Expense_income_invoice();
+				item.setCreated_at(DateTool.now());
+				item.setUpdated_at(DateTool.now());
+				item.setCreated_user(user.getId());
+				item.setInvoice_id(invoice.getId());
+				item.setExpense_income_id(expense_income.getId());
+//				double amount = Math.min(expense_income.getAmount() - expense_income.getInvoice_amount(), invoice.getAmount() - invoice.getMatch_amount());
+				double amount = 0 ;
+				if(one_many){//若一项收入对应 一项或多项发票 ， 则取发票的amount值
+					amount = invoice.getAmount() - invoice.getMatch_amount();
+				}
+				else{//否则，取收入的值
+					amount = expense_income.getAmount() - expense_income.getInvoice_amount();
+				}
+				item.setAmount(amount);
+				resultList.add(item);
+			}
+		}
+		invoice_total = NumberUtil.formateDouble(invoice_total, 2);
+		if(invoice_total!=expense_income_total){
+			throw new Exception("匹配失败：发票待匹配金额之和 不等于 收入项金额之和 ");
+		}
+		String[] t_expense_income_ids = expense_income_ids.split(",");
+		String[] t_invoice_ids = invoice_ids.split(",");
+		
+		//判断 发票的公司和科目是否一致
+		Integer companyId = invoiceList.get(0).getCompany_id();
+		Integer subjectId = invoiceList.get(0).getSubject_id();
+		Integer bank_id = invoiceList.get(0).getBank_id();
+		for(Invoice temp :  invoiceList){
+			if(temp.getIn_out()!= invoices_in_out){
+				throw new Exception("发票类型不统一， 请统一提交销项发票");
+			}
+			if(temp.getCompany_id()!=companyId){
+				throw new Exception("匹配失败：发票项公司不一致 ");
+			}
+			if((int)temp.getSubject_id()!=(int)subjectId){
+				throw new Exception("匹配失败：发票项科目不一致 ");
+			}
+			if((int)temp.getBank_id()!=(int)bank_id){
+				System.out.println(bank_id);
+				System.out.println(temp.getBank_id());
+				throw new Exception("匹配失败：发票项对方账户不一致 ");
+			}
+		}
+		
+		expense_income_invoiceService.batch_add_incomeMatch(companyId,subjectId,t_expense_income_ids,t_invoice_ids,resultList);
+		
+		
+		
+		return this.returnSuccess();
+		
+	}
+	/*收入匹配销项发票*/
 	
 }
