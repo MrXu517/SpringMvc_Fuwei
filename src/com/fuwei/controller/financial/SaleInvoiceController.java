@@ -46,6 +46,7 @@ import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.controller.BaseController;
+import com.fuwei.entity.Company;
 import com.fuwei.entity.User;
 import com.fuwei.entity.financial.Bank;
 import com.fuwei.entity.financial.Expense_income;
@@ -124,7 +125,7 @@ public class SaleInvoiceController extends BaseController {
 		request.setAttribute("amount_to", amount_to);
 		request.setAttribute("number", number);
 		request.setAttribute("pager", pager);
-		List<Subject> subjectlist = SystemCache.getSubjectList(false);
+		List<Subject> subjectlist = SystemCache.getSubjectList(true);
 		request.setAttribute("subjectlist", subjectlist);	
 		List<Bank> banklist = bankService.getList();
 		request.setAttribute("banklist", banklist);
@@ -352,6 +353,9 @@ public class SaleInvoiceController extends BaseController {
 					throw new Exception("不存在的银行名称：" + item.getBank_name());
 				}
 			}
+			if(item.getSubject_id()==null){
+				throw new Exception("科目不能为空：" + item.getBank_name()+","+item.getAmount());
+			}
 			item.setIn_out(false);
 			item.setMatch_amount(0);
 			item.setCreated_at(DateTool.now());
@@ -378,7 +382,7 @@ public class SaleInvoiceController extends BaseController {
 				jxl.format.BorderLineStyle.THIN, jxl.format.Colour.BLACK); // BorderLineStyle边框
 		titleFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
 
-		String[] title = {"年","月","日", "对方账户","发票号","发票类型(1普通发票、2增值税普通发票、3增值税专用发票)","金额", "备注"};
+		String[] title = {"年","月","日","公司","科目", "对方账户","发票号","发票类型(1普通发票、2增值税普通发票、3增值税专用发票)","金额", "备注"};
 		// 设置Excel表头
 		for (int i = 0; i < title.length; i++) {			
 			Label excelTitle = new Label(i, 0, title[i], titleFormat);
@@ -409,7 +413,15 @@ public class SaleInvoiceController extends BaseController {
 		Sheet[] sheet = rb.getSheets();
 
 		List<Invoice> list = new ArrayList<Invoice>();
-
+		Map<String,Integer> subject_name_id_map = new HashMap<String, Integer>();
+		Map<String,Integer> company_name_id_map = new HashMap<String, Integer>();
+		for(Subject item : SystemCache.subjectlist){
+			subject_name_id_map.put(item.getName(), item.getId());
+		}
+		for(Company item : SystemCache.companylist){
+			company_name_id_map.put(item.getShortname(), item.getId());
+		}
+		
 		for (int i = 0; i < sheet.length; i++) {
 			Sheet rs = rb.getSheet(i);
 			int rows = rs.getRows();
@@ -419,40 +431,62 @@ public class SaleInvoiceController extends BaseController {
 				Invoice invoice = new Invoice();
 				String year = "";
 				if (cells[0].getType() == CellType.EMPTY) {
-					continue;// 收款方名称为空的直接跳过
+					continue;// YEAR为空的直接跳过
 				} else {
 					year = cells[0].getContents().trim();
 					if (year.equals("")) {
-						continue;// 收款方名称为空的直接跳过
+						continue;// YEAR名称为空的直接跳过
 					}
 				}
 				String month = "";
 				if (cells[1].getType() == CellType.EMPTY) {
-					continue;// 收款方名称为空的直接跳过
+					continue;// MONTH为空的直接跳过
 				} else {
 					month = cells[1].getContents().trim();
 					if (month.equals("")) {
-						continue;// 收款方名称为空的直接跳过
+						continue;// MONTH为空的直接跳过
 					}
 				}
 				String day = "";
 				if (cells[2].getType() == CellType.EMPTY) {
-					continue;// 收款方名称为空的直接跳过
+					continue;// DAY为空的直接跳过
 				} else {
 					day = cells[2].getContents().trim();
 					if (day.equals("")) {
-						continue;// 收款方名称为空的直接跳过
+						continue;// DAY为空的直接跳过
 					}
 				}
 				Calendar c = Calendar.getInstance();
 				c.set(Integer.valueOf(year), Integer.valueOf(month)-1, Integer.valueOf(day));
 				invoice.setPrint_date(c.getTime());
 				
-				String bank_name = "";
+				String company_name = "";
 				if (cells[3].getType() == CellType.EMPTY) {
+//					continue;// 公司名称为空的直接跳过
+				} else {
+					company_name = chinese2English(cells[3].getContents().trim());
+					if (!company_name.equals("")) {
+						invoice.setCompany_id(company_name_id_map.get(company_name));
+					}
+				}
+				
+				
+				String subject_name = "";
+				if (cells[4].getType() == CellType.EMPTY) {
+					continue;// 科目名称为空的直接跳过
+				} else {
+					subject_name = chinese2English(cells[4].getContents().trim());
+					if (subject_name.equals("")) {
+						continue;// 科目名称为空的直接跳过
+					}
+				}
+				invoice.setSubject_id(subject_name_id_map.get(subject_name));
+				
+				String bank_name = "";
+				if (cells[5].getType() == CellType.EMPTY) {
 					continue;// 收款方名称为空的直接跳过
 				} else {
-					bank_name = chinese2English(cells[3].getContents().trim());
+					bank_name = chinese2English(cells[5].getContents().trim());
 					if (bank_name.equals("")) {
 						continue;// 收款方名称为空的直接跳过
 					}
@@ -460,10 +494,10 @@ public class SaleInvoiceController extends BaseController {
 				invoice.setBank_name(bank_name);
 				
 				String number = "";
-				if (cells[4].getType() == CellType.EMPTY) {
+				if (cells[6].getType() == CellType.EMPTY) {
 					continue;
 				} else {
-					number = cells[4].getContents().trim();
+					number = cells[6].getContents().trim();
 					if (number.equals("")) {
 						continue;
 					}
@@ -471,10 +505,10 @@ public class SaleInvoiceController extends BaseController {
 				invoice.setNumber(number);
 				
 				String type = "";
-				if (cells[5].getType() == CellType.EMPTY) {
+				if (cells[7].getType() == CellType.EMPTY) {
 					continue;
 				} else {
-					type = cells[5].getContents().trim();
+					type = cells[7].getContents().trim();
 					if (type.equals("")) {
 						continue;
 					}
@@ -482,10 +516,10 @@ public class SaleInvoiceController extends BaseController {
 				invoice.setType(Integer.valueOf(type));
 			
 				String amount = "";
-				if (cells[6].getType() == CellType.EMPTY) {
+				if (cells[8].getType() == CellType.EMPTY) {
 					continue;// 直接跳过
 				} else {
-					amount = cells[6].getContents().trim();
+					amount = cells[8].getContents().trim();
 					if (amount.equals("")) {
 						continue;// 直接跳过
 					}
@@ -493,11 +527,11 @@ public class SaleInvoiceController extends BaseController {
 				invoice.setAmount(Double.valueOf(amount));
 				
 				String memo = "";
-				if(cells.length>=8){
-					if (cells[7].getType() == CellType.EMPTY) {
+				if(cells.length>=10){
+					if (cells[9].getType() == CellType.EMPTY) {
 						
 					} else {
-						memo = cells[7].getContents().trim();
+						memo = cells[9].getContents().trim();
 					}
 				}
 				

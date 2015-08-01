@@ -255,6 +255,11 @@ public class InvoiceService extends BaseService {
 		try{
 			return this.insert(invoice);
 		}catch(Exception e){
+			SQLException sqlException = (java.sql.SQLException)e.getCause();
+			if(sqlException!=null && sqlException.getErrorCode() == 1062){//外键约束
+				log.error(e);
+				throw new Exception("发票号必须唯一");
+			}
 			throw e;
 		}
 	}
@@ -278,6 +283,11 @@ public class InvoiceService extends BaseService {
 		try{
 			return this.update(invoice, "id", "created_at,created_user",true);
 		}catch(Exception e){
+			SQLException sqlException = (java.sql.SQLException)e.getCause();
+			if(sqlException!=null && sqlException.getErrorCode() == 1062){//外键约束
+				log.error(e);
+				throw new Exception("发票号必须唯一");
+			}
 			throw e;
 		}
 
@@ -309,11 +319,13 @@ public class InvoiceService extends BaseService {
 	
 	@Transactional
 	public boolean batch_add(List<Invoice> list) throws Exception {
-		String sql = "INSERT INTO tb_invoice(number,print_date,amount,tax,tax_amount,bank_id,bank_name,type,memo,created_at,updated_at,created_user,in_out,match_amount) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO tb_invoice(company_id,subject_id,number,print_date,amount,tax,tax_amount,bank_id,bank_name,type,memo,created_at,updated_at,created_user,in_out,match_amount) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		List<Object[]> batchArgs = new ArrayList<Object[]>();
 		for (Invoice item : list) {
-			batchArgs.add(new Object[] { item.getNumber(), item.getPrint_date(),
+			batchArgs.add(new Object[] { 
+					item.getCompany_id(),item.getSubject_id(),
+					item.getNumber(), item.getPrint_date(),
 					item.getAmount(), item.getTax(),
 					item.getTax_amount(), item.getBank_id(),
 					item.getBank_name(), item.getType(),
@@ -326,6 +338,11 @@ public class InvoiceService extends BaseService {
 			int result[] = jdbc.batchUpdate(sql, batchArgs);
 			return true;
 		} catch (Exception e) {
+			SQLException sqlException = (java.sql.SQLException)e.getCause();
+			if(sqlException!=null && sqlException.getErrorCode() == 1062){//外键约束
+				log.error(e);
+				throw new Exception("发票号必须唯一");
+			}
 			throw e;
 		}
 
