@@ -43,6 +43,8 @@ $(document).ready(function(){
 	$("a.match").click(function(){
 		var data_cid = $(this).attr("data-cid");
 		var src = $("#matchIframe").attr("src");
+		window.frames["matchIframe"].document.write("请耐心等待，数据正在加载中......");
+		window.frames["matchIframe"].document.close();
 		$("#matchIframe").attr("src", "expense_income_invoice/income_match_saleinvoice/"+data_cid);	
 		$("#matchDialog").modal();
 		return false;

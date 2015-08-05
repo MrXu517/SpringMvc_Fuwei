@@ -449,6 +449,7 @@
 	/*设置当前选中的页*/
 	var $a = $("#left li a[href='report/financial/payable']");
 	setActiveLeft($a.parent("li"));
+	$("#bank_id").select2();
 
 	// 公司-业务员级联
 	$("#companyId").change( function() {

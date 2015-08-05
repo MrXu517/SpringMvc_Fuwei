@@ -97,10 +97,10 @@
 												<span><%=SystemCache.getCompanyName(invoice.getCompany_id()) %></span>
 											</td>
 											<td class="property">
-												发票号
+												科目
 											</td>
 											<td>
-												<span><%=invoice.getNumber()%></span>
+												<span><%=SystemCache.getSubjectName(invoice.getSubject_id())%></span>
 											</td>
 											
 										</tr>
@@ -110,13 +110,13 @@
 											</td>
 											<td>
 												<span><%=invoice.getBank_name()%></span>
-											</td>
-											<td class="property">
-												金额
+											</td><td class="property">
+												发票号
 											</td>
 											<td>
-												<span><%=invoice.getAmount()%></span>
+												<span><%=invoice.getNumber()%></span>
 											</td>
+											
 										</tr>
 										<tr>
 											<td class="property">
@@ -126,11 +126,12 @@
 												<span><%=invoice.getTypeString()%></span>
 											</td>
 											<td class="property">
-												已匹配金额
+												金额
 											</td>
 											<td>
-												<span><%=invoice.getMatch_amount()%></span>
+												<span><%=invoice.getAmount()%></span>
 											</td>
+											
 										</tr>
 										<tr>
 											<td class="property">
@@ -139,15 +140,13 @@
 											<td>
 												<span><%=invoice.getPrint_date()%></span>
 											</td>
-											
 											<td class="property">
-												待匹配金额
+												已匹配金额
 											</td>
 											<td>
-												<span class="label label-danger"><%=NumberUtil.formateDouble(
-															invoice.getAmount() - invoice.getMatch_amount(), 2)%></span>
-												
+												<span><%=invoice.getMatch_amount()%></span>
 											</td>
+											
 										</tr>
 										<tr>
 											<td class="property">
@@ -156,8 +155,14 @@
 											<td>
 												<span><%=invoice.getMemo()%></span>
 											</td>
-											<td class="property"></td><td></td>
-											
+											<td class="property">
+												待匹配金额
+											</td>
+											<td>
+												<span class="label label-danger"><%=NumberUtil.formateDouble(
+															invoice.getAmount() - invoice.getMatch_amount(), 2)%></span>
+												
+											</td>
 										</tr>
 									</table>
 								</fieldset>

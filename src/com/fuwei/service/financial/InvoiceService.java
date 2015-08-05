@@ -35,6 +35,20 @@ public class InvoiceService extends BaseService {
 		}
 	}
 	
+	public List<Invoice> getInvoiceList(Integer bank_id,boolean in_out,Integer subject_id) throws Exception{
+		try {
+			if(subject_id == null){
+				return getInvoiceList(bank_id,in_out);
+			}else{
+				List<Invoice> invoiceList = dao.queryForBeanList(
+						"SELECT * FROM tb_invoice WHERE bank_id=? and amount<>match_amount and in_out=? and subject_id=?", Invoice.class,bank_id,in_out,subject_id);
+				return invoiceList;
+			}
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 	public List<Invoice> getByIds(String ids) throws Exception{
 		if(ids == null || ids.equals("")){
 			return null;

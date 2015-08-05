@@ -101,6 +101,8 @@
 												对方账户
 											</th><th width="40px">
 												公司
+											</th><th width="40px">
+												科目
 											</th>
 											<th width="60px">
 												总金额
@@ -132,7 +134,7 @@
 												invoice_ids = invoice_ids.substring(0,invoice_ids.length()-1);
 										%>
 										<tr class="unit">
-											<td colspan="8">
+											<td colspan="9">
 												<table class="table table-responsive table-bordered">
 													<%int i = 0 ;
 											for(Invoice item :tempList){
@@ -141,7 +143,8 @@
 													<tr><%if(i==1){ %><td width="60px" rowspan="<%=tempList.size() %>">
 															<a href="#" class="match" invoice_ids="<%=invoice_ids %>" expense_income_ids="<%=income.getId() %>">匹配</a>
 														</td><%} %>
-														<td width="100px"><%=item.getBank_name() %></td>
+														<td width="100px"><a target="_blank" href="sale_invoice/detail/<%=item.getId() %>"><%=item.getBank_name() %></td>
+														<td width="40px"><%=SystemCache.getSubjectName(item.getSubject_id()) %></td>
 														<td width="40px"><%=SystemCache.getCompanyShortName(item.getCompany_id()) %></td>
 														<td width="60px"><%=item.getAmount() %></td>
 														<td width="60px"><%=item.getMatch_amount() %></td>
@@ -257,7 +260,7 @@
 														<%} %>
 
 													</tr>
-													<%} %></td>
+													<%} %><td></td>
 												</table>
 										</tr>
 										<%

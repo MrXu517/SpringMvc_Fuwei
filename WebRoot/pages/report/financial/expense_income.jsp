@@ -120,7 +120,6 @@
 		<script src="js/plugins/bootstrap.min.js" type="text/javascript"></script>
 		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
-		<script src="js/financial/workspace/expense_income.js" type="text/javascript"></script>
 		<script type='text/javascript' src='js/plugins/select2.min.js'></script>
 	<link rel="stylesheet" type="text/css" href="css/plugins/select2.min.css" />
 		<link href="css/report/financial.css" rel="stylesheet"
@@ -468,7 +467,37 @@
 	/*设置当前选中的页*/
 	var $a = $("#left li a[href='report/financial/expense_income']");
 	setActiveLeft($a.parent("li"));
+	$("#bank_id").select2();
 
+	// 公司-业务员级联
+	$("#companyId").change( function() {
+		changeCompany(this.value);
+	});
+	// 公司-业务员级联
+	function changeCompany(companyId) {
+		var companyName = $("#companyId").val();
+		var companySalesmanMap = $("#companyId").attr("data");
+		companySalesmanMap = $.parseJSON(companySalesmanMap).companySalesmanMap;
+		var SalesNameList = companySalesmanMap[companyName];
+		$("#salesmanId").empty();
+		var frag = document.createDocumentFragment();
+		var option = document.createElement("option");
+		option.value = "";
+		option.text = "未选择";
+		frag.appendChild(option);
+		if (SalesNameList) {
+			for ( var i = 0; i < SalesNameList.length; ++i) {
+				var salesName = SalesNameList[i];
+				var option = document.createElement("option");
+				option.value = salesName.id;
+				option.text = salesName.name;
+				frag.appendChild(option);
+			}
+		}
+
+		$("#salesmanId").append(frag);
+	}
 </script>
+
 	</body>
 </html>

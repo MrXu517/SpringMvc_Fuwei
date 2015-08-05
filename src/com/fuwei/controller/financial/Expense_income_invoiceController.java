@@ -1,6 +1,8 @@
 package com.fuwei.controller.financial;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -169,6 +171,28 @@ public class Expense_income_invoiceController extends BaseController {
 		Integer bank_id = invoice.getBank_id();
 		List<Expense_income> Expense_incomeList = expense_incomeService.getExpenseIncomeList(bank_id,expense_or_income);
 		
+		Collections.sort(Expense_incomeList, new Comparator() {
+			  @Override
+		      public int compare(Object o1, Object o2) {
+				  Expense_income a1 = (Expense_income) o1;
+				  Expense_income a2 = (Expense_income) o2;
+		    	  Double a1_d = new Double(a1.getAmount()-a1.getInvoice_amount());
+		    	  Double a2_d = new Double(a2.getAmount()-a2.getInvoice_amount());
+		        return a1_d.compareTo(a2_d);
+		      }
+		    });
+		
+//		//把收入中负数的item放到前面
+//		List<Expense_income> Expense_incomeList = new ArrayList<Expense_income>();
+//		for(Expense_income item : temp_Expense_incomeList){
+//			if(item.getAmount() - item.getInvoice_amount() < 0){
+//				Expense_incomeList.add(0, item);
+//			}else{
+//				Expense_incomeList.add(item);
+//			}
+//		}
+		
+		
 		//存放 一张发票 -> 一项或多项支出
 		List<List<Expense_income>> one_to_many_Result = new ArrayList<List<Expense_income>>();
 		for(int i = 0 ; i < Expense_incomeList.size() ; ++i){
@@ -185,6 +209,26 @@ public class Expense_income_invoiceController extends BaseController {
 		//多张发票 -> 一项支出
 		Map<List<Invoice> , List<Expense_income>> many_to_one_map = new HashMap<List<Invoice> , List<Expense_income>>();
 		List<Invoice> invoiceList = invoiceService.getInvoiceList(bank_id,invoice.getIn_out());	
+
+		Collections.sort(invoiceList, new Comparator() {
+			  @Override
+		      public int compare(Object o1, Object o2) {
+		    	  Invoice a1 = (Invoice) o1;
+		    	  Invoice a2 = (Invoice) o2;
+		    	  Double a1_d = new Double(a1.getAmount()-a1.getMatch_amount());
+		    	  Double a2_d = new Double(a2.getAmount()-a2.getMatch_amount());
+		        return a1_d.compareTo(a2_d);
+		      }
+		    });
+//		//把发票中负数的item放到前面
+//		List<Invoice> invoiceList = new ArrayList<Invoice>();
+//		for(Invoice item : temp_invoiceList){
+//			if(item.getAmount() - item.getMatch_amount() < 0){
+//				invoiceList.add(0, item);
+//			}else{
+//				invoiceList.add(item);
+//			}
+//		}
 		
 		for(Invoice tempinvoice : invoiceList){
 			if(tempinvoice.getId() == invoice.getId()){
@@ -318,6 +362,7 @@ public class Expense_income_invoiceController extends BaseController {
 			un_invoiced_amount = NumberUtil.formateDouble(un_invoiced_amount,2);
 			double temp_sum = sum + un_invoiced_amount;
 			temp_sum = NumberUtil.formateDouble(temp_sum,2);
+			System.out.println(un_invoiced_amount+","+temp_sum);
 			if(temp_sum == value){//若相等，则找到了
 				templist.add(item);
 				mapResult.add(templist);
@@ -349,22 +394,24 @@ public class Expense_income_invoiceController extends BaseController {
 				continue;
 			}
 			if(temp_sum > value){//若值>value,则返回 false
-				templist.add(item);
-				int indexOf = templist.size()-1;
-				invoiceNSum(list,j+1,temp_sum , value ,templist,mapResult);
+//				templist.add(item);
+//				int indexOf = templist.size()-1;
+//				invoiceNSum(list,j+1,temp_sum , value ,templist,mapResult);
+//				
+//				if(indexOf <= 0){
+//					return ; 
+//				}else{
+//					List<Invoice> alist  = new ArrayList<Invoice>();
+//
+//					for(int k = 0; k < indexOf;++k){
+//						alist.add(templist.get(k));
+//					}
+//					templist = alist;
+//				}
+//				
+//				continue;
 				
-				if(indexOf <= 0){
-					return ; 
-				}else{
-					List<Invoice> alist  = new ArrayList<Invoice>();
-
-					for(int k = 0; k < indexOf;++k){
-						alist.add(templist.get(k));
-					}
-					templist = alist;
-				}
-				
-				continue;
+				return;
 			}
 		}
 	}
@@ -408,22 +455,23 @@ public class Expense_income_invoiceController extends BaseController {
 				continue;
 			}
 			if(temp_sum > value){//若值>value,则返回 false
-				templist.add(item);
-				int indexOf = templist.size()-1;
-				Expense_incomeNSum(list,j+1,temp_sum , value ,templist,mapResult);
+//				templist.add(item);
+//				int indexOf = templist.size()-1;
+//				Expense_incomeNSum(list,j+1,temp_sum , value ,templist,mapResult);
+//				
+//				if(indexOf <= 0){
+//					return ; 
+//				}else{
+//					List<Expense_income> alist  = new ArrayList<Expense_income>();
+//
+//					for(int k = 0; k < indexOf;++k){
+//						alist.add(templist.get(k));
+//					}
+//					templist = alist;
+//				}
+//				continue;
 				
-				if(indexOf <= 0){
-					return ; 
-				}else{
-					List<Expense_income> alist  = new ArrayList<Expense_income>();
-
-					for(int k = 0; k < indexOf;++k){
-						alist.add(templist.get(k));
-					}
-					templist = alist;
-				}
-				
-				continue;
+				return;
 			}
 		}
 	}
@@ -529,20 +577,63 @@ public class Expense_income_invoiceController extends BaseController {
 		//收入待匹配金额
 		double to_be_match_income_amount = income.getAmount() - income.getInvoice_amount();
 		Integer bank_id = income.getBank_id();
-		List<Invoice> invoiceList = invoiceService.getInvoiceList(bank_id,false);
+		List<Invoice> invoiceList = invoiceService.getInvoiceList(bank_id,false,income.getSubject_id());
+		
+		Collections.sort(invoiceList, new Comparator() {
+			  @Override
+		      public int compare(Object o1, Object o2) {
+		    	  Invoice a1 = (Invoice) o1;
+		    	  Invoice a2 = (Invoice) o2;
+		    	  Double a1_d = new Double(a1.getAmount()-a1.getMatch_amount());
+		    	  Double a2_d = new Double(a2.getAmount()-a2.getMatch_amount());
+		        return a1_d.compareTo(a2_d);
+		      }
+		    });
+		
+//		//把发票中负数的item放到前面
+//		List<Invoice> invoiceList = new ArrayList<Invoice>();
+//		for(Invoice invoice : temp_invoiceList){
+//			if(invoice.getAmount() - invoice.getMatch_amount() < 0){
+//				invoiceList.add(0, invoice);
+//			}else{
+//				invoiceList.add(invoice);
+//			}
+//		}
+		
+		
 		//存放 一项收入 -> 一张或多张销项发票
 		List<List<Invoice>> one_to_many_Result = new ArrayList<List<Invoice>>();
 		for(int i = 0 ; i < invoiceList.size() ; ++i){
 			List<Invoice> tempList = new ArrayList<Invoice>();
 			double value = NumberUtil.formateDouble(to_be_match_income_amount,2);
-			Invoice temp = invoiceList.get(i);
-			double value_i = NumberUtil.formateDouble(temp.getAmount() - temp.getMatch_amount(),2);
+//			Invoice temp = invoiceList.get(i);
+//			double value_i = NumberUtil.formateDouble(temp.getAmount() - temp.getMatch_amount(),2);
 			invoiceNSum(invoiceList,i,0,value,tempList,one_to_many_Result);
 		}
 		
 		//多项收入 -> 一张发票
 		Map<List<Expense_income> , List<Invoice>> many_to_one_map = new HashMap<List<Expense_income> , List<Invoice>>();
 		List<Expense_income> expense_incomeList = expense_incomeService.getExpenseIncomeList(bank_id, true);
+
+		Collections.sort(expense_incomeList, new Comparator() {
+			  @Override
+		      public int compare(Object o1, Object o2) {
+				  Expense_income a1 = (Expense_income) o1;
+				  Expense_income a2 = (Expense_income) o2;
+		    	  Double a1_d = new Double(a1.getAmount()-a1.getInvoice_amount());
+		    	  Double a2_d = new Double(a2.getAmount()-a2.getInvoice_amount());
+		        return a1_d.compareTo(a2_d);
+		      }
+		    });
+//		//把收入中负数的item放到前面
+//		List<Expense_income> expense_incomeList = new ArrayList<Expense_income>();
+//		for(Expense_income item : temp_expense_incomeList){
+//			if(item.getAmount() - item.getInvoice_amount() < 0){
+//				expense_incomeList.add(0, item);
+//			}else{
+//				expense_incomeList.add(item);
+//			}
+//		}
 		
 		for(Expense_income tempExpenseIncome : expense_incomeList){
 			if(tempExpenseIncome.getId() == income.getId()){
