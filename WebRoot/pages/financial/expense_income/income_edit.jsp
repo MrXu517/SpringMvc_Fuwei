@@ -167,7 +167,7 @@
 												</label>
 												<div class="col-sm-8">
 													<input type="text" class="form-control" name="memo"
-														id="memo" placeholder="备注">
+														id="memo" value="<%=expense_income.getMemo() %>">
 												</div>
 												<div class="col-sm-1"></div>
 											</div>
