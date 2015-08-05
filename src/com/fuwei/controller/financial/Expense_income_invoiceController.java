@@ -362,7 +362,7 @@ public class Expense_income_invoiceController extends BaseController {
 			un_invoiced_amount = NumberUtil.formateDouble(un_invoiced_amount,2);
 			double temp_sum = sum + un_invoiced_amount;
 			temp_sum = NumberUtil.formateDouble(temp_sum,2);
-			System.out.println(un_invoiced_amount+","+temp_sum);
+//			System.out.println(un_invoiced_amount+","+temp_sum);
 			if(temp_sum == value){//若相等，则找到了
 				templist.add(item);
 				mapResult.add(templist);
