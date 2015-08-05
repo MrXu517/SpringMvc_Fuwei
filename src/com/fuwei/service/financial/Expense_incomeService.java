@@ -286,7 +286,7 @@ public class Expense_incomeService extends BaseService {
 	// 编辑
 	public int update(Expense_income expense) throws Exception {
 		try{
-			return this.update(expense, "id", "created_at,created_user",true);
+			return this.update(expense, "id", "created_at,created_user,amount,expense_at,bank_id,company_id,salesman_id",true);
 		}catch(Exception e){
 			throw e;
 		}

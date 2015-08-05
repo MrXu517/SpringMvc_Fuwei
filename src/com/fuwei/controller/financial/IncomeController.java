@@ -172,6 +172,30 @@ public class IncomeController extends BaseController {
 		return expense;
 	}
 	
+	@RequestMapping(value = "/put/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView put(@PathVariable Integer id, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		if(id == null){
+			throw new Exception("ID不能为空");
+		}
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "expense_income/edit";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有编辑出纳的权限", null);
+		}
+		Expense_income expense_income = expense_incomeService.get(id);
+		if(expense_income == null || expense_income.getIn_out()!=true){
+			throw new Exception("找不到ID="+id + "的收入项");
+		}
+		List<Subject> subjectlist = SystemCache.getSubjectList(true);
+		request.setAttribute("subjectlist", subjectlist);	
+		request.setAttribute("expense_income", expense_income);	
+		
+		return new ModelAndView("financial/expense_income/income_edit");
+	}
 	@RequestMapping(value = "/put", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> update(Expense_income expense,HttpSession session, HttpServletRequest request,
@@ -184,9 +208,9 @@ public class IncomeController extends BaseController {
 		}
 		expense.setUpdated_at(DateTool.now());
 		expense.setIn_out(true);
-		int success = expense_incomeService.update(expense);
+		expense_incomeService.update(expense);
 		
-		return this.returnSuccess();
+		return this.returnSuccess("id",expense.getId());
 		
 	}
 	

@@ -89,6 +89,7 @@
 										<%
 											}
 										%>
+										
 									</legend>
 									<table
 										class="table table-responsive table-bordered propertyTable">

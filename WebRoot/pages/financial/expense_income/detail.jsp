@@ -119,6 +119,7 @@ legend span.label {
 										<%
 											}
 										%>
+										<a type="button" class="btn btn-danger pull-right" href="income/put/<%=expense_income.getId() %>">编辑</a>
 									</legend>
 									<table class="table table-responsive table-bordered propertyTable">
 <tr><td class="property">公司</td><td><span ><%=SystemCache.getCompanyName(expense_income.getCompany_id()) %></span></td><td class="property">对方账户</td><td><span><%=expense_income.getBank_name()%></span></td></tr>
