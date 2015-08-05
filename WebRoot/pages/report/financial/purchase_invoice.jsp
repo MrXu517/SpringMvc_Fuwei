@@ -230,7 +230,7 @@
 													<%if(un_paid!=null && un_paid){ %><input checked name="un_paid" type="checkbox" value="1" style="margin-left:10px;">  未付
 <%}else{ %>
 <input name="un_paid" type="checkbox" value="1" style="margin-left:10px;">  未付<%} %>
-													<button class="btn btn-primary" type="button" id="searchBtn">
+													<button class="btn btn-primary" type="submit" id="searchBtn">
 														搜索
 													</button>
 																								<ul class="pagination">

@@ -85,7 +85,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>进项发票报表 -- 财务报表 -- 桐庐富伟针织厂</title>
+		<title>销项发票报表 -- 财务报表 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -230,7 +230,7 @@
 													<%if(un_received!=null && un_received){ %><input checked name="un_received" type="checkbox" value="1" style="margin-left:10px;">  未收
 <%}else{ %>
 <input name="un_received" type="checkbox" value="1" style="margin-left:10px;">  未收<%} %>
-													<button class="btn btn-primary" type="button" id="searchBtn">
+													<button class="btn btn-primary" type="submit" id="searchBtn">
 														搜索
 													</button>
 																								<ul class="pagination">
