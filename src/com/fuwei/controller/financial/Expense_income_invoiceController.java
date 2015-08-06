@@ -577,7 +577,7 @@ public class Expense_income_invoiceController extends BaseController {
 		//收入待匹配金额
 		double to_be_match_income_amount = income.getAmount() - income.getInvoice_amount();
 		Integer bank_id = income.getBank_id();
-		List<Invoice> invoiceList = invoiceService.getInvoiceList(bank_id,false,income.getSubject_id());
+		List<Invoice> invoiceList = invoiceService.getBeforeDateInvoiceList(bank_id,false,income.getSubject_id(),income.getExpense_at());
 		
 		Collections.sort(invoiceList, new Comparator() {
 			  @Override

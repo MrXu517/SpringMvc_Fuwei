@@ -318,7 +318,7 @@
 										</div>
 
 										
-									<br><button class="btn btn-primary" type="button" id="searchBtn">
+									<br><button class="btn btn-primary" type="submit" id="searchBtn">
 											搜索
 										</button><a class="exportBtn btn btn-primary" type="button" href="report/financial/expense_income/export?bank_id=<%=bank_str%>&subject_id=<%=subject_str%>&in_out=<%=in_out_str%>&companyId=<%=company_str%>&salesmanId=<%=salesman_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>">
 											导出

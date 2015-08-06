@@ -758,7 +758,7 @@ public class FinancialReportController extends BaseController {
 		sort.setDirection("desc");
 		sort.setProperty("print_date");
 		sortList.add(sort);
-		pager = invoiceService.getList(pager, un_received, start_time_d,
+		pager = invoiceService.getSaleInvoiceReport(pager, un_received, start_time_d,
 				end_time_d, companyId, subject_id, false, bank_id, null, null,
 				null, sortList);
 

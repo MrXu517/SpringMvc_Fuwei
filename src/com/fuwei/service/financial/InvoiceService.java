@@ -49,6 +49,20 @@ public class InvoiceService extends BaseService {
 		}
 	}
 	
+	public List<Invoice> getBeforeDateInvoiceList(Integer bank_id,boolean in_out,Integer subject_id,Date date) throws Exception{
+		try {
+			if(date == null){
+				return getInvoiceList(bank_id,in_out,subject_id);
+			}else{
+				List<Invoice> invoiceList = dao.queryForBeanList(
+						"SELECT * FROM tb_invoice WHERE bank_id=? and amount<>match_amount and in_out=? and subject_id=? and print_date<?", Invoice.class,bank_id,in_out,subject_id,date);
+				return invoiceList;
+			}
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 	public List<Invoice> getByIds(String ids) throws Exception{
 		if(ids == null || ids.equals("")){
 			return null;
@@ -360,6 +374,102 @@ public class InvoiceService extends BaseService {
 			throw e;
 		}
 
+	}
+	
+	
+	// 获取分页列表
+	public Pager getSaleInvoiceReport(Pager pager,Boolean unpaid, Date start_time, Date end_time,
+			Integer companyId, Integer subjectId,
+			Boolean in_out, Integer bank_id ,Double amount_from , Double amount_to,String number, List<Sort> sortlist) throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			String seq = " WHERE ";
+			sql.append("select * from tb_invoice");
+			
+			StringBuffer sql_condition = new StringBuffer();
+			if (companyId != null) {
+				sql_condition.append(seq + " company_id='" + companyId+ "'");
+				seq = " AND ";
+			}
+			if (subjectId != null) {
+				sql_condition.append(seq + " subject_id='" + subjectId+ "'");
+				seq = " AND ";
+			}
+			if (start_time != null) {
+				sql_condition.append(seq + " print_date>='"
+						+ DateTool.formateDate(start_time) + "'");
+				seq = " AND ";
+			}
+			if (end_time != null) {
+				sql_condition.append(seq + " print_date<='"
+						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
+						+ "'");
+				seq = " AND ";
+			}
+			if (unpaid != null) {
+				if(unpaid){
+					sql_condition.append(seq + " amount>match_amount");
+					seq = " AND ";
+				}else{
+					sql_condition.append(seq + " amount=match_amount");
+					seq = " AND ";
+				}
+			}
+			if (in_out != null) {
+				sql_condition.append(seq + " in_out='" + (in_out == true?"1":0 )+ "'");
+				seq = " AND ";
+			}
+			if (bank_id != null) {
+				sql_condition.append(seq + " bank_id='" + bank_id+ "'");
+				seq = " AND ";
+			}
+			
+			if (amount_from != null) {
+				sql_condition.append(seq + " amount>='" + amount_from+ "'");
+				seq = " AND ";
+			}
+			if (amount_to != null) {
+				sql_condition.append(seq + " amount<='" + amount_to+ "'");
+				seq = " AND ";
+			}
+			if (number != null && !number.equals("")) {
+				sql_condition.append(seq + " number='" + number+ "'");
+				seq = " AND ";
+			}
+
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql_condition.append(" order by " + sortlist.get(i).getProperty()
+								+ " " + sortlist.get(i).getDirection() + " ");
+					} else {
+						sql_condition.append("," + sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			
+			pager = findPager_T(sql.append(sql_condition).toString(), Invoice.class, pager);
+			//获取统计数据
+			String [] total_colnames = pager.getTotal_colnames();
+			if(total_colnames == null || total_colnames.length <= 0){
+				return pager;
+			}
+			StringBuffer sql_total = new StringBuffer();
+			sql_total.append("select ");
+			for(String colname : total_colnames){
+				sql_total.append("IFNULL(sum(IFNULL(" + colname+",0)),0) " + colname + ",");
+			}
+			sql_total = new StringBuffer(sql_total.substring(0, sql_total.length()-1));
+			sql_total.append(" from tb_invoice");			
+			Map<String,Object> total_map = dao.queryForMap(sql_total.append(sql_condition).toString(),null);
+			pager.setTotal(total_map);
+			return pager;
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 	
 }

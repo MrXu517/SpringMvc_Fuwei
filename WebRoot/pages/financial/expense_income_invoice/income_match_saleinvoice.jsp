@@ -124,7 +124,7 @@
 									</thead>
 									<tbody>
 										<%if(one_to_many_Result==null || one_to_many_Result.size()<=0){ %>
-										<tr><td colspan="8">未找到符合条件的记录</td></tr>
+										<tr><td colspan="9">未找到符合条件的记录</td></tr>
 										<%}else{
 											for (List<Invoice> tempList : one_to_many_Result) {
 												String invoice_ids = "";
