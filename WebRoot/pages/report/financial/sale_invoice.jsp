@@ -299,7 +299,7 @@
 														<th width="20px">
 															No.
 														</th>
-														<th width="120px">
+														<th width="130px">
 															对方账户
 														</th><th width="60px">
 															科目
@@ -355,9 +355,9 @@
 														}
 													%>
 													<%if(invoicelist == null || invoicelist.size() <= 0){ %>
-														<tr><td colspan="10">找不到符合条件的记录</td></tr>
+														<tr><td colspan="11">找不到符合条件的记录</td></tr>
 													<%}else{ %>
-												</tbody><tfoot><tr><td></td><td>合计</td><td><%=total_amount%></td><td><%=total_matched_amout%></td><td><%=total_unmatched_amount %></td><td></td><td></td><td></td><td></td><td></td></tr></tfoot>
+												</tbody><tfoot><tr><td></td><td>合计</td><td></td><td><%=total_amount%></td><td><%=total_matched_amout%></td><td><%=total_unmatched_amount %></td><td></td><td></td><td></td><td></td><td></td></tr></tfoot>
 											<%} %>
 											</table>
 										</div>
