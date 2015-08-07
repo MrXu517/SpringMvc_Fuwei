@@ -301,6 +301,8 @@
 														</th>
 														<th width="120px">
 															对方账户
+														</th><th width="60px">
+															科目
 														</th>
 														<th width="60px">
 															金额
@@ -337,7 +339,8 @@
 														<td><%=++i%></td>
 														
 														
-														<td><a class="detailA" href="purchase_invoice/detail/<%=item.getId() %>"><%=item.getBank_name()%></a></td>
+														<td><a class="detailA" href="sale_invoice/detail/<%=item.getId() %>"><%=item.getBank_name()%></a></td>
+														<td><%=SystemCache.getSubjectName(item.getSubject_id())%></td>
 														<td><%=item.getAmount()%></td>
 														<td><%=item.getMatch_amount()%></td>
 														<td><%=NumberUtil.formateDouble(item.getAmount() - item.getMatch_amount(),2)%></td>
