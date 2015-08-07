@@ -775,6 +775,86 @@ public class Expense_income_invoiceController extends BaseController {
 		return this.returnSuccess();
 		
 	}
+	
+	//手动匹配
+	@RequestMapping(value = "/income_match_manual/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView income_match_manual(@PathVariable Integer id,HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "expense_income_invoice/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有将收入匹配销项发票", null);
+		}
+		
+		Map<Expense_income , List<Invoice>> map = new HashMap<Expense_income , List<Invoice>>();
+		
+		Expense_income income = expense_incomeService.get(id);
+		Boolean expense_or_income = income.getIn_out();
+		Boolean invoice_in_out = !expense_or_income;
+		//发票待匹配金额
+		Integer bank_id = income.getBank_id();
+		
+		List<Invoice> invoicelist = invoiceService.getInvoiceList(bank_id, invoice_in_out);
+
+		request.setAttribute("income", income);
+		request.setAttribute("invoicelist", invoicelist);
+		return new ModelAndView("financial/expense_income_invoice/income_match_manual_saleinvoice");			
+		
+	}
+	
+	//手动匹配
+	@RequestMapping(value = "/income_match_manual", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> income_match_manual(Integer invoice_id,Integer expense_income_id,HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "expense_income_invoice/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有将收入匹配销项发票", null);
+		}
+		
+		Expense_income income = expense_incomeService.get(expense_income_id);
+		Boolean expense_or_income = income.getIn_out();
+		Boolean invoice_in_out = !expense_or_income;
+		
+		if(income==null){
+			throw new Exception("匹配收入时，请至少提供一项收入");
+		}
+		
+		Invoice invoice = invoiceService.get(invoice_id,invoice_in_out);
+		if(invoice==null){
+			throw new Exception("匹配收入时，请至少提供一项销项发票");
+		}
+		
+		
+		List<Expense_income_invoice> resultList = new ArrayList<Expense_income_invoice>();
+		
+		Expense_income_invoice item = new Expense_income_invoice();
+		item.setCreated_at(DateTool.now());
+		item.setUpdated_at(DateTool.now());
+		item.setCreated_user(user.getId());
+		item.setInvoice_id(invoice.getId());
+		item.setExpense_income_id(income.getId());
+		double amount = Math.min(income.getAmount() - income.getInvoice_amount(), invoice.getAmount() - invoice.getMatch_amount());
+		item.setAmount(amount);
+		resultList.add(item);
+		
+		Integer companyId = income.getCompany_id();
+		Integer subjectId = income.getSubject_id();
+		
+		
+		expense_income_invoiceService.batch_add(companyId,subjectId,new String[]{""+expense_income_id},new String[]{""+invoice_id},resultList);
+		
+		
+		
+		return this.returnSuccess();
+		
+	}
 	/*收入匹配销项发票*/
+	
+	
 	
 }

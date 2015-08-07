@@ -88,7 +88,12 @@
 						<div class="row">
 							<div class="col-md-12 tablewidget">
 								<!-- Table -->
-									
+								<%if((one_to_many_Result==null || one_to_many_Result.size()<=0) && (many_to_one_map==null || many_to_one_map.size()<=0)){ %>
+										<!-- 若匹配不到，则手动匹配 -->
+									<a class="btn btn-primary" type="button" href="expense_income_invoice/income_match_manual/<%=income.getId() %>">
+										手动匹配
+									</a>
+									<%} %>	
 								<p>
 									<strong>一项【收入】 对应 一张或多张【销项发票】</strong>
 								</p>
