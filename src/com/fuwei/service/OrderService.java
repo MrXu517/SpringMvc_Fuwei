@@ -94,6 +94,7 @@ public class OrderService extends BaseService {
 	ColoringProcessOrderService coloringProcessOrderService;
 	
 	/*2015-7-1添加装箱单*/
+	@Autowired
 	PackingOrderService packingOrderService;
 	
 	//获取所有订单
@@ -358,7 +359,7 @@ public class OrderService extends BaseService {
 
 	// 执行订单
 	@Transactional
-	public int exestep(int orderId, OrderHandle handle) throws Exception {
+	public int exestep(int orderId,Date step_time, OrderHandle handle) throws Exception {
 		try {
 			// 获取当前步骤
 			Order order = this.get(orderId);
@@ -374,7 +375,10 @@ public class OrderService extends BaseService {
 
 			// 若当前执行发货步骤，则修改订单的发货时间
 			if (status == OrderStatus.DELIVERING.ordinal()) {
-				order.setDelivery_at(DateTool.now());
+				if(step_time == null){
+					step_time = DateTool.now();
+				}
+				order.setDelivery_at(step_time);
 				
 				//2015-3-18添加，若当前执行发货步骤，则将所有表格status设为6
 				headBankOrderService.completeByOrder(orderId);

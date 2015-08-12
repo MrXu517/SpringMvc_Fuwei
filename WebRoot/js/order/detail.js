@@ -82,28 +82,68 @@ $(document).ready(function(){
 	// 编辑步骤 -- 结束
 	
 	//执行当前步骤 -- 开始
-	$("#exeStep").click(function(){
-		if(!confirm("是否确定执行？")){
+	var $exeform = $("#exeStepDialog .exeform");
+	if($exeform.length>0){
+		$exeform.submit(function(){
+			if(!confirm("是否确定执行？")){
+				return false;
+			}
+			if (!Common.checkform(this)) {
+				return false;
+			}
+			var formdata = $(this).serializeJson();
+			$.ajax({
+	            url: "order/exestep/"+formdata.orderId,
+	            type: 'POST',
+	            data :$.param(formdata)
+	        })
+	            .done(function(result) {
+	            	if(result.success!=false){
+	            		Common.Tip("执行步骤成功",function(){
+	            			location.reload();
+	            		});
+	            	}
+	            })
+	            .fail(function(result) {
+	            	Common.Error("执行步骤失败：" + result.responseText);
+	            })
+	            .always(function() {
+	            	
+	            });
 			return false;
+		});
+	}
+	
+	$('#exeStepDialog').on('shown.bs.modal', function () {
+		$exeform.find("#delivery_at").focus();
+		$exeform.find("#delivery_at").select();
+	});
+	$("#exeStep").click(function(){
+		//若是发货状态，则弹出对话框，填写执行步骤的时间
+		var $dialog = $("#exeStepDialog");
+		if($dialog.length>0){
+			$("#exeStepDialog").modal();
+		}else{
+			var orderId = $(this).attr("orderid");
+			$.ajax({
+	            url: "order/exestep/"+orderId,
+	            type: 'POST'
+	        })
+	            .done(function(result) {
+	            	if(result.success!=false){
+	            		Common.Tip("执行步骤成功",function(){
+	            			location.reload();
+	            		});
+	            	}
+	            })
+	            .fail(function(result) {
+	            	Common.Error("执行步骤失败：" + result.responseText);
+	            })
+	            .always(function() {
+	            	
+	            });
 		}
-		var orderId = $(this).attr("orderId");
-		$.ajax({
-            url: "order/exestep/"+orderId,
-            type: 'POST'
-        })
-            .done(function(result) {
-            	if(result.success!=false){
-            		Common.Tip("执行步骤成功",function(){
-            			location.reload();
-            		});
-            	}
-            })
-            .fail(function(result) {
-            	Common.Error("执行步骤失败：" + result.responseText);
-            })
-            .always(function() {
-            	
-            });
+		
 		return false;
 	});
 	//执行当前步骤 -- 结束

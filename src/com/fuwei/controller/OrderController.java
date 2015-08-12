@@ -1019,7 +1019,7 @@ public class OrderController extends BaseController {
 	// 执行订单步骤
 	@RequestMapping(value = "/exestep/{orderId}", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> exeStep(@PathVariable Integer orderId,
+	public Map<String, Object> exeStep(@PathVariable Integer orderId,Date step_time,
 			HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
@@ -1039,7 +1039,7 @@ public class OrderController extends BaseController {
 		handle.setCreated_user(user.getId());
 		handle.setName("执行订单步骤");
 		// 修改订单信息
-		orderService.exestep(orderId, handle);
+		orderService.exestep(orderId, step_time,handle);
 
 		return this.returnSuccess();
 	}

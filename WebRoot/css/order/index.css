@@ -277,3 +277,6 @@ tr.label-warning{
 .imggroup{
 	height:380px;
 }
+#exeStepDialog .modal-dialog{
+	width:700px;
+}

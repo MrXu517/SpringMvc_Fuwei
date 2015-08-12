@@ -421,6 +421,62 @@
 										%>
 									</tbody>
 								</table>
+							
+								<div clas="navbar navbar-default" style="margin-bottom:10px;">	<ul class="pagination">
+										<li>
+											<a
+												href="order/undelivery?charge_employee=<%=charge_employee_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
+										</li>
+
+										<%
+										if (pager.getPageNo() > 1) {
+									%>
+										<li class="">
+											<a
+												href="order/undelivery?charge_employee=<%=charge_employee_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
+												<span class="sr-only"></span> </a>
+										</li>
+										<%
+										} else {
+									%>
+										<li class="disabled">
+											<a disabled>上一页 <span class="sr-only"></span> </a>
+										</li>
+										<%
+										}
+									%>
+
+										<li class="active">
+											<a
+												href="order/undelivery?charge_employee=<%=charge_employee_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
+												class="sr-only"></span> </a>
+										</li>
+										<li>
+											<%
+											if (pager.getPageNo() < pager.getTotalPage()) {
+										%>
+										
+										<li class="">
+											<a
+												href="order/undelivery?charge_employee=<%=charge_employee_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
+												<span class="sr-only"></span> </a>
+										</li>
+										<%
+										} else {
+									%>
+										<li class="disabled">
+											<a disabled>下一页 <span class="sr-only"></span> </a>
+										</li>
+										<%
+										}
+									%>
+
+										</li>
+										<li>
+											<a
+												href="order/undelivery?charge_employee=<%=charge_employee_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
+										</li>
+									</ul></div>
 							</div>
 						</div>
 					</div>

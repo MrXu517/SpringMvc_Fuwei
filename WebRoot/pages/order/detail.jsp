@@ -573,5 +573,56 @@
 			<!-- /.modal-dialog -->
 		</div>
 		<!-- /.modal -->
+
+	<%
+	int status = order.getStatus();
+	if (status == OrderStatus.DELIVERING.ordinal()) { %>
+	<!--执行步骤对话框 对话框 -->
+		<div class="modal fade" id="exeStepDialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+						</button>
+						<h4 class="modal-title">
+							请填写  <%=exeStr%>  的时间
+
+						</h4>
+					</div>
+					<div class="modal-body">
+						<form class="form-horizontal exeform" role="form">
+							<input type="hidden" id="orderId" name="orderId"
+										value="<%=order.getId()%>" class="require" />
+							<div class="form-group col-md-12">
+								<label for="color" class="col-sm-3 control-label">
+									 <%=exeStr%> 的时间
+								</label>
+								<div class="col-sm-8">
+									<input type="text" name="delivery_at" id="delivery_at"
+										class="form-control require date" value="<%=DateTool.formatDateYMD(DateTool.now()) %>"/>
+								</div>
+								<div class="col-sm-1"></div>
+							</div>
+						
+							<div class="modal-footer">
+								<button type="submit" class="btn btn-primary"
+									data-loading-text="正在执行...">
+									确定
+								</button>
+								<button type="button" class="btn btn-default"
+									data-dismiss="modal">
+									关闭
+								</button>
+							</div>
+						</form>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!--
+						 执行步骤对话框 -->
+		<%} %>
 	</body>
 </html>
