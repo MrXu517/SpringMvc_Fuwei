@@ -124,6 +124,9 @@ $(document).ready(function(){
 		if($dialog.length>0){
 			$("#exeStepDialog").modal();
 		}else{
+			if(!confirm("是否确定执行？")){
+				return false;
+			}
 			var orderId = $(this).attr("orderid");
 			$.ajax({
 	            url: "order/exestep/"+orderId,
