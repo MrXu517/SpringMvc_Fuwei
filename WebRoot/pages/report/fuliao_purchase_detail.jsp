@@ -1,7 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
-<%@page import="com.fuwei.entity.ordergrid.MaterialPurchaseOrder"%>
-<%@page import="com.fuwei.entity.ordergrid.MaterialPurchaseOrderDetail"%>
+<%@page import="com.fuwei.entity.ordergrid.FuliaoPurchaseOrder"%>
+<%@page import="com.fuwei.entity.ordergrid.FuliaoPurchaseOrderDetail"%>
 <%@page import="com.fuwei.entity.Material"%>
 <%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.entity.User"%>
@@ -18,7 +18,7 @@
 	
 	
 	
-	List<MaterialPurchaseOrder> result = (List<MaterialPurchaseOrder>)request.getAttribute("result");
+	List<FuliaoPurchaseOrder> result = (List<FuliaoPurchaseOrder>)request.getAttribute("result");
 	Date start_time = (Date) request.getAttribute("start_time");
 	String start_time_str = "";
 	if (start_time != null) {
@@ -49,7 +49,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>原材料采购明细报表 -- 桐庐富伟针织厂</title>
+		<title>辅料采购明细报表 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -78,7 +78,7 @@
 							<a href="user/index">首页</a>
 						</li>
 						<li class="active">
-							原材料采购明细报表
+							辅料采购明细报表
 						</li>
 					</ul>
 				</div>
@@ -138,7 +138,7 @@
 										</div>
 									</form>
 									
-									<a target="_blank" href="report/material_purchase_detail/export?factoryId=<%=factory_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>" class="btn btn-primary">导出</a>
+									<a target="_blank" href="report/fuliao_purchase_detail/export?factoryId=<%=factory_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>" class="btn btn-primary">导出</a>
 								</div>
 
 								<table class="table table-responsive">
@@ -173,24 +173,24 @@
 									<tbody>
 										<%
 											int i = 0 ;
-											for (MaterialPurchaseOrder materialPurchaseOrder : result) {
+											for (FuliaoPurchaseOrder fuliaoPurchaseOrder : result) {
 												int count = 0 ;
-												for (MaterialPurchaseOrderDetail item : materialPurchaseOrder.getDetaillist()) {
+												for (FuliaoPurchaseOrderDetail item : fuliaoPurchaseOrder.getDetaillist()) {
 										%>
 										<tr>
 											<td><%=++i%></td>
 											<%if(count==0){ %>
-											<td><%=DateTool.formatDateYMD(materialPurchaseOrder.getCreated_at())%></td>
-											<td><%=SystemCache.getFactoryName(materialPurchaseOrder.getFactoryId())%></td>
-											<td><a href="material_purchase_order/detail/<%=materialPurchaseOrder.getId() %>"><%=materialPurchaseOrder.getNumber()%></a></td>
-											<td><%=materialPurchaseOrder.getName()%></td>
-											<td><%=SystemCache.getCompanyShortName(materialPurchaseOrder.getCompanyId())%></td>
-											<td><%=SystemCache.getEmployeeName(materialPurchaseOrder.getCharge_employee())%></td>
+											<td><%=DateTool.formatDateYMD(fuliaoPurchaseOrder.getCreated_at())%></td>
+											<td><%=SystemCache.getFactoryName(fuliaoPurchaseOrder.getFactoryId())%></td>
+											<td><a href="fuliao_purchase_order/detail/<%=fuliaoPurchaseOrder.getId() %>"><%=fuliaoPurchaseOrder.getNumber()%></a></td>
+											<td><%=fuliaoPurchaseOrder.getName()%></td>
+											<td><%=SystemCache.getCompanyShortName(fuliaoPurchaseOrder.getCompanyId())%></td>
+											<td><%=SystemCache.getEmployeeName(fuliaoPurchaseOrder.getCharge_employee())%></td>
 											<%}else{ %>
 											<td></td><td></td><td></td><td></td><td></td><td></td>
 											<%} %>
 											
-											<td><%=SystemCache.getMaterialName(item.getMaterial())%></td>
+											<td><%=SystemCache.getMaterialName(item.getStyle())%></td>
 											<td><%=item.getQuantity()%></td>
 											<td></td>
 										</tr>
@@ -211,7 +211,7 @@
 
 		<script type="text/javascript">
 	/*设置当前选中的页*/
-	var $a = $("#left li a[href='report/material_purchase_detail']");
+	var $a = $("#left li a[href='report/fuliao_purchase_detail']");
 	setActiveLeft($a.parent("li"));
 
 </script>

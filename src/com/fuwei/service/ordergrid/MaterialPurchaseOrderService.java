@@ -251,16 +251,6 @@ public class MaterialPurchaseOrderService extends BaseService {
 				}
 			}
 			
-			
-//			Map<Long, MaterialPurchaseOrder> result = dao.queryForMaps(sql.toString());
-//			
-//                for (Long key : result.keySet()) {
-//                	System.out.println(key + "," );
-//                        System.out.println(key + " = " + result.get(key).getCreated_at()+ " , " + result.get(key).getCompany_productNumber());
-//                }
-//                System.out.println("----------------------");
-//			
-//			System.out.println(result.size()); 
 			List<MaterialPurchaseOrder> materialPurchaseOrderList = dao.queryForBeanList(
 					sql.toString(), MaterialPurchaseOrder.class);
 			
@@ -301,13 +291,7 @@ public class MaterialPurchaseOrderService extends BaseService {
 					}
 				}
 			}
-			for (Integer key : temp_hashmap.keySet()) {
-            	System.out.println(key + "," );
-            	for (Integer key_m : temp_hashmap.get(key).keySet()) {
-                    System.out.println(key_m+ " = " + temp_hashmap.get(key).get(key_m));
-            	}
-            }
-            System.out.println("----------------------");
+			
 			
 			
 			HashMap<Factory,HashMap<Material,Double> > result = new HashMap<Factory,HashMap<Material,Double> >();
@@ -330,13 +314,7 @@ public class MaterialPurchaseOrderService extends BaseService {
 					}
 			}
 			
-			for (Factory key : result.keySet()) {
-            	System.out.println(key.getName() + "," );
-            	for (Material key_m : result.get(key).keySet()) {
-                    System.out.println(key_m.getName() + " = " + result.get(key).get(key_m));
-            	}
-            }
-            System.out.println("----------------------");
+			
 			return result;
 			
 		} catch (Exception e) {

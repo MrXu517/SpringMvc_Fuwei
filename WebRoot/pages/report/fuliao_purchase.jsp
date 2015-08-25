@@ -1,7 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
-<%@page import="com.fuwei.entity.ordergrid.MaterialPurchaseOrder"%>
-<%@page import="com.fuwei.entity.ordergrid.MaterialPurchaseOrderDetail"%>
+<%@page import="com.fuwei.entity.ordergrid.FuliaoPurchaseOrder"%>
 <%@page import="com.fuwei.entity.Material"%>
 <%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.entity.User"%>
@@ -18,7 +17,7 @@
 	
 	
 	
-	List<MaterialPurchaseOrder> result = (List<MaterialPurchaseOrder>)request.getAttribute("result");
+	HashMap<Factory,HashMap<Material,Double> > result = (HashMap<Factory,HashMap<Material,Double> >)request.getAttribute("result");
 	Date start_time = (Date) request.getAttribute("start_time");
 	String start_time_str = "";
 	if (start_time != null) {
@@ -30,6 +29,9 @@
 		end_time_str = DateTool.formatDateYMD(end_time);
 	}
 
+	
+	Integer fac = (Integer) request.getAttribute("companyId");
+	String company_str = "";
 	
 	Integer factoryId = (Integer) request.getAttribute("factoryId");
 	String factory_str = "";
@@ -49,7 +51,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>原材料采购明细报表 -- 桐庐富伟针织厂</title>
+		<title>辅料采购汇总报表 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -78,7 +80,7 @@
 							<a href="user/index">首页</a>
 						</li>
 						<li class="active">
-							原材料采购明细报表
+							辅料采购汇总报表
 						</li>
 					</ul>
 				</div>
@@ -97,7 +99,7 @@
 												采购单位
 											</label>
 											<div class="col-sm-9">
-												<select class="form-control require" name="factoryId" id="factoryId">
+												<select class="form-control" name="factoryId" id="factoryId">
 													<option value="">
 														所有
 													</option>
@@ -138,7 +140,6 @@
 										</div>
 									</form>
 									
-									<a target="_blank" href="report/material_purchase_detail/export?factoryId=<%=factory_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>" class="btn btn-primary">导出</a>
 								</div>
 
 								<table class="table table-responsive">
@@ -146,58 +147,34 @@
 										<tr>
 											<th>
 												序号
-											</th><th>
-												日期
-											</th><th>
-												采购单位
-											</th><th>
-												采购单号
-											</th><th>
-												品名
-											</th><th>
-												公司
-											</th><th>
-												跟单
-											</th><th>
-												材料名
-											</th><th>
-												数量(kg)
-											</th><th>
-												颜色
 											</th>
 											
-											
-											
+											<th>
+												采购单位
+											</th>
+											<th>
+												材料
+											</th>
+											<th>
+												数量（kg）
+											</th>
 										</tr>
 									</thead>
 									<tbody>
 										<%
 											int i = 0 ;
-											for (MaterialPurchaseOrder materialPurchaseOrder : result) {
-												int count = 0 ;
-												for (MaterialPurchaseOrderDetail item : materialPurchaseOrder.getDetaillist()) {
+											for (Factory key : result.keySet()) {
+												for (Material key_m : result.get(key).keySet()) {
 										%>
 										<tr>
 											<td><%=++i%></td>
-											<%if(count==0){ %>
-											<td><%=DateTool.formatDateYMD(materialPurchaseOrder.getCreated_at())%></td>
-											<td><%=SystemCache.getFactoryName(materialPurchaseOrder.getFactoryId())%></td>
-											<td><a href="material_purchase_order/detail/<%=materialPurchaseOrder.getId() %>"><%=materialPurchaseOrder.getNumber()%></a></td>
-											<td><%=materialPurchaseOrder.getName()%></td>
-											<td><%=SystemCache.getCompanyShortName(materialPurchaseOrder.getCompanyId())%></td>
-											<td><%=SystemCache.getEmployeeName(materialPurchaseOrder.getCharge_employee())%></td>
-											<%}else{ %>
-											<td></td><td></td><td></td><td></td><td></td><td></td>
-											<%} %>
-											
-											<td><%=SystemCache.getMaterialName(item.getMaterial())%></td>
-											<td><%=item.getQuantity()%></td>
-											<td></td>
+											<td><%=key.getName()%></td>
+											<td><%=key_m.getName()%></td>
+											<td><%=result.get(key).get(key_m)%></td>
 										</tr>
 										<%
-										++count;
 											}
-										}
+											}
 										%>
 									</tbody>
 								</table>
@@ -211,9 +188,9 @@
 
 		<script type="text/javascript">
 	/*设置当前选中的页*/
-	var $a = $("#left li a[href='report/material_purchase_detail']");
+	var $a = $("#left li a[href='report/fuliao_purchase']");
 	setActiveLeft($a.parent("li"));
-
+	
 </script>
 	</body>
 </html>

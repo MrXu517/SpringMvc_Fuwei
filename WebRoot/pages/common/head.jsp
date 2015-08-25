@@ -37,7 +37,7 @@
 	Boolean h_has_report = SystemCache.hasAuthority(session,"report");
 	Boolean h_has_report_material = SystemCache.hasAuthority(session,"report/material");//材料库存报表
 	Boolean h_has_report_material_purchase = SystemCache.hasAuthority(session,"report/material_purchase");//原材料采购报表
-	
+
 	
 	//系统信息管理
 	Boolean h_has_systeminfo = SystemCache.hasAuthority(session,"systeminfo");
@@ -124,6 +124,9 @@
 	
 	Boolean has_packing_order_index = SystemCache.hasAuthority(session,"packing_order/index");
 	
+	//2015-8-24添加
+	Boolean h_has_report_fuliao_purchase = SystemCache.hasAuthority(session,"report/fuliao_purchase");//原材料采购报表
+	Boolean h_has_report_fuliao_purchase_detail = SystemCache.hasAuthority(session,"report/fuliao_purchase_detail");
 	
 	//权限相关
 	
@@ -448,6 +451,16 @@
 							<%if(h_has_report_material_purchase_detail){ %>
 							<li>
 								<a href="report/material_purchase_detail">原材料采购明细报表</a>
+							</li>
+							<%} %>
+							<%if(h_has_report_fuliao_purchase){ %>
+							<li>
+								<a href="report/fuliao_purchase">辅料采购汇总报表</a>
+							</li>
+							<%} %>
+							<%if(h_has_report_fuliao_purchase_detail){ %>
+							<li>
+								<a href="report/fuliao_purchase_detail">辅料采购明细报表</a>
 							</li>
 							<%} %>
 							<%if(h_has_report_coloring_detail){ %>
