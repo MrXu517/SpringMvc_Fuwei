@@ -3,6 +3,7 @@ package com.fuwei.controller;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,7 @@ import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.constant.OrderStatus;
+import com.fuwei.entity.Employee;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.OrderDetail;
 import com.fuwei.entity.OrderHandle;
@@ -51,6 +53,7 @@ import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
 import com.fuwei.entity.ordergrid.PlanOrder;
 import com.fuwei.entity.ordergrid.PlanOrderDetail;
 import com.fuwei.entity.ordergrid.ProducingOrder;
+import com.fuwei.entity.ordergrid.ProducingOrderDetail;
 import com.fuwei.entity.ordergrid.ProductionScheduleOrder;
 import com.fuwei.entity.ordergrid.ShopRecordOrder;
 import com.fuwei.entity.ordergrid.StoreOrder;
@@ -175,7 +178,7 @@ public class OrderController extends BaseController {
 		
 		Integer status = OrderStatus.DELIVERING.ordinal();
 		pager = orderService.getList(pager, start_time_d, end_time_d,
-				companyId, salesmanId,charge_employee, status, sortList);
+				companyId,charge_employee, status, sortList);
 
 		
 		request.setAttribute("start_time", start_time_d);
@@ -412,7 +415,7 @@ public class OrderController extends BaseController {
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView index(Integer page, String start_time, String end_time,
-			Integer companyId, Integer salesmanId, Integer status,
+			Integer companyId, Integer charge_employeeId, Integer status,
 			String sortJSON, HttpSession session, HttpServletRequest request)
 			throws Exception {
 
@@ -440,19 +443,23 @@ public class OrderController extends BaseController {
 		sort.setDirection("desc");
 		sort.setProperty("created_at");
 		sortList.add(sort);
-		Integer charge_employee = null;
+		
 		pager = orderService.getList(pager, start_time_d, end_time_d,
-				companyId, salesmanId,charge_employee, status, sortList);
+				companyId,charge_employeeId, status, sortList);
 //		if (pager != null & pager.getResult() != null) {
 //			List<FuliaoPurchaseOrder> orderlist = (List<FuliaoPurchaseOrder>) pager.getResult();
 //		}
 		
 		request.setAttribute("start_time", start_time_d);
 		request.setAttribute("end_time", end_time_d);
-		request.setAttribute("salesmanId", salesmanId);
-		if (companyId == null & salesmanId != null) {
-			companyId = SystemCache.getSalesman(salesmanId).getCompanyId();
+		request.setAttribute("charge_employeeId", charge_employeeId);
+		List<Employee> employeelist = new ArrayList<Employee>();
+		for(Employee temp : SystemCache.employeelist){
+			if(temp.getIs_charge_employee()){
+				employeelist.add(temp);
+			}		
 		}
+		request.setAttribute("employeelist", employeelist);
 		request.setAttribute("companyId", companyId);
 		request.setAttribute("status", status);
 		request.setAttribute("pager", pager);
@@ -639,6 +646,19 @@ public class OrderController extends BaseController {
 			// 获取生产单
 			List<ProducingOrder> producingOrderList = producingOrderService
 					.getByOrder(orderId);
+			if(producingOrderList != null){
+				for(ProducingOrder producingOrder : producingOrderList){
+					//去掉生产单为数量为0的行
+					Iterator iterator = producingOrder.getDetaillist().iterator();
+					    while(iterator.hasNext()){
+					    	ProducingOrderDetail item = (ProducingOrderDetail)iterator.next();
+					           if(item.getQuantity() == 0){
+					               iterator.remove();
+					            }
+					    }
+					}
+			}
+			
 
 			// 获取计划单
 			PlanOrder planOrder = planOrderService.getByOrder(orderId);

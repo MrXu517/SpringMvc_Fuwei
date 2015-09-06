@@ -1,8 +1,11 @@
 package com.fuwei.entity.ordergrid;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
+import com.fuwei.util.DateTool;
+import com.fuwei.util.NumberUtil;
 import com.fuwei.util.SerializeTool;
 
 import net.keepsoft.commons.annotation.IdentityId;
@@ -16,6 +19,7 @@ public class ProducingOrder extends BaseTableOrder{
 	private int id;
 	private Integer orderId;//订单ID
 	private String orderNumber;//订单编号
+	private String number ; // 生产单号
 	private Date created_at;// 创建时间
 	private Date updated_at;// 最近更新时间
 	
@@ -64,6 +68,12 @@ public class ProducingOrder extends BaseTableOrder{
 	
 	
 
+	public String getNumber() {
+		return number;
+	}
+	public void setNumber(String number) {
+		this.number = number;
+	}
 	public Integer getCompanyId() {
 		return companyId;
 	}
@@ -260,7 +270,9 @@ public class ProducingOrder extends BaseTableOrder{
 		this.detail_2_list = detail_2_list;
 	}
 	
-	
+	public String createNumber() throws ParseException{
+		return DateTool.getYear2() + "SC" + NumberUtil.appendZero(this.id, 4);
+	}
 	
 	
 }

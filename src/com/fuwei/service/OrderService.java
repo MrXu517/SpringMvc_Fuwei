@@ -103,12 +103,12 @@ public class OrderService extends BaseService {
 	}
 	// 获取订单列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,
-			Integer companyId, Integer salesmanId,Integer charge_employee, Integer status,
+			Integer companyId,Integer charge_employee, Integer status,
 			List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
 			String seq = "WHERE ";
-			if (companyId != null & salesmanId == null) {
+			if (companyId != null) {
 				sql.append("select * from tb_order where companyId='"
 						+ companyId + "'");
 				seq = " AND ";
@@ -127,10 +127,10 @@ public class OrderService extends BaseService {
 						+ "'");
 				seq = " AND ";
 			}
-			if (salesmanId != null) {
-				sql.append(seq + " salesmanId='" + salesmanId + "'");
-				seq = " AND ";
-			}
+//			if (salesmanId != null) {
+//				sql.append(seq + " salesmanId='" + salesmanId + "'");
+//				seq = " AND ";
+//			}
 			if (charge_employee != null) {
 				sql.append(seq + " charge_employee='" + charge_employee + "'");
 				seq = " AND ";

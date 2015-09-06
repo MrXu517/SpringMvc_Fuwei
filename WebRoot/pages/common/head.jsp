@@ -127,6 +127,7 @@
 	//2015-8-24添加
 	Boolean h_has_report_fuliao_purchase = SystemCache.hasAuthority(session,"report/fuliao_purchase");//原材料采购报表
 	Boolean h_has_report_fuliao_purchase_detail = SystemCache.hasAuthority(session,"report/fuliao_purchase_detail");
+	Boolean h_has_report_coloring_summary = SystemCache.hasAuthority(session,"report/coloring_summary");
 	
 	//权限相关
 	
@@ -461,6 +462,11 @@
 							<%if(h_has_report_fuliao_purchase_detail){ %>
 							<li>
 								<a href="report/fuliao_purchase_detail">辅料采购明细报表</a>
+							</li>
+							<%} %>
+							<%if(h_has_report_coloring_summary){ %>
+							<li>
+								<a href="report/coloring_summary">染色汇总报表</a>
 							</li>
 							<%} %>
 							<%if(h_has_report_coloring_detail){ %>

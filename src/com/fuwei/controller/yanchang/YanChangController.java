@@ -4,6 +4,8 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -51,6 +53,7 @@ import com.fuwei.entity.Employee;
 import com.fuwei.entity.Salary;
 import com.fuwei.util.CompressUtil;
 import com.fuwei.util.DateTool;
+import com.fuwei.util.FileUtil;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 @RequestMapping("/yanchang")
@@ -233,7 +236,7 @@ public class YanChangController extends BaseController {
 					salary.setMonth(month-1);
 				}
 								
-				
+			
 				int day = leave_at.get(Calendar.DAY_OF_MONTH);
 				if(map.containsKey(day)){
 					List<Salary> salaryList = map.get(day);
@@ -251,6 +254,63 @@ public class YanChangController extends BaseController {
 			return this.returnFail( year + "年" + month + "月无离职记录");
 		}
 		
+//		for(Integer day : map.keySet()){
+//			List<Salary> salaryList= map.get(day);
+////			Comparator<Salary> com=Collator.getInstance(java.util.Locale.CHINA);
+//			java.util.Collections.sort(salaryList);
+//			for(Salary salary : salaryList){
+//				//设置加班工资，平时工资，应发工资等
+//				salary.setWork_money(salary.getWork_hour() * salary.getHour_salary());
+//				salary.setOver_holiday_money(salary.getOver_holiday() * salary.getHour_salary()*3);
+//				salary.setOver_weekend_money(salary.getOver_weekend() * salary.getHour_salary()*2);
+//				salary.setOver_normal_money(salary.getOver_normal() * salary.getHour_salary()*1.5);
+//				//设置假日补贴
+//				int holiday_day = Holiday.getHoliday(salary.getYear(), salary.getMonth(), salary.getLeave_at()) ;
+//				salary.setHoliday_reback(holiday_day * 8 * salary.getHour_salary() + salary.getSick_leave() * salary.getHour_salary() + salary.getYear_leave() * salary.getHour_salary());
+//				salary.setPayable_salary(salary.getOver_holiday_money() + salary.getOver_normal_money() + salary.getOver_weekend_money() + salary.getWork_money()+salary.getHoliday_reback());
+//				//设置个税	
+//				salary.personal_tax();
+//				salary.setReal_salary(salary.getPayable_salary() - salary.getPayable_salary() - salary.getInsurance_deduction());
+//			}
+//			
+//			
+//			//导出
+//			ByteArrayOutputStream os = new ByteArrayOutputStream();
+//			createSalaryFile(os,salaryList,year,month,day);
+//			byte[] content = os.toByteArray();
+//			InputStream is = new ByteArrayInputStream(content);
+//			
+//			String fileName="" + year+"年" + month + "月"+"离职工资表_" + day + "号_yan";
+//			
+//			 // 设置response参数，可以打开下载页面
+//	        response.reset();
+//	        response.setContentType("application/vnd.ms-excel;charset=utf-8");
+//	        response.setHeader("Content-Disposition", "attachment;filename="+ new String((fileName + ".xls").getBytes(), "iso-8859-1"));
+//	        BufferedInputStream bis = null;
+//	        BufferedOutputStream bos = null;
+//	        try {
+//	            bis = new BufferedInputStream(is);
+//	            bos = new BufferedOutputStream(response.getOutputStream());
+//	            byte[] buff = new byte[2048];
+//	            int bytesRead;
+//	            // Simple read/write loop.
+//	            while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
+//	                bos.write(buff, 0, bytesRead);
+//	            }
+//	        } catch (final IOException e) {
+//	            throw e;
+//	        } finally {
+//	            if (bis != null)
+//	                bis.close();
+//	            if (bos != null)
+//	                bos.close();
+//	        }
+//		}
+//	    return this.returnSuccess();
+		
+		
+		Map<InputStream,String> inputStreams = new HashMap<InputStream, String>();
+		String zipfileName="" + year+"年" + month + "月"+"离职工资表";
 		for(Integer day : map.keySet()){
 			List<Salary> salaryList= map.get(day);
 //			Comparator<Salary> com=Collator.getInstance(java.util.Locale.CHINA);
@@ -274,35 +334,44 @@ public class YanChangController extends BaseController {
 			//导出
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			createSalaryFile(os,salaryList,year,month,day);
+			
 			byte[] content = os.toByteArray();
 			InputStream is = new ByteArrayInputStream(content);
 			
-			String fileName="" + year+"年" + month + "月"+"离职工资表_" + day + "号_yan";
+			String fileName="" + year+"年" + month + "月"+"离职工资表_" + day + "号_yan.xls";
+			inputStreams.put(is, fileName);
 			
-			 // 设置response参数，可以打开下载页面
-	        response.reset();
-	        response.setContentType("application/vnd.ms-excel;charset=utf-8");
-	        response.setHeader("Content-Disposition", "attachment;filename="+ new String((fileName + ".xls").getBytes(), "iso-8859-1"));
-	        BufferedInputStream bis = null;
-	        BufferedOutputStream bos = null;
-	        try {
-	            bis = new BufferedInputStream(is);
-	            bos = new BufferedOutputStream(response.getOutputStream());
-	            byte[] buff = new byte[2048];
-	            int bytesRead;
-	            // Simple read/write loop.
-	            while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
-	                bos.write(buff, 0, bytesRead);
-	            }
-	        } catch (final IOException e) {
-	            throw e;
-	        } finally {
-	            if (bis != null)
-	                bis.close();
-	            if (bos != null)
-	                bos.close();
-	        }
+//			
+//			byte[] content = os.toByteArray();
+//			InputStream is = new ByteArrayInputStream(content);
+//			
+//			String fileName="" + year+"年" + month + "月"+"离职工资表_" + day + "号_yan";
+//			
+//			 // 设置response参数，可以打开下载页面
+//	        response.reset();
+//	        response.setContentType("application/vnd.ms-excel;charset=utf-8");
+//	        response.setHeader("Content-Disposition", "attachment;filename="+ new String((fileName + ".xls").getBytes(), "iso-8859-1"));
+//	        BufferedInputStream bis = null;
+//	        BufferedOutputStream bos = null;
+//	        try {
+//	            bis = new BufferedInputStream(is);
+//	            bos = new BufferedOutputStream(response.getOutputStream());
+//	            byte[] buff = new byte[2048];
+//	            int bytesRead;
+//	            // Simple read/write loop.
+//	            while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
+//	                bos.write(buff, 0, bytesRead);
+//	            }
+//	        } catch (final IOException e) {
+//	            throw e;
+//	        } finally {
+//	            if (bis != null)
+//	                bis.close();
+//	            if (bos != null)
+//	                bos.close();
+//	        }
 		}
+		FileUtil.downLoadFiles(zipfileName,inputStreams, request, response);
 	    return this.returnSuccess();
 
 	}

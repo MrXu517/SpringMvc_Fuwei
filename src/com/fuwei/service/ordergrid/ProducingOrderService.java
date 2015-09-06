@@ -50,6 +50,8 @@ public class ProducingOrderService extends BaseService {
 					Integer producingOrderId = this.insert(producingOrder);
 
 					producingOrder.setId(producingOrderId);
+					producingOrder.setNumber(producingOrder.createNumber());
+					this.update(producingOrder, "id", null);
 
 					return producingOrderId;
 				}
@@ -86,7 +88,7 @@ public class ProducingOrderService extends BaseService {
 
 					// 更新表
 					this.update(producingOrder, "id",
-							"created_user,created_at,orderId,factoryId", true);
+							"created_user,created_at,orderId,factoryId,number", true);
 
 					return producingOrder.getId();
 				}

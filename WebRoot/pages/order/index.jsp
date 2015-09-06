@@ -9,6 +9,7 @@
 <%@page import="com.fuwei.constant.OrderStatus"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="net.sf.json.JSONObject"%>
+<%@page import="com.fuwei.entity.Employee"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -34,18 +35,18 @@
 		end_time_str = DateTool.formatDateYMD(end_time);
 	}
 
-	Integer salesmanId = (Integer) request.getAttribute("salesmanId");
+	Integer charge_employeeId = (Integer) request.getAttribute("charge_employeeId");
 	Integer companyId = (Integer) request.getAttribute("companyId");
 	String company_str = "";
-	String salesman_str = "";
-	if (salesmanId != null) {
-		salesman_str = String.valueOf(salesmanId);
+	String charge_employeeId_str = "";
+	if (charge_employeeId != null) {
+		charge_employeeId_str = String.valueOf(charge_employeeId);
 	}
 	if (companyId != null) {
 		company_str = String.valueOf(companyId);
 	}
-	if (salesmanId == null) {
-		salesmanId = -1;
+	if (charge_employeeId == null) {
+		charge_employeeId = -1;
 	}
 	if (companyId == null) {
 		companyId = -1;
@@ -62,7 +63,8 @@
 	JSONObject jObject = new JSONObject();
 	jObject.put("companySalesmanMap", companySalesmanMap);
 	String companySalesmanMap_str = jObject.toString();
-
+	List<Employee> employeelist = (List<Employee>) request.getAttribute("employeelist");
+	
 	//权限相关
 	Boolean has_order_detail = SystemCache.hasAuthority(session,
 			"order/detail");
@@ -173,24 +175,24 @@
 											</div>
 										</div>
 										<div class="form-group salesgroup">
-											<label for="salesmanId" class="col-sm-4 control-label">
-												业务员
+											<label for="charge_employee" class="col-sm-4 control-label">
+												跟单人
 											</label>
 											<div class="col-sm-8">
-												<select class="form-control" name="salesmanId"
-													id="salesmanId" placeholder="业务员">
+												<select class="form-control" name="charge_employeeId"
+													id="charge_employeeId">
 													<option value="">
 														所有
 													</option>
 													<%
-														for (Salesman salesman : SystemCache.getSalesmanList(companyId)) {
-															if (salesmanId!=null&&salesmanId == salesman.getId()) {
+														for (Employee temp : employeelist) {
+															if (charge_employeeId != null && charge_employeeId == temp.getId()) {
 													%>
-													<option value="<%=salesman.getId()%>" selected><%=salesman.getName()%></option>
+													<option value="<%=temp.getId()%>" selected="selected"><%=temp.getName()%></option>
 													<%
 														} else {
 													%>
-													<option value="<%=salesman.getId()%>"><%=salesman.getName()%></option>
+													<option value="<%=temp.getId()%>"><%=temp.getName()%></option>
 													<%
 														}
 														}
@@ -220,7 +222,7 @@
 									<ul class="pagination">
 										<li>
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
+												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&charge_employeeId=<%=charge_employeeId_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
 										</li>
 
 										<%
@@ -228,7 +230,7 @@
 									%>
 										<li class="">
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
+												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&charge_employeeId=<%=charge_employeeId_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -243,7 +245,7 @@
 
 										<li class="active">
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
+												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&charge_employeeId=<%=charge_employeeId_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
 												class="sr-only"></span> </a>
 										</li>
 										<li>
@@ -253,7 +255,7 @@
 										
 										<li class="">
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
+												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&charge_employeeId=<%=charge_employeeId_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -269,7 +271,7 @@
 										</li>
 										<li>
 											<a
-												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&salesmanId=<%=salesman_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
+												href="order/index?status=<%=status_str %>&companyId=<%=company_str %>&charge_employeeId=<%=charge_employeeId_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
 									

@@ -1,6 +1,7 @@
 package com.fuwei.controller.ordergrid;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +34,7 @@ import com.fuwei.entity.ordergrid.IroningRecordOrder;
 import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
 import com.fuwei.entity.ordergrid.PlanOrder;
 import com.fuwei.entity.ordergrid.ProducingOrder;
+import com.fuwei.entity.ordergrid.ProducingOrderDetail;
 import com.fuwei.entity.ordergrid.ProductionScheduleOrder;
 import com.fuwei.entity.ordergrid.ShopRecordOrder;
 import com.fuwei.entity.ordergrid.StoreOrder;
@@ -111,6 +113,15 @@ public class PrintOrderController extends BaseController {
 				for(ProducingOrder producingOrder : producingOrderList){
 					productfactoryStr += seq + SystemCache.getFactoryName(producingOrder.getFactoryId());
 					seq = " | ";
+					//去掉生产单为数量为0的行
+					Iterator iterator = producingOrder.getDetaillist().iterator();
+				    while(iterator.hasNext()){
+				    	ProducingOrderDetail item = (ProducingOrderDetail)iterator.next();
+				           if(item.getQuantity() == 0){
+				               iterator.remove();
+				            }
+				    }
+					
 				}
 			}
 			request.setAttribute("productfactoryStr", productfactoryStr);

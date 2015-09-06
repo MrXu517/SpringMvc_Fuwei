@@ -3,6 +3,7 @@ package com.fuwei.controller.ordergrid;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -166,6 +167,15 @@ public class ProducingOrderController extends BaseController {
 		if(producingOrder == null){
 			throw new Exception("找不到ID为" + id + "的生产单");
 		}
+		//去掉生产单为数量为0的行
+		Iterator iterator = producingOrder.getDetaillist().iterator();
+	    while(iterator.hasNext()){
+	    	ProducingOrderDetail item = (ProducingOrderDetail)iterator.next();
+	           if(item.getQuantity() == 0){
+	               iterator.remove();
+	            }
+	    }
+		
 		Order order = orderService.get(producingOrder.getOrderId());
 		request.setAttribute("order", order);
 
@@ -518,6 +528,14 @@ public class ProducingOrderController extends BaseController {
 		if(producingOrder == null){
 			throw new Exception("找不到ID为" + id + "的生产单");
 		}
+		//去掉生产单为数量为0的行
+		Iterator iterator = producingOrder.getDetaillist().iterator();
+	    while(iterator.hasNext()){
+	    	ProducingOrderDetail item = (ProducingOrderDetail)iterator.next();
+	           if(item.getQuantity() == 0){
+	               iterator.remove();
+	            }
+	    }
 		Order order = orderService.get(producingOrder.getOrderId());
 		request.setAttribute("order", order);
 

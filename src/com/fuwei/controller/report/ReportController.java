@@ -444,6 +444,53 @@ public class ReportController extends BaseController {
 	
 	
 	/*染色报表*/
+	//染色汇总报表
+	@RequestMapping(value = "/coloring_summary", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView coloring_summary(String start_time, String end_time,
+			Integer factoryId,
+			String sortJSON, HttpSession session, HttpServletRequest request)
+			throws Exception {
+		
+		String lcode = "report/coloring_summary";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有查看染色汇总报表的权限", null);
+		}
+		
+		try {
+			Date start_time_d = DateTool.parse(start_time);
+			Date end_time_d = DateTool.parse(end_time);
+			
+			List<Sort> sortList = null;
+			if (sortJSON != null) {
+				sortList = SerializeTool.deserializeList(sortJSON, Sort.class);
+			}
+			if (sortList == null) {
+				sortList = new ArrayList<Sort>();
+			}
+			Sort sort = new Sort();
+			sort.setDirection("desc");
+			sort.setProperty("created_at");
+			sortList.add(sort);
+			Sort sort_factory = new Sort();
+			sort_factory.setDirection("desc");
+			sort_factory.setProperty("factoryId");
+			sortList.add(sort_factory);
+			
+			
+			HashMap<Factory,HashMap<Material,Double> > result = coloringOrderService.coloring_summary_report(start_time_d, end_time_d,
+					factoryId, sortList);
+			request.setAttribute("result", result);
+			request.setAttribute("start_time", start_time_d);
+			request.setAttribute("end_time", end_time_d);
+			request.setAttribute("factoryId", factoryId);
+//			request.setAttribute("pager", pager);
+			return new ModelAndView("report/coloring_summary");
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 	@RequestMapping(value = "/coloring_detail", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView coloring_detail(String start_time, String end_time,
