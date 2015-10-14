@@ -129,6 +129,9 @@
 	Boolean h_has_report_fuliao_purchase_detail = SystemCache.hasAuthority(session,"report/fuliao_purchase_detail");
 	Boolean h_has_report_coloring_summary = SystemCache.hasAuthority(session,"report/coloring_summary");
 	
+	//2015-10-12
+	Boolean h_has_util_pantong_color = SystemCache.hasAuthority(session,"pantongcolor/search");//潘通色号
+	Boolean h_has_pantongcolor_import = SystemCache.hasAuthority(session,"pantongcolor/import");//潘通色号
 	//权限相关
 	
 %>
@@ -323,7 +326,7 @@
 							<%} %>
 							<%if(has_halfstoreorder_workspace){ %>
 							<li>
-								<a href="half_store_order/workspace">半成品工作台</a>
+								<a href="workspace/half_workspace">半成品工作台</a>
 							</li>
 							<%} %>
 							<%if(has_order_producing_unprice_list){ %>
@@ -334,13 +337,13 @@
 
 							<%if(has_producing_order_index){ %>
 							<li>
-								<a href="producing_order/index"><i class="fa fa-list"></i>查询生产单</a>
+								<a href="producing_order/index">查询生产单</a>
 							</li>
 							<%} %>
 
 							<%if(has_producing_order_index){ %>
 							<li>
-								<a href="producing_order/scan"><i class="fa fa-scan"></i>扫描生产单</a>
+								<a href="producing_order/scan">扫描生产单</a>
 							</li>
 							<%} %>
 						</ul>
@@ -582,6 +585,11 @@
 								<a href="role/list">角色管理</a>
 							</li>
 							<%} %>
+							<%if(h_has_pantongcolor_import){ %>
+							<li>
+								<a href="pantongcolor/import">重置潘通色卡</a>
+							</li>
+							<%} %>
 
 
 						</ul>
@@ -599,7 +607,12 @@
 						<ul class="submenu">
 							<%if(h_has_box_util){%>
 							<li>
-								<a href="util/box"><i class="fa fa-truck"></i>ASOS箱贴生成器</a>
+								<a href="util/box">ASOS箱贴生成器</a>
+							</li>
+							<%} %>
+							<%if(h_has_util_pantong_color){%>
+							<li>
+								<a href="pantongcolor/search">潘通色号</a>
 							</li>
 							<%} %>
 						</ul>

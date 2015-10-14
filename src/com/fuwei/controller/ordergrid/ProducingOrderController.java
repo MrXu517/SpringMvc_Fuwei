@@ -176,8 +176,8 @@ public class ProducingOrderController extends BaseController {
 	            }
 	    }
 		
-		Order order = orderService.get(producingOrder.getOrderId());
-		request.setAttribute("order", order);
+//		Order order = orderService.get(producingOrder.getOrderId());
+//		request.setAttribute("order", order);
 
 		List<ProducingOrder> producingOrderList = new ArrayList<ProducingOrder>();
 		producingOrderList.add(producingOrder);
@@ -344,6 +344,7 @@ public class ProducingOrderController extends BaseController {
 				producingOrder.setOrderNumber(order.getOrderNumber());
 				producingOrder.setCharge_employee(order.getCharge_employee());
 			
+				producingOrder.setCompany_productNumber(order.getCompany_productNumber());
 				
 				List<ProducingOrderDetail> detaillist = SerializeTool
 						.deserializeList(details, ProducingOrderDetail.class);
@@ -536,8 +537,8 @@ public class ProducingOrderController extends BaseController {
 	               iterator.remove();
 	            }
 	    }
-		Order order = orderService.get(producingOrder.getOrderId());
-		request.setAttribute("order", order);
+//		Order order = orderService.get(producingOrder.getOrderId());
+//		request.setAttribute("order", order);
 
 		List<ProducingOrder> producingOrderList = new ArrayList<ProducingOrder>();
 		producingOrderList.add(producingOrder);

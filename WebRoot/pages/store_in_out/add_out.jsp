@@ -28,7 +28,10 @@
 	List<Map<String, Object>> lot_not_outlist = (List<Map<String, Object>>) request
 			.getAttribute("lot_not_outlist");
 	Integer factoryId = (Integer)request.getAttribute("factoryId");
-	
+	Boolean lot_able = true;
+	if(lot_not_outlist == null || lot_not_outlist.size()==0){
+		lot_able = false;
+	}
 %>
 <!DOCTYPE html>
 <html>
@@ -133,6 +136,8 @@ caption{
 									value="<%=storeOrder.getId()%>" />
 								<%if(factoryId == null || factoryId <= 0){ %>
 								<p class="alert alert-danger">请先选择 【领取单位】</p>
+								<%}else if(!lot_able){ %>
+									<p class="alert alert-danger">原材料库存为0，无法出库</p>		
 								<%} %>
 								<div class="clear"></div>
 								<div class="col-md-12 tablewidget">
@@ -335,6 +340,11 @@ caption{
 												</tr>
 										</thead>
 										<tbody>
+												<%if(factoryId != null && factoryId > 0 && !lot_able){ %>
+												<tr class="EmptyTr center" style="color:red;">
+													<td colspan="4">库存为0，无法出库</td>
+												</tr>
+												<%} %>
 												<%
 													for (Map<String, Object> item : lot_not_outlist) {
 												%>

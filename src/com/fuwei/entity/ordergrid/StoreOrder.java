@@ -3,6 +3,7 @@ package com.fuwei.entity.ordergrid;
 import java.util.Date;
 import java.util.List;
 
+import com.fuwei.entity.producesystem.StoreInOutDetail;
 import com.fuwei.util.SerializeTool;
 
 import net.keepsoft.commons.annotation.IdentityId;

@@ -9,7 +9,7 @@
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%
-	Order order = (Order) request.getAttribute("order");
+	//Order order = (Order) request.getAttribute("order");
 	List<ProducingOrder> producingOrderList = (List<ProducingOrder>) request
 			.getAttribute("producingOrderList");
 	producingOrderList = producingOrderList == null? new ArrayList<ProducingOrder>()
@@ -46,7 +46,7 @@
 						<caption id="tablename">
 							桐庐富伟针织厂生产单<div table_id="<%=producingOrder.getId() %>" class="id_barcode"></div>
 						</caption>
-						<tr><td colspan="3" class="pull-right">№：<%=producingOrder.getOrderNumber() %></td></tr>
+						<tr><td colspan="3" class="pull-right">№：<%=producingOrder.getOrderNumber() %> - <%=producingOrder.getNumber() %></td></tr>
 					</table>
 
 					<table id="orderTb" class="tableTb">
@@ -54,7 +54,7 @@
 							<tr>
 								<td align="center" rowspan="7" width="50%">
 									<img id="previewImg" alt="200 x 100%"
-										src="/<%=order.getImg_s()%>">
+										src="/<%=producingOrder.getImg_s()%>">
 								</td>
 								<td width="20%">
 									生产单位
@@ -84,7 +84,7 @@
 								<td>
 									货号
 								</td>
-								<td><%=order.getCompany_productNumber()%></td>
+								<td><%=producingOrder.getCompany_productNumber()%></td>
 							</tr>
 							<tr>
 								<td>

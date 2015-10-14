@@ -15,6 +15,7 @@ import com.fuwei.commons.Sort;
 import com.fuwei.entity.ordergrid.CarFixRecordOrder;
 import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
 import com.fuwei.entity.ordergrid.ProducingOrder;
+import com.fuwei.entity.ordergrid.StoreOrder;
 import com.fuwei.service.BaseService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
@@ -187,7 +188,7 @@ public class ProducingOrderService extends BaseService {
 				seq = " AND ";
 			}
 			if (end_time != null) {
-				sql.append(seq + " created_at<='"
+				sql.append(seq + " created_at<'"
 						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
 						+ "'");
 				seq = " AND ";
@@ -258,6 +259,18 @@ public class ProducingOrderService extends BaseService {
 	public int updateStatus(int tableOrderId ,int status,String state) throws Exception {
 		try {
 			return dao.update("UPDATE tb_producingorder SET status=?,state=? WHERE id = ?", status,state, tableOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	// 获取
+	public ProducingOrder getByNumber(String number) throws Exception {
+		try {
+			ProducingOrder order = dao.queryForBean(
+					"select * from tb_producingorder where number = ?",
+					ProducingOrder.class, number);
+			return order;
 		} catch (Exception e) {
 			throw e;
 		}

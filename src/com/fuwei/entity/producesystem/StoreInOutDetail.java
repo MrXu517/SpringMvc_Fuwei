@@ -1,4 +1,4 @@
-package com.fuwei.entity.ordergrid;
+package com.fuwei.entity.producesystem;
 
 public class StoreInOutDetail {
 	private int id;

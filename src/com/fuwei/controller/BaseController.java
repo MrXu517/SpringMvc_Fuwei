@@ -43,6 +43,14 @@ public class BaseController extends MultiActionController{
 		result.put(type, value);
 		return result;
 	}
+	protected Map<String, Object> returnSuccess(Map<String ,Object> data) {
+		Map<String,  Object> result = new HashMap<String,  Object>();
+		result.put("success", true);
+		for(String key : data.keySet()){
+			result.put(key, data.get(key));
+		}
+		return result;
+	}
 
 	/**
 	 * 返回值
@@ -106,6 +114,5 @@ public class BaseController extends MultiActionController{
 			message = URLEncoder.encode(message, "utf-8");
 			response.sendRedirect(basePath + errorUrl + "?message=" + message);
 		}
-		System.out.println(e.getMessage());
 	}
 }

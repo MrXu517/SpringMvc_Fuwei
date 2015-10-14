@@ -10,28 +10,31 @@
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.entity.ordergrid.StoreOrder"%>
-<%@page import="com.fuwei.entity.ordergrid.StoreInOut"%>
+<%@page import="com.fuwei.entity.producesystem.StoreInOut"%>
 <%@page import="com.fuwei.entity.ordergrid.StoreOrderDetail"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+	+ request.getServerName() + ":" + request.getServerPort()
+	+ path + "/";
 	StoreInOut object = (StoreInOut) request
-			.getAttribute("storeInOut");
+	.getAttribute("storeInOut");
 	StoreOrder storeOrder = (StoreOrder) request
-			.getAttribute("storeOrder");
+	.getAttribute("storeOrder");
 	List<StoreOrderDetail> storeOrderDetailList = storeOrder == null ? new ArrayList<StoreOrderDetail>()
-			: storeOrder.getDetaillist();
-			
+	: storeOrder.getDetaillist();
+	
 	Map<Integer,String> factoryMap = (Map<Integer,String>)request.getAttribute("factoryMap");
 	
 	List<Map<String,Object>> factory_not_outlist = (List<Map<String, Object>>) request
-			.getAttribute("factory_not_outlist");
+	.getAttribute("factory_not_outlist");
 	List<Map<String, Object>> lot_outlist = (List<Map<String, Object>>) request
-			.getAttribute("lot_outlist");
+	.getAttribute("lot_outlist");
 	Integer factoryId = (Integer)request.getAttribute("factoryId");
-	
+	Boolean lot_able = true;
+	if(lot_outlist == null || lot_outlist.size()==0){
+		lot_able = false;
+	}
 %>
 <!DOCTYPE html>
 <html>
@@ -136,6 +139,8 @@ caption{
 									value="<%=object.getStore_order_id()%>" />
 								<%if(factoryId == null || factoryId <= 0){ %>
 								<p class="alert alert-danger">请先选择 【领取单位】</p>
+								<%}else if(!lot_able){ %>
+									<p class="alert alert-danger">原材料库存为0，无法出库</p>		
 								<%} %>
 								<div class="clear"></div>
 								<div class="col-md-12 tablewidget">
@@ -338,6 +343,11 @@ caption{
 												</tr>
 										</thead>
 										<tbody>
+												<%if(factoryId != null && factoryId > 0 && !lot_able){ %>
+												<tr class="EmptyTr center" style="color:red;">
+													<td colspan="4">库存为0，无法出库</td>
+												</tr>
+												<%} %>
 												<%
 													for (Map<String, Object> item : lot_outlist) {
 												%>

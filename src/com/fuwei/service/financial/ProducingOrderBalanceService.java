@@ -49,7 +49,7 @@ public class ProducingOrderBalanceService extends BaseService {
 				seq = " AND ";
 			}
 			if (end_time != null) {
-				sql_condition.append(seq + " created_at<='"
+				sql_condition.append(seq + " created_at<'"
 						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
 						+ "'");
 				seq = " AND ";

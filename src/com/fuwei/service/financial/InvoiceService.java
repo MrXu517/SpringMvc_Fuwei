@@ -111,7 +111,7 @@ public class InvoiceService extends BaseService {
 				seq = " AND ";
 			}
 			if (end_time != null) {
-				sql_condition.append(seq + " print_date<='"
+				sql_condition.append(seq + " print_date<'"
 						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
 						+ "'");
 				seq = " AND ";
@@ -206,7 +206,7 @@ public class InvoiceService extends BaseService {
 				seq = " AND ";
 			}
 			if (end_time != null) {
-				sql_condition.append(seq + " created_at<='"
+				sql_condition.append(seq + " created_at<'"
 						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
 						+ "'");
 				seq = " AND ";
@@ -401,7 +401,7 @@ public class InvoiceService extends BaseService {
 				seq = " AND ";
 			}
 			if (end_time != null) {
-				sql_condition.append(seq + " print_date<='"
+				sql_condition.append(seq + " print_date<'"
 						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
 						+ "'");
 				seq = " AND ";

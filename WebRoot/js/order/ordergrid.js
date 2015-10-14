@@ -393,7 +393,11 @@ function OrderGrid(settings){
 			success : function(result) {
 				if (result.success) {
 					$saveform.find("[name='id']").val(result.id);
-					Common.Tip(tipText+"成功", function() {
+					var message = tipText+"成功";
+					if(result.message){
+						message = message + "<br>重要提示：" + result.message;
+					}
+					Common.Tip(message, function() {
 						if(Object.donecall){
 							Object.donecall(result);
 						}

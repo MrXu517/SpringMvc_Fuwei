@@ -123,6 +123,8 @@ public class SystemCache {
 	
 	// 缓存科目
 	public static List<Subject> subjectlist = new ArrayList<Subject>();
+	
+
 
 	public static void addCompany(Company company) {
 		companylist.add(company);

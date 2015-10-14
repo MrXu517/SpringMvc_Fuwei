@@ -34,7 +34,7 @@
 				<div class="col-md-12 tablewidget">
 					<table class="table noborder">
 						<caption id="tablename">
-							桐庐富伟针织厂整烫记录单
+							桐庐富伟针织厂整烫记录单<div table_id="<%=order.getId() %>" class="id_barcode"></div>
 						</caption>
 						<tr><td colspan="3" class="pull-right">№：<%=order.getOrderNumber() %></td></tr>
 					</table>
@@ -195,4 +195,10 @@
 			</div>
 		</div>
 	</body>
+	<script type="text/javascript">
+		$(".id_barcode").each(function(){
+			var id =$(this).attr("table_id");
+			$(this).barcode(id, "code128",{barWidth:2, barHeight:30,showHRI:false});
+		});		
+	</script>
 </html>

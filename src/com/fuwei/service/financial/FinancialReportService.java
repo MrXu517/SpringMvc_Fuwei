@@ -51,7 +51,7 @@ public class FinancialReportService extends BaseService {
 				seq = " AND ";
 			}
 			if (end_time != null) {
-				sql_condition.append(seq + " record_at<='"
+				sql_condition.append(seq + " record_at<'"
 						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
 						+ "'");
 				seq = " AND ";
@@ -138,7 +138,7 @@ public class FinancialReportService extends BaseService {
 				seq = " AND ";
 			}
 			if (end_time != null) {
-				sql_condition.append(seq + " record_at<='"
+				sql_condition.append(seq + " record_at<'"
 						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
 						+ "'");
 				seq = " AND ";
@@ -200,7 +200,7 @@ public class FinancialReportService extends BaseService {
 				seq = " AND ";
 			}
 			if (end_time != null) {
-				sql_condition.append(seq + " happen_at<='"
+				sql_condition.append(seq + " happen_at<'"
 						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
 						+ "'");
 				seq = " AND ";
@@ -287,7 +287,7 @@ public class FinancialReportService extends BaseService {
 				seq = " AND ";
 			}
 			if (end_time != null) {
-				sql_condition.append(seq + " happen_at<='"
+				sql_condition.append(seq + " happen_at<'"
 						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
 						+ "'");
 				seq = " AND ";

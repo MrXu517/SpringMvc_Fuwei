@@ -3,7 +3,7 @@ package com.fuwei.entity.ordergrid;
 import java.io.Serializable;
 
 public class ProducingOrderDetail implements Serializable {
-	private int planOrderDetailId;
+	private int planOrderDetailId;//同一个生产单中唯一
 	private String color;//颜色
 	private double weight;//克重
 	private Integer yarn;//纱线种类

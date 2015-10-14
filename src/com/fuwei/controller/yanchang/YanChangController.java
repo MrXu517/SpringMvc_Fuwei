@@ -27,6 +27,7 @@ import jxl.CellType;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.biff.EmptyCell;
+import jxl.format.PageOrientation;
 import jxl.format.VerticalAlignment;
 import jxl.write.Label;
 import jxl.write.WritableCellFormat;
@@ -463,8 +464,15 @@ public class YanChangController extends BaseController {
 			throws Exception {
 		
 		WritableWorkbook wbook = Workbook.createWorkbook(os); //建立excel文件 
-		WritableSheet wsheet = wbook.createSheet("Sheet1", 0); //工作表名称 
 		
+		WritableSheet wsheet = wbook.createSheet("Sheet1", 0); //工作表名称 
+		wsheet.setPageSetup(PageOrientation.LANDSCAPE);
+		wsheet.getSettings().setLeftMargin(0.4);
+		wsheet.getSettings().setRightMargin(0.4);
+		wsheet.getSettings().setTopMargin(1);
+		wsheet.getSettings().setBottomMargin(0.4);
+		wsheet.getSettings().setFooterMargin(0);
+		wsheet.getSettings().setHeaderMargin(0);
 		//设置公司名
 		WritableFont companyfont = new WritableFont(WritableFont.createFont("宋体"), 18, 
 				WritableFont.BOLD, false, 

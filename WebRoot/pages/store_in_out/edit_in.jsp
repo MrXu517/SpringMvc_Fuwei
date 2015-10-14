@@ -10,21 +10,21 @@
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.entity.ordergrid.StoreOrder"%>
-<%@page import="com.fuwei.entity.ordergrid.StoreInOut"%>
+<%@page import="com.fuwei.entity.producesystem.StoreInOut"%>
 <%@page import="com.fuwei.entity.ordergrid.StoreOrderDetail"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+	+ request.getServerName() + ":" + request.getServerPort()
+	+ path + "/";
 	StoreInOut object = (StoreInOut) request
-			.getAttribute("storeInOut");
+	.getAttribute("storeInOut");
 	StoreOrder storeOrder = (StoreOrder) request
-			.getAttribute("storeOrder");
+	.getAttribute("storeOrder");
 	List<StoreOrderDetail> storeOrderDetailList = storeOrder == null ? new ArrayList<StoreOrderDetail>()
-			: storeOrder.getDetaillist();
+	: storeOrder.getDetaillist();
 	List<Map<String, Object>> detaillist = (List<Map<String, Object>>) request
-			.getAttribute("detaillist");
+	.getAttribute("detaillist");
 	if (detaillist == null) {
 		detaillist = new ArrayList<Map<String, Object>>();
 	}
@@ -347,7 +347,7 @@ caption {
 													<td>
 														<input class="quantity form-control require double value"
 															type="text" value="<%=item.get("quantity")%>"
-															placeholder="小于等于<%=item.get("not_in_quantity")%>的数量">
+															placeholder="小于等于<%=(Double)item.get("not_in_quantity") + (Double)item.get("quantity")%>的数量">
 													</td>
 													<td>
 														<input class="lot_no form-control value"

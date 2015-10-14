@@ -7,14 +7,14 @@
 			+ path + "/";
 	String message = (String) request.getAttribute("message");
 	if (message == null) {
-		message = "";
+		message = "系统发生未知权限有关错误";
 	}
 %>
 <!DOCTYPE html>
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>错误页面 -- 桐庐富伟针织厂</title>
+		<title>权限错误页面 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -28,15 +28,12 @@
 		<script src="js/plugins/jquery-1.10.2.min.js"></script>
 		<script src="js/plugins/bootstrap.min.js" type="text/javascript"></script>
 
-
 	</head>
 
 	<body>
 		<%@ include file="../common/head.jsp"%>
 		<div id="Content">
-			<div id="main">
-				<center><%=message%></center>
-			</div>
+			<center><%=message%></center>
 		</div>
 
 	</body>
@@ -46,3 +43,5 @@
 		$("#left .menubar li").removeClass("active");
 	});
 </script>
+
+

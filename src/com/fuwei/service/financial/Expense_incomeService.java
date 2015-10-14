@@ -89,7 +89,7 @@ public class Expense_incomeService extends BaseService {
 				seq = " AND ";
 			}
 			if (end_time != null) {
-				sql_condition.append(seq + " expense_at<='"
+				sql_condition.append(seq + " expense_at<'"
 						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
 						+ "'");
 				seq = " AND ";
@@ -151,7 +151,7 @@ public class Expense_incomeService extends BaseService {
 				seq = " AND ";
 			}
 			if (end_time != null) {
-				sql_condition.append(seq + " expense_at<='"
+				sql_condition.append(seq + " expense_at<'"
 						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
 						+ "'");
 				seq = " AND ";
@@ -226,7 +226,7 @@ public class Expense_incomeService extends BaseService {
 			seq = " AND ";
 		}
 		if (end_time != null) {
-			sql.append(seq + " expense_at<='"
+			sql.append(seq + " expense_at<'"
 					+ DateTool.formateDate(DateTool.addDay(end_time, 1))
 					+ "'");
 			seq = " AND ";

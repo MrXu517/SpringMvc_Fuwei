@@ -1,4 +1,4 @@
-package com.fuwei.service.ordergrid;
+package com.fuwei.service.producesystem;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,8 +15,8 @@ import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
 import com.fuwei.entity.financial.Expense_income;
 import com.fuwei.entity.ordergrid.PackingOrder;
-import com.fuwei.entity.ordergrid.StoreInOut;
 import com.fuwei.entity.ordergrid.StoreOrder;
+import com.fuwei.entity.producesystem.StoreInOut;
 import com.fuwei.service.BaseService;
 import com.fuwei.util.CreateNumberUtil;
 import com.fuwei.util.DateTool;
@@ -51,7 +51,7 @@ public class StoreInOutService extends BaseService {
 				seq = " AND ";
 			}
 			if (end_time != null) {
-				sql_condition.append(seq + " date<='"
+				sql_condition.append(seq + " date<'"
 						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
 						+ "'");
 				seq = " AND ";

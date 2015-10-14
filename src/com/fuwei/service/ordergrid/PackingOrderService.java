@@ -49,7 +49,7 @@ public class PackingOrderService extends BaseService {
 				seq = " AND ";
 			}
 			if (end_time != null) {
-				sql.append(seq + " aT.created_at<='"
+				sql.append(seq + " aT.created_at<'"
 						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
 						+ "'");
 				seq = " AND ";

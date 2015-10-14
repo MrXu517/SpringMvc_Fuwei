@@ -483,7 +483,7 @@
 												<thead>
 													<tr>
 														<td colspan="3" class="pull-right orderNumber">
-															№：<%=order.getOrderNumber()%></td>
+															№：<%=order.getOrderNumber()%> - <%=producingOrder.getNumber() %></td>
 													</tr>
 												</thead>
 												<tbody>

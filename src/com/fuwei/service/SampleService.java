@@ -38,7 +38,7 @@ public class SampleService extends BaseService {
 			}
 			if (end_time != null) {
 				
-				sql.append(seq + "created_at<='" +  DateTool.formateDate(DateTool.addDay(end_time, 1))+"'");
+				sql.append(seq + "created_at<'" +  DateTool.formateDate(DateTool.addDay(end_time, 1))+"'");
 				seq = " AND ";
 			}
 			if(charge_employee!=null){

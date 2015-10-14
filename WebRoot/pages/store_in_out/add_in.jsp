@@ -25,6 +25,8 @@
 	if (detaillist == null) {
 		detaillist = new ArrayList<Map<String, Object>>();
 	}
+	String message = request.getAttribute("message") == null ? null : (String)request.getAttribute("message");
+	
 %>
 <!DOCTYPE html>
 <html>
@@ -119,53 +121,14 @@ caption {
 				<div class="body">
 					<div class="container-fluid materialorderWidget">
 						<div class="row">
-							<!-- 	<div class="col-md-12">
-									<fieldset>
-										<legend>
-											原材料仓库单信息
-										</legend>
-										<div class="col-md-6">
-										<table class="table table-responsive table-bordered tableTb">
-											<tbody>
-												
-											</tbody>
-										</table>
-										</div>
-										<div class="col-md-6"><table class="table table-responsive table-bordered detailTb">
-											<caption>
-												原材料仓库单材料列表
-											</caption>
-											<thead>
-												<tr>
-													<th width="15%">
-														色号
-													</th>
-													<th width="15%">
-														材料
-													</th>
-													<th width="15%">
-														总数量(kg)
-													</th>
-													<th width="15%">
-														领取人
-													</th>
-
-												</tr>
-											</thead>
-											<tbody>
-												
-
-											</tbody>
-										</table></div>
-
-									</fieldset>
-								</div>
-							 -->
 							<div class="col-md-12">
 								<form class="saveform">
 									<input type="hidden" name="id" value="" />
 									<input type="hidden" name="store_order_id"
 										value="<%=storeOrder.getId()%>" />
+									<%if(message != null){ %>
+								<p class="alert alert-danger">信息提示：<%=message %></p>
+								<%}%>
 									<div class="clear"></div>
 									<div class="col-md-12 tablewidget">
 										<table class="table">

@@ -4,19 +4,19 @@
 <%@page import="com.fuwei.entity.Salesman"%>
 <%@page import="com.fuwei.entity.Company"%>
 <%@page import="com.fuwei.entity.User"%>
-<%@page import="com.fuwei.entity.ordergrid.StoreInOut"%>
+<%@page import="com.fuwei.entity.producesystem.StoreInOut"%>
 <%@page import="com.fuwei.commons.Pager"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="net.sf.json.JSONObject"%>
 <%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.entity.Employee"%>
-<%@page import="com.fuwei.entity.ordergrid.StoreInOutDetail"%>
+<%@page import="com.fuwei.entity.producesystem.StoreInOutDetail"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+	+ request.getServerName() + ":" + request.getServerPort()
+	+ path + "/";
 	Pager pager = (Pager) request.getAttribute("pager");
 	if (pager == null) {
 		pager = new Pager();
@@ -75,7 +75,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>入库列表 -- 桐庐富伟针织厂</title>
+		<title>出库列表 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -116,7 +116,7 @@
 												单号
 											</label>
 											<div class="col-sm-9">
-												<input class="form-control" type="text" name="number" id="number" value="<%=number_str %>" />
+												<input class="form-control" type="text" name="number" id="number" value="<%=number_str%>" />
 											</div>
 										</div>
 										<div class="form-group salesgroup">
@@ -130,7 +130,7 @@
 													</option>
 													<%
 														for (Factory factory : SystemCache.produce_factorylist) {
-															if (factoryId != null && factoryId == factory.getId()) {
+																																					if (factoryId != null && factoryId == factory.getId()) {
 													%>
 													<option value="<%=factory.getId()%>" selected><%=factory.getName()%></option>
 													<%
@@ -139,7 +139,7 @@
 													<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
 													<%
 														}
-														}
+																																				}
 													%>
 												</select>
 											</div>
@@ -157,7 +157,7 @@
 													</option>
 													<%
 														for (Employee temp : employeelist) {
-															if (charge_employee != null && charge_employee == temp.getId()) {
+																																					if (charge_employee != null && charge_employee == temp.getId()) {
 													%>
 													<option value="<%=temp.getId()%>" selected="selected"><%=temp.getName()%></option>
 													<%
@@ -166,7 +166,7 @@
 													<option value="<%=temp.getId()%>"><%=temp.getName()%></option>
 													<%
 														}
-														}
+																																				}
 													%>
 												</select>
 											</div>
@@ -184,7 +184,7 @@
 													</option>
 													<%
 														for (Company company : SystemCache.companylist) {
-															if (companyId != null && companyId == company.getId()) {
+																																					if (companyId != null && companyId == company.getId()) {
 													%>
 													<option value="<%=company.getId()%>" selected><%=company.getShortname()%></option>
 													<%
@@ -193,7 +193,7 @@
 													<option value="<%=company.getId()%>"><%=company.getShortname()%></option>
 													<%
 														}
-														}
+																																				}
 													%>
 												</select>
 											</div>
@@ -218,7 +218,7 @@
 									<ul class="pagination">
 										<li>
 											<a
-												href="store_out/index?number=<%=number_str %>&charge_employee=<%=charge_employee_str %>&factoryId=<%=factory_str%>&companyId=<%=company_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=1">«</a>
+												href="store_out/index?number=<%=number_str%>&charge_employee=<%=charge_employee_str%>&factoryId=<%=factory_str%>&companyId=<%=company_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=1">«</a>
 										</li>
 
 										<%
@@ -226,7 +226,7 @@
 										%>
 										<li class="">
 											<a
-												href="store_out/index?number=<%=number_str %>&charge_employee=<%=charge_employee_str %>&factoryId=<%=factory_str%>&companyId=<%=company_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() - 1%>">上一页
+												href="store_out/index?number=<%=number_str%>&charge_employee=<%=charge_employee_str%>&factoryId=<%=factory_str%>&companyId=<%=company_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() - 1%>">上一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -241,7 +241,7 @@
 
 										<li class="active">
 											<a
-												href="store_out/index?number=<%=number_str %>&charge_employee=<%=charge_employee_str %>&factoryId=<%=factory_str%>&companyId=<%=company_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
+												href="store_out/index?number=<%=number_str%>&charge_employee=<%=charge_employee_str%>&factoryId=<%=factory_str%>&companyId=<%=company_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
 												class="sr-only"></span> </a>
 										</li>
 										<li>
@@ -251,7 +251,7 @@
 										
 										<li class="">
 											<a
-												href="store_out/index?number=<%=number_str %>&charge_employee=<%=charge_employee_str %>&factoryId=<%=factory_str%>&companyId=<%=company_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() + 1%>">下一页
+												href="store_out/index?number=<%=number_str%>&charge_employee=<%=charge_employee_str%>&factoryId=<%=factory_str%>&companyId=<%=company_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() + 1%>">下一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -267,7 +267,7 @@
 										<li></li>
 										<li>
 											<a
-												href="store_out/index?number=<%=number_str %>&charge_employee=<%=charge_employee_str %>&factoryId=<%=factory_str%>&companyId=<%=company_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getTotalPage()%>">»</a>
+												href="store_out/index?number=<%=number_str%>&charge_employee=<%=charge_employee_str%>&factoryId=<%=factory_str%>&companyId=<%=company_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
 
@@ -336,22 +336,22 @@
 									<tbody>
 										<%
 											int i = (pager.getPageNo()-1) * pager.getPageSize() + 0;
-											for (StoreInOut item : StoreInOutlist) {
-												boolean even = i%2 == 0;
-												String classname = even?"even":"odd";
-												List<StoreInOutDetail> detailist = item.getDetaillist();
-												int detailsize = item.getDetaillist().size();
+																											for (StoreInOut item : StoreInOutlist) {
+																												boolean even = i%2 == 0;
+																												String classname = even?"even":"odd";
+																												List<StoreInOutDetail> detailist = item.getDetaillist();
+																												int detailsize = item.getDetaillist().size();
 										%>
-										<tr itemId="<%=item.getId()%>" class="<%=classname %>">
-											<td rowspan="<%=detailsize %>"><%=++i%></td>
+										<tr itemId="<%=item.getId()%>" class="<%=classname%>">
+											<td rowspan="<%=detailsize%>"><%=++i%></td>
 											
-											<td rowspan="<%=detailsize %>"><a target="_top" href="store_out/detail/<%=item.getId() %>"><%=item.getNumber() %></a></td>
-											<td rowspan="<%=detailsize %>"><%=SystemCache.getFactoryName(item.getFactoryId())%></td>
-											<td rowspan="<%=detailsize %>"><a target="_top" href="order/detail/<%=item.getOrderId() %>"><%=item.getOrderNumber() %></a></td>
-											<td rowspan="<%=detailsize %>"><%=SystemCache.getCompanyShortName(item.getCompanyId())%></td>
-											<td rowspan="<%=detailsize %>"><%=item.getCompany_productNumber()%></td>
-											<td rowspan="<%=detailsize %>"><%=item.getName()%></td>
-											<td rowspan="<%=detailsize %>"><%=SystemCache.getEmployeeName(item.getCharge_employee())%></td>
+											<td rowspan="<%=detailsize%>"><a target="_top" href="store_out/detail/<%=item.getId()%>"><%=item.getNumber()%></a></td>
+											<td rowspan="<%=detailsize%>"><%=SystemCache.getFactoryName(item.getFactoryId())%></td>
+											<td rowspan="<%=detailsize%>"><a target="_top" href="order/detail/<%=item.getOrderId()%>"><%=item.getOrderNumber()%></a></td>
+											<td rowspan="<%=detailsize%>"><%=SystemCache.getCompanyShortName(item.getCompanyId())%></td>
+											<td rowspan="<%=detailsize%>"><%=item.getCompany_productNumber()%></td>
+											<td rowspan="<%=detailsize%>"><%=item.getName()%></td>
+											<td rowspan="<%=detailsize%>"><%=SystemCache.getEmployeeName(item.getCharge_employee())%></td>
 											
 											
 											<td><%=detailist.get(0).getColor()%></td>
@@ -359,17 +359,18 @@
 											<td><%=detailist.get(0).getLot_no()%></td>
 											<td><%=detailist.get(0).getQuantity()%></td>
 
-											<td rowspan="<%=detailsize %>"><%=SystemCache.getUserName(item.getCreated_user())%></td>				
-											<td rowspan="<%=detailsize %>"><%=DateTool.formatDateYMD(item.getDate())%></td>				
+											<td rowspan="<%=detailsize%>"><%=SystemCache.getUserName(item.getCreated_user())%></td>				
+											<td rowspan="<%=detailsize%>"><%=DateTool.formatDateYMD(item.getDate())%></td>				
 											
 											
-											<td rowspan="<%=detailsize %>">
-												<a target="_top" href="store_out/detail/<%=item.getId() %>">详情</a>
+											<td rowspan="<%=detailsize%>">
+												<a target="_top" href="store_out/detail/<%=item.getId()%>">详情</a>
 											</td>
 										</tr>
 										<%
-										detailist.remove(0);
-										for(StoreInOutDetail detail : detailist){ %>
+											detailist.remove(0);
+																		for(StoreInOutDetail detail : detailist){
+										%>
 										<tr class="<%=classname %>">
 											<td><%=detail.getColor()%></td>
 											<td><%=SystemCache.getMaterialName(detail.getMaterial())%></td>

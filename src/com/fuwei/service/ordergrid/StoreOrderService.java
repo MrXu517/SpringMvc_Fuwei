@@ -20,6 +20,7 @@ import com.fuwei.entity.ordergrid.StoreOrderDetail;
 //import com.fuwei.entity.ProducingOrderMaterialDetail;
 import com.fuwei.service.BaseService;
 import com.fuwei.service.QuoteOrderDetailService;
+import com.fuwei.service.producesystem.StoreInOutService;
 import com.fuwei.util.SerializeTool;
 
 @Component

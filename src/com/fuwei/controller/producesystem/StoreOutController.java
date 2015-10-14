@@ -38,18 +38,18 @@ import com.fuwei.entity.ordergrid.PlanOrderDetail;
 import com.fuwei.entity.ordergrid.ProducingOrder;
 import com.fuwei.entity.ordergrid.ProducingOrderDetail;
 import com.fuwei.entity.ordergrid.ProducingOrderMaterialDetail;
-import com.fuwei.entity.ordergrid.StoreInOut;
-import com.fuwei.entity.ordergrid.StoreInOutDetail;
 import com.fuwei.entity.ordergrid.StoreOrder;
 import com.fuwei.entity.ordergrid.StoreOrderDetail;
+import com.fuwei.entity.producesystem.StoreInOut;
+import com.fuwei.entity.producesystem.StoreInOutDetail;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.MessageService;
 import com.fuwei.service.OrderService;
 import com.fuwei.service.SampleService;
 import com.fuwei.service.ordergrid.PlanOrderService;
 import com.fuwei.service.ordergrid.ProducingOrderService;
-import com.fuwei.service.ordergrid.StoreInOutService;
 import com.fuwei.service.ordergrid.StoreOrderService;
+import com.fuwei.service.producesystem.StoreInOutService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
 import com.google.gson.JsonObject;
@@ -151,14 +151,17 @@ public class StoreOutController extends BaseController {
 	public ModelAndView addbyorder2(String storeOrderId,Integer factoryId,
 			HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		//storeOrderId可能为原材料仓库ID， 或者订单 orderNumber	
+		 Integer new_storeOrderId = null ;
 		 try{
-		      int new_storeOrderId = Integer.parseInt(storeOrderId);
-		      return addbyorder(new_storeOrderId,factoryId, session, request, response);
+			 new_storeOrderId = Integer.parseInt(storeOrderId);
 		 }catch(Exception e){
 			 StoreOrder storeOrder =  storeOrderService.getByOrderNumber(storeOrderId);
-			 return addbyorder(storeOrder.getId(),factoryId, session, request, response);
+			 if(storeOrder == null){
+				 throw new Exception("找不到原材料仓库单ID或订单号为" + storeOrderId + "的订单");
+			 }
+			 new_storeOrderId = storeOrder.getId();
 		 }
+		 return addbyorder(new_storeOrderId,factoryId, session, request, response);
 	}
 	@RequestMapping(value = "/{storeOrderId}/add", method = RequestMethod.GET)
 	@ResponseBody
@@ -179,12 +182,12 @@ public class StoreOutController extends BaseController {
 		try {
 			StoreOrder storeOrder = storeOrderService.get(storeOrderId);
 			if (storeOrder == null) {
-				throw new PermissionDeniedDataAccessException(
+				throw new Exception(
 						"该原材料仓库单不存在或已被删除", null);
 			}
 			if (storeOrder.getDetaillist() == null
 					|| storeOrder.getDetaillist().size() <= 0) {
-				throw new PermissionDeniedDataAccessException(
+				throw new Exception(
 						"原材料仓库单缺少材料列表，请先修改原材料仓库的材料列表 ", null);
 			}
 			request.setAttribute("storeOrder", storeOrder);
@@ -251,12 +254,12 @@ public class StoreOutController extends BaseController {
 			}
 			StoreOrder storeOrder = storeOrderService.get(storeOrderId);
 			if (storeOrder == null) {
-				throw new PermissionDeniedDataAccessException(
+				throw new Exception(
 						"该原材料仓库单不存在或已被删除", null);
 			}
 			if (storeOrder.getDetaillist() == null
 					|| storeOrder.getDetaillist().size() <= 0) {
-				throw new PermissionDeniedDataAccessException(
+				throw new Exception(
 						"原材料仓库单缺少材料列表，请先修改原材料仓库的材料列表 ", null);
 			}
 			/* 判断有些数据不能为空 */
@@ -448,7 +451,7 @@ public class StoreOutController extends BaseController {
 			
 			List<Map<String,Object>> lot_outlist = new ArrayList<Map<String,Object>>();
 			for(Map<String,Object> not_outMap : lot_not_outlist){
-				not_outMap.put("quantity",0);
+				not_outMap.put("quantity",0.0);
 				for(StoreInOutDetail detail : object.getDetaillist()){
 					if(detail.getColor().trim().equals(not_outMap.get("color")) && detail.getMaterial() == (Integer)not_outMap.get("material") && detail.getLot_no().trim().equals(not_outMap.get("lot_no"))){
 						not_outMap.put("quantity",detail.getQuantity());

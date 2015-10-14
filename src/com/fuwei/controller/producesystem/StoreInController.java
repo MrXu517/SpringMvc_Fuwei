@@ -35,18 +35,18 @@ import com.fuwei.entity.ordergrid.PlanOrderDetail;
 import com.fuwei.entity.ordergrid.ProducingOrder;
 import com.fuwei.entity.ordergrid.ProducingOrderDetail;
 import com.fuwei.entity.ordergrid.ProducingOrderMaterialDetail;
-import com.fuwei.entity.ordergrid.StoreInOut;
-import com.fuwei.entity.ordergrid.StoreInOutDetail;
 import com.fuwei.entity.ordergrid.StoreOrder;
 import com.fuwei.entity.ordergrid.StoreOrderDetail;
+import com.fuwei.entity.producesystem.StoreInOut;
+import com.fuwei.entity.producesystem.StoreInOutDetail;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.MessageService;
 import com.fuwei.service.OrderService;
 import com.fuwei.service.SampleService;
 import com.fuwei.service.ordergrid.PlanOrderService;
 import com.fuwei.service.ordergrid.ProducingOrderService;
-import com.fuwei.service.ordergrid.StoreInOutService;
 import com.fuwei.service.ordergrid.StoreOrderService;
+import com.fuwei.service.producesystem.StoreInOutService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
 import com.sun.star.beans.Pair;
@@ -151,14 +151,17 @@ public class StoreInController extends BaseController {
 	public ModelAndView addbyorder2(String storeOrderId, HttpSession session,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		//storeOrderId可能为原材料仓库ID， 或者订单 orderNumber	
+		Integer new_storeOrderId = null ;
 		 try{
-		      int new_storeOrderId = Integer.parseInt(storeOrderId);
-		      return addbyorder(new_storeOrderId, session, request, response);
+			 new_storeOrderId = Integer.parseInt(storeOrderId);
 		 }catch(Exception e){
 			 StoreOrder storeOrder =  storeOrderService.getByOrderNumber(storeOrderId);
-			 return addbyorder(storeOrder.getId(), session, request, response);
+			 if(storeOrder == null){
+				 throw new Exception("找不到原材料仓库单ID或订单号为" + storeOrderId + "的订单");
+			 }
+			 new_storeOrderId = storeOrder.getId();
 		 }
+		 return addbyorder(new_storeOrderId, session, request, response);
 	}
 
 	@RequestMapping(value = "/{storeOrderId}/add", method = RequestMethod.GET)
@@ -180,12 +183,12 @@ public class StoreInController extends BaseController {
 		try {
 			StoreOrder storeOrder = storeOrderService.get(storeOrderId);
 			if (storeOrder == null) {
-				throw new PermissionDeniedDataAccessException(
+				throw new Exception(
 						"该原材料仓库单不存在或已被删除", null);
 			}
 			if (storeOrder.getDetaillist() == null
 					|| storeOrder.getDetaillist().size() <= 0) {
-				throw new PermissionDeniedDataAccessException(
+				throw new Exception(
 						"原材料仓库单缺少材料列表，请先修改原材料仓库的材料列表 ", null);
 			}
 			
@@ -195,6 +198,19 @@ public class StoreInController extends BaseController {
 			//获取已开的入库单
 			List<StoreInOut> storeInList = storeInOutService.getByStoreOrder(storeOrderId,true);
 			List<Map<String,Object>> detaillist = getInStoreQuantity(storeOrder,storeInList);
+			
+			/*判断若detaillist 的not_in_quantity 均 == 0 ， 则表示已全部入库，无需再创建入库单*/
+			boolean flag = true;
+			for(Map<String,Object> tMap : detaillist){
+				if((Double)tMap.get("not_in_quantity") > 0){				
+					flag = false;
+				}
+			}
+			if(flag){
+				request.setAttribute("message", "未入库数量为0，原材料已全部入库 ，无需再创建入库单， 请确认材料是否超出！！！");
+			}
+			/*判断若detaillist 的not_in_quantity 均 == 0 ， 则表示已全部入库，无需再创建入库单*/
+			
 			
 			request.setAttribute("detaillist", detaillist);
 
@@ -237,12 +253,12 @@ public class StoreInController extends BaseController {
 			}
 			StoreOrder storeOrder = storeOrderService.get(storeOrderId);
 			if (storeOrder == null) {
-				throw new PermissionDeniedDataAccessException(
+				throw new Exception(
 						"该原材料仓库单不存在或已被删除", null);
 			}
 			if (storeOrder.getDetaillist() == null
 					|| storeOrder.getDetaillist().size() <= 0) {
-				throw new PermissionDeniedDataAccessException(
+				throw new Exception(
 						"原材料仓库单缺少材料列表，请先修改原材料仓库的材料列表 ", null);
 			}
 			/* 判断有些数据不能为空 */
@@ -303,6 +319,7 @@ public class StoreInController extends BaseController {
 
 				storeInOut.setIn_out(true);
 				
+				Map<String ,Object> data = new HashMap<String, Object>();
 				
 				/*判断入库量总和是否大于原材料仓库总量*/
 				List<StoreInOut> storeInList = storeInOutService.getByStoreOrder(storeOrderId,true);
@@ -311,14 +328,19 @@ public class StoreInController extends BaseController {
 				for(Map<String,Object> item:not_in_quantityList){
 					double not_in_quantity = (Double)item.get("not_in_quantity");
 					if(not_in_quantity<0){//入库总数大于原材料仓库单的数量
-						throw new Exception("入库总数大于原材料仓库单的数量");
+						data.put("message", "入库总数大于原材料仓库单的数量");
 					}
 				}
 				/*判断入库量总和是否大于原材料仓库总量*/
 				
+				
+				
 				int tableOrderId = storeInOutService.add(storeInOut);
-				return this.returnSuccess("id", tableOrderId);
+				data.put("id", tableOrderId);
+				return this.returnSuccess(data);
 			} else {// 编辑
+				Map<String ,Object> data = new HashMap<String, Object>();
+				
 				storeInOut.setUpdated_at(DateTool.now());
 				List<StoreInOutDetail> detaillist = SerializeTool
 						.deserializeList(details, StoreInOutDetail.class);
@@ -372,7 +394,8 @@ public class StoreInController extends BaseController {
 				for(Map<String,Object> item:not_in_quantityList){
 					double not_in_quantity = (Double)item.get("not_in_quantity");
 					if(not_in_quantity<0){//入库总数大于原材料仓库单的数量
-						throw new Exception("入库总数大于原材料仓库单的数量");
+//						throw new Exception("入库总数大于原材料仓库单的数量");
+						data.put("message", "入库总数大于原材料仓库单的数量");
 					}
 				}
 				/*判断入库量总和是否大于原材料仓库总量*/
@@ -448,7 +471,8 @@ public class StoreInController extends BaseController {
 				
 				
 				int tableOrderId = storeInOutService.update(storeInOut);
-				return this.returnSuccess("id", tableOrderId);
+				data.put("id", tableOrderId);
+				return this.returnSuccess(data);
 			}
 
 		} catch (Exception e) {
@@ -485,7 +509,7 @@ public class StoreInController extends BaseController {
 				
 				List<Map<String,Object>> detaillist_result = new ArrayList<Map<String,Object>>();
 				for(Map<String,Object> not_outMap : detaillist){
-					not_outMap.put("quantity",0);
+					not_outMap.put("quantity",0.0);
 					not_outMap.put("lot_no","");
 					not_outMap.put("packages","1");
 					for(StoreInOutDetail detail : storeInOut.getDetaillist()){

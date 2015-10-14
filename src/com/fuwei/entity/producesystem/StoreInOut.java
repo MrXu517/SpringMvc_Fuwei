@@ -1,4 +1,4 @@
-package com.fuwei.entity.ordergrid;
+package com.fuwei.entity.producesystem;
 
 import java.text.ParseException;
 import java.util.Date;

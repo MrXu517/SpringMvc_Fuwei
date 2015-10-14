@@ -64,10 +64,20 @@ public class ProducingOrder extends BaseTableOrder{
 	private Integer charge_employee;// 打样人 ，跟单人 2015-5-2修改
 	
 	
+	//2015-10-6 增加样品公司货号
+	private String company_productNumber;//样品的公司货号
+	
+	
 	
 	
 	
 
+	public String getCompany_productNumber() {
+		return company_productNumber;
+	}
+	public void setCompany_productNumber(String company_productNumber) {
+		this.company_productNumber = company_productNumber;
+	}
 	public String getNumber() {
 		return number;
 	}

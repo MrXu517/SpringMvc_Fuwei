@@ -37,4 +37,18 @@ public class WorkspaceController extends BaseController {
 		}
 		return new ModelAndView("store_in_out/workspace");
 	}
+	
+	@RequestMapping(value = "/half_workspace", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView half_workspace(HttpSession session,HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "producesystem/halfstoreorder_workspace";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有半成品工作台的权限",
+					null);
+		}
+		return new ModelAndView("half_store_in_out/workspace");
+	}
 }

@@ -122,7 +122,7 @@ public class OrderService extends BaseService {
 				seq = " AND ";
 			}
 			if (end_time != null) {
-				sql.append(seq + " created_at<='"
+				sql.append(seq + " created_at<'"
 						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
 						+ "'");
 				seq = " AND ";
