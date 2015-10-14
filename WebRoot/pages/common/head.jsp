@@ -132,6 +132,8 @@
 	//2015-10-12
 	Boolean h_has_util_pantong_color = SystemCache.hasAuthority(session,"pantongcolor/search");//潘通色号
 	Boolean h_has_pantongcolor_import = SystemCache.hasAuthority(session,"pantongcolor/import");//潘通色号
+	//2015-10-14
+	Boolean h_has_half_current_stock = SystemCache.hasAuthority(session,"report/half_current_stock");//半成品库存报表
 	//权限相关
 	
 %>
@@ -500,6 +502,11 @@
 							<%if(h_has_report_financial_sale_invoice){ %>
 							<li>
 								<a href="report/financial/sale_invoice">销项发票报表</a>
+							</li>
+							<%} %>
+							<%if(h_has_half_current_stock){ %>
+							<li>
+								<a href="half_current_stock/report">半成品库存报表</a>
 							</li>
 							<%} %>
 						</ul>

@@ -93,6 +93,53 @@ public class HalfCurrentStockController extends BaseController {
 		return new ModelAndView("half_store_in_out/current_stock");
 	}
 	
+	@RequestMapping(value = "/report", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView report(Integer page, Integer companyId, Integer charge_employee,
+			String orderNumber, Boolean not_zero,String sortJSON, HttpSession session,
+			HttpServletRequest request) throws Exception {
+
+		String lcode = "report/half_current_stock";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有查看半成品库存报表的权限", null);
+		}
+
+		Pager pager = new Pager();
+		if (page != null && page > 0) {
+			pager.setPageNo(page);
+		}
+
+		List<Sort> sortList = null;
+		if (sortJSON != null) {
+			sortList = SerializeTool.deserializeList(sortJSON, Sort.class);
+		}
+		if (sortList == null) {
+			sortList = new ArrayList<Sort>();
+		}
+		Sort sort2 = new Sort();
+		sort2.setDirection("desc");
+		sort2.setProperty("id");
+		sortList.add(sort2);
+
+		pager = halfCurrentStockService.getList(pager, companyId, charge_employee, orderNumber,not_zero, sortList);
+		
+		request.setAttribute("companyId", companyId);
+		request.setAttribute("not_zero", not_zero);
+		request.setAttribute("charge_employee", charge_employee);
+		List<Employee> employeelist = new ArrayList<Employee>();
+		for (Employee temp : SystemCache.employeelist) {
+			if (temp.getIs_charge_employee()) {
+				employeelist.add(temp);
+			}
+		}
+		request.setAttribute("employeelist", employeelist);
+		request.setAttribute("orderNumber", orderNumber);
+		request.setAttribute("pager", pager);
+		return new ModelAndView("report/half_current_stock");
+	}
+	
+	
 	@RequestMapping(value = "/in_out/{orderId}", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView in_out(@PathVariable Integer orderId, HttpSession session,
