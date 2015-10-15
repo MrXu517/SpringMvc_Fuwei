@@ -50,6 +50,17 @@
 		<%@ include file="../../common/head.jsp"%>
 		<div id="Content">
 			<div id="main">
+					<div class="breadcrumbs" id="breadcrumbs">
+					<ul class="breadcrumb">
+						<li>
+							<i class="fa fa-home"></i>
+							<a href="user/index">首页</a>
+						</li>
+						<li class="active">
+							搜索潘通色号
+						</li>
+					</ul>
+				</div>
 				<div class="body">
 
 					<div class="container-fluid">
