@@ -410,7 +410,6 @@ public class PackingOrderController extends BaseController {
 		jObject.put("excel",Constants.UPLOADEXCEL_Packing + fileName +".xls");
 		jObject.put("pdf", Constants.UPLOADPDF_Packing + fileName + ".pdf");
 		
-        System.out.println("方法二的运行时间："+String.valueOf(endTime-startTime)+"ms");
         return jObject;  
     }
 	

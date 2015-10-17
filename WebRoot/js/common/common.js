@@ -20,12 +20,12 @@ $(document).ajaxSend( function(event, xhr, settings) {
 		} else {
 			settings.url = settings.url + "?_timestmp=" + new Date().getTime();
 		}
-		if (top.Cache != undefined) {
-			var token = top.Cache.getToken();
-			if (token != undefined) {
-				xhr.setRequestHeader("Token", token);
-			}
-		}
+//		if (top.Cache != undefined) {
+//			var token = top.Cache.getToken();
+//			if (token != undefined) {
+//				xhr.setRequestHeader("Token", token);
+//			}
+//		}
 
 		if (settings.loading != false) {
 			Common.loading(event.target);
