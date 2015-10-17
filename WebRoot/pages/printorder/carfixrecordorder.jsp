@@ -7,13 +7,13 @@
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
+<%@page import="com.fuwei.entity.ordergrid.PlanOrder"%>
 <%
 	Order order = (Order) request.getAttribute("order");
 	//车缝记录单
-	CarFixRecordOrder carFixRecordOrder = (CarFixRecordOrder) request
-			.getAttribute("carFixRecordOrder");
-	List<PlanOrderDetail> carFixRecordOrderDetailList = carFixRecordOrder == null ? new ArrayList<PlanOrderDetail>()
-			: carFixRecordOrder.getDetaillist();
+	PlanOrder planorder = (PlanOrder) request.getAttribute("planorder");
+	List<PlanOrderDetail> planOrderDetailList = planorder == null ? new ArrayList<PlanOrderDetail>()
+			: planorder.getDetaillist();
 	String productfactoryStr = (String)request.getAttribute("productfactoryStr");
 %>
 <!DOCTYPE html>
@@ -26,6 +26,7 @@
 		<meta http-equiv="description" content="富伟桐庐针织厂">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<!-- 为了让IE浏览器运行最新的渲染模式 -->
+		<script src="js/plugins/jquery-barcode.min.js"></script>
 	</head>
 	<body class="">
 		<div class="container-fluid gridTab auto_container">
@@ -123,7 +124,7 @@
 									</thead>
 									<tbody>
 										<%
-											for (PlanOrderDetail detail : carFixRecordOrderDetailList) {
+											for (PlanOrderDetail detail : planOrderDetailList) {
 										%>
 										<tr class="tr">
 											<td class="color"><%=detail.getColor()%>
@@ -188,8 +189,8 @@
 					</table>
 
 					<p class="pull-right auto_bottom">
-						<span id="created_user">制单人：<%=SystemCache.getUserName(carFixRecordOrder.getCreated_user()) %></span>
-						<span id="date"> 日期：<%=DateTool.formatDateYMD(DateTool.getYanDate(carFixRecordOrder.getCreated_at())) %></span>
+						<span id="created_user">制单人：<%=SystemCache.getUserName(order.getCreated_user()) %></span>
+						<span id="date"> 日期：<%=DateTool.formatDateYMD(DateTool.getYanDate(order.getCreated_at())) %></span>
 					</p>
 
 

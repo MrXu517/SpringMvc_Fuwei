@@ -585,46 +585,43 @@ public class SystemCache {
 	}
 
 	/* 权限相关 */
-	public static Boolean hasAuthority(HttpSession session, int authorityId) {
-		LoginedUser loginUser = SystemContextUtils.getCurrentUser(session);
-		return SystemCache.hasAuthority(loginUser, authorityId);
-	}
+//	public static Boolean hasAuthority(HttpSession session, int authorityId) {
+//		LoginedUser loginUser = SystemContextUtils.getCurrentUser(session);
+//		return SystemCache.hasAuthority(loginUser, authorityId);
+//	}
 
 	public static Boolean hasAuthority(HttpSession session, String lcode) {
 		LoginedUser loginUser = SystemContextUtils.getCurrentUser(session);
 		return SystemCache.hasAuthority(loginUser, lcode);
 	}
 
-	public static Boolean hasAuthority(LoginedUser loginUser, int authorityId) {
-		if (loginUser.getLoginedUser().getBuilt_in()) {
-			return true;
-		}
-		List<Authority> authorityList = loginUser.getAuthoritylist();
-		if (authorityList == null || authorityList.size() <= 0) {
-			return false;
-		}
-		for (Authority authority : authorityList) {
-			if (authority.getId() == authorityId) {
-				return true;
-			}
-		}
-		return false;
-	}
+//	public static Boolean hasAuthority(LoginedUser loginUser, int authorityId) {
+//		if (loginUser.getLoginedUser().getBuilt_in()) {
+//			return true;
+//		}
+////		List<Authority> authorityList = loginUser.getAuthoritylist();
+//		private Map<String,Authority> authorityMap = loginUser.getAuthorityMap();
+//		if (authorityMap == null || authorityMap.size() <= 0) {
+//			return false;
+//		}
+////		for (Authority authority : authorityList) {
+////			if (authority.getId() == authorityId) {
+////				return true;
+////			}
+////		}
+//		
+//		return false;
+//	}
 
 	public static Boolean hasAuthority(LoginedUser loginUser, String lcode) {
 		if (loginUser.getLoginedUser().getBuilt_in()) {
 			return true;
 		}
-		List<Authority> authorityList = loginUser.getAuthoritylist();
-		if (authorityList == null || authorityList.size() <= 0) {
+		Map<String,Authority> authorityMap = loginUser.getAuthorityMap();
+		if (authorityMap == null || authorityMap.size() <= 0) {
 			return false;
 		}
-		for (Authority authority : authorityList) {
-			if (authority.getLcode().trim().equals(lcode.trim())) {
-				return true;
-			}
-		}
-		return false;
+		return authorityMap.containsKey(lcode);
 	}
 
 	/* 权限相关 */

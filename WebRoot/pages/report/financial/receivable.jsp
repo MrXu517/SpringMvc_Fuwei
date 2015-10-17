@@ -345,13 +345,13 @@
 											<th width="120px">
 												对方账户
 											</th>
-											<th width="60px">
+											<th width="100px">
 												应收
 											</th>
-											<th width="60px">
+											<th width="100px">
 												已收
 											</th>
-											<th width="60px">
+											<th width="100px">
 												未匹配
 											</th>
 											<th width="60px">
@@ -414,9 +414,9 @@
 														合计
 													</td>
 													<td></td>
-													<td><%=total_receivable %></td>
-													<td><%=total_received%></td>
-													<td><%=total_uninvoiced%></td>
+													<td><%=String.format("%.2f",total_receivable)  %></td>
+													<td><%=String.format("%.2f",total_received)%></td>
+													<td><%=String.format("%.2f",total_uninvoiced)%></td>
 													<td></td>
 													<td></td>
 												</tr>

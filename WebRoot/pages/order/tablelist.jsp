@@ -44,8 +44,8 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	Order order = (Order) request.getAttribute("order");
-	HeadBankOrder headBankOrder = (HeadBankOrder) request
-			.getAttribute("headBankOrder");
+//	HeadBankOrder headBankOrder = (HeadBankOrder) request
+//			.getAttribute("headBankOrder");
 
 	List<ProducingOrder> producingOrderList = (List<ProducingOrder>) request
 			.getAttribute("producingOrderList");
@@ -94,24 +94,24 @@
 			: halfCheckRecordOrder.getDetail_2_list();
 
 	//抽检记录单
-	CheckRecordOrder checkRecordOrder = (CheckRecordOrder) request
-			.getAttribute("checkRecordOrder");
+//	CheckRecordOrder checkRecordOrder = (CheckRecordOrder) request
+//			.getAttribute("checkRecordOrder");
 
 	//车缝记录单
-	CarFixRecordOrder carFixRecordOrder = (CarFixRecordOrder) request
-			.getAttribute("carFixRecordOrder");
+//	CarFixRecordOrder carFixRecordOrder = (CarFixRecordOrder) request
+//			.getAttribute("carFixRecordOrder");
 
 	//整烫记录单
-	IroningRecordOrder ironingRecordOrder = (IroningRecordOrder) request
-			.getAttribute("ironingRecordOrder");
+//	IroningRecordOrder ironingRecordOrder = (IroningRecordOrder) request
+//			.getAttribute("ironingRecordOrder");
 
 	//2015-3-23添加新表格 生产进度单
-	ProductionScheduleOrder productionScheduleOrder = (ProductionScheduleOrder) request
-			.getAttribute("productionScheduleOrder");
-	FinalStoreOrder finalStoreOrder = (FinalStoreOrder) request
-			.getAttribute("finalStoreOrder");
-	ShopRecordOrder shopRecordOrder = (ShopRecordOrder) request
-			.getAttribute("shopRecordOrder");
+//	ProductionScheduleOrder productionScheduleOrder = (ProductionScheduleOrder) request
+//			.getAttribute("productionScheduleOrder");
+//	FinalStoreOrder finalStoreOrder = (FinalStoreOrder) request
+//			.getAttribute("finalStoreOrder");
+//	ShopRecordOrder shopRecordOrder = (ShopRecordOrder) request
+//			.getAttribute("shopRecordOrder");
 	ColoringProcessOrder coloringProcessOrder = (ColoringProcessOrder) request
 			.getAttribute("coloringProcessOrder");
 	List<ColoringProcessOrderDetail> coloringProcessOrderDetailList = coloringProcessOrder == null ? new ArrayList<ColoringProcessOrderDetail>()
@@ -270,8 +270,6 @@
 								<div class="container-fluid">
 									<div class="row">
 										<form class="saveform">
-											<input type="hidden" name="id"
-												value="<%=headBankOrder == null ? "" : headBankOrder.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
 
@@ -2067,9 +2065,6 @@
 								<div class="container-fluid">
 									<div class="row">
 										<form class="saveform">
-											<input type="hidden" name="id"
-												value="<%=checkRecordOrder == null ? "" : checkRecordOrder
-					.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
 											
@@ -2413,81 +2408,6 @@
 								<%
 									}
 								%>
-								<!--
-						 添加编辑辅料采购单对话框 -->
-								<div class="modal fade tableRowDialog" id="fuliaopurchaseDialog">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-header">
-												<button type="button" class="close" data-dismiss="modal">
-													<span aria-hidden="true">&times;</span><span
-														class="sr-only">Close</span>
-												</button>
-												<h4 class="modal-title">
-													添加一行
-												</h4>
-											</div>
-											<div class="modal-body">
-												<form class="form-horizontal rowform" role="form">
-													<div class="form-group col-md-12">
-														<label for="style" class="col-sm-3 control-label">
-															辅料类型
-														</label>
-														<div class="col-sm-8">
-															<select name="style" id="style"
-																class="form-control require">
-																<option value="">
-																	未选择
-																</option>
-																<%
-																	for (Material material : SystemCache.materiallist) {
-																%>
-																<option value="<%=material.getId()%>"><%=material.getName()%></option>
-																<%
-																	}
-																%>
-															</select>
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="quantity" class="col-sm-3 control-label">
-															数量(kg)
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="quantity" id="quantity"
-																class="form-control double require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="memo" class="col-sm-3 control-label">
-															备注
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="memo" id="memo"
-																class="form-control" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-
-													<div class="modal-footer">
-														<button type="submit" class="btn btn-primary"
-															data-loading-text="正在保存...">
-															保存
-														</button>
-														<button type="button" class="btn btn-default"
-															data-dismiss="modal">
-															关闭
-														</button>
-													</div>
-												</form>
-											</div>
-
-										</div>
-									</div>
-								</div>
-								<!-- 添加编辑辅料采购单对话框 -->
 
 							</div>
 
@@ -2497,9 +2417,6 @@
 								<div class="container-fluid">
 									<div class="row">
 										<form class="saveform">
-											<input type="hidden" name="id"
-												value="<%=carFixRecordOrder == null ? "" : carFixRecordOrder
-					.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
 											
@@ -2651,9 +2568,6 @@
 								<div class="container-fluid">
 									<div class="row">
 										<form class="saveform">
-											<input type="hidden" name="id"
-												value="<%=ironingRecordOrder == null ? "" : ironingRecordOrder
-					.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
 											
@@ -2806,9 +2720,6 @@
 								<div class="container-fluid">
 									<div class="row">
 										<form class="saveform">
-											<input type="hidden" name="id"
-												value="<%=productionScheduleOrder == null ? ""
-					: productionScheduleOrder.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
 											
@@ -2922,9 +2833,6 @@
 								<div class="container-fluid">
 									<div class="row">
 										<form class="saveform">
-											<input type="hidden" name="id"
-												value="<%=finalStoreOrder == null ? "" : finalStoreOrder
-					.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
 											
@@ -3341,9 +3249,6 @@
 								<div class="container-fluid">
 									<div class="row">
 										<form class="saveform">
-											<input type="hidden" name="id"
-												value="<%=shopRecordOrder == null ? "" : shopRecordOrder
-					.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
 											
@@ -3502,9 +3407,6 @@
 								<div class="container-fluid">
 									<div class="row">
 										<form class="saveform">
-											<input type="hidden" name="id"
-												value="<%=productionScheduleOrder == null ? ""
-					: productionScheduleOrder.getId()%>" />
 											<input type="hidden" name="orderId"
 												value="<%=order.getId()%>" />
 											

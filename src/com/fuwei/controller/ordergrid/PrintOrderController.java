@@ -20,39 +20,40 @@ import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
-import com.fuwei.entity.ordergrid.CarFixRecordOrder;
-import com.fuwei.entity.ordergrid.CheckRecordOrder;
+//import com.fuwei.entity.ordergrid.CarFixRecordOrder;
+//import com.fuwei.entity.ordergrid.CheckRecordOrder;
 import com.fuwei.entity.ordergrid.ColoringOrder;
 import com.fuwei.entity.ordergrid.ColoringOrderDetail;
 import com.fuwei.entity.ordergrid.ColoringProcessOrder;
 import com.fuwei.entity.ordergrid.ColoringProcessOrderDetail;
-import com.fuwei.entity.ordergrid.FinalStoreOrder;
+//import com.fuwei.entity.ordergrid.FinalStoreOrder;
 import com.fuwei.entity.ordergrid.FuliaoPurchaseOrder;
 import com.fuwei.entity.ordergrid.HalfCheckRecordOrder;
-import com.fuwei.entity.ordergrid.HeadBankOrder;
-import com.fuwei.entity.ordergrid.IroningRecordOrder;
+//import com.fuwei.entity.ordergrid.HeadBankOrder;
+//import com.fuwei.entity.ordergrid.IroningRecordOrder;
 import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
 import com.fuwei.entity.ordergrid.PlanOrder;
+import com.fuwei.entity.ordergrid.PlanOrderDetail;
 import com.fuwei.entity.ordergrid.ProducingOrder;
 import com.fuwei.entity.ordergrid.ProducingOrderDetail;
-import com.fuwei.entity.ordergrid.ProductionScheduleOrder;
-import com.fuwei.entity.ordergrid.ShopRecordOrder;
+//import com.fuwei.entity.ordergrid.ProductionScheduleOrder;
+//import com.fuwei.entity.ordergrid.ShopRecordOrder;
 import com.fuwei.entity.ordergrid.StoreOrder;
 import com.fuwei.service.OrderService;
-import com.fuwei.service.ordergrid.CarFixRecordOrderService;
-import com.fuwei.service.ordergrid.CheckRecordOrderService;
+//import com.fuwei.service.ordergrid.CarFixRecordOrderService;
+//import com.fuwei.service.ordergrid.CheckRecordOrderService;
 import com.fuwei.service.ordergrid.ColoringOrderService;
-import com.fuwei.service.ordergrid.ColoringProcessOrderService;
-import com.fuwei.service.ordergrid.FinalStoreOrderService;
+//import com.fuwei.service.ordergrid.ColoringProcessOrderService;
+//import com.fuwei.service.ordergrid.FinalStoreOrderService;
 import com.fuwei.service.ordergrid.FuliaoPurchaseOrderService;
 import com.fuwei.service.ordergrid.HalfCheckRecordOrderService;
-import com.fuwei.service.ordergrid.HeadBankOrderService;
-import com.fuwei.service.ordergrid.IroningRecordOrderService;
+//import com.fuwei.service.ordergrid.HeadBankOrderService;
+//import com.fuwei.service.ordergrid.IroningRecordOrderService;
 import com.fuwei.service.ordergrid.MaterialPurchaseOrderService;
 import com.fuwei.service.ordergrid.PlanOrderService;
 import com.fuwei.service.ordergrid.ProducingOrderService;
-import com.fuwei.service.ordergrid.ProductionScheduleOrderService;
-import com.fuwei.service.ordergrid.ShopRecordOrderService;
+//import com.fuwei.service.ordergrid.ProductionScheduleOrderService;
+//import com.fuwei.service.ordergrid.ShopRecordOrderService;
 import com.fuwei.service.ordergrid.StoreOrderService;
 
 @RequestMapping("/printorder")
@@ -61,8 +62,8 @@ public class PrintOrderController extends BaseController {
 	@Autowired
 	OrderService orderService;
 	
-	@Autowired
-	HeadBankOrderService headBankOrderService;
+//	@Autowired
+//	HeadBankOrderService headBankOrderService;
 	@Autowired
 	ProducingOrderService producingOrderService;
 	@Autowired
@@ -71,28 +72,28 @@ public class PrintOrderController extends BaseController {
 	StoreOrderService storeOrderService;
 	@Autowired
 	HalfCheckRecordOrderService halfCheckRecordOrderService;
-	@Autowired
-	CheckRecordOrderService checkRecordOrderService;
+//	@Autowired
+//	CheckRecordOrderService checkRecordOrderService;
 	@Autowired
 	ColoringOrderService coloringOrderService;
 	@Autowired
 	MaterialPurchaseOrderService materialPurchaseOrderService;
 	@Autowired
 	FuliaoPurchaseOrderService fuliaoPurchaseOrderService;
-	@Autowired
-	CarFixRecordOrderService carFixRecordOrderService;
-	@Autowired
-	IroningRecordOrderService ironingRecordOrderService;
+//	@Autowired
+//	CarFixRecordOrderService carFixRecordOrderService;
+//	@Autowired
+//	IroningRecordOrderService ironingRecordOrderService;
 	
 	/*2015-3-23添加 新表格*/
-	@Autowired
-	ProductionScheduleOrderService productionScheduleOrderService;
-	@Autowired
-	FinalStoreOrderService finalStoreOrderService;
-	@Autowired
-	ShopRecordOrderService shopRecordOrderService;
-	@Autowired
-	ColoringProcessOrderService coloringProcessOrderService;
+//	@Autowired
+//	ProductionScheduleOrderService productionScheduleOrderService;
+//	@Autowired
+//	FinalStoreOrderService finalStoreOrderService;
+//	@Autowired
+//	ShopRecordOrderService shopRecordOrderService;
+//	@Autowired
+//	ColoringProcessOrderService coloringProcessOrderService;
 
 	
 	@RequestMapping(value = "/print", method = RequestMethod.GET)
@@ -139,17 +140,19 @@ public class PrintOrderController extends BaseController {
 			
 			//获取质量记录单
 			if(printAll || gridName.indexOf("headbankorder") > -1){
-				HeadBankOrder headBankOrder = headBankOrderService.getByOrder(orderId);
-				if(headBankOrder!=null){
-					if(planOrder==null){
-						planOrder = planOrderService.getByOrder(orderId);
-					}
-					headBankOrder.setDetaillist(planOrder.getDetaillist());
-					grids += "headbankorder,";
-					request.setAttribute("headBankOrder", headBankOrder);
-					
+//				if(planOrder==null){
+//					planOrder = planOrderService.getByOrder(orderId);
+//					planOrderDetailList = planOrder.getDetaillist();
+//				}else if(planOrderDetailList == null){
+//					planOrderDetailList = planOrder.getDetaillist();
+//				}
+//				request.setAttribute("planOrderDetailList", planOrderDetailList);
+//				grids += "headbankorder,";	
+				if(planOrder==null){
+					planOrder = planOrderService.getByOrder(orderId);
 				}
-				
+				grids += "headbankorder,";
+				request.setAttribute("planOrder", planOrder);
 			}
 			
 			//获取生产单
@@ -220,11 +223,12 @@ public class PrintOrderController extends BaseController {
 			
 			//获取抽检记录单
 			if(printAll || (gridName.indexOf(",checkrecordorder") > -1 || gridName.indexOf("checkrecordorder")==0)){
-				CheckRecordOrder checkRecordOrder = checkRecordOrderService.getByOrder(orderId);
-				if(checkRecordOrder!=null){
-					grids += "checkrecordorder,";
-					request.setAttribute("checkRecordOrder", checkRecordOrder);
-				}	
+//				CheckRecordOrder checkRecordOrder = checkRecordOrderService.getByOrder(orderId);
+//				if(checkRecordOrder!=null){
+//					grids += "checkrecordorder,";
+//					request.setAttribute("checkRecordOrder", checkRecordOrder);
+//				}	
+				grids += "checkrecordorder,";
 			}
 			
 			
@@ -241,51 +245,67 @@ public class PrintOrderController extends BaseController {
 			
 			//获取车缝记录单
 			if(printAll || gridName.indexOf("carfixrecordorder") > -1){
-				CarFixRecordOrder carFixRecordOrder = carFixRecordOrderService.getByOrder(orderId);
-				if(carFixRecordOrder!=null){
-					if(planOrder==null){
-						planOrder = planOrderService.getByOrder(orderId);
-					}
-					carFixRecordOrder.setDetaillist(planOrder.getDetaillist());
-					grids += "carfixrecordorder,";
-					request.setAttribute("carFixRecordOrder", carFixRecordOrder);
-				}	
+//				CarFixRecordOrder carFixRecordOrder = carFixRecordOrderService.getByOrder(orderId);
+//				if(carFixRecordOrder!=null){
+//					if(planOrder==null){
+//						planOrder = planOrderService.getByOrder(orderId);
+//					}
+//					carFixRecordOrder.setDetaillist(planOrder.getDetaillist());
+//					grids += "carfixrecordorder,";
+//					request.setAttribute("carFixRecordOrder", carFixRecordOrder);
+//				}	
+				if(planOrder==null){
+					planOrder = planOrderService.getByOrder(orderId);
+				}
+				grids += "carfixrecordorder,";
+				request.setAttribute("planOrder", planOrder);
 			}
 			
 			
 			//获取整烫记录单
 			if(printAll || gridName.indexOf("ironingrecordorder") > -1){
-				IroningRecordOrder ironingRecordOrder = ironingRecordOrderService.getByOrder(orderId);
-				if(ironingRecordOrder!=null){
-					if(planOrder==null){
-						planOrder = planOrderService.getByOrder(orderId);
-					}
-					ironingRecordOrder.setDetaillist(planOrder.getDetaillist());
-					grids += "ironingrecordorder,";
-					request.setAttribute("ironingRecordOrder", ironingRecordOrder);
-				}	
+//				IroningRecordOrder ironingRecordOrder = ironingRecordOrderService.getByOrder(orderId);
+//				if(ironingRecordOrder!=null){
+//					if(planOrder==null){
+//						planOrder = planOrderService.getByOrder(orderId);
+//					}
+//					ironingRecordOrder.setDetaillist(planOrder.getDetaillist());
+//					grids += "ironingrecordorder,";
+//					request.setAttribute("ironingRecordOrder", ironingRecordOrder);
+//				}	
+				if(planOrder==null){
+					planOrder = planOrderService.getByOrder(orderId);
+				}
+				grids += "ironingrecordorder,";
+				request.setAttribute("planOrder", planOrder);
 			}
 			
 			/*2015-3-23添加 新表格*/
 			//获取生产进度单
 			if(printAll || gridName.indexOf("productionscheduleorder") > -1){
-				ProductionScheduleOrder productionScheduleOrder = productionScheduleOrderService.getByOrder(orderId);
-				if(productionScheduleOrder!=null){
-					grids += "productionscheduleorder,";
-					request.setAttribute("productionScheduleOrder", productionScheduleOrder);
-				}	
+//				ProductionScheduleOrder productionScheduleOrder = productionScheduleOrderService.getByOrder(orderId);
+//				if(productionScheduleOrder!=null){
+//					grids += "productionscheduleorder,";
+//					request.setAttribute("productionScheduleOrder", productionScheduleOrder);
+//				}	
+				grids += "productionscheduleorder,";
 			}
 			//获取成品仓库记录单
 			if(printAll || gridName.indexOf("finalstorerecordorder") > -1){
-				FinalStoreOrder finalStoreOrder = finalStoreOrderService.getByOrder(orderId);
-				if(finalStoreOrder!=null){
-					if(planOrder==null){
-						planOrder = planOrderService.getByOrder(orderId);
-					}
-					finalStoreOrder.setDetaillist(planOrder.getDetaillist());
-					grids += "finalstorerecordorder,";
-					request.setAttribute("finalStoreOrder", finalStoreOrder);
+//				FinalStoreOrder finalStoreOrder = finalStoreOrderService.getByOrder(orderId);
+//				if(finalStoreOrder!=null){
+//					if(planOrder==null){
+//						planOrder = planOrderService.getByOrder(orderId);
+//					}
+//					finalStoreOrder.setDetaillist(planOrder.getDetaillist());
+//					grids += "finalstorerecordorder,";
+//					request.setAttribute("finalStoreOrder", finalStoreOrder);
+//				}
+				if(planOrder==null){
+					planOrder = planOrderService.getByOrder(orderId);
 				}
+				grids += "finalstorerecordorder,";
+				request.setAttribute("planOrder", planOrder);
 			}
 			//2015-5-12添加获取成品检验记录单
 			if(printAll || gridName.indexOf("finalcheckrecordorder") > -1){		
@@ -305,19 +325,25 @@ public class PrintOrderController extends BaseController {
 			}
 			//获取车间记录单
 			if(printAll || gridName.indexOf("shoprecordorder") > -1){
-				ShopRecordOrder shopRecordOrder = shopRecordOrderService.getByOrder(orderId);
-				if(shopRecordOrder!=null){
-					if(planOrder==null){
-						planOrder = planOrderService.getByOrder(orderId);
-					}
-					shopRecordOrder.setDetaillist(planOrder.getDetaillist());
-					grids += "shoprecordorder,";
-					request.setAttribute("shopRecordOrder", shopRecordOrder);
+//				ShopRecordOrder shopRecordOrder = shopRecordOrderService.getByOrder(orderId);
+//				if(shopRecordOrder!=null){
+//					if(planOrder==null){
+//						planOrder = planOrderService.getByOrder(orderId);
+//					}
+//					shopRecordOrder.setDetaillist(planOrder.getDetaillist());
+//					grids += "shoprecordorder,";
+//					request.setAttribute("shopRecordOrder", shopRecordOrder);
+//				}
+
+				if(planOrder==null){
+					planOrder = planOrderService.getByOrder(orderId);
 				}
+				grids += "shoprecordorder,";
+				request.setAttribute("planOrder", planOrder);
 			}
 			//获取染色进度单
 			if(printAll || gridName.indexOf("coloringprocessorder") > -1){
-				ColoringProcessOrder coloringProcessOrder = coloringProcessOrderService.getByOrder(orderId);
+				ColoringProcessOrder coloringProcessOrder = new ColoringProcessOrder();
 				if(coloringProcessOrder!=null){
 					if(coloringOrderList==null){
 						coloringOrderList = coloringOrderService.getByOrder(orderId);

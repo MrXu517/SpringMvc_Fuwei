@@ -192,11 +192,11 @@
 														for (Company company : SystemCache.companylist) {
 															if (companyId!=null && companyId == company.getId()) {
 													%>
-													<option value="<%=company.getId()%>" selected><%=company.getFullname()%></option>
+													<option value="<%=company.getId()%>" selected><%=company.getShortname()%></option>
 													<%
 														} else {
 													%>
-													<option value="<%=company.getId()%>"><%=company.getFullname()%></option>
+													<option value="<%=company.getId()%>"><%=company.getShortname()%></option>
 													<%
 														}
 														}
@@ -241,13 +241,11 @@
 												<span class="input-group-addon">到</span>
 												<input type="text" name="end_time" id="end_time"
 													class="date form-control" value="<%=end_time_str%>">
-
-												<span class="input-group-btn">
-													<button class="btn btn-primary" type="submit">
-														搜索
-													</button> </span>
 											</div>
 										</div>
+										<button class="btn btn-primary" type="submit">
+														搜索
+													</button>
 									</form>
 									<ul class="pagination">
 										<li>

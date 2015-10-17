@@ -34,28 +34,28 @@ import com.fuwei.entity.OrderProduceStatus;
 import com.fuwei.entity.OrderStep;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
-import com.fuwei.entity.ordergrid.CarFixRecordOrder;
-import com.fuwei.entity.ordergrid.CheckRecordOrder;
+//import com.fuwei.entity.ordergrid.CarFixRecordOrder;
+//import com.fuwei.entity.ordergrid.CheckRecordOrder;
 import com.fuwei.entity.ordergrid.ColoringOrder;
 import com.fuwei.entity.ordergrid.ColoringOrderDetail;
 import com.fuwei.entity.ordergrid.ColoringProcessOrder;
 import com.fuwei.entity.ordergrid.ColoringProcessOrderDetail;
-import com.fuwei.entity.ordergrid.FinalStoreOrder;
+//import com.fuwei.entity.ordergrid.FinalStoreOrder;
 import com.fuwei.entity.ordergrid.FuliaoPurchaseOrder;
-import com.fuwei.entity.ordergrid.FuliaoPurchaseOrderDetail;
+//import com.fuwei.entity.ordergrid.FuliaoPurchaseOrderDetail;
 import com.fuwei.entity.ordergrid.HalfCheckRecordOrder;
 import com.fuwei.entity.ordergrid.HalfCheckRecordOrderDetail;
 import com.fuwei.entity.ordergrid.HalfCheckRecordOrderDetail2;
-import com.fuwei.entity.ordergrid.HeadBankOrder;
-import com.fuwei.entity.ordergrid.HeadBankOrderDetail;
-import com.fuwei.entity.ordergrid.IroningRecordOrder;
+//import com.fuwei.entity.ordergrid.HeadBankOrder;
+//import com.fuwei.entity.ordergrid.HeadBankOrderDetail;
+//import com.fuwei.entity.ordergrid.IroningRecordOrder;
 import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
 import com.fuwei.entity.ordergrid.PlanOrder;
 import com.fuwei.entity.ordergrid.PlanOrderDetail;
 import com.fuwei.entity.ordergrid.ProducingOrder;
 import com.fuwei.entity.ordergrid.ProducingOrderDetail;
-import com.fuwei.entity.ordergrid.ProductionScheduleOrder;
-import com.fuwei.entity.ordergrid.ShopRecordOrder;
+//import com.fuwei.entity.ordergrid.ProductionScheduleOrder;
+//import com.fuwei.entity.ordergrid.ShopRecordOrder;
 import com.fuwei.entity.ordergrid.StoreOrder;
 import com.fuwei.entity.ordergrid.StoreOrderDetail;
 import com.fuwei.service.AuthorityService;
@@ -66,20 +66,20 @@ import com.fuwei.service.OrderService;
 import com.fuwei.service.ProductionNotificationService;
 import com.fuwei.service.QuoteOrderDetailService;
 import com.fuwei.service.SampleService;
-import com.fuwei.service.ordergrid.CarFixRecordOrderService;
-import com.fuwei.service.ordergrid.CheckRecordOrderService;
+//import com.fuwei.service.ordergrid.CarFixRecordOrderService;
+//import com.fuwei.service.ordergrid.CheckRecordOrderService;
 import com.fuwei.service.ordergrid.ColoringOrderService;
-import com.fuwei.service.ordergrid.ColoringProcessOrderService;
-import com.fuwei.service.ordergrid.FinalStoreOrderService;
+//import com.fuwei.service.ordergrid.ColoringProcessOrderService;
+//import com.fuwei.service.ordergrid.FinalStoreOrderService;
 import com.fuwei.service.ordergrid.FuliaoPurchaseOrderService;
 import com.fuwei.service.ordergrid.HalfCheckRecordOrderService;
-import com.fuwei.service.ordergrid.HeadBankOrderService;
-import com.fuwei.service.ordergrid.IroningRecordOrderService;
+//import com.fuwei.service.ordergrid.HeadBankOrderService;
+//import com.fuwei.service.ordergrid.IroningRecordOrderService;
 import com.fuwei.service.ordergrid.MaterialPurchaseOrderService;
 import com.fuwei.service.ordergrid.PlanOrderService;
 import com.fuwei.service.ordergrid.ProducingOrderService;
-import com.fuwei.service.ordergrid.ProductionScheduleOrderService;
-import com.fuwei.service.ordergrid.ShopRecordOrderService;
+//import com.fuwei.service.ordergrid.ProductionScheduleOrderService;
+//import com.fuwei.service.ordergrid.ShopRecordOrderService;
 import com.fuwei.service.ordergrid.StoreOrderService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.NumberUtil;
@@ -105,8 +105,8 @@ public class OrderController extends BaseController {
 	@Autowired
 	ProductionNotificationService productionNotificationService;
 
-	@Autowired
-	HeadBankOrderService headBankOrderService;
+//	@Autowired
+//	HeadBankOrderService headBankOrderService;
 
 	@Autowired
 	ProducingOrderService producingOrderService;
@@ -116,28 +116,28 @@ public class OrderController extends BaseController {
 	StoreOrderService storeOrderService;
 	@Autowired
 	HalfCheckRecordOrderService halfCheckRecordOrderService;
-	@Autowired
-	CheckRecordOrderService checkRecordOrderService;
+//	@Autowired
+//	CheckRecordOrderService checkRecordOrderService;
 	@Autowired
 	ColoringOrderService coloringOrderService;
 	@Autowired
 	MaterialPurchaseOrderService materialPurchaseOrderService;
 	@Autowired
 	FuliaoPurchaseOrderService fuliaoPurchaseOrderService;
-	@Autowired
-	CarFixRecordOrderService carFixRecordOrderService;
-	@Autowired
-	IroningRecordOrderService ironingRecordOrderService;
+//	@Autowired
+//	CarFixRecordOrderService carFixRecordOrderService;
+//	@Autowired
+//	IroningRecordOrderService ironingRecordOrderService;
 	
 	/*2015-3-23添加 新表格*/
-	@Autowired
-	ProductionScheduleOrderService productionScheduleOrderService;
-	@Autowired
-	FinalStoreOrderService finalStoreOrderService;
-	@Autowired
-	ShopRecordOrderService shopRecordOrderService;
-	@Autowired
-	ColoringProcessOrderService coloringProcessOrderService;
+//	@Autowired
+//	ProductionScheduleOrderService productionScheduleOrderService;
+//	@Autowired
+//	FinalStoreOrderService finalStoreOrderService;
+//	@Autowired
+//	ShopRecordOrderService shopRecordOrderService;
+//	@Autowired
+//	ColoringProcessOrderService coloringProcessOrderService;
 	
 	
 	@Autowired
@@ -178,7 +178,7 @@ public class OrderController extends BaseController {
 		
 		Integer status = OrderStatus.DELIVERING.ordinal();
 		pager = orderService.getList(pager, start_time_d, end_time_d,
-				companyId,charge_employee, status, sortList);
+				companyId,charge_employee,null, status, sortList);
 
 		
 		request.setAttribute("start_time", start_time_d);
@@ -315,57 +315,57 @@ public class OrderController extends BaseController {
 			int planOrderId = planOrderService.add(planOrder);
 			// 2015-3-2添加 创建订单时 自动创建计划单
 
-			// 2015-3-4创建订单时自动创建抽检记录单
-			// 抽检记录单
-			CheckRecordOrder checkRecordOrder = new CheckRecordOrder();
-			checkRecordOrder.setOrderId(orderId);
-			checkRecordOrder.setCreated_at(DateTool.now());// 设置创建时间
-			checkRecordOrder.setUpdated_at(DateTool.now());// 设置更新时间
-			checkRecordOrder.setCreated_user(user.getId());// 设置创建人
-			checkRecordOrderService.add(checkRecordOrder);
+//			// 2015-3-4创建订单时自动创建抽检记录单
+//			// 抽检记录单
+//			CheckRecordOrder checkRecordOrder = new CheckRecordOrder();
+//			checkRecordOrder.setOrderId(orderId);
+//			checkRecordOrder.setCreated_at(DateTool.now());// 设置创建时间
+//			checkRecordOrder.setUpdated_at(DateTool.now());// 设置更新时间
+//			checkRecordOrder.setCreated_user(user.getId());// 设置创建人
+//			checkRecordOrderService.add(checkRecordOrder);
 			/*2015-3-23添加 新表格*/
-			//生产进度单
-			ProductionScheduleOrder productionScheduleOrder = new ProductionScheduleOrder();
-			productionScheduleOrder.setOrderId(orderId);
-			productionScheduleOrder.setCreated_at(DateTool.now());// 设置创建时间
-			productionScheduleOrder.setUpdated_at(DateTool.now());// 设置更新时间
-			productionScheduleOrder.setCreated_user(user.getId());// 设置创建人
-			productionScheduleOrderService.add(productionScheduleOrder);
+//			//生产进度单
+//			ProductionScheduleOrder productionScheduleOrder = new ProductionScheduleOrder();
+//			productionScheduleOrder.setOrderId(orderId);
+//			productionScheduleOrder.setCreated_at(DateTool.now());// 设置创建时间
+//			productionScheduleOrder.setUpdated_at(DateTool.now());// 设置更新时间
+//			productionScheduleOrder.setCreated_user(user.getId());// 设置创建人
+//			productionScheduleOrderService.add(productionScheduleOrder);
 			
 			//染色进度单
-			ColoringProcessOrder coloringProcessOrder = new ColoringProcessOrder();
-			coloringProcessOrder.setOrderId(orderId);
-			coloringProcessOrder.setCreated_at(DateTool.now());// 设置创建时间
-			coloringProcessOrder.setUpdated_at(DateTool.now());// 设置更新时间
-			coloringProcessOrder.setCreated_user(user.getId());// 设置创建人
-			coloringProcessOrderService.add(coloringProcessOrder);
+//			ColoringProcessOrder coloringProcessOrder = new ColoringProcessOrder();
+//			coloringProcessOrder.setOrderId(orderId);
+//			coloringProcessOrder.setCreated_at(DateTool.now());// 设置创建时间
+//			coloringProcessOrder.setUpdated_at(DateTool.now());// 设置更新时间
+//			coloringProcessOrder.setCreated_user(user.getId());// 设置创建人
+//			coloringProcessOrderService.add(coloringProcessOrder);
 			
 			// 2015-3-4创建订单时自动创建半检记录单、抽检记录单
 
 			// 2015-3-4创建计划单后，自动创建 质量记录单、车缝记录单、整烫记录单，2015-3-31添加 计划单创建后，自动创建半检记录单
 			// 质量记录单
-			HeadBankOrder headBankOrder = new HeadBankOrder();
-			headBankOrder.setOrderId(orderId);
-			headBankOrder.setCreated_at(DateTool.now());// 设置创建时间
-			headBankOrder.setUpdated_at(DateTool.now());// 设置更新时间
-			headBankOrder.setCreated_user(user.getId());// 设置创建人
-			headBankOrderService.add(headBankOrder);
+//			HeadBankOrder headBankOrder = new HeadBankOrder();
+//			headBankOrder.setOrderId(orderId);
+//			headBankOrder.setCreated_at(DateTool.now());// 设置创建时间
+//			headBankOrder.setUpdated_at(DateTool.now());// 设置更新时间
+//			headBankOrder.setCreated_user(user.getId());// 设置创建人
+//			headBankOrderService.add(headBankOrder);
 
 			// 车缝记录单
-			CarFixRecordOrder carFixRecordOrder = new CarFixRecordOrder();
-			carFixRecordOrder.setOrderId(orderId);
-			carFixRecordOrder.setCreated_at(DateTool.now());// 设置创建时间
-			carFixRecordOrder.setUpdated_at(DateTool.now());// 设置更新时间
-			carFixRecordOrder.setCreated_user(user.getId());// 设置创建人
-			carFixRecordOrderService.add(carFixRecordOrder);
+//			CarFixRecordOrder carFixRecordOrder = new CarFixRecordOrder();
+//			carFixRecordOrder.setOrderId(orderId);
+//			carFixRecordOrder.setCreated_at(DateTool.now());// 设置创建时间
+//			carFixRecordOrder.setUpdated_at(DateTool.now());// 设置更新时间
+//			carFixRecordOrder.setCreated_user(user.getId());// 设置创建人
+//			carFixRecordOrderService.add(carFixRecordOrder);
 
-			// 整烫记录单
-			IroningRecordOrder ironingRecordOrder = new IroningRecordOrder();
-			ironingRecordOrder.setOrderId(orderId);
-			ironingRecordOrder.setCreated_at(DateTool.now());// 设置创建时间
-			ironingRecordOrder.setUpdated_at(DateTool.now());// 设置更新时间
-			ironingRecordOrder.setCreated_user(user.getId());// 设置创建人
-			ironingRecordOrderService.add(ironingRecordOrder);
+//			 整烫记录单
+//			IroningRecordOrder ironingRecordOrder = new IroningRecordOrder();
+//			ironingRecordOrder.setOrderId(orderId);
+//			ironingRecordOrder.setCreated_at(DateTool.now());// 设置创建时间
+//			ironingRecordOrder.setUpdated_at(DateTool.now());// 设置更新时间
+//			ironingRecordOrder.setCreated_user(user.getId());// 设置创建人
+//			ironingRecordOrderService.add(ironingRecordOrder);
 			
 			// 半检记录单
 			HalfCheckRecordOrder halfCheckRecordOrder = new HalfCheckRecordOrder();
@@ -387,22 +387,22 @@ public class OrderController extends BaseController {
 			
 			// 2015-3-4创建计划单后，自动创建 质量记录单、车缝记录单、整烫记录单，2015-3-31添加 计划单创建后，自动创建半检记录单
 			
-			/*2015-3-23添加 新表格*/
-			//成品仓库记录单
-			FinalStoreOrder finalStoreOrder = new FinalStoreOrder();
-			finalStoreOrder.setOrderId(orderId);
-			finalStoreOrder.setCreated_at(DateTool.now());// 设置创建时间
-			finalStoreOrder.setUpdated_at(DateTool.now());// 设置更新时间
-			finalStoreOrder.setCreated_user(user.getId());// 设置创建人
-			finalStoreOrderService.add(finalStoreOrder);
-			
-			//车间记录单
-			ShopRecordOrder shopRecordOrder = new ShopRecordOrder();
-			shopRecordOrder.setOrderId(orderId);
-			shopRecordOrder.setCreated_at(DateTool.now());// 设置创建时间
-			shopRecordOrder.setUpdated_at(DateTool.now());// 设置更新时间
-			shopRecordOrder.setCreated_user(user.getId());// 设置创建人
-			shopRecordOrderService.add(shopRecordOrder);
+//			/*2015-3-23添加 新表格*/
+//			//成品仓库记录单
+//			FinalStoreOrder finalStoreOrder = new FinalStoreOrder();
+//			finalStoreOrder.setOrderId(orderId);
+//			finalStoreOrder.setCreated_at(DateTool.now());// 设置创建时间
+//			finalStoreOrder.setUpdated_at(DateTool.now());// 设置更新时间
+//			finalStoreOrder.setCreated_user(user.getId());// 设置创建人
+//			finalStoreOrderService.add(finalStoreOrder);
+//			
+//			//车间记录单
+//			ShopRecordOrder shopRecordOrder = new ShopRecordOrder();
+//			shopRecordOrder.setOrderId(orderId);
+//			shopRecordOrder.setCreated_at(DateTool.now());// 设置创建时间
+//			shopRecordOrder.setUpdated_at(DateTool.now());// 设置更新时间
+//			shopRecordOrder.setCreated_user(user.getId());// 设置创建人
+//			shopRecordOrderService.add(shopRecordOrder);
 			
 			
 			return this.returnSuccess("id", orderId);
@@ -415,7 +415,7 @@ public class OrderController extends BaseController {
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView index(Integer page, String start_time, String end_time,
-			Integer companyId, Integer charge_employeeId, Integer status,
+			Integer companyId, Integer charge_employeeId, String company_productNumber,Integer status,
 			String sortJSON, HttpSession session, HttpServletRequest request)
 			throws Exception {
 
@@ -445,7 +445,7 @@ public class OrderController extends BaseController {
 		sortList.add(sort);
 		
 		pager = orderService.getList(pager, start_time_d, end_time_d,
-				companyId,charge_employeeId, status, sortList);
+				companyId,charge_employeeId,company_productNumber, status, sortList);
 //		if (pager != null & pager.getResult() != null) {
 //			List<FuliaoPurchaseOrder> orderlist = (List<FuliaoPurchaseOrder>) pager.getResult();
 //		}
@@ -461,6 +461,7 @@ public class OrderController extends BaseController {
 		}
 		request.setAttribute("employeelist", employeelist);
 		request.setAttribute("companyId", companyId);
+		request.setAttribute("company_productNumber", company_productNumber);
 		request.setAttribute("status", status);
 		request.setAttribute("pager", pager);
 		return new ModelAndView("order/index");
@@ -639,9 +640,9 @@ public class OrderController extends BaseController {
 		try {
 			Order order = orderService.get(orderId);
 
-			// 获取头带质量记录单
-			HeadBankOrder headBankOrder = headBankOrderService
-					.getByOrder(orderId);
+//			// 获取头带质量记录单
+//			HeadBankOrder headBankOrder = headBankOrderService
+//					.getByOrder(orderId);
 
 			// 获取生产单
 			List<ProducingOrder> producingOrderList = producingOrderService
@@ -678,38 +679,39 @@ public class OrderController extends BaseController {
 			List<ColoringOrder> coloringOrderList = coloringOrderService
 					.getByOrder(orderId);
 
-			// 获取抽检记录单
-			CheckRecordOrder checkRecordOrder = checkRecordOrderService
-					.getByOrder(orderId);
+//			// 获取抽检记录单
+//			CheckRecordOrder checkRecordOrder = checkRecordOrderService
+//					.getByOrder(orderId);
 
 			// 获取辅料采购单
 			List<FuliaoPurchaseOrder> fuliaoPurchaseOrderList = fuliaoPurchaseOrderService
 					.getByOrder(orderId);
 
-			// 获取车缝记录单
-			CarFixRecordOrder carFixRecordOrder = carFixRecordOrderService
-					.getByOrder(orderId);
+//			// 获取车缝记录单
+//			CarFixRecordOrder carFixRecordOrder = carFixRecordOrderService
+//					.getByOrder(orderId);
 
-			// 获取整烫记录单
-			IroningRecordOrder ironingRecordOrder = ironingRecordOrderService
-					.getByOrder(orderId);
+//			// 获取整烫记录单
+//			IroningRecordOrder ironingRecordOrder = ironingRecordOrderService
+//					.getByOrder(orderId);
 			
 			//2015-3-24添加新表格
-			//生产进度单
-			ProductionScheduleOrder productionScheduleOrder = productionScheduleOrderService.getByOrder(orderId);
-			request.setAttribute("productionScheduleOrder",productionScheduleOrder);
+//			//生产进度单
+//			ProductionScheduleOrder productionScheduleOrder = productionScheduleOrderService.getByOrder(orderId);
+//			request.setAttribute("productionScheduleOrder",productionScheduleOrder);
 	
-			//成品仓库记录单
-			FinalStoreOrder finalStoreOrder = finalStoreOrderService.getByOrder(orderId);
-			request.setAttribute("finalStoreOrder",finalStoreOrder);
+//			//成品仓库记录单
+//			FinalStoreOrder finalStoreOrder = finalStoreOrderService.getByOrder(orderId);
+//			request.setAttribute("finalStoreOrder",finalStoreOrder);
 			
 			
-			//车间记录单
-			ShopRecordOrder shopRecordOrder = shopRecordOrderService.getByOrder(orderId);
-			request.setAttribute("shopRecordOrder",shopRecordOrder);
+//			//车间记录单
+//			ShopRecordOrder shopRecordOrder = shopRecordOrderService.getByOrder(orderId);
+//			request.setAttribute("shopRecordOrder",shopRecordOrder);
 			
 			//染色进度单
-			ColoringProcessOrder coloringProcessOrder = coloringProcessOrderService.getByOrder(orderId);	
+//			ColoringProcessOrder coloringProcessOrder = coloringProcessOrderService.getByOrder(orderId);	
+			ColoringProcessOrder coloringProcessOrder = new ColoringProcessOrder();
 			if(coloringProcessOrder!=null){
 				List<ColoringProcessOrderDetail> coloringProcessOrderDetailList = new ArrayList<ColoringProcessOrderDetail>();
 				for(ColoringOrder coloringOrder : coloringOrderList){
@@ -733,7 +735,7 @@ public class OrderController extends BaseController {
 			
 
 			request.setAttribute("order", order);
-			request.setAttribute("headBankOrder", headBankOrder);
+//			request.setAttribute("headBankOrder", headBankOrder);
 			request.setAttribute("producingOrderList", producingOrderList);
 			request.setAttribute("planOrder", planOrder);
 			request.setAttribute("storeOrder", storeOrder);
@@ -742,10 +744,10 @@ public class OrderController extends BaseController {
 			request.setAttribute("materialPurchaseOrderList",
 							materialPurchaseOrderList);
 			request.setAttribute("coloringOrderList", coloringOrderList);
-			request.setAttribute("checkRecordOrder", checkRecordOrder);
+//			request.setAttribute("checkRecordOrder", checkRecordOrder);
 			request.setAttribute("fuliaoPurchaseOrderList", fuliaoPurchaseOrderList);
-			request.setAttribute("carFixRecordOrder", carFixRecordOrder);
-			request.setAttribute("ironingRecordOrder", ironingRecordOrder);
+//			request.setAttribute("carFixRecordOrder", carFixRecordOrder);
+//			request.setAttribute("ironingRecordOrder", ironingRecordOrder);
 
 			return new ModelAndView("order/tablelist");
 		} catch (Exception e) {

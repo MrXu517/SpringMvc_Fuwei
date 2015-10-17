@@ -417,9 +417,9 @@
 												合计
 											</td>
 											<td></td>
-											<td><%=total_payable %></td>
-											<td><%=total_pay%></td>
-											<td><%=total_uninvoiced%></td>
+											<td><%=String.format("%.2f",total_payable) %></td>
+											<td><%=String.format("%.2f",total_pay)%></td>
+											<td><%=String.format("%.2f",total_uninvoiced)%></td>
 											<td></td>
 											<td></td>
 										</tr>

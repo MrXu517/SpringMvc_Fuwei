@@ -244,7 +244,6 @@ public class FinancialReportService extends BaseService {
 			String sql_condition_1 = sql_condition.substring(0,sql_condition.indexOf(" order by"));
 			String sql_condition_orderby =  sql_condition.substring(sql_condition.indexOf(" order by"));
 			Map<String,Object> total_map = dao.queryForMap(sql_total.append(sql_condition).toString(),null);
-			
 			String received_personal_sql = "select IFNULL(sum(IFNULL(received,0)),0) received_personal from report_receivable" + sql_condition_1;
 			received_personal_sql = received_personal_sql + seq + "is_enterprise=0";
 			received_personal_sql = received_personal_sql + sql_condition_orderby;

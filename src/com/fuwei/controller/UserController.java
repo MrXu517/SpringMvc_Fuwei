@@ -85,7 +85,13 @@ public class UserController extends BaseController {
 				role = roleService.get(roleId);
 				authoritylist = authorityService.getList(roleId);
 			}
-			loginUser.setAuthoritylist(authoritylist);
+			if(authoritylist!=null && authoritylist.size()>0){
+				Map<String,Authority> authorityMap = new HashMap<String, Authority>();
+				for (Authority authority : authoritylist) {
+					authorityMap.put(authority.getLcode(), authority);
+				}
+				loginUser.setAuthorityMap(authorityMap);
+			}
 			loginUser.setRole(role);
 			//登录成功，若该用户的locked为true,则改为false，且从缓存列表中删除
 			if(user.getLocked()){

@@ -2,7 +2,9 @@ package com.fuwei.commons;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fuwei.entity.Authority;
 import com.fuwei.entity.Message;
@@ -39,8 +41,10 @@ public class LoginedUser implements Serializable {
 
 	private User loginedUser;
 	private Role role;
-	private List<Authority> authoritylist = new ArrayList<Authority>();
+//	private List<Authority> authoritylist = new ArrayList<Authority>();
+	private Map<String,Authority> authorityMap = new HashMap<String, Authority>();
 	private int message_count = 0;//未读信息列表
+	
 	
 	
 //	// 1:个人用户 2：企业用户 3：企业 4：admin
@@ -64,6 +68,12 @@ public class LoginedUser implements Serializable {
 //		this.role = role;
 //	}
 
+	public Map<String, Authority> getAuthorityMap() {
+		return authorityMap;
+	}
+	public void setAuthorityMap(Map<String, Authority> authorityMap) {
+		this.authorityMap = authorityMap;
+	}
 	public Role getRole() {
 		return role;
 	}
@@ -74,13 +84,13 @@ public class LoginedUser implements Serializable {
 
 
 
-	public List<Authority> getAuthoritylist() {
-		return authoritylist;
-	}
-
-	public void setAuthoritylist(List<Authority> authoritylist) {
-		this.authoritylist = authoritylist;
-	}
+//	public List<Authority> getAuthoritylist() {
+//		return authoritylist;
+//	}
+//
+//	public void setAuthoritylist(List<Authority> authoritylist) {
+//		this.authoritylist = authoritylist;
+//	}
 
 	public User getLoginedUser() {
 		return loginedUser;

@@ -451,7 +451,7 @@
 											<%if(Expense_incomelist == null || Expense_incomelist.size() <= 0){ %>
 														<tr><td colspan="8">找不到符合条件的记录</td></tr>
 													<%}else{ %>
-												</tbody><tfoot><tr><td>合计</td><td><%=total_income %></td><td><%=total_expense%></td><td style="text-align:left;padding-left:10px;" colspan="6"> 收入-支出 = <%=total_minus%></td></tr>
+												</tbody><tfoot><tr><td>合计</td><td><%=String.format("%.2f",total_income) %></td><td><%=String.format("%.2f",total_expense)%></td><td style="text-align:left;padding-left:10px;" colspan="6"> 收入-支出 = <%=String.format("%.2f",total_minus)%></td></tr>
 </tfoot>
 											<%} %>
 									</tbody>

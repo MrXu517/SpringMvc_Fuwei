@@ -59,8 +59,8 @@ public class OrderService extends BaseService {
 	ProductionNotificationService productionNotificationService;
 	
 	//2015-3-18添加
-	@Autowired
-	HeadBankOrderService headBankOrderService;
+//	@Autowired
+//	HeadBankOrderService headBankOrderService;
 	@Autowired
 	ProducingOrderService producingOrderService;
 	@Autowired
@@ -69,29 +69,29 @@ public class OrderService extends BaseService {
 	StoreOrderService storeOrderService;
 	@Autowired
 	HalfCheckRecordOrderService halfCheckRecordOrderService;
-	@Autowired
-	CheckRecordOrderService checkRecordOrderService;
+//	@Autowired
+//	CheckRecordOrderService checkRecordOrderService;
 	@Autowired
 	ColoringOrderService coloringOrderService;
 	@Autowired
 	MaterialPurchaseOrderService materialPurchaseOrderService;
 	@Autowired
 	FuliaoPurchaseOrderService fuliaoPurchaseOrderService;
-	@Autowired
-	CarFixRecordOrderService carFixRecordOrderService;
-	@Autowired
-	IroningRecordOrderService ironingRecordOrderService;
+//	@Autowired
+//	CarFixRecordOrderService carFixRecordOrderService;
+//	@Autowired
+//	IroningRecordOrderService ironingRecordOrderService;
 	//2015-3-18添加
 	
 	/*2015-3-31添加 新表格*/
-	@Autowired
-	ProductionScheduleOrderService productionScheduleOrderService;
-	@Autowired
-	FinalStoreOrderService finalStoreOrderService;
-	@Autowired
-	ShopRecordOrderService shopRecordOrderService;
-	@Autowired
-	ColoringProcessOrderService coloringProcessOrderService;
+//	@Autowired
+//	ProductionScheduleOrderService productionScheduleOrderService;
+//	@Autowired
+//	FinalStoreOrderService finalStoreOrderService;
+//	@Autowired
+//	ShopRecordOrderService shopRecordOrderService;
+//	@Autowired
+//	ColoringProcessOrderService coloringProcessOrderService;
 	
 	/*2015-7-1添加装箱单*/
 	@Autowired
@@ -103,7 +103,7 @@ public class OrderService extends BaseService {
 	}
 	// 获取订单列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,
-			Integer companyId,Integer charge_employee, Integer status,
+			Integer companyId,Integer charge_employee,String company_productNumber, Integer status,
 			List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
@@ -137,6 +137,9 @@ public class OrderService extends BaseService {
 			}
 			if (status != null) {
 				sql.append(seq + " status='" + status + "'");
+			}
+			if (company_productNumber != null && !company_productNumber.equals("")) {
+				sql.append(seq + " company_productNumber='" + company_productNumber + "'");
 			}
 
 			if (sortlist != null && sortlist.size() > 0) {
@@ -381,23 +384,23 @@ public class OrderService extends BaseService {
 				order.setDelivery_at(step_time);
 				
 				//2015-3-18添加，若当前执行发货步骤，则将所有表格status设为6
-				headBankOrderService.completeByOrder(orderId);
-				carFixRecordOrderService.completeByOrder(orderId);
-				checkRecordOrderService.completeByOrder(orderId);
+//				headBankOrderService.completeByOrder(orderId);
+//				carFixRecordOrderService.completeByOrder(orderId);
+//				checkRecordOrderService.completeByOrder(orderId);
 				coloringOrderService.completeByOrder(orderId);
 				fuliaoPurchaseOrderService.completeByOrder(orderId);
 				halfCheckRecordOrderService.completeByOrder(orderId);
-				ironingRecordOrderService.completeByOrder(orderId);
+//				ironingRecordOrderService.completeByOrder(orderId);
 				materialPurchaseOrderService.completeByOrder(orderId);
 				planOrderService.completeByOrder(orderId);
 				producingOrderService.completeByOrder(orderId);
 				storeOrderService.completeByOrder(orderId);
 				//2015-3-18添加，若当前执行发货步骤，则将所有表格status设为6
 				//2015-3-31添加 新单据
-				productionScheduleOrderService.completeByOrder(orderId);
-				coloringProcessOrderService.completeByOrder(orderId);
-				shopRecordOrderService.completeByOrder(orderId);
-				finalStoreOrderService.completeByOrder(orderId);
+//				productionScheduleOrderService.completeByOrder(orderId);
+//				coloringProcessOrderService.completeByOrder(orderId);
+//				shopRecordOrderService.completeByOrder(orderId);
+//				finalStoreOrderService.completeByOrder(orderId);
 				//2015-3-31添加 新单据
 				
 				//2015-7-1添加 执行订单发货时，将装箱单设置为不可修改

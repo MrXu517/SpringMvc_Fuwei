@@ -9,8 +9,8 @@
 <%
 	Order order = (Order) request.getAttribute("order");
 	//生产进度单
-	ProductionScheduleOrder productionScheduleOrder = (ProductionScheduleOrder) request
-			.getAttribute("productionScheduleOrder");
+//	ProductionScheduleOrder productionScheduleOrder = (ProductionScheduleOrder) request
+//			.getAttribute("productionScheduleOrder");
 	List<OrderDetail> DetailList = order == null ? new ArrayList<OrderDetail>()
 			: order.getDetaillist();
 	if(DetailList == null){
@@ -28,6 +28,7 @@
 		<meta http-equiv="description" content="富伟桐庐针织厂">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<!-- 为了让IE浏览器运行最新的渲染模式 -->
+		<script src="js/plugins/jquery-barcode.min.js"></script>
 	</head>
 	<body class="">
 		<div class="container-fluid gridTab auto_container">
@@ -185,8 +186,8 @@
 					</table>
 
 					<p class="pull-right auto_bottom">
-						<span id="created_user">制单人：<%=SystemCache.getUserName(productionScheduleOrder.getCreated_user()) %></span>
-						<span id="date"> 日期：<%=DateTool.formatDateYMD(DateTool.getYanDate(productionScheduleOrder.getCreated_at())) %></span>
+						<span id="created_user">制单人：<%=SystemCache.getUserName(order.getCreated_user()) %></span>
+						<span id="date"> 日期：<%=DateTool.formatDateYMD(DateTool.getYanDate(order.getCreated_at())) %></span>
 					</p>
 
 

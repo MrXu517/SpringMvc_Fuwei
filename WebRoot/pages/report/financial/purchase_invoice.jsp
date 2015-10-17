@@ -354,7 +354,7 @@
 													<%if(invoicelist == null || invoicelist.size() <= 0){ %>
 														<tr><td colspan="10">找不到符合条件的记录</td></tr>
 													<%}else{ %>
-												</tbody><tfoot><tr><td></td><td>合计</td><td><%=total_amount%></td><td><%=total_matched_amout%></td><td><%=total_unmatched_amount %></td><td></td><td></td><td></td><td></td><td></td></tr></tfoot>
+												</tbody><tfoot><tr><td></td><td>合计</td><td><%=String.format("%.2f",total_amount)%></td><td><%=String.format("%.2f",total_matched_amout)%></td><td><%=String.format("%.2f",total_unmatched_amount) %></td><td></td><td></td><td></td><td></td><td></td></tr></tfoot>
 											<%} %>
 											</table>
 										</div>
