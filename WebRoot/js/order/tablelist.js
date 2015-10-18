@@ -115,6 +115,23 @@ $(document).ready(function() {
 		});
 	});
 	
+	//2015-10-18添加工序加工单
+	var $gongxuproducingorderTab = $("#gongxuproduceorder .gongxuproduceorderWidget");
+	$gongxuproducingorderTab.each(function(){
+		var $content = $(this);
+		var coloringGrid = new OrderGrid({
+			url:"gongxu_producing_order/put",
+			deleteUrl:"gongxu_producing_order/delete",
+			$content:$content,
+			donecall:function(){
+				var params = Common.urlParams();
+				params.tab = "gongxuproduceorder";
+				location.href = location.pathname + "?" + $.param(params);
+			},
+			
+		});
+	});
+	
 	//计划单
 	var planGrid = new OrderGrid({
 		url:"order/planorder",

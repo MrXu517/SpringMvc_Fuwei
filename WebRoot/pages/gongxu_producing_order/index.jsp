@@ -1,6 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
-<%@page import="com.fuwei.entity.ordergrid.ProducingOrder"%>
+<%@page import="com.fuwei.entity.ordergrid.GongxuProducingOrder"%>
 <%@page import="com.fuwei.entity.Salesman"%>
 <%@page import="com.fuwei.entity.Company"%>
 <%@page import="com.fuwei.entity.Factory"%>
@@ -19,9 +19,9 @@
 	if (pager == null) {
 		pager = new Pager();
 	}
-	List<ProducingOrder> producingOrderlist = new ArrayList<ProducingOrder>();
+	List<GongxuProducingOrder> producingOrderlist = new ArrayList<GongxuProducingOrder>();
 	if (pager != null & pager.getResult() != null) {
-		producingOrderlist = (List<ProducingOrder>) pager.getResult();
+		producingOrderlist = (List<GongxuProducingOrder>) pager.getResult();
 	}
 
 	Date start_time = (Date) request.getAttribute("start_time");
@@ -73,11 +73,11 @@
 
 	//权限相关
 	Boolean has_order_detail = SystemCache.hasAuthority(session,
-			"producing_order/detail");
+			"gongxu_producing_order/detail");
 	Boolean has_order_edit = SystemCache.hasAuthority(session,
-			"order/producing");
+			"gongxu_producing_order/add");
 	Boolean has_order_delete = SystemCache.hasAuthority(session,
-			"order/producing/delete");
+			"gongxu_producing_order/delete");
 	
 	//权限相关
 %>
@@ -86,7 +86,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>查询生产单 -- 桐庐富伟针织厂</title>
+		<title>查询工序加工单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -120,7 +120,7 @@
 							<a href="user/index">首页</a>
 						</li>
 						<li class="active">
-							查询生产单
+							查询工序加工单
 						</li>
 					</ul>
 				</div>
@@ -171,7 +171,7 @@
 										</div>
 										<div class="form-group salesgroup">
 											<label for="factoryId" class="col-sm-3 control-label">
-												机织单位
+												加工单位
 											</label>
 											<div class="col-sm-9">
 												<select class="form-control" name="factoryId" id="factoryId">
@@ -215,7 +215,7 @@
 									<ul class="pagination pull-right">
 										<li>
 											<a
-												href="producing_order/index?orderNumber=<%=orderNumber %>&factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
+												href="gongxu_producing_order/index?orderNumber=<%=orderNumber %>&factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=1">«</a>
 										</li>
 
 										<%
@@ -223,7 +223,7 @@
 									%>
 										<li class="">
 											<a
-												href="producing_order/index?orderNumber=<%=orderNumber %>&factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
+												href="gongxu_producing_order/index?orderNumber=<%=orderNumber %>&factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -238,7 +238,7 @@
 
 										<li class="active">
 											<a
-												href="producing_order/index?orderNumber=<%=orderNumber %>&factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
+												href="gongxu_producing_order/index?orderNumber=<%=orderNumber %>&factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
 												class="sr-only"></span> </a>
 										</li>
 										<li>
@@ -248,7 +248,7 @@
 										
 										<li class="">
 											<a
-												href="producing_order/index?orderNumber=<%=orderNumber %>&factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
+												href="gongxu_producing_order/index?orderNumber=<%=orderNumber %>&factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -264,7 +264,7 @@
 										</li>
 										<li>
 											<a
-												href="producing_order/index?orderNumber=<%=orderNumber %>&factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
+												href="gongxu_producing_order/index?orderNumber=<%=orderNumber %>&factoryId=<%=factory_str %>&status=<%=status_str %>&companyId=<%=company_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
 
@@ -278,7 +278,9 @@
 											</th>
 											<th width="110px">样品</th>
 											<th width="60px">
-												生产单位
+												加工单位
+											</th><th width="60px">
+												加工工序
 											</th>
 											<th width="60px">
 												订单号
@@ -288,9 +290,6 @@
 											</th>
 											<th width="50px">
 												公司
-											</th>
-											<th width="50px">
-												客户
 											</th>
 											<th width="50px">
 												跟单
@@ -306,7 +305,7 @@
 									<tbody>
 										<%
 											int i = (pager.getPageNo()-1) * pager.getPageSize() + 0;
-											for (ProducingOrder item : producingOrderlist) {
+											for (GongxuProducingOrder item : producingOrderlist) {
 										%>
 										<tr orderId="<%=item.getId()%>">
 											<td><%=++i%></td>
@@ -318,11 +317,11 @@
 														src="/<%=item.getImg_ss()%>"> </a>
 											</td>
 											<td><%=SystemCache.getFactoryName(item.getFactoryId())%></td>
+											<td><%=SystemCache.getGongxuName(item.getGongxuId())%></td>
 											<td><a target="_blank"
 													href="order/tablelist?orderId=<%=item.getOrderId()%>&tab=producingorder"><%=item.getOrderNumber() == null ? "":item.getOrderNumber() %></a></td>
 											<td><%=item.getName()%></td>
 											<td><%=SystemCache.getCompanyShortName(item.getCompanyId())%></td>
-											<td><%=SystemCache.getCustomerName(item.getCustomerId())%></td>
 											<td><%=SystemCache.getEmployeeName(item
 										.getCharge_employee())%></td>
 										
@@ -332,7 +331,7 @@
 													if (has_order_detail) {
 												%>
 												<a target="_blank"
-													href="producing_order/detail/<%=item.getId()%>">详情</a>
+													href="gongxu_producing_order/detail/<%=item.getId()%>">详情</a>
 												<%
 													}
 												%>
@@ -342,7 +341,7 @@
 												%>
 												|
 												<a
-													href="producing_order/put/<%=item.getId()%>">编辑</a>
+													href="gongxu_producing_order/put/<%=item.getId()%>">编辑</a>
 												<%
 														}
 													%>
@@ -376,25 +375,25 @@
 
 		<script type="text/javascript">
 	/*设置当前选中的页*/
-	var $a = $("#left li a[href='producing_order/index']");
+	var $a = $("#left li a[href='gongxu_producing_order/index']");
 	setActiveLeft($a.parent("li"));
 	//删除单据 -- 开始
 	$(".delete").click( function() {
 		var id = $(this).attr("data-cid");
-		if (!confirm("确定要删除该生产单吗？")) {
+		if (!confirm("确定要删除该工序加工单吗？")) {
 			return false;
 		}
 		$.ajax( {
-			url :"producing_order/delete/" + id,
+			url :"gongxu_producing_order/delete/" + id,
 			type :'POST'
 		}).done( function(result) {
 			if (result.success) {
-				Common.Tip("删除生产单成功", function() {
+				Common.Tip("删除工序加工单成功", function() {
 					location.reload();
 				});
 			}
 		}).fail( function(result) {
-			Common.Error("删除生产单失败：" + result.responseText);
+			Common.Error("删除工序加工单失败：" + result.responseText);
 		}).always( function() {
 
 		});

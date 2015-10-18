@@ -3,12 +3,6 @@
 <%@page import="com.fuwei.entity.OrderDetail"%>
 <%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.entity.Material"%>
-
-<%@page import="com.fuwei.entity.ordergrid.HeadBankOrder"%>
-<%@page import="com.fuwei.entity.ordergrid.HeadBankOrderDetail"%>
-<%@page import="com.fuwei.entity.ordergrid.ProducingOrder"%>
-<%@page import="com.fuwei.entity.ordergrid.ProducingOrderDetail"%>
-<%@page import="com.fuwei.entity.ordergrid.ProducingOrderMaterialDetail"%>
 <%@page import="com.fuwei.entity.ordergrid.PlanOrder"%>
 <%@page import="com.fuwei.entity.ordergrid.PlanOrderDetail"%>
 <%@page import="com.fuwei.entity.ordergrid.PlanOrderProducingDetail"%>
@@ -16,6 +10,8 @@
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
+<%@page import="com.fuwei.entity.GongXu"%>
+<%@page import="com.fuwei.entity.ordergrid.GongxuProducingOrderDetail"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -23,20 +19,18 @@
 			+ path + "/";
 	Order order = (Order) request.getAttribute("order");
 
-	List<ProducingOrderDetail> detaillist = (List<ProducingOrderDetail>) request
+	List<GongxuProducingOrderDetail> detaillist = (List<GongxuProducingOrderDetail>) request
 			.getAttribute("detaillist");
 
 	if (detaillist == null) {
-		detaillist = new ArrayList<ProducingOrderDetail>();
+		detaillist = new ArrayList<GongxuProducingOrderDetail>();
 	}
-	
-	Boolean has_order_producing_price_edit = SystemCache.hasAuthority(session,"order/producing/price_edit");
 %>
 <!DOCTYPE html>
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>创建生产单 -- 桐庐富伟针织厂</title>
+		<title>创建工序加工单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -58,7 +52,7 @@
 
 		<link href="css/order/bill.css" rel="stylesheet" type="text/css" />
 		<script src="js/order/ordergrid.js" type="text/javascript"></script>
-		<script src="js/producing_order/addbyorder.js" type="text/javascript"></script>
+		<script src="js/gongxu_producing_order/addbyorder.js" type="text/javascript"></script>
 
 	</head>
 	<body>
@@ -75,10 +69,10 @@
 							<a href="order/detail/<%=order.getId()%>">订单详情</a>
 						</li>
 						<li>
-							<a href="order/tablelist?orderId=<%=order.getId()%>&tab=producingorder">表格</a>
+							<a href="order/tablelist?orderId=<%=order.getId()%>&tab=gongxuproduceorder">表格</a>
 						</li>
 						<li class="active">
-							创建生产单
+							创建工序加工单
 						</li>
 					</ul>
 				</div>
@@ -92,22 +86,22 @@
 							<form class="saveform">
 								<input type="hidden" name="id" value="" />
 								<input type="hidden" name="orderId" value="<%=order.getId()%>" />
-								
-
+							
 
 
 								<div class="clear"></div>
 								<div class="col-md-12 tablewidget">
 									<table class="table">
 										<caption id="tablename">
-											桐庐富伟针织厂生产单<button type="submit"
+											桐庐富伟针织厂工序加工单	<button type="submit"
 									class="pull-right btn btn-danger saveTable"
 									data-loading-text="正在保存...">
-									创建生产单
+									创建工序加工单
 								</button>
-										</caption>
-										</table>
+
+										</caption></table>
 									<table>
+										
 										<tbody>
 											<tr>
 												<td>
@@ -125,7 +119,7 @@
 																	生产单位
 																</td>
 																<td class="orderproperty">
-																	<select class="form-control" name="factoryId"
+																	<select class="form-control require" name="factoryId"
 																		id="factoryId">
 																		<option value="">
 																			未选择
@@ -142,8 +136,23 @@
 															</tr>
 
 															<tr>
-																<td colspan="2" class="center">
-																	订单信息
+																<td>
+																	生产工序
+																</td>
+																<td class="orderproperty">
+																	<select class="form-control require" name="gongxuId"
+																		id="gongxuId">
+																		<option value="">
+																			未选择
+																		</option>
+																		<%
+																			for (GongXu gongxu : SystemCache.gongxulist) {
+																		%>
+																		<option value="<%=gongxu.getId()%>"><%=gongxu.getName()%></option>
+																		<%
+																			}
+																		%>
+																	</select>
 																</td>
 															</tr>
 															<tr>
@@ -151,12 +160,6 @@
 																	公司
 																</td>
 																<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
-															</tr>
-															<tr>
-																<td>
-																	客户
-																</td>
-																<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
 															</tr>
 															<tr>
 																<td>
@@ -175,6 +178,14 @@
 																	跟单
 																</td>
 																<td><%=SystemCache.getEmployeeName(order.getCharge_employee())%></td>
+															</tr>
+															<tr>
+																<td>
+																	备注
+																</td>
+																<td class="orderproperty">
+																	<textarea class="form-control" name="memo"
+																		id="memo"></textarea></td>
 															</tr>
 														</tbody>
 													</table>
@@ -205,17 +216,15 @@
 																<th width="15%">
 																	生产数量
 																</th>
-																<%if(has_order_producing_price_edit){ %>
 																<th width="15%">
-																	价格(/个)
+																	价格(/打)
 																</th>
-																<%} %>
 																
 															</tr>
 														</thead>
 														<tbody>
 															<%
-																for (ProducingOrderDetail detail : detaillist) {
+																for (GongxuProducingOrderDetail detail : detaillist) {
 															%>
 															<tr class="tr"
 																data='<%=SerializeTool.serialize(detail)%>'>
@@ -231,12 +240,12 @@
 																	<input type="text" class="form-control quantity value"
 																		value="<%=detail.getQuantity()%>" />
 																</td>
-																<%if(has_order_producing_price_edit){ %>
+																
 																<td class="double">
 																	<input type="text" class="form-control price value"
 																		value="<%=detail.getPrice()%>" />
 																</td>
-																<%} %>
+																
 																
 															</tr>
 
@@ -370,7 +379,6 @@
 											</div>
 											<div class="col-sm-1"></div>
 										</div>
-										<%if(has_order_producing_price_edit){ %>
 										<div class="form-group col-md-12">
 											<label for="price" class="col-sm-3 control-label">
 												单价
@@ -381,7 +389,6 @@
 											</div>
 											<div class="col-sm-1"></div>
 										</div>
-										<%} %>
 										<div class="modal-footer">
 											<button type="submit" class="btn btn-primary"
 												data-loading-text="正在保存...">

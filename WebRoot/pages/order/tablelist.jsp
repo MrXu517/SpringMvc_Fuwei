@@ -38,6 +38,9 @@
 <%@page import="com.fuwei.entity.ordergrid.ShopRecordOrder"%>
 <%@page import="com.fuwei.entity.ordergrid.ColoringProcessOrder"%>
 <%@page import="com.fuwei.entity.ordergrid.ColoringProcessOrderDetail"%>
+<%@page import="com.fuwei.entity.ordergrid.GongxuProducingOrder"%>
+<%@page import="com.fuwei.entity.ordergrid.GongxuProducingOrderDetail"%>
+<%@page import="com.fuwei.entity.ordergrid.GongxuProducingOrderMaterialDetail"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -152,6 +155,16 @@
 			"order/producing");
 	Boolean has_order_producing_price_edit = SystemCache.hasAuthority(session,"order/producing/price_edit");
 	Boolean has_order_producing_price_request = SystemCache.hasAuthority(session,"order/producing/price_request");
+
+	//2015-10-18添加工序加工单
+	Boolean has_gongxu_producing_order = SystemCache.hasAuthority(session,"gongxu_producing_order/index");
+	Boolean has_gongxu_producing_order_add = SystemCache.hasAuthority(session,"gongxu_producing_order/add");
+	Boolean has_gongxu_producing_order_delete = SystemCache.hasAuthority(session,"gongxu_producing_order/delete");
+	Boolean has_gongxu_producing_price = SystemCache.hasAuthority(session,"gongxu_producing_order/price");
+	List<GongxuProducingOrder> gongxuProducingOrderList = (List<GongxuProducingOrder>) request
+			.getAttribute("gongxuProducingOrderList");
+	gongxuProducingOrderList = gongxuProducingOrderList == null ? new ArrayList<GongxuProducingOrder>()
+			: gongxuProducingOrderList;
 %>
 <!DOCTYPE html>
 <html>
@@ -216,6 +229,9 @@
 							</li>
 							<li>
 								<a href="#producingorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>生产单</a>
+							</li>
+							<li>
+								<a href="#gongxuproduceorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>工序加工单</a>
 							</li>
 							<li>
 								<a href="#storeorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>原材料仓库</a>
@@ -668,91 +684,257 @@
 								<%
 									}
 								%>
-								<div class="modal fade tableRowDialog"
-									id="producingDetailDialog">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-header">
-												<button type="button" class="close" data-dismiss="modal">
-													<span aria-hidden="true">&times;</span><span
-														class="sr-only">Close</span>
-												</button>
-												<h4 class="modal-title">
-													添加一行
-												</h4>
-											</div>
-											<div class="modal-body">
-												<form class="form-horizontal rowform" role="form">
-													<div class="form-group col-md-12">
-														<label for="material" class="col-sm-3 control-label">
-															材料
-														</label>
-														<div class="col-sm-8">
-															<select name="material" id="material"
-																class="form-control require">
-																<option value="">
-																	未选择
-																</option>
-																<%
-																	for (Material material : SystemCache.materiallist) {
-																%>
-																<option value="<%=material.getId()%>"><%=material.getName()%></option>
-																<%
-																	}
-																%>
-															</select>
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="color" class="col-sm-3 control-label">
-															色号
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="color" id="color"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="quantity" class="col-sm-3 control-label">
-															数量(kg)
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="quantity" id="quantity"
-																class="form-control double require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="colorsample" class="col-sm-3 control-label">
-															标准色样
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="colorsample" id="colorsample"
-																class="form-control" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="modal-footer">
-														<button type="submit" class="btn btn-primary"
-															data-loading-text="正在保存...">
-															保存
-														</button>
-														<button type="button" class="btn btn-default"
-															data-dismiss="modal">
-															关闭
-														</button>
-													</div>
-												</form>
-											</div>
-
-										</div>
-									</div>
-								</div>
-								<!-- 添加编辑生产单对话框 -->
+								
 							</div>
 
+
+							<!-- 工序加工单  -->
+							<div class="tab-pane" id="gongxuproduceorder" role="tabpanel">
+								<%if(has_gongxu_producing_order_add && !order.isDelivered()){ %>
+								<div class="emptyrecordwidget">
+									<p>
+										如果您要创建工序加工单，请点击下方的按钮
+									</p>
+									<a href="gongxu_producing_order/<%=order.getId()%>/add"
+										class="btn btn-primary" id="createGongxuProducingorderBtn">创建工序加工单</a>
+								</div>
+								<%} %>
+								<a  href="printorder/print?orderId=<%=order.getId() %>&gridName=gongxuproduceorder" target="_blank" type="button"
+												class="printBtn btn btn-success"
+												data-loading-text="正在打印..."> 打印工序加工单 </a>
+								
+							
+								<%
+									for (GongxuProducingOrder gongxuProducingOrder : gongxuProducingOrderList) {
+										List<GongxuProducingOrderDetail> gongxuProducingOrderDetailList = gongxuProducingOrder == null ? new ArrayList<GongxuProducingOrderDetail>()
+												: gongxuProducingOrder.getDetaillist();
+										List<GongxuProducingOrderMaterialDetail> gongxuProducingOrderMaterialDetailList = gongxuProducingOrder == null ? new ArrayList<GongxuProducingOrderMaterialDetail>()
+												: gongxuProducingOrder.getDetail_2_list();
+								%>
+								<div class="container-fluid gongxuproduceorderWidget">
+									<div class="row">
+										<form class="saveform">
+											<input type="hidden" name="id"
+												value="<%=gongxuProducingOrder == null ? "" : gongxuProducingOrder
+						.getId()%>" />
+											<input type="hidden" name="orderId"
+												value="<%=order.getId()%>" />	
+												
+											<%if(gongxuProducingOrder.isEdit()){ %>
+												<%if(has_gongxu_producing_order_delete){ %>
+													<a target="_blank" type="button"
+													class="pull-right btn btn-default deleteTableBtn"
+													data-loading-text="正在删除..."> 删除 </a>
+												<%} %>
+												<%if(has_gongxu_producing_order_add){ %>
+												<a href="gongxu_producing_order/put/<%=gongxuProducingOrder.getId() %>" target="_blank" type="button"
+													class="pull-right btn btn-default"
+													data-loading-text="正在跳转页面......"> 编辑 </a><%} %>
+											<%} %>
+											
+											<a href="gongxu_producing_order/print/<%=gongxuProducingOrder.getId()%>" target="_blank" type="button"
+												class="pull-right btn btn-success"
+												data-loading-text="正在打印..."> 打印 </a>
+										</form>
+
+										<div class="clear"></div>
+										<div class="col-md-12 tablewidget">
+											<table class="table">
+												<caption>
+													桐庐富伟针织厂工序加工单
+												</caption>
+												<thead>
+													<tr>
+														<td colspan="3" class="pull-right orderNumber">
+															№：<%=order.getOrderNumber()%> - <%=gongxuProducingOrder.getNumber() %></td>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>
+															<table
+																class="table table-responsive table-bordered tableTb">
+																<tbody>
+																	<tr>
+																		<td rowspan="7" width="50%">
+																			<a href="/<%=gongxuProducingOrder.getImg()%>" class="thumbnail"
+																				target="_blank"> <img id="previewImg"
+																					alt="200 x 100%" src="/<%=gongxuProducingOrder.getImg_s()%>">
+																			</a>
+																		</td>
+																		<td width="20%">
+																			生产单位
+																		</td>
+																		<td class="orderproperty"><%=SystemCache.getFactoryName(gongxuProducingOrder
+								.getFactoryId())%></td>
+																	</tr>
+
+																	<tr>
+																		<td>
+																			生产工序
+																		</td>
+																		<td><%=SystemCache.getGongxuName(gongxuProducingOrder
+										.getGongxuId())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			公司
+																		</td>
+																		<td><%=SystemCache.getCompanyName(gongxuProducingOrder
+										.getCompanyId())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			货号
+																		</td>
+																		<td><%=gongxuProducingOrder.getCompany_productNumber()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			款名
+																		</td>
+																		<td><%=gongxuProducingOrder.getName()%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			跟单
+																		</td>
+																		<td><%=SystemCache.getEmployeeName(gongxuProducingOrder.getCharge_employee())%></td>
+																	</tr>
+																	<tr>
+																		<td>
+																			备注
+																		</td>
+																		<td><%=gongxuProducingOrder.getMemo()==null?"":gongxuProducingOrder.getMemo()%></td>
+																	</tr>
+																</tbody>
+															</table>
+
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<table class="table table-responsive detailTb">
+																<caption>
+																	颜色及数量
+																</caption>
+																<thead>
+																	<tr>
+																		<th width="15%">
+																			颜色
+																		</th>
+																		<th width="15%">
+																			机织克重(g)
+																		</th>
+																		<th width="15%">
+																			纱线种类
+																		</th>
+																		<th width="15%">
+																			尺寸
+																		</th>
+																		<th width="15%">
+																			生产数量
+																		</th>
+																		<%if(has_gongxu_producing_price){ %>
+																		<th width="15%">
+																			价格(/个、顶、套)
+																		</th>
+																		<%} %>
+																	</tr>
+																</thead>
+																<tbody>
+																	<%
+																		for (GongxuProducingOrderDetail detail : gongxuProducingOrderDetailList) {
+																	%>
+																	<tr class="tr"
+																		data='<%=SerializeTool.serialize(detail)%>'>
+																		<td class="color"><%=detail.getColor()%>
+																		</td>
+																		<td class="produce_weight"><%=detail.getProduce_weight()%>
+																		</td>
+																		<td class="yarn_name"><%=SystemCache.getMaterialName(detail.getYarn())%>
+																		</td>
+																		<td class="size"><%=detail.getSize()%>
+																		</td>
+																		<td class="quantity"><%=detail.getQuantity()%>
+																		</td>
+																		<%if(has_gongxu_producing_price){ %>
+																		<td class="price"><%=detail.getPrice()%></td>
+																		<%} %>
+																	</tr>
+
+																	<%
+																		}
+																	%>
+
+																</tbody>
+															</table>
+															<div id="navigator"></div>
+														</td>
+													</tr>
+
+													<tr>
+														<td>
+															<table class="table table-responsive detailTb2">
+																<caption>
+																	
+																	生产材料信息
+																</caption>
+																<thead>
+																	<tr>
+																		<th width="20%">
+																			材料
+																		</th>
+																		<th width="20%">
+																			色号
+																		</th>
+																		<th width="20%">
+																			数量(kg)
+																		</th>
+																		<th width="25%">
+																			标准色样
+																		</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<%
+																	if(gongxuProducingOrderMaterialDetailList!=null){
+																		for (GongxuProducingOrderMaterialDetail detail : gongxuProducingOrderMaterialDetailList) {
+																	%>
+																	<tr class="tr"
+																		data='<%=SerializeTool.serialize(detail)%>'>
+																		<td class="material_name"><%=SystemCache.getMaterialName(detail
+											.getMaterial())%>
+																		</td>
+																		<td class="color"><%=detail.getColor()%>
+																		</td>
+																		<td class="quantity"><%=detail.getQuantity()%>
+																		</td>
+																		<td class="colorsample"><%=detail.getColorsample()%>
+																		</td>
+																	</tr>
+
+																	<%
+																		}}
+																	%>
+
+																</tbody>
+															</table>
+															<div id="navigator"></div>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+
+										</div>
+
+
+									</div>
+								</div>
+								<%
+									}
+								%>
+							</div>
 
 
 							<!-- 计划单  -->
@@ -1701,85 +1883,7 @@
 								<%
 									}
 								%>
-								<!--
-						 			添加编辑原材料采购对话框 -->
-								<div class="modal fade tableRowDialog"
-									id="materialpurchaseDialog">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-header">
-												<button type="button" class="close" data-dismiss="modal">
-													<span aria-hidden="true">&times;</span><span
-														class="sr-only">Close</span>
-												</button>
-												<h4 class="modal-title">
-													添加一行
-												</h4>
-											</div>
-											<div class="modal-body">
-												<form class="form-horizontal rowform" role="form">
-													<div class="form-group col-md-12">
-														<label for="material" class="col-sm-3 control-label">
-															材料品种
-														</label>
-														<div class="col-sm-8">
-															<select name="material" id="material"
-																class="form-control require">
-																<option value="">
-																	未选择
-																</option>
-																<%
-																	for (Material material : SystemCache.materiallist) {
-																%>
-																<option value="<%=material.getId()%>"><%=material.getName()%></option>
-																<%
-																	}
-																%>
-															</select>
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-												
-													<div class="form-group col-md-12">
-														<label for="quantity" class="col-sm-3 control-label">
-															数量(kg)
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="quantity" id="quantity"
-																class="form-control double require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-												
-													<div class="form-group col-md-12">
-														<label for="memo" class="col-sm-3 control-label">
-															备注
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="memo" id="memo"
-																class="form-control" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-
-
-													<div class="modal-footer">
-														<button type="submit" class="btn btn-primary"
-															data-loading-text="正在保存...">
-															保存
-														</button>
-														<button type="button" class="btn btn-default"
-															data-dismiss="modal">
-															关闭
-														</button>
-													</div>
-												</form>
-											</div>
-
-										</div>
-									</div>
-								</div>
-								<!-- 添加编辑原材料采购对话框 -->
+							
 							</div>
 
 
@@ -1967,95 +2071,6 @@
 								<%
 									}
 								%>
-
-
-
-								<!--
-						 			添加编辑染色单对话框 -->
-								<div class="modal fade tableRowDialog" id="coloringDialog">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-header">
-												<button type="button" class="close" data-dismiss="modal">
-													<span aria-hidden="true">&times;</span><span
-														class="sr-only">Close</span>
-												</button>
-												<h4 class="modal-title">
-													添加一行
-												</h4>
-											</div>
-											<div class="modal-body">
-												<form class="form-horizontal rowform" role="form">
-													<div class="form-group col-md-12">
-														<label for="color" class="col-sm-3 control-label">
-															颜色
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="color" id="color"
-																class="form-control require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="material" class="col-sm-3 control-label">
-															材料
-														</label>
-														<div class="col-sm-8">
-															<select name="material" id="material"
-																class="form-control require">
-																<option value="">
-																	未选择
-																</option>
-																<%
-																	for (Material material : SystemCache.materiallist) {
-																%>
-																<option value="<%=material.getId()%>"><%=material.getName()%></option>
-																<%
-																	}
-																%>
-															</select>
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="quantity" class="col-sm-3 control-label">
-															数量(kg)
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="quantity" id="quantity"
-																class="form-control double require" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-													<div class="form-group col-md-12">
-														<label for="standardyarn" class="col-sm-3 control-label">
-															标准样纱
-														</label>
-														<div class="col-sm-8">
-															<input type="text" name="standardyarn" id="standardyarn"
-																class="form-control" />
-														</div>
-														<div class="col-sm-1"></div>
-													</div>
-
-
-													<div class="modal-footer">
-														<button type="submit" class="btn btn-primary"
-															data-loading-text="正在保存...">
-															保存
-														</button>
-														<button type="button" class="btn btn-default"
-															data-dismiss="modal">
-															关闭
-														</button>
-													</div>
-												</form>
-											</div>
-
-										</div>
-									</div>
-								</div>
-								<!-- 添加编辑染色单对话框 -->
 							</div>
 
 

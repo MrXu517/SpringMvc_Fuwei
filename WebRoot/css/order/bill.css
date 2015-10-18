@@ -118,3 +118,9 @@ p#sign{
 .memo_label{
 	font-size: 15px;
 }
+.tablewidget .thumbnail img{max-width: 250px;max-height: 200px;}
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
+	padding:3px 8px;
+	vertical-align: middle;
+}
+textarea.form-control,input[type='text'].form-control,select.form-control{border-color: #8E8B8B;border-width: 2px;}

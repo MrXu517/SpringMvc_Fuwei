@@ -106,7 +106,7 @@ a.thumbnail{
 .materialorderWidget caption,.fuliaoorderWidget caption,.coloringorderWidget caption{
 	margin-bottom:20px;
 }
-#producingorder .printBtn,#materialpurchaseorder .printBtn,#fuliaopurchaseorder .printBtn,#coloringorder .printBtn{
+#gongxuproduceorder .printBtn, #producingorder .printBtn,#materialpurchaseorder .printBtn,#fuliaopurchaseorder .printBtn,#coloringorder .printBtn{
 	margin-left:100px;
 	margin-top:30px;
 }
@@ -140,3 +140,5 @@ input.printcheck{
 .materialorderWidget .table th, .fuliaoorderWidget .table th, .coloringorderWidget .table th{
   border-color: #000;
   }
+  input[type='text'],select.form-control{border-color: #8E8B8B;border-width: 2px;}
+  .tablewidget .thumbnail img{max-width: 250px;max-height: 200px;}

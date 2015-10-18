@@ -49,6 +49,8 @@ import com.fuwei.entity.ordergrid.HalfCheckRecordOrderDetail2;
 //import com.fuwei.entity.ordergrid.HeadBankOrder;
 //import com.fuwei.entity.ordergrid.HeadBankOrderDetail;
 //import com.fuwei.entity.ordergrid.IroningRecordOrder;
+import com.fuwei.entity.ordergrid.GongxuProducingOrder;
+import com.fuwei.entity.ordergrid.GongxuProducingOrderDetail;
 import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
 import com.fuwei.entity.ordergrid.PlanOrder;
 import com.fuwei.entity.ordergrid.PlanOrderDetail;
@@ -75,6 +77,7 @@ import com.fuwei.service.ordergrid.FuliaoPurchaseOrderService;
 import com.fuwei.service.ordergrid.HalfCheckRecordOrderService;
 //import com.fuwei.service.ordergrid.HeadBankOrderService;
 //import com.fuwei.service.ordergrid.IroningRecordOrderService;
+import com.fuwei.service.ordergrid.GongxuProducingOrderService;
 import com.fuwei.service.ordergrid.MaterialPurchaseOrderService;
 import com.fuwei.service.ordergrid.PlanOrderService;
 import com.fuwei.service.ordergrid.ProducingOrderService;
@@ -139,6 +142,9 @@ public class OrderController extends BaseController {
 //	@Autowired
 //	ColoringProcessOrderService coloringProcessOrderService;
 	
+	//2015-10-18添加工序加工单
+	@Autowired
+	GongxuProducingOrderService gongxuProducingOrderService;
 	
 	@Autowired
 	SampleService sampleService;
@@ -732,8 +738,23 @@ public class OrderController extends BaseController {
 				request.setAttribute("coloringProcessOrder",coloringProcessOrder);
 			}
 			
+			// 2015-10-18添加获取加工工序单
+			List<GongxuProducingOrder> gongxuProducingOrderList = gongxuProducingOrderService
+					.getByOrder(orderId);
+			if(gongxuProducingOrderList != null){
+				for(GongxuProducingOrder gongxuProducingOrder : gongxuProducingOrderList){
+					//去掉生产单为数量为0的行
+					Iterator iterator = gongxuProducingOrder.getDetaillist().iterator();
+					    while(iterator.hasNext()){
+					    	GongxuProducingOrderDetail item = (GongxuProducingOrderDetail)iterator.next();
+					           if(item.getQuantity() == 0){
+					               iterator.remove();
+					            }
+					    }
+					}
+			}
+			request.setAttribute("gongxuProducingOrderList", gongxuProducingOrderList);
 			
-
 			request.setAttribute("order", order);
 //			request.setAttribute("headBankOrder", headBankOrder);
 			request.setAttribute("producingOrderList", producingOrderList);

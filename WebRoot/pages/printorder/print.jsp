@@ -43,7 +43,14 @@
 			<%@ include file="producingorder.jsp"%>
 			</div>
 		<%} %>
-
+		<%
+		//获取工序加工单
+			if(gridName.indexOf("gongxuproduceorder") > -1){
+		 %>
+			<div style="page-break-after: always">
+			<%@ include file="gongxuproducingorder.jsp"%>
+			</div>
+		<%} %>
 		<%
 		/*2015-3-23添加新表格*/
 		//获取染色进度单

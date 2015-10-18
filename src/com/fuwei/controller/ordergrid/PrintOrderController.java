@@ -31,6 +31,7 @@ import com.fuwei.entity.ordergrid.FuliaoPurchaseOrder;
 import com.fuwei.entity.ordergrid.HalfCheckRecordOrder;
 //import com.fuwei.entity.ordergrid.HeadBankOrder;
 //import com.fuwei.entity.ordergrid.IroningRecordOrder;
+import com.fuwei.entity.ordergrid.GongxuProducingOrder;
 import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
 import com.fuwei.entity.ordergrid.PlanOrder;
 import com.fuwei.entity.ordergrid.PlanOrderDetail;
@@ -49,6 +50,7 @@ import com.fuwei.service.ordergrid.FuliaoPurchaseOrderService;
 import com.fuwei.service.ordergrid.HalfCheckRecordOrderService;
 //import com.fuwei.service.ordergrid.HeadBankOrderService;
 //import com.fuwei.service.ordergrid.IroningRecordOrderService;
+import com.fuwei.service.ordergrid.GongxuProducingOrderService;
 import com.fuwei.service.ordergrid.MaterialPurchaseOrderService;
 import com.fuwei.service.ordergrid.PlanOrderService;
 import com.fuwei.service.ordergrid.ProducingOrderService;
@@ -95,6 +97,8 @@ public class PrintOrderController extends BaseController {
 //	@Autowired
 //	ColoringProcessOrderService coloringProcessOrderService;
 
+	@Autowired
+	GongxuProducingOrderService gongxuProducingOrderService;
 	
 	@RequestMapping(value = "/print", method = RequestMethod.GET)
 	@ResponseBody
@@ -137,7 +141,14 @@ public class PrintOrderController extends BaseController {
 			}
 			String grids = "";
 			
-			
+			//获取工序加工单
+			if(printAll || gridName.indexOf("gongxuproduceorder") > -1){
+				List<GongxuProducingOrder> gongxuProducingOrderList = gongxuProducingOrderService.getByOrder(orderId);	
+				if(producingOrderList!=null){
+					grids += "gongxuproduceorder,";
+					request.setAttribute("gongxuProducingOrderList", gongxuProducingOrderList);
+				}
+			}
 			//获取质量记录单
 			if(printAll || gridName.indexOf("headbankorder") > -1){
 //				if(planOrder==null){

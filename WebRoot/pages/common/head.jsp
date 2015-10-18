@@ -134,6 +134,8 @@
 	Boolean h_has_pantongcolor_import = SystemCache.hasAuthority(session,"pantongcolor/import");//潘通色号
 	//2015-10-14
 	Boolean h_has_half_current_stock = SystemCache.hasAuthority(session,"report/half_current_stock");//半成品库存报表
+	
+	Boolean h_has_gongxu_producing_order_index = SystemCache.hasAuthority(session,"gongxu_producing_order/index");//查询工序加工单
 	//权限相关
 	
 %>
@@ -342,7 +344,11 @@
 								<a href="producing_order/index">查询生产单</a>
 							</li>
 							<%} %>
-
+							<%if(h_has_gongxu_producing_order_index){ %>
+							<li>
+								<a href="gongxu_producing_order/index">查询工序加工单</a>
+							</li>
+							<%} %>
 							<%if(has_producing_order_index){ %>
 							<li>
 								<a href="producing_order/scan">扫描生产单</a>

@@ -10,7 +10,7 @@
 <%
 	Order order = (Order) request.getAttribute("order");
 	//成品仓库记录单 
-	PlanOrder planorder = (PlanOrder) request.getAttribute("planorder");
+	PlanOrder planorder = (PlanOrder) request.getAttribute("planOrder");
 	List<PlanOrderDetail> planOrderDetailList = planorder == null ? new ArrayList<PlanOrderDetail>()
 			: planorder.getDetaillist();
 	String productfactoryStr = (String)request.getAttribute("productfactoryStr");

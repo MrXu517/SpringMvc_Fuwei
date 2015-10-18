@@ -27,6 +27,7 @@ import com.fuwei.service.ordergrid.ColoringOrderService;
 import com.fuwei.service.ordergrid.ColoringProcessOrderService;
 import com.fuwei.service.ordergrid.FinalStoreOrderService;
 import com.fuwei.service.ordergrid.FuliaoPurchaseOrderService;
+import com.fuwei.service.ordergrid.GongxuProducingOrderService;
 import com.fuwei.service.ordergrid.HalfCheckRecordOrderService;
 import com.fuwei.service.ordergrid.HeadBankOrderService;
 import com.fuwei.service.ordergrid.IroningRecordOrderService;
@@ -96,6 +97,9 @@ public class OrderService extends BaseService {
 	/*2015-7-1添加装箱单*/
 	@Autowired
 	PackingOrderService packingOrderService;
+	/*2015-10-18添加工序加工单*/
+	@Autowired
+	GongxuProducingOrderService gongxuProducingOrderService;
 	
 	//获取所有订单
 	public List<Order> getList(){
@@ -405,6 +409,9 @@ public class OrderService extends BaseService {
 				
 				//2015-7-1添加 执行订单发货时，将装箱单设置为不可修改
 				packingOrderService.completeByOrder(orderId);
+				
+				//2015-10-18添加工序加工单
+				gongxuProducingOrderService.completeByOrder(orderId);
 			}
 
 			// 2014-11-10 删除if，因为去掉了动态步骤
