@@ -513,9 +513,13 @@ public class ProducingOrderController extends BaseController {
 	}
 	@RequestMapping(value = "/detail", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView detail2(Integer id, HttpSession session,
+	public ModelAndView detail2(String number, HttpSession session,
 			HttpServletRequest request) throws Exception {
-		return detail(id, session, request);
+		ProducingOrder producingOrder = producingOrderService.getByNumber(number);
+		if(producingOrder == null){
+			throw new Exception("找不到生产单号为"+number+"的生产单");
+		}
+		return detail(producingOrder.getId(), session, request);
 	}
 
 	@RequestMapping(value = "/print/{id}", method = RequestMethod.GET)

@@ -44,7 +44,7 @@
 				<div class="col-md-12 tablewidget">
 					<table class="table noborder">
 						<caption id="tablename">
-							桐庐富伟针织厂生产单<div table_id="<%=producingOrder.getId() %>" class="id_barcode"></div>
+							桐庐富伟针织厂生产单<div table_id="<%=producingOrder.getNumber() %>" class="id_barcode"></div>
 						</caption>
 						<tr><td colspan="3" class="pull-right">№：<%=producingOrder.getOrderNumber() %> - <%=producingOrder.getNumber() %></td></tr>
 					</table>

@@ -32,6 +32,7 @@ public class GongXuService extends BaseService {
 	@Transactional
 	public int add(GongXu gongxu) throws Exception {
 		try{
+			gongxu.setIsProducingOrder(false);
 			return this.insert(gongxu);
 		}catch(Exception e){
 			throw e;

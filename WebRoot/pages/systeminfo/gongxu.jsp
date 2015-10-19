@@ -132,6 +132,9 @@
 															data-cid="<%=gongxu.getId()%>">编辑</a> |
 														<a class="deleteGongxu" href="#"
 															data-cid="<%=gongxu.getId()%>">删除</a>
+														<%if(gongxu.getIsProducingOrder()){ %>
+														<span class="label label-default">生产通知单专用工序</span>
+														<%}%>
 													</td>
 												</tr>
 												<%

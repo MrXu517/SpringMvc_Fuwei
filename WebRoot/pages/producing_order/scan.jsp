@@ -70,11 +70,11 @@
 						<div class="row">
 							<form target="_blank" action="producing_order/detail">
 								<div class="form-group col-md-12">
-									<label for="id" class="col-sm-3 control-label">
-										生产单ID
+									<label for="number" class="col-sm-3 control-label">
+										生产单号
 									</label>
 									<div class="input-group col-sm-9">
-										<input type="text" class="form-control" name="id" id="id" />
+										<input type="text" class="form-control" name="number" id="number" />
 
 										<span class="input-group-btn">
 											<button type="submit" class="pull-right btn btn-primary">
@@ -94,11 +94,11 @@
 			/*设置当前选中的页*/
 			var $a = $("#left li a[href='producing_order/scan']");
 			setActiveLeft($a.parent("li"));
-			$("#id").focus();
+			$("#number").focus();
 			
 			$("form").submit(function(){
-				$("#id").focus();
-				$("#id").select();
+				$("#number").focus();
+				$("#number").select();
 				return true;
 			});
 		</script>

@@ -42,7 +42,7 @@
 					<div class="col-md-12 tablewidget">
 						<table class="table noborder">
 							<caption id="tablename">
-								桐庐富伟针织厂辅料采购单<div table_id="<%=fuliaoPurchaseOrder.getId() %>" class="id_barcode"></div>
+								桐庐富伟针织厂辅料采购单<div table_id="<%=fuliaoPurchaseOrder.getNumber() %>" class="id_barcode"></div>
 							</caption>
 						</table>
 

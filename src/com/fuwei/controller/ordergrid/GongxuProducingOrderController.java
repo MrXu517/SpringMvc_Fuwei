@@ -25,6 +25,7 @@ import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.controller.BaseController;
+import com.fuwei.entity.Employee;
 import com.fuwei.entity.GongXu;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
@@ -33,6 +34,7 @@ import com.fuwei.entity.ordergrid.GongxuProducingOrderDetail;
 import com.fuwei.entity.ordergrid.GongxuProducingOrderMaterialDetail;
 import com.fuwei.entity.ordergrid.PlanOrder;
 import com.fuwei.entity.ordergrid.PlanOrderDetail;
+import com.fuwei.entity.producesystem.HalfStoreInOutDetail;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.OrderService;
 import com.fuwei.service.ordergrid.GongxuProducingOrderService;
@@ -190,6 +192,13 @@ public class GongxuProducingOrderController extends BaseController {
 			}
 			request.setAttribute("order", order);
 			request.setAttribute("detaillist", detaillist);
+			List<GongXu> gongxulist = new ArrayList<GongXu>();
+			for(GongXu temp : SystemCache.gongxulist){
+				if(!temp.getIsProducingOrder()){  
+					gongxulist.add(temp);
+				}		
+			}
+			request.setAttribute("gongxulist", gongxulist);
 			return new ModelAndView("gongxu_producing_order/addbyorder");
 		} catch (Exception e) {
 			throw e;
@@ -216,21 +225,32 @@ public class GongxuProducingOrderController extends BaseController {
 				// 添加
 				if (producingOrder.getOrderId() == null
 						|| producingOrder.getOrderId() == 0) {
-					throw new PermissionDeniedDataAccessException(
+					throw new Exception(
 							"工序加工单必须属于一张订单", null);
 				}
 				if (producingOrder.getFactoryId() == null
 						|| producingOrder.getFactoryId() == 0) {
-					throw new PermissionDeniedDataAccessException(
+					throw new Exception(
 							"工序加工单必须指定生产单位", null);
 				} 
 				if (producingOrder.getGongxuId() == 0) {
-					throw new PermissionDeniedDataAccessException(
+					throw new Exception(
 							"工序加工单必须指定工序", null);
 				} 
+				//判断工序是否是机织专用工序，若是则报错
+				GongXu gongxu = SystemCache.getGongxu(producingOrder.getGongxuId());
+				if(gongxu==null){
+					throw new Exception(
+							"该工序不存在", null);
+				}else{
+					if(gongxu.getIsProducingOrder()){
+						throw new Exception(
+								gongxu.getName() + " 工序是生产通知单专用工序，不能用于工序加工单", null);
+					}
+				}
 				Order order = orderService.get(producingOrder.getOrderId());
 				if(order == null){
-					throw new PermissionDeniedDataAccessException(
+					throw new Exception(
 							"订单不存在", null);
 				}
 				
@@ -269,15 +289,26 @@ public class GongxuProducingOrderController extends BaseController {
 				//判断生产数量是否超出了计划数量
 				//判断生产数量是否超出了计划数量
 				
-				if (producingOrder.getFactoryId() == null
-						|| producingOrder.getFactoryId() == 0) {
-					throw new PermissionDeniedDataAccessException(
-							"工序加工单必须指定生产单位", null);
-				} 
-				if (producingOrder.getGongxuId() == 0) {
-					throw new PermissionDeniedDataAccessException(
-							"工序加工单必须指定工序", null);
-				} 
+//				if (producingOrder.getFactoryId() == null
+//						|| producingOrder.getFactoryId() == 0) {
+//					throw new Exception(
+//							"工序加工单必须指定生产单位", null);
+//				} 
+//				if (producingOrder.getGongxuId() == 0) {
+//					throw new Exception(
+//							"工序加工单必须指定工序", null);
+//				} 
+//				//判断工序是否是机织专用工序，若是则报错
+//				GongXu gongxu = SystemCache.getGongxu(producingOrder.getGongxuId());
+//				if(gongxu==null){
+//					throw new Exception(
+//							"该工序不存在", null);
+//				}else{
+//					if(gongxu.getIsProducingOrder()){
+//						throw new Exception(
+//								gongxu.getName() + " 工序是生产通知单专用工序，不能用于工序加工单", null);
+//					}
+//				}
 				producingOrder.setUpdated_at(DateTool.now());
 				List<GongxuProducingOrderDetail> detaillist = SerializeTool
 						.deserializeList(details, GongxuProducingOrderDetail.class);
@@ -324,6 +355,13 @@ public class GongxuProducingOrderController extends BaseController {
 		}
 		try {
 			if(gongxuProducingOrderId!=null){
+				List<GongXu> gongxulist = new ArrayList<GongXu>();
+				for(GongXu temp : SystemCache.gongxulist){
+					if(!temp.getIsProducingOrder()){  
+						gongxulist.add(temp);
+					}	
+				}
+				request.setAttribute("gongxulist", gongxulist);
 				GongxuProducingOrder gongxuProducingOrder = gongxuProducingOrderService.get(gongxuProducingOrderId);
 				request.setAttribute("gongxuProducingOrder",gongxuProducingOrder);
 				if(gongxuProducingOrder.getOrderId()!=null){

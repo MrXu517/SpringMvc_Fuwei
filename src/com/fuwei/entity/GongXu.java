@@ -20,9 +20,21 @@ public class GongXu implements Serializable {
 	private Date updated_at;// 最近更新时间
 	
 	private Integer created_user;//创建用户
+	private Boolean isProducingOrder;//是否机织生产单专用工序
 	
 	
 	
+	
+	
+
+	public Boolean getIsProducingOrder() {
+		return isProducingOrder;
+	}
+
+	public void setIsProducingOrder(Boolean isProducingOrder) {
+		this.isProducingOrder = isProducingOrder;
+	}
+
 	public Integer getCreated_user() {
 		return created_user;
 	}

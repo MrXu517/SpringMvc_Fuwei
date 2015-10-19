@@ -71,10 +71,10 @@
 							<form action="store_in/add">
 								<div class="form-group col-md-12">
 									<label for="id" class="col-sm-3 control-label">
-										原材料仓库单ID
+										原材料仓库单上的订单号
 									</label>
 									<div class="input-group col-sm-9">
-										<input type="text" class="form-control" name="storeOrderId" id="storeOrderId" />
+										<input type="text" class="form-control" name="orderNumber" id="orderNumber" />
 
 										<span class="input-group-btn">
 											<button type="submit" class="pull-right btn btn-primary">
@@ -94,11 +94,11 @@
 			/*设置当前选中的页*/
 			var $a = $("#left li a[href='workspace/material_workspace']");
 			setActiveLeft($a.parent("li"));
-			$("#storeOrderId").focus();
+			$("#orderNumber").focus();
 			
 			$("form").submit(function(){
-				$("#storeOrderId").focus();
-				$("#storeOrderId").select();
+				$("#orderNumber").focus();
+				$("#orderNumber").select();
 				return true;
 			});
 		</script>

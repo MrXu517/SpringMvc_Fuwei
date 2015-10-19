@@ -148,20 +148,14 @@ public class StoreOutController extends BaseController {
 	// 添加或保存
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView addbyorder2(String storeOrderId,Integer factoryId,
+	public ModelAndView addbyorder2(String orderNumber,Integer factoryId,
 			HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		 Integer new_storeOrderId = null ;
-		 try{
-			 new_storeOrderId = Integer.parseInt(storeOrderId);
-		 }catch(Exception e){
-			 StoreOrder storeOrder =  storeOrderService.getByOrderNumber(storeOrderId);
-			 if(storeOrder == null){
-				 throw new Exception("找不到原材料仓库单ID或订单号为" + storeOrderId + "的订单");
-			 }
-			 new_storeOrderId = storeOrder.getId();
-		 }
-		 return addbyorder(new_storeOrderId,factoryId, session, request, response);
+		StoreOrder storeOrder = storeOrderService.getByOrderNumber(orderNumber);
+		if(storeOrder == null){
+			throw new Exception("找不到订单号为" + orderNumber + "的原材料仓库单");
+		}
+		 return addbyorder(storeOrder.getId(),factoryId, session, request, response);
 	}
 	@RequestMapping(value = "/{storeOrderId}/add", method = RequestMethod.GET)
 	@ResponseBody

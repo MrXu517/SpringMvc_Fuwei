@@ -144,21 +144,14 @@ public class HalfStoreInController extends BaseController {
 	// 添加或保存
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView addbyorder2(String orderId, HttpSession session,
+	public ModelAndView addbyorder2(String orderNumber, HttpSession session,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		//storeOrderId可能为原材料仓库ID， 或者订单 orderNumber	
-		Integer new_OrderId = null ;
-		 try{
-		      new_OrderId = Integer.parseInt(orderId);
-		 }catch(Exception e){
-			 Order order =  orderService.get(orderId);
-			 if(order == null){
-				 throw new Exception("找不到订单ID或订单号为" + orderId + "的订单");
-			 }
-			 new_OrderId = order.getId();
+		 Order order =  orderService.get(orderNumber);
+		 if(order == null){
+			 throw new Exception("找不到订单号为" + orderNumber + "的订单");
 		 }
-		 return addbyorder(new_OrderId, session, request, response);
+		 return addbyorder(order.getId(), session, request, response);
 	}
 
 	@RequestMapping(value = "/{orderId}/add", method = RequestMethod.GET)

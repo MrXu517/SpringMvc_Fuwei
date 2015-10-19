@@ -344,14 +344,14 @@
 								<a href="producing_order/index">查询生产单</a>
 							</li>
 							<%} %>
-							<%if(h_has_gongxu_producing_order_index){ %>
-							<li>
-								<a href="gongxu_producing_order/index">查询工序加工单</a>
-							</li>
-							<%} %>
 							<%if(has_producing_order_index){ %>
 							<li>
 								<a href="producing_order/scan">扫描生产单</a>
+							</li>
+							<%} %>
+							<%if(h_has_gongxu_producing_order_index){ %>
+							<li>
+								<a href="gongxu_producing_order/index">查询工序加工单</a>
 							</li>
 							<%} %>
 						</ul>

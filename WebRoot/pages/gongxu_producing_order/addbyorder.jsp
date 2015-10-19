@@ -25,6 +25,7 @@
 	if (detaillist == null) {
 		detaillist = new ArrayList<GongxuProducingOrderDetail>();
 	}
+	List<GongXu> gongxulist = (List<GongXu>)request.getAttribute("gongxulist");
 %>
 <!DOCTYPE html>
 <html>
@@ -146,7 +147,7 @@
 																			未选择
 																		</option>
 																		<%
-																			for (GongXu gongxu : SystemCache.gongxulist) {
+																			for (GongXu gongxu : gongxulist) {
 																		%>
 																		<option value="<%=gongxu.getId()%>"><%=gongxu.getName()%></option>
 																		<%

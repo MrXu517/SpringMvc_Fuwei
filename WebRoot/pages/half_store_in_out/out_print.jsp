@@ -36,7 +36,7 @@
 					<div class="col-md-12 tablewidget">
 						<table class="table noborder">
 							<caption id="tablename">
-								桐庐富伟针织厂半成品出库单<div table_id="<%=storeInOut.getId()%>" class="id_barcode"></div>
+								桐庐富伟针织厂半成品出库单<div table_id="<%=storeInOut.getNumber()%>" class="id_barcode"></div>
 							</caption>
 						</table>
 

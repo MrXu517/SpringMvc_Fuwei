@@ -4,14 +4,14 @@
 <%@page import="com.fuwei.entity.Salesman"%>
 <%@page import="com.fuwei.entity.Company"%>
 <%@page import="com.fuwei.entity.User"%>
-<%@page import="com.fuwei.entity.ordergrid.StoreInOut"%>
+<%@page import="com.fuwei.entity.producesystem.StoreInOut"%>
 <%@page import="com.fuwei.commons.Pager"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="net.sf.json.JSONObject"%>
 <%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.entity.Employee"%>
-<%@page import="com.fuwei.entity.ordergrid.StoreInOutDetail"%>
+<%@page import="com.fuwei.entity.producesystem.StoreInOutDetail"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"

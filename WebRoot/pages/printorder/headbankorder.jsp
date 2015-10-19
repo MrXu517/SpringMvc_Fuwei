@@ -9,7 +9,7 @@
 <%@page import="com.fuwei.entity.ordergrid.PlanOrder"%>
 <%
 	Order order = (Order) request.getAttribute("order");
-	PlanOrder planorder = (PlanOrder) request.getAttribute("planorder");
+	PlanOrder planorder = (PlanOrder) request.getAttribute("planOrder");
 	List<PlanOrderDetail> planOrderDetailList = planorder == null ? new ArrayList<PlanOrderDetail>()
 			: planorder.getDetaillist();
 	String productfactoryStr = (String)request.getAttribute("productfactoryStr");
@@ -32,7 +32,7 @@
 				<div class="col-md-12 tablewidget">
 					<table class="table noborder">
 						<caption id="tablename">
-							桐庐富伟针织厂质量记录单<div table_id="<%=order.getId() %>" class="id_barcode"></div>
+							桐庐富伟针织厂质量记录单<div table_id="<%=order.getOrderNumber() %>" class="id_barcode"></div>
 						</caption>
 						<tr><td colspan="3" class="pull-right">№：<%=order.getOrderNumber() %></td></tr>
 					</table>

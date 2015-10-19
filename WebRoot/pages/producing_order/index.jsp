@@ -281,6 +281,9 @@
 												生产单位
 											</th>
 											<th width="60px">
+												生产单号
+											</th>
+											<th width="60px">
 												订单号
 											</th>
 											<th width="80px">
@@ -318,6 +321,7 @@
 														src="/<%=item.getImg_ss()%>"> </a>
 											</td>
 											<td><%=SystemCache.getFactoryName(item.getFactoryId())%></td>
+											<td><%=item.getNumber()%></td>
 											<td><a target="_blank"
 													href="order/tablelist?orderId=<%=item.getOrderId()%>&tab=producingorder"><%=item.getOrderNumber() == null ? "":item.getOrderNumber() %></a></td>
 											<td><%=item.getName()%></td>

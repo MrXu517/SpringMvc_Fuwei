@@ -82,7 +82,7 @@ public class GongxuProducingOrderService extends BaseService {
 				producingOrder.setDetail_json(details);
 				// 更新表
 				this.update(producingOrder, "id",
-						"created_user,created_at,orderId,number", true);
+						"created_user,created_at,orderId,factoryId,gongxuId,number", true);
 
 				return producingOrder.getId();
 			}

@@ -492,6 +492,16 @@ public class SystemCache {
 		}
 		return "";
 	}
+	public static GongXu getGongxu(int gongxuId) {
+
+		for (int i = 0; i < SystemCache.gongxulist.size(); ++i) {
+			GongXu temp = SystemCache.gongxulist.get(i);
+			if (temp.getId() == gongxuId) {
+				return temp;
+			}
+		}
+		return null;
+	}
 
 	public static Factory getFactory(Integer factoryId) {
 		if (factoryId == null) {

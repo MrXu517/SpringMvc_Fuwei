@@ -1,7 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
-<%@page import="com.fuwei.entity.ordergrid.StoreInOut"%>
-<%@page import="com.fuwei.entity.ordergrid.StoreInOutDetail"%>
+<%@page import="com.fuwei.entity.producesystem.StoreInOut"%>
+<%@page import="com.fuwei.entity.producesystem.StoreInOutDetail"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>

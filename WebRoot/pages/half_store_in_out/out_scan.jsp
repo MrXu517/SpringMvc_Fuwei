@@ -70,11 +70,11 @@
 						<div class="row">
 							<form action="half_store_out/add">
 								<div class="form-group col-md-12">
-									<label for="id" class="col-sm-3 control-label">
-										订单ID或订单号
+									<label for="orderNumber" class="col-sm-3 control-label">
+										订单号
 									</label>
 									<div class="input-group col-sm-9">
-										<input type="text" class="form-control" name="orderId" id="orderId" />
+										<input type="text" class="form-control" name="orderNumber" id="orderNumber" />
 
 										<span class="input-group-btn">
 											<button type="submit" class="pull-right btn btn-primary">
@@ -94,11 +94,11 @@
 			/*设置当前选中的页*/
 			var $a = $("#left li a[href='workspace/half_workspace']");
 			setActiveLeft($a.parent("li"));
-			$("#orderId").focus();
+			$("#orderNumber").focus();
 			
 			$("form").submit(function(){
-				$("#orderId").focus();
-				$("#orderId").select();
+				$("#orderNumber").focus();
+				$("#orderNumber").select();
 				return true;
 			});
 		</script>

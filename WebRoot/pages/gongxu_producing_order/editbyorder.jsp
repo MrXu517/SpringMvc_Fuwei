@@ -26,7 +26,7 @@
 	List<GongxuProducingOrderMaterialDetail> producingOrderMaterialDetailList = gongxuProducingOrder == null ? new ArrayList<GongxuProducingOrderMaterialDetail>()
 												: gongxuProducingOrder.getDetail_2_list();
 	producingOrderMaterialDetailList = producingOrderMaterialDetailList==null?new ArrayList<GongxuProducingOrderMaterialDetail>():producingOrderMaterialDetailList;
-	
+	List<GongXu> gongxulist = (List<GongXu>)request.getAttribute("gongxulist");
 %>
 <!DOCTYPE html>
 <html>
@@ -108,8 +108,8 @@
 																		<td width="20%">
 																			生产单位
 																		</td>
-																		<td class="orderproperty">
-																	<select class="form-control require" name="factoryId"
+																		<td class="orderproperty"><%=SystemCache.getFactoryName(gongxuProducingOrder.getFactoryId()) %>
+																<!-- 	<select class="form-control require" name="factoryId"
 																		id="factoryId">
 																		<option value="">
 																			未选择
@@ -124,7 +124,7 @@
 																		<%
 																			}}
 																		%>
-																	</select>
+																	</select> -->
 																</td>
 																	</tr>
 
@@ -132,14 +132,14 @@
 																		<td>
 																	生产工序
 																</td>
-																<td class="orderproperty">
-																	<select class="form-control require" name="gongxuId"
+																<td class="orderproperty"><%=SystemCache.getGongxuName(gongxuProducingOrder.getGongxuId()) %>
+																	<!--<select class="form-control require" name="gongxuId"
 																		id="gongxuId">
 																		<option value="">
 																			未选择
 																		</option>
 																		<%
-																			for (GongXu gongxu : SystemCache.gongxulist) {
+																			for (GongXu gongxu : gongxulist) {
 																				if(gongxu.getId() == gongxuProducingOrder.getGongxuId()){
 																		%>
 																		<option value="<%=gongxu.getId()%>" selected><%=gongxu.getName()%></option>
@@ -148,7 +148,7 @@
 																		<%
 																			}}
 																		%>
-																	</select>
+																	</select>  -->
 																</td>
 																	</tr>
 																	<tr>
