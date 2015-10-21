@@ -81,13 +81,9 @@
 							<li>
 								<a href="#planorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>计划单</a>
 							</li>
-					<!-- 		<li>
-								<a href="#productionscheduleorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>生产进度单</a>
-							</li> -->
-							
-						<!-- 	<li>
+							<li>
 								<a href="#coloringprocessorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>染色进度单</a>
-							</li> -->
+							</li>
 							<li>
 								<a href="#finalstorerecordorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>成品仓库记录单</a>
 							</li>
@@ -152,6 +148,11 @@
 							<div class="tab-pane" id="planorder" role="tabpanel">
 								
 								<jsp:include flush="true" page="ordergrid/planorder.jsp" />
+							</div>
+							<!-- 染色进度单 -->
+							<div class="tab-pane" id="coloringprocessorder" role="tabpanel">
+								
+								<jsp:include flush="true" page="ordergrid/coloringprocessorder.jsp" />
 							</div>
 							<!-- 成品仓库记录单 -->
 							<div class="tab-pane" id="finalstorerecordorder" role="tabpanel">
