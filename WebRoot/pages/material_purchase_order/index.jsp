@@ -302,8 +302,8 @@
 											<th width="40px">
 												公司
 											</th>
-											<th width="40px">
-												客户
+											<th width="60px">
+												订单号
 											</th>
 											<th width="60px">
 												公司货号
@@ -343,7 +343,7 @@
 											<td rowspan="<%=detailsize %>"><%=SystemCache.getFactoryName(materialPurchaseOrder.getFactoryId())%></td>
 											<td rowspan="<%=detailsize %>"><%=SystemCache.getCompanyShortName(materialPurchaseOrder
 										.getCompanyId())%></td>
-											<td rowspan="<%=detailsize %>"><%=SystemCache.getCustomerName(materialPurchaseOrder.getCustomerId())%></td>
+											<td rowspan="<%=detailsize %>"><%=materialPurchaseOrder.getOrderNumber() == null ? "" :materialPurchaseOrder.getOrderNumber()%></td>
 											<td rowspan="<%=detailsize %>"><%=materialPurchaseOrder.getCompany_productNumber()%></td>
 											<td rowspan="<%=detailsize %>"><%=materialPurchaseOrder.getName()%></td>
 											<td rowspan="<%=detailsize %>"><%=SystemCache.getEmployeeName(materialPurchaseOrder.getCharge_employee())%></td>

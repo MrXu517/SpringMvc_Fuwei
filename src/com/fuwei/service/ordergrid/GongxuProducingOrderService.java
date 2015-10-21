@@ -247,4 +247,13 @@ public class GongxuProducingOrderService extends BaseService {
 		}
 	}
 
+	// 获取
+	public List<GongxuProducingOrder> getByFactoryGongXu(int orderId,int factoryId,int gongxuId) throws Exception {
+		try {
+			List<GongxuProducingOrder> list = dao.queryForBeanList("select * from tb_gongxu_producingorder where orderId=? and factoryId=? and gongxuId=?", GongxuProducingOrder.class,orderId, factoryId,gongxuId);		
+			return list;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 }

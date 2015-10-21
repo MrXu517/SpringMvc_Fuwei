@@ -18,8 +18,7 @@ public class HalfStoreInOut {
 	@IdentityId
 	private Integer id;
 	private String number;//半成品出入库单编号
-//	private Integer producing_order_id;//生产单ID
-//	private String producing_order_number;//生产单号
+	private int gongxuId;//工序Id
 	private Integer orderId;
 	
 	private Boolean in_out ;//入库/出库  ， true:入库 , false：出库
@@ -68,8 +67,13 @@ public class HalfStoreInOut {
 	
 	
 	
-	
-//	public String getProducing_order_number() {
+	public int getGongxuId() {
+		return gongxuId;
+	}
+	public void setGongxuId(int gongxuId) {
+		this.gongxuId = gongxuId;
+	}
+	//	public String getProducing_order_number() {
 //		return producing_order_number;
 //	}
 //	public void setProducing_order_number(String producing_order_number) {

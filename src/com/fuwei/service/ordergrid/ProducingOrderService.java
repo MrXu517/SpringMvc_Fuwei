@@ -276,4 +276,13 @@ public class ProducingOrderService extends BaseService {
 		}
 	}
 
+	// 获取生产单
+	public List<ProducingOrder> getByFactory(int orderId,int factoryId) throws Exception {
+		try {
+			List<ProducingOrder> list = dao.queryForBeanList("select * from tb_producingorder where orderId=? and factoryId = ?", ProducingOrder.class,orderId, factoryId);
+			return list;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 }

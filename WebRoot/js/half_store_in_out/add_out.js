@@ -4,7 +4,16 @@ $(document).ready( function() {
 	setActiveLeft($a.parent("li"));
 	/* 设置当前选中的页 */
 	
-	
+	$("#factoryId").change(function(){
+		var params = Common.urlParams();
+		params.factoryId = this.value;
+		location.href = location.pathname + "?" + $.param(params);
+	});
+	$("#gongxuId").change(function(){
+		var params = Common.urlParams();
+		params.gongxuId = this.value;
+		location.href = location.pathname + "?" + $.param(params);
+	});
 	//2015-4-3 添加自动focus到第一个可输入input、select
 	$("form").find("input[type='text'],select").not("[readonly],[disabled]").first().focus();
 	//2015-4-3 添加自动focus到第一个可输入input、select

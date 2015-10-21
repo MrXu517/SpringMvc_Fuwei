@@ -50,6 +50,7 @@
 								
 								<a href="half_store_in/scan" type="button" class="btn btn-warning"><i class="fa fa-sign-in fa-lg"></i>入库</a>
 								<a href="half_store_out/scan" type="button" class="btn btn-danger"><i class="fa fa-sign-out fa-lg"></i>出库</a>
+								<a href="half_store_return/scan" type="button" class="btn btn-danger"><i class="fa fa-sign-out fa-lg"></i>退货</a>
 							</div>
 						</div>
 
@@ -66,6 +67,9 @@
 								<a href="#store_out" role="tab" data-toggle="tab">出库列表</a>
 							</li>
 							<li>
+								<a href="#store_return" role="tab" data-toggle="tab">退货列表</a>
+							</li>
+							<li>
 								<a href="#current_stock" role="tab" data-toggle="tab">半成品库存报表</a>
 							</li>
 						</ul>
@@ -78,6 +82,9 @@
 							</div>
 							<div class="tab-pane" id="store_out">
 								<iframe id="store_outIframe" name="store_outIframe" border="0" furl="half_store_out/index" > </iframe>
+							</div>
+							<div class="tab-pane" id="store_return">
+								<iframe id="store_returnIframe" name="store_returnIframe" border="0" furl="half_store_return/index" > </iframe>
 							</div>
 							<div class="tab-pane" id="current_stock">
 								<iframe id="current_stockIframe" name="current_stockIframe" border="0" furl="half_current_stock/index" > </iframe>

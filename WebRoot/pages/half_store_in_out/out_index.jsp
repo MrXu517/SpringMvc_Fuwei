@@ -279,6 +279,7 @@
 											<th style="width:20px"></th>
     										<th style="width:60px"></th>
     										<th style="width:50px"></th>
+											<th style="width:40px"></th>
     										<th style="width:55px"></th>
     										<th style="width:40px"></th>
     										<th style="width:60px"></th>
@@ -299,6 +300,8 @@
 												出库单号
 											</th><th rowspan="2" width="50px">
 												领取工厂
+											</th><th rowspan="2" width="40px">
+												工序
 											</th><th rowspan="2" width="60px">
 												订单号
 											</th>
@@ -344,6 +347,7 @@
 											
 											<td rowspan="<%=detailsize%>"><a target="_top" href="store_out/detail/<%=item.getId()%>"><%=item.getNumber()%></a></td>
 											<td rowspan="<%=detailsize%>"><%=SystemCache.getFactoryName(item.getFactoryId())%></td>
+											<td rowspan="<%=detailsize%>"><%=SystemCache.getGongxuName(item.getGongxuId())%></td>
 											<td rowspan="<%=detailsize%>"><a target="_top" href="order/detail/<%=item.getOrderId()%>"><%=item.getOrderNumber()%></a></td>
 											<td rowspan="<%=detailsize%>"><%=SystemCache.getCompanyShortName(item.getCompanyId())%></td>
 											<td rowspan="<%=detailsize%>"><%=item.getCompany_productNumber()%></td>

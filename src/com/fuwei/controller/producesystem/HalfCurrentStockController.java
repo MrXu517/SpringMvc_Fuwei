@@ -3,6 +3,7 @@ package com.fuwei.controller.producesystem;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,7 +23,10 @@ import com.fuwei.commons.SystemCache;
 import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Employee;
 import com.fuwei.entity.Order;
+import com.fuwei.entity.ordergrid.GongxuProducingOrder;
 import com.fuwei.entity.ordergrid.PlanOrder;
+import com.fuwei.entity.ordergrid.ProducingOrder;
+import com.fuwei.entity.producesystem.HalfInOut;
 import com.fuwei.entity.producesystem.HalfStoreInOut;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.OrderService;
@@ -149,7 +153,9 @@ public class HalfCurrentStockController extends BaseController {
 		}
 		String lcode = "half_current_stock/in_out";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
-		if (!hasAuthority) {
+		String lcode2 = "order/progress";
+		Boolean hasAuthority2 = SystemCache.hasAuthority(session, lcode2);
+		if (!hasAuthority && !hasAuthority2) {
 			throw new PermissionDeniedDataAccessException("没有查看订单半成品出入库记录的权限",
 					null);
 		}
@@ -157,14 +163,44 @@ public class HalfCurrentStockController extends BaseController {
 		if(order == null){
 			throw new Exception("找不到ID为" + orderId + "的订单");
 		}
-		List<HalfStoreInOut> storeInOutList = halfStoreInOutService.getByOrderDESC(orderId);
-		if (storeInOutList == null) {
-			throw new Exception("找不到订单ID为" + orderId + "的半成品出入库记录");
+		List<HalfInOut> detailInOutlist = halfCurrentStockService.halfDetail(orderId);
+		if (detailInOutlist == null) {
+			throw new Exception("找不到订单ID为" + orderId + "的半成品出入库、退货记录");
 		}
 		PlanOrder planOrder = planOrderService.getByOrder(orderId);
 		request.setAttribute("order", order);
 		request.setAttribute("planOrder", planOrder);
-		request.setAttribute("storeInOutList", storeInOutList);
+		request.setAttribute("detailInOutlist", detailInOutlist);
 		return new ModelAndView("half_store_in_out/order_in_out");	
+	}
+	
+	@RequestMapping(value = "/in_out2/{orderId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView in_out2(@PathVariable Integer orderId, HttpSession session,
+			HttpServletRequest request) throws Exception {
+		if (orderId == null) {
+			throw new Exception("缺少订单ID");
+		}
+		String lcode = "order/progress";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		String lcode2 = "order/progress";
+		Boolean hasAuthority2 = SystemCache.hasAuthority(session, lcode2);
+		if (!hasAuthority && !hasAuthority2) {
+			throw new PermissionDeniedDataAccessException("没有查看订单半成品出入库记录的权限",
+					null);
+		}
+		Order order = orderService.get(orderId);
+		if(order == null){
+			throw new Exception("找不到ID为" + orderId + "的订单");
+		}
+		List<HalfInOut> detailInOutlist = halfCurrentStockService.halfDetail(orderId);
+		if (detailInOutlist == null) {
+			throw new Exception("找不到订单ID为" + orderId + "的半成品出入库、退货记录");
+		}
+		PlanOrder planOrder = planOrderService.getByOrder(orderId);
+		request.setAttribute("order", order);
+		request.setAttribute("planOrder", planOrder);
+		request.setAttribute("detailInOutlist", detailInOutlist);
+		return new ModelAndView("order/progress/half_in_out");	
 	}
 }

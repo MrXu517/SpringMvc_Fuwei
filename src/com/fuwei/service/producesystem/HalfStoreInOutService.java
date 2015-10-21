@@ -2,6 +2,7 @@ package com.fuwei.service.producesystem;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -101,7 +102,7 @@ public class HalfStoreInOutService extends BaseService {
 		try {
 			if (object.getDetaillist() == null
 					|| object.getDetaillist().size() <= 0) {
-				throw new Exception("原材料出、入库单中至少得有一条材料出入库列表记录");
+				throw new Exception("半成品出、入库单至少得有一条颜色及数量记录");
 			} else {
 				object.setStatus(0);
 				object.setState("新建");
@@ -141,7 +142,7 @@ public class HalfStoreInOutService extends BaseService {
 			object.setHas_print(false);
 			if (object.getDetaillist() == null
 					|| object.getDetaillist().size() <= 0) {
-				throw new Exception("半成品出、入库单至少得有一条材料列表记录");
+				throw new Exception("半成品出、入库单至少得有一条颜色及数量记录");
 			} else {
 				HalfStoreInOut temp = this.get(object.getId());
 				if (!temp.isEdit()) {
@@ -279,7 +280,7 @@ public class HalfStoreInOutService extends BaseService {
 			SQLException sqlException = (java.sql.SQLException) e.getCause();
 			if (sqlException != null && sqlException.getErrorCode() == 1451) {// 外键约束
 				log.error(e);
-				throw new Exception("已被引用，无法删除，请先删除与原材料出入库单有关的引用");
+				throw new Exception("已被引用，无法删除，请先删除与半成品出入库单有关的引用");
 			}
 			throw e;
 		}
@@ -303,14 +304,25 @@ public class HalfStoreInOutService extends BaseService {
 			SQLException sqlException = (java.sql.SQLException) e.getCause();
 			if (sqlException != null && sqlException.getErrorCode() == 1451) {// 外键约束
 				log.error(e);
-				throw new Exception("已被引用，无法删除，请先删除与原材料出入库单有关的引用");
+				throw new Exception("已被引用，无法删除，请先删除与半成品出入库单有关的引用");
 			}
 			throw e;
 		}
 	}
-	// //获取所有
-	// public List<StoreInOut> getList(){
-	// return dao.queryForBeanList("select * from tb_store_in_out",
-	// StoreInOut.class);
-	// }
+
+	
+	// 获取
+	public List<HalfStoreInOut> getByFactoryGongxu(int orderId,int factoryId,int gongxuId, Boolean in_out)
+			throws Exception {
+		try {
+			List<HalfStoreInOut> orderlist = dao
+					.queryForBeanList(
+							"select * from tb_half_store_in_out where orderId=? and factoryId = ? and gongxuId=? and in_out=?",
+							HalfStoreInOut.class, orderId,factoryId, gongxuId,in_out);
+			return orderlist;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 }

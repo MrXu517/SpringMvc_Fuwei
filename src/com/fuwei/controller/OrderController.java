@@ -99,18 +99,12 @@ public class OrderController extends BaseController {
 	OrderHandleService orderHandleService;
 	@Autowired
 	AuthorityService authorityService;
-//	@Autowired
-//	QuoteOrderService quoteOrderService;
 	@Autowired
 	QuoteOrderDetailService quoteOrderDetailService;
 	@Autowired
 	OrderProduceStatusService orderProduceStatusService;
 	@Autowired
 	ProductionNotificationService productionNotificationService;
-
-//	@Autowired
-//	HeadBankOrderService headBankOrderService;
-
 	@Autowired
 	ProducingOrderService producingOrderService;
 	@Autowired
@@ -119,28 +113,12 @@ public class OrderController extends BaseController {
 	StoreOrderService storeOrderService;
 	@Autowired
 	HalfCheckRecordOrderService halfCheckRecordOrderService;
-//	@Autowired
-//	CheckRecordOrderService checkRecordOrderService;
 	@Autowired
 	ColoringOrderService coloringOrderService;
 	@Autowired
 	MaterialPurchaseOrderService materialPurchaseOrderService;
 	@Autowired
 	FuliaoPurchaseOrderService fuliaoPurchaseOrderService;
-//	@Autowired
-//	CarFixRecordOrderService carFixRecordOrderService;
-//	@Autowired
-//	IroningRecordOrderService ironingRecordOrderService;
-	
-	/*2015-3-23添加 新表格*/
-//	@Autowired
-//	ProductionScheduleOrderService productionScheduleOrderService;
-//	@Autowired
-//	FinalStoreOrderService finalStoreOrderService;
-//	@Autowired
-//	ShopRecordOrderService shopRecordOrderService;
-//	@Autowired
-//	ColoringProcessOrderService coloringProcessOrderService;
 	
 	//2015-10-18添加工序加工单
 	@Autowired
@@ -217,17 +195,7 @@ public class OrderController extends BaseController {
 			order.setAmount(0);// 设置订单总金额
 			List<OrderDetail> orderDetaillist = new ArrayList<OrderDetail>();// 设置订单详情
 			double amount = 0;
-//			if (quoteOrderId != null) {
-//				QuoteOrder quoteOrder = quoteOrderService.get(quoteOrderId);
-//				List<QuoteOrderDetail> quoteOrderDetaillist = quoteOrderDetailService
-//						.getListByQuoteOrder(quoteOrderId);
-//				order.setCompanyId(SystemCache.getSalesman(
-//						quoteOrder.getSalesmanId()).getCompanyId());// 设置订单公司
-//				order.setSalesmanId(quoteOrder.getSalesmanId());// 设置订单业务员
-//
-//			}
 			order.setAmount(NumberUtil.formateDouble(amount, 3));// 设置订单总金额
-			// order.setDetaillist(orderDetaillist);//设置订单详情
 			request.setAttribute("order", order);
 			return new ModelAndView("order/add");
 		} catch (Exception e) {
@@ -319,60 +287,7 @@ public class OrderController extends BaseController {
 			}
 			planOrder.setDetaillist(plandetaillist);
 			int planOrderId = planOrderService.add(planOrder);
-			// 2015-3-2添加 创建订单时 自动创建计划单
-
-//			// 2015-3-4创建订单时自动创建抽检记录单
-//			// 抽检记录单
-//			CheckRecordOrder checkRecordOrder = new CheckRecordOrder();
-//			checkRecordOrder.setOrderId(orderId);
-//			checkRecordOrder.setCreated_at(DateTool.now());// 设置创建时间
-//			checkRecordOrder.setUpdated_at(DateTool.now());// 设置更新时间
-//			checkRecordOrder.setCreated_user(user.getId());// 设置创建人
-//			checkRecordOrderService.add(checkRecordOrder);
-			/*2015-3-23添加 新表格*/
-//			//生产进度单
-//			ProductionScheduleOrder productionScheduleOrder = new ProductionScheduleOrder();
-//			productionScheduleOrder.setOrderId(orderId);
-//			productionScheduleOrder.setCreated_at(DateTool.now());// 设置创建时间
-//			productionScheduleOrder.setUpdated_at(DateTool.now());// 设置更新时间
-//			productionScheduleOrder.setCreated_user(user.getId());// 设置创建人
-//			productionScheduleOrderService.add(productionScheduleOrder);
-			
-			//染色进度单
-//			ColoringProcessOrder coloringProcessOrder = new ColoringProcessOrder();
-//			coloringProcessOrder.setOrderId(orderId);
-//			coloringProcessOrder.setCreated_at(DateTool.now());// 设置创建时间
-//			coloringProcessOrder.setUpdated_at(DateTool.now());// 设置更新时间
-//			coloringProcessOrder.setCreated_user(user.getId());// 设置创建人
-//			coloringProcessOrderService.add(coloringProcessOrder);
-			
-			// 2015-3-4创建订单时自动创建半检记录单、抽检记录单
-
-			// 2015-3-4创建计划单后，自动创建 质量记录单、车缝记录单、整烫记录单，2015-3-31添加 计划单创建后，自动创建半检记录单
-			// 质量记录单
-//			HeadBankOrder headBankOrder = new HeadBankOrder();
-//			headBankOrder.setOrderId(orderId);
-//			headBankOrder.setCreated_at(DateTool.now());// 设置创建时间
-//			headBankOrder.setUpdated_at(DateTool.now());// 设置更新时间
-//			headBankOrder.setCreated_user(user.getId());// 设置创建人
-//			headBankOrderService.add(headBankOrder);
-
-			// 车缝记录单
-//			CarFixRecordOrder carFixRecordOrder = new CarFixRecordOrder();
-//			carFixRecordOrder.setOrderId(orderId);
-//			carFixRecordOrder.setCreated_at(DateTool.now());// 设置创建时间
-//			carFixRecordOrder.setUpdated_at(DateTool.now());// 设置更新时间
-//			carFixRecordOrder.setCreated_user(user.getId());// 设置创建人
-//			carFixRecordOrderService.add(carFixRecordOrder);
-
-//			 整烫记录单
-//			IroningRecordOrder ironingRecordOrder = new IroningRecordOrder();
-//			ironingRecordOrder.setOrderId(orderId);
-//			ironingRecordOrder.setCreated_at(DateTool.now());// 设置创建时间
-//			ironingRecordOrder.setUpdated_at(DateTool.now());// 设置更新时间
-//			ironingRecordOrder.setCreated_user(user.getId());// 设置创建人
-//			ironingRecordOrderService.add(ironingRecordOrder);
-			
+			// 2015-3-2添加 创建订单时 自动创建计划单		
 			// 半检记录单
 			HalfCheckRecordOrder halfCheckRecordOrder = new HalfCheckRecordOrder();
 			halfCheckRecordOrder.setOrderId(orderId);
@@ -392,24 +307,6 @@ public class OrderController extends BaseController {
 			halfCheckRecordOrderService.add(halfCheckRecordOrder);
 			
 			// 2015-3-4创建计划单后，自动创建 质量记录单、车缝记录单、整烫记录单，2015-3-31添加 计划单创建后，自动创建半检记录单
-			
-//			/*2015-3-23添加 新表格*/
-//			//成品仓库记录单
-//			FinalStoreOrder finalStoreOrder = new FinalStoreOrder();
-//			finalStoreOrder.setOrderId(orderId);
-//			finalStoreOrder.setCreated_at(DateTool.now());// 设置创建时间
-//			finalStoreOrder.setUpdated_at(DateTool.now());// 设置更新时间
-//			finalStoreOrder.setCreated_user(user.getId());// 设置创建人
-//			finalStoreOrderService.add(finalStoreOrder);
-//			
-//			//车间记录单
-//			ShopRecordOrder shopRecordOrder = new ShopRecordOrder();
-//			shopRecordOrder.setOrderId(orderId);
-//			shopRecordOrder.setCreated_at(DateTool.now());// 设置创建时间
-//			shopRecordOrder.setUpdated_at(DateTool.now());// 设置更新时间
-//			shopRecordOrder.setCreated_user(user.getId());// 设置创建人
-//			shopRecordOrderService.add(shopRecordOrder);
-			
 			
 			return this.returnSuccess("id", orderId);
 		} catch (Exception e) {
@@ -665,6 +562,15 @@ public class OrderController extends BaseController {
 					    }
 					}
 			}
+			producingOrderList = producingOrderList == null ? new ArrayList<ProducingOrder>()
+					: producingOrderList;
+			String productfactoryStr = "";
+			String seq = "";
+			for(ProducingOrder producingOrder : producingOrderList){
+				productfactoryStr += seq + SystemCache.getFactoryName(producingOrder.getFactoryId());
+				seq = " | ";
+			}
+			request.setAttribute("productfactoryStr", productfactoryStr);
 			
 
 			// 获取计划单
@@ -1234,158 +1140,28 @@ public class OrderController extends BaseController {
 		
 		//request.setAttribute("result", "result");
 	}
-	/*
-	 * @RequestMapping(value = "/headbank", method = RequestMethod.POST)
-	 * 
-	 * @ResponseBody public Map<String, Object> headbank(HeadBankOrder
-	 * headBankOrder, HttpSession session, HttpServletRequest request,
-	 * HttpServletResponse response) throws Exception { User user =
-	 * SystemContextUtils.getCurrentUser(session).getLoginedUser(); String lcode
-	 * = "order/headbank"; Boolean hasAuthority =
-	 * authorityService.checkLcode(user.getId(), lcode); if(!hasAuthority){
-	 * throw new PermissionDeniedDataAccessException("没有创建或编辑质量记录单的权限", null); }
-	 * try { Integer headBankOrderId = headBankOrder.getId();
-	 * 
-	 * if(headBankOrderId == null || headBankOrderId == 0){ //添加
-	 * if(headBankOrder.getOrderId() == null || headBankOrder.getOrderId() ==
-	 * 0){ throw new PermissionDeniedDataAccessException("质量记录单必须属于一张订单", null);
-	 * }else{ HeadBankOrder temp =
-	 * headBankOrderService.getByOrder(headBankOrder.getOrderId());
-	 * if(temp!=null){ throw new
-	 * PermissionDeniedDataAccessException("该订单已经存在质量记录单", null); } }
-	 * 
-	 * 
-	 * headBankOrder.setCreated_at(DateTool.now());//设置创建时间
-	 * headBankOrder.setUpdated_at(DateTool.now());//设置更新时间
-	 * headBankOrder.setCreated_user(user.getId());//设置创建人
-	 * 
-	 * headBankOrderId = headBankOrderService.add(headBankOrder); }else{//编辑
-	 * headBankOrder.setUpdated_at(DateTool.now()); headBankOrderId =
-	 * headBankOrderService.update(headBankOrder); } return
-	 * this.returnSuccess("id",headBankOrderId); } catch (Exception e) { throw
-	 * e; }
-	 * 
-	 * }
-	 * 
-	 * //添加或保存抽检记录单
-	 * 
-	 * @RequestMapping(value = "/checkrecordorder", method = RequestMethod.POST)
-	 * 
-	 * @ResponseBody public Map<String, Object>
-	 * checkrecordorder(CheckRecordOrder tableOrder, HttpSession session,
-	 * HttpServletRequest request, HttpServletResponse response) throws
-	 * Exception { User user =
-	 * SystemContextUtils.getCurrentUser(session).getLoginedUser(); String lcode
-	 * = "order/checkrecord"; Boolean hasAuthority =
-	 * authorityService.checkLcode(user.getId(), lcode); if(!hasAuthority){
-	 * throw new PermissionDeniedDataAccessException("没有创建或编辑抽检记录单的权限", null); }
-	 * try { Integer tableOrderId = tableOrder.getId();
-	 * 
-	 * if(tableOrderId == null || tableOrderId == 0){ //添加
-	 * if(tableOrder.getOrderId() == null || tableOrder.getOrderId() == 0){
-	 * throw new PermissionDeniedDataAccessException("抽检记录单必须属于一张订单", null);
-	 * }else{ CheckRecordOrder temp =
-	 * checkRecordOrderService.getByOrder(tableOrder.getOrderId());
-	 * if(temp!=null){ throw new
-	 * PermissionDeniedDataAccessException("该订单已经存在抽检记录单", null); } }
-	 * 
-	 * 
-	 * tableOrder.setCreated_at(DateTool.now());//设置创建时间
-	 * tableOrder.setUpdated_at(DateTool.now());//设置更新时间
-	 * tableOrder.setCreated_user(user.getId());//设置创建人
-	 * 
-	 * // List<CheckRecordOrderDetail> detaillist =
-	 * SerializeTool.deserializeList(details, CheckRecordOrderDetail.class); //
-	 * tableOrder.setDetaillist(detaillist); tableOrderId =
-	 * checkRecordOrderService.add(tableOrder); }else{//编辑
-	 * tableOrder.setUpdated_at(DateTool.now()); // List<CheckRecordOrderDetail>
-	 * detaillist = SerializeTool.deserializeList(details,
-	 * CheckRecordOrderDetail.class); // tableOrder.setDetaillist(detaillist);
-	 * tableOrderId = checkRecordOrderService.update(tableOrder); } return
-	 * this.returnSuccess("id",tableOrderId); } catch (Exception e) { throw e; }
-	 * 
-	 * }
-	 * 
-	 * //添加或保存车缝记录单
-	 * 
-	 * @RequestMapping(value = "/carfixrecordorder", method =
-	 * RequestMethod.POST)
-	 * 
-	 * @ResponseBody public Map<String, Object>
-	 * carfixrecordorder(CarFixRecordOrder tableOrder, HttpSession session,
-	 * HttpServletRequest request, HttpServletResponse response) throws
-	 * Exception { User user =
-	 * SystemContextUtils.getCurrentUser(session).getLoginedUser(); String lcode
-	 * = "order/carfixrecord"; Boolean hasAuthority =
-	 * authorityService.checkLcode(user.getId(), lcode); if(!hasAuthority){
-	 * throw new PermissionDeniedDataAccessException("没有创建或编辑车缝记录单的权限", null); }
-	 * try { Integer tableOrderId = tableOrder.getId();
-	 * 
-	 * if(tableOrderId == null || tableOrderId == 0){ //添加
-	 * if(tableOrder.getOrderId() == null || tableOrder.getOrderId() == 0){
-	 * throw new PermissionDeniedDataAccessException("车缝记录单必须属于一张订单", null);
-	 * }else{ CarFixRecordOrder temp =
-	 * carFixRecordOrderService.getByOrder(tableOrder.getOrderId());
-	 * if(temp!=null){ throw new
-	 * PermissionDeniedDataAccessException("该订单已经存在车缝记录单", null); } }
-	 * 
-	 * 
-	 * tableOrder.setCreated_at(DateTool.now());//设置创建时间
-	 * tableOrder.setUpdated_at(DateTool.now());//设置更新时间
-	 * tableOrder.setCreated_user(user.getId());//设置创建人
-	 * 
-	 * // List<CarFixRecordOrderDetail> detaillist =
-	 * SerializeTool.deserializeList(details, CarFixRecordOrderDetail.class); //
-	 * tableOrder.setDetaillist(detaillist); tableOrderId =
-	 * carFixRecordOrderService.add(tableOrder); }else{//编辑
-	 * tableOrder.setUpdated_at(DateTool.now()); //
-	 * List<CarFixRecordOrderDetail> detaillist =
-	 * SerializeTool.deserializeList(details, CarFixRecordOrderDetail.class); //
-	 * tableOrder.setDetaillist(detaillist); tableOrderId =
-	 * carFixRecordOrderService.update(tableOrder); } return
-	 * this.returnSuccess("id",tableOrderId); } catch (Exception e) { throw e; }
-	 * 
-	 * }
-	 * 
-	 * //添加或保存整烫记录单
-	 * 
-	 * @RequestMapping(value = "/ironingrecordorder", method =
-	 * RequestMethod.POST)
-	 * 
-	 * @ResponseBody public Map<String, Object>
-	 * ironingrecordorder(IroningRecordOrder tableOrder,HttpSession session,
-	 * HttpServletRequest request, HttpServletResponse response) throws
-	 * Exception { User user =
-	 * SystemContextUtils.getCurrentUser(session).getLoginedUser(); String lcode
-	 * = "order/ironingrecord"; Boolean hasAuthority =
-	 * authorityService.checkLcode(user.getId(), lcode); if(!hasAuthority){
-	 * throw new PermissionDeniedDataAccessException("没有创建或编辑整烫记录单的权限", null); }
-	 * try { Integer tableOrderId = tableOrder.getId();
-	 * 
-	 * if(tableOrderId == null || tableOrderId == 0){ //添加
-	 * if(tableOrder.getOrderId() == null || tableOrder.getOrderId() == 0){
-	 * throw new PermissionDeniedDataAccessException("整烫记录单必须属于一张订单", null);
-	 * }else{ IroningRecordOrder temp =
-	 * ironingRecordOrderService.getByOrder(tableOrder.getOrderId());
-	 * if(temp!=null){ throw new
-	 * PermissionDeniedDataAccessException("该订单已经存在整烫记录单", null); } }
-	 * 
-	 * 
-	 * tableOrder.setCreated_at(DateTool.now());//设置创建时间
-	 * tableOrder.setUpdated_at(DateTool.now());//设置更新时间
-	 * tableOrder.setCreated_user(user.getId());//设置创建人
-	 * 
-	 * // List<IroningRecordOrderDetail> detaillist =
-	 * SerializeTool.deserializeList(details, IroningRecordOrderDetail.class);
-	 * // tableOrder.setDetaillist(detaillist); tableOrderId =
-	 * ironingRecordOrderService.add(tableOrder); }else{//编辑
-	 * tableOrder.setUpdated_at(DateTool.now()); //
-	 * List<IroningRecordOrderDetail> detaillist =
-	 * SerializeTool.deserializeList(details, IroningRecordOrderDetail.class);
-	 * // tableOrder.setDetaillist(detaillist); tableOrderId =
-	 * ironingRecordOrderService.update(tableOrder); } return
-	 * this.returnSuccess("id",tableOrderId); } catch (Exception e) { throw e; }
-	 * 
-	 * }
-	 */
+
+	//查看订单进度
+	// 获取步骤详情
+	@RequestMapping(value = "/progress/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView progress(@PathVariable int id, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+
+		String lcode = "order/progress";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有查看订单生产进度的权限", null);
+		}
+		Order order = orderService.get(id);
+		request.setAttribute("order", order);
+		if(order == null){
+			throw new Exception("找不到ID为"+id+"的订单");
+		}
+//		PlanOrder planOrder = planOrderService.getByOrder(id);
+//		request.setAttribute("planOrder", planOrder);
+		return new ModelAndView("order/progress");
+
+	}
 }

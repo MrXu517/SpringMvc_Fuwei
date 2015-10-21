@@ -271,8 +271,6 @@ public class GongxuProducingOrder extends BaseTableOrder{
 	public String createNumber() throws ParseException{
 		return DateTool.getYear2() + "GX" + NumberUtil.appendZero(this.id, 4);
 	}
-	
-	
 }
 
 

@@ -13,6 +13,7 @@
 <%@page import="com.fuwei.entity.OrderDetail"%>
 <%@page import="com.fuwei.entity.ordergrid.PlanOrder"%>
 <%@page import="com.fuwei.entity.ordergrid.PlanOrderDetail"%>
+<%@page import="com.fuwei.entity.GongXu"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -30,7 +31,10 @@
 		detaillist = new ArrayList<Map<String, Object>>();
 	}
 	String message = request.getAttribute("message") == null ? null : (String)request.getAttribute("message");
-	
+	Map<Integer,String> factoryMap = (Map<Integer,String>)request.getAttribute("factoryMap");
+	Integer factoryId = (Integer)request.getAttribute("factoryId");
+	Map<Integer,String> gongxuMap = (Map<Integer,String>)request.getAttribute("gongxuMap");
+	Integer gongxuId = (Integer)request.getAttribute("gongxuId");
 %>
 <!DOCTYPE html>
 <html>
@@ -130,7 +134,11 @@ caption {
 									<input type="hidden" name="id" value="" />
 									<input type="hidden" name="orderId"
 										value="<%=order.getId()%>" />
-									<%if(message != null){ %>
+								<%if(factoryId == null || factoryId <= 0){ %>
+								<p class="alert alert-danger">请先选择 【加工单位】</p>
+								<%}else if(gongxuId == null || gongxuId <= 0){ %>
+									<p class="alert alert-danger">请先选择 【工序】</p>		
+								<%} else if(message != null){ %>
 								<p class="alert alert-danger">信息提示：<%=message %></p>
 								<%}%>
 									<div class="clear"></div>
@@ -150,18 +158,43 @@ caption {
 												<tr>
 													<td>
 														<div class="form-group">
-															送货单位：
+															加工单位：
 															<select class="form-control require" name="factoryId" id="factoryId">
 															<option value="">请选择</option>
-															<%for(Factory factory : SystemCache.produce_factorylist){ %>
-															<option value="<%=factory.getId() %>"><%=factory.getName() %></option>
-															<%} %>
+															<%
+																	for (int tempfactoryId : factoryMap.keySet()) {
+																%>
+																	<%if(factoryId!=null && factoryId == tempfactoryId){ %>
+																		<option selected value="<%=factoryId%>"><%=factoryMap.get(tempfactoryId)%></option>
+																	<%} else{ %>
+																		<option value="<%=tempfactoryId%>"><%=factoryMap.get(tempfactoryId)%></option>
+																<%
+																	}
+																}
+																%>
 															</select>
 														</div>
-														<div class="form-group ">
-															业务员：<%=SystemCache.getEmployeeName(order
-							.getCharge_employee())%>
+														<div class="form-group">
+															工序：
+															<select class="form-control require" name="gongxuId"
+																		id="gongxuId">
+																		<option value="">
+																			未选择
+																		</option>
+																		<%
+																	for (int tempgongxuId : gongxuMap.keySet()) {
+																%>
+																	<%if(gongxuId!=null && gongxuId == tempgongxuId){ %>
+																		<option selected value="<%=tempgongxuId%>"><%=gongxuMap.get(tempgongxuId)%></option>
+																	<%} else{ %>
+																		<option value="<%=tempgongxuId%>"><%=gongxuMap.get(tempgongxuId)%></option>
+																<%
+																	}
+																}
+																%>
+																	</select>
 														</div>
+														
 														<div class="form-group ">
 															入库时间：
 															<input type="text" class="form-control require date"
@@ -204,7 +237,7 @@ caption {
 																					公司货号
 																				</th>
 																				<th class="center" width="10%">
-																					客户
+																					跟单人
 																				</th>
 																				<th class="center" width="20%">
 																					品名
@@ -222,7 +255,8 @@ caption {
 					: order.getCompany_productNumber()%>
 																				</td>
 																				<td class="center">
-																					<%=SystemCache.getCustomerName(order.getCustomerId())%>
+																					<%=SystemCache.getEmployeeName(order
+							.getCharge_employee())%>
 																				</td>
 																				<td class="center"><%=order.getName() == null ? "" : order
 					.getName()%>
@@ -272,7 +306,7 @@ caption {
 														总数量
 													</th>
 													<th width="10%">
-														库存
+														实际已入库
 													</th>
 													<th width="10%">
 														未入库
@@ -284,6 +318,19 @@ caption {
 												</tr>
 											</thead>
 											<tbody>
+												<%if(factoryId == null || factoryId == 0){ %>
+												<tr class="EmptyTr center" style="color:red;">
+													<td colspan="7">请先选择【加工工厂】</td>
+												</tr>
+												<%}else if(gongxuId == null || gongxuId== 0){ %>
+												<tr class="EmptyTr center" style="color:red;">
+													<td colspan="7">请先选择【工序】</td>
+												</tr>
+												<%} else if(detaillist == null || detaillist.size()<0){ %>
+												<tr class="EmptyTr center" style="color:red;">
+													<td colspan="7">没有产品可以入库</td>
+												</tr>
+												<%} %>
 												<%
 													for (Map<String, Object> item : detaillist) {
 												%>

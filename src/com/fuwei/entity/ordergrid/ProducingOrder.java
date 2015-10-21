@@ -284,7 +284,6 @@ public class ProducingOrder extends BaseTableOrder{
 		return DateTool.getYear2() + "SC" + NumberUtil.appendZero(this.id, 4);
 	}
 	
-	
 }
 
 

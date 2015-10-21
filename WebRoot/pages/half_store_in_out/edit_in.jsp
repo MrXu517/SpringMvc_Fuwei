@@ -12,6 +12,7 @@
 <%@page import="com.fuwei.entity.ordergrid.PlanOrder"%>
 <%@page import="com.fuwei.entity.producesystem.HalfStoreInOut"%>
 <%@page import="com.fuwei.entity.ordergrid.PlanOrderDetail"%>
+<%@page import="com.fuwei.entity.GongXu"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -28,6 +29,10 @@
 	if (detaillist == null) {
 		detaillist = new ArrayList<Map<String, Object>>();
 	}
+	Map<Integer,String> factoryMap = (Map<Integer,String>)request.getAttribute("factoryMap");
+	Integer factoryId = (Integer)request.getAttribute("factoryId");
+	Map<Integer,String> gongxuMap = (Map<Integer,String>)request.getAttribute("gongxuMap");
+	Integer gongxuId = (Integer)request.getAttribute("gongxuId");
 %>
 <!DOCTYPE html>
 <html>
@@ -127,6 +132,11 @@ caption {
 									<input type="hidden" name="id" value="<%=object.getId() %>" />
 									<input type="hidden" name="orderId"
 										value="<%=object.getOrderId()%>" />
+									<%if(factoryId == null || factoryId <= 0){ %>
+								<p class="alert alert-danger">请先选择 【加工单位】</p>
+								<%}else if(gongxuId == null || gongxuId <= 0){ %>
+									<p class="alert alert-danger">请先选择 【工序】</p>		
+								<%}%>
 									<div class="clear"></div>
 									<div class="col-md-12 tablewidget">
 										<table class="table">
@@ -151,21 +161,37 @@ caption {
 																	未选择
 																</option>
 																<%
-																	for (Factory factory : SystemCache.produce_factorylist) {
+																	for (int tempfactoryId : factoryMap.keySet()) {
 																%>
-																<%if(object.getFactoryId() == factory.getId()){ %>
-																		<option selected value="<%=factory.getId()%>"><%=factory.getName()%></option>
+																	<%if(factoryId!=null && factoryId == tempfactoryId){ %>
+																		<option selected value="<%=factoryId%>"><%=factoryMap.get(tempfactoryId)%></option>
 																	<%} else{ %>
-																		<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
+																		<option value="<%=tempfactoryId%>"><%=factoryMap.get(tempfactoryId)%></option>
 																<%
 																	}
 																}
 																%>
 															</select>
 														</div>
-														<div class="form-group ">
-															业务员：<%=SystemCache.getEmployeeName(object
-							.getCharge_employee())%>
+														<div class="form-group">
+															工序：
+															<select class="form-control require" name="gongxuId"
+																id="gongxuId">
+																<option value="">
+																	未选择
+																</option>
+																<%
+																	for (int tempgongxuId : gongxuMap.keySet()) {
+																%>
+																	<%if(gongxuId!=null && gongxuId == tempgongxuId){ %>
+																		<option selected value="<%=tempgongxuId%>"><%=gongxuMap.get(tempgongxuId)%></option>
+																	<%} else{ %>
+																		<option value="<%=tempgongxuId%>"><%=gongxuMap.get(tempgongxuId)%></option>
+																<%
+																	}
+																}
+																%>
+															</select>
 														</div>
 														<div class="form-group ">
 															入库时间：
@@ -208,6 +234,9 @@ caption {
 																				<th class="center" width="15%">
 																					公司货号
 																				</th>
+																				<th class="center" width="15%">
+																					业务员
+																				</th>
 																				<th class="center" width="20%">
 																					品名
 																				</th>
@@ -222,6 +251,8 @@ caption {
 																				</td>
 																				<td class="center"><%=object.getCompany_productNumber() == null ? ""
 					: object.getCompany_productNumber()%>
+																				</td>
+																				<td class="center"><%=SystemCache.getEmployeeName(object.getCharge_employee())%>
 																				</td>
 																				<td class="center"><%=object.getName() == null ? "" : object
 					.getName()%>
@@ -272,7 +303,7 @@ caption {
 														总数量
 													</th>
 													<th width="10%">
-														库存
+														实际已入库
 													</th>
 													<th width="10%">
 														未入库

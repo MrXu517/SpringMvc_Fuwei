@@ -16,7 +16,6 @@
 	//权限
 	Boolean has_delete = SystemCache.hasAuthority(session,"half_store_in_out/delete");
 	Boolean has_print = SystemCache.hasAuthority(session,"half_store_in_out/print");
-	Boolean has_edit = SystemCache.hasAuthority(session,"half_store_in_out/edit");
 %>
 <!DOCTYPE html>
 <html>
@@ -82,13 +81,7 @@
 						<%
 							}
 						%>
-						<%
-							if(has_edit){
-						%>
-						<a href="half_store_in/put/<%=storeInOut.getId()%>" type="button" class="btn btn-primary">编辑</a>					
-						<%
-												}
-											%>
+						
 						<%
 							if(has_delete){
 						%>
@@ -113,10 +106,11 @@
 
 									</td>
 									<td>
-										业务员：
+										工序：
 										<span><%=storeInOut == null ? ""
-						: (SystemCache.getEmployeeName((storeInOut
-								.getCharge_employee())))%></span>
+						: (SystemCache.getGongxuName(storeInOut
+								.getGongxuId()))%></span>
+
 									</td>
 									<td>
 										入库时间：
@@ -156,6 +150,9 @@
 																				<th class="center" width="15%">
 																					公司货号
 																				</th>
+																				<th class="center" width="15%">
+																					业务员
+																				</th>
 																				<th class="center" width="20%">
 																					品名
 																				</th>
@@ -170,6 +167,10 @@
 																				</td>
 																				<td class="center"><%=storeInOut.getCompany_productNumber() == null ? ""
 					: storeInOut.getCompany_productNumber()%>
+																				</td><td>
+																					<span><%=storeInOut == null ? ""
+																	: (SystemCache.getEmployeeName((storeInOut
+																			.getCharge_employee())))%></span>
 																				</td>
 																				<td class="center"><%=storeInOut.getName() == null ? "" : storeInOut
 					.getName()%>

@@ -44,7 +44,6 @@
 							<tbody>
 								<tr>
 									<td>
-
 										送货单位：
 										<span><%=storeInOut == null ? ""
 						: (SystemCache.getFactoryName(storeInOut
@@ -52,10 +51,11 @@
 
 									</td>
 									<td>
-										业务员：
+										工序：
 										<span><%=storeInOut == null ? ""
-						: (SystemCache.getEmployeeName((storeInOut
-								.getCharge_employee())))%></span>
+						: (SystemCache.getGongxuName(storeInOut
+								.getGongxuId()))%></span>
+
 									</td>
 									<td>
 										入库时间：
@@ -83,6 +83,9 @@
 													公司货号
 												</td>
 												<td class="center" width="15%">
+													业务员
+												</td>
+												<td class="center" width="15%">
 													品名
 												</td>
 											</tr>
@@ -95,7 +98,11 @@
 												</td>
 												<td class="center">
 													<span><%=storeInOut.getCompany_productNumber()%></span>
-												</td>
+												</td><td>
+										<span><%=storeInOut == null ? ""
+						: (SystemCache.getEmployeeName((storeInOut
+								.getCharge_employee())))%></span>
+									</td>
 												<td class="center">
 													<span><%=storeInOut.getName()%></span>
 												</td>

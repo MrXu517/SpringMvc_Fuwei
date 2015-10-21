@@ -1,0 +1,62 @@
+$(document).ready( function() {
+	/* 设置当前选中的页 */
+	/*设置当前选中的页*/
+	var $a = $("#left li a[href='workspace/half_workspace']");
+	setActiveLeft($a.parent("li"));
+	/* 设置当前选中的页 */
+	$("#factoryId").focus();
+	$("#factoryId").change(function(){
+		var params = Common.urlParams();
+		params.factoryId = this.value;
+		location.href = location.pathname + "?" + $.param(params);
+	});
+	$("#gongxuId").change(function(){
+		var params = Common.urlParams();
+		params.gongxuId = this.value;
+		location.href = location.pathname + "?" + $.param(params);
+	});
+	$(".quantity").bind("blur",function(){
+		if(this.value == ""){
+			this.value = 0 ;
+		}
+	});
+	$(".quantity").click(function(){
+		$(this).focus();
+		$(this).select();
+	});
+	
+	//2015-4-3 添加自动focus到第一个可输入input、select
+	$("form").find(".quantity").not("[readonly],[disabled]").first().click();
+	//2015-4-3 添加自动focus到第一个可输入input、select
+		var storInGrid = new OrderGrid({
+			tipText:"半成品退货单",
+			url:"half_store_return/add",
+			postUrl:"half_store_return/add",
+			$content:$(".body"),
+			donecall:function(result){
+				Common.Tip("请打印半成品退货单", function() {
+					location.href = "half_store_return/detail/" + result.id;
+				});
+			},
+			tbOptions:{
+				beforeAdd:function(){
+					var TableInstance = this;
+					var length = $(TableInstance.tableEle).find("tbody tr").length;
+					if(length >= 6){
+						Common.Tip("不能再添加行，一张入库单最多只能填6条材料信息。您可以保存当前退货单后，再创建一张退货单");
+						return false;
+					}
+					return true;
+				},
+				colnames : [
+						{
+							name :'quantity',
+							colname :'数量',
+							width :'15%'
+						}],
+						$dialog:$("#storeDialog")
+			}
+			
+		});
+		
+	});

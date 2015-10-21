@@ -17,8 +17,11 @@ import com.fuwei.commons.Sort;
 import com.fuwei.entity.ordergrid.PlanOrderDetail;
 import com.fuwei.entity.producesystem.HalfCurrentStock;
 import com.fuwei.entity.producesystem.HalfCurrentStockDetail;
+import com.fuwei.entity.producesystem.HalfInOut;
 import com.fuwei.entity.producesystem.HalfStoreInOut;
 import com.fuwei.entity.producesystem.HalfStoreInOutDetail;
+import com.fuwei.entity.producesystem.HalfStoreReturn;
+import com.fuwei.entity.producesystem.HalfStoreReturnDetail;
 import com.fuwei.service.BaseService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
@@ -31,6 +34,8 @@ public class HalfCurrentStockService extends BaseService {
 	JdbcTemplate jdbc;
 	@Autowired
 	HalfStoreInOutService halfStoreInOutService;
+	@Autowired
+	HalfStoreReturnService halfStoreReturnService;
 	
 	// 获取列表
 	public Pager getList(Pager pager,Integer companyId,Integer charge_employee,String orderNumber,Boolean not_zero, List<Sort> sortlist)
@@ -79,6 +84,20 @@ public class HalfCurrentStockService extends BaseService {
 			throw e;
 		}
 	}
+	
+	//获取某订单的半成品出入库记录
+	// 获取
+	public List<HalfInOut> halfDetail(int orderId)
+			throws Exception {
+		try {
+			List<HalfInOut> list = dao.queryForBeanList("select * from (select created_at,created_user,'store' as type ,id ,number, gongxuId, orderId,date,factoryId,sign,has_print,detail_json,in_out,memo  from tb_half_store_in_out where orderId = ? union all select created_at,created_user,'return' as type,id ,number, gongxuId, orderId,date,factoryId,sign,has_print,detail_json,null,memo  from tb_half_store_return where orderId = ?)  c order by date desc,created_at desc",
+					HalfInOut.class,orderId,orderId);
+			return list;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 	
 	//创建
 	@Transactional
@@ -157,6 +176,8 @@ public class HalfCurrentStockService extends BaseService {
 		List<HalfStoreInOut> storeInList = halfStoreInOutService.getByOrder(orderId,true);
 		//获取已开的出库单
 		List<HalfStoreInOut> storeOutList = halfStoreInOutService.getByOrder(orderId,false);
+		//获取已开的半成品退货单
+		List<HalfStoreReturn> storeReturnList = halfStoreReturnService.getByOrder(orderId);
 		
 		//根据  【planOrderDetailId】  统计入库总数量 , key = planOrderDetailId
 		HashMap<Integer, HalfStoreInOutDetail> tempMap = new HashMap<Integer, HalfStoreInOutDetail>();
@@ -190,6 +211,18 @@ public class HalfCurrentStockService extends BaseService {
 				}
 			}
 		}
+		for (HalfStoreReturn storereturn : storeReturnList) {
+			for (HalfStoreReturnDetail temp : storereturn.getDetaillist()) {
+				int key = temp.getPlanOrderDetailId(); 
+				if(total_outmap.containsKey(key)){
+					int temp_total_quantity = total_outmap.get(key);
+					total_outmap.put(key, temp_total_quantity + temp.getQuantity());
+				}else{
+					total_outmap.put(key, temp.getQuantity());
+				}
+			}
+		}
+		
 
 		//获取当前库存列表
 		for(int key : total_inmap.keySet()){

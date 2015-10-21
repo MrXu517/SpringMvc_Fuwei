@@ -25,14 +25,18 @@
 	List<PlanOrderDetail> planOrderDetailList = planOrder == null ? new ArrayList<PlanOrderDetail>()
 			: planOrder.getDetaillist();
 			
-	List<Map<String,Object>> stocklist = (List<Map<String, Object>>) request
-			.getAttribute("stocklist");
+	List<Map<String,Object>> detaillist = (List<Map<String, Object>>) request
+			.getAttribute("detaillist");
+	detaillist = detaillist == null? new ArrayList<Map<String,Object>>():detaillist;
 	Boolean able = true;
-	if(stocklist == null || stocklist.size()==0){
+	if(detaillist == null || detaillist.size()==0){
 		able = false;
 	}
 	String message = request.getAttribute("message") == null ? null : (String)request.getAttribute("message");
-	
+	Map<Integer,String> factoryMap = (Map<Integer,String>)request.getAttribute("factoryMap");
+	Integer factoryId = (Integer)request.getAttribute("factoryId");
+	Map<Integer,String> gongxuMap = (Map<Integer,String>)request.getAttribute("gongxuMap");
+	Integer gongxuId = (Integer)request.getAttribute("gongxuId");
 %>
 <!DOCTYPE html>
 <html>
@@ -135,10 +139,13 @@ caption{
 								<input type="hidden" name="id" value="" />
 								<input type="hidden" name="orderId"
 									value="<%=order.getId()%>" />
-								<%if(message != null){ %>
+								<%if(factoryId == null || factoryId <= 0){ %>
+								<p class="alert alert-danger">请先选择 【加工单位】</p>
+								<%}else if(gongxuId == null || gongxuId <= 0){ %>
+									<p class="alert alert-danger">请先选择 【工序】</p>		
+								<%} else if(message != null){ %>
 								<p class="alert alert-danger">信息提示：<%=message %></p>
-								<%}%>
-								<%if(!able){ %>
+								<%}else if(!able){ %>
 									<p class="alert alert-danger">该订单半成品库存为0，无法出库</p>		
 												<%} %>
 								<div class="clear"></div>
@@ -173,17 +180,37 @@ caption{
 																	未选择
 																</option>
 																<%
-																	for (Factory factory : SystemCache.produce_factorylist) {
+																	for (int tempfactoryId : factoryMap.keySet()) {
 																%>
-																		<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
+																	<%if(factoryId!=null && factoryId == tempfactoryId){ %>
+																		<option selected value="<%=factoryId%>"><%=factoryMap.get(tempfactoryId)%></option>
+																	<%} else{ %>
+																		<option value="<%=tempfactoryId%>"><%=factoryMap.get(tempfactoryId)%></option>
 																<%
+																	}
 																}
 																%>
 															</select>
 														</div>
-														<div class="form-group ">
-															业务员：<%=SystemCache.getEmployeeName(order
-							.getCharge_employee())%>
+														<div class="form-group">
+															工序：
+															<select class="form-control require" name="gongxuId"
+																		id="gongxuId">
+																		<option value="">
+																			未选择
+																		</option>
+																		<%
+																	for (int tempgongxuId : gongxuMap.keySet()) {
+																%>
+																	<%if(gongxuId!=null && gongxuId == tempgongxuId){ %>
+																		<option selected value="<%=tempgongxuId%>"><%=gongxuMap.get(tempgongxuId)%></option>
+																	<%} else{ %>
+																		<option value="<%=tempgongxuId%>"><%=gongxuMap.get(tempgongxuId)%></option>
+																<%
+																	}
+																}
+																%>
+																	</select>
 														</div>
 														<div class="form-group ">
 															出库时间：
@@ -226,8 +253,8 @@ caption{
 																				<th class="center" width="15%">
 																					公司货号
 																				</th>
-																				<th class="center" width="15%">
-																					客户
+																				<th class="center" width="10%">
+																					跟单人
 																				</th>
 																				<th class="center" width="20%">
 																					品名
@@ -245,7 +272,8 @@ caption{
 					: order.getCompany_productNumber()%>
 																				</td>
 																				<td class="center">
-																					<%=SystemCache.getCustomerName(order.getCustomerId())%>
+																					<%=SystemCache.getEmployeeName(order
+							.getCharge_employee())%>
 																				</td>
 																				<td class="center"><%=order.getName() == null ? "" : order
 					.getName()%>
@@ -288,6 +316,11 @@ caption{
 													</th>
 													<th width="15%">
 														尺寸
+													</th><th width="15%">
+														总数量
+													</th>
+													<th width="10%">
+														未出库
 													</th>
 													<th width="10%">
 														当前库存
@@ -302,20 +335,22 @@ caption{
 										<tbody>
 												<%if(!able){ %>
 												<tr class="EmptyTr center" style="color:red;">
-													<td colspan="4">库存为0，无法出库</td>
+													<td colspan="6">库存为0，无法出库</td>
 												</tr>
 												<%} %>
 												<%
-													for (Map<String, Object> item : stocklist) {
+													for (Map<String, Object> item : detaillist) {
 												%>
 												<tr class="tr" data='<%=SerializeTool.serialize(item)%>'>
 													<td><%=item.get("color")%></td>
 													<td><%=item.get("size")%></td>
+													<td><%=item.get("total_quantity")%></td>
+													<td><%=item.get("not_out_quantity")%></td>
 													<td><%=item.get("stock_quantity")%></td>
 													<td>
 														<input class="quantity form-control require double value"
 															type="text" value="0"
-															placeholder="小于等于<%=item.get("stock_quantity")%>的数量">
+															placeholder="小于等于<%=Math.min((Integer)item.get("stock_quantity"),(Integer)item.get("not_out_quantity"))%>的数量">
 													</td>
 												</tr>
 												<%

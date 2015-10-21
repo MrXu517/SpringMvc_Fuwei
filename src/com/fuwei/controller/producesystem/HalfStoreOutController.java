@@ -34,6 +34,8 @@ import com.fuwei.entity.Order;
 import com.fuwei.entity.OrderDetail;
 import com.fuwei.entity.User;
 import com.fuwei.entity.ordergrid.FuliaoPurchaseOrderDetail;
+import com.fuwei.entity.ordergrid.GongxuProducingOrder;
+import com.fuwei.entity.ordergrid.GongxuProducingOrderDetail;
 import com.fuwei.entity.ordergrid.PlanOrder;
 import com.fuwei.entity.ordergrid.PlanOrderDetail;
 import com.fuwei.entity.ordergrid.ProducingOrder;
@@ -41,6 +43,8 @@ import com.fuwei.entity.ordergrid.ProducingOrderDetail;
 import com.fuwei.entity.ordergrid.ProducingOrderMaterialDetail;
 import com.fuwei.entity.ordergrid.StoreOrder;
 import com.fuwei.entity.ordergrid.StoreOrderDetail;
+import com.fuwei.entity.producesystem.HalfCurrentStock;
+import com.fuwei.entity.producesystem.HalfCurrentStockDetail;
 import com.fuwei.entity.producesystem.HalfStoreInOut;
 import com.fuwei.entity.producesystem.HalfStoreInOutDetail;
 import com.fuwei.entity.producesystem.StoreInOut;
@@ -49,8 +53,10 @@ import com.fuwei.service.AuthorityService;
 import com.fuwei.service.MessageService;
 import com.fuwei.service.OrderService;
 import com.fuwei.service.SampleService;
+import com.fuwei.service.ordergrid.GongxuProducingOrderService;
 import com.fuwei.service.ordergrid.PlanOrderService;
 import com.fuwei.service.ordergrid.ProducingOrderService;
+import com.fuwei.service.producesystem.HalfCurrentStockService;
 import com.fuwei.service.producesystem.HalfStoreInOutService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
@@ -70,6 +76,12 @@ public class HalfStoreOutController extends BaseController {
 	AuthorityService authorityService;
 	@Autowired
 	MessageService messageService;
+	@Autowired
+	HalfCurrentStockService halfCurrentStockService;
+	@Autowired
+	ProducingOrderService producingOrderService;
+	@Autowired
+	GongxuProducingOrderService gongxuProducingOrderService;
 	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
@@ -150,18 +162,18 @@ public class HalfStoreOutController extends BaseController {
 	// 添加或保存
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView addbyorder2(String orderNumber,
+	public ModelAndView addbyorder2(String orderNumber,Integer factoryId,Integer gongxuId,
 			HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		Order order =  orderService.get(orderNumber);
 		 if(order == null){
 			 throw new Exception("找不到订单号为" + orderNumber + "的订单");
 		 }
-		 return addbyorder(order.getId(), session, request, response);
+		 return addbyorder(order.getId(),factoryId,gongxuId, session, request, response);
 	}
 	@RequestMapping(value = "/{orderId}/add", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView addbyorder(@PathVariable Integer orderId,HttpSession session, HttpServletRequest request,
+	public ModelAndView addbyorder(@PathVariable Integer orderId,Integer factoryId,Integer gongxuId,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		if (orderId == null) {
 			throw new Exception("订单ID不能为空");
@@ -193,28 +205,106 @@ public class HalfStoreOutController extends BaseController {
 			request.setAttribute("planOrder", planOrder);
 			request.setAttribute("order", order);
 			
-			/*获取当前库存*/
-			//获取已开的入库单
-			List<HalfStoreInOut> storeInList = halfStoreInOutService.getByOrder(orderId,true);
-			//获取已开的出库单
-			List<HalfStoreInOut> storeOutList = halfStoreInOutService.getByOrder(orderId,false);
-			//当前库存
-			List<Map<String,Object>> stocklist = getOutStoreQuantity(planOrder, storeInList,storeOutList);
-			/*获取当前库存*/
 			
-			/*判断若detaillist 的not_in_quantity 均 == 0 ， 则表示已全部入库，无需再创建入库单*/
-			boolean flag = true;
-			for(Map<String,Object> tMap : stocklist){
-				if((Integer)tMap.get("stock_quantity") > 0){				
-					flag = false;
+			/*找到可以半成品入库的工厂：生产单的工厂、工序加工单的工厂*/
+			Map<Integer,String> factoryMap = new HashMap<Integer, String>();
+			List<ProducingOrder> producingOrderlist = producingOrderService.getByOrder(orderId);		
+			for(ProducingOrder temp : producingOrderlist){
+				int tempfactoryId = temp.getFactoryId();
+				if(!factoryMap.containsKey(tempfactoryId)){
+					factoryMap.put(tempfactoryId, SystemCache.getFactoryName(tempfactoryId));
+				}
+				
+			}
+			List<GongxuProducingOrder> gongxuProducingOrderlist = gongxuProducingOrderService.getByOrder(orderId);		
+			for(GongxuProducingOrder temp : gongxuProducingOrderlist){
+				int tempfactoryId = temp.getFactoryId();
+				if(!factoryMap.containsKey(tempfactoryId)){
+					factoryMap.put(tempfactoryId, SystemCache.getFactoryName(tempfactoryId));
 				}
 			}
-			if(flag){
-				request.setAttribute("message", "库存数量为0，无法再创建出库单！！！");
+			if(factoryMap.size()==1){
+				for(Integer temp:factoryMap.keySet()){
+					factoryId = temp;
+				}
 			}
-			/*判断若detaillist 的not_in_quantity 均 == 0 ， 则表示已全部入库，无需再创建入库单*/
+			request.setAttribute("factoryMap", factoryMap);
 			
-			request.setAttribute("stocklist", stocklist);
+			Map<Integer,String> gongxuMap = new HashMap<Integer, String>();
+			for(ProducingOrder temp : producingOrderlist){
+				int tempfactoryId = temp.getFactoryId();
+				if(factoryId != null && tempfactoryId == factoryId){
+					int tempGongxuId = SystemCache.producing_GONGXU.getId();
+					if(!gongxuMap.containsKey(tempGongxuId)){
+						gongxuMap.put(tempGongxuId, SystemCache.getGongxuName(tempGongxuId));
+					}
+				}
+				
+			}	
+			for(GongxuProducingOrder temp : gongxuProducingOrderlist){
+				int tempfactoryId = temp.getFactoryId();
+				if(factoryId != null && tempfactoryId == factoryId){
+					int tempGongxuId = temp.getGongxuId();
+					if(!gongxuMap.containsKey(tempGongxuId)){
+						gongxuMap.put(tempGongxuId, SystemCache.getGongxuName(tempGongxuId));
+					}
+				}
+			}
+			request.setAttribute("gongxuMap", gongxuMap);
+			if(gongxuMap.size()==1){
+				for(Integer temp:gongxuMap.keySet()){
+					gongxuId = temp;
+				}
+			}
+			
+			request.setAttribute("factoryId", factoryId);
+			request.setAttribute("gongxuId", gongxuId);
+			/*找到可以半成品入库的工厂：生产单的工厂、工序加工单的工厂*/
+			
+			if(factoryId!=null && factoryId!=0 && gongxuId!=null && gongxuId!=0){
+				/*半成品出库单的限制条件：1、出库数量<=仓库中当前库存  ， 2、出库数量大于加工单中数量时，给提醒，但依然可保存*/
+				/*1.获取当前库存*/
+				HalfCurrentStock currentStock = halfCurrentStockService.get(orderId);
+				/*1.获取当前库存*/
+				
+				/*2.获取加工单未出库数量  = 加工单中的数量 - 已出库数量*/
+				//获取已开的出库单
+				List<HalfStoreInOut> storeOutList = halfStoreInOutService.getByFactoryGongxu(orderId,factoryId,gongxuId,false);
+				List<Map<String,Object>> detaillist = new ArrayList<Map<String,Object>>();
+				if(gongxuId == SystemCache.producing_GONGXU.getId()){//若是生产单的半成品入库
+					List<ProducingOrder> templist = producingOrderService.getByFactory(orderId,factoryId);
+					detaillist = getOutStoreQuantity(currentStock,templist,storeOutList,planOrder);
+				}else{
+					List<GongxuProducingOrder> gongxuProducingOrderList = gongxuProducingOrderService.getByFactoryGongXu(orderId,factoryId,gongxuId);
+					detaillist = getGongxuOutStoreQuantity(currentStock,gongxuProducingOrderList,storeOutList,planOrder);
+				}
+//				List<Map<String,Object>> stocklist = getOutStoreQuantity(planOrder,storeOutList);
+				/*2.获取加工单未出库数量*/
+				
+				/*判断若detaillist 的not_in_quantity 均 == 0 ， 则表示已全部入库，无需再创建入库单*/
+				boolean flag = true;
+				boolean flag_not_in = true;
+				for(Map<String,Object> tMap : detaillist){
+					if((Integer)tMap.get("stock_quantity") > 0){				
+						flag = false;
+					}
+					if((Integer)tMap.get("not_out_quantity") > 0){				
+						flag_not_in = false;
+					}
+				}
+				if(flag_not_in){
+					request.setAttribute("message", "加工单所需半成品已全部出库，请确认出库量是否过大");
+				}
+				if(flag){
+					request.setAttribute("message", "库存数量为0，无法再创建出库单！！！");
+				}
+				
+				/*判断若detaillist 的not_in_quantity 均 == 0 ， 则表示已全部入库，无需再创建入库单*/
+				
+				request.setAttribute("detaillist", detaillist);
+			}
+			
+			
 			return new ModelAndView("half_store_in_out/add_out");
 		} catch (Exception e) {
 			throw e;
@@ -244,10 +334,10 @@ public class HalfStoreOutController extends BaseController {
 			if (factoryId == null || factoryId == 0) {
 				throw new Exception("必须指定领取单位", null);
 			}
-//			if (storeInOut.getEmployee_id() == null
-//					|| storeInOut.getEmployee_id() == 0) {
-//				throw new Exception("经办人不能为空", null);
-//			}
+			Integer gongxuId = storeInOut.getGongxuId();
+			if (gongxuId == null || gongxuId == 0) {
+				throw new Exception("工序ID不能为空");
+			}
 			if (storeInOut.getDate() == null) {
 				throw new Exception("出库日期不能为空", null);
 			}
@@ -311,23 +401,46 @@ public class HalfStoreOutController extends BaseController {
 
 				storeInOut.setIn_out(false);
 				
-				/*判断出库量总和是否大于入库总数*/
-				//获取已开的入库单
-				List<HalfStoreInOut> storeInList = halfStoreInOutService.getByOrder(orderId,true);
-				//获取已开的出库单
-				List<HalfStoreInOut> storeOutList = halfStoreInOutService.getByOrder(orderId,false);
-				storeOutList.add(storeInOut);
-				List<Map<String,Object>> stocklist =  getOutStoreQuantity(planOrder,storeInList,storeOutList);
-				for(Map<String,Object> item:stocklist){
-					int stock_quantity = (Integer)item.get("stock_quantity");
-					if(stock_quantity<0){//出库总数大于原材料仓库单的数量
-						throw new Exception("颜色：" +  item.get("color") + "," 
-								+ "尺寸：" +  item.get("size")+
-								"的出库总数大于当前库存");
+				/*半成品出库单的限制条件：1、出库数量<=仓库中当前库存  ， 2、出库数量大于加工单中数量时，给提醒，但依然可保存*/
+				/*1.出库数量<=仓库中当前库存*/
+				HalfCurrentStock currentStock = halfCurrentStockService.get(orderId);
+				for(HalfStoreInOutDetail temp : storeInOut.getDetaillist()){
+					for(HalfCurrentStockDetail dt: currentStock.getDetaillist()){
+						if(dt.getPlanOrderDetailId() == temp.getPlanOrderDetailId()){
+							dt.setStock_quantity(dt.getStock_quantity() - temp.getQuantity());
+							if(dt.getStock_quantity() < 0){//出库总数大于仓库库存的数量
+								throw new Exception("颜色：" +  dt.getColor() + "," 
+										+ "尺寸：" +  dt.getSize()+
+										"的出库总数大于仓库库存");
+							}
+						}
 					}
 				}
-				/*判断出库量总和是否大于入库总数*/
+				/*1.出库数量<=仓库中当前库存*/
 				
+				/*2.获取加工单未出库数量  = 加工单中的数量 - 已出库数量*/
+				List<HalfStoreInOut> storeOutList = halfStoreInOutService.getByFactoryGongxu(orderId,factoryId,gongxuId,false);
+				storeOutList.add(storeInOut);
+				List<Map<String,Object>> stocklist = new ArrayList<Map<String,Object>>();
+				if(gongxuId == SystemCache.producing_GONGXU.getId()){//若是生产单的半成品入库
+					List<ProducingOrder> templist = producingOrderService.getByFactory(orderId,factoryId);
+					stocklist = getOutStoreQuantity(currentStock,templist,storeOutList,planOrder);
+				}else{
+					List<GongxuProducingOrder> gongxuProducingOrderList = gongxuProducingOrderService.getByFactoryGongXu(orderId,factoryId,gongxuId);
+					stocklist = getGongxuOutStoreQuantity(currentStock,gongxuProducingOrderList,storeOutList,planOrder);
+				}
+				/*2.获取加工单未出库数量*/
+				boolean flag = true;
+				for(Map<String,Object> tMap : stocklist){
+					if((Integer)tMap.get("not_out_quantity") > 0){				
+						flag = false;
+					}
+				}
+				if(flag){
+					request.setAttribute("message", "出库数量大于加工单数量，请仔细确认数量是否正确");
+				}
+				/*半成品出库单的限制条件：1、出库数量<=仓库中当前库存  ， 2、出库数量大于加工单中数量时，给提醒，但依然可保存*/
+
 				int tableOrderId = halfStoreInOutService.add(storeInOut);
 				return this.returnSuccess("id", tableOrderId);
 			} else {// 编辑
@@ -349,11 +462,26 @@ public class HalfStoreOutController extends BaseController {
 				storeInOut.setDetaillist(detaillist);
 				storeInOut.setIn_out(false);
 				
-				/*判断出库量总和是否大于入库总数*/
-				//获取已开的入库单
-				List<HalfStoreInOut> storeInList = halfStoreInOutService.getByOrder(orderId,true);
-				//获取已开的出库单
-				List<HalfStoreInOut> storeOutList = halfStoreInOutService.getByOrder(orderId,false);
+				
+				/*半成品出库单的限制条件：1、出库数量<=仓库中当前库存  ， 2、出库数量大于加工单中数量时，给提醒，但依然可保存*/
+				/*1.出库数量<=仓库中当前库存*/
+				HalfCurrentStock currentStock = halfCurrentStockService.get(orderId);
+				for(HalfStoreInOutDetail temp : storeInOut.getDetaillist()){
+					for(HalfCurrentStockDetail dt: currentStock.getDetaillist()){
+						if(dt.getPlanOrderDetailId() == temp.getPlanOrderDetailId()){
+							dt.setStock_quantity(dt.getStock_quantity() - temp.getQuantity());
+							if(dt.getStock_quantity() < 0){//出库总数大于仓库库存的数量
+								throw new Exception("颜色：" +  dt.getColor() + "," 
+										+ "尺寸：" +  dt.getSize()+
+										"的出库总数大于仓库库存");
+							}
+						}
+					}
+				}
+				/*1.出库数量<=仓库中当前库存*/
+				
+				/*2.获取加工单未出库数量  = 加工单中的数量 - 已出库数量*/
+				List<HalfStoreInOut> storeOutList = halfStoreInOutService.getByFactoryGongxu(orderId,factoryId,gongxuId,false);
 				Iterator<HalfStoreInOut> iterator = storeOutList.iterator();  
 				while(iterator.hasNext()){  
 					HalfStoreInOut temp = iterator.next();  
@@ -362,16 +490,25 @@ public class HalfStoreOutController extends BaseController {
 				    }  
 				} 
 				storeOutList.add(storeInOut);
-				List<Map<String,Object>> stocklist =  getOutStoreQuantity(planOrder,storeInList,storeOutList);
-				for(Map<String,Object> item:stocklist){
-					int stock_quantity = (Integer)item.get("stock_quantity");
-					if(stock_quantity<0){//出库总数大于入库的数量
-						throw new Exception("【颜色：" +  item.get("color") + "," 
-								+ "尺寸：" +  item.get("size")+
-								"】的出库总数大于当前库存");
+				List<Map<String,Object>> stocklist = new ArrayList<Map<String,Object>>();
+				if(gongxuId == SystemCache.producing_GONGXU.getId()){//若是生产单的半成品入库
+					List<ProducingOrder> templist = producingOrderService.getByFactory(orderId,factoryId);
+					stocklist = getOutStoreQuantity(currentStock,templist,storeOutList,planOrder);
+				}else{
+					List<GongxuProducingOrder> gongxuProducingOrderList = gongxuProducingOrderService.getByFactoryGongXu(orderId,factoryId,gongxuId);
+					stocklist = getGongxuOutStoreQuantity(currentStock,gongxuProducingOrderList,storeOutList,planOrder);
+				}
+				/*2.获取加工单未出库数量*/
+				boolean flag = true;
+				for(Map<String,Object> tMap : stocklist){
+					if((Integer)tMap.get("not_out_quantity") > 0){				
+						flag = false;
 					}
 				}
-				/*判断出库量总和是否大于入库总数*/
+				if(flag){
+					request.setAttribute("message", "出库数量大于加工单数量，请仔细确认数量是否正确");
+				}
+				/*半成品出库单的限制条件：1、出库数量<=仓库中当前库存  ， 2、出库数量大于加工单中数量时，给提醒，但依然可保存*/
 				
 				int tableOrderId = halfStoreInOutService.update(storeInOut);
 				return this.returnSuccess("id", tableOrderId);
@@ -383,60 +520,60 @@ public class HalfStoreOutController extends BaseController {
 
 	}
 
-	
-	@RequestMapping(value = "/put/{id}", method = RequestMethod.GET)
-	@ResponseBody
-	public ModelAndView put(@PathVariable Integer id,HttpSession session, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		if(id == null){
-			throw new Exception("半成品出库单ID不能为null");
-		}
-		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "half_store_in_out/edit";
-		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
-		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有编辑半成品出库单的权限", null);
-		}
-		try {
-			HalfStoreInOut object = halfStoreInOutService.get(id, false);
-			if(object == null){
-				throw new Exception("找不到ID为" + id + "的半成品出库单");
-			}
-			request.setAttribute("halfStoreInOut", object);
-			int orderId = object.getOrderId();
-			PlanOrder planOrder = planOrderService.getByOrder(orderId);
-			request.setAttribute("planOrder", planOrder);
-			
-			/*获取当前库存*/
-			//获取已开的入库单
-			List<HalfStoreInOut> storeInList = halfStoreInOutService.getByOrder(orderId,true);
-			//获取已开的出库单
-			List<HalfStoreInOut> storeOutList = halfStoreInOutService.getByOrder(orderId,false);
-			List<Map<String,Object>> stocklist =  getOutStoreQuantity(planOrder,storeInList,storeOutList);
-			/*获取当前库存*/
-				
-			List<Map<String,Object>> detaillist_result = new ArrayList<Map<String,Object>>();
-			for(Map<String,Object> stockMap : stocklist){
-				stockMap.put("quantity",0);
-				for(HalfStoreInOutDetail detail : object.getDetaillist()){
-					if(detail.getPlanOrderDetailId() == (Integer)stockMap.get("planOrderDetailId")){
-						stockMap.put("quantity",detail.getQuantity());
-						stockMap.put("id", detail.getId());
-					}
-					
-				}
-				
-				detaillist_result.add(stockMap);
-			}
-			
-			request.setAttribute("detaillist", detaillist_result);
-			
-			request.setAttribute("stocklist", stocklist);
-			return new ModelAndView("half_store_in_out/edit_out");
-		} catch (Exception e) {
-			throw e;
-		}
-	}
+//	
+//	@RequestMapping(value = "/put/{id}", method = RequestMethod.GET)
+//	@ResponseBody
+//	public ModelAndView put(@PathVariable Integer id,HttpSession session, HttpServletRequest request,
+//			HttpServletResponse response) throws Exception {
+//		if(id == null){
+//			throw new Exception("半成品出库单ID不能为null");
+//		}
+//		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+//		String lcode = "half_store_in_out/edit";
+//		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+//		if (!hasAuthority) {
+//			throw new PermissionDeniedDataAccessException("没有编辑半成品出库单的权限", null);
+//		}
+//		try {
+//			HalfStoreInOut object = halfStoreInOutService.get(id, false);
+//			if(object == null){
+//				throw new Exception("找不到ID为" + id + "的半成品出库单");
+//			}
+//			request.setAttribute("halfStoreInOut", object);
+//			int orderId = object.getOrderId();
+//			PlanOrder planOrder = planOrderService.getByOrder(orderId);
+//			request.setAttribute("planOrder", planOrder);
+//			
+//			/*获取当前库存*/
+//			//获取已开的入库单
+//			List<HalfStoreInOut> storeInList = halfStoreInOutService.getByOrder(orderId,true);
+//			//获取已开的出库单
+//			List<HalfStoreInOut> storeOutList = halfStoreInOutService.getByOrder(orderId,false);
+//			List<Map<String,Object>> stocklist =  getOutStoreQuantity(planOrder,storeInList,storeOutList);
+//			/*获取当前库存*/
+//				
+//			List<Map<String,Object>> detaillist_result = new ArrayList<Map<String,Object>>();
+//			for(Map<String,Object> stockMap : stocklist){
+//				stockMap.put("quantity",0);
+//				for(HalfStoreInOutDetail detail : object.getDetaillist()){
+//					if(detail.getPlanOrderDetailId() == (Integer)stockMap.get("planOrderDetailId")){
+//						stockMap.put("quantity",detail.getQuantity());
+//						stockMap.put("id", detail.getId());
+//					}
+//					
+//				}
+//				
+//				detaillist_result.add(stockMap);
+//			}
+//			
+//			request.setAttribute("detaillist", detaillist_result);
+//			
+//			request.setAttribute("stocklist", stocklist);
+//			return new ModelAndView("half_store_in_out/edit_out");
+//		} catch (Exception e) {
+//			throw e;
+//		}
+//	}
 	
 	// 2015-3-31 删除
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
@@ -491,23 +628,46 @@ public class HalfStoreOutController extends BaseController {
 		return new ModelAndView("half_store_in_out/out_print");
 	}
 
-	//获取某订单的当前库存
-	public List<Map<String,Object>> getOutStoreQuantity(PlanOrder planOrder, List<HalfStoreInOut> storeInList , List<HalfStoreInOut> storeOutList) throws Exception{
-		//根据  【planOrderDetailId】  统计入库总数量 , key = planOrderDetailId
-		HashMap<Integer, Integer> total_inmap = new HashMap<Integer, Integer>();
-		for (HalfStoreInOut storeIn : storeInList) {
-			for (HalfStoreInOutDetail temp : storeIn.getDetaillist()) {
+	//获取某加工工厂某工序的未出库数量
+	public List<Map<String,Object>> getOutStoreQuantity(HalfCurrentStock currentStock,List<ProducingOrder> list,List<HalfStoreInOut> storeOutList,PlanOrder planOrder) throws Exception{
+		//根据  【planOrderDetailId】  统计加工单总数量 , key = planOrderDetailId
+		HashMap<Integer, Integer> total_producingmap = new HashMap<Integer, Integer>();
+		for (ProducingOrder producingorder : list) {
+			for (ProducingOrderDetail temp : producingorder.getDetaillist()) {
 				int key = temp.getPlanOrderDetailId(); 
-				if(total_inmap.containsKey(key)){
-					int quantity = total_inmap.get(key) + temp.getQuantity();
-					total_inmap.put(key, quantity);
+				if(total_producingmap.containsKey(key)){
+					int quantity = total_producingmap.get(key) + temp.getQuantity();
+					total_producingmap.put(key, quantity);
 				}else{
-					total_inmap.put(key, temp.getQuantity());
+					total_producingmap.put(key, temp.getQuantity());
 				}
 			}
 		}
-		
-
+		List<Map<String,Object>> resultlist = _getOutStoreQuantity(currentStock,total_producingmap, storeOutList,planOrder);
+		return resultlist;
+	}
+	
+	//获取某加工工厂某工序的未出库数量
+	public List<Map<String,Object>> getGongxuOutStoreQuantity(HalfCurrentStock currentStock, List<GongxuProducingOrder> list,List<HalfStoreInOut> storeOutList,PlanOrder planOrder) throws Exception{
+		//根据  【planOrderDetailId】  统计加工单总数量 , key = planOrderDetailId
+		HashMap<Integer, Integer> total_producingmap = new HashMap<Integer, Integer>();
+		for (GongxuProducingOrder producingorder : list) {
+			for (GongxuProducingOrderDetail temp : producingorder.getDetaillist()) {
+				int key = temp.getPlanOrderDetailId(); 
+				if(total_producingmap.containsKey(key)){
+					int quantity = total_producingmap.get(key) + temp.getQuantity();
+					total_producingmap.put(key, quantity);
+				}else{
+					total_producingmap.put(key, temp.getQuantity());
+				}
+			}
+		}
+		List<Map<String,Object>> resultlist = _getOutStoreQuantity(currentStock,total_producingmap, storeOutList,planOrder);
+		return resultlist;
+	}
+	
+	//获取某订单的当前库存
+	public List<Map<String,Object>> _getOutStoreQuantity(HalfCurrentStock currentStock,HashMap<Integer, Integer> total_producingmap,List<HalfStoreInOut> storeOutList,PlanOrder planOrder) throws Exception{
 		//根据 【planOrderDetailId】 统计已出库 数量
 		HashMap<Integer, Integer> total_outmap = new HashMap<Integer, Integer>();
 		for (HalfStoreInOut storeOut : storeOutList) {
@@ -523,19 +683,23 @@ public class HalfStoreOutController extends BaseController {
 		}
 
 		List<Map<String,Object>> resultlist = new ArrayList<Map<String,Object>>();
-		//获取当前库存（未出库）列表
-		for(int key : total_inmap.keySet()){
-			int in_quantity = total_inmap.get(key);
+		//获取加工单未出库列表
+		for(int key : total_producingmap.keySet()){
+			int total_quantity = total_producingmap.get(key);
 			Integer out_quantity = total_outmap.get(key);
-			//库存数量 = 入库数量 - 出库数量
-			int stock_quantity = out_quantity == null? in_quantity:in_quantity - out_quantity;
+			if(out_quantity == null){
+				out_quantity = 0 ;
+			}
+			//未出库数量 = 加工单数量  - 已出库数量
+			int not_out_quantity = out_quantity == null? total_quantity:total_quantity - out_quantity;
 			
 			HashMap<String, Object> tempHash = new HashMap<String, Object>();
 			tempHash.put("planOrderDetailId", key);
-			tempHash.put("stock_quantity", stock_quantity);
+			tempHash.put("total_quantity", total_quantity);//应生产数量
+			tempHash.put("out_quantity", out_quantity);//已出库
+			tempHash.put("not_out_quantity", not_out_quantity);
 			resultlist.add(tempHash);
 		}
-		
 		//添加planOrderDetailId对应的颜色尺寸等属性
 		for(Map<String,Object> map : resultlist){
 			int planOrderDetailId = (Integer)map.get("planOrderDetailId");
@@ -544,9 +708,16 @@ public class HalfStoreOutController extends BaseController {
 					map.put("color", detail.getColor());
 					map.put("weight", detail.getProduce_weight());
 					map.put("size", detail.getSize());
+					map.put("yarn", detail.getYarn());
+				}
+			}
+			for(HalfCurrentStockDetail detail : currentStock.getDetaillist()){
+				if(detail.getPlanOrderDetailId() == planOrderDetailId){
+					map.put("stock_quantity", detail.getStock_quantity());
 				}
 			}
 		}
+		
 		return resultlist;
 	}
 }

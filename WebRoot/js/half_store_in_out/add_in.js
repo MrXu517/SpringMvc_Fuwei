@@ -5,6 +5,16 @@ $(document).ready( function() {
 	setActiveLeft($a.parent("li"));
 	/* 设置当前选中的页 */
 	$("#factoryId").focus();
+	$("#factoryId").change(function(){
+		var params = Common.urlParams();
+		params.factoryId = this.value;
+		location.href = location.pathname + "?" + $.param(params);
+	});
+	$("#gongxuId").change(function(){
+		var params = Common.urlParams();
+		params.gongxuId = this.value;
+		location.href = location.pathname + "?" + $.param(params);
+	});
 	$(".quantity").bind("blur",function(){
 		if(this.value == ""){
 			this.value = 0 ;

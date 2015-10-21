@@ -92,11 +92,11 @@
 			/*设置当前选中的页*/
 			var $a = $("#left li a[href='workspace/half_workspace']");
 			setActiveLeft($a.parent("li"));
-			$("#orderId").focus();
+			$("#orderNumber").focus();
 			
 			$("form").submit(function(){
-				$("#orderId").focus();
-				$("#orderId").select();
+				$("#orderNumber").focus();
+				$("#orderNumber").select();
 				return true;
 			});
 		</script>

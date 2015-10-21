@@ -11,6 +11,8 @@
 <%@page import="com.fuwei.entity.producesystem.HalfStoreInOutDetail"%>
 <%@page import="com.fuwei.entity.ordergrid.PlanOrder"%>
 <%@page import="com.fuwei.entity.ordergrid.PlanOrderDetail"%>
+<%@page import="com.fuwei.entity.producesystem.HalfInOut"%>
+<%@page import="com.fuwei.entity.producesystem.HalfInOutDetail"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -20,7 +22,7 @@
 	PlanOrder planOrder = (PlanOrder) request.getAttribute("planOrder");
 	List<PlanOrderDetail> DetailList = planOrder == null || planOrder.getDetaillist() == null ? new ArrayList<PlanOrderDetail>()
 			: planOrder.getDetaillist();
-	List<HalfStoreInOut> storeInOutList = (List<HalfStoreInOut>)request.getAttribute("storeInOutList");
+	List<HalfInOut> detailInOutlist = (List<HalfInOut>)request.getAttribute("detailInOutlist");
 %>
 <!DOCTYPE html>
 <html>
@@ -52,6 +54,7 @@
 			#rightStoreInfo .table-bordered>thead>tr>th,#rightStoreInfo .table-bordered>tbody>tr>td{border-color: #000;}
 			#rightStoreInfo #storeDetail legend{font-weight: bold;}
 			legend{margin-bottom:0;}
+			#storeDetail thead th{text-align:center;}
 		</style>
 	</head>
 	<body>
@@ -222,6 +225,7 @@
 												<th style="width:50px"></th>
 	    										<th style="width:70px"></th>
 	    										<th style="width:100px"></th>
+	    										<th style="width:70px"></th>
 	    										<th style="width:55px"></th>
 	    										<th style="width:60px"></th>
 	    										<th style="width:50px"></th>
@@ -236,7 +240,10 @@
 													单号
 												</th>
 												<th rowspan="2" width="100px">
-													领取/送货单位
+													加工工厂
+												</th>
+												<th rowspan="2" width="70px">
+													工序
 												</th>
 												<th colspan="3" width="200px">
 													颜色及数量
@@ -257,27 +264,37 @@
 										</thead>
 										<tbody>
 												<%
-												for (HalfStoreInOut storeInout : storeInOutList) {
-													String classname = storeInout.getIn_out()?"ruku":"chuku";
-													List<HalfStoreInOutDetail> detailist = storeInout.getDetaillist();
-													int detailsize = storeInout.getDetaillist().size();
+												for (HalfInOut item : detailInOutlist) {
+													List<HalfInOutDetail> detailist = item.getDetaillist();
+													int detailsize = detailist.size();
+													int type = item.getInt();
 										%>
-										<tr itemId="<%=storeInout.getId()%>" class="<%=classname%>">
-											<td rowspan="<%=detailsize%>"><%=storeInout.getType()%></td>
-											<td rowspan="<%=detailsize%>"><a target="_top" href="half_store_in/detail/<%=storeInout.getId()%>"><%=storeInout.getNumber()%></a></td>
-											<td rowspan="<%=detailsize%>"><%=SystemCache.getFactoryName(storeInout.getFactoryId())%></td>
+										<tr itemId="<%=item.getId()%>">
+											<td rowspan="<%=detailsize%>"><%=item.getTypeString()%></td>
+											<td rowspan="<%=detailsize%>">
+												<%if(type == 1){ %>
+													<a target="_top" href="half_store_in/detail/<%=item.getId()%>"><%=item.getNumber()%></a>
+												<%}else if(type==0){ %>
+													<a target="_top" href="half_store_out/detail/<%=item.getId()%>"><%=item.getNumber()%></a>
+												<%}else if(type==-1){ %>
+													<a target="_top" href="half_store_return/detail/<%=item.getId()%>"><%=item.getNumber()%></a>
+												<%} else{ %>
+													<%=item.getNumber()%>
+												<%} %></td>
+											<td rowspan="<%=detailsize%>"><%=SystemCache.getFactoryName(item.getFactoryId())%></td>
+											<td rowspan="<%=detailsize%>"><%=SystemCache.getGongxuName(item.getGongxuId())%></td>
 											<td><%=detailist.get(0).getColor()%></td>
 											<td><%=detailist.get(0).getSize()%></td>
 											<td><%=detailist.get(0).getQuantity()%></td>
 
-											<td rowspan="<%=detailsize%>"><%=SystemCache.getUserName(storeInout.getCreated_user())%></td>				
-											<td rowspan="<%=detailsize%>"><%=DateTool.formatDateYMD(storeInout.getDate())%></td>				
+											<td rowspan="<%=detailsize%>"><%=SystemCache.getUserName(item.getCreated_user())%></td>				
+											<td rowspan="<%=detailsize%>"><%=DateTool.formatDateYMD(item.getDate())%></td>				
 										</tr>
 										<%
 											detailist.remove(0);
-																		for(HalfStoreInOutDetail detail : detailist){
+																		for(HalfInOutDetail detail : detailist){
 										%>
-										<tr class="<%=classname %>">
+										<tr>
 											<td><%=detail.getColor()%></td>
 											<td><%=detail.getSize()%></td>
 											<td><%=detail.getQuantity()%></td>

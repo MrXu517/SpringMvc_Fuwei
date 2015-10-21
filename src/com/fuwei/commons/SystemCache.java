@@ -93,6 +93,7 @@ public class SystemCache {
 
 	// 缓存工艺
 	public static List<GongXu> gongxulist = new ArrayList<GongXu>();
+	public static GongXu producing_GONGXU = null;
 
 	// 缓存用户
 	public static List<User> userlist = new ArrayList<User>();
@@ -190,6 +191,11 @@ public class SystemCache {
 
 	public static void initGongxuList() throws Exception {
 		SystemCache.gongxulist = gongXuService.getList(); // gongxulist;
+		for(GongXu temp : SystemCache.gongxulist){
+			if(temp.getIsProducingOrder()){
+				SystemCache.producing_GONGXU = temp;
+			}
+		}
 	}
 
 	public static void initUserList() throws Exception {
