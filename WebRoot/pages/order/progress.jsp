@@ -80,7 +80,7 @@
 
 						<div class="tab-content auto_height">
 							<div class="tab-pane active" id="coloringprocessorder">
-								<iframe id="coloringprocessorderIframe" name="coloringprocessorderIframe" border="0" furl="half_store_in/index" > </iframe>
+								<iframe id="coloringprocessorderIframe" name="coloringprocessorderIframe" border="0" furl="" > </iframe>
 
 							</div>
 							<div class="tab-pane" id="halfinout">
@@ -90,7 +90,7 @@
 								<iframe id="halfprogressIframe" name="halfprogressIframe" border="0" furl="half_store_in/actual_in/<%=order.getId()%>" > </iframe>
 							</div>
 							<div class="tab-pane" id="materialprogress">
-								<iframe id="materialprogressIframe" name="materialprogressIframe" border="0" furl="half_current_stock/index" > </iframe>
+								<iframe id="materialprogressIframe" name="materialprogressIframe" border="0" furl="" > </iframe>
 							</div>
 						</div>
 					</div>
