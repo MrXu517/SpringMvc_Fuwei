@@ -1,5 +1,6 @@
 package com.fuwei.service.producesystem;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -255,11 +256,32 @@ public class HalfCurrentStockService extends BaseService {
 			halfCurrentStock = new HalfCurrentStock();
 			halfCurrentStock.setOrderId(orderId);
 			halfCurrentStock.setDetaillist(detaillist);
-			this.add(halfCurrentStock);
+			if(detaillist.size()>0){
+				this.add(halfCurrentStock);
+			}
 		}
 		else{//编辑
 			halfCurrentStock.setDetaillist(detaillist);
-			this.update(halfCurrentStock);
+			if(detaillist.size()<=0){
+				this.remove(halfCurrentStock);
+			}else{
+				this.update(halfCurrentStock);
+			}
+		}
+	}
+	
+	// 删除
+	public int remove(HalfCurrentStock temp) throws Exception {
+		try {
+			int result = dao.update("delete from tb_half_current_stock WHERE  id = ?", temp.getId());
+			return result;
+		} catch (Exception e) {
+			SQLException sqlException = (java.sql.SQLException) e.getCause();
+			if (sqlException != null && sqlException.getErrorCode() == 1451) {// 外键约束
+				log.error(e);
+				throw new Exception("已被引用，无法删除，请先删除与半成品库存有关的引用");
+			}
+			throw e;
 		}
 	}
 

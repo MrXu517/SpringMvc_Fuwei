@@ -106,7 +106,7 @@
 																			</a>
 																		</td>
 																		<td width="20%">
-																			生产单位
+																			加工单位
 																		</td>
 																		<td class="orderproperty"><%=SystemCache.getFactoryName(gongxuProducingOrder.getFactoryId()) %>
 																<!-- 	<select class="form-control require" name="factoryId"
@@ -130,7 +130,7 @@
 
 																	<tr>
 																		<td>
-																	生产工序
+																	加工工序
 																</td>
 																<td class="orderproperty"><%=SystemCache.getGongxuName(gongxuProducingOrder.getGongxuId()) %>
 																	<!--<select class="form-control require" name="gongxuId"
@@ -210,7 +210,7 @@
 																			尺寸
 																		</th>
 																		<th width="15%">
-																			生产数量
+																			生产数量(个、双)
 																		</th>
 																		
 																		<th width="15%">

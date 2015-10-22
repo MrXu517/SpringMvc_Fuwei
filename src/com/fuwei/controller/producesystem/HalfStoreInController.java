@@ -792,6 +792,9 @@ public class HalfStoreInController extends BaseController {
 					total_factory_in_quantity += (Integer)object.get("in_quantity");
 				}
 				Map<Integer,Map<String,Object>> temp = new HashMap<Integer, Map<String,Object>>();
+				if(factoryQuantityMap.containsKey(gongxuId)){
+					temp = factoryQuantityMap.get(gongxuId);
+				}
 				Map<String,Object> ttt = new HashMap<String, Object>();
 				ttt.put("plan_quantity", total_factory_plan_quantity);
 				ttt.put("in_quantity", total_factory_in_quantity);

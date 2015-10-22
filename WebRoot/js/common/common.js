@@ -566,6 +566,12 @@ $(document).ready( function() {
         Common.doubleCheck_Rewrite(this, this.value);
     });
     //2015-3-4添加数字验证，包括小数点
+    
+  //2015-3-4添加数字验证，包括小数点
+    $("input.positive_int").keyup(function(event) {
+        Common.positive_intCheck_Rewrite(this, this.value);
+    });
+    //2015-3-4添加数字验证，包括小数点
 		/* 2014-6-11 高度自适应修改 */
 		$(window).resize( function(event) {
 			_c9_autoheight();

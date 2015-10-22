@@ -182,16 +182,16 @@
 									<td colspan="4">
 										<div id="tip" class="auto_bottom">
 											<div>
-												说明：1.此单说明了本次出入库的相关内容，请充分阅读并理解，如有疑问及时联系我方
+												说明：1.出库前请确认产品及数量是否正确，一旦出库若入库时存在数量不足，一切后果自负
 											</div>
 											<div class="tip_line">
-												2.材料品质及颜色要确保准确，颜色色牢度须达到4级以上。
+												2.请在规定时间内严格按照计划生产单进行生产
 											</div>
 											<div class="tip_line">
-												3.不得含有偶氮、PCP、甲醛、APEO。不得有特殊气味，无致敏致癌物质。
+												3.保证产品符合要求品质
 											</div>
 											<div class="tip_line">
-												4.贵单位须妥善保管此单据，结账时须提供此单据
+												4.<span style="font-weight: bold;text-decoration: underline;font-size: 18px;">完成生产后须到我厂收发处开具入库单，否则无法完成结账</span>
 											</div>
 
 										</div>

@@ -189,18 +189,11 @@
 									<td colspan="4">
 										<div id="tip" class="auto_bottom">
 											<div>
-												说明：1.此单说明了本次出入库的相关内容，请充分阅读并理解，如有疑问及时联系我方
+												说明：1.此单标明了加工方完成生产的产品及入库产品的数量，实际合格品须参考次品的退货情况
 											</div>
-											<div class="tip_line">
-												2.材料品质及颜色要确保准确，颜色色牢度须达到4级以上。
+											<div style="padding-bottom: 5px;" class="tip_line">
+												2.<span style="font-weight: bold;text-decoration: underline;font-size: 18px;">请妥善保管此单，结账时须出具本入库单及加工生产单方可结账。</span>
 											</div>
-											<div class="tip_line">
-												3.不得含有偶氮、PCP、甲醛、APEO。不得有特殊气味，无致敏致癌物质。
-											</div>
-											<div class="tip_line">
-												4.贵单位须妥善保管此单据，结账时须提供此单据
-											</div>
-
 										</div>
 									</td>
 									<td></td>

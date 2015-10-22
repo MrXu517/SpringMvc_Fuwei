@@ -106,7 +106,7 @@
 																			</a>
 																		</td>
 																		<td width="20%">
-																			生产单位
+																			加工单位
 																		</td>
 																		<td class="orderproperty"><%=SystemCache.getFactoryName(gongxuProducingOrder
 								.getFactoryId())%></td>
@@ -114,7 +114,7 @@
 
 																	<tr>
 																		<td>
-																			生产工序
+																			加工工序
 																		</td>
 																		<td><%=SystemCache.getGongxuName(gongxuProducingOrder
 										.getGongxuId())%></td>
@@ -176,7 +176,7 @@
 																			尺寸
 																		</th>
 																		<th width="15%">
-																			生产数量
+																			生产数量(个、双)
 																		</th>
 																		<%if(has_gongxu_producing_price){ %>
 																		<th width="15%">

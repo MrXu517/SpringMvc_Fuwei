@@ -348,7 +348,7 @@ caption{
 													<td><%=item.get("not_out_quantity")%></td>
 													<td><%=item.get("stock_quantity")%></td>
 													<td>
-														<input class="quantity form-control require double value"
+														<input class="quantity form-control require positive_int value"
 															type="text" value="0"
 															placeholder="小于等于<%=Math.min((Integer)item.get("stock_quantity"),(Integer)item.get("not_out_quantity"))%>的数量">
 													</td>

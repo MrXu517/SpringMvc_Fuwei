@@ -342,7 +342,7 @@ caption {
 													<td><%=item.get("in_quantity")%></td>
 													<td><%=item.get("not_in_quantity")%></td>
 													<td>
-														<input class="quantity form-control require double value"
+														<input class="quantity form-control require positive_int value"
 															type="text" value="0"
 															placeholder="小于等于<%=item.get("not_in_quantity")%>的数量">
 													</td>
