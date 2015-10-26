@@ -191,7 +191,7 @@
 												3.保证产品符合要求品质
 											</div>
 											<div class="tip_line">
-												4.<span style="font-weight: bold;text-decoration: underline;font-size: 18px;">完成生产后须到我厂收发处开具入库单，否则无法完成结账</span>
+												4.<span style="font-weight: bold;text-decoration: underline;font-size: 18px;">产品入库后须到我厂收发处开具入库单，否则无法完成结账</span>
 											</div>
 
 										</div>
