@@ -30,7 +30,7 @@ import com.fuwei.util.SerializeTool;
 @Component
 public class HalfCurrentStockService extends BaseService {
 	private Logger log = org.apache.log4j.LogManager
-			.getLogger(StoreInOutService.class);
+			.getLogger(HalfCurrentStockService.class);
 	@Autowired
 	JdbcTemplate jdbc;
 	@Autowired

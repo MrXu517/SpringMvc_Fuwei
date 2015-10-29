@@ -1,9 +1,7 @@
 package com.fuwei.controller.producesystem;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -23,33 +21,29 @@ import com.fuwei.commons.SystemCache;
 import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Employee;
 import com.fuwei.entity.Order;
-import com.fuwei.entity.ordergrid.GongxuProducingOrder;
-import com.fuwei.entity.ordergrid.PlanOrder;
-import com.fuwei.entity.ordergrid.ProducingOrder;
-import com.fuwei.entity.producesystem.HalfInOut;
-import com.fuwei.entity.producesystem.HalfStoreInOut;
+import com.fuwei.entity.ordergrid.StoreOrder;
+import com.fuwei.entity.producesystem.MaterialInOut;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.OrderService;
-import com.fuwei.service.ordergrid.PlanOrderService;
-import com.fuwei.service.producesystem.HalfCurrentStockService;
-import com.fuwei.service.producesystem.HalfStoreInOutService;
-import com.fuwei.util.DateTool;
+import com.fuwei.service.ordergrid.StoreOrderService;
+import com.fuwei.service.producesystem.MaterialCurrentStockService;
+import com.fuwei.service.producesystem.StoreInOutService;
 import com.fuwei.util.SerializeTool;
 
-@RequestMapping("/half_current_stock")
+@RequestMapping("/material_current_stock")
 @Controller
-/* 半成品库存*/
-public class HalfCurrentStockController extends BaseController {
+/* 原材料库存*/
+public class MaterialCurrentStockController extends BaseController {
 	@Autowired
 	AuthorityService authorityService;
 	@Autowired
-	HalfCurrentStockService halfCurrentStockService;
+	MaterialCurrentStockService materialCurrentStockService;
 	@Autowired
-	HalfStoreInOutService halfStoreInOutService;
+	StoreInOutService storeInOutService;
 	@Autowired
 	OrderService orderService;
 	@Autowired
-	PlanOrderService planOrderService;
+	StoreOrderService storeOrderService;
 	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
@@ -57,10 +51,10 @@ public class HalfCurrentStockController extends BaseController {
 			String orderNumber, Boolean not_zero,String sortJSON, HttpSession session,
 			HttpServletRequest request) throws Exception {
 
-		String lcode = "half_current_stock/index";
+		String lcode = "material_current_stock/index";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有查看半成品库存列表的权限", null);
+			throw new PermissionDeniedDataAccessException("没有查看原材料库存列表的权限", null);
 		}
 
 		Pager pager = new Pager();
@@ -80,7 +74,7 @@ public class HalfCurrentStockController extends BaseController {
 		sort2.setProperty("id");
 		sortList.add(sort2);
 
-		pager = halfCurrentStockService.getList(pager, companyId, charge_employee, orderNumber,not_zero, sortList);
+		pager = materialCurrentStockService.getList(pager, companyId, charge_employee, orderNumber,not_zero, sortList);
 		
 		request.setAttribute("companyId", companyId);
 		request.setAttribute("not_zero", not_zero);
@@ -94,7 +88,7 @@ public class HalfCurrentStockController extends BaseController {
 		request.setAttribute("employeelist", employeelist);
 		request.setAttribute("orderNumber", orderNumber);
 		request.setAttribute("pager", pager);
-		return new ModelAndView("half_store_in_out/current_stock");
+		return new ModelAndView("store_in_out/current_stock");
 	}
 	
 	@RequestMapping(value = "/report", method = RequestMethod.GET)
@@ -103,10 +97,10 @@ public class HalfCurrentStockController extends BaseController {
 			String orderNumber, Boolean not_zero,String sortJSON, HttpSession session,
 			HttpServletRequest request) throws Exception {
 
-		String lcode = "report/half_current_stock";
+		String lcode = "report/material_current_stock";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有查看半成品库存报表的权限", null);
+			throw new PermissionDeniedDataAccessException("没有查看原材料库存报表的权限", null);
 		}
 
 		Pager pager = new Pager();
@@ -126,7 +120,7 @@ public class HalfCurrentStockController extends BaseController {
 		sort2.setProperty("id");
 		sortList.add(sort2);
 
-		pager = halfCurrentStockService.getList(pager, companyId, charge_employee, orderNumber,not_zero, sortList);
+		pager = materialCurrentStockService.getList(pager, companyId, charge_employee, orderNumber,not_zero, sortList);
 		
 		request.setAttribute("companyId", companyId);
 		request.setAttribute("not_zero", not_zero);
@@ -140,7 +134,7 @@ public class HalfCurrentStockController extends BaseController {
 		request.setAttribute("employeelist", employeelist);
 		request.setAttribute("orderNumber", orderNumber);
 		request.setAttribute("pager", pager);
-		return new ModelAndView("report/half_current_stock");
+		return new ModelAndView("report/material_current_stock");
 	}
 	
 	
@@ -151,27 +145,27 @@ public class HalfCurrentStockController extends BaseController {
 		if (orderId == null) {
 			throw new Exception("缺少订单ID");
 		}
-		String lcode = "half_current_stock/in_out";
+		String lcode = "material_current_stock/in_out";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		String lcode2 = "order/progress";
 		Boolean hasAuthority2 = SystemCache.hasAuthority(session, lcode2);
 		if (!hasAuthority && !hasAuthority2) {
-			throw new PermissionDeniedDataAccessException("没有查看订单半成品出入库记录的权限",
+			throw new PermissionDeniedDataAccessException("没有查看订单原材料出入库记录的权限",
 					null);
 		}
 		Order order = orderService.get(orderId);
 		if(order == null){
 			throw new Exception("找不到ID为" + orderId + "的订单");
 		}
-		List<HalfInOut> detailInOutlist = halfCurrentStockService.halfDetail(orderId);
+		List<MaterialInOut> detailInOutlist = materialCurrentStockService.inOutdetail(orderId);
 		if (detailInOutlist == null) {
-			throw new Exception("找不到订单ID为" + orderId + "的半成品出入库、退货记录");
+			throw new Exception("找不到订单ID为" + orderId + "的原材料出入库、退货记录");
 		}
-		PlanOrder planOrder = planOrderService.getByOrder(orderId);
+		StoreOrder storeOrder = storeOrderService.getByOrder(orderId);
 		request.setAttribute("order", order);
-		request.setAttribute("planOrder", planOrder);
+		request.setAttribute("storeOrder", storeOrder);
 		request.setAttribute("detailInOutlist", detailInOutlist);
-		return new ModelAndView("half_store_in_out/order_in_out");	
+		return new ModelAndView("store_in_out/order_in_out");	
 	}
 	
 	@RequestMapping(value = "/in_out2/{orderId}", method = RequestMethod.GET)
@@ -184,21 +178,21 @@ public class HalfCurrentStockController extends BaseController {
 		String lcode = "order/progress";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有查看订单半成品出入库记录的权限",
+			throw new PermissionDeniedDataAccessException("没有查看订单原材料出入库记录的权限",
 					null);
 		}
 		Order order = orderService.get(orderId);
 		if(order == null){
 			throw new Exception("找不到ID为" + orderId + "的订单");
 		}
-		List<HalfInOut> detailInOutlist = halfCurrentStockService.halfDetail(orderId);
+		List<MaterialInOut> detailInOutlist = materialCurrentStockService.inOutdetail(orderId);
 		if (detailInOutlist == null) {
-			throw new Exception("找不到订单ID为" + orderId + "的半成品出入库、退货记录");
+			throw new Exception("找不到订单ID为" + orderId + "的原材料出入库、退货记录");
 		}
-		PlanOrder planOrder = planOrderService.getByOrder(orderId);
+		StoreOrder storeOrder = storeOrderService.getByOrder(orderId);
 		request.setAttribute("order", order);
-		request.setAttribute("planOrder", planOrder);
+		request.setAttribute("storeOrder", storeOrder);
 		request.setAttribute("detailInOutlist", detailInOutlist);
-		return new ModelAndView("order/progress/half_in_out");	
+		return new ModelAndView("order/progress/material_in_out");	
 	}
 }

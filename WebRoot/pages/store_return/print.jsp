@@ -1,24 +1,24 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
-<%@page import="com.fuwei.entity.producesystem.StoreInOut"%>
-<%@page import="com.fuwei.entity.producesystem.StoreInOutDetail"%>
+<%@page import="com.fuwei.entity.producesystem.StoreReturn"%>
+<%@page import="com.fuwei.entity.producesystem.StoreReturnDetail"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
-	//原材料入库单
-	StoreInOut storeInOut = (StoreInOut) request.getAttribute("storeInOut");
-	List<StoreInOutDetail> detaillist = storeInOut == null ? new ArrayList<StoreInOutDetail>() :storeInOut.getDetaillist();
+	+ request.getServerName() + ":" + request.getServerPort()
+	+ path + "/";
+	//原材料退货单
+	StoreReturn storeReturn = (StoreReturn) request.getAttribute("storeReturn");
+	List<StoreReturnDetail> detaillist = storeReturn == null ? new ArrayList<StoreReturnDetail>() :storeReturn.getDetaillist();
 %>
 <!DOCTYPE html>
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>原材料入库单 -- 桐庐富伟针织厂</title>
+		<title>原材料退货单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -36,7 +36,7 @@
 					<div class="col-md-12 tablewidget">
 						<table class="table noborder">
 							<caption id="tablename">
-								桐庐富伟针织厂原材料入库单<div table_id="<%=storeInOut.getNumber() %>" class="id_barcode"></div>
+								桐庐富伟针织厂原材料退货单<div table_id="<%=storeReturn.getNumber()%>" class="id_barcode"></div>
 							</caption>
 						</table>
 
@@ -44,27 +44,20 @@
 							<tbody>
 								<tr>
 									<td>
-
 										染色单位：
-										<span><%=storeInOut == null ? ""
-						: (SystemCache.getFactoryName(storeInOut
+										<span><%=storeReturn == null ? ""
+						: (SystemCache.getFactoryName(storeReturn
 								.getFactoryId()))%></span>
 
 									</td>
 									<td>
-										业务员：
-										<span><%=storeInOut == null ? ""
-						: (SystemCache.getEmployeeName((storeInOut
-								.getCharge_employee())))%></span>
-									</td>
-									<td>
-										入库时间：
-										<span><%=storeInOut == null ? ""
-						: (DateTool.formatDateYMD(DateTool.getYanDate(storeInOut.getDate())))%></span>
+										退货时间：
+										<span><%=storeReturn == null ? ""
+						: (DateTool.formatDateYMD(DateTool.getYanDate(storeReturn.getDate())))%></span>
 									</td>
 									<td class="pull-right">
 
-										№：<%=storeInOut.getNumber()%>
+										№：<%=storeReturn.getNumber()%>
 
 									</td>
 									<td></td>
@@ -83,34 +76,34 @@
 													公司货号
 												</td>
 												<td class="center" width="15%">
-													客户
+													业务员
 												</td>
 												<td class="center" width="15%">
 													品名
 												</td>
 											</tr>
 											<tr><td class="center">
-													<span><%=storeInOut.getOrderNumber()%></span>
+													<span><%=storeReturn.getOrderNumber()%></span>
 												</td>
 												<td class="center">
-													<span><%=SystemCache.getCompanyShortName(storeInOut
+													<span><%=SystemCache.getCompanyShortName(storeReturn
 								.getCompanyId())%></span>
 												</td>
 												<td class="center">
-													<span><%=storeInOut.getCompany_productNumber()%></span>
-												</td>
+													<span><%=storeReturn.getCompany_productNumber()%></span>
+												</td><td>
+										<span><%=storeReturn == null ? ""
+						: (SystemCache.getEmployeeName((storeReturn
+								.getCharge_employee())))%></span>
+									</td>
 												<td class="center">
-													<span><%=SystemCache.getCustomerName(storeInOut
-								.getCustomerId())%></span>
-												</td>
-												<td class="center">
-													<span><%=storeInOut.getName()%></span>
+													<span><%=storeReturn.getName()%></span>
 												</td>
 											</tr>
 											<tr><td class="center" width="10%">
 													备注
 												</td><td colspan="4">
-													<span><%=storeInOut.getMemo() == null ? "" : storeInOut.getMemo()%></span>
+													<span><%=storeReturn.getMemo() == null ? "" : storeReturn.getMemo()%></span>
 												</td></tr>
 										</table>
 									</td>
@@ -123,32 +116,31 @@
 											<thead>
 												<tr>
 													<td width="15%">
-														色号
-													</td>
-													<td width="15%">
 														材料
 													</td>
 													<td width="15%">
-														入库数量(kg)
+														色号
 													</td>
 													<td width="15%">
 														缸号
+													</td>
+													<td width="15%">
+														退货数量
 													</td>
 
 												</tr>
 											</thead>
 											<tbody>
 												<%
-													for (StoreInOutDetail detail : detaillist) {
+													for (StoreReturnDetail detail : detaillist) {
 												%>
 												<tr class="tr">
+													<td class="material_name"><%=SystemCache.getMaterialName(detail.getMaterial())%>
 													<td class="color"><%=detail.getColor()%>
-													<td class="material_name"><%=SystemCache.getMaterialName(detail
-											.getMaterial())%>
-													</td>
-													<td class="quantity"><%=(int)detail.getQuantity()%>
 													</td>
 													<td class="lot_no"><%=detail.getLot_no()%>
+													</td>
+													<td class="quantity"><%=detail.getQuantity()%>
 													</td>
 												</tr>
 
@@ -158,12 +150,12 @@
 														for (; i < 6; ++i) {
 												%>
 												<tr class="tr">
-													<td class="color">&nbsp;</td>
-													<td class="material_name">
-													</td>
-													<td class="quantity">
+													<td class="material_name">&nbsp;</td>
+													<td class="color">
 													</td>
 													<td class="lot_no">
+													</td>
+													<td class="quantity">
 													</td>
 												</tr>
 												<%
@@ -190,7 +182,7 @@
 									<td colspan="4">
 										<div id="tip" class="auto_bottom">
 											<div>
-												说明：1.此单说明了本次出入库的相关内容，请充分阅读并理解，如有疑问及时联系我方
+												说明：1.此单说明了本次退货的相关内容，请充分阅读并理解，如有疑问及时联系我方
 											</div>
 											<div class="tip_line">
 												2.材料品质及颜色要确保准确，颜色色牢度须达到4级以上。
@@ -216,7 +208,7 @@
 
 
 						<p class="pull-right auto_bottom">
-							<span id="created_user">制单人：<%=SystemCache.getUserName(storeInOut
+							<span id="created_user">制单人：<%=SystemCache.getUserName(storeReturn
 								.getCreated_user())%></span>
 							<span id="receiver_user">收货人：</span>
 							<span id="date"> 打印日期：<%=DateTool.formatDateYMD(DateTool.getYanDate(DateTool.now()))%></span>

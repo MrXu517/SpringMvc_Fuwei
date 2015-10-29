@@ -1,18 +1,13 @@
 $(document).ready( function() {
 	/* 设置当前选中的页 */
 	/*设置当前选中的页*/
-	var $a = $("#left li a[href='workspace/half_workspace']");
+	var $a = $("#left li a[href='workspace/material_workspace']");
 	setActiveLeft($a.parent("li"));
 	/* 设置当前选中的页 */
 	$("#factoryId").focus();
 	$("#factoryId").change(function(){
 		var params = Common.urlParams();
 		params.factoryId = this.value;
-		location.href = location.pathname + "?" + $.param(params);
-	});
-	$("#gongxuId").change(function(){
-		var params = Common.urlParams();
-		params.gongxuId = this.value;
 		location.href = location.pathname + "?" + $.param(params);
 	});
 	$(".quantity").bind("blur",function(){
@@ -29,13 +24,13 @@ $(document).ready( function() {
 	$("form").find(".quantity").not("[readonly],[disabled]").first().click();
 	//2015-4-3 添加自动focus到第一个可输入input、select
 		var storInGrid = new OrderGrid({
-			tipText:"半成品退货单",
-			url:"half_store_return/add",
-			postUrl:"half_store_return/add",
+			tipText:"原材料退货单",
+			url:"store_return/add",
+			postUrl:"store_return/add",
 			$content:$(".body"),
 			donecall:function(result){
-				Common.Tip("请打印半成品退货单", function() {
-					location.href = "half_store_return/detail/" + result.id;
+				Common.Tip("请打印原材料退货单", function() {
+					location.href = "store_return/detail/" + result.id;
 				});
 			},
 			tbOptions:{

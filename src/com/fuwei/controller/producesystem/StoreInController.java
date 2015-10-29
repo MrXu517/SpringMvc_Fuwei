@@ -30,6 +30,8 @@ import com.fuwei.entity.Employee;
 import com.fuwei.entity.Message;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
+import com.fuwei.entity.ordergrid.GongxuProducingOrder;
+import com.fuwei.entity.ordergrid.GongxuProducingOrderDetail;
 import com.fuwei.entity.ordergrid.PlanOrder;
 import com.fuwei.entity.ordergrid.PlanOrderDetail;
 import com.fuwei.entity.ordergrid.ProducingOrder;
@@ -37,8 +39,14 @@ import com.fuwei.entity.ordergrid.ProducingOrderDetail;
 import com.fuwei.entity.ordergrid.ProducingOrderMaterialDetail;
 import com.fuwei.entity.ordergrid.StoreOrder;
 import com.fuwei.entity.ordergrid.StoreOrderDetail;
+import com.fuwei.entity.producesystem.HalfStoreInOut;
+import com.fuwei.entity.producesystem.HalfStoreInOutDetail;
+import com.fuwei.entity.producesystem.HalfStoreReturn;
+import com.fuwei.entity.producesystem.HalfStoreReturnDetail;
 import com.fuwei.entity.producesystem.StoreInOut;
 import com.fuwei.entity.producesystem.StoreInOutDetail;
+import com.fuwei.entity.producesystem.StoreReturn;
+import com.fuwei.entity.producesystem.StoreReturnDetail;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.MessageService;
 import com.fuwei.service.OrderService;
@@ -47,6 +55,7 @@ import com.fuwei.service.ordergrid.PlanOrderService;
 import com.fuwei.service.ordergrid.ProducingOrderService;
 import com.fuwei.service.ordergrid.StoreOrderService;
 import com.fuwei.service.producesystem.StoreInOutService;
+import com.fuwei.service.producesystem.StoreReturnService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
 import com.sun.star.beans.Pair;
@@ -65,6 +74,8 @@ public class StoreInController extends BaseController {
 	AuthorityService authorityService;
 	@Autowired
 	MessageService messageService;
+	@Autowired
+	StoreReturnService storeReturnService;
 
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
@@ -191,7 +202,8 @@ public class StoreInController extends BaseController {
 			//获取未入库列表 ， 包括 色号、材料、总数量、已入库数量、未入库数量
 			//获取已开的入库单
 			List<StoreInOut> storeInList = storeInOutService.getByStoreOrder(storeOrderId,true);
-			List<Map<String,Object>> detaillist = getInStoreQuantity(storeOrder,storeInList);
+			List<StoreReturn> storeReturnList = storeReturnService.getByStoreOrder(storeOrderId);
+			List<Map<String,Object>> detaillist = getInStoreQuantity(storeOrder,storeInList,storeReturnList);
 			
 			/*判断若detaillist 的not_in_quantity 均 == 0 ， 则表示已全部入库，无需再创建入库单*/
 			boolean flag = true;
@@ -318,7 +330,8 @@ public class StoreInController extends BaseController {
 				/*判断入库量总和是否大于原材料仓库总量*/
 				List<StoreInOut> storeInList = storeInOutService.getByStoreOrder(storeOrderId,true);
 				storeInList.add(storeInOut);
-				List<Map<String,Object>> not_in_quantityList = getInStoreQuantity(storeOrder,storeInList);
+				List<StoreReturn> storeReturnList = storeReturnService.getByStoreOrder(storeOrderId);
+				List<Map<String,Object>> not_in_quantityList = getInStoreQuantity(storeOrder,storeInList,storeReturnList);
 				for(Map<String,Object> item:not_in_quantityList){
 					double not_in_quantity = (Double)item.get("not_in_quantity");
 					if(not_in_quantity<0){//入库总数大于原材料仓库单的数量
@@ -384,7 +397,8 @@ public class StoreInController extends BaseController {
 						storeInList.set(i, storeInOut);
 					}
 				}
-				List<Map<String,Object>> not_in_quantityList = getInStoreQuantity(storeOrder,storeInList);
+				List<StoreReturn> storeReturnList = storeReturnService.getByStoreOrder(storeOrderId);
+				List<Map<String,Object>> not_in_quantityList = getInStoreQuantity(storeOrder,storeInList,storeReturnList);
 				for(Map<String,Object> item:not_in_quantityList){
 					double not_in_quantity = (Double)item.get("not_in_quantity");
 					if(not_in_quantity<0){//入库总数大于原材料仓库单的数量
@@ -499,7 +513,8 @@ public class StoreInController extends BaseController {
 				StoreOrder storeOrder = storeOrderService.get(storeOrderId);
 				request.setAttribute("storeOrder", storeOrder);
 				List<StoreInOut> storeInList = storeInOutService.getByStoreOrder(storeOrderId,true);
-				List<Map<String,Object>> detaillist = getInStoreQuantity(storeOrder,storeInList);
+				List<StoreReturn> storeReturnList = storeReturnService.getByStoreOrder(storeOrderId);
+				List<Map<String,Object>> detaillist = getInStoreQuantity(storeOrder,storeInList,storeReturnList);
 				
 				List<Map<String,Object>> detaillist_result = new ArrayList<Map<String,Object>>();
 				for(Map<String,Object> not_outMap : detaillist){
@@ -542,6 +557,27 @@ public class StoreInController extends BaseController {
 		if (!hasAuthority) {
 			throw new PermissionDeniedDataAccessException("没有删除原材料入库单的权限", null);
 		}
+		StoreInOut storeIn = storeInOutService.get(id);
+		/*2.删除后入库数量 若 < 退货量， 则不可删除*/
+		int storeOrderId = storeIn.getStore_order_id();
+		int factoryId = storeIn.getFactoryId();
+		List<StoreInOut> storeInList = storeInOutService.getByFactory(storeOrderId,factoryId, true);
+		Iterator<StoreInOut> iter = storeInList.iterator();
+		while(iter.hasNext()){
+			StoreInOut temp = iter.next();
+			if(temp.getId() == storeIn.getId()){
+				iter.remove();
+			}
+		}
+		List<StoreReturn> storeReturnList = storeReturnService.getByFactory(storeOrderId,factoryId);
+		List<Map<String,Object>> actualInList = getActualInStoreQuantity(storeInList,storeReturnList);
+		for(Map<String,Object> item:actualInList){
+			double actual_in_quantity = (Double)item.get("actual_in_quantity");
+			if(actual_in_quantity<0){//入库总数大于原材料仓库单的数量
+				throw new Exception("入库总量小于退货总量，请先删除原材料退货单");
+			}
+		}
+		/*2.删除后入库数量 若 < 退货量， 则不可删除*/
 		int success = storeInOutService.remove(id);
 
 		return this.returnSuccess();
@@ -602,7 +638,111 @@ public class StoreInController extends BaseController {
 	}
 	
 	
-	public List<Map<String,Object>> getInStoreQuantity(StoreOrder storeOrder , List<StoreInOut> storeInList) throws Exception{	
+	//实际入库数量
+	@RequestMapping(value = "/actual_in/{orderId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView actual_in(@PathVariable Integer orderId, HttpSession session,
+			HttpServletRequest request) throws Exception {
+		if (orderId == null) {
+			throw new Exception("缺少订单ID");
+		}
+		String lcode = "order/progress";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有查看订单原材料生产进度的权限",
+					null);
+		}
+		StoreOrder storeOrder = storeOrderService.getByOrder(orderId);
+		if(storeOrder == null){
+			throw new Exception("找不到订单ID为" + orderId + "的原材料仓库单");
+		}
+		int storeOrderId = storeOrder.getId();
+		
+		/*1.获取工序 以及 工序对应工厂 Map*/
+		//Map<材料：色号，Map<工厂,入库进度数据Map>>
+		Map<String,Map<String,Object>> color_materialTotalMap = new HashMap<String,Map<String,Object>>();
+		//Map<材料：色号，Map<工厂,实际入库数量>>
+		List<StoreInOut> storeInList = storeInOutService.getByStoreOrder(storeOrderId,true);
+		List<StoreReturn> storeReturnList = storeReturnService.getByStoreOrder(storeOrderId);
+		Map<String,Map<Integer,Double>> actualInMap =  getFactoryActualInMap(storeOrder,storeInList,storeReturnList);	
+		//根据  【色号】 和 【材料】  统计总数量 , key = material + : + color
+		HashMap<String, Double> planmap = new HashMap<String, Double>();
+		for (StoreOrderDetail storeOrderDetail : storeOrder.getDetaillist()) {
+			String key = storeOrderDetail.getMaterial() + ":"+ storeOrderDetail.getColor().trim(); 
+			if(planmap.containsKey(key)){
+				double temp_total_quantity = planmap.get(key);
+				planmap.put(key, temp_total_quantity + storeOrderDetail.getQuantity());
+			}else{
+				planmap.put(key, storeOrderDetail.getQuantity());
+			}
+		}
+		
+		for(String key : planmap.keySet()){
+			double total_plan_quantity = planmap.get(key);
+			double total_actual_in_quantity = 0;
+			if(actualInMap.containsKey(key)){
+				Map<Integer,Double> tempMap = actualInMap.get(key);
+				for(Integer factoryId : tempMap.keySet()){
+					total_actual_in_quantity = total_actual_in_quantity + tempMap.get(factoryId);
+				}
+			}
+			Map<String,Object> detailMap = new HashMap<String, Object>();
+			detailMap.put("total_plan_quantity", total_plan_quantity);
+			detailMap.put("total_actual_in_quantity", total_actual_in_quantity);
+			color_materialTotalMap.put(key, detailMap);
+		}
+		
+		request.setAttribute("storeOrder", storeOrder);
+		request.setAttribute("color_materialTotalMap", color_materialTotalMap);
+		request.setAttribute("actualInMap", actualInMap);
+		return new ModelAndView("store_in_out/actual_in");	
+	}
+	
+	
+	//各个订单的原材料生产进度
+	@RequestMapping(value = "/order_progress", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView order_progress(Integer page,String orderNumber,HttpSession session,HttpServletRequest request) throws Exception {
+		String lcode = "order/progress";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有查看订单原材料生产进度的权限",
+					null);
+		}
+		//Map<orderId,List<Map<String,Object>>(包括工序id，计划数量、实际数量等)>
+		Map<Integer,List<Map<String,Object>>> resultMap = new HashMap<Integer, List<Map<String,Object>>>();
+		Pager pager = new Pager();
+		if (page != null && page > 0) {
+			pager.setPageNo(page);
+		}
+		pager = orderService.getUnDeliveryList(pager,orderNumber);
+		List<Order> orderlist = new ArrayList<Order>();
+		if(pager.getResult()!=null){
+			orderlist = (List<Order>)pager.getResult();
+		}
+		for(Order order : orderlist){
+			int orderId = order.getId();
+			StoreOrder storeOrder = storeOrderService.getByOrder(orderId);
+			if(storeOrder == null){
+				resultMap.put(orderId, new ArrayList<Map<String,Object>>());
+				continue;
+			}
+			int storeOrderId = storeOrder.getId();
+			List<StoreInOut> storeInList = storeInOutService.getByStoreOrder(storeOrderId,true);
+			List<StoreReturn> storeReturnList = storeReturnService.getByStoreOrder(storeOrderId);
+			
+			List<Map<String,Object>> detaillist = getInStoreQuantity(storeOrder,storeInList,storeReturnList);
+	
+			resultMap.put(orderId, detaillist);
+		}
+		
+		request.setAttribute("resultMap", resultMap);
+		request.setAttribute("pager", pager);
+		request.setAttribute("orderlist",orderlist);
+		request.setAttribute("orderNumber", orderNumber);
+		return new ModelAndView("store_in_out/order_progress");	
+	}
+	public List<Map<String,Object>> getInStoreQuantity(StoreOrder storeOrder , List<StoreInOut> storeInList,List<StoreReturn> storeReturnList) throws Exception{	
 		//根据  【色号】 和 【材料】  统计总数量 , key = material + : + color
 		HashMap<String, Double> totalmap = new HashMap<String, Double>();
 		for (StoreOrderDetail storeOrderDetail : storeOrder.getDetaillist()) {
@@ -631,6 +771,20 @@ public class StoreInController extends BaseController {
 			}
 		}
 		
+		//根据 【色号】 和 【材料】获取退货 数量
+		HashMap<String, Double> returnmap = new HashMap<String, Double>();
+		for (StoreReturn storeReturn : storeReturnList) {
+			for (StoreReturnDetail temp : storeReturn.getDetaillist()) {
+				String key = temp.getMaterial() + ":"+ temp.getColor().trim(); 
+				if(returnmap.containsKey(key)){
+					double temp_total_quantity = returnmap.get(key);
+					returnmap.put(key, temp_total_quantity + temp.getQuantity());
+				}else{
+					returnmap.put(key, temp.getQuantity());
+				}
+			}
+		}
+		
 		//获取未入库列表 ， 包括 色号、材料、总数量、已入库数量、未入库数量
 		List<Map<String,Object>> resultlist = new ArrayList<Map<String,Object>>();
 		for(String key : totalmap.keySet()){
@@ -645,16 +799,200 @@ public class StoreInController extends BaseController {
 			if(inmap.containsKey(key)){
 				in_quantity = inmap.get(key);
 			}
-			double not_in_quantity = total_quantity - in_quantity;
+			double return_quantity = 0 ;
+			if(returnmap.containsKey(key)){
+				return_quantity = returnmap.get(key);
+			}
+			double actual_in_quantity = in_quantity-return_quantity;
+			double not_in_quantity = total_quantity - actual_in_quantity;
 			HashMap<String, Object> tempHash = new HashMap<String, Object>();
 			tempHash.put("material", material);
 			tempHash.put("color", color);
 			tempHash.put("total_quantity", total_quantity);
 			tempHash.put("in_quantity", in_quantity);
+			tempHash.put("actual_in_quantity", actual_in_quantity);
 			tempHash.put("not_in_quantity", not_in_quantity);
 			resultlist.add(tempHash);
 		}
 		return resultlist;
+	}
+	
+	public List<Map<String,Object>> getActualInStoreQuantity(List<StoreInOut> storeInList,List<StoreReturn> storeReturnList) throws Exception{	
+		//根据 【色号】 和 【材料】获取已入库 数量
+		HashMap<String, Double> inmap = new HashMap<String, Double>();
+		for (StoreInOut storeIn : storeInList) {
+			for (StoreInOutDetail temp : storeIn.getDetaillist()) {
+				String key = temp.getMaterial() + ":"+ temp.getColor().trim(); 
+				if(inmap.containsKey(key)){
+					double temp_total_quantity = inmap.get(key);
+					inmap.put(key, temp_total_quantity + temp.getQuantity());
+				}else{
+					inmap.put(key, temp.getQuantity());
+				}
+			}
+		}
+		
+		//根据 【色号】 和 【材料】获取退货 数量
+		HashMap<String, Double> returnmap = new HashMap<String, Double>();
+		for (StoreReturn storeReturn : storeReturnList) {
+			for (StoreReturnDetail temp : storeReturn.getDetaillist()) {
+				String key = temp.getMaterial() + ":"+ temp.getColor().trim(); 
+				if(returnmap.containsKey(key)){
+					double temp_total_quantity = returnmap.get(key);
+					returnmap.put(key, temp_total_quantity + temp.getQuantity());
+				}else{
+					returnmap.put(key, temp.getQuantity());
+				}
+			}
+		}
+		
+		//获取未入库列表 ， 包括 色号、材料、总数量、已入库数量、未入库数量
+		List<Map<String,Object>> resultlist = new ArrayList<Map<String,Object>>();
+		if(returnmap.size()>inmap.size()){
+			for(String key : returnmap.keySet()){
+				int indexOf = key.indexOf(":");
+				if(indexOf <= -1){
+					throw new Exception("分割色号与材料出错");
+				}
+				Integer material = Integer.parseInt(key.substring(0,indexOf));
+				String color = key.substring(indexOf+1);
+				double return_quantity = returnmap.get(key);
+				double in_quantity = 0 ;
+				if(inmap.containsKey(key)){
+					in_quantity = inmap.get(key);
+				}
+				double actual_in_quantity = in_quantity-return_quantity;
+				HashMap<String, Object> tempHash = new HashMap<String, Object>();
+				tempHash.put("material", material);
+				tempHash.put("color", color);
+				tempHash.put("in_quantity", in_quantity);
+				tempHash.put("actual_in_quantity", actual_in_quantity);
+				resultlist.add(tempHash);
+			}
+		}else{
+			for(String key : inmap.keySet()){
+				int indexOf = key.indexOf(":");
+				if(indexOf <= -1){
+					throw new Exception("分割色号与材料出错");
+				}
+				Integer material = Integer.parseInt(key.substring(0,indexOf));
+				String color = key.substring(indexOf+1);
+				double in_quantity = inmap.get(key);
+				double return_quantity = 0 ;
+				if(returnmap.containsKey(key)){
+					return_quantity = returnmap.get(key);
+				}
+				double actual_in_quantity = in_quantity-return_quantity;
+				HashMap<String, Object> tempHash = new HashMap<String, Object>();
+				tempHash.put("material", material);
+				tempHash.put("color", color);
+				tempHash.put("in_quantity", in_quantity);
+				tempHash.put("actual_in_quantity", actual_in_quantity);
+				resultlist.add(tempHash);
+			}
+		}
+		
+		return resultlist;
+	}
+
+	public Map<String, Map<Integer,Double>> getFactoryActualInMap(StoreOrder storeOrder , List<StoreInOut> storeInList,List<StoreReturn> storeReturnList) throws Exception{	
+		//根据  【色号】 和 【材料】  统计总数量 , key = material + : + color
+		HashMap<String, Double> totalmap = new HashMap<String, Double>();
+		for (StoreOrderDetail storeOrderDetail : storeOrder.getDetaillist()) {
+			String key = storeOrderDetail.getMaterial() + ":"+ storeOrderDetail.getColor().trim(); 
+			if(totalmap.containsKey(key)){
+				double temp_total_quantity = totalmap.get(key);
+				totalmap.put(key, temp_total_quantity + storeOrderDetail.getQuantity());
+			}else{
+				totalmap.put(key, storeOrderDetail.getQuantity());
+			}
+		}
+		
+		
+		
+		//根据 【色号】 、【材料】、【工厂】获取已入库 数量
+		HashMap<String, Map<Integer,Double>> inmap = new HashMap<String, Map<Integer,Double>>();
+		for (StoreInOut storeIn : storeInList) {
+			int factoryId = storeIn.getFactoryId();
+			for (StoreInOutDetail temp : storeIn.getDetaillist()) {
+				String key = temp.getMaterial() + ":"+ temp.getColor().trim(); 
+				if(inmap.containsKey(key)){
+					HashMap<Integer,Double> factoryMap = (HashMap<Integer,Double>)inmap.get(key);
+					if(factoryMap.containsKey(factoryId)){
+						double temp_total_quantity = factoryMap.get(factoryId);
+						factoryMap.put(factoryId, temp_total_quantity + temp.getQuantity());
+						inmap.put(key, factoryMap);
+					}else{
+						factoryMap.put(factoryId, temp.getQuantity());
+						inmap.put(key, factoryMap);
+					}
+				}else{
+					HashMap<Integer,Double> tempM = new HashMap<Integer, Double>();
+					tempM.put(factoryId, temp.getQuantity());
+					inmap.put(key, tempM);
+				}
+			}
+		}
+		
+		//根据 【色号】 、【材料】、【工厂】获取退货 数量
+		HashMap<String, Map<Integer,Double>> returnmap = new HashMap<String, Map<Integer,Double>>();
+		for (StoreReturn storeReturn : storeReturnList) {
+			int factoryId = storeReturn.getFactoryId();
+			for (StoreReturnDetail temp : storeReturn.getDetaillist()) {
+				String key = temp.getMaterial() + ":"+ temp.getColor().trim(); 
+				if(returnmap.containsKey(key)){
+					HashMap<Integer,Double> factoryMap = (HashMap<Integer,Double>)returnmap.get(key);
+					if(factoryMap.containsKey(factoryId)){
+						double temp_total_quantity = factoryMap.get(factoryId);
+						factoryMap.put(factoryId, temp_total_quantity + temp.getQuantity());
+						returnmap.put(key, factoryMap);
+					}else{
+						factoryMap.put(factoryId, temp.getQuantity());
+						returnmap.put(key, factoryMap);
+					}
+				}else{
+					HashMap<Integer,Double> tempM = new HashMap<Integer, Double>();
+					tempM.put(factoryId, temp.getQuantity());
+					returnmap.put(key, tempM);
+				}
+			}
+		}
+		
+		//获取未入库列表 ， 包括 色号、材料、总数量、已入库数量、未入库数量
+		Map<String,Map<Integer,Double>> actualInMap = new HashMap<String, Map<Integer,Double>>();
+		for(String key : totalmap.keySet()){
+			Map<Integer,Double> actualInDetailMap = new HashMap<Integer, Double>();
+			if(actualInMap.containsKey(key)){
+				actualInDetailMap = actualInMap.get(key);
+			}
+			
+			Map<Integer,Double> factoryInM = inmap.get(key);
+			if(factoryInM != null){
+				for(Integer factoryId : factoryInM.keySet()){
+					double in_quantity = factoryInM.get(factoryId);
+					if(actualInDetailMap.containsKey(factoryId)){
+						double value = actualInDetailMap.get(factoryId);
+						actualInDetailMap.put(factoryId, in_quantity + value);
+					}else{
+						actualInDetailMap.put(factoryId, in_quantity);
+					}
+				}
+			}
+			Map<Integer,Double> factoryReturnM = returnmap.get(key);
+			if(factoryReturnM != null){
+				for(Integer factoryId : factoryReturnM.keySet()){
+					double return_quantity = factoryReturnM.get(factoryId);
+					if(actualInDetailMap.containsKey(factoryId)){
+						double value = actualInDetailMap.get(factoryId);
+						actualInDetailMap.put(factoryId, value-return_quantity);
+					}else{
+						actualInDetailMap.put(factoryId, -return_quantity);
+					}
+				}
+			}
+			actualInMap.put(key, actualInDetailMap);
+		}
+		return actualInMap;
 	}
 
 }

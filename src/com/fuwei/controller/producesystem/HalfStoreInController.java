@@ -42,6 +42,7 @@ import com.fuwei.entity.producesystem.HalfStoreInOut;
 import com.fuwei.entity.producesystem.HalfStoreInOutDetail;
 import com.fuwei.entity.producesystem.HalfStoreReturn;
 import com.fuwei.entity.producesystem.HalfStoreReturnDetail;
+import com.fuwei.entity.producesystem.StoreInOut;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.MessageService;
 import com.fuwei.service.OrderService;
@@ -531,6 +532,27 @@ public class HalfStoreInController extends BaseController {
 			}
 		}
 		
+		/*2.删除后入库数量 若 < 退货量， 则不可删除*/
+		int orderId = storeIn.getOrderId();
+		int factoryId = storeIn.getFactoryId();
+		int gongxuId = storeIn.getGongxuId();
+		List<HalfStoreInOut> halfstoreInList = halfStoreInOutService.getByFactoryGongxu(orderId,factoryId, gongxuId, true);
+		Iterator<HalfStoreInOut> iter = halfstoreInList.iterator();
+		while(iter.hasNext()){
+			HalfStoreInOut temp = iter.next();
+			if(temp.getId() == storeIn.getId()){
+				iter.remove();
+			}
+		}
+		List<HalfStoreReturn> storeReturnList = halfStoreReturnService.getByFactoryGongxu(orderId,factoryId, gongxuId);
+		List<Map<String,Object>> actualInList = getActualInStoreQuantity(halfstoreInList,storeReturnList);
+		for(Map<String,Object> item:actualInList){
+			int actual_in_quantity = (Integer)item.get("actual_in_quantity");
+			if(actual_in_quantity<0){//入库总数大于原材料仓库单的数量
+				throw new Exception("入库总量小于退货总量，请先删除半成品退货单");
+			}
+		}
+		/*2.删除后入库数量 若 < 退货量， 则不可删除*/
 		/*判断删除后入库量是否小于出库量，若是，则不可以删除*/
 		
 		int success = halfStoreInOutService.remove(storeIn);
@@ -818,6 +840,144 @@ public class HalfStoreInController extends BaseController {
 	}
 	
 	
+	//各个订单的半成品生产进度
+	@RequestMapping(value = "/order_progress", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView order_progress(Integer page,String orderNumber,HttpSession session,HttpServletRequest request) throws Exception {
+		String lcode = "order/progress";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有查看订单半成品生产进度的权限",
+					null);
+		}
+		//Map<orderId,Map<String,Object>(包括工序id，计划数量、实际数量等)>
+		Map<Integer,Map<Integer,Map<String,Object>>> resultMap = new HashMap<Integer, Map<Integer,Map<String,Object>>>();
+		Pager pager = new Pager();
+		if (page != null && page > 0) {
+			pager.setPageNo(page);
+		}
+		pager = orderService.getUnDeliveryList(pager,orderNumber);
+		List<Order> orderlist = new ArrayList<Order>();
+		if(pager.getResult()!=null){
+			orderlist = (List<Order>)pager.getResult();
+		}
+		for(Order order : orderlist){
+			int orderId = order.getId();
+			Map<Integer,Map<String,Object>> resultDetailMap = new HashMap<Integer, Map<String,Object>>();
+			/*1.获取工序 Map*/
+			/*Map<工序，计划数量> -- 开始*/
+			Map<Integer,Integer> planMap_producing = new HashMap<Integer, Integer>();
+			List<ProducingOrder> producingOrderlist = producingOrderService.getByOrder(orderId);		
+			for(ProducingOrder temp : producingOrderlist){
+				int tempGongxuId = SystemCache.producing_GONGXU.getId();
+				if(!planMap_producing.containsKey(tempGongxuId)){
+					planMap_producing.put(tempGongxuId, 0);
+				}
+				int temp_total_quantity = 0 ;
+				for (ProducingOrderDetail detail : temp.getDetaillist()) {
+					temp_total_quantity += detail.getQuantity();
+				}
+				planMap_producing.put(tempGongxuId, temp_total_quantity + planMap_producing.get(tempGongxuId));
+			}
+			List<GongxuProducingOrder> gongxuProducingOrderlist = gongxuProducingOrderService.getByOrder(orderId);		
+			Map<Integer,Integer> planMap_gongxu = new HashMap<Integer, Integer>();
+			for(GongxuProducingOrder temp : gongxuProducingOrderlist){
+				int tempGongxuId = temp.getGongxuId();
+				if(!planMap_gongxu.containsKey(tempGongxuId)){
+					planMap_gongxu.put(tempGongxuId, 0);
+				}
+				int temp_total_quantity = 0 ;
+				for (GongxuProducingOrderDetail detail : temp.getDetaillist()) {
+					temp_total_quantity += detail.getQuantity();
+				}
+				planMap_gongxu.put(tempGongxuId, temp_total_quantity + planMap_gongxu.get(tempGongxuId));
+			}
+			/*Map<工序，计划数量> -- 结束*/
+			
+			/*2.对每一个工序的组合：获取计划单总量、实际入库数量*/
+			/*Map<工序，入库数量> -- 开始*/
+			List<HalfStoreInOut> storeInList = halfStoreInOutService.getByOrder(orderId,true);
+			Map<Integer,Integer> storeInMap = new HashMap<Integer, Integer>();
+			for(HalfStoreInOut temp : storeInList){
+				int tempGongxuId = temp.getGongxuId();
+				if(!storeInMap.containsKey(tempGongxuId)){
+					storeInMap.put(tempGongxuId, 0);
+				}
+				int temp_total_quantity = 0 ;
+				for (HalfStoreInOutDetail detail : temp.getDetaillist()) {
+					temp_total_quantity += detail.getQuantity();
+				}
+				storeInMap.put(tempGongxuId, temp_total_quantity + storeInMap.get(tempGongxuId));
+				
+			}
+			/*Map<工序，入库数量> -- 结束*/
+			
+			/*Map<工序，退货数量> -- 开始*/
+			List<HalfStoreReturn> storeReturnList = halfStoreReturnService.getByOrder(orderId);
+			Map<Integer,Integer> storeReturnMap = new HashMap<Integer,Integer>();
+			for(HalfStoreReturn temp : storeReturnList){
+				int tempGongxuId = temp.getGongxuId();
+				if(!storeReturnMap.containsKey(tempGongxuId)){
+					storeReturnMap.put(tempGongxuId, 0);
+				}
+				int temp_total_quantity = 0 ;
+				for (HalfStoreReturnDetail detail : temp.getDetaillist()) {
+					temp_total_quantity += detail.getQuantity();
+				}
+				storeReturnMap.put(tempGongxuId, temp_total_quantity + storeReturnMap.get(tempGongxuId));
+				
+			}
+			/*Map<工序，退货数量> -- 结束*/
+			
+			/*获取 工序 以及对应的 计划数量、入库数量、退货数量、实际入库数量*/
+			for(Integer gongxuId : planMap_producing.keySet()){
+				int plan_quantity = planMap_producing.get(gongxuId);
+				int in_quantity = 0 ; 
+				if(storeInMap.containsKey(gongxuId)){
+					in_quantity = storeInMap.get(gongxuId);
+				}
+				int return_quantity = 0 ; 
+				if(storeReturnMap.containsKey(gongxuId)){
+					return_quantity = storeReturnMap.get(gongxuId);
+				}
+				int actual_in_quantity = in_quantity - return_quantity;
+				HashMap<String,Object> tempM = new HashMap<String, Object>();
+				tempM.put("plan_quantity", plan_quantity);
+				tempM.put("in_quantity", in_quantity);
+				tempM.put("return_quantity", return_quantity);
+				tempM.put("actual_in_quantity", actual_in_quantity);
+				resultDetailMap.put(gongxuId, tempM);	
+			}
+			for(Integer gongxuId : planMap_gongxu.keySet()){
+				int plan_quantity = planMap_gongxu.get(gongxuId);
+				int in_quantity = 0 ; 
+				if(storeInMap.containsKey(gongxuId)){
+					in_quantity = storeInMap.get(gongxuId);
+				}
+				int return_quantity = 0 ; 
+				if(storeReturnMap.containsKey(gongxuId)){
+					return_quantity = storeReturnMap.get(gongxuId);
+				}
+				int actual_in_quantity = in_quantity - return_quantity;
+				HashMap<String,Object> tempM = new HashMap<String, Object>();
+				tempM.put("plan_quantity", plan_quantity);
+				tempM.put("in_quantity", in_quantity);
+				tempM.put("return_quantity", return_quantity);
+				tempM.put("actual_in_quantity", actual_in_quantity);
+				resultDetailMap.put(gongxuId, tempM);	
+			}
+			/*获取 工序 以及对应的 计划数量、入库数量、退货数量、实际入库数量*/
+	
+			resultMap.put(orderId, resultDetailMap);
+		}
+		
+		request.setAttribute("resultMap", resultMap);
+		request.setAttribute("pager", pager);
+		request.setAttribute("orderlist",orderlist);
+		request.setAttribute("orderNumber", orderNumber);
+		return new ModelAndView("half_store_in_out/order_progress");	
+	}
+	
 	public List<Map<String,Object>> getInStoreQuantity(List<ProducingOrder> list , List<HalfStoreInOut> halfstoreInList , List<HalfStoreReturn> halfstoreReturnList,PlanOrder planOrder) throws Exception{	
 		if(list == null){
 			return null;
@@ -899,15 +1059,15 @@ public class HalfStoreInController extends BaseController {
 		}
 		
 		//根据 【planOrderDetailId】 统计已出库 数量
-		HashMap<Integer, Integer> total_outmap = new HashMap<Integer, Integer>();
+		HashMap<Integer, Integer> total_returnmap = new HashMap<Integer, Integer>();
 		for (HalfStoreReturn storereturn : halfstoreReturnList) {
 			for (HalfStoreReturnDetail temp : storereturn.getDetaillist()) {
 				int key = temp.getPlanOrderDetailId(); 
-				if(total_outmap.containsKey(key)){
-					int temp_total_quantity = total_outmap.get(key);
-					total_outmap.put(key, temp_total_quantity + temp.getQuantity());
+				if(total_returnmap.containsKey(key)){
+					int temp_total_quantity = total_returnmap.get(key);
+					total_returnmap.put(key, temp_total_quantity + temp.getQuantity());
 				}else{
-					total_outmap.put(key, temp.getQuantity());
+					total_returnmap.put(key, temp.getQuantity());
 				}
 			}
 		}
@@ -920,8 +1080,8 @@ public class HalfStoreInController extends BaseController {
 			if(inmap.containsKey(key)){
 				in_quantity = inmap.get(key);//库存数量
 			}
-			if(total_outmap.containsKey(key)){
-				in_quantity = in_quantity - total_outmap.get(key);
+			if(total_returnmap.containsKey(key)){
+				in_quantity = in_quantity - total_returnmap.get(key);
 			}
 			int not_in_quantity = total_quantity - in_quantity;
 			HashMap<String, Object> tempHash = new HashMap<String, Object>();
@@ -931,6 +1091,73 @@ public class HalfStoreInController extends BaseController {
 			tempHash.put("not_in_quantity", not_in_quantity);//实际未入库
 			resultlist.add(tempHash);
 		}
+		return resultlist;
+	}
+	
+	public List<Map<String,Object>> getActualInStoreQuantity(List<HalfStoreInOut> halfstoreInList , List<HalfStoreReturn> halfstoreReturnList){
+		//根据 【planOrderDetailId】获取已入库 数量
+		HashMap<Integer, Integer> inmap = new HashMap<Integer, Integer>();
+		for (HalfStoreInOut storeIn : halfstoreInList) {
+			for (HalfStoreInOutDetail temp : storeIn.getDetaillist()) {
+				int key = temp.getPlanOrderDetailId(); 
+				if(inmap.containsKey(key)){
+					int temp_total_quantity = inmap.get(key);
+					inmap.put(key, temp_total_quantity + temp.getQuantity());
+				}else{
+					inmap.put(key, temp.getQuantity());
+				}
+			}
+		}
+		
+		//根据 【planOrderDetailId】 统计已出库 数量
+		HashMap<Integer, Integer> total_returnmap = new HashMap<Integer, Integer>();
+		for (HalfStoreReturn storereturn : halfstoreReturnList) {
+			for (HalfStoreReturnDetail temp : storereturn.getDetaillist()) {
+				int key = temp.getPlanOrderDetailId(); 
+				if(total_returnmap.containsKey(key)){
+					int temp_total_quantity = total_returnmap.get(key);
+					total_returnmap.put(key, temp_total_quantity + temp.getQuantity());
+				}else{
+					total_returnmap.put(key, temp.getQuantity());
+				}
+			}
+		}
+		
+		//获取未入库列表 ， 包括 色号、材料、总数量、已入库数量、未入库数量
+		List<Map<String,Object>> resultlist = new ArrayList<Map<String,Object>>();
+
+		if(total_returnmap.size()>inmap.size()){
+			for(Integer key : total_returnmap.keySet()){
+				int return_quantity = total_returnmap.get(key);//
+				int in_quantity = 0;
+				if(inmap.containsKey(key)){
+					in_quantity = inmap.get(key);
+				}
+				int actual_in_quantity = in_quantity - return_quantity;
+				HashMap<String, Object> tempHash = new HashMap<String, Object>();
+				tempHash.put("planOrderDetailId", key);
+				tempHash.put("in_quantity", in_quantity);//计划单总量
+				tempHash.put("return_quantity", return_quantity);//实际入库数量 = 入库 - 退货
+				tempHash.put("actual_in_quantity", actual_in_quantity);//实际未入库
+				resultlist.add(tempHash);
+			}
+		}else{
+			for(Integer key : inmap.keySet()){
+				int in_quantity = inmap.get(key);//库存数量
+				int return_quantity = 0;
+				if(total_returnmap.containsKey(key)){
+					return_quantity = total_returnmap.get(key);
+				}
+				int actual_in_quantity = in_quantity - return_quantity;
+				HashMap<String, Object> tempHash = new HashMap<String, Object>();
+				tempHash.put("planOrderDetailId", key);
+				tempHash.put("in_quantity", in_quantity);//计划单总量
+				tempHash.put("return_quantity", return_quantity);//实际入库数量 = 入库 - 退货
+				tempHash.put("actual_in_quantity", actual_in_quantity);//实际未入库
+				resultlist.add(tempHash);
+			}
+		}
+		
 		return resultlist;
 	}
 //	

@@ -4,26 +4,26 @@
 <%@page import="com.fuwei.entity.Salesman"%>
 <%@page import="com.fuwei.entity.Company"%>
 <%@page import="com.fuwei.entity.User"%>
-<%@page import="com.fuwei.entity.producesystem.StoreInOut"%>
+<%@page import="com.fuwei.entity.producesystem.StoreReturn"%>
 <%@page import="com.fuwei.commons.Pager"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="net.sf.json.JSONObject"%>
 <%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.entity.Employee"%>
-<%@page import="com.fuwei.entity.producesystem.StoreInOutDetail"%>
+<%@page import="com.fuwei.entity.producesystem.StoreReturnDetail"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+	+ request.getServerName() + ":" + request.getServerPort()
+	+ path + "/";
 	Pager pager = (Pager) request.getAttribute("pager");
 	if (pager == null) {
 		pager = new Pager();
 	}
-	List<StoreInOut> StoreInOutlist = new ArrayList<StoreInOut>();
+	List<StoreReturn> storeReturnlist = new ArrayList<StoreReturn>();
 	if (pager != null & pager.getResult() != null) {
-		StoreInOutlist = (List<StoreInOut>) pager.getResult();
+		storeReturnlist = (List<StoreReturn>) pager.getResult();
 	}
 
 	Date start_time = (Date) request.getAttribute("start_time");
@@ -75,7 +75,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>入库列表 -- 桐庐富伟针织厂</title>
+		<title>退货列表 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -116,12 +116,12 @@
 												单号
 											</label>
 											<div class="col-sm-9">
-												<input class="form-control" type="text" name="number" id="number" value="<%=number_str %>" />
+												<input class="form-control" type="text" name="number" id="number" value="<%=number_str%>" />
 											</div>
 										</div>
 										<div class="form-group salesgroup">
 											<label for="factoryId" class="col-sm-3 control-label">
-												送货工厂
+												染色工厂
 											</label>
 											<div class="col-sm-8">
 												<select class="form-control" name="factoryId" id="factoryId">
@@ -130,7 +130,7 @@
 													</option>
 													<%
 														for (Factory factory : SystemCache.coloring_factorylist) {
-															if (factoryId != null && factoryId == factory.getId()) {
+																																					if (factoryId != null && factoryId == factory.getId()) {
 													%>
 													<option value="<%=factory.getId()%>" selected><%=factory.getName()%></option>
 													<%
@@ -139,7 +139,7 @@
 													<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
 													<%
 														}
-														}
+																																				}
 													%>
 												</select>
 											</div>
@@ -157,7 +157,7 @@
 													</option>
 													<%
 														for (Employee temp : employeelist) {
-															if (charge_employee != null && charge_employee == temp.getId()) {
+																																					if (charge_employee != null && charge_employee == temp.getId()) {
 													%>
 													<option value="<%=temp.getId()%>" selected="selected"><%=temp.getName()%></option>
 													<%
@@ -166,7 +166,7 @@
 													<option value="<%=temp.getId()%>"><%=temp.getName()%></option>
 													<%
 														}
-														}
+																																				}
 													%>
 												</select>
 											</div>
@@ -184,7 +184,7 @@
 													</option>
 													<%
 														for (Company company : SystemCache.companylist) {
-															if (companyId != null && companyId == company.getId()) {
+																																					if (companyId != null && companyId == company.getId()) {
 													%>
 													<option value="<%=company.getId()%>" selected><%=company.getShortname()%></option>
 													<%
@@ -193,7 +193,7 @@
 													<option value="<%=company.getId()%>"><%=company.getShortname()%></option>
 													<%
 														}
-														}
+																																				}
 													%>
 												</select>
 											</div>
@@ -201,7 +201,7 @@
 										
 										<div class="form-group timegroup">
 											<label class="col-sm-3 control-label">
-												入库时间
+												退货时间
 											</label>
 
 											<div class="input-group col-md-9">
@@ -218,7 +218,7 @@
 									<ul class="pagination">
 										<li>
 											<a
-												href="store_in/index?number=<%=number_str %>&charge_employee=<%=charge_employee_str %>&factoryId=<%=factory_str%>&companyId=<%=company_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=1">«</a>
+												href="store_return/index?number=<%=number_str%>&charge_employee=<%=charge_employee_str%>&factoryId=<%=factory_str%>&companyId=<%=company_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=1">«</a>
 										</li>
 
 										<%
@@ -226,7 +226,7 @@
 										%>
 										<li class="">
 											<a
-												href="store_in/index?number=<%=number_str %>&charge_employee=<%=charge_employee_str %>&factoryId=<%=factory_str%>&companyId=<%=company_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() - 1%>">上一页
+												href="store_return/index?number=<%=number_str%>&charge_employee=<%=charge_employee_str%>&factoryId=<%=factory_str%>&companyId=<%=company_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() - 1%>">上一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -241,7 +241,7 @@
 
 										<li class="active">
 											<a
-												href="store_in/index?number=<%=number_str %>&charge_employee=<%=charge_employee_str %>&factoryId=<%=factory_str%>&companyId=<%=company_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
+												href="store_return/index?number=<%=number_str%>&charge_employee=<%=charge_employee_str%>&factoryId=<%=factory_str%>&companyId=<%=company_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
 												class="sr-only"></span> </a>
 										</li>
 										<li>
@@ -251,7 +251,7 @@
 										
 										<li class="">
 											<a
-												href="store_in/index?number=<%=number_str %>&charge_employee=<%=charge_employee_str %>&factoryId=<%=factory_str%>&companyId=<%=company_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() + 1%>">下一页
+												href="store_return/index?number=<%=number_str%>&charge_employee=<%=charge_employee_str%>&factoryId=<%=factory_str%>&companyId=<%=company_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getPageNo() + 1%>">下一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -267,7 +267,7 @@
 										<li></li>
 										<li>
 											<a
-												href="store_in/index?number=<%=number_str %>&charge_employee=<%=charge_employee_str %>&factoryId=<%=factory_str%>&companyId=<%=company_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getTotalPage()%>">»</a>
+												href="store_return/index?number=<%=number_str%>&charge_employee=<%=charge_employee_str%>&factoryId=<%=factory_str%>&companyId=<%=company_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
 
@@ -286,7 +286,7 @@
     										<th style="width:40px"></th>
     										<th style="width:55px"></th>
     										<th style="width:60px"></th>
-    										<th style="width:40px"></th>
+    										<th style="width:60px"></th>
     										<th style="width:50px"></th>
     										<th style="width:40px"></th>
     										<th style="width:60px"></th>
@@ -297,9 +297,9 @@
 												No.
 											</th>
 											<th rowspan="2" width="60px">
-												入库单号
+												退货单号
 											</th><th rowspan="2" width="50px">
-												染色单位
+												染色工厂
 											</th><th rowspan="2" width="60px">
 												订单号
 											</th>
@@ -313,21 +313,21 @@
 											</th>
 											<th rowspan="2" width="40px">
 												跟单人
-											</th><th colspan="4" width="165px">材料入库列表</th>
+											</th><th colspan="4" width="225px">原材料退货列表</th>
 											<th rowspan="2" width="40px">
 												经办人
 											</th><th rowspan="2" width="60px">
-												入库时间
+												退货时间
 											</th>
 											
 											<th rowspan="2" width="40px">
 												操作
 											</th>
 										</tr><tr><th width="55px">
+												材料
+											</th><th  width="60px">
 												色号
 											</th><th  width="60px">
-												材料
-											</th><th  width="50px">
 												缸号
 											</th><th  width="50px">
 												数量(kg)
@@ -336,43 +336,44 @@
 									<tbody>
 										<%
 											int i = (pager.getPageNo()-1) * pager.getPageSize() + 0;
-											for (StoreInOut item : StoreInOutlist) {
-												boolean even = i%2 == 0;
-												String classname = even?"even":"odd";
-												List<StoreInOutDetail> detailist = item.getDetaillist();
-												int detailsize = item.getDetaillist().size();
+																											for (StoreReturn item : storeReturnlist) {
+																												boolean even = i%2 == 0;
+																												String classname = even?"even":"odd";
+																												List<StoreReturnDetail> detailist = item.getDetaillist();
+																												int detailsize = item.getDetaillist().size();
 										%>
-										<tr itemId="<%=item.getId()%>" class="<%=classname %>">
-											<td rowspan="<%=detailsize %>"><%=++i%></td>
+										<tr itemId="<%=item.getId()%>" class="<%=classname%>">
+											<td rowspan="<%=detailsize%>"><%=++i%></td>
 											
-											<td rowspan="<%=detailsize %>"><a target="_top" href="store_in/detail/<%=item.getId() %>"><%=item.getNumber() %></a></td>
-											<td rowspan="<%=detailsize %>"><%=SystemCache.getFactoryName(item.getFactoryId())%></td>
-											<td rowspan="<%=detailsize %>"><a target="_top" href="order/detail/<%=item.getOrderId() %>"><%=item.getOrderNumber() %></a></td>
-											<td rowspan="<%=detailsize %>"><%=SystemCache.getCompanyShortName(item.getCompanyId())%></td>
-											<td rowspan="<%=detailsize %>"><%=item.getCompany_productNumber()%></td>
-											<td rowspan="<%=detailsize %>"><%=item.getName()%></td>
-											<td rowspan="<%=detailsize %>"><%=SystemCache.getEmployeeName(item.getCharge_employee())%></td>
+											<td rowspan="<%=detailsize%>"><a target="_top" href="store_return/detail/<%=item.getId()%>"><%=item.getNumber()%></a></td>
+											<td rowspan="<%=detailsize%>"><%=SystemCache.getFactoryName(item.getFactoryId())%></td>
+											<td rowspan="<%=detailsize%>"><a target="_top" href="order/detail/<%=item.getOrderId()%>"><%=item.getOrderNumber()%></a></td>
+											<td rowspan="<%=detailsize%>"><%=SystemCache.getCompanyShortName(item.getCompanyId())%></td>
+											<td rowspan="<%=detailsize%>"><%=item.getCompany_productNumber()%></td>
+											<td rowspan="<%=detailsize%>"><%=item.getName()%></td>
+											<td rowspan="<%=detailsize%>"><%=SystemCache.getEmployeeName(item.getCharge_employee())%></td>
 											
 											
-											<td><%=detailist.get(0).getColor()%></td>
 											<td><%=SystemCache.getMaterialName(detailist.get(0).getMaterial())%></td>
+											<td><%=detailist.get(0).getColor()%></td>
 											<td><%=detailist.get(0).getLot_no()%></td>
 											<td><%=detailist.get(0).getQuantity()%></td>
 
-											<td rowspan="<%=detailsize %>"><%=SystemCache.getUserName(item.getCreated_user())%></td>				
-											<td rowspan="<%=detailsize %>"><%=DateTool.formatDateYMD(item.getDate())%></td>				
+											<td rowspan="<%=detailsize%>"><%=SystemCache.getUserName(item.getCreated_user())%></td>				
+											<td rowspan="<%=detailsize%>"><%=DateTool.formatDateYMD(item.getDate())%></td>				
 											
 											
-											<td rowspan="<%=detailsize %>">
-												<a target="_top" href="store_in/detail/<%=item.getId() %>">详情</a>
+											<td rowspan="<%=detailsize%>">
+												<a target="_top" href="half_store_return/detail/<%=item.getId()%>">详情</a>
 											</td>
 										</tr>
 										<%
-										detailist.remove(0);
-										for(StoreInOutDetail detail : detailist){ %>
+											detailist.remove(0);
+																		for(StoreReturnDetail detail : detailist){
+										%>
 										<tr class="<%=classname %>">
-											<td><%=detail.getColor()%></td>
 											<td><%=SystemCache.getMaterialName(detail.getMaterial())%></td>
+											<td><%=detail.getColor()%></td>
 											<td><%=detail.getLot_no()%></td>
 											<td><%=detail.getQuantity()%></td>
 

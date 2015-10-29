@@ -186,7 +186,7 @@ caption {
 												<tr>
 													<td>
 														<div class="form-group">
-															送货单位：
+															染色单位：
 															<select class="form-control require" name="factoryId"
 																id="factoryId">
 																<option value="">

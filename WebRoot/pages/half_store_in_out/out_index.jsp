@@ -345,7 +345,7 @@
 										<tr itemId="<%=item.getId()%>" class="<%=classname%>">
 											<td rowspan="<%=detailsize%>"><%=++i%></td>
 											
-											<td rowspan="<%=detailsize%>"><a target="_top" href="store_out/detail/<%=item.getId()%>"><%=item.getNumber()%></a></td>
+											<td rowspan="<%=detailsize%>"><a target="_top" href="half_store_out/detail/<%=item.getId()%>"><%=item.getNumber()%></a></td>
 											<td rowspan="<%=detailsize%>"><%=SystemCache.getFactoryName(item.getFactoryId())%></td>
 											<td rowspan="<%=detailsize%>"><%=SystemCache.getGongxuName(item.getGongxuId())%></td>
 											<td rowspan="<%=detailsize%>"><a target="_top" href="order/detail/<%=item.getOrderId()%>"><%=item.getOrderNumber()%></a></td>

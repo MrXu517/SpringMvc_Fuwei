@@ -136,6 +136,8 @@
 	Boolean h_has_half_current_stock = SystemCache.hasAuthority(session,"report/half_current_stock");//半成品库存报表
 	
 	Boolean h_has_gongxu_producing_order_index = SystemCache.hasAuthority(session,"gongxu_producing_order/index");//查询工序加工单
+	
+	Boolean h_has_order_progress = SystemCache.hasAuthority(session,"order/progress");//订单生产进度
 	//权限相关
 	
 %>
@@ -326,6 +328,13 @@
 							<%if(has_material_workspace){ %>
 							<li>
 								<a href="workspace/material_workspace">原材料工作台</a>
+							</li>
+							<%} %><%if(h_has_order_progress){ %>
+							<li>
+								<a href="half_store_in/order_progress">半成品生产进度</a>
+							</li>
+							<li>
+								<a href="store_in/order_progress">原材料生产进度</a>
 							</li>
 							<%} %>
 							<%if(has_halfstoreorder_workspace){ %>

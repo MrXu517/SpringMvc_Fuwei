@@ -101,6 +101,22 @@ public class OrderService extends BaseService {
 	@Autowired
 	GongxuProducingOrderService gongxuProducingOrderService;
 	
+	//获取未发货的订单
+	public Pager getUnDeliveryList(Pager pager,String orderNumber) throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			sql.append("select * from tb_order where status<" + OrderStatus.DELIVERED.ordinal());
+			if (orderNumber != null && !orderNumber.equals("")) {
+				sql.append(" and orderNumber='" + orderNumber + "'");
+			}
+			sql.append(" order by end_at");
+			return findPager_T(sql.toString(), Order.class, pager);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	
 	//获取所有订单
 	public List<Order> getList(){
 		return dao.queryForBeanList("select * from tb_order", Order.class);

@@ -287,7 +287,7 @@
     										<th style="width:55px"></th>
     										<th style="width:60px"></th>
     										<th style="width:40px"></th>
-    										<th style="width:40px"></th>
+    										<th style="width:50px"></th>
     										<th style="width:40px"></th>
     										<th style="width:60px"></th>
     										<th style="width:40px"></th>
@@ -330,7 +330,7 @@
 											</th><th>
 												缸号
 											</th><th>
-												数量
+												数量(kg)
 											</th></tr>
 									</thead>
 									<tbody>

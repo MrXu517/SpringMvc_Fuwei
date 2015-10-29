@@ -73,7 +73,7 @@
 								<a href="#producingorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>生产单</a>
 							</li>
 							<li>
-								<a href="#gongxuproduceorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>工序加工单</a>
+								<a href="#gongxuproduceorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck"/>工序加工单</a>
 							</li>
 							<li>
 								<a href="#storeorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>原材料仓库</a>

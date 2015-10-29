@@ -16,6 +16,7 @@ import com.fuwei.commons.Sort;
 import com.fuwei.entity.financial.Expense_income;
 import com.fuwei.entity.ordergrid.PackingOrder;
 import com.fuwei.entity.ordergrid.StoreOrder;
+import com.fuwei.entity.producesystem.HalfStoreInOut;
 import com.fuwei.entity.producesystem.StoreInOut;
 import com.fuwei.service.BaseService;
 import com.fuwei.util.CreateNumberUtil;
@@ -30,6 +31,8 @@ public class StoreInOutService extends BaseService {
 			.getLogger(StoreInOutService.class);
 	@Autowired
 	JdbcTemplate jdbc;
+	@Autowired
+	MaterialCurrentStockService materialCurrentStockService;
 
 	// 获取列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,
@@ -113,6 +116,8 @@ public class StoreInOutService extends BaseService {
 				object.setId(id);
 				object.setNumber(object.createNumber());
 				this.update(object, "id", null);
+				//更新库存表
+				materialCurrentStockService.reStock(object.getOrderId());
 
 				return id;
 			}
@@ -161,6 +166,8 @@ public class StoreInOutService extends BaseService {
 				this.update(object, "id",
 						"number,created_user,created_at,orderId,store_order_id,companyId,customerId,sampleId,name,img,img_s,img_ss,materialId,weight,size,productNumber,orderNumber,charge_employee,company_productNumber", true);
 
+				//更新库存表
+				materialCurrentStockService.reStock(temp.getOrderId());
 				return object.getId();
 			}
 		} catch (Exception e) {
@@ -186,6 +193,29 @@ public class StoreInOutService extends BaseService {
 			List<StoreInOut> orderlist = dao.queryForBeanList(
 					"select * from tb_store_in_out where store_order_id = ? and in_out=?",
 					StoreInOut.class, storeOrderId,in_out);
+			return orderlist;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	// 获取
+	public List<StoreInOut> getByOrder(int orderId) throws Exception {
+		try {
+			List<StoreInOut> orderlist = dao.queryForBeanList(
+					"select * from tb_store_in_out where orderId = ?",
+					StoreInOut.class, orderId);
+			return orderlist;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	// 获取
+	public List<StoreInOut> getByOrder(int OrderId,Boolean in_out) throws Exception {
+		try {
+			List<StoreInOut> orderlist = dao.queryForBeanList(
+					"select * from tb_store_in_out where orderId = ? and in_out=?",
+					StoreInOut.class, OrderId,in_out);
 			return orderlist;
 		} catch (Exception e) {
 			throw e;
@@ -250,7 +280,10 @@ public class StoreInOutService extends BaseService {
 			if(!temp.deletable()){
 				throw new Exception("单据已执行完成，无法删除 ");
 			}
-			return dao.update("delete from tb_store_in_out WHERE  id = ?", id);
+			int result = dao.update("delete from tb_store_in_out WHERE  id = ?", id);
+			//更新库存表
+			materialCurrentStockService.reStock(temp.getOrderId());
+			return result;
 		} catch (Exception e) {
 			SQLException sqlException = (java.sql.SQLException) e.getCause();
 			if (sqlException != null && sqlException.getErrorCode() == 1451) {// 外键约束
@@ -260,9 +293,18 @@ public class StoreInOutService extends BaseService {
 			throw e;
 		}
 	}
-//	//获取所有
-//	public List<StoreInOut> getList(){
-//		return dao.queryForBeanList("select * from tb_store_in_out", StoreInOut.class);
-//	}
 	
+	// 获取
+	public List<StoreInOut> getByFactory(int storeOrderId,int factoryId, Boolean in_out)
+			throws Exception {
+		try {
+			List<StoreInOut> orderlist = dao
+					.queryForBeanList(
+							"select * from tb_store_in_out where store_order_id=? and factoryId = ? and in_out=?",
+							StoreInOut.class, storeOrderId,factoryId,in_out);
+			return orderlist;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 }

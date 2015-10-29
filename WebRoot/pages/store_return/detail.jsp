@@ -1,28 +1,27 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
-<%@page import="com.fuwei.entity.producesystem.StoreInOut"%>
-<%@page import="com.fuwei.entity.producesystem.StoreInOutDetail"%>
+<%@page import="com.fuwei.entity.producesystem.StoreReturn"%>
+<%@page import="com.fuwei.entity.producesystem.StoreReturnDetail"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
-	//原材料入库单
-	StoreInOut storeInOut = (StoreInOut) request.getAttribute("storeInOut");
-	List<StoreInOutDetail> detaillist = storeInOut == null ? new ArrayList<StoreInOutDetail>() :storeInOut.getDetaillist();
+	+ request.getServerName() + ":" + request.getServerPort()
+	+ path + "/";
+	//原材料退货单
+	StoreReturn storeReturn = (StoreReturn) request.getAttribute("storeReturn");
+	List<StoreReturnDetail> detaillist = storeReturn == null ? new ArrayList<StoreReturnDetail>() :storeReturn.getDetaillist();
 	//权限
-	Boolean has_delete = SystemCache.hasAuthority(session,"store_in_out/delete");
-	Boolean has_print = SystemCache.hasAuthority(session,"store_in_out/print");
-	Boolean has_edit = SystemCache.hasAuthority(session,"store_in_out/edit");
+	Boolean has_delete = SystemCache.hasAuthority(session,"store_return/delete");
+	Boolean has_print = SystemCache.hasAuthority(session,"store_return/print");
 %>
 <!DOCTYPE html>
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>原材料入库单 -- 桐庐富伟针织厂</title>
+		<title>原材料退货单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -66,7 +65,7 @@
 							<a href="workspace/material_workspace">原材料工作台</a>
 						</li>
 						<li class="active">
-							原材料入库单 --- 详情
+							原材料退货单 --- 详情
 						</li>
 					</ul>
 				</div>
@@ -75,19 +74,24 @@
 			<div class="container-fluid gridTb_2 auto_container">
 				<div class="row">
 					<div class="col-md-12 tablewidget">
-						<%if(has_print){ %>
-						<a target="_blank" href="store_in/print/<%=storeInOut.getId() %>" type="button" class="btn btn-success">打印</a>
-						<a target="_blank" href="store_in/print/<%=storeInOut.getId() %>/tag" type="button" class="btn btn-success">打印纱线标签</a>
-						<%} %>
-						<%if(has_edit){ %>
-						<a href="store_in/put/<%=storeInOut.getId() %>" type="button" class="btn btn-primary">编辑</a>					
-						<%} %>
-						<%if(has_delete){ %>
-						<button data-cid="<%=storeInOut.getId() %>" type="button" class="btn btn-danger" id="deleteBtn">删除</button>
-						<%} %>
+						<%
+							if(has_print){
+						%>
+						<a target="_blank" href="store_return/print/<%=storeReturn.getId()%>" type="button" class="btn btn-success">打印</a>
+						<%
+							}
+						%>
+						
+						<%
+							if(has_delete){
+						%>
+						<button data-cid="<%=storeReturn.getId()%>" type="button" class="btn btn-danger" id="deleteBtn">删除</button>
+						<%
+							}
+						%>
 						<table class="table noborder">
 							<caption id="tablename">
-								桐庐富伟针织厂原材料入库单<div table_id="<%=storeInOut.getNumber() %>" class="id_barcode"></div>
+								桐庐富伟针织厂原材料退货单<div table_id="<%=storeReturn.getNumber()%>" class="id_barcode"></div>
 							</caption>
 						</table>
 
@@ -95,27 +99,20 @@
 							<tbody>
 								<tr>
 									<td>
-
 										染色单位：
-										<span><%=storeInOut == null ? ""
-						: (SystemCache.getFactoryName(storeInOut
+										<span><%=storeReturn == null ? ""
+						: (SystemCache.getFactoryName(storeReturn
 								.getFactoryId()))%></span>
 
 									</td>
 									<td>
-										业务员：
-										<span><%=storeInOut == null ? ""
-						: (SystemCache.getEmployeeName((storeInOut
-								.getCharge_employee())))%></span>
-									</td>
-									<td>
-										入库时间：
-										<span><%=storeInOut == null ? ""
-						: (DateTool.formatDateYMD(storeInOut.getDate()))%></span>
+										退货时间：
+										<span><%=storeReturn == null ? ""
+						: (DateTool.formatDateYMD(storeReturn.getDate()))%></span>
 									</td>
 									<td class="pull-right">
 
-										№：<%=storeInOut.getNumber()%>
+										№：<%=storeReturn.getNumber()%>
 
 									</td>
 									<td></td>
@@ -127,9 +124,9 @@
 											<tbody>
 																<tr>
 																	<td rowspan="4" width="30%">
-																		<a href="/<%=storeInOut.getImg()%>" class="thumbnail"
+																		<a href="/<%=storeReturn.getImg()%>" class="thumbnail"
 																			target="_blank"> <img id="previewImg"
-																				alt="200 x 100%" src="/<%=storeInOut.getImg_s()%>">
+																				alt="200 x 100%" src="/<%=storeReturn.getImg_s()%>">
 																		</a>
 																	</td>
 																</tr>
@@ -147,27 +144,28 @@
 																					公司货号
 																				</th>
 																				<th class="center" width="15%">
-																					客户
+																					业务员
 																				</th>
 																				<th class="center" width="20%">
 																					品名
 																				</th>
 																			</tr>
 																			<tr>
-																				<td class="center"><%=storeInOut.getOrderNumber()%>
+																				<td class="center"><%=storeReturn.getOrderNumber()%>
 
 																				</td>
 																				<td class="center"><%=SystemCache
-							.getCompanyShortName(storeInOut.getCompanyId())%>
+							.getCompanyShortName(storeReturn.getCompanyId())%>
 
 																				</td>
-																				<td class="center"><%=storeInOut.getCompany_productNumber() == null ? ""
-					: storeInOut.getCompany_productNumber()%>
+																				<td class="center"><%=storeReturn.getCompany_productNumber() == null ? ""
+					: storeReturn.getCompany_productNumber()%>
+																				</td><td>
+																					<span><%=storeReturn == null ? ""
+																	: (SystemCache.getEmployeeName((storeReturn
+																			.getCharge_employee())))%></span>
 																				</td>
-																				<td class="center">
-																					<%=SystemCache.getCustomerName(storeInOut.getCustomerId())%>
-																				</td>
-																				<td class="center"><%=storeInOut.getName() == null ? "" : storeInOut
+																				<td class="center"><%=storeReturn.getName() == null ? "" : storeReturn
 					.getName()%>
 																				</td>
 																			</tr>
@@ -176,7 +174,7 @@
 																					备注
 																				</td>
 																				<td colspan="4">
-																					<%=storeInOut.getMemo() == null ? "" : storeInOut.getMemo() %>
+																					<%=storeReturn.getMemo() == null ? "" : storeReturn.getMemo()%>
 																				</td>
 																			</tr>
 																		</table>
@@ -195,35 +193,31 @@
 											<thead>
 												<tr>
 													<td width="15%">
-														色号
-													</td>
-													<td width="15%">
 														材料
 													</td>
 													<td width="15%">
-														入库数量(kg)
+														颜色
 													</td>
 													<td width="15%">
 														缸号
-													</td><td width="15%">
-														包数
+													</td>
+													<td width="15%">
+														退货数量
 													</td>
 
 												</tr>
 											</thead>
 											<tbody>
 												<%
-													for (StoreInOutDetail detail : detaillist) {
+													for (StoreReturnDetail detail : detaillist) {
 												%>
 												<tr class="tr">
+													<td class="material_name"><%=SystemCache.getMaterialName(detail.getMaterial())%>
 													<td class="color"><%=detail.getColor()%>
-													<td class="material_name"><%=SystemCache.getMaterialName(detail
-											.getMaterial())%>
-													</td>
-													<td class="quantity"><%=detail.getQuantity()%>
 													</td>
 													<td class="lot_no"><%=detail.getLot_no()%>
-													</td><td class="packages"><%=detail.getPackages()%>
+													</td>
+													<td class="quantity"><%=detail.getQuantity()%>
 													</td>
 												</tr>
 
@@ -233,14 +227,12 @@
 														for (; i < 6; ++i) {
 												%>
 												<tr class="tr">
-													<td class="color">&nbsp;</td>
-													<td class="material_name">
-													</td>
-													<td class="quantity">
+													<td class="material_name">&nbsp;</td>
+													<td class="color">
 													</td>
 													<td class="lot_no">
 													</td>
-													<td class="packages">
+													<td class="quantity">
 													</td>
 												</tr>
 												<%
@@ -274,7 +266,7 @@
 
 
 						<p class="pull-right auto_bottom">
-							<span id="created_user">制单人：<%=SystemCache.getUserName(storeInOut
+							<span id="created_user">制单人：<%=SystemCache.getUserName(storeReturn
 								.getCreated_user())%></span>
 							<span id="receiver_user">收货人：</span>
 							
@@ -301,20 +293,20 @@
 		//删除单据 -- 开始
 		$("#deleteBtn").click( function() {
 			var id = $(this).attr("data-cid");
-			if (!confirm("确定要删除该原材料入库单吗？")) {
+			if (!confirm("确定要删除该原材料退货单吗？")) {
 				return false;
 			}
 			$.ajax( {
-				url :"store_in/delete/" + id,
+				url :"store_return/delete/" + id,
 				type :'POST'
 			}).done( function(result) {
 				if (result.success) {
-					Common.Tip("删除原材料入库单成功", function() {
+					Common.Tip("删除原材料退货单成功", function() {
 						$("#breadcrumbs li.active").prev().find("a").click();
 					});
 				}
 			}).fail( function(result) {
-				Common.Error("删除原材料入库单失败：" + result.responseText);
+				Common.Error("删除原材料退货单失败：" + result.responseText);
 			}).always( function() {
 	
 			});

@@ -42,6 +42,8 @@ import com.fuwei.entity.ordergrid.StoreOrder;
 import com.fuwei.entity.ordergrid.StoreOrderDetail;
 import com.fuwei.entity.producesystem.StoreInOut;
 import com.fuwei.entity.producesystem.StoreInOutDetail;
+import com.fuwei.entity.producesystem.StoreReturn;
+import com.fuwei.entity.producesystem.StoreReturnDetail;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.MessageService;
 import com.fuwei.service.OrderService;
@@ -50,6 +52,7 @@ import com.fuwei.service.ordergrid.PlanOrderService;
 import com.fuwei.service.ordergrid.ProducingOrderService;
 import com.fuwei.service.ordergrid.StoreOrderService;
 import com.fuwei.service.producesystem.StoreInOutService;
+import com.fuwei.service.producesystem.StoreReturnService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
 import com.google.gson.JsonObject;
@@ -68,6 +71,8 @@ public class StoreOutController extends BaseController {
 	AuthorityService authorityService;
 	@Autowired
 	MessageService messageService;
+	@Autowired
+	StoreReturnService storeReturnService;
 	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
@@ -204,7 +209,9 @@ public class StoreOutController extends BaseController {
 				List<StoreInOut> storeInList = storeInOutService.getByStoreOrder(storeOrderId,true);
 				//获取已开的出库单
 				List<StoreInOut> storeOutList = storeInOutService.getByStoreOrder(storeOrderId,false);
-				getOutStoreQuantity(factory_not_outlist,lot_not_outlist,factoryId,storeOrder,storeInList,storeOutList);
+				//获取已开的退货单
+				List<StoreReturn> storeReturnList = storeReturnService.getByStoreOrder(storeOrderId);
+				getOutStoreQuantity(factory_not_outlist,lot_not_outlist,factoryId,storeOrder,storeInList,storeReturnList,storeOutList);
 				request.setAttribute("factoryId", factoryId);
 			}
 			
@@ -312,7 +319,9 @@ public class StoreOutController extends BaseController {
 				//获取已开的出库单
 				List<StoreInOut> storeOutList = storeInOutService.getByStoreOrder(storeOrderId,false);
 				storeOutList.add(storeInOut);
-				getOutStoreQuantity(factory_not_outlist,lot_not_outlist,factoryId,storeOrder,storeInList,storeOutList);
+				//获取已开的退货单
+				List<StoreReturn> storeReturnList = storeReturnService.getByStoreOrder(storeOrderId);
+				getOutStoreQuantity(factory_not_outlist,lot_not_outlist,factoryId,storeOrder,storeInList,storeReturnList,storeOutList);
 				for(Map<String,Object> item:factory_not_outlist){
 					double not_out_quantity = (Double)item.get("not_out_quantity");
 					if(not_out_quantity<0){//出库总数大于原材料仓库单的数量
@@ -364,7 +373,9 @@ public class StoreOutController extends BaseController {
 						storeOutList.set(i, storeInOut);
 					}
 				}
-				getOutStoreQuantity(factory_not_outlist,lot_not_outlist,factoryId,storeOrder,storeInList,storeOutList);
+				//获取已开的退货单
+				List<StoreReturn> storeReturnList = storeReturnService.getByStoreOrder(storeOrderId);
+				getOutStoreQuantity(factory_not_outlist,lot_not_outlist,factoryId,storeOrder,storeInList,storeReturnList,storeOutList);
 				for(Map<String,Object> item:factory_not_outlist){
 					double not_out_quantity = (Double)item.get("not_out_quantity");
 					if(not_out_quantity<0){//出库总数大于原材料仓库单的数量
@@ -439,7 +450,9 @@ public class StoreOutController extends BaseController {
 				List<StoreInOut> storeInList = storeInOutService.getByStoreOrder(storeOrderId,true);
 				//获取已开的出库单
 				List<StoreInOut> storeOutList = storeInOutService.getByStoreOrder(storeOrderId,false);
-				getOutStoreQuantity(factory_not_outlist,lot_not_outlist,factoryId,storeOrder,storeInList,storeOutList);
+				//获取已开的退货单
+				List<StoreReturn> storeReturnList = storeReturnService.getByStoreOrder(storeOrderId);
+				getOutStoreQuantity(factory_not_outlist,lot_not_outlist,factoryId,storeOrder,storeInList,storeReturnList,storeOutList);
 				request.setAttribute("factoryId", factoryId);
 			}
 			
@@ -646,7 +659,7 @@ public class StoreOutController extends BaseController {
 	}
 
 	//获取各个缸号的库存量  和  某工厂未出库量  
-	public void getOutStoreQuantity(List<Map<String,Object>> factory_not_outlist,List<Map<String,Object>> lot_not_outlist, int factoryId, StoreOrder storeOrder , List<StoreInOut> storeInList , List<StoreInOut> storeOutList) throws Exception{	
+	public void getOutStoreQuantity(List<Map<String,Object>> factory_not_outlist,List<Map<String,Object>> lot_not_outlist, int factoryId, StoreOrder storeOrder , List<StoreInOut> storeInList ,List<StoreReturn> storeReturnList, List<StoreInOut> storeOutList) throws Exception{	
 		//根据【工厂】  【色号】 和 【材料】  统计总数量 , key = material + : + color
 		HashMap<String, Double> factory_totalmap = new HashMap<String, Double>();
 		for (StoreOrderDetail storeOrderDetail : storeOrder.getDetaillist()) {
@@ -691,7 +704,7 @@ public class StoreOutController extends BaseController {
 		}
 		
 
-		//根据 【色号】 和 【材料】 和 【工厂】 统计已出库 数量
+		//根据 【色号】 和 【材料】 和 【工厂】 统计已出库 数量 + 退货数量
 		HashMap<String, Double> factory_outmap = new HashMap<String, Double>();
 		for (StoreInOut storeOut : storeOutList) {
 			if(storeOut.getFactoryId() != factoryId){
@@ -707,12 +720,47 @@ public class StoreOutController extends BaseController {
 				}
 			}
 		}
+		for (StoreReturn storeReturn : storeReturnList) {
+			if(storeReturn.getFactoryId() != factoryId){
+				continue;
+			}
+			for (StoreReturnDetail temp : storeReturn.getDetaillist()) {
+				String key = temp.getMaterial() + ":"+ temp.getColor().trim(); 
+				if(factory_outmap.containsKey(key)){
+					double temp_total_quantity = factory_outmap.get(key);
+					factory_outmap.put(key, temp_total_quantity + temp.getQuantity());
+				}else{
+					factory_outmap.put(key, temp.getQuantity());
+				}
+			}
+		}
 		
 		
-		//根据 【色号】 和 【材料】 和 【缸号】 统计已出库 数量
+		//根据 【色号】 和 【材料】 和 【缸号】 统计已出库 数量+退货数量
 		HashMap<String, HashMap<String, Double>> outmap = new HashMap<String, HashMap<String, Double>>();
 		for (StoreInOut storeOut : storeOutList) {
 			for (StoreInOutDetail temp : storeOut.getDetaillist()) {
+				String key = temp.getMaterial() + ":"+ temp.getColor().trim(); 
+				if(outmap.containsKey(key)){
+					HashMap<String, Double> lotno_quantity = outmap.get(key);
+					String key_lotno = temp.getLot_no();
+					if(lotno_quantity.containsKey(key_lotno)){
+						double temp_total_quantity = lotno_quantity.get(key_lotno);
+						lotno_quantity.put(key_lotno, temp_total_quantity + temp.getQuantity());
+						outmap.put(key, lotno_quantity);
+					}else{
+						lotno_quantity.put(temp.getLot_no(), temp.getQuantity());
+						outmap.put(key, lotno_quantity);
+					}
+				}else{
+					HashMap<String, Double> lotno_quantity = new HashMap<String, Double>();
+					lotno_quantity.put(temp.getLot_no(), temp.getQuantity());
+					outmap.put(key, lotno_quantity);
+				}
+			}
+		}
+		for (StoreReturn storeReturn : storeReturnList) {
+			for (StoreReturnDetail temp : storeReturn.getDetaillist()) {
 				String key = temp.getMaterial() + ":"+ temp.getColor().trim(); 
 				if(outmap.containsKey(key)){
 					HashMap<String, Double> lotno_quantity = outmap.get(key);

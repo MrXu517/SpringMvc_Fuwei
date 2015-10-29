@@ -63,10 +63,6 @@
 
 						<ul class="nav nav-tabs" role="tablist">
 							<li class="active">
-								<a href="#coloringprocessorder" role="tab" data-toggle="tab">染色进度</a>
-							</li>
-
-							<li>
 								<a href="#halfinout" role="tab" data-toggle="tab">半成品出入库记录</a>
 							</li>
 							<li>
@@ -75,22 +71,24 @@
 							<li>
 								<a href="#materialprogress" role="tab" data-toggle="tab">原材料生产进度</a>
 							</li>
+							<li>
+								<a href="#coloringprocessorder" role="tab" data-toggle="tab">染色进度</a>
+							</li>
 						</ul>
 
 
 						<div class="tab-content auto_height">
-							<div class="tab-pane active" id="coloringprocessorder">
-								<iframe id="coloringprocessorderIframe" name="coloringprocessorderIframe" border="0" furl="" > </iframe>
-
-							</div>
-							<div class="tab-pane" id="halfinout">
+							<div class="tab-pane active" id="halfinout">
 								<iframe id="halfinoutIframe" name="halfinoutIframe" border="0" furl="half_current_stock/in_out2/<%=order.getId() %>" > </iframe>
 							</div>
 							<div class="tab-pane" id="halfprogress">
 								<iframe id="halfprogressIframe" name="halfprogressIframe" border="0" furl="half_store_in/actual_in/<%=order.getId()%>" > </iframe>
 							</div>
 							<div class="tab-pane" id="materialprogress">
-								<iframe id="materialprogressIframe" name="materialprogressIframe" border="0" furl="" > </iframe>
+								<iframe id="materialprogressIframe" name="materialprogressIframe" border="0" furl="store_in/actual_in/<%=order.getId()%>" > </iframe>
+							</div>
+							<div class="tab-pane" id="coloringprocessorder">
+								<iframe id="coloringprocessorderIframe" name="coloringprocessorderIframe" border="0" furl="" > </iframe>
 							</div>
 						</div>
 					</div>

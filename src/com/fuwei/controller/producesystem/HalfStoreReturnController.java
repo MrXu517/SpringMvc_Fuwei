@@ -230,7 +230,6 @@ public class HalfStoreReturnController extends BaseController {
 				List<HalfStoreInOut> storeInList = halfStoreInOutService.getByFactoryGongxu(orderId,factoryId, gongxuId,true);
 				List<HalfStoreReturn> storeReturnList = halfStoreReturnService.getByFactoryGongxu(orderId,factoryId, gongxuId);
 				List<Map<String,Object>> detaillist =  getInStoreQuantity(storeInList,storeReturnList);
-				/*判断若detaillist 的not_in_quantity 均 == 0 ， 则表示已全部入库，无需再创建入库单*/
 				boolean flag = true;
 				for(Map<String,Object> tMap : detaillist){
 					if((Integer)tMap.get("actual_in_quantity") > 0){//实际入库数量大于0，则表示有货可退			
@@ -240,7 +239,6 @@ public class HalfStoreReturnController extends BaseController {
 				if(flag){
 					throw new Exception("实际入库数量为0，已全部退货或者还未入库，无法再创建退货单！！！");
 				}
-				/*判断若detaillist 的not_in_quantity 均 == 0 ， 则表示已全部入库，无需再创建入库单*/
 				request.setAttribute("detaillist", detaillist);
 			}
 
@@ -279,7 +277,7 @@ public class HalfStoreReturnController extends BaseController {
 				throw new Exception("工序ID不能为空");
 			}
 			if (halfStoreReturn.getDate() == null) {
-				throw new Exception("入库日期不能为空", null);
+				throw new Exception("退货日期不能为空", null);
 			}
 			Order order = orderService.get(orderId);
 			if (order == null) {
@@ -371,7 +369,7 @@ public class HalfStoreReturnController extends BaseController {
 				    }
 				}  
 				if(detaillist.size() <=0){
-					throw new Exception("本次入库数量均为0，无法创建入库单");
+					throw new Exception("本次退货数量均为0，无法创建退货单");
 				}
 				//判断是否有数量为0的明细项
 				
@@ -436,25 +434,26 @@ public class HalfStoreReturnController extends BaseController {
 		if (!hasAuthority) {
 			throw new PermissionDeniedDataAccessException("没有删除半成品退货单的权限", null);
 		}
-		/*判断实际入库量是否小于退货量，若是，则不可以删除*/
 		HalfStoreReturn storeReturn = halfStoreReturnService.get(id);
-		List<HalfStoreInOut> halfstoreInList = halfStoreInOutService.getByFactoryGongxu(storeReturn.getOrderId(),storeReturn.getFactoryId(), storeReturn.getGongxuId(), true);
-		List<HalfStoreReturn> storeReturnList = halfStoreReturnService.getByFactoryGongxu(storeReturn.getOrderId(),storeReturn.getFactoryId(), storeReturn.getGongxuId());
-		Iterator<HalfStoreReturn> iter = storeReturnList.iterator();
-		while(iter.hasNext()){
-			HalfStoreReturn temp = iter.next();
-			if(temp.getId() == storeReturn.getId()){
-				iter.remove();
-			}
-		}
-		List<Map<String,Object>> returnlist = getInStoreQuantity(halfstoreInList,storeReturnList);
-		for(Map<String,Object> item:returnlist){
-			int actual_in_quantity = (Integer)item.get("actual_in_quantity");
-			if(actual_in_quantity<0){//删除后实际入库数量<0， 则不可删除
-				throw new Exception("删除后实际入库数量小于0， 无法删除");
-			}
-		}
-		/*判断实际入库量是否小于退货量，若是，则不可以删除*/
+		
+//		/*判断实际入库量是否小于退货量，若是，则不可以删除*/
+//		List<HalfStoreInOut> halfstoreInList = halfStoreInOutService.getByFactoryGongxu(storeReturn.getOrderId(),storeReturn.getFactoryId(), storeReturn.getGongxuId(), true);
+//		List<HalfStoreReturn> storeReturnList = halfStoreReturnService.getByFactoryGongxu(storeReturn.getOrderId(),storeReturn.getFactoryId(), storeReturn.getGongxuId());
+//		Iterator<HalfStoreReturn> iter = storeReturnList.iterator();
+//		while(iter.hasNext()){
+//			HalfStoreReturn temp = iter.next();
+//			if(temp.getId() == storeReturn.getId()){
+//				iter.remove();
+//			}
+//		}
+//		List<Map<String,Object>> returnlist = getInStoreQuantity(halfstoreInList,storeReturnList);
+//		for(Map<String,Object> item:returnlist){
+//			int actual_in_quantity = (Integer)item.get("actual_in_quantity");
+//			if(actual_in_quantity<0){//删除后实际入库数量<0， 则不可删除
+//				throw new Exception("删除后实际入库数量小于0， 无法删除");
+//			}
+//		}
+//		/*判断实际入库量是否小于退货量，若是，则不可以删除*/
 		
 		int success = halfStoreReturnService.remove(storeReturn);
 
