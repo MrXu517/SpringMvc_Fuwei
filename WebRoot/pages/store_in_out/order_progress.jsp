@@ -65,7 +65,7 @@
 							<a href="user/index">首页</a>
 						</li>
 						<li>
-							<a href="workspace/material_workspace">半成品工作台</a>
+							<a href="workspace/material_workspace">原材料工作台</a>
 						</li>
 						<li class="active">
 							未发货订单原材料生产进度列表
