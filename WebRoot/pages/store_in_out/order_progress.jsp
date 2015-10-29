@@ -50,9 +50,6 @@
 
 		<link href="css/store_in_out/index.css" rel="stylesheet"
 			type="text/css" />
-	<style type="text/css">
-	.table>tbody>tr:hover,.table>tbody>tr.selected{background:rgb(249, 210, 198);}
-	</style>
 	</head>
 	<body>
 		<%@ include file="../common/head.jsp"%>

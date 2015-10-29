@@ -50,9 +50,6 @@
 
 		<link href="css/store_in_out/index.css" rel="stylesheet"
 			type="text/css" />
-	<style type="text/css">
-	.table>tbody>tr:hover,.table>tbody>tr.selected{background:rgb(249, 210, 198);}
-	</style>
 	</head>
 	<body>
 		<%@ include file="../common/head.jsp"%>
@@ -226,7 +223,9 @@
 																	style="max-width: 120px; height: 120px; max-height: 120px;"
 																	src="/<%=order.getImg_ss()%>"> </a>
 														</td>
-														<td rowspan="<%=detailsize%>"><a target="_top" href="order/detail/<%=order.getId()%>"><%=order.getOrderNumber()%></a></td>
+														<td rowspan="<%=detailsize%>">
+															<a target="_top" href="order/detail/<%=order.getId()%>"><%=order.getOrderNumber()%></a>
+															<br><br><a target="_blank" href="half_store_in/actual_in/<%=order.getId()%>">进度详情</a></td>
 														<td rowspan="<%=detailsize%>"><%=order.getCompany_productNumber()%></td>
 														<td rowspan="<%=detailsize%>"><%=order.getName()%></td>
 														
