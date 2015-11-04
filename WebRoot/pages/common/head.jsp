@@ -416,47 +416,47 @@
 						</ul>
 					</li>
 					<%} %>
-					<%if(h_has_materialsys){ %>
+					<%if(h_has_financial){ %>
 					<li class="li_dropdown">
-						<a href="#"><i class="fa fa-barcode"></i>材料系统<i
+						<a href="#"><i class="fa fa-list-alt"></i>财务<i
 							class="fa fa-angle-down"></i> </a>
 						<ul class="submenu">
-
-							<%if(h_has_materialsys_purchase){ %>
+							<%if(h_has_financial_workspace){ %>
 							<li>
-								<a href="material_purchase_order/index"><i
-									class="fa fa-sign-in"></i>原材料采购查询</a>
+								<a href="financial/workspace">财务工作台</a>
 							</li>
 							<%} %>
-							<%if(h_has_materialsys_purchase_add){ %>
+							<%if(h_has_financial_invoice){ %>
 							<li>
-								<a href="material_purchase_order/add"><i class="fa fa-plus"></i>采购原材料</a>
+								<a href="purchase_invoice/add">进项发票</a>
 							</li>
 							<%} %>
-
-							<%if(h_has_fuliao_purchase_order_index){ %>
+							<%if(h_has_financial_invoice){ %>
 							<li>
-								<a href="fuliao_purchase_order/index"><i
-									class="fa fa-sign-in"></i>辅料采购查询</a>
+								<a href="sale_invoice/add">销项发票</a>
 							</li>
 							<%} %>
-							<%if(h_has_fuliao_purchase_order_add){ %>
+							<%if(h_has_financial_expense_income){ %>
 							<li>
-								<a href="fuliao_purchase_order/add"><i class="fa fa-plus"></i>采购辅料</a>
+								<a href="expense/add">支出</a>
 							</li>
 							<%} %>
-
-							<%if(h_has_coloring_order_index){ %>
+							<%if(h_has_financial_expense_income){ %>
 							<li>
-								<a href="coloring_order/index"><i class="fa fa-sign-in"></i>染色单查询</a>
+								<a href="income/add">收入</a>
 							</li>
 							<%} %>
-							<%if(h_has_coloring_order_add){ %>
+							<%if(h_has_financial_bank){ %>
 							<li>
-								<a href="coloring_order/add"><i class="fa fa-plus"></i>创建染色单</a>
+								<a href="bank/index">对方银行账户</a>
 							</li>
 							<%} %>
-
+							<%if(h_has_financial_subject){ %>
+							<li>
+								<a href="subject/index">科目</a>
+							</li>
+							<%} %>
+							
 						</ul>
 					</li>
 					<%} %>
