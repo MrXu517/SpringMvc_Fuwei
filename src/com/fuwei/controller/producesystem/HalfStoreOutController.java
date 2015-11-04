@@ -711,10 +711,15 @@ public class HalfStoreOutController extends BaseController {
 					map.put("yarn", detail.getYarn());
 				}
 			}
+			boolean flag = true;
 			for(HalfCurrentStockDetail detail : currentStock.getDetaillist()){
 				if(detail.getPlanOrderDetailId() == planOrderDetailId){
+					flag=false;
 					map.put("stock_quantity", detail.getStock_quantity());
 				}
+			}
+			if(flag){
+				map.put("stock_quantity", 0);
 			}
 		}
 		

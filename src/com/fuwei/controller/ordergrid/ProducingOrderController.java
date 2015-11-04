@@ -438,6 +438,16 @@ public class ProducingOrderController extends BaseController {
 					null);
 		}
 		ProducingOrder producingOrder = producingOrderService.get(id);
+		if(producingOrder == null){
+			throw new Exception("找不到ID为"+id+ "的生产单");
+		}
+		Iterator<ProducingOrderDetail> iter = producingOrder.getDetaillist().iterator();
+		while(iter.hasNext()){
+			ProducingOrderDetail detail = iter.next();
+			if(detail.getQuantity() == 0){
+				iter.remove();
+			}
+		}
 		request.setAttribute("producingOrder", producingOrder);
 		Order order = orderService.get(producingOrder.getOrderId());
 		request.setAttribute("order", order);

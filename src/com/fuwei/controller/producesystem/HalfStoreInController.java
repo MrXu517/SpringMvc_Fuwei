@@ -272,6 +272,13 @@ public class HalfStoreInController extends BaseController {
 					detaillist = getGongXuInStoreQuantity(gongxuProducingOrderList,storeInList,storeReturnList,planOrder);
 				}
 				
+				Iterator<Map<String,Object>> iter = detaillist.iterator();
+				while(iter.hasNext()){
+					Map<String,Object> temp = iter.next();
+					if(temp.get("total_quantity")!=null && (Integer)temp.get("total_quantity")==0){
+						iter.remove();
+					}
+				}
 				/*判断若detaillist 的not_in_quantity 均 == 0 ， 则表示已全部入库，无需再创建入库单*/
 				boolean flag = true;
 				for(Map<String,Object> tMap : detaillist){

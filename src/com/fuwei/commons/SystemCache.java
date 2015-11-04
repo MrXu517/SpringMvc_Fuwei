@@ -19,6 +19,7 @@ import com.fuwei.entity.Customer;
 import com.fuwei.entity.Department;
 import com.fuwei.entity.Employee;
 import com.fuwei.entity.Factory;
+import com.fuwei.entity.FuliaoType;
 import com.fuwei.entity.GongXu;
 import com.fuwei.entity.Material;
 import com.fuwei.entity.Message;
@@ -31,6 +32,7 @@ import com.fuwei.service.CustomerService;
 import com.fuwei.service.DepartmentService;
 import com.fuwei.service.EmployeeService;
 import com.fuwei.service.FactoryService;
+import com.fuwei.service.FuliaoTypeService;
 import com.fuwei.service.GongXuService;
 import com.fuwei.service.MaterialService;
 import com.fuwei.service.RoleService;
@@ -61,6 +63,8 @@ public class SystemCache {
 	static EmployeeService employeeService;
 	
 	static SubjectService subjectService;
+	
+	static FuliaoTypeService fuliaoTypeService;
 
 	public SystemCache() {
 		companyService = (CompanyService) SystemContextUtils
@@ -85,6 +89,8 @@ public class SystemCache {
 				.getBean(EmployeeService.class);
 		subjectService = (SubjectService) SystemContextUtils
 		.getBean(SubjectService.class);
+		fuliaoTypeService = (FuliaoTypeService) SystemContextUtils
+		.getBean(FuliaoTypeService.class);
 
 	}
 
@@ -125,7 +131,8 @@ public class SystemCache {
 	// 缓存科目
 	public static List<Subject> subjectlist = new ArrayList<Subject>();
 	
-
+	// 缓存辅料类型
+	public static List<FuliaoType> fuliaotypelist = new ArrayList<FuliaoType>();
 
 	public static void addCompany(Company company) {
 		companylist.add(company);
@@ -162,6 +169,8 @@ public class SystemCache {
 				.getBean(EmployeeService.class);
 		subjectService = (SubjectService) SystemContextUtils
 		.getBean(SubjectService.class);
+		fuliaoTypeService = (FuliaoTypeService) SystemContextUtils
+		.getBean(FuliaoTypeService.class);
 		initCompanyList();
 		initSalesmanList();
 		initGongxuList();
@@ -173,6 +182,7 @@ public class SystemCache {
 		initDepartmentList();
 		initEmployeeList();
 		initSubjectList();
+		initFuliaoTypeList();
 	}
 
 	public static void reload() throws Exception {
@@ -225,6 +235,10 @@ public class SystemCache {
 			}
 		}
 
+	}
+	
+	public static void initFuliaoTypeList() throws Exception {
+		SystemCache.fuliaotypelist = fuliaoTypeService.getList(); // 
 	}
 
 	public static void initMaterialList() throws Exception {
@@ -378,6 +392,32 @@ public class SystemCache {
 		for (int i = 0; i < SystemCache.materiallist.size(); ++i) {
 			Material temp = SystemCache.materiallist.get(i);
 			if (temp.getId() == materialId) {
+				return temp;
+			}
+		}
+		return null;
+	}
+	
+	public static String getFuliaoTypeName(Integer fuliaotypeId) {
+		if (fuliaotypeId == null) {
+			return "";
+		}
+		for (int i = 0; i < SystemCache.fuliaotypelist.size(); ++i) {
+			FuliaoType temp = SystemCache.fuliaotypelist.get(i);
+			if (temp.getId() == fuliaotypeId) {
+				return temp.getName();
+			}
+		}
+		return "";
+	}
+
+	public static FuliaoType getFuliaoType(Integer fuliaotypeId) {
+		if (fuliaotypeId == null) {
+			return null;
+		}
+		for (int i = 0; i < SystemCache.fuliaotypelist.size(); ++i) {
+			FuliaoType temp = SystemCache.fuliaotypelist.get(i);
+			if (temp.getId() == fuliaotypeId) {
 				return temp;
 			}
 		}

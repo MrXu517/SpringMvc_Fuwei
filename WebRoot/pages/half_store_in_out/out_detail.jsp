@@ -79,7 +79,7 @@
 						<%
 							if(has_print){
 						%>
-						<a href="half_store_out/print/<%=storeInOut.getId()%>" type="button" class="btn btn-success">出库打印</a>
+						<a target="_blank" href="half_store_out/print/<%=storeInOut.getId()%>" type="button" class="btn btn-success">出库打印</a>
 						<%
 							}
 						%>

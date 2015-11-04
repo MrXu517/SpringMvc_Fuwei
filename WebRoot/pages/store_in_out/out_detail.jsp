@@ -77,7 +77,7 @@
 				<div class="row">
 					<div class="col-md-12 tablewidget">
 						<%if(has_print){ %>
-						<a href="store_out/print_scan/<%=storeInOut.getId() %>" type="button" class="btn btn-success">出库打印</a>
+						<a target="_blank" href="store_out/print_scan/<%=storeInOut.getId() %>" type="button" class="btn btn-success">出库打印</a>
 						<%} %>
 						<%if(has_edit){ %>
 						<a href="store_out/put/<%=storeInOut.getId() %>" type="button" class="btn btn-primary">编辑</a>
