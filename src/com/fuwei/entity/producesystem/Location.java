@@ -35,5 +35,16 @@ public class Location {
 		this.size = size;
 	}
 	
-	
+
+	public String getSizeString() {
+		if(this.size == 3){
+			return "大";
+		}else if(this.size == 2){
+			return "中";
+		}else if(this.size == 1){
+			return "小";
+		}else{
+			return "其他";
+		}
+	}
 }

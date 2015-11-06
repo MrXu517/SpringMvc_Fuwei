@@ -55,7 +55,7 @@ public class LocationController extends BaseController {
 			HttpServletResponse response) throws Exception{
 		
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		String lcode = "material/add";
+		String lcode = "location/add";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有添加库位的权限", null);

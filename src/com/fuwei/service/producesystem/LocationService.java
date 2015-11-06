@@ -57,7 +57,7 @@ public class LocationService extends BaseService {
 	// 编辑材料
 	public int update(Location location) throws Exception {
 		try{
-			return this.update(location, "id", "created_at,created_user",true);
+			return this.update(location, "id", "created_at,created_user,number",true);
 		}catch(Exception e){
 			throw e;
 		}
