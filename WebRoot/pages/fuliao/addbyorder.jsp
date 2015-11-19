@@ -160,7 +160,7 @@ input[name='location_size']{height:20px;width:20px;}
 														颜色
 													</label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control require"
+														<input type="text" class="form-control"
 															name="color" id="color" placeholder="颜色">
 													</div>
 													<div class="col-sm-1"></div>
