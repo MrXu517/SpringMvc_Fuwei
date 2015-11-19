@@ -79,8 +79,18 @@ public class Employee implements Serializable {
 	
 	private Boolean is_charge_employee = false;//是否跟单人
 	
+	private Boolean ismanager;
+	
 	
 
+
+	public Boolean getIsmanager() {
+		return ismanager;
+	}
+
+	public void setIsmanager(Boolean ismanager) {
+		this.ismanager = ismanager;
+	}
 
 	public Boolean getIs_charge_employee() {
 		return is_charge_employee;

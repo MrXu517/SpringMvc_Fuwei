@@ -229,6 +229,18 @@
 															<div class="col-sm-1"></div>
 														</div>
 														<div class="form-group">
+															<label for="ismanager" class="col-sm-3 control-label">
+																是否管理层
+															</label>
+															<div class="col-sm-8">
+																<input type="radio" id="ismanager"
+																	name="ismanager" value="1" >是
+																<input type="radio" id="ismanager"
+																	name="ismanager" value="0" checked>否
+															</div>
+															<div class="col-sm-1"></div>
+														</div>
+														<div class="form-group">
 															<label for="sex" class="col-sm-3 control-label">
 																性别
 															</label>

@@ -73,4 +73,9 @@ public class Constants {
 	//2015-6-27添加 装箱单存放的path
 	public static final String UPLOADEXCEL_Packing = "resource.fuwei.com/excel/packing/";
 	public static final String UPLOADPDF_Packing = "resource.fuwei.com/pdf/packing/";
+	
+	//2015-11-6添加存放辅料图片
+	public static final String UPLOADIMGPATH_fuliao = "resource.fuwei.com/images/fuliao/";
+	public static final String UPLOADIMGPATH_fuliao_SS = "resource.fuwei.com/images/fuliao/ss/";
+	public static final String UPLOADIMGPATH_fuliao_S = "resource.fuwei.com/images/fuliao/s/";
 }

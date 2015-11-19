@@ -16,7 +16,7 @@ import com.fuwei.util.CreateNumberUtil;
 
 @Component
 public class OrderHandleService  extends BaseService {
-	private Logger log = org.apache.log4j.LogManager.getLogger(QuoteOrderDetailService.class);
+	private Logger log = org.apache.log4j.LogManager.getLogger(OrderHandleService.class);
 	@Autowired
 	JdbcTemplate jdbc;
 	

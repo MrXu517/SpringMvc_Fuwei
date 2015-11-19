@@ -47,7 +47,7 @@
 			.table>thead>tr>th {padding: 0 8px;vertical-align: middle;}
 			.table>thead>tr {background: #AEADAD;}
 			.table tbody tr {background: #ddd;}
-			.thumbnail>img{max-width: 300px;max-height: 200px;}
+			.thumbnail>img{max-width: 200px;max-height: 200px;}
 			#leftOrderInfo{  width: 250px;}
 			#leftOrderInfo .table-bordered>tbody>tr>td{border-color: #000;}
 			#rightStoreInfo{margin-left:250px;}

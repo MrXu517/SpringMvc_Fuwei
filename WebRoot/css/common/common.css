@@ -99,3 +99,4 @@ table.detailTb td .form-control{
 	height: 400px;
 }
 .pagination>li>a, .pagination>li>span{ padding: 6px 6px;}
+.k4printpage{height: auto;width: 21cm;margin: auto;}

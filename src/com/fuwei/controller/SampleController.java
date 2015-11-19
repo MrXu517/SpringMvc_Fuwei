@@ -334,7 +334,6 @@ public class SampleController extends BaseController {
     			throw new Exception("请上传有效的图片文件，包括 以.bmp,.png,.jpg,.jpeg,.gif为扩展名的文件");
     		}
     	}
-         long  startTime=System.currentTimeMillis();
         String fileName = new Date().getTime() +file.getOriginalFilename();
         String path = Constants.UPLOADIMGPATH_Sample + fileName;
         
@@ -361,7 +360,6 @@ public class SampleController extends BaseController {
 		jObject.put("img_s", Constants.UPLOADIMGPATH_Sample_S + s_filename);
 		jObject.put("img_ss", Constants.UPLOADIMGPATH_Sample_SS + ss_filename);
 		
-        System.out.println("方法二的运行时间："+String.valueOf(endTime-startTime)+"ms");
         return jObject;  
     }
     

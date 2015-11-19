@@ -10,6 +10,30 @@ public class Location {
 	private String number;
 	private String location;
 	private int size;//size = 3大、size = 2中、 size=1小
+	private Boolean isempty;
+	private Integer fuliaoId;
+	private int quantity ;
+	
+	
+	
+	public int getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+	public Integer getFuliaoId() {
+		return fuliaoId;
+	}
+	public void setFuliaoId(Integer fuliaoId) {
+		this.fuliaoId = fuliaoId;
+	}
+	public Boolean getIsempty() {
+		return isempty;
+	}
+	public void setIsempty(Boolean isempty) {
+		this.isempty = isempty;
+	}
 	public int getId() {
 		return id;
 	}
@@ -34,8 +58,6 @@ public class Location {
 	public void setSize(int size) {
 		this.size = size;
 	}
-	
-
 	public String getSizeString() {
 		if(this.size == 3){
 			return "大";

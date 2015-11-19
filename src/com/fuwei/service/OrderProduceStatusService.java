@@ -14,7 +14,7 @@ import com.fuwei.entity.OrderProduceStatus;
 
 @Component
 public class OrderProduceStatusService  extends BaseService {
-	private Logger log = org.apache.log4j.LogManager.getLogger(QuoteOrderDetailService.class);
+	private Logger log = org.apache.log4j.LogManager.getLogger(OrderHandleService.class);
 	@Autowired
 	JdbcTemplate jdbc;
 	

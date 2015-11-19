@@ -275,7 +275,7 @@
 						<p class="pull-right auto_bottom">
 							<span id="created_user">制单人：<%=SystemCache.getUserName(storeInOut
 								.getCreated_user())%></span>
-							<span id="receiver_user">收货人：</span>
+							<span id="receiver_user">送货人：</span>
 							
 						</p>
 

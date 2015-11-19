@@ -52,20 +52,12 @@ import com.fuwei.entity.ordergrid.FuliaoPurchaseOrder;
 import com.fuwei.entity.ordergrid.FuliaoPurchaseOrderDetail;
 import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
 import com.fuwei.entity.ordergrid.MaterialPurchaseOrderDetail;
-import com.fuwei.service.ordergrid.CarFixRecordOrderService;
-import com.fuwei.service.ordergrid.CheckRecordOrderService;
 import com.fuwei.service.ordergrid.ColoringOrderService;
-import com.fuwei.service.ordergrid.ColoringProcessOrderService;
-import com.fuwei.service.ordergrid.FinalStoreOrderService;
 import com.fuwei.service.ordergrid.FuliaoPurchaseOrderService;
 import com.fuwei.service.ordergrid.HalfCheckRecordOrderService;
-import com.fuwei.service.ordergrid.HeadBankOrderService;
-import com.fuwei.service.ordergrid.IroningRecordOrderService;
 import com.fuwei.service.ordergrid.MaterialPurchaseOrderService;
 import com.fuwei.service.ordergrid.PlanOrderService;
 import com.fuwei.service.ordergrid.ProducingOrderService;
-import com.fuwei.service.ordergrid.ProductionScheduleOrderService;
-import com.fuwei.service.ordergrid.ShopRecordOrderService;
 import com.fuwei.service.ordergrid.StoreOrderService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.NumberUtil;
@@ -75,9 +67,6 @@ import com.fuwei.util.SerializeTool;
 @Controller
 public class ReportController extends BaseController {
 	@Autowired
-	HeadBankOrderService headBankOrderService;
-
-	@Autowired
 	ProducingOrderService producingOrderService;
 	@Autowired
 	PlanOrderService planOrderService;
@@ -86,27 +75,11 @@ public class ReportController extends BaseController {
 	@Autowired
 	HalfCheckRecordOrderService halfCheckRecordOrderService;
 	@Autowired
-	CheckRecordOrderService checkRecordOrderService;
-	@Autowired
 	ColoringOrderService coloringOrderService;
 	@Autowired
 	MaterialPurchaseOrderService materialPurchaseOrderService;
 	@Autowired
 	FuliaoPurchaseOrderService fuliaoPurchaseOrderService;
-	@Autowired
-	CarFixRecordOrderService carFixRecordOrderService;
-	@Autowired
-	IroningRecordOrderService ironingRecordOrderService;
-	
-	/*2015-3-23添加 新表格*/
-	@Autowired
-	ProductionScheduleOrderService productionScheduleOrderService;
-	@Autowired
-	FinalStoreOrderService finalStoreOrderService;
-	@Autowired
-	ShopRecordOrderService shopRecordOrderService;
-	@Autowired
-	ColoringProcessOrderService coloringProcessOrderService;
 	
 	
 	@RequestMapping(value = "/material_purchase", method = RequestMethod.GET)

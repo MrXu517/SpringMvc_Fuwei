@@ -13,7 +13,7 @@ import com.fuwei.entity.Factory;
 
 @Component
 public class FactoryService extends BaseService{
-	private Logger log = org.apache.log4j.LogManager.getLogger(CompanyService.class);
+	private Logger log = org.apache.log4j.LogManager.getLogger(FactoryService.class);
 	@Autowired
 	JdbcTemplate jdbc;
 

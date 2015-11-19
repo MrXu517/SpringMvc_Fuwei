@@ -1164,4 +1164,19 @@ public class OrderController extends BaseController {
 		return new ModelAndView("order/progress");
 
 	}
+	
+	//查看辅料列表与出入库情况
+	@RequestMapping(value = "/fuliao_progress/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView fuliao_progress(@PathVariable int id, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		Order order = orderService.get(id);
+		request.setAttribute("order", order);
+		if(order == null){
+			throw new Exception("找不到ID为"+id+"的订单");
+		}
+		return new ModelAndView("order/fuliao_progress");
+
+	}
 }

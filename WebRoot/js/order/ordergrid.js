@@ -2,6 +2,7 @@ function OrderGrid(settings){
 	var Object = this;
 	Object.donecall = settings.donecall;//2015-3-18添加
 	Object.tipText = settings.tipText;//2015-3-18添加
+	Object._beforeSubmit = settings._beforeSubmit;
 	
 	this.$content = settings.$content || null;
 	this.tbOptions = settings.tbOptions || null;
@@ -351,6 +352,11 @@ function OrderGrid(settings){
 	this.$content.find(".saveform").submit(function(){
 		if (!Common.checkform(this)) {
 			return false;
+		}
+		if(Object._beforeSubmit){
+			if (!Object._beforeSubmit(this)) {
+				return false;
+			}
 		}
 		var $saveform = $(this);
 		var $submitBtn = $(this).find("[type='submit']");

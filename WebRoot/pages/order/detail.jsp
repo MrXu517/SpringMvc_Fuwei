@@ -233,6 +233,7 @@
 									<div class="pull-left" style="margin-left: 30px;margin-top: -10px;"><a target="_blank" href="packing_order/list/<%=order.getId() %>" type="button" class="btn btn-primary">查看装箱单</a>
 										<a href="order/progress/<%=order.getId() %>" target="_blank" type="button" class="btn btn-primary"
 						data-loading-text=""> 查看生产进度 </a>
+										<a target="_blank" href="order/fuliao_progress/<%=order.getId() %>" type="button" class="btn btn-primary">查看辅料</a>
 									</div>
 
 								</div>

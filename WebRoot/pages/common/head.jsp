@@ -142,7 +142,7 @@
 	Boolean h_has_fuliaotype = SystemCache.hasAuthority(session,"fuliaotype");//辅料类型管理
 	
 	Boolean h_has_fuliaosystem = SystemCache.hasAuthority(session,"fuliaosystem");//辅料仓库系统
-	Boolean h_has_fuliao_workspace = SystemCache.hasAuthority(session,"fuliao/workspace");//辅料仓库工作台
+	Boolean h_has_fuliao_workspace = SystemCache.hasAuthority(session,"fuliao_workspace/workspace");//辅料仓库工作台
 	Boolean h_has_location = SystemCache.hasAuthority(session,"location/index");//辅料仓库工作台
 	//权限相关
 	
@@ -467,7 +467,7 @@
 						<ul class="submenu">
 							<%if(h_has_fuliao_workspace){ %>
 							<li>
-								<a href="fuliao/workspace">辅料工作台</a>
+								<a href="fuliao_workspace/workspace">辅料工作台</a>
 							</li>
 							<%} %>
 							<%if(h_has_location){ %>

@@ -14,7 +14,7 @@ import com.fuwei.util.CreateNumberUtil;
 
 @Component
 public class ProductionNotificationService extends BaseService{
-	private Logger log = org.apache.log4j.LogManager.getLogger(CompanyService.class);
+	private Logger log = org.apache.log4j.LogManager.getLogger(ProductionNotificationService.class);
 	@Autowired
 	JdbcTemplate jdbc;
 	

@@ -54,6 +54,17 @@ public class BaseService {
 		return pager;
 	}
 	
+	protected Pager findPager_T_Map(String sql, Pager pager, Object... args) {
+		String countSql = SQLHelperFactory.getMqSqlHelper().getCountSQL(sql);	
+		String pagedSql = getPageSQL(sql, pager.getPageNo(),
+				pager.getPageSize());
+		pager.setTotalCount(this.dao.queryForObject(countSql, Integer.class, args));
+		pager.setResult(this.dao.queryForListMap(pagedSql, args));
+		int totalPageNum = (pager.getTotalCount() + pager.getPageSize() - 1) / pager.getPageSize();
+		pager.setTotalPage(totalPageNum);
+		return pager;
+	}
+	
 	protected String getPageSQL(String sql,Integer pageNo,Integer pageSize){
 		if(pageSize == null){
 			return sql;

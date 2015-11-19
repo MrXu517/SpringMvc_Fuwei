@@ -61,6 +61,7 @@ public class LocationController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有添加库位的权限", null);
 		}
 		int success = locationService.add(location);
+		SystemCache.initLocationList();
 		
 		return this.returnSuccess();
 		
@@ -77,6 +78,7 @@ public class LocationController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有删除库位的权限", null);
 		}
 		int success = locationService.remove(id);	
+		SystemCache.initLocationList();
 		return this.returnSuccess();
 		
 	}
@@ -105,6 +107,7 @@ public class LocationController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有编辑库位的权限", null);
 		}
 		int success = locationService.update(location);
+		SystemCache.initLocationList();
 		
 		return this.returnSuccess();
 		
