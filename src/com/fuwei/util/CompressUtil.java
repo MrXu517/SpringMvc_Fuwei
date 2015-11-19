@@ -15,7 +15,7 @@ public class CompressUtil {
 	private static boolean proportion = true; // 是否等比缩放标记(默认为等比缩放)
 
 	// 图片处理
-	public static String compressPic(String inputDir, String outputDir,
+	public static String _compressPic(String inputDir, String outputDir,
 			String inputFileName, String outputFileName, int outputWidth,
 			int outputHeight) throws Exception {
 		FileOutputStream out = null;
@@ -29,7 +29,7 @@ public class CompressUtil {
 			if (!file.exists()) {
 				return "";
 			}
-			Image img = ImageIO.read(file);
+			BufferedImage img = ImageIO.read(file);
 			// 判断图片格式是否正确
 			if (img.getWidth(null) == -1) {
 				return "no";
@@ -57,9 +57,7 @@ public class CompressUtil {
 				/*
 				 * Image.SCALE_SMOOTH 的缩略算法 生成缩略图片的平滑度的 优先级比速度高 生成的图片质量比较好 但速度慢
 				 */
-				tag.getGraphics().drawImage(
-						img.getScaledInstance(newWidth, newHeight,
-								Image.SCALE_SMOOTH), 0, 0, null);
+				tag.getGraphics().drawImage(img,newWidth,newHeight,null);
 				// File file=new File(outputDir + outputFileName);
 				// if(!file.exists()){
 				// file.createNewFile();
@@ -69,6 +67,7 @@ public class CompressUtil {
 				// JPEGImageEncoder可适用于其他图片类型的转换
 				JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
 				encoder.encode(tag);
+				img.
 			}
 		} catch (IOException ex) {
 			throw ex;
@@ -93,7 +92,7 @@ public class CompressUtil {
 			String h_filename = outputFileName.substring(0, outputFileName
 					.lastIndexOf("."));
 			outputFileName = h_filename + "." + ext;
-			CompressUtil.compressPic(inputDir, outputDir, inputFileName,
+			CompressUtil._compressPic(inputDir, outputDir, inputFileName,
 					outputFileName, outputWidth, outputHeight);
 			return outputFileName;
 		} catch (Exception e) {
