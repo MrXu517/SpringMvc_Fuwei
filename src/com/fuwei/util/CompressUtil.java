@@ -18,6 +18,7 @@ public class CompressUtil {
 	public static String compressPic(String inputDir, String outputDir,
 			String inputFileName, String outputFileName, int outputWidth,
 			int outputHeight) throws Exception {
+		FileOutputStream out = null;
 		try {
 			// 获得源文件
 			File mdfile = new File(outputDir);
@@ -31,7 +32,6 @@ public class CompressUtil {
 			Image img = ImageIO.read(file);
 			// 判断图片格式是否正确
 			if (img.getWidth(null) == -1) {
-				System.out.println(" can't read,retry!" + "<BR>");
 				return "no";
 			} else {
 				int newWidth;
@@ -64,16 +64,22 @@ public class CompressUtil {
 				// if(!file.exists()){
 				// file.createNewFile();
 				// }
-				FileOutputStream out = new FileOutputStream(outputDir
+				out = new FileOutputStream(outputDir
 						+ outputFileName);
 				// JPEGImageEncoder可适用于其他图片类型的转换
 				JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
 				encoder.encode(tag);
-				out.close();
 			}
 		} catch (IOException ex) {
-			ex.printStackTrace();
 			throw ex;
+		}finally{
+			try{  
+		        if (out != null) {
+		        	out.close();
+		        }
+		      } catch (Exception e) {
+		    	  out = null;
+		      }
 		}
 		return outputFileName;
 	}

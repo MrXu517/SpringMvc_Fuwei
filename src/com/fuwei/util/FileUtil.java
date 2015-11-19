@@ -50,14 +50,14 @@ public class FileUtil {
 			fous.close();
 			return downloadZip(file, response);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw e;
 		}
 		/**
 		 * 直到文件的打包已经成功了， 文件的打包过程被我封装在FileUtil.zipFile这个静态方法中，
 		 * 稍后会呈现出来，接下来的就是往客户端写数据了
 		 */
 
-		return response;
+		
 	}
 
 	/**
@@ -67,8 +67,9 @@ public class FileUtil {
 	 *            <File>;
 	 * @param org
 	 *            .apache.tools.zip.ZipOutputStream
+	 * @throws Exception 
 	 */
-	public static void zipFile(List files, ZipOutputStream outputStream) {
+	public static void zipFile(List files, ZipOutputStream outputStream) throws Exception {
 		int size = files.size();
 		for (int i = 0; i < size; i++) {
 			File file = (File) files.get(i);
@@ -77,7 +78,7 @@ public class FileUtil {
 	}
 
 	public static HttpServletResponse downloadZip(File file,
-			HttpServletResponse response) {
+			HttpServletResponse response) throws Exception {
 		try {
 			// 以流的形式下载文件。
 			InputStream fis = new BufferedInputStream(new FileInputStream(file
@@ -99,13 +100,13 @@ public class FileUtil {
 			toClient.flush();
 			toClient.close();
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			throw ex;
 		} finally {
 			try {
 				File f = new File(file.getPath());
 				f.delete();
 			} catch (Exception e) {
-				e.printStackTrace();
+				throw e;
 			}
 		}
 		return response;
@@ -117,8 +118,9 @@ public class FileUtil {
 	 * @param File
 	 * @param org
 	 *            .apache.tools.zip.ZipOutputStream
+	 * @throws Exception 
 	 */
-	public static void zipFile(File inputFile, ZipOutputStream ouputStream) {
+	public static void zipFile(File inputFile, ZipOutputStream ouputStream) throws Exception {
 		try {
 			if (inputFile.exists()) {
 				/**
@@ -146,12 +148,12 @@ public class FileUtil {
 							zipFile(files[i], ouputStream);
 						}
 					} catch (Exception e) {
-						e.printStackTrace();
+						throw e;
 					}
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw e;
 		}
 	}
 	
@@ -190,14 +192,14 @@ public class FileUtil {
 			fous.close();
 			return downloadZip(file, response);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw e;
 		}
 		/**
 		 * 直到文件的打包已经成功了， 文件的打包过程被我封装在FileUtil.zipFile这个静态方法中，
 		 * 稍后会呈现出来，接下来的就是往客户端写数据了
 		 */
 
-		return response;
+		
 	}
 
 	/**
@@ -207,8 +209,9 @@ public class FileUtil {
 	 *            <File>;
 	 * @param org
 	 *            .apache.tools.zip.ZipOutputStream
+	 * @throws Exception 
 	 */
-	public static void zipFile(Map<InputStream,String> inputStreams, ZipOutputStream outputStream) {
+	public static void zipFile(Map<InputStream,String> inputStreams, ZipOutputStream outputStream) throws Exception {
 		int size = inputStreams.size();
 		for (InputStream in : inputStreams.keySet()) {
 			zipFile(in,inputStreams.get(in), outputStream);
@@ -222,8 +225,9 @@ public class FileUtil {
 	 * @param File
 	 * @param org
 	 *            .apache.tools.zip.ZipOutputStream
+	 * @throws Exception 
 	 */
-	public static void zipFile(InputStream in,String fileName, ZipOutputStream ouputStream) {
+	public static void zipFile(InputStream in,String fileName, ZipOutputStream ouputStream) throws Exception {
 		try {
 				BufferedInputStream bins = new BufferedInputStream(in, 512);
 				// org.apache.tools.zip.ZipEntry
@@ -240,7 +244,7 @@ public class FileUtil {
 				in.close();
 		
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw e;
 		}
 	}
 }

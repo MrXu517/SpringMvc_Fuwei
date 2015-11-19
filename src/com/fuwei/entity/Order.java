@@ -306,8 +306,6 @@ public class Order implements Serializable {
 			try {
 				return DateTool.formateDate(this.delivery_at);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 				return "";
 			}
 		}

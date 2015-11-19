@@ -416,14 +416,15 @@ public class PackingOrderController extends BaseController {
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	@ResponseBody
 	public void test(HttpServletRequest request,
-			HttpServletResponse response){
+			HttpServletResponse response) throws Exception{
 		//读取excel文件
 		try{
 		File file =new File("C:\\Users\\Administrator\\Desktop\\张明霞正唛1.xls");
 		
 		Any2PDFUtil.convert2PDF("C:\\Users\\Administrator\\Desktop\\张明霞正唛1.xls", "C:\\Users\\Administrator\\Desktop\\text2.pdf");
 		}catch(Exception e){
-			e.printStackTrace();
+			throw e;
+//			e.printStackTrace();
 		}
 		//		BufferedInputStream bis=new BufferedInputStream(new FileInputStream(file));
 		

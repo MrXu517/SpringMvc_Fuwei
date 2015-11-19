@@ -33,7 +33,7 @@ class printThread implements Runnable{
 			// 开始打印
 			Dispatch.get(excel, "PrintOut");
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 		} finally {
 			// 始终释放资源
 			ComThread.Release();
