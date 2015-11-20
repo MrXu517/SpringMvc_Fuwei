@@ -42,7 +42,8 @@ $(document).ready( function() {
 				if (result.success) {
 					var orderId = result.orderId;
 					Common.Tip("添加成功", function() {
-						location = "order/fuliao_progress/"+orderId+"?tab=fuliaoinnotice";
+						//location = "order/fuliao_progress/"+orderId+"?tab=fuliaoinnotice";
+						window.close();
 					});
 				}
 				$submitBtn.button('reset');

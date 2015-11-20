@@ -45,7 +45,8 @@ $(document).ready( function() {
 			success : function(result) {
 				if (result.success) {
 					Common.Tip("修改成功", function() {
-						location = "order/fuliao_progress/"+result.orderId+"?tab=fuliaoinnotice";
+//						location = "order/fuliao_progress/"+result.orderId+"?tab=fuliaoinnotice";
+						window.close();
 					});
 				}
 				$submitBtn.button('reset');
