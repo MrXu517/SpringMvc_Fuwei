@@ -67,7 +67,6 @@ public class CompressUtil {
 				// JPEGImageEncoder可适用于其他图片类型的转换
 				JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
 				encoder.encode(tag);
-				img.
 			}
 		} catch (IOException ex) {
 			throw ex;
