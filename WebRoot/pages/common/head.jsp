@@ -150,6 +150,8 @@
 <html>
 	<link href="css/common/head.css" rel="stylesheet" type="text/css" />
 	<script src="js/common/head.js" type="text/javascript"></script>
+	<script src="js/plugins/jquery.goup.min.js" type="text/javascript"></script> 
+	
 	<script type="text/javascript">
 	version = 2015042502;
 </script>
@@ -696,3 +698,4 @@
 		</div>
 
 	</div>
+	

@@ -539,6 +539,18 @@ FormTools.checkFrom = function(formEle) {
 /* 表单相关 */
 
 $(document).ready( function() {
+
+
+        $.goup({
+            trigger: 50,
+            //bottomOffset: 150,
+            //locationOffset: 100,
+            title: '返回顶部',
+            titleAsText: true,
+            $scrollEle:$("#main")
+        });
+
+
 	$(".dialog_icons .close").click( function(event) {
 		$(this).closest('.dialog').hide();
 		return false;
