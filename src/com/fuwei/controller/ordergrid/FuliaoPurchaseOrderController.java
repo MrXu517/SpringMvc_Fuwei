@@ -399,71 +399,71 @@ public class FuliaoPurchaseOrderController extends BaseController {
 		return new ModelAndView("printorder/print",data);
 	}
 	
-	@RequestMapping(value = "/setwrong", method = RequestMethod.GET)
-	@ResponseBody
-	@Transactional
-	public Map<String,Object> setWrongFuliaoOrder(String details,HttpSession session, HttpServletRequest request,
-			HttpServletResponse response) throws Exception{
-		
-		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-		
-		try {	
-			
-			List<FuliaoPurchaseOrder> list = fuliaoPurchaseOrderService.getListFactory1();
-			for(FuliaoPurchaseOrder item : list){
-				int factoryId = item.getFactoryId();
-				String factoryName = SystemCache.getFactoryName(factoryId);
-				Factory factory = factoryService.getByNameTYPE3(factoryName);
-				Factory factory2 = factoryService.getByNameTYPE3(factoryName + "_辅料");
-				if(factory == null && factory2 == null){
-					factory = new Factory();
-					factory.setType(3);
-					factory.setName(factoryName + "_辅料");
-					factory.setHelp_code(HanyuPinyinUtil.getFirstSpellByString(factory
-							.getName()));
-					factory.setCreated_at(DateTool.now());
-					factory.setUpdated_at(DateTool.now());
-					factory.setCreated_user(user.getId());
-					int newfactoryId = factoryService.add(factory);
-					item.setFactoryId(newfactoryId);
-				}else{
-					if(factory!=null){
-						item.setFactoryId(factory.getId());
-					}else{
-						item.setFactoryId(factory2.getId());
-						
-					}
-				}
-				
-				
-				List<FuliaoPurchaseOrderDetail> detaillist = item.getDetaillist();
-				for(FuliaoPurchaseOrderDetail detail : detaillist){
-					int styleId = detail.getStyle();
-					//将此style 材料ID设为对应的辅料类型Id
-					Material material = materialService.get(styleId);
-					FuliaoType fuliaoType = fuliaoTypeService.getName(material.getName());
-					if(fuliaoType == null){//则自动添加一个
-						fuliaoType = new FuliaoType();
-						fuliaoType.setCreated_at(DateTool.now());
-						fuliaoType.setUpdated_at(DateTool.now());
-						fuliaoType.setCreated_user(user.getId());
-						fuliaoType.setName(material.getName());
-						int fuliaoTypeId = fuliaoTypeService.add(fuliaoType);
-						detail.setStyle(fuliaoTypeId);
-					}else{
-						detail.setStyle(fuliaoType.getId());
-					}
-				}
-				
-				fuliaoPurchaseOrderService.update(item);
-			}
-			SystemCache.initFactoryList();
-			SystemCache.initFuliaoTypeList();
-			return this.returnSuccess("result","纠正辅料采购单错误数据成功");
-		} catch (Exception e) {
-			throw e;
-		}
-		
-	}
+//	@RequestMapping(value = "/setwrong", method = RequestMethod.GET)
+//	@ResponseBody
+//	@Transactional
+//	public Map<String,Object> setWrongFuliaoOrder(String details,HttpSession session, HttpServletRequest request,
+//			HttpServletResponse response) throws Exception{
+//		
+//		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+//		
+//		try {	
+//			
+//			List<FuliaoPurchaseOrder> list = fuliaoPurchaseOrderService.getListFactory1();
+//			for(FuliaoPurchaseOrder item : list){
+//				int factoryId = item.getFactoryId();
+//				String factoryName = SystemCache.getFactoryName(factoryId);
+//				Factory factory = factoryService.getByNameTYPE3(factoryName);
+//				Factory factory2 = factoryService.getByNameTYPE3(factoryName + "_辅料");
+//				if(factory == null && factory2 == null){
+//					factory = new Factory();
+//					factory.setType(3);
+//					factory.setName(factoryName + "_辅料");
+//					factory.setHelp_code(HanyuPinyinUtil.getFirstSpellByString(factory
+//							.getName()));
+//					factory.setCreated_at(DateTool.now());
+//					factory.setUpdated_at(DateTool.now());
+//					factory.setCreated_user(user.getId());
+//					int newfactoryId = factoryService.add(factory);
+//					item.setFactoryId(newfactoryId);
+//				}else{
+//					if(factory!=null){
+//						item.setFactoryId(factory.getId());
+//					}else{
+//						item.setFactoryId(factory2.getId());
+//						
+//					}
+//				}
+//				
+//				
+//				List<FuliaoPurchaseOrderDetail> detaillist = item.getDetaillist();
+//				for(FuliaoPurchaseOrderDetail detail : detaillist){
+//					int styleId = detail.getStyle();
+//					//将此style 材料ID设为对应的辅料类型Id
+//					Material material = materialService.get(styleId);
+//					FuliaoType fuliaoType = fuliaoTypeService.getName(material.getName());
+//					if(fuliaoType == null){//则自动添加一个
+//						fuliaoType = new FuliaoType();
+//						fuliaoType.setCreated_at(DateTool.now());
+//						fuliaoType.setUpdated_at(DateTool.now());
+//						fuliaoType.setCreated_user(user.getId());
+//						fuliaoType.setName(material.getName());
+//						int fuliaoTypeId = fuliaoTypeService.add(fuliaoType);
+//						detail.setStyle(fuliaoTypeId);
+//					}else{
+//						detail.setStyle(fuliaoType.getId());
+//					}
+//				}
+//				
+//				fuliaoPurchaseOrderService.update(item);
+//			}
+//			SystemCache.initFactoryList();
+//			SystemCache.initFuliaoTypeList();
+//			return this.returnSuccess("result","纠正辅料采购单错误数据成功");
+//		} catch (Exception e) {
+//			throw e;
+//		}
+//		
+//	}
 }
 
