@@ -540,7 +540,7 @@ FormTools.checkFrom = function(formEle) {
 
 $(document).ready( function() {
 
-
+	if($.goup){
         $.goup({
             trigger: 50,
             //bottomOffset: 150,
@@ -549,7 +549,7 @@ $(document).ready( function() {
             titleAsText: true,
             $scrollEle:$("#main")
         });
-
+	}
 
 	$(".dialog_icons .close").click( function(event) {
 		$(this).closest('.dialog').hide();
