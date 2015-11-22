@@ -20,10 +20,7 @@ import net.keepsoft.dao.Dao;
 import net.keepsoft.sql.SQLHelperFactory;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-
 import com.fuwei.commons.Pager;
-import com.fuwei.controller.BaseController;
 
 /**
  * Service基类

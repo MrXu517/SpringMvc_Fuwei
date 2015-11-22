@@ -11,6 +11,7 @@
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.entity.ordergrid.FuliaoPurchaseOrderDetail"%>
 <%@page import="com.fuwei.entity.ordergrid.FuliaoPurchaseOrder"%>
+<%@page import="com.fuwei.entity.FuliaoType"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -105,7 +106,7 @@
 																未选择
 															</option>
 															<%
-																for (Factory factory : SystemCache.purchase_factorylist) {
+																for (Factory factory : SystemCache.fuliao_factorylist) {
 																	if (factory.getId() == fuliaoPurchaseOrder.getFactoryId()) {
 															%>
 															<option value="<%=factory.getId()%>" selected='selected'><%=factory.getName()%></option>
@@ -254,7 +255,7 @@
 												for (FuliaoPurchaseOrderDetail detail : detaillist) {
 											%>
 											<tr class="tr" data='<%=SerializeTool.serialize(detail)%>'>
-												<td class="style_name"><%=SystemCache.getMaterialName(detail.getStyle())%>
+												<td class="style_name"><%=SystemCache.getFuliaoTypeName(detail.getStyle())%>
 												</td>
 												<td class="quantity"><%=detail.getQuantity()%>
 												</td>
@@ -328,9 +329,9 @@
 														未选择
 													</option>
 													<%
-														for (Material material : SystemCache.materiallist) {
+														for (FuliaoType fuliaoType : SystemCache.fuliaotypelist) {
 													%>
-													<option value="<%=material.getId()%>"><%=material.getName()%></option>
+													<option value="<%=fuliaoType.getId()%>"><%=fuliaoType.getName()%></option>
 													<%
 														}
 													%>

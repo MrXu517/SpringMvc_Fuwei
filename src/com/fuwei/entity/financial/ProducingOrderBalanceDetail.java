@@ -7,7 +7,6 @@ import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
 import net.keepsoft.commons.annotation.Temporary;
 
-import com.fuwei.entity.ordergrid.MaterialPurchaseOrderDetail;
 import com.fuwei.entity.ordergrid.ProducingOrderDetail;
 import com.fuwei.util.SerializeTool;
 

@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.fuwei.entity.Module;
-import com.fuwei.entity.Role;
 
 @Component
 public class ModuleService extends BaseService {

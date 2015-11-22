@@ -17,11 +17,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
-import com.fuwei.entity.Company;
 import com.fuwei.entity.Factory;
 import com.fuwei.entity.User;
 import com.fuwei.service.AuthorityService;
-import com.fuwei.service.CompanyService;
 import com.fuwei.service.FactoryService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.HanyuPinyinUtil;
@@ -56,6 +54,9 @@ public class FactoryController extends BaseController {
 		} else if (type == 2) {
 			request.setAttribute("factorylist",
 					SystemCache.coloring_factorylist);
+		}  else if (type == 3) {
+			request.setAttribute("factorylist",
+					SystemCache.fuliao_factorylist);
 		} else {
 			request.setAttribute("factorylist", SystemCache.factorylist);
 		}
@@ -73,7 +74,7 @@ public class FactoryController extends BaseController {
 		String lcode = "factory/add";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有添加加工工厂的权限", null);
+			throw new PermissionDeniedDataAccessException("没有添加工厂的权限", null);
 		}
 		factory.setHelp_code(HanyuPinyinUtil.getFirstSpellByString(factory
 				.getName()));
@@ -98,7 +99,7 @@ public class FactoryController extends BaseController {
 		String lcode = "factory/delete";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有删除加工工厂的权限", null);
+			throw new PermissionDeniedDataAccessException("没有删除工厂的权限", null);
 		}
 		int success = factoryService.remove(id);
 
@@ -117,7 +118,7 @@ public class FactoryController extends BaseController {
 		String lcode = "factory/index";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
 		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有查看加工工厂列表的权限", null);
+			throw new PermissionDeniedDataAccessException("没有查看工厂列表的权限", null);
 		}
 		Factory Factory = factoryService.get(id);
 		return Factory;
@@ -132,7 +133,7 @@ public class FactoryController extends BaseController {
 		String lcode = "factory/edit";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有编辑加工工厂的权限", null);
+			throw new PermissionDeniedDataAccessException("没有编辑工厂的权限", null);
 		}
 		Factory.setHelp_code(HanyuPinyinUtil.getFirstSpellByString(Factory
 				.getName()));

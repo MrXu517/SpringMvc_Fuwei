@@ -28,13 +28,12 @@ import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Employee;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
-import com.fuwei.entity.ordergrid.StoreOrderDetail;
 import com.fuwei.entity.producesystem.FuliaoIn;
 import com.fuwei.entity.producesystem.FuliaoInDetail;
 import com.fuwei.entity.producesystem.FuliaoInNotice;
 import com.fuwei.entity.producesystem.FuliaoInNoticeDetail;
+import com.fuwei.entity.producesystem.StoreInOut;
 import com.fuwei.service.AuthorityService;
-import com.fuwei.service.MessageService;
 import com.fuwei.service.OrderService;
 import com.fuwei.service.producesystem.FuliaoCurrentStockService;
 import com.fuwei.service.producesystem.FuliaoInNoticeDetailService;
@@ -238,6 +237,8 @@ public class FuliaoInController extends BaseController {
 				fuliaoIn.setCharge_employee(notice.getCharge_employee());
 				fuliaoIn.setOrderNumber(notice.getOrderNumber());
 				fuliaoIn.setOrderId(notice.getOrderId());
+				fuliaoIn.setName(notice.getName());
+				fuliaoIn.setCompany_productNumber(notice.getCompany_productNumber());
 
 				List<FuliaoInDetail> detaillist = SerializeTool
 						.deserializeList(details, FuliaoInDetail.class);
@@ -302,10 +303,30 @@ public class FuliaoInController extends BaseController {
 		if (fuliaoIn == null) {
 			throw new Exception("找不到ID为" + id + "的辅料入库单");
 		}
+		fuliaoIn.setHas_print(true);
+		fuliaoInService.updatePrint(fuliaoIn);
 		Order order = orderService.get(fuliaoIn.getOrderId());
 		request.setAttribute("order", order);
 		request.setAttribute("fuliaoIn", fuliaoIn);
 		return new ModelAndView("fuliaoinout/in_print");
+	}
+	
+	/*打印纱线标签*/
+	@RequestMapping(value = "/print/{id}/tag", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView print_tag(@PathVariable Integer id, HttpSession session,
+			HttpServletRequest request) throws Exception {	
+		if (id == null) {
+			throw new Exception("缺少辅料入库单ID");
+		}
+		FuliaoIn fuliaoIn = fuliaoInService.get(id);
+		if (fuliaoIn == null) {
+			throw new Exception("找不到ID为" + id + "的辅料入库单");
+		}
+		fuliaoIn.setHas_tagprint(true);
+		fuliaoInService.updateTagPrint(fuliaoIn);
+		request.setAttribute("fuliaoIn", fuliaoIn);
+		return new ModelAndView("fuliaoinout/in_tag_print");
 	}
 //	// 删除
 //	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)

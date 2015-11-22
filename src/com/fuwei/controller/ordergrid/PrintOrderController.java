@@ -16,10 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fuwei.commons.SystemCache;
-import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Order;
-import com.fuwei.entity.User;
 //import com.fuwei.entity.ordergrid.CarFixRecordOrder;
 //import com.fuwei.entity.ordergrid.CheckRecordOrder;
 import com.fuwei.entity.ordergrid.ColoringOrder;
@@ -34,7 +32,6 @@ import com.fuwei.entity.ordergrid.HalfCheckRecordOrder;
 import com.fuwei.entity.ordergrid.GongxuProducingOrder;
 import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
 import com.fuwei.entity.ordergrid.PlanOrder;
-import com.fuwei.entity.ordergrid.PlanOrderDetail;
 import com.fuwei.entity.ordergrid.ProducingOrder;
 import com.fuwei.entity.ordergrid.ProducingOrderDetail;
 //import com.fuwei.entity.ordergrid.ProductionScheduleOrder;

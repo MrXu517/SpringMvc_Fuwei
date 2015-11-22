@@ -195,7 +195,7 @@
 														所有
 													</option>
 													<%
-														for (Factory factory : SystemCache.purchase_factorylist) {
+														for (Factory factory : SystemCache.fuliao_factorylist) {
 															if (factoryId == factory.getId()) {
 													%>
 													<option value="<%=factory.getId()%>" selected><%=factory.getName()%></option>
@@ -347,7 +347,7 @@
 											<td rowspan="<%=detailsize %>"><%=fuliaoPurchaseOrder.getName()%></td>
 											<td rowspan="<%=detailsize %>"><%=SystemCache.getEmployeeName(fuliaoPurchaseOrder.getCharge_employee())%></td>
 									
-											<td><%=SystemCache.getMaterialName(detailist.get(0).getStyle())%></td>
+											<td><%=detailist.get(0).getStyleString()%></td>
 											<td><%=detailist.get(0).getQuantity()%></td>
 											<td><%=detailist.get(0).getMemo()%></td>
 
@@ -390,7 +390,7 @@
 										detailist.remove(0);
 										for(FuliaoPurchaseOrderDetail detail : detailist){ %>
 										<tr>
-											<td><%=SystemCache.getMaterialName(detail.getStyle())%></td>
+											<td><%=detail.getStyleString()%></td>
 											<td><%=detail.getQuantity()%></td>
 											<td><%=detail.getMemo()%></td>
 

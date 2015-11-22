@@ -22,7 +22,6 @@ import com.fuwei.entity.User;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.MaterialService;
 import com.fuwei.util.DateTool;
-import com.fuwei.util.HanyuPinyinUtil;
 
 @RequestMapping("/material")
 @Controller

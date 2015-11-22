@@ -21,7 +21,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>系统信息管理 -- 桐庐富伟针织厂</title>
+		<title>基础资料 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -52,7 +52,7 @@
 							<a href="user/index">首页</a>
 						</li>
 						<li>
-							系统信息管理
+							基础资料
 						</li>
 						<li class="active">
 							工厂管理
@@ -90,13 +90,16 @@
 													<div class="col-sm-8">
 														<select class="form-control require" name="type" id="type">	
 															<option value="0">
-																机织
+																机织、加工
 															</option>
 															<option value="1">
-																采购
+																原材料采购
 															</option>
 															<option value="2">
 																染色
+															</option>
+															<option value="3">
+																辅料采购
 															</option>
 														</select>
 													</div>
@@ -117,7 +120,7 @@
 													<div class="col-sm-offset-3 col-sm-5">
 														<button type="submit" class="btn btn-primary"
 															data-loading-text="正在保存...">
-															添加加工工厂
+															添加工厂
 														</button>
 														<a href="#" class="switch_add">添加</a>
 													</div>
@@ -137,7 +140,7 @@
 									<div class="panel panel-primary">
 										<!-- Default panel contents -->
 										<div class="panel-heading">
-											加工工厂列表
+											工厂列表
 										</div>
 										<form class="form-horizontal" role="form" id="filterform" action="factory/index">
 											<div class="form-group col-sm-6">
@@ -151,20 +154,20 @@
 														</option>
 														<%if(type!=null && type == 0){ %>
 															<option value="0" selected>
-																机织
+																机织、加工
 															</option>
 														<%}else{ %>
 															<option value="0">
-																机织
+																机织、加工
 															</option>
 														<%} %>
 														<%if(type!=null && type == 1){ %>
 															<option value="1" selected>
-																采购
+																原材料采购
 															</option>
 														<%}else{ %>
 															<option value="1">
-																采购
+																原材料采购
 															</option>
 														<%} %>
 														<%if(type!=null && type == 2){ %>
@@ -174,6 +177,15 @@
 														<%}else{ %>
 															<option value="2">
 																染色
+															</option>
+														<%} %>
+														<%if(type!=null && type == 3){ %>
+															<option value="3" selected>
+																辅料采购
+															</option>
+														<%}else{ %>
+															<option value="3">
+																辅料采购
 															</option>
 														<%} %>
 													</select>

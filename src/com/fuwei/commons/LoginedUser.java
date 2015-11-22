@@ -1,25 +1,13 @@
 package com.fuwei.commons;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.fuwei.entity.Authority;
-import com.fuwei.entity.Message;
-import com.fuwei.entity.Module;
 import com.fuwei.entity.Role;
 import com.fuwei.entity.User;
-import com.fuwei.service.CompanyService;
-import com.fuwei.service.CustomerService;
-import com.fuwei.service.FactoryService;
-import com.fuwei.service.GongXuService;
-import com.fuwei.service.MaterialService;
 import com.fuwei.service.MessageService;
-import com.fuwei.service.RoleService;
-import com.fuwei.service.SalesmanService;
-import com.fuwei.service.UserService;
 
 public class LoginedUser implements Serializable {
 	

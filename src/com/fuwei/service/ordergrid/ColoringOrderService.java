@@ -1,7 +1,6 @@
 package com.fuwei.service.ordergrid;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,13 +16,9 @@ import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.entity.Factory;
 import com.fuwei.entity.Material;
-import com.fuwei.entity.ordergrid.CarFixRecordOrder;
 import com.fuwei.entity.ordergrid.ColoringOrder;
 import com.fuwei.entity.ordergrid.ColoringOrderDetail;
-import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
-import com.fuwei.entity.ordergrid.MaterialPurchaseOrderDetail;
 import com.fuwei.service.BaseService;
-import com.fuwei.util.CreateNumberUtil;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
 

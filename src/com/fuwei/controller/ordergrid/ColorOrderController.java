@@ -31,8 +31,6 @@ import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
 import com.fuwei.entity.ordergrid.ColoringOrder;
 import com.fuwei.entity.ordergrid.ColoringOrderDetail;
-import com.fuwei.entity.ordergrid.FuliaoPurchaseOrder;
-import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.OrderService;
 import com.fuwei.service.SampleService;

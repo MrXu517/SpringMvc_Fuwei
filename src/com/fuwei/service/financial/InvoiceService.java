@@ -13,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
-import com.fuwei.entity.Customer;
-import com.fuwei.entity.financial.Expense_income;
 import com.fuwei.entity.financial.Invoice;
 import com.fuwei.service.BaseService;
 import com.fuwei.util.DateTool;

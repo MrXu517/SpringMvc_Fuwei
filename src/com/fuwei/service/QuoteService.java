@@ -1,7 +1,6 @@
 
 package com.fuwei.service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.log4j.Logger;

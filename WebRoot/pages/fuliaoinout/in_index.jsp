@@ -224,14 +224,15 @@
 											<th style="width:20px"></th>
     										<th style="width:60px"></th>
     										<th style="width:60px"></th>
+    										<th style="width:100px"></th>
 											<th style="width:40px"></th>
     										<th style="width:55px"></th>
     										<th style="width:55px"></th>
     										<th style="width:55px"></th>
     										<th style="width:55px"></th>
     										<th style="width:60px"></th>
+    										<th style="width:40px"></th>
     										<th style="width:60px"></th>
-    										<th style="width:50px"></th>
     										<th style="width:50px"></th>
     										<th style="width:60px"></th>
     										<th style="width:40px"></th>
@@ -244,6 +245,8 @@
 												入库单号
 											</th><th rowspan="2" width="60px">
 												订单号
+											</th><th rowspan="2" width="100px">
+												款名
 											</th>
 											<th rowspan="2" width="40px">
 												跟单人
@@ -264,9 +267,9 @@
 												颜色
 											</th><th  width="60px">
 												尺码
-											</th><th  width="60px">
+											</th><th  width="40px">
 												批次
-											</th><th  width="50px">
+											</th><th  width="60px">
 												数量(个)
 											</th><th  width="50px">
 												库位
@@ -287,6 +290,7 @@
 											
 											<td rowspan="<%=detailsize%>"><a target="_blank" href="fuliaoin/detail/<%=item.getId()%>"><%=item.getNumber()%></a></td>
 											<td rowspan="<%=detailsize%>"><a target="_blank" href="order/detail/<%=item.getOrderId()%>"><%=item.getOrderNumber()%></a></td>
+											<td rowspan="<%=detailsize%>"><%=item.getName()%></td>
 											<td rowspan="<%=detailsize%>"><%=SystemCache.getEmployeeName(item.getCharge_employee())%></td>
 											
 											

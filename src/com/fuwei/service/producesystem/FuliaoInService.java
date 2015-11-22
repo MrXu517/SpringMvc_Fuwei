@@ -1,6 +1,5 @@
 package com.fuwei.service.producesystem;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,8 +16,7 @@ import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
 import com.fuwei.entity.producesystem.FuliaoIn;
 import com.fuwei.entity.producesystem.FuliaoInDetail;
-import com.fuwei.entity.producesystem.FuliaoInNoticeDetail;
-import com.fuwei.entity.producesystem.HalfStoreInOut;
+import com.fuwei.entity.producesystem.StoreInOut;
 import com.fuwei.service.BaseService;
 import com.fuwei.util.DateTool;
 
@@ -151,6 +149,8 @@ public class FuliaoInService extends BaseService {
 				if(object.getDetaillist()==null || object.getDetaillist().size()<=0){
 					throw new Exception("请至少填写一条入库明细");
 				}
+				object.setHas_tagprint(false);
+				object.setHas_print(false);
 				object.setStatus(6);
 				object.setState("执行完成");
 				Integer fuliaoInId = this.insert(object);
@@ -213,6 +213,24 @@ public class FuliaoInService extends BaseService {
 		}
 	}
 
+	//更新是否打印属性
+	@Transactional
+	public int updatePrint(FuliaoIn object) throws Exception {
+		// 更新表
+		dao.update("update tb_fuliaoin set has_print=? where id=?", object.getHas_print(),object.getId());
+
+		return object.getId();
+	}
+	
+	//更新是否打印辅料标签属性
+	@Transactional
+	public int updateTagPrint(FuliaoIn object) throws Exception {
+		// 更新表
+		dao.update("update tb_fuliaoin set has_tagprint=? where id=?", object.getHas_tagprint(),object.getId());
+
+		return object.getId();
+	}
+	
 //	// 删除
 //	@Transactional
 //	public int remove(int id) throws Exception {

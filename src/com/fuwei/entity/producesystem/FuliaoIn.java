@@ -19,16 +19,45 @@ public class FuliaoIn {
 	private int fuliaoin_noticeId;
 	private int orderId;
 	private String orderNumber;
+	private String name;// 样品名称
+	private String company_productNumber;//样品的公司货号
 	private int charge_employee;
 	private int status;//一旦创建，status = 6
 	private String state;//状态描述
 	private Integer created_user;//创建人
 	private Date created_at;
+	/*是否打印、 是否打印辅料标签 属性*/
+	private Boolean has_print;
+	private Boolean has_tagprint;
 	@Temporary
 	private List<FuliaoInDetail> detaillist;
 	
 	
 	
+	public Boolean getHas_print() {
+		return has_print;
+	}
+	public void setHas_print(Boolean has_print) {
+		this.has_print = has_print;
+	}
+	public Boolean getHas_tagprint() {
+		return has_tagprint;
+	}
+	public void setHas_tagprint(Boolean has_tagprint) {
+		this.has_tagprint = has_tagprint;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getCompany_productNumber() {
+		return company_productNumber;
+	}
+	public void setCompany_productNumber(String company_productNumber) {
+		this.company_productNumber = company_productNumber;
+	}
 	public List<FuliaoInDetail> getDetaillist() {
 		return detaillist;
 	}

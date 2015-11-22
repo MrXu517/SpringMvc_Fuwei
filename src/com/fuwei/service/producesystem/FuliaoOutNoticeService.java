@@ -10,8 +10,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fuwei.entity.producesystem.FuliaoInNotice;
-import com.fuwei.entity.producesystem.FuliaoInNoticeDetail;
 import com.fuwei.entity.producesystem.FuliaoOutNotice;
 import com.fuwei.entity.producesystem.FuliaoOutNoticeDetail;
 import com.fuwei.service.BaseService;
@@ -152,7 +150,7 @@ public class FuliaoOutNoticeService extends BaseService {
 				detail.setFuliaoInOutNoticeId(notice.getId());
 			}
 			fuliaoOutNoticeDetailService.addBatch(notice.getDetaillist());
-			this.update(notice,"id","created_user,number,created_at,orderNumber,orderId,status,state,charge_employee",
+			this.update(notice,"id","created_user,number,created_at,orderNumber,orderId,status,state,charge_employee,name,company_productNumber",
 								true);
 			return notice.getId();
 		} catch (Exception e) {

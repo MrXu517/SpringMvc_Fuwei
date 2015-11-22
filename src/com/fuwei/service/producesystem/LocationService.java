@@ -10,11 +10,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fuwei.commons.SystemCache;
 import com.fuwei.entity.producesystem.FuliaoChangeLocation;
 import com.fuwei.entity.producesystem.Location;
 import com.fuwei.service.BaseService;
-import com.fuwei.util.DateTool;
 
 
 @Component

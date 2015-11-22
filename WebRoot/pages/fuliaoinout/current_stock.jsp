@@ -196,7 +196,8 @@
     										<th style="width:50px"></th>
     										<th style="width:50px"></th>
 											<th style="width:60px"></th>
-    										<th style="width:60px"></th>
+    										<th style="width:65px"></th>
+    										<th style="width:100px"></th>
     										<th style="width:120px"></th>
     										<th style="width:55px"></th>
     										<th style="width:70px"></th>
@@ -218,13 +219,16 @@
 											<th rowspan="2" width="60px">
 												库存数量
 											</th>
-											<th colspan="8" width="500px">
+											<th colspan="9" width="500px">
 												库位所放置的辅料相关属性
 											</th>
 											</tr>
 											<tr>
-											<th width="60px">
+											<th width="65px">
 												系统订单号
+											</th>
+											<th width="100px">
+												款名
 											</th>
 											<th width="120px">
 												图片
@@ -252,13 +256,25 @@
 											for (Map<String,Object> detail : currentStocklist) {
 												boolean even = i%2 == 0;
 												String classname = even?"even":"odd";
+												int location_size = (Integer)detail.get("l_size");
+												String location_size_str = "";
+												if(location_size == 3){
+													location_size_str = "大";
+												}else if(location_size == 2){
+													location_size_str = "中";
+												}else if(location_size == 1){
+													location_size_str = "小";
+												}else{
+													location_size_str = "其他";
+												}
 										%>
 										<tr class="<%=classname%>">
 											<td><%=++i%></td>
 											<td><%=detail.get("number")%></td>
-											<td><%=detail.get("l_size")%></td>
+											<td><%=location_size_str %></td>
 											<td><%=detail.get("quantity")%></td>
 											<td><a target="_top" href="order/detail/<%=detail.get("orderId")%>"><%=detail.get("orderNumber")%></a></td>
+											<td><%=detail.get("sample_name")%></td>
 											<td><a href="/<%=detail.get("img")%>" class="" target="_blank"> <img id="previewImg"
 													alt="200 x 100%" src="/<%=detail.get("img_ss")%>">
 												</a></td>

@@ -130,7 +130,7 @@
 													for (FuliaoPurchaseOrderDetail detail : fuliaoPurchaseOrderDetailList) {
 												%>
 												<tr class="tr">
-													<td class="style_name"><%=SystemCache.getMaterialName(detail.getStyle())%>
+													<td class="style_name"><%=SystemCache.getFuliaoTypeName(detail.getStyle())%>
 													</td>
 													<td class="quantity"><%=(int)detail.getQuantity()%>
 													</td>

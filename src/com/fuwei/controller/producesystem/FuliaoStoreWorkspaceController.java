@@ -1,7 +1,6 @@
 package com.fuwei.controller.producesystem;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +28,6 @@ import com.fuwei.entity.producesystem.Fuliao;
 import com.fuwei.entity.producesystem.FuliaoChangeLocation;
 import com.fuwei.entity.producesystem.Location;
 import com.fuwei.service.AuthorityService;
-import com.fuwei.service.producesystem.FuliaoChangeLocationService;
 import com.fuwei.service.producesystem.FuliaoCurrentStockService;
 import com.fuwei.service.producesystem.FuliaoService;
 import com.fuwei.service.producesystem.LocationService;

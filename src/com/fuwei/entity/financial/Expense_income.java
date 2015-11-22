@@ -1,12 +1,8 @@
 package com.fuwei.entity.financial;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
 import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
-import net.keepsoft.commons.annotation.Temporary;
 
 @Table("tb_expense_income")
 public class Expense_income {

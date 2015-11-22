@@ -2,8 +2,6 @@ package com.fuwei.service;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,8 +10,6 @@ import org.springframework.stereotype.Component;
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
 import com.fuwei.entity.Message;
-import com.fuwei.entity.Order;
-import com.fuwei.util.DateTool;
 
 
 @Component

@@ -16,6 +16,7 @@ public class ServletContextListenerOverWrite implements ServletContextListener{
 	public void contextInitialized(ServletContextEvent event) {
 		try {
 			SystemCache.init();
+			SystemSettings.init();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

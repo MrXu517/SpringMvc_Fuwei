@@ -1,13 +1,8 @@
 package com.fuwei.entity.ordergrid;
 
 import java.util.Date;
-import java.util.List;
-
-import com.fuwei.util.SerializeTool;
-
 import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
-import net.keepsoft.commons.annotation.Temporary;
 
 //抽检记录单
 @Table("tb_checkrecordorder")

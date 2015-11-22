@@ -88,21 +88,21 @@
 											</tr>
 											<tr>
 												<td class="center">
-													<span><%=order.getOrderNumber()%></span>
+													<span><%=fuliaoOut.getOrderNumber()%></span>
 												</td>
 												<td class="center">
 													<span><%=SystemCache.getCompanyShortName(order
 								.getCompanyId())%></span>
 												</td>
 												<td class="center">
-													<span><%=order.getCompany_productNumber()%></span>
+													<span><%=fuliaoOut.getCompany_productNumber()%></span>
 												</td>
 												<td class="center">
 													<span><%=SystemCache.getCustomerName(order
 								.getCustomerId())%></span>
 												</td>
 												<td class="center">
-													<span><%=order.getName()%></span>
+													<span><%=fuliaoOut.getName()%></span>
 												</td>
 											</tr>
 										</table>

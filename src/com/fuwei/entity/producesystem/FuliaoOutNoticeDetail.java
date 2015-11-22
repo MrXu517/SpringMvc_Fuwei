@@ -2,7 +2,6 @@ package com.fuwei.entity.producesystem;
 
 import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
-import net.keepsoft.commons.annotation.Temporary;
 @Table("tb_fuliaoout_notice_detail")
 public class FuliaoOutNoticeDetail {
 	@IdentityId

@@ -1,10 +1,7 @@
 package com.fuwei.controller.producesystem;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -23,17 +20,13 @@ import com.fuwei.commons.SystemCache;
 import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Employee;
 import com.fuwei.entity.Order;
-import com.fuwei.entity.ordergrid.GongxuProducingOrder;
 import com.fuwei.entity.ordergrid.PlanOrder;
-import com.fuwei.entity.ordergrid.ProducingOrder;
 import com.fuwei.entity.producesystem.HalfInOut;
-import com.fuwei.entity.producesystem.HalfStoreInOut;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.OrderService;
 import com.fuwei.service.ordergrid.PlanOrderService;
 import com.fuwei.service.producesystem.HalfCurrentStockService;
 import com.fuwei.service.producesystem.HalfStoreInOutService;
-import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
 
 @RequestMapping("/half_current_stock")

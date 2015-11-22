@@ -1,8 +1,6 @@
 package com.fuwei.controller.producesystem;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +23,6 @@ import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
-import com.fuwei.entity.producesystem.Fuliao;
 import com.fuwei.entity.producesystem.FuliaoOutNotice;
 import com.fuwei.entity.producesystem.FuliaoOutNoticeDetail;
 import com.fuwei.service.AuthorityService;
@@ -141,6 +138,8 @@ public class FuliaoOutNoticeController extends BaseController {
 			fuliaoOutNotice.setDetaillist(detaillist);
 			if(fuliaoOutNotice.getId() == 0){//添加
 				Order order = orderService.get(fuliaoOutNotice.getOrderId());
+				fuliaoOutNotice.setName(order.getName());
+				fuliaoOutNotice.setCompany_productNumber(order.getCompany_productNumber());
 				fuliaoOutNotice.setOrderNumber(order.getOrderNumber());
 				fuliaoOutNotice.setCharge_employee(order.getCharge_employee());
 				Integer tableOrderId = fuliaoOutNoticeService.add(fuliaoOutNotice);

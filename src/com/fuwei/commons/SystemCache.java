@@ -16,7 +16,6 @@ import com.fuwei.entity.Factory;
 import com.fuwei.entity.FuliaoType;
 import com.fuwei.entity.GongXu;
 import com.fuwei.entity.Material;
-import com.fuwei.entity.Message;
 import com.fuwei.entity.Role;
 import com.fuwei.entity.Salesman;
 import com.fuwei.entity.User;
@@ -120,6 +119,7 @@ public class SystemCache {
 	public static List<Factory> purchase_factorylist = new ArrayList<Factory>();
 	public static List<Factory> coloring_factorylist = new ArrayList<Factory>();
 	public static List<Factory> produce_factorylist = new ArrayList<Factory>();
+	public static List<Factory> fuliao_factorylist = new ArrayList<Factory>();
 
 	// 缓存材料
 	public static List<Material> materiallist = new ArrayList<Material>();
@@ -265,6 +265,7 @@ public class SystemCache {
 		purchase_factorylist = new ArrayList<Factory>();
 		coloring_factorylist = new ArrayList<Factory>();
 		produce_factorylist = new ArrayList<Factory>();
+		fuliao_factorylist = new ArrayList<Factory>();
 		for (int i = 0; i < SystemCache.factorylist.size(); ++i) {
 			Factory temp = SystemCache.factorylist.get(i);
 			Integer type = temp.getType();
@@ -276,6 +277,9 @@ public class SystemCache {
 			}
 			if (type == 2) {
 				SystemCache.coloring_factorylist.add(temp);
+			}
+			if (type == 3) {
+				SystemCache.fuliao_factorylist.add(temp);
 			}
 //			factoryMap.put(temp.getId(), temp.getName());
 		}

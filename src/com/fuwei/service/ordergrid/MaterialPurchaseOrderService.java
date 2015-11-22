@@ -1,11 +1,8 @@
 package com.fuwei.service.ordergrid;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,10 +14,8 @@ import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.entity.Factory;
 import com.fuwei.entity.Material;
-import com.fuwei.entity.ordergrid.CarFixRecordOrder;
 import com.fuwei.entity.ordergrid.MaterialPurchaseOrder;
 import com.fuwei.entity.ordergrid.MaterialPurchaseOrderDetail;
-import com.fuwei.entity.ordergrid.ProducingOrder;
 import com.fuwei.service.BaseService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;

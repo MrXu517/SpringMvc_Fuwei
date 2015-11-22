@@ -62,7 +62,7 @@
 							<a href="user/index">首页</a>
 						</li>
 						<li>
-							系统信息管理
+							基础资料
 						</li>
 						<li class="active">
 							部门、员工管理

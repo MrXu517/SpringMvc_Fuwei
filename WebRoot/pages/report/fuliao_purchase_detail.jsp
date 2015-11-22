@@ -102,7 +102,7 @@
 														所有
 													</option>
 													<%
-														for (Factory factory : SystemCache.purchase_factorylist) {
+														for (Factory factory : SystemCache.fuliao_factorylist) {
 															if (factoryId == factory.getId()) {
 													%>
 													<option value="<%=factory.getId()%>" selected><%=factory.getName()%></option>
@@ -190,7 +190,7 @@
 											<td></td><td></td><td></td><td></td><td></td><td></td>
 											<%} %>
 											
-											<td><%=SystemCache.getMaterialName(item.getStyle())%></td>
+											<td><%=item.getStyleString()%></td>
 											<td><%=item.getQuantity()%></td>
 											<td></td>
 										</tr>

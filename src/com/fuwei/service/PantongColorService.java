@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.entity.PantongColor;
-import com.fuwei.entity.financial.Invoice;
 
 
 @Component

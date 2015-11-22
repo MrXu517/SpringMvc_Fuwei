@@ -1,12 +1,9 @@
 package com.fuwei.service;
 
-import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,7 +15,6 @@ import com.fuwei.commons.Sort;
 import com.fuwei.entity.Sample;
 import com.fuwei.util.CreateNumberUtil;
 import com.fuwei.util.DateTool;
-import com.fuwei.util.SerializeTool;
 
 @Component
 public class SampleService extends BaseService {
@@ -26,6 +22,44 @@ public class SampleService extends BaseService {
 	@Autowired
 	JdbcTemplate jdbc;
 
+	public Pager getList(Pager pager, Date start_time, Date end_time,String productNumber,
+			List<Sort> sortlist) throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			sql.append("select * from tb_sample ");
+			String seq = " where ";
+			if (start_time != null) {
+				sql.append(seq + "created_at>='" + DateTool.formateDate(start_time) + "'");
+				seq = " AND ";
+			}
+			if (end_time != null) {
+				
+				sql.append(seq + "created_at<'" +  DateTool.formateDate(DateTool.addDay(end_time, 1))+"'");
+				seq = " AND ";
+			}
+			if(productNumber!=null && !productNumber.equals("")){
+				sql.append(seq + "productNumber='" +  productNumber +"'");
+				seq = " AND ";
+			}
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql.append("order by " + sortlist.get(i).getProperty()
+								+ " " + sortlist.get(i).getDirection() + " ");
+					} else {
+						sql.append("," + sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			return findPager_T(sql.toString(),Sample.class, pager);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 	public Pager getList(Pager pager, Date start_time, Date end_time,Integer charge_employee,
 			List<Sort> sortlist) throws Exception {
 		try {

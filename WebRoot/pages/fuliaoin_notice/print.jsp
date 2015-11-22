@@ -77,7 +77,7 @@ div.name{   margin-left: 15px; width: 100px; display: inline-block;}
 																		</a>
 																	</td>
 																	<td width="100px">
-																		<div class="name">订单号：</div><span class="value"><%=order.getOrderNumber()%></span>
+																		<div class="name">订单号：</div><span class="value"><%=notice.getOrderNumber()%></span>
 																	</td>
 																</tr>
 																<tr>
@@ -93,17 +93,17 @@ div.name{   margin-left: 15px; width: 100px; display: inline-block;}
 																</tr>
 																<tr>
 																	<td>
-																		<div class="name">货号：</div><span class="value"><%=order.getCompany_productNumber()%></span>
+																		<div class="name">货号：</div><span class="value"><%=notice.getCompany_productNumber()%></span>
 																	</td>
 																</tr>
 																<tr>
 																	<td>
-																		<div class="name">款名：</div><span class="value"><%=order.getName()%></span>
+																		<div class="name">款名：</div><span class="value"><%=notice.getName()%></span>
 																	</td>
 																</tr>
 																<tr>
 																	<td>
-																		<div class="name">跟单：</div><span class="value"><%=SystemCache.getEmployeeName(order.getCharge_employee())%></span>
+																		<div class="name">跟单：</div><span class="value"><%=SystemCache.getEmployeeName(notice.getCharge_employee())%></span>
 																	</td>
 																	
 																</tr>

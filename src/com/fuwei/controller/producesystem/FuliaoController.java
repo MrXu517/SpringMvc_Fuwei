@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -34,9 +33,7 @@ import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.constant.Constants;
 import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Order;
-import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
-import com.fuwei.entity.ordergrid.PackingOrder;
 import com.fuwei.entity.producesystem.Fuliao;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.OrderService;
@@ -46,7 +43,6 @@ import com.fuwei.service.producesystem.FuliaoOutNoticeService;
 import com.fuwei.service.producesystem.FuliaoService;
 import com.fuwei.util.CompressUtil;
 import com.fuwei.util.DateTool;
-import com.fuwei.util.HanyuPinyinUtil;
 
 @RequestMapping("/fuliao")
 @Controller

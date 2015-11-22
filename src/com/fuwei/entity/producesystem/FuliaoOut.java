@@ -28,8 +28,22 @@ public class FuliaoOut {
 	@Temporary
 	private List<FuliaoOutDetail> detaillist;
 	
+	private String name;// 样品名称
+	private String company_productNumber;//样品的公司货号
 	
 	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getCompany_productNumber() {
+		return company_productNumber;
+	}
+	public void setCompany_productNumber(String company_productNumber) {
+		this.company_productNumber = company_productNumber;
+	}
 	public int getFuliaoout_noticeId() {
 		return fuliaoout_noticeId;
 	}

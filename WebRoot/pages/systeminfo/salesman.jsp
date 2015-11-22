@@ -17,7 +17,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>系统信息管理 -- 桐庐富伟针织厂</title>
+		<title>基础资料 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -48,7 +48,7 @@
 							<a href="user/index">首页</a>
 						</li>
 						<li>
-							系统信息管理
+							基础资料
 						</li>
 						<li class="active">
 							公司、业务员管理

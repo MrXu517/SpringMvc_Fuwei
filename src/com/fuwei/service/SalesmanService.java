@@ -9,8 +9,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fuwei.commons.Sort;
-import com.fuwei.entity.Company;
 import com.fuwei.entity.Salesman;
 
 @Component

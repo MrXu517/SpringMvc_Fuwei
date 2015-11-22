@@ -1,7 +1,5 @@
 package com.fuwei.entity.ordergrid;
 
-import java.util.Date;
-
 public class PlanOrderProducingDetail {
 	private String project ; //生产项目
 	private Integer quantity ; //计划数量

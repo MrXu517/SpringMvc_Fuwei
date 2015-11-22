@@ -9,6 +9,7 @@
 <%@page import="com.fuwei.constant.OrderStatus"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="net.sf.json.JSONObject"%>
+<%@page import="com.fuwei.entity.FuliaoType"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -17,7 +18,7 @@
 	
 	
 	
-	HashMap<Factory,HashMap<Material,Double> > result = (HashMap<Factory,HashMap<Material,Double> >)request.getAttribute("result");
+	HashMap<Factory,HashMap<FuliaoType,Double> > result = (HashMap<Factory,HashMap<FuliaoType,Double> >)request.getAttribute("result");
 	Date start_time = (Date) request.getAttribute("start_time");
 	String start_time_str = "";
 	if (start_time != null) {
@@ -104,7 +105,7 @@
 														所有
 													</option>
 													<%
-														for (Factory factory : SystemCache.purchase_factorylist) {
+														for (Factory factory : SystemCache.fuliao_factorylist) {
 															if (factoryId == factory.getId()) {
 													%>
 													<option value="<%=factory.getId()%>" selected><%=factory.getName()%></option>
@@ -164,7 +165,7 @@
 										<%
 											int i = 0 ;
 											for (Factory key : result.keySet()) {
-												for (Material key_m : result.get(key).keySet()) {
+												for (FuliaoType key_m : result.get(key).keySet()) {
 										%>
 										<tr>
 											<td><%=++i%></td>

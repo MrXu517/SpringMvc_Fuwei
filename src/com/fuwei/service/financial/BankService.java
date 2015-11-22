@@ -10,7 +10,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import com.fuwei.entity.financial.Bank;
-import com.fuwei.entity.financial.Expense_income_invoice;
 import com.fuwei.service.BaseService;
 
 @Component

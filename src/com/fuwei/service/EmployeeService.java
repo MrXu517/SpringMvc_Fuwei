@@ -10,10 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fuwei.constant.OrderStatus;
 import com.fuwei.entity.Employee;
-import com.fuwei.entity.Order;
-import com.fuwei.util.CreateNumberUtil;
 import com.fuwei.util.DateTool;
 
 @Component

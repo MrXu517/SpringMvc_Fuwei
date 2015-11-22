@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fuwei.entity.Company;
 import com.fuwei.entity.ProductionNotification;
 import com.fuwei.util.CreateNumberUtil;
 

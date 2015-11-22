@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
-import com.fuwei.entity.producesystem.HalfCurrentStock;
-import com.fuwei.entity.producesystem.Location;
 import com.fuwei.service.BaseService;
 
 @Component

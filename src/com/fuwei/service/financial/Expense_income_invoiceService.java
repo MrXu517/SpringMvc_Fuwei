@@ -3,8 +3,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,10 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
-import com.fuwei.entity.financial.Bank;
-import com.fuwei.entity.financial.Expense_income;
 import com.fuwei.entity.financial.Expense_income_invoice;
-import com.fuwei.entity.financial.Invoice;
 import com.fuwei.service.BaseService;
 import com.fuwei.util.DateTool;
 

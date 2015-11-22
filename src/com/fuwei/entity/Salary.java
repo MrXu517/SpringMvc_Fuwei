@@ -7,7 +7,6 @@ import com.fuwei.util.NumberUtil;
 
 import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
-import net.keepsoft.commons.annotation.Temporary;
 
 @Table("tb_salary")
 public class Salary implements Serializable, Comparable {

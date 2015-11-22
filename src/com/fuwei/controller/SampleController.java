@@ -13,7 +13,6 @@ import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.PermissionDeniedDataAccessException;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,10 +34,8 @@ import com.fuwei.entity.Employee;
 import com.fuwei.entity.QuotePrice;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
-import com.fuwei.print.PrintExcel;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.QuotePriceService;
-import com.fuwei.service.QuoteService;
 import com.fuwei.service.SampleService;
 import com.fuwei.util.CompressUtil;
 import com.fuwei.util.DateTool;

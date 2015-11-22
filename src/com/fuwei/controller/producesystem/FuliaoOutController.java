@@ -292,6 +292,8 @@ public class FuliaoOutController extends BaseController {
 				fuliaoOut.setCharge_employee(notice.getCharge_employee());
 				fuliaoOut.setOrderNumber(notice.getOrderNumber());
 				fuliaoOut.setOrderId(notice.getOrderId());
+				fuliaoOut.setName(notice.getName());
+				fuliaoOut.setCompany_productNumber(notice.getCompany_productNumber());
 
 				List<FuliaoOutDetail> detaillist = SerializeTool
 						.deserializeList(details, FuliaoOutDetail.class);

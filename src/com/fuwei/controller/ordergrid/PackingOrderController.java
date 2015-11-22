@@ -2,13 +2,11 @@ package com.fuwei.controller.ordergrid;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,22 +35,16 @@ import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.constant.Constants;
-import com.fuwei.constant.ERROR;
 import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Order;
-import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
-import com.fuwei.entity.ordergrid.ColoringOrder;
-import com.fuwei.entity.ordergrid.ColoringOrderDetail;
 import com.fuwei.entity.ordergrid.PackingOrder;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.OrderService;
 import com.fuwei.service.ordergrid.PackingOrderService;
 import com.fuwei.util.Any2PDFUtil;
-import com.fuwei.util.CompressUtil;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
-import com.lowagie.text.pdf.codec.Base64.InputStream;
 
 @RequestMapping("/packing_order")
 @Controller

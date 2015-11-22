@@ -18,12 +18,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.entity.FuliaoType;
-import com.fuwei.entity.Material;
 import com.fuwei.entity.User;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.FuliaoTypeService;
 import com.fuwei.util.DateTool;
-import com.fuwei.util.HanyuPinyinUtil;
 
 @RequestMapping("/fuliaotype")
 @Controller

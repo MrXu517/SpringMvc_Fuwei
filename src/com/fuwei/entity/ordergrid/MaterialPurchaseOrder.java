@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
-import com.fuwei.constant.OrderStatus;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.NumberUtil;
 import com.fuwei.util.SerializeTool;

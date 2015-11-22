@@ -1,6 +1,5 @@
 package com.fuwei.util;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -45,14 +44,14 @@ public class CompressUtil {
 							/ (double) outputHeight + 0.1;
 					// 根据缩放比率大的进行缩放控制
 					double rate = rate1 > rate2 ? rate1 : rate2;
-					newWidth = (int) (((double) img.getWidth(null)) / rate);
-					newHeight = (int) (((double) img.getHeight(null)) / rate);
+					newWidth = (int) ((img.getWidth(null)) / rate);
+					newHeight = (int) ((img.getHeight(null)) / rate);
 				} else {
 					newWidth = outputWidth; // 输出的图片宽度
 					newHeight = outputHeight; // 输出的图片高度
 				}
-				BufferedImage tag = new BufferedImage((int) newWidth,
-						(int) newHeight, BufferedImage.TYPE_INT_RGB);
+				BufferedImage tag = new BufferedImage(newWidth,
+						newHeight, BufferedImage.TYPE_INT_RGB);
 
 				/*
 				 * Image.SCALE_SMOOTH 的缩略算法 生成缩略图片的平滑度的 优先级比速度高 生成的图片质量比较好 但速度慢

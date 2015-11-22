@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -34,18 +33,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
-import com.fuwei.commons.SystemContextUtils;
-import com.fuwei.constant.OrderStatus;
 import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Factory;
+import com.fuwei.entity.FuliaoType;
 import com.fuwei.entity.Material;
-import com.fuwei.entity.Order;
-import com.fuwei.entity.OrderDetail;
-import com.fuwei.entity.Salary;
-import com.fuwei.entity.User;
 import com.fuwei.entity.ordergrid.ColoringOrder;
 import com.fuwei.entity.ordergrid.ColoringOrderDetail;
 import com.fuwei.entity.ordergrid.FuliaoPurchaseOrder;
@@ -60,7 +53,6 @@ import com.fuwei.service.ordergrid.PlanOrderService;
 import com.fuwei.service.ordergrid.ProducingOrderService;
 import com.fuwei.service.ordergrid.StoreOrderService;
 import com.fuwei.util.DateTool;
-import com.fuwei.util.NumberUtil;
 import com.fuwei.util.SerializeTool;
 
 @RequestMapping("/report")
@@ -790,7 +782,7 @@ public class ReportController extends BaseController {
 			sortList.add(sort_factory);
 			
 			
-			HashMap<Factory,HashMap<Material,Double> > result = fuliaoPurchaseOrderService.fuliao_purchase_report(start_time_d, end_time_d,
+			HashMap<Factory,HashMap<FuliaoType,Double> > result = fuliaoPurchaseOrderService.fuliao_purchase_report(start_time_d, end_time_d,
 					factoryId, sortList);
 			request.setAttribute("result", result);
 			request.setAttribute("start_time", start_time_d);

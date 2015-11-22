@@ -17,7 +17,7 @@ $(document).ready( function() {
 				return true;
 			},
 			donecall:function(result){
-				Common.Tip("请打印辅料入库单", function() {
+				Common.Tip("请打印辅料入库单 以及 辅料标签，并将标签粘贴在辅料袋上", function() {
 					location.href = "fuliaoin/detail/" + result.id;
 				});
 			},

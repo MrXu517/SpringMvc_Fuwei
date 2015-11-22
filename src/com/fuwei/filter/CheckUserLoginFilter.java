@@ -6,7 +6,6 @@ package com.fuwei.filter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -17,18 +16,14 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.keepsoft.pojo.User;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.propertyeditors.URLEditor;
-
 import com.fuwei.commons.LoginedUser;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
@@ -118,7 +113,7 @@ public class CheckUserLoginFilter implements Filter {
 		if(locked){
 			message = ERROR.LOCKED;
 		}
-		String requestType = (String) request.getHeader("X-Requested-With");
+		String requestType = request.getHeader("X-Requested-With");
 		if (requestType != null && requestType.equals("XMLHttpRequest")) {
 			JSONObject json = new JSONObject();
 			json.put("message",message);

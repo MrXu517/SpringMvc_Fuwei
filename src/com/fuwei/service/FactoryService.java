@@ -73,4 +73,16 @@ public class FactoryService extends BaseService{
 			throw e;
 		}
 	}
+	
+	// 获取
+	public Factory getByNameTYPE3(String name) throws Exception {
+		try {
+			Factory Factory = dao.queryForBean(
+					"select * from tb_factory where type=3 and name = ?", Factory.class,
+					name);
+			return Factory;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 }

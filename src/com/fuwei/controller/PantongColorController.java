@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,19 +18,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
-import com.fuwei.entity.Company;
-import com.fuwei.entity.Factory;
 import com.fuwei.entity.PantongColor;
 import com.fuwei.entity.User;
-import com.fuwei.entity.financial.Bank;
 import com.fuwei.service.AuthorityService;
-import com.fuwei.service.CompanyService;
-import com.fuwei.service.FactoryService;
 import com.fuwei.service.PantongColorService;
-import com.fuwei.util.DateTool;
-import com.fuwei.util.HanyuPinyinUtil;
 import com.fuwei.util.PantongUtil;
 
 @RequestMapping("/pantongcolor")

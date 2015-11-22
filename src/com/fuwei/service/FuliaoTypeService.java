@@ -75,4 +75,16 @@ public class FuliaoTypeService extends BaseService {
 			throw e;
 		}
 	}
+	
+	// 获取
+	public FuliaoType getName(String name) throws Exception {
+		try {
+			FuliaoType obj = dao.queryForBean(
+					"select * from tb_fuliaotype where name = ?", FuliaoType.class,
+					name);
+			return obj;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 }

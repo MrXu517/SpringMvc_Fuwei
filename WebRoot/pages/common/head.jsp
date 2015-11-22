@@ -145,7 +145,8 @@
 	Boolean h_has_fuliao_workspace = SystemCache.hasAuthority(session,"fuliao_workspace/workspace");//辅料仓库工作台
 	Boolean h_has_location = SystemCache.hasAuthority(session,"location/index");//辅料仓库工作台
 	//权限相关
-	
+	Boolean h_has_systemsettings = SystemCache.hasAuthority(session,"systemsetting");//系统设置
+	Boolean h_has_sampledisplay = SystemCache.hasAuthority(session,"sample_display/index");//样品展示
 %>
 <html>
 	<link href="css/common/head.css" rel="stylesheet" type="text/css" />
@@ -288,6 +289,11 @@
 							<%}if(h_has_sample_util_price){ %>
 							<li>
 								<a href="sample/util_price"><i class="fa fa-thumb-tack"></i>报价工具</a>
+							</li>
+							<%
+							}if(h_has_sampledisplay){ %>
+							<li>
+								<a href="sample_display/index"><i class="fa fa-dashboard"></i>样品展示</a>
 							</li>
 							<%
 							}
@@ -590,7 +596,7 @@
 					
 					<%if(h_has_systeminfo){ %>
 					<li class="li_dropdown">
-						<a href="#"><i class="fa fa-list-alt"></i>系统信息管理<i
+						<a href="#"><i class="fa fa-list-alt"></i>基础资料<i
 							class="fa fa-angle-down"></i> </a>
 						<ul class="submenu">
 							<%if(h_has_systeminfo_customer){ %>
@@ -676,11 +682,17 @@
 					<li>
 						<a href="authority/index"><i class="fa fa-lock"></i>权限设置</a>
 					</li>
-
 					<%
 					}
 					%>
 
+					<%if(h_has_systemsettings){%>
+					<li>
+						<a href="systemsetting/set"><i class="fa fa-lock"></i>系统设置</a>
+					</li>
+					<%
+					}
+					%>
 
 				</ul>
 			</div>

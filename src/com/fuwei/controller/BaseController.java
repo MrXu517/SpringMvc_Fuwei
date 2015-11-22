@@ -14,7 +14,6 @@ import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -101,7 +100,7 @@ public class BaseController extends MultiActionController{
 			//则跳到异常页面
 			errorUrl = "authority/error";
 		}
-		String requestType = (String) request.getHeader("X-Requested-With");
+		String requestType = request.getHeader("X-Requested-With");
 		if (requestType != null && requestType.equals("XMLHttpRequest")) {
 			JSONObject json = new JSONObject();
 			PrintWriter pw = response.getWriter();

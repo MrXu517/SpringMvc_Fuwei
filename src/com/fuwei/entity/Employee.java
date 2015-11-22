@@ -4,12 +4,10 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Date;
 
-import com.fuwei.util.DateTool;
 import com.fuwei.util.NumberUtil;
 
 import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
-import net.keepsoft.commons.annotation.Temporary;
 
 @Table("tb_employee")
 public class Employee implements Serializable {

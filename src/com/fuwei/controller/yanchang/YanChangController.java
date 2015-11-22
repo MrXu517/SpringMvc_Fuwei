@@ -4,15 +4,11 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +22,6 @@ import jxl.Cell;
 import jxl.CellType;
 import jxl.Sheet;
 import jxl.Workbook;
-import jxl.biff.EmptyCell;
 import jxl.format.PageOrientation;
 import jxl.format.VerticalAlignment;
 import jxl.write.Label;
@@ -34,8 +29,6 @@ import jxl.write.WritableCellFormat;
 import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
-
-import net.sf.json.JSONObject;
 
 import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.stereotype.Controller;
@@ -47,15 +40,11 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fuwei.commons.SystemCache;
-import com.fuwei.constant.Constants;
 import com.fuwei.constant.Holiday;
 import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Employee;
 import com.fuwei.entity.Salary;
-import com.fuwei.util.CompressUtil;
-import com.fuwei.util.DateTool;
 import com.fuwei.util.FileUtil;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 @RequestMapping("/yanchang")
 @Controller

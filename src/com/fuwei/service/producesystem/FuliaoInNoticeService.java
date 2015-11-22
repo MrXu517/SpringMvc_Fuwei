@@ -1,7 +1,6 @@
 package com.fuwei.service.producesystem;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -150,7 +149,7 @@ public class FuliaoInNoticeService extends BaseService {
 				detail.setFuliaoInOutNoticeId(notice.getId());
 			}
 			fuliaoInOutNoticeDetailService.addBatch(notice.getDetaillist());
-			this.update(notice,"id","created_user,number,created_at,orderNumber,orderId,status,state,charge_employee",
+			this.update(notice,"id","created_user,number,created_at,orderNumber,orderId,status,state,charge_employee,name,company_productNumber",
 								true);
 			return notice.getId();
 		} catch (Exception e) {

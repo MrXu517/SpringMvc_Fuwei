@@ -1,6 +1,5 @@
 package com.fuwei.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,11 +17,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
-import com.fuwei.entity.Company;
 import com.fuwei.entity.Salesman;
 import com.fuwei.entity.User;
 import com.fuwei.service.AuthorityService;
-import com.fuwei.service.CompanyService;
 import com.fuwei.service.SalesmanService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.HanyuPinyinUtil;

@@ -11,6 +11,7 @@ public class Fuliao {
 	private int id;
 	private int orderId;//厂订单ID
 	private String orderNumber;//厂订单号
+	private String sample_name;//样品名称
 	private String company_orderNumber;//公司订单号
 	private String company_productNumber;//公司货号
 	private String country;//国家/城市
@@ -27,6 +28,14 @@ public class Fuliao {
 	private Integer created_user;//创建人
 	private Date created_at;
 	private Date updated_at;
+	
+	
+	public String getSample_name() {
+		return sample_name;
+	}
+	public void setSample_name(String sample_name) {
+		this.sample_name = sample_name;
+	}
 	public int getId() {
 		return id;
 	}

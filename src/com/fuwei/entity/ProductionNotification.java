@@ -3,8 +3,6 @@ package com.fuwei.entity;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
 import net.keepsoft.commons.annotation.Temporary;

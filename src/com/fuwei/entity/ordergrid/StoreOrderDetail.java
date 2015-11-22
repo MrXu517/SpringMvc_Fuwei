@@ -1,10 +1,5 @@
 package com.fuwei.entity.ordergrid;
 
-import java.util.Date;
-
-import net.keepsoft.commons.annotation.IdentityId;
-import net.keepsoft.commons.annotation.Table;
-
 //@Table("tb_storeorder_detail")
 public class StoreOrderDetail extends BaseTableOrder{
 //	@IdentityId

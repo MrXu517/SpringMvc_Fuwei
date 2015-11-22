@@ -10,6 +10,7 @@
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.entity.ordergrid.MaterialPurchaseOrderDetail"%>
+<%@page import="com.fuwei.entity.FuliaoType"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -100,7 +101,7 @@
 																未选择
 															</option>
 															<%
-																for (Factory factory : SystemCache.purchase_factorylist) {
+																for (Factory factory : SystemCache.fuliao_factorylist) {
 															%>
 															<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
 															<%
@@ -292,9 +293,9 @@
 														未选择
 													</option>
 													<%
-														for (Material material : SystemCache.materiallist) {
+														for (FuliaoType fuliaoType : SystemCache.fuliaotypelist) {
 													%>
-													<option value="<%=material.getId()%>"><%=material.getName()%></option>
+													<option value="<%=fuliaoType.getId()%>"><%=fuliaoType.getName()%></option>
 													<%
 														}
 													%>

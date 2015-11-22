@@ -22,13 +22,11 @@ import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.entity.Quote;
 import com.fuwei.entity.QuotePrice;
-import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.QuotePriceService;
 import com.fuwei.service.QuoteService;
 import com.fuwei.util.DateTool;
-import com.fuwei.util.HanyuPinyinUtil;
 
 @RequestMapping("/quote")
 @Controller

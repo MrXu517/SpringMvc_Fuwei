@@ -1,11 +1,6 @@
 package com.fuwei.entity.ordergrid;
 
 import java.io.Serializable;
-import java.util.List;
-
-import net.keepsoft.commons.annotation.IdentityId;
-import net.keepsoft.commons.annotation.Table;
-import net.keepsoft.commons.annotation.Temporary;
 
 //头带质量记录单详情
 //@Table("tb_headbankorder_detail")

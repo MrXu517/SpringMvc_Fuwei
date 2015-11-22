@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
-import com.fuwei.entity.financial.Invoice;
-import com.fuwei.entity.ordergrid.ColoringOrder;
 import com.fuwei.entity.report.Payable;
 import com.fuwei.entity.report.Receivable;
 import com.fuwei.service.BaseService;

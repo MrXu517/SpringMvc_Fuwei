@@ -1,15 +1,12 @@
 package com.fuwei.service;
 
 import java.util.List;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.fuwei.entity.Authority;
-import com.fuwei.entity.QuoteOrderDetail;
 import com.fuwei.entity.Role_Authority;
 import com.fuwei.entity.User;
 @Component

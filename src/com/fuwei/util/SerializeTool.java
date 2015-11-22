@@ -1,9 +1,13 @@
 package com.fuwei.util;
 
-import java.io.IOException; //import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 //import java.nio.file.Path;
 //import java.nio.file.StandardOpenOption;
 
@@ -23,6 +27,23 @@ public class SerializeTool {
 
 	public static <T> T deserialize(String string, Class<T> clz) {
 		return JSON.parseObject(string, clz);
+	}
+	
+	public static Map<String, Object> deserializeMap(String string) throws Exception {
+		try {
+			JSONObject jsonObject = JSONObject.fromObject(string);  
+			
+	        Map<String, Object> map = new HashMap<String,Object>();  
+	        Iterator it = jsonObject.keys();   
+	        while(it.hasNext()){  
+	            String key = String.valueOf(it.next());  
+	            Object value = jsonObject.get(key);  
+	            map.put(key, value); 
+	        }  
+	        return map;  
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 
 	public static <T> List<T> deserializeList(String string, Class<T> clz) throws Exception {

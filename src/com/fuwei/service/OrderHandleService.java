@@ -9,10 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fuwei.entity.Order;
-import com.fuwei.entity.OrderDetail;
 import com.fuwei.entity.OrderHandle;
-import com.fuwei.util.CreateNumberUtil;
 
 @Component
 public class OrderHandleService  extends BaseService {

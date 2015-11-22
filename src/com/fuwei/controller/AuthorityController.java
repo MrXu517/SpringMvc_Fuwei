@@ -21,14 +21,11 @@ import com.fuwei.commons.LoginedUser;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.entity.Authority;
-import com.fuwei.entity.Company;
 import com.fuwei.entity.Role;
 import com.fuwei.entity.Role_Authority;
 import com.fuwei.entity.User;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.RoleService;
-import com.fuwei.util.DateTool;
-import com.fuwei.util.HanyuPinyinUtil;
 import com.fuwei.util.SerializeTool;
 
 @RequestMapping("/authority")

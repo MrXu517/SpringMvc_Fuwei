@@ -9,9 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fuwei.entity.Company;
 import com.fuwei.entity.Role;
-import com.fuwei.entity.User;
 
 @Component
 public class RoleService extends BaseService {

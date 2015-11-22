@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.fuwei.constant.OrderStatus;
-import com.fuwei.entity.ordergrid.CarFixRecordOrderDetail;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
 

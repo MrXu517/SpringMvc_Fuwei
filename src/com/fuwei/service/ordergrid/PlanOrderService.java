@@ -1,22 +1,14 @@
 package com.fuwei.service.ordergrid;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fuwei.entity.ordergrid.CarFixRecordOrder;
-import com.fuwei.entity.ordergrid.HeadBankOrder;
-import com.fuwei.entity.ordergrid.HeadBankOrderDetail;
 import com.fuwei.entity.ordergrid.PlanOrder;
-import com.fuwei.entity.ordergrid.ProducingOrder; //import com.fuwei.entity.ProducingOrderDetail;
 //import com.fuwei.entity.ProducingOrderMaterialDetail;
 import com.fuwei.service.BaseService;
-import com.fuwei.service.QuoteOrderDetailService;
 import com.fuwei.util.SerializeTool;
 
 @Component

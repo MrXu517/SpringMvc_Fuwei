@@ -5,7 +5,6 @@ import java.util.Date;
 
 import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
-import net.keepsoft.commons.annotation.Temporary;
 
 @Table("tb_department")
 public class Department implements Serializable {

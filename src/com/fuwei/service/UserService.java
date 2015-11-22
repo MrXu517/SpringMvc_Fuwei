@@ -10,8 +10,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import org.springframework.stereotype.Component;
 
-import com.fuwei.controller.BaseController;
-import com.fuwei.entity.Company;
 import com.fuwei.entity.User;
 import com.fuwei.util.DateTool;
 

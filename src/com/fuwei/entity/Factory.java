@@ -71,15 +71,25 @@ public class Factory {
 	public String getTypeName() {
 		Integer type = this.type;
 		if(type == 0){
-			return "机织";
+			return "机织、加工";
 		}
 		if(type == 1){
-			return "采购";
+			return "原材料采购";
 		}
 		if(type == 2){
 			return "染色";
 		}
+		if(type == 3){
+			return "辅料采购";
+		}
 		return "";
+	}
+	
+	public boolean ismaterialFactory(){
+		if(this.type == 1){
+			return true;
+		}
+		return false;
 	}
 	
 }
