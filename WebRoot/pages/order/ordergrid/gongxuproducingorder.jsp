@@ -180,7 +180,7 @@
 																		</th>
 																		<%if(has_gongxu_producing_price){ %>
 																		<th width="15%">
-																			价格(/个、顶、套)
+																			价格(/打)
 																		</th>
 																		<%} %>
 																	</tr>
