@@ -28,6 +28,7 @@ import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Employee;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
+import com.fuwei.entity.producesystem.FuliaoIn;
 import com.fuwei.entity.producesystem.FuliaoOut;
 import com.fuwei.entity.producesystem.FuliaoOutDetail;
 import com.fuwei.entity.producesystem.FuliaoOutNotice;
@@ -403,10 +404,29 @@ public class FuliaoOutController extends BaseController {
 		if (fuliaoOut == null) {
 			throw new Exception("找不到ID为" + id + "的辅料出库单");
 		}
+		fuliaoOut.setHas_print(true);
+		fuliaoOutService.updatePrint(fuliaoOut);
 		Order order = orderService.get(fuliaoOut.getOrderId());
 		request.setAttribute("order", order);
 		request.setAttribute("fuliaoOut", fuliaoOut);
 		return new ModelAndView("fuliaoinout/out_print");
+	}
+	/*打印纱线标签*/
+	@RequestMapping(value = "/print/{id}/tag", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView print_tag(@PathVariable Integer id, HttpSession session,
+			HttpServletRequest request) throws Exception {	
+		if (id == null) {
+			throw new Exception("缺少辅料出库单ID");
+		}
+		FuliaoOut fuliaoOut = fuliaoOutService.get(id);
+		if (fuliaoOut == null) {
+			throw new Exception("找不到ID为" + id + "的辅料出库单");
+		}
+		fuliaoOut.setHas_tagprint(true);
+		fuliaoOutService.updateTagPrint(fuliaoOut);
+		request.setAttribute("fuliaoOut", fuliaoOut);
+		return new ModelAndView("fuliaoinout/out_tag_print");
 	}
 //	// 删除
 //	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)

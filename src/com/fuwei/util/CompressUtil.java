@@ -1,5 +1,6 @@
 package com.fuwei.util;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -56,7 +57,7 @@ public class CompressUtil {
 				/*
 				 * Image.SCALE_SMOOTH 的缩略算法 生成缩略图片的平滑度的 优先级比速度高 生成的图片质量比较好 但速度慢
 				 */
-				tag.getGraphics().drawImage(img,newWidth,newHeight,null);
+				tag.getGraphics().drawImage(img.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH), 0, 0, null);
 				// File file=new File(outputDir + outputFileName);
 				// if(!file.exists()){
 				// file.createNewFile();

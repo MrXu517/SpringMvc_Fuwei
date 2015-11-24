@@ -188,13 +188,15 @@ tr.disable{background:#ddd;}
 													</th>
 													<th width="8%">
 														类型
-													</th><th width="20%">
+													</th><th width="15%">
 														图片
 													</th><th width="10%">
 														订单号
-													</th><th width="10%">
+													</th><th width="8%">
 														款号
-													</th><th width="10%">
+													</th><th width="8%">
+														国家
+													</th><th width="8%">
 														颜色
 													</th><th width="8%">
 														尺码
@@ -225,13 +227,14 @@ tr.disable{background:#ddd;}
 																		</a></td>
 													<td><%=fuliao.getCompany_orderNumber()%></td>
 													<td><%=fuliao.getCompany_productNumber()%></td>
+													<td><%=fuliao.getCountry()%></td>
 													<td><%=fuliao.getColor()%></td>
 													<td><%=fuliao.getSize()%></td>
 													<td><%=fuliao.getBatch()%></td>
 													<td>
 														<select disabled class="fuliaoPurchaseFactoryId form-control  value">
 															<option value="">未选择</option>
-															<%for(Factory factory : SystemCache.purchase_factorylist){ %>
+															<%for(Factory factory : SystemCache.fuliao_factorylist){ %>
 															<option value="<%=factory.getId() %>"><%=factory.getName() %></option>
 															<%} %>
 														</select>

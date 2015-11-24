@@ -200,13 +200,15 @@ tr.disable{background:#ddd;}
 												<tr>
 													<th width="8%">
 														类型
-													</th><th width="20%">
+													</th><th width="15%">
 														图片
 													</th><th width="10%">
 														订单号
-													</th><th width="10%">
+													</th><th width="8%">
 														款号
-													</th><th width="10%">
+													</th><th width="8%">
+														国家
+													</th><th width="8%">
 														颜色
 													</th><th width="8%">
 														尺码
@@ -232,6 +234,7 @@ tr.disable{background:#ddd;}
 																		</a></td>
 													<td><%=detail.getCompany_orderNumber()%></td>
 													<td><%=detail.getCompany_productNumber()%></td>
+													<td><%=detail.getCountry()%></td>
 													<td><%=detail.getColor()%></td>
 													<td><%=detail.getSize()%></td>
 													<td><%=detail.getBatch()%></td>

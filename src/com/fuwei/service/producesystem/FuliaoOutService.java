@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
+import com.fuwei.entity.producesystem.FuliaoIn;
 import com.fuwei.entity.producesystem.FuliaoOut;
 import com.fuwei.entity.producesystem.FuliaoOutDetail;
 import com.fuwei.service.BaseService;
@@ -136,7 +137,7 @@ public class FuliaoOutService extends BaseService {
 	}
 
 	// 添加,返回主键
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	public int add(FuliaoOut object) throws Exception {
 		try {
 			if (object.getFuliaoout_noticeId() == 0) {
@@ -173,6 +174,23 @@ public class FuliaoOutService extends BaseService {
 		}
 	}
 	
+	//更新是否打印属性
+	@Transactional
+	public int updatePrint(FuliaoOut object) throws Exception {
+		// 更新表
+		dao.update("update tb_fuliaoout set has_print=? where id=?", object.getHas_print(),object.getId());
+
+		return object.getId();
+	}
+	
+	//更新是否打印辅料标签属性
+	@Transactional
+	public int updateTagPrint(FuliaoOut object) throws Exception {
+		// 更新表
+		dao.update("update tb_fuliaoout set has_tagprint=? where id=?", object.getHas_tagprint(),object.getId());
+
+		return object.getId();
+	}
 //	// 获取
 //	public FuliaoOut getAndDetail(int id) throws Exception {
 //		try {

@@ -29,8 +29,23 @@ public class FuliaoInDetail {
 	private String img_s;//中等缩略图
 	
 	private String img_ss;//缩略图
+
+	private String country;//国家/城市
+	private String memo;
 	
 	
+	public String getCountry() {
+		return country;
+	}
+	public void setCountry(String country) {
+		this.country = country;
+	}
+	public String getMemo() {
+		return memo;
+	}
+	public void setMemo(String memo) {
+		this.memo = memo;
+	}
 	public String getCompany_orderNumber() {
 		return company_orderNumber;
 	}

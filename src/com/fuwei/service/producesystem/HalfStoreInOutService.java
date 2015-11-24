@@ -264,9 +264,10 @@ public class HalfStoreInOutService extends BaseService {
 	public int remove(int id) throws Exception {
 		try {
 			HalfStoreInOut temp = this.get(id);
-			if (temp.getIn_out() == false && temp.getHas_print()) {// 如果出库单已打印，
+			//如果单据已打印则不可以删除
+			if (temp.getHas_print()) {// 如果出库单已打印，
 																	// 则不能再删除
-				throw new Exception("已打印出库，无法删除 ");
+				throw new Exception("单据已打印，无法删除 ");
 			}
 			if (!temp.deletable()) {
 				throw new Exception("单据已执行完成，无法删除 ");
@@ -288,9 +289,9 @@ public class HalfStoreInOutService extends BaseService {
 	// 删除
 	public int remove(HalfStoreInOut temp) throws Exception {
 		try {
-			if (temp.getIn_out() == false && temp.getHas_print()) {// 如果出库单已打印，
+			if (temp.getHas_print()) {// 如果出库单已打印，
 																	// 则不能再删除
-				throw new Exception("已打印出库，无法删除 ");
+				throw new Exception("单据已打印，无法删除 ");
 			}
 			if (!temp.deletable()) {
 				throw new Exception("单据已执行完成，无法删除 ");

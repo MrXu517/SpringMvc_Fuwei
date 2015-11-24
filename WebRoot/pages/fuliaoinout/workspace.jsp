@@ -51,7 +51,7 @@
 								
 								<a href="fuliaoin/scan" type="button" class="btn btn-warning"><i class="fa fa-sign-in fa-lg"></i>入库</a>
 								<a href="fuliaoout/scan" type="button" class="btn btn-danger"><i class="fa fa-sign-out fa-lg"></i>出库</a>
-								<a href="fuliaoreturn/scan" type="button" class="btn btn-danger"><i class="fa fa-sign-out fa-lg"></i>退货</a>
+							<!--	<a href="fuliaoreturn/scan" type="button" class="btn btn-danger"><i class="fa fa-sign-out fa-lg"></i>退货</a> -->
 								<%if(has_changelocation){ %>
 								<a target="_blank" href="fuliao_workspace/changelocation/scan" type="button" class="btn btn-primary"><i class=""></i>更改库位</a>
 								<%} %>
@@ -70,9 +70,9 @@
 							<li>
 								<a href="#store_out" role="tab" data-toggle="tab">出库列表</a>
 							</li>
-							<li>
+							<!-- <li>
 								<a href="#store_return" role="tab" data-toggle="tab">退货列表</a>
-							</li>
+							</li> -->
 							<li>
 								<a href="#current_stock" role="tab" data-toggle="tab">库位库存报表</a>
 							</li>

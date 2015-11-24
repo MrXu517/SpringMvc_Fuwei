@@ -31,7 +31,7 @@ public class FuliaoInNoticeDetailService extends BaseService {
 	
 	@Transactional
 	public boolean addBatch(List<FuliaoInNoticeDetail> detailList) throws Exception {
-		String sql = "INSERT INTO tb_fuliaoin_notice_detail(fuliaoInOutNoticeId,fuliaoId,quantity,fuliaoPurchaseFactoryId,img,img_s,img_ss,color,size,batch,fuliaoTypeId,company_orderNumber,company_productNumber) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO tb_fuliaoin_notice_detail(fuliaoInOutNoticeId,fuliaoId,quantity,fuliaoPurchaseFactoryId,img,img_s,img_ss,color,size,batch,fuliaoTypeId,company_orderNumber,company_productNumber,country,memo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		List<Object[]> batchArgs = new ArrayList<Object[]>();
 		for (FuliaoInNoticeDetail item : detailList) {
@@ -39,7 +39,8 @@ public class FuliaoInNoticeDetailService extends BaseService {
 					item.getFuliaoInOutNoticeId(),item.getFuliaoId(),item.getQuantity(),item.getFuliaoPurchaseFactoryId()
 					,item.getImg(),item.getImg_s(),item.getImg_ss()
 					,item.getColor(),item.getSize(),item.getBatch()
-					,item.getFuliaoTypeId(),item.getCompany_orderNumber(),item.getCompany_productNumber()});
+					,item.getFuliaoTypeId(),item.getCompany_orderNumber(),item.getCompany_productNumber(),
+					item.getCountry(),item.getMemo()});
 		}
 		try {
 			int result[] = jdbc.batchUpdate(sql, batchArgs);

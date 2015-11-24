@@ -202,6 +202,8 @@ form .selectDiv.form-group{  width: 250px;display: inline-block;}
 													</th><th rowspan="2" width="60px">
 														款号
 													</th><th rowspan="2" width="55px">
+														国家
+													</th><th rowspan="2" width="55px">
 														颜色
 													</th><th rowspan="2" width="55px">
 														尺码
@@ -247,6 +249,7 @@ form .selectDiv.form-group{  width: 250px;display: inline-block;}
 																		</a></td>
 													<td rowspan="<%=detailsize%>"><%=detail.getCompany_orderNumber()%></td>
 													<td rowspan="<%=detailsize%>"><%=detail.getCompany_productNumber()%></td>
+													<td rowspan="<%=detailsize%>"><%=detail.getCountry()%></td>
 													<td rowspan="<%=detailsize%>"><%=detail.getColor()%></td>
 													<td rowspan="<%=detailsize%>"><%=detail.getSize()%></td>
 													<td rowspan="<%=detailsize%>"><%=detail.getBatch()%></td>

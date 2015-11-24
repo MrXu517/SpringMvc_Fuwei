@@ -108,13 +108,14 @@ tr.disable{background:#ddd;}
 					</ul>
 				</div>
 				<div class="body">
-					<div class="container-fluid materialorderWidget k4printpage">
+					<div class="container-fluid materialorderWidget">
 						<div class="row">
 							<div class="col-md-12">
 								<%
 									if(has_print){
 								%>
 								<a target="_blank" href="fuliaoout/print/<%=object.getId()%>" type="button" class="btn btn-success">打印</a>
+								<a target="_blank" href="fuliaoout/print/<%=object.getId() %>/tag" type="button" class="btn btn-success">打印辅料标签</a>
 								<%
 									}
 								%>
@@ -188,9 +189,11 @@ tr.disable{background:#ddd;}
 														图片
 													</th><th width="10%">
 														订单号
-													</th><th width="10%">
+													</th><th width="8%">
 														款号
-													</th><th width="10%">
+													</th><th width="8%">
+														国家
+													</th><th width="8%">
 														颜色
 													</th><th width="8%">
 														尺码
@@ -216,6 +219,7 @@ tr.disable{background:#ddd;}
 																		</a></td>
 													<td><%=detail.getCompany_orderNumber()%></td>
 													<td><%=detail.getCompany_productNumber()%></td>
+													<td><%=detail.getCountry()%></td>
 													<td><%=detail.getColor()%></td>
 													<td><%=detail.getSize()%></td>
 													<td><%=detail.getBatch()%></td>

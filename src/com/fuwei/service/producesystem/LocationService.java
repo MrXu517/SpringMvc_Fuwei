@@ -25,6 +25,7 @@ public class LocationService extends BaseService {
 	@Autowired
 	FuliaoChangeLocationService fuliaoChangeLocationService;
 	// 库位存放辅料，修改库存数量
+	@Transactional
 	public synchronized int addQuantity(int locationId,int fuliaoId, int add_quantity) throws Exception {
 		try{
 			Location location = this.get(locationId);

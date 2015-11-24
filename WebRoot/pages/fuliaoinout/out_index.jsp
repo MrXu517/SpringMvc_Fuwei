@@ -230,6 +230,7 @@
     										<th style="width:55px"></th>
     										<th style="width:55px"></th>
     										<th style="width:55px"></th>
+    										<th style="width:55px"></th>
     										<th style="width:60px"></th>
     										<th style="width:40px"></th>
     										<th style="width:60px"></th>
@@ -250,7 +251,7 @@
 											</th>
 											<th rowspan="2" width="40px">
 												跟单人
-											</th><th colspan="8" width="165px">辅料出库列表</th>
+											</th><th colspan="9" width="165px">辅料出库列表</th>
 											<th rowspan="2" width="60px">
 												出库时间
 											</th>
@@ -263,6 +264,8 @@
 												订单号
 											</th><th width="55px">
 												款号
+											</th><th width="55px">
+												国家
 											</th><th width="55px">
 												颜色
 											</th><th  width="60px">
@@ -297,6 +300,7 @@
 											<td><%=SystemCache.getFuliaoTypeName(detailist.get(0).getFuliaoTypeId())%></td>
 											<td><%=detailist.get(0).getCompany_orderNumber()%></td>
 											<td><%=detailist.get(0).getCompany_productNumber()%></td>
+											<td><%=detailist.get(0).getCountry()%></td>
 											<td><%=detailist.get(0).getColor()%></td>
 											<td><%=detailist.get(0).getSize()%></td>
 											<td><%=detailist.get(0).getBatch()%></td>
@@ -308,7 +312,7 @@
 											
 											
 											<td rowspan="<%=detailsize%>">
-												<a target="_blank" href="fuliaoin/detail/<%=item.getId()%>">详情</a>
+												<a target="_blank" href="fuliaoout/detail/<%=item.getId()%>">详情</a>
 												
 											</td>
 										</tr>
@@ -320,6 +324,7 @@
 											<td><%=SystemCache.getFuliaoTypeName(detail.getFuliaoTypeId())%></td>
 											<td><%=detail.getCompany_orderNumber()%></td>
 											<td><%=detail.getCompany_productNumber()%></td>
+											<td><%=detail.getCountry()%></td>
 											<td><%=detail.getColor()%></td>
 											<td><%=detail.getSize()%></td>
 											<td><%=detail.getBatch()%></td>

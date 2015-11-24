@@ -31,7 +31,7 @@ public class FuliaoInNoticeService extends BaseService {
 	
 	//获取某订单的辅料预入库通知单
 	public List<FuliaoInNotice> getList(int orderId){
-		return dao.queryForBeanList("select * from tb_fuliaoin_notice where orderId=?", FuliaoInNotice.class,orderId);
+		return dao.queryForBeanList("select * from tb_fuliaoin_notice where orderId=? order by created_at desc", FuliaoInNotice.class,orderId);
 	}
 	public List<FuliaoInNotice> getList(String orderNumber){
 		return dao.queryForBeanList("select * from tb_fuliaoin_notice where orderNumber=?", FuliaoInNotice.class,orderNumber);

@@ -196,14 +196,15 @@
     										<th style="width:50px"></th>
     										<th style="width:50px"></th>
 											<th style="width:60px"></th>
-    										<th style="width:65px"></th>
-    										<th style="width:100px"></th>
+    										<th style="width:60px"></th>
+    										<th style="width:80px"></th>
     										<th style="width:120px"></th>
     										<th style="width:55px"></th>
     										<th style="width:70px"></th>
-    										<th style="width:70px"></th>
-    										<th style="width:50px"></th>
     										<th style="width:60px"></th>
+    										<th style="width:50px"></th>
+    										<th style="width:50px"></th>
+    										<th style="width:50px"></th>
     										<th style="width:40px"></th>
   										</tr>
 										<tr>
@@ -219,15 +220,15 @@
 											<th rowspan="2" width="60px">
 												库存数量
 											</th>
-											<th colspan="9" width="500px">
+											<th colspan="10" width="500px">
 												库位所放置的辅料相关属性
 											</th>
 											</tr>
 											<tr>
-											<th width="65px">
-												系统订单号
+											<th width="60px">
+												厂订单号
 											</th>
-											<th width="100px">
+											<th width="80px">
 												款名
 											</th>
 											<th width="120px">
@@ -239,12 +240,15 @@
 											<th width="70px">
 												公司订单号
 											</th>
-											<th width="70px">
+											<th width="60px">
 												公司货号
 											</th>
 											<th width="50px">
+												国家
+											</th>
+											<th width="50px">
 												颜色
-											</th><th width="60px">
+											</th><th width="50px">
 												尺码
 											</th><th width="40px">
 												批次
@@ -281,6 +285,7 @@
 											<td><a target="_top" href="fuliao/detail/<%=detail.get("id")%>"><%=SystemCache.getFuliaoTypeName((Integer)detail.get("fuliaoTypeId"))%></a></td>
 											<td><%=detail.get("company_orderNumber")%></td>
 											<td><%=detail.get("company_productNumber")%></td>
+											<td><%=detail.get("country")%></td>
 											<td><%=detail.get("color")%></td>
 											<td><%=detail.get("size")%></td>
 											<td><%=detail.get("batch")%></td>

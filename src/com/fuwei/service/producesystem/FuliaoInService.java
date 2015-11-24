@@ -137,7 +137,7 @@ public class FuliaoInService extends BaseService {
 	}
 
 	// 添加,返回主键
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	public int add(FuliaoIn object) throws Exception {
 		try {
 			if (object.getFuliaoin_noticeId() == 0) {

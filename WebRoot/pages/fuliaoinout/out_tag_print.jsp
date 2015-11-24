@@ -4,17 +4,17 @@
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.alibaba.fastjson.JSONObject"%>
-<%@page import="com.fuwei.entity.producesystem.FuliaoIn"%>
-<%@page import="com.fuwei.entity.producesystem.FuliaoInDetail"%>
+<%@page import="com.fuwei.entity.producesystem.FuliaoOut"%>
+<%@page import="com.fuwei.entity.producesystem.FuliaoOutDetail"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	//辅料入库单
-	FuliaoIn object = (FuliaoIn) request.getAttribute("fuliaoIn");
+	//辅料出库单
+	FuliaoOut object = (FuliaoOut) request.getAttribute("fuliaoOut");
 	String employee_name = SystemCache.getEmployeeName(object.getCharge_employee()) ;//跟单人
-	List<FuliaoInDetail> detaillist = object == null ? new ArrayList<FuliaoInDetail>() :object.getDetaillist();
+	List<FuliaoOutDetail> detaillist = object == null ? new ArrayList<FuliaoOutDetail>() :object.getDetaillist();
 	String date_string = DateTool.formatDateYMD(object.getCreated_at());
 	String date_now = DateTool.formatDateYMD(DateTool.now());
 %>
@@ -45,6 +45,7 @@ body {
 	margin: auto;
     padding-left: 3px;
 }
+
 .pull-right {
 	float: right;
 }
@@ -57,7 +58,7 @@ table tr td.firsttd{width:70px;}
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-md-12 tablewidget">
-					<%for(FuliaoInDetail detail : detaillist){
+					<%for(FuliaoOutDetail detail : detaillist){
 						String tag_string = object.getId() + "_" + detail.getId();
 					%>
 					<div style="page-break-after: always">
@@ -65,8 +66,8 @@ table tr td.firsttd{width:70px;}
 							<table class="table noborder tagWidget">
 								<caption>
 									<div tag_string='<%=tag_string %>' class="id_barcode"></div>
-									<strong>入库辅料标签 -- <%=object.getNumber()%></strong>
-									<div><%=object.getOrderNumber() %> -- <%=employee_name %>    <%=date_string %></div>
+									<strong>出库辅料标签 -- <%=object.getNumber()%></strong>
+									<div><%=object.getOrderNumber() %> -- <%=employee_name %></div>
 								</caption>
 								<tr>
 									<td class="firsttd">
@@ -118,15 +119,16 @@ table tr td.firsttd{width:70px;}
 								</tr>
 								<tr>
 									<td class="firsttd">
-										入库数量：
+										出库数量：
 									</td>
 									<td><%=detail.getQuantity() %></td>
 								</tr>
+								
 								<tr>
 									<td class="firsttd">
-										库位：
+										出库时间：
 									</td>
-									<td><%=SystemCache.getLocationNumber(detail.getLocationId()) %></td>
+									<td><%=date_string %></td>
 								</tr>
 
 							</table>
