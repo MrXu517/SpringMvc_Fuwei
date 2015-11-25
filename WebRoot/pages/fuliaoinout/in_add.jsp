@@ -25,6 +25,7 @@
 		detaillist = new ArrayList<FuliaoInNoticeDetail>();
 	}
 	Map<Integer,List<Map<String,Object>>> locationMap = (Map<Integer,List<Map<String,Object>>>) request.getAttribute("locationMap");
+	Map<Integer,Boolean> locationContains = new HashMap<Integer,Boolean>();
 %>
 <!DOCTYPE html>
 <html>
@@ -218,6 +219,7 @@ tr.disable{background:#ddd;}
 											<tbody>
 												<%
 													for (FuliaoInNoticeDetail detail : detaillist) {
+														boolean flag = false;
 														List<Map<String,Object>> templist = locationMap.get(detail.getFuliaoId());
 												%>
 												<tr class="tr" data='<%=SerializeTool.serialize(detail)%>'>
@@ -238,8 +240,14 @@ tr.disable{background:#ddd;}
 													<td><select class="locationId form-control value require" name="locationId">
 														<%for(Map<String,Object> item: templist) {
 															Integer locationId = (Integer)item.get("locationId");
-														%>
-															<option value="<%=locationId %>"><%=SystemCache.getLocationNumber(locationId) %></option>
+															if(!flag && !locationContains.containsKey(locationId)){
+																locationContains.put(locationId,true);
+																flag=true;
+																%>
+															<option value="<%=locationId %>" selected><%=SystemCache.getLocationNumber(locationId) %></option>
+															<%}else{ %>
+																<option value="<%=locationId %>"><%=SystemCache.getLocationNumber(locationId) %></option>
+															<%} %>
 														<%} %>
 													</td>
 												</tr>
