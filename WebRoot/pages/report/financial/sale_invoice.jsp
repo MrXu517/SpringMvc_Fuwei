@@ -232,7 +232,9 @@
 <input name="un_received" type="checkbox" value="1" style="margin-left:10px;">  未收<%} %>
 													<button class="btn btn-primary" type="submit" id="searchBtn">
 														搜索
-													</button>
+													</button><a class="exportBtn btn btn-primary" type="button" href="report/financial/sale_invoice/export?companyId=<%=company_str %>&subject_id=<%=subject_str %>&un_received=<%=un_received_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>">
+														导出
+													</a>
 																								<ul class="pagination">
 													<li>
 														<a

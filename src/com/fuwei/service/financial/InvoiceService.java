@@ -470,4 +470,67 @@ public class InvoiceService extends BaseService {
 		}
 	}
 	
+	// 获取分页列表
+	public List<Invoice> getSaleInvoiceReport_export(Boolean un_received, Date start_time, Date end_time,
+			Integer companyId, Integer subjectId, Integer bank_id , List<Sort> sortlist) throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			String seq = " AND ";
+			sql.append("select * from tb_invoice WHERE in_out=0 ");
+			
+			StringBuffer sql_condition = new StringBuffer();
+			if (companyId != null) {
+				sql_condition.append(seq + " company_id='" + companyId+ "'");
+				seq = " AND ";
+			}
+			if (subjectId != null) {
+				sql_condition.append(seq + " subject_id='" + subjectId+ "'");
+				seq = " AND ";
+			}
+			if (start_time != null) {
+				sql_condition.append(seq + " print_date>='"
+						+ DateTool.formateDate(start_time) + "'");
+				seq = " AND ";
+			}
+			if (end_time != null) {
+				sql_condition.append(seq + " print_date<'"
+						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
+						+ "'");
+				seq = " AND ";
+			}
+			if (un_received != null) {
+				if(un_received){
+					sql_condition.append(seq + " amount>match_amount");
+					seq = " AND ";
+				}else{
+					sql_condition.append(seq + " amount=match_amount");
+					seq = " AND ";
+				}
+			}
+			if (bank_id != null) {
+				sql_condition.append(seq + " bank_id='" + bank_id+ "'");
+				seq = " AND ";
+			}
+
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql_condition.append(" order by " + sortlist.get(i).getProperty()
+								+ " " + sortlist.get(i).getDirection() + " ");
+					} else {
+						sql_condition.append("," + sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			
+			List<Invoice> result = dao.queryForBeanList(sql.append(sql_condition).toString(), Invoice.class);
+			return result;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 }
