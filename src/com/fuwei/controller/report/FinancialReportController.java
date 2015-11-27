@@ -414,7 +414,9 @@ public class FinancialReportController extends BaseController {
 
 			String expense_at = DateTool.formatDateYMD(item.getExpense_at());
 			String bank_name = item.getBank_name();
-			String subject_name = item.getSubject_name();
+			
+			Integer subject_id = item.getSubject_id();
+			String subject_name = SystemCache.getSubjectName(subject_id);
 			String company_name = SystemCache.getCompanyShortName(item
 					.getCompany_id());
 			String salesman_name = SystemCache.getSalesmanName(item

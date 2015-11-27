@@ -43,6 +43,14 @@ public class Expense_income {
 	
 	
 		 
+	public String getSubject_name() {
+		return subject_name;
+	}
+
+	public void setSubject_name(String subject_name) {
+		this.subject_name = subject_name;
+	}
+
 	public double getInvoice_amount() {
 		return invoice_amount;
 	}
@@ -78,13 +86,13 @@ public class Expense_income {
 		this.subject_id = subject_id;
 	}
 
-	public String getSubject_name() {
-		return subject_name;
-	}
-
-	public void setSubject_name(String subject_name) {
-		this.subject_name = subject_name;
-	}
+//	public String getSubject_name() {
+//		return subject_name;
+//	}
+//
+//	public void setSubject_name(String subject_name) {
+//		this.subject_name = subject_name;
+//	}
 
 	public Integer getBank_id() {
 		return bank_id;

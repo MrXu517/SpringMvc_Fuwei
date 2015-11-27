@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
+import com.fuwei.commons.SystemCache;
 import com.fuwei.entity.financial.Expense_income_invoice;
 import com.fuwei.service.BaseService;
 import com.fuwei.util.DateTool;
@@ -23,7 +24,7 @@ public class Expense_income_invoiceService extends BaseService {
 	
 	//匹配
 	@Transactional
-	public Boolean batch_add(Integer company_id , Integer subject_id , String[] expense_income_ids, String[] invoice_ids,List<Expense_income_invoice> list){
+	public Boolean batch_add(Integer company_id , Integer subject_id ,String subject_name, String[] expense_income_ids, String[] invoice_ids,List<Expense_income_invoice> list){
 		String sql = "INSERT INTO tb_expense_income_invoice(amount,created_at,created_user,expense_income_id,invoice_id,updated_at) VALUES(?,?,?,?,?,?)";
 
         List<Object[]> batchArgs = new ArrayList<Object[]>();
@@ -42,10 +43,10 @@ public class Expense_income_invoiceService extends BaseService {
         }
         int[] result_invoice= jdbc.batchUpdate(sql_invoice, batchArgs_invoice);
         //设置发票的公司 和 科目
-        String sql_invoice_company_subject = "update tb_invoice set company_id=? , subject_id=? where id=?";
+        String sql_invoice_company_subject = "update tb_invoice set company_id=? , subject_id=?,subject_name=? where id=?";
         List<Object[]> batchArgs_invoice_company_subject = new ArrayList<Object[]>();
         for(String item :invoice_ids) {
-        	batchArgs_invoice_company_subject.add(new Object[]{company_id,subject_id,item});
+        	batchArgs_invoice_company_subject.add(new Object[]{company_id,subject_id,subject_name,item});
         }
         int[] result_invoice_company_subject= jdbc.batchUpdate(sql_invoice_company_subject, batchArgs_invoice_company_subject);
         
@@ -66,7 +67,7 @@ public class Expense_income_invoiceService extends BaseService {
 	
 	//收入匹配发票
 	@Transactional
-	public Boolean batch_add_incomeMatch(Integer company_id , Integer subject_id , String[] expense_income_ids, String[] invoice_ids,List<Expense_income_invoice> list){
+	public Boolean batch_add_incomeMatch(Integer company_id , Integer subject_id,String subject_name, String[] expense_income_ids, String[] invoice_ids,List<Expense_income_invoice> list){
 		String sql = "INSERT INTO tb_expense_income_invoice(amount,created_at,created_user,expense_income_id,invoice_id,updated_at) VALUES(?,?,?,?,?,?)";
 
         List<Object[]> batchArgs = new ArrayList<Object[]>();
@@ -86,17 +87,17 @@ public class Expense_income_invoiceService extends BaseService {
         int[] result_invoice= jdbc.batchUpdate(sql_invoice, batchArgs_invoice);
         //设置收入项的公司和科目
         if(company_id == null){
-        	String sql_expense_income_company_subject = "update tb_expense_income set subject_id=? where id=?";
+        	String sql_expense_income_company_subject = "update tb_expense_income set subject_id=?,subject_name=? where id=?";
             List<Object[]> batchArgs_expense_income_company_subject = new ArrayList<Object[]>();
             for(String item :expense_income_ids) {
-            	batchArgs_expense_income_company_subject.add(new Object[]{subject_id,item});
+            	batchArgs_expense_income_company_subject.add(new Object[]{subject_id, subject_name, item});
             }
             int[] result_expense_income_company_subject= jdbc.batchUpdate(sql_expense_income_company_subject, batchArgs_expense_income_company_subject);
         }else{
-        	String sql_expense_income_company_subject = "update tb_expense_income set company_id=? , subject_id=? where id=?";
+        	String sql_expense_income_company_subject = "update tb_expense_income set company_id=? , subject_id=?,subject_name=? where id=?";
             List<Object[]> batchArgs_expense_income_company_subject = new ArrayList<Object[]>();
             for(String item :expense_income_ids) {
-            	batchArgs_expense_income_company_subject.add(new Object[]{company_id,subject_id,item});
+            	batchArgs_expense_income_company_subject.add(new Object[]{company_id,subject_id, subject_name,item});
             }
             int[] result_expense_income_company_subject= jdbc.batchUpdate(sql_expense_income_company_subject, batchArgs_expense_income_company_subject);
         }
