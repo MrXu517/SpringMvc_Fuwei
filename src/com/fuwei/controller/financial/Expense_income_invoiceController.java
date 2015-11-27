@@ -762,8 +762,6 @@ public class Expense_income_invoiceController extends BaseController {
 				throw new Exception("匹配失败：发票项科目不一致 ");
 			}
 			if((int)temp.getBank_id()!=(int)bank_id){
-				System.out.println(bank_id);
-				System.out.println(temp.getBank_id());
 				throw new Exception("匹配失败：发票项对方账户不一致 ");
 			}
 		}
@@ -842,11 +840,12 @@ public class Expense_income_invoiceController extends BaseController {
 		item.setAmount(amount);
 		resultList.add(item);
 		
-		Integer companyId = income.getCompany_id();
-		Integer subjectId = income.getSubject_id();
+		
+		Integer companyId = invoice.getCompany_id();
+		Integer subjectId = invoice.getSubject_id();
 		
 		
-		expense_income_invoiceService.batch_add(companyId,subjectId,new String[]{""+expense_income_id},new String[]{""+invoice_id},resultList);
+		expense_income_invoiceService.batch_add_incomeMatch(companyId,subjectId,new String[]{""+expense_income_id},new String[]{""+invoice_id},resultList);
 		
 		
 		

@@ -79,7 +79,7 @@
 												</label>
 												<div class="col-sm-8">
 													<select
-														class="form-control" name="company_id" id="company_id">
+														class="form-control require" name="company_id" id="company_id">
 														<option value="">
 															未选择
 														</option>

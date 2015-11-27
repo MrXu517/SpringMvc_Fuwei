@@ -160,6 +160,12 @@ public class SaleInvoiceController extends BaseController {
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有创建销项发票的权限", null);
 		}
+		if(invoice.getCompany_id() == null){
+			throw new Exception("公司不能为空");
+		}
+		if(invoice.getSubject_id() == null){
+			throw new Exception("科目不能为空");
+		}
 		if(invoice.getNumber() == null || invoice.getNumber().equals("")){
 			throw new Exception("发票号不能为空");
 		}

@@ -85,12 +85,22 @@ public class Expense_income_invoiceService extends BaseService {
         }
         int[] result_invoice= jdbc.batchUpdate(sql_invoice, batchArgs_invoice);
         //设置收入项的公司和科目
-        String sql_expense_income_company_subject = "update tb_expense_income set company_id=? , subject_id=? where id=?";
-        List<Object[]> batchArgs_expense_income_company_subject = new ArrayList<Object[]>();
-        for(String item :expense_income_ids) {
-        	batchArgs_expense_income_company_subject.add(new Object[]{company_id,subject_id,item});
+        if(company_id == null){
+        	String sql_expense_income_company_subject = "update tb_expense_income set subject_id=? where id=?";
+            List<Object[]> batchArgs_expense_income_company_subject = new ArrayList<Object[]>();
+            for(String item :expense_income_ids) {
+            	batchArgs_expense_income_company_subject.add(new Object[]{subject_id,item});
+            }
+            int[] result_expense_income_company_subject= jdbc.batchUpdate(sql_expense_income_company_subject, batchArgs_expense_income_company_subject);
+        }else{
+        	String sql_expense_income_company_subject = "update tb_expense_income set company_id=? , subject_id=? where id=?";
+            List<Object[]> batchArgs_expense_income_company_subject = new ArrayList<Object[]>();
+            for(String item :expense_income_ids) {
+            	batchArgs_expense_income_company_subject.add(new Object[]{company_id,subject_id,item});
+            }
+            int[] result_expense_income_company_subject= jdbc.batchUpdate(sql_expense_income_company_subject, batchArgs_expense_income_company_subject);
         }
-        int[] result_expense_income_company_subject= jdbc.batchUpdate(sql_expense_income_company_subject, batchArgs_expense_income_company_subject);
+        
         
         
         String sql_expense = "update tb_expense_income set invoice_amount= (select  ROUND(IFNULL(sum(amount),0),2)  from  tb_expense_income_invoice where expense_income_id=?)  where id=?";
