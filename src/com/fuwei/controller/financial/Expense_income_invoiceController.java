@@ -142,8 +142,7 @@ public class Expense_income_invoiceController extends BaseController {
 			}
 		}
 
-		String subject_name = SystemCache.getSubjectName(subjectId);
-		expense_income_invoiceService.batch_add(companyId,subjectId,subject_name,t_expense_income_ids,t_invoice_ids,resultList);
+		expense_income_invoiceService.batch_add(companyId,subjectId,t_expense_income_ids,t_invoice_ids,resultList);
 		
 		
 		
@@ -348,8 +347,7 @@ public class Expense_income_invoiceController extends BaseController {
 		Integer subjectId = expense_income.getSubject_id();
 		
 
-		String subject_name = SystemCache.getSubjectName(subjectId);
-		expense_income_invoiceService.batch_add(companyId,subjectId,subject_name,new String[]{""+expense_income_id},new String[]{""+invoice_id},resultList);
+		expense_income_invoiceService.batch_add(companyId,subjectId,new String[]{""+expense_income_id},new String[]{""+invoice_id},resultList);
 		
 		
 		

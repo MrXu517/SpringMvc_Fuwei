@@ -24,7 +24,7 @@ public class Expense_income_invoiceService extends BaseService {
 	
 	//匹配
 	@Transactional
-	public Boolean batch_add(Integer company_id , Integer subject_id ,String subject_name, String[] expense_income_ids, String[] invoice_ids,List<Expense_income_invoice> list){
+	public Boolean batch_add(Integer company_id , Integer subject_id ,String[] expense_income_ids, String[] invoice_ids,List<Expense_income_invoice> list){
 		String sql = "INSERT INTO tb_expense_income_invoice(amount,created_at,created_user,expense_income_id,invoice_id,updated_at) VALUES(?,?,?,?,?,?)";
 
         List<Object[]> batchArgs = new ArrayList<Object[]>();
@@ -43,10 +43,10 @@ public class Expense_income_invoiceService extends BaseService {
         }
         int[] result_invoice= jdbc.batchUpdate(sql_invoice, batchArgs_invoice);
         //设置发票的公司 和 科目
-        String sql_invoice_company_subject = "update tb_invoice set company_id=? , subject_id=?,subject_name=? where id=?";
+        String sql_invoice_company_subject = "update tb_invoice set company_id=? , subject_id=? where id=?";
         List<Object[]> batchArgs_invoice_company_subject = new ArrayList<Object[]>();
         for(String item :invoice_ids) {
-        	batchArgs_invoice_company_subject.add(new Object[]{company_id,subject_id,subject_name,item});
+        	batchArgs_invoice_company_subject.add(new Object[]{company_id,subject_id,item});
         }
         int[] result_invoice_company_subject= jdbc.batchUpdate(sql_invoice_company_subject, batchArgs_invoice_company_subject);
         
