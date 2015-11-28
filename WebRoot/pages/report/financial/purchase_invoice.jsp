@@ -232,7 +232,9 @@
 <input name="un_paid" type="checkbox" value="1" style="margin-left:10px;">  未付<%} %>
 													<button class="btn btn-primary" type="submit" id="searchBtn">
 														搜索
-													</button>
+													</button><a class="exportBtn btn btn-primary" type="button" href="report/financial/purchase_invoice/export?companyId=<%=company_str %>&subject_id=<%=subject_str %>&un_paid=<%=un_paid_str %>&bank_id=<%=bank_str%>&start_time=<%=start_time_str%>&end_time=<%=end_time_str%>">
+														导出
+													</a>
 																								<ul class="pagination">
 													<li>
 														<a
