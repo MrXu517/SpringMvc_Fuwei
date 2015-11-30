@@ -40,16 +40,18 @@ body {
 }
 
 .gridTab {
-	height: 8cm;
-	width: 8cm;
+	height: 10cm;
+	width: 7cm;
 	margin: auto;
     padding-left: 3px;
+    font-size: 15px;
 }
 .pull-right {
 	float: right;
 }
 .tagWidget{margin:auto;}
-table tr td.firsttd{width:70px;}
+table tr td.firsttd{width:75px;}
+table caption strong{width: 200px;display: inline-block;}
 </style>
 
 	</head>
@@ -66,7 +68,7 @@ table tr td.firsttd{width:70px;}
 								<caption>
 									<div tag_string='<%=tag_string %>' class="id_barcode"></div>
 									<strong>入库辅料标签 -- <%=object.getNumber()%></strong>
-									<div><%=object.getOrderNumber() %> -- <%=employee_name %>    <%=date_string %></div>
+									<div><%=object.getOrderNumber() %> -- <%=employee_name %></div>
 								</caption>
 								<tr>
 									<td class="firsttd">
@@ -127,6 +129,12 @@ table tr td.firsttd{width:70px;}
 										库位：
 									</td>
 									<td><%=SystemCache.getLocationNumber(detail.getLocationId()) %></td>
+								</tr>
+								<tr>
+									<td class="firsttd">
+										入库时间：
+									</td>
+									<td><%=date_string %></td>
 								</tr>
 
 							</table>

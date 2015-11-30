@@ -40,17 +40,19 @@ body {
 }
 
 .gridTab {
-	height: 8cm;
-	width: 8cm;
+	height: 10cm;
+	width: 7cm;
 	margin: auto;
     padding-left: 3px;
+    font-size: 15px;
 }
 
 .pull-right {
 	float: right;
 }
 .tagWidget{margin:auto;}
-table tr td.firsttd{width:70px;}
+table tr td.firsttd{width:75px;}
+table caption strong{width: 200px;display: inline-block;}
 </style>
 
 	</head>
