@@ -25,6 +25,7 @@ import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.controller.BaseController;
+import com.fuwei.entity.DataCorrectRecord;
 import com.fuwei.entity.Employee;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
@@ -514,7 +515,9 @@ public class HalfStoreInController extends BaseController {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
 		String lcode = "half_store_in_out/delete";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
-		if (!hasAuthority) {
+		String lcode_datacorrect = "data/correct";
+		Boolean hasAuthority_datacorrect = authorityService.checkLcode(user.getId(), lcode_datacorrect);
+		if (!hasAuthority && !hasAuthority_datacorrect) {
 			throw new PermissionDeniedDataAccessException("没有删除半成品入库单的权限", null);
 		}
 		/*判断删除后入库量是否小于出库量，若是，则不可以删除*/
@@ -559,9 +562,28 @@ public class HalfStoreInController extends BaseController {
 		/*2.删除后入库数量 若 < 退货量， 则不可删除*/
 		/*判断删除后入库量是否小于出库量，若是，则不可以删除*/
 		
-		int success = halfStoreInOutService.remove(storeIn);
-
-		return this.returnSuccess();
+		//若半成品入库单已打印或已执行完成(即不可正常删除)，则执行数据纠正，否则正常执行删除
+		Map<String,Object> data = new HashMap<String, Object>();
+		if(!storeIn.deletable()){
+			//判断是否有数据纠正的权限
+			if(!hasAuthority_datacorrect){
+				throw new PermissionDeniedDataAccessException("半成品入库单已打印或已执行完成，且没有数据纠正的权限，无法删除", null);
+			}
+			DataCorrectRecord dataCorrectRecord = new DataCorrectRecord();
+			dataCorrectRecord.setCreated_at(DateTool.now());
+			dataCorrectRecord.setCreated_user(user.getId());
+			dataCorrectRecord.setOperation("删除");
+			dataCorrectRecord.setTb_table("半成品入库单");
+			dataCorrectRecord.setDescription("半成品入库单" + storeIn.getNumber()+"已打印或已执行完成，因数据错误进行数据纠正删除");
+			halfStoreInOutService.remove_datacorrect(storeIn,dataCorrectRecord);
+			data.put("message", "半成品入库单" + storeIn.getNumber() + " 数据纠正删除操作成功");
+		}else{
+			if (!hasAuthority) {
+				throw new PermissionDeniedDataAccessException("没有删除半成品入库单的权限", null);
+			}
+			halfStoreInOutService.remove(storeIn);
+		}
+		return this.returnSuccess(data);
 	}
 
 	@RequestMapping(value = "/scan", method = RequestMethod.GET)

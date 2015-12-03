@@ -147,6 +147,9 @@
 	//权限相关
 	Boolean h_has_systemsettings = SystemCache.hasAuthority(session,"systemsetting");//系统设置
 	Boolean h_has_sampledisplay = SystemCache.hasAuthority(session,"sample_display/index");//样品展示
+	
+	Boolean h_has_datacorrectrecord = SystemCache.hasAuthority(session,"data/correct");//数据纠正
+	
 %>
 <html>
 	<link href="css/common/head.css" rel="stylesheet" type="text/css" />
@@ -677,6 +680,14 @@
 						</ul>
 					</li>
 					<%} %>
+
+					<%if(h_has_datacorrectrecord){%>
+					<li>
+						<a href="datacorrectrecord/index"><i class="fa fa-lock"></i>数据纠正记录</a>
+					</li>
+					<%
+					}
+					%>
 
 					<%if(h_has_authority){%>
 					<li>

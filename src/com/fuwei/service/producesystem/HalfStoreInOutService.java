@@ -12,8 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
+import com.fuwei.entity.DataCorrectRecord;
+import com.fuwei.entity.producesystem.FuliaoIn;
+import com.fuwei.entity.producesystem.FuliaoInDetail;
 import com.fuwei.entity.producesystem.HalfStoreInOut;
 import com.fuwei.service.BaseService;
+import com.fuwei.service.DataCorrectRecordService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
 
@@ -25,6 +29,8 @@ public class HalfStoreInOutService extends BaseService {
 	JdbcTemplate jdbc;
 	@Autowired
 	HalfCurrentStockService halfCurrentStockService;
+	@Autowired
+	DataCorrectRecordService dataCorrectRecordService;
 
 	// 获取列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,
@@ -260,6 +266,37 @@ public class HalfStoreInOutService extends BaseService {
 		}
 	}
 
+	// 数据纠正_删除
+	@Transactional
+	public int remove_datacorrect(HalfStoreInOut temp,DataCorrectRecord datacorrect) throws Exception {
+		try {
+			int id = temp.getId();
+			//如果单据并未打印，且并未执行完成，则无需数据纠正，正常删除单据即可
+			if (!temp.getHas_print() && temp.deletable()) {// 
+				throw new Exception("半成品入库单并未打印且并未执行完成，无需数据纠正，正常删除单据即可");
+			}
+			
+			int result = dao.update("delete from tb_half_store_in_out WHERE  id = ?", id);
+			//更新半成品库存表
+			halfCurrentStockService.reStock(temp.getOrderId());
+			//3.添加数据纠正记录
+			dataCorrectRecordService.add(datacorrect);
+			return result;
+		} catch (Exception e) {
+			SQLException sqlException = (java.sql.SQLException) e.getCause();
+			if (sqlException != null && sqlException.getErrorCode() == 1451) {// 外键约束
+				log.error(e);
+				throw new Exception("已被引用，无法删除，请先删除与半成品出入库单有关的引用");
+			}
+			throw e;
+		}
+	}
+	@Transactional
+	public int remove_datacorrect(int id,DataCorrectRecord datacorrect) throws Exception {
+		HalfStoreInOut temp = this.get(id);
+		return remove_datacorrect(temp,datacorrect);
+	}
+	
 	// 删除
 	public int remove(int id) throws Exception {
 		try {
