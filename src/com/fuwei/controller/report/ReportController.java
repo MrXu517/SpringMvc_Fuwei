@@ -1029,7 +1029,7 @@ public class ReportController extends BaseController {
 				}
 				wsheet.setRowView(c,400);
 				Label content1 = new Label(0, c, count+"",titleFormat2); 
-				Label content7 = new Label(6, c, SystemCache.getMaterialName(detail.getStyle()),titleFormat2); 
+				Label content7 = new Label(6, c, SystemCache.getFuliaoTypeName(detail.getStyle()),titleFormat2); 
 				Label content8 = new Label(7, c, String.valueOf(new Double(detail.getQuantity()).intValue()),titleFormat2); 
 				wsheet.addCell(content2); 
 				wsheet.addCell(content3); 
