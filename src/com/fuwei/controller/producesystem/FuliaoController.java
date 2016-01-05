@@ -79,6 +79,11 @@ public class FuliaoController extends BaseController {
 		request.setAttribute("fuliaoList", fuliaoList);
 		Order order = orderService.get(OrderId);
 		request.setAttribute("order", order);
+		
+		//获取某订单的各辅料总当前库存,只返回fuliaoId和stock_quantity
+		Map<Integer,Integer> stockMap = fuliaoCurrentStockService.getStockMapByOrder(OrderId);
+		request.setAttribute("stockMap", stockMap);
+		
 		return new ModelAndView("fuliao/listbyorder");
 	}
 

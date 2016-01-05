@@ -125,7 +125,12 @@ table caption strong{width: 200px;display: inline-block;}
 									</td>
 									<td><%=detail.getQuantity() %></td>
 								</tr>
-								
+								<tr>
+									<td class="firsttd">
+										库位：
+									</td>
+									<td><%=SystemCache.getLocationNumber(detail.getLocationId()) %></td>
+								</tr>
 								<tr>
 									<td class="firsttd">
 										出库时间：

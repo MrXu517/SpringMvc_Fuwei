@@ -20,7 +20,12 @@
 			+ path + "/";
 	Order order = (Order)request.getAttribute("order");
 	List<Fuliao> fuliaoList = (List<Fuliao>)request.getAttribute("fuliaoList");
-
+	//当前订单各辅料当前库存
+	Map<Integer,Integer> stockMap = (Map<Integer,Integer>)request.getAttribute("stockMap");
+	if (stockMap == null) {
+		stockMap = new HashMap<Integer,Integer>();
+	}
+	
 	//权限相关
 	Boolean has_edit = SystemCache.hasAuthority(session,
 			"fuliao/edit");
@@ -115,7 +120,7 @@
 											<th width="60px">
 												国家/城市
 											</th>
-											<th width="60px">
+											<th width="50px">
 												库位容量
 											</th>
 											<th width="80px">
@@ -124,6 +129,9 @@
 											<th width="70px">
 												创建人
 											</th>
+											<th width="70px">
+												当前库存(个)
+											</th>
 											<th width="40px">
 												操作
 											</th>
@@ -131,7 +139,7 @@
 									</thead>
 									<tbody>
 										<%if(fuliaoList.size()<=0){ %>
-										<tr><td colspan="12">还未添加辅料，请点击按钮 "添加辅料" 添加</td></tr>
+										<tr><td colspan="13">还未添加辅料，请点击按钮 "添加辅料" 添加</td></tr>
 										<%} %>
 										<%
 											
@@ -155,7 +163,7 @@
 											<td><%=fuliao.getLocationSizeString() %></td>
 											<td><%=fuliao.getMemo()%></td>
 											<td><%=SystemCache.getUserName(fuliao.getCreated_user()) %> <br> <%=fuliao.getCreated_at() %></td>
-											
+											<td><%=stockMap.containsKey(fuliao.getId())?stockMap.get(fuliao.getId()) : 0 %></td>
 											<td>
 												<a target="_blank" href="fuliao/detail/<%=fuliao.getId()%>">详情</a>
 												<%
