@@ -150,6 +150,7 @@
 	
 	Boolean h_has_datacorrectrecord = SystemCache.hasAuthority(session,"data/correct");//数据纠正
 	
+	Boolean h_has_producebill_index = SystemCache.hasAuthority(session,"producebill/index");//生产对账单列表
 %>
 <html>
 	<link href="css/common/head.css" rel="stylesheet" type="text/css" />
@@ -465,6 +466,11 @@
 							<%if(h_has_financial_subject){ %>
 							<li>
 								<a href="subject/index">科目</a>
+							</li>
+							<%} %>
+							<%if(h_has_producebill_index){ %>
+							<li>
+								<a href="producebill/index">生产对账单</a>
 							</li>
 							<%} %>
 							

@@ -9,11 +9,14 @@
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.entity.ordergrid.PlanOrder"%>
 <%
-	Order order = (Order) request.getAttribute("order");
+
 	//车缝记录单
-	PlanOrder planorder = (PlanOrder) request.getAttribute("planOrder");
-	List<PlanOrderDetail> planOrderDetailList = planorder == null ? new ArrayList<PlanOrderDetail>()
-			: planorder.getDetaillist();
+	Order order = (Order) request.getAttribute("order");
+	List<OrderDetail> DetailList = order == null ? new ArrayList<OrderDetail>()
+			: order.getDetaillist();
+	if(DetailList == null){
+		DetailList = new ArrayList<OrderDetail>();
+	}
 	String productfactoryStr = (String)request.getAttribute("productfactoryStr");
 %>
 <!DOCTYPE html>
@@ -131,13 +134,13 @@
 																			尺寸
 																		</th>
 																		<th width="15%">
-																			生产数量
+																			订单数量
 																		</th>
 																	</tr>
 																</thead>
 																<tbody>
 																	<%
-																		for (PlanOrderDetail detail : planOrderDetailList) {
+																		for (OrderDetail detail : DetailList) {
 																	%>
 																	<tr class="tr"
 																		data='<%=SerializeTool.serialize(detail)%>'>

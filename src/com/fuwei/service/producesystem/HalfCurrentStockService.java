@@ -4,6 +4,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,6 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
+import com.fuwei.commons.SystemCache;
+import com.fuwei.entity.Order;
+import com.fuwei.entity.ordergrid.GongxuProducingOrder;
+import com.fuwei.entity.ordergrid.GongxuProducingOrderDetail;
+import com.fuwei.entity.ordergrid.ProducingOrder;
+import com.fuwei.entity.ordergrid.ProducingOrderDetail;
 import com.fuwei.entity.producesystem.HalfCurrentStock;
 import com.fuwei.entity.producesystem.HalfCurrentStockDetail;
 import com.fuwei.entity.producesystem.HalfInOut;
@@ -280,4 +289,52 @@ public class HalfCurrentStockService extends BaseService {
 		}
 	}
 
+
+	//某工厂各个订单的实际生产数量
+	public Map<String,Integer> factory_actual_in(Integer factoryId) throws Exception {
+		//Map<订单ID_工序ID_planOrderDetailId，实际入库数量>
+		Map<String,Integer> actual_inMap = new HashMap<String, Integer>();
+		
+		/*1.获取入库数量*/
+		/*Map<订单ID_工序ID_planOrderDetailId，入库数量> -- 开始*/
+		List<HalfStoreInOut> storeInList = halfStoreInOutService.getByFactory(factoryId,true);
+		for(HalfStoreInOut temp : storeInList){
+			int tempGongxuId = temp.getGongxuId();
+			int tempOrderId = temp.getOrderId();
+			for (HalfStoreInOutDetail detail : temp.getDetaillist()) {
+				int tempPlanOrderDetailId = detail.getPlanOrderDetailId();
+				int temp_in_quantity = detail.getQuantity();
+				String key = tempOrderId + "_" + tempGongxuId + "_" + tempPlanOrderDetailId;
+				if(actual_inMap.containsKey(key)){
+					actual_inMap.put(key, temp_in_quantity + actual_inMap.get(key));
+				}
+				else{
+					actual_inMap.put(key, temp_in_quantity);
+				}
+			}
+			
+		}
+		/*Map<订单ID_工序ID_planOrderDetailId，入库数量> -- 结束*/
+		
+		/*Map<订单ID_工序ID_planOrderDetailId，退货数量> -- 开始*/
+		List<HalfStoreReturn> storeReturnList = halfStoreReturnService.getByFactory(factoryId);
+		for(HalfStoreReturn temp : storeReturnList){
+			int tempGongxuId = temp.getGongxuId();
+			int tempOrderId = temp.getOrderId();
+			for (HalfStoreReturnDetail detail : temp.getDetaillist()) {
+				int tempPlanOrderDetailId = detail.getPlanOrderDetailId();
+				int temp_return_quantity = detail.getQuantity();
+				String key = tempOrderId + "_" + tempGongxuId + "_" + tempPlanOrderDetailId;
+				if(actual_inMap.containsKey(key)){
+					actual_inMap.put(key, actual_inMap.get(key) - temp_return_quantity);
+				}
+				else{
+					actual_inMap.put(key, -temp_return_quantity);
+				}
+			}
+		}
+		/*Map<订单ID_工序ID_planOrderDetailId，退货数量> -- 结束*/
+		
+		return actual_inMap;
+	}
 }

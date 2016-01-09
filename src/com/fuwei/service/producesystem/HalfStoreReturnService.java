@@ -179,6 +179,20 @@ public class HalfStoreReturnService extends BaseService {
 	}
 	
 	// 获取
+	public List<HalfStoreReturn> getByFactory(int factoryId)
+			throws Exception {
+		try {
+			List<HalfStoreReturn> orderlist = dao
+					.queryForBeanList(
+							"select * from tb_half_store_return where factoryId = ?",
+							HalfStoreReturn.class, factoryId);
+			return orderlist;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	// 获取
 	public List<HalfStoreReturn> getByOrderDESC(int orderId)
 			throws Exception {
 		try {

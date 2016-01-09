@@ -2,6 +2,7 @@ package com.fuwei.service;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,9 +30,17 @@ public class SystemSettingService extends BaseService{
 				String name = (String)map.get("name");
 				String value = (String)map.get("value");
 				Field field = SystemSettings.class.getField(name);
+				Class type = field.getType();
+				String className = type.getName();
 				field.setAccessible(true);
-				field.set(null, value);
+				if(className.equals("java.lang.String") ){
+					field.set(null, value);
+				}else if(className.equals("java.lang.Double")){
+					field.set(null, Double.parseDouble(value));
+				}
+				
 			}
+			
 		} catch (Exception e) {
 			throw e;
 		}

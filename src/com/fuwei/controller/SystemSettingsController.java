@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fuwei.commons.SystemCache;
+import com.fuwei.commons.SystemSettings;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.SystemSettingService;
 import com.fuwei.util.SerializeTool;
@@ -37,6 +38,7 @@ public class SystemSettingsController extends BaseController {
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有系统设置的权限", null);
 		}
+		System.out.println(SystemSettings.local_tax_rate);
 		return new ModelAndView("systemsetting/set");
 
 	}

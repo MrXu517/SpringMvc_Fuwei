@@ -40,6 +40,7 @@ public class GongxuProducingOrderService extends BaseService {
 									.serialize(producingOrder
 											.getDetail_2_list()));
 				}
+				producingOrder.setInbill(false);
 				producingOrder.setStatus(0);
 				producingOrder.setState("新建");
 				producingOrder.setDetail_json(SerializeTool
@@ -82,7 +83,7 @@ public class GongxuProducingOrderService extends BaseService {
 				producingOrder.setDetail_json(details);
 				// 更新表
 				this.update(producingOrder, "id",
-						"created_user,created_at,orderId,factoryId,gongxuId,number", true);
+						"created_user,created_at,orderId,factoryId,gongxuId,number,inbill", true);
 
 				return producingOrder.getId();
 			}
@@ -96,6 +97,16 @@ public class GongxuProducingOrderService extends BaseService {
 	public List<GongxuProducingOrder> getByOrder(int orderId) throws Exception {
 		try {
 			List<GongxuProducingOrder> list = dao.queryForBeanList("select * from tb_gongxu_producingorder where orderId = ?", GongxuProducingOrder.class, orderId);		
+			return list;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	// 获取
+	public List<GongxuProducingOrder> getByFactoryNoBill(int factoryId) throws Exception {
+		try {
+			List<GongxuProducingOrder> list = dao.queryForBeanList("select * from tb_gongxu_producingorder where factoryId = ? and inbill=0 order by orderId", GongxuProducingOrder.class, factoryId);		
 			return list;
 		} catch (Exception e) {
 			throw e;
@@ -225,6 +236,14 @@ public class GongxuProducingOrderService extends BaseService {
 			throw e;
 		}
 	}
+	@Transactional 
+	public int updateInBill(int gongxuProducingOrderId ,boolean inbill) throws Exception {
+		try {
+			return dao.update("UPDATE tb_gongxu_producingorder SET inbill=? WHERE id = ?", inbill, gongxuProducingOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+	}	
 	
 	@Transactional 
 	public int updateStatus(int tableOrderId ,int status,String state) throws Exception {

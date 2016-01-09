@@ -36,6 +36,7 @@ public class ProducingOrderService extends BaseService {
 						|| producingOrder.getDetail_2_list().size() <= 0) {
 					throw new Exception("生产单中至少得有一条生产材料详情记录");
 				} else {
+					producingOrder.setInbill(false);
 					producingOrder.setStatus(0);
 					producingOrder.setState("新建");
 					producingOrder.setDetail_json(SerializeTool
@@ -86,7 +87,7 @@ public class ProducingOrderService extends BaseService {
 
 					// 更新表
 					this.update(producingOrder, "id",
-							"created_user,created_at,orderId,factoryId,number", true);
+							"created_user,created_at,orderId,factoryId,number,inbill", true);
 
 					return producingOrder.getId();
 				}
@@ -122,6 +123,18 @@ public class ProducingOrderService extends BaseService {
 		}
 	}
 
+	// 获取还未对账的生产单
+	public List<ProducingOrder> getByFactoryNoBill(int factoryId) throws Exception {
+		try {
+			List<ProducingOrder> list = dao.queryForBeanList("select * from tb_producingorder where factoryId = ? and inbill=0  order by orderId", ProducingOrder.class, factoryId);
+			
+			return list;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	
 	// 获取生产单
 	public ProducingOrder get(int id) throws Exception {
 		try {
@@ -251,6 +264,15 @@ public class ProducingOrderService extends BaseService {
 			throw e;
 		}
 	}
+	
+	@Transactional 
+	public int updateInBill(int producingOrderId ,boolean inbill) throws Exception {
+		try {
+			return dao.update("UPDATE tb_producingorder SET inbill=? WHERE id = ?", inbill, producingOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+	}	
 	
 	@Transactional 
 	public int updateStatus(int tableOrderId ,int status,String state) throws Exception {

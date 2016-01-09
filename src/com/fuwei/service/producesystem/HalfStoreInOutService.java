@@ -205,6 +205,20 @@ public class HalfStoreInOutService extends BaseService {
 	}
 	
 	// 获取
+	public List<HalfStoreInOut> getByFactory(int factoryId, Boolean in_out)
+			throws Exception {
+		try {
+			List<HalfStoreInOut> orderlist = dao
+					.queryForBeanList(
+							"select * from tb_half_store_in_out where factoryId = ? and in_out=?",
+							HalfStoreInOut.class, factoryId, in_out);
+			return orderlist;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	// 获取
 	public List<HalfStoreInOut> getByOrderDESC(int orderId)
 			throws Exception {
 		try {

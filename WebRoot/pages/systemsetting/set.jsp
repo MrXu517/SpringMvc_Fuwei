@@ -13,6 +13,7 @@
 			+ path + "/";
 	String start_at_str = SystemSettings.sample_display_start_at == null ? "" : SystemSettings.sample_display_start_at; 
 	String end_at_str = SystemSettings.sample_display_end_at == null ? "" : SystemSettings.sample_display_end_at; 
+	Double local_tax_rate = SystemSettings.local_tax_rate;
 %>
 <!DOCTYPE html>
 <html>
@@ -78,6 +79,17 @@
 														<input type="text" class="date form-control"
 															name="sample_display_end_at" id="sample_display_end_at" 
 															value="<%=end_at_str %>" placeholder="请输入结束时间">
+													</div>
+													<div class="col-sm-1"></div>
+												</div>
+												<div class="form-group">
+													<label for="local_tax_rate" class="col-sm-3 control-label">
+														地税税率
+													</label>
+													<div class="col-sm-8">
+														<input type="text" class="form-control"
+															name="local_tax_rate" id="local_tax_rate" 
+															value="<%=local_tax_rate %>" placeholder="请输入地税税率">
 													</div>
 													<div class="col-sm-1"></div>
 												</div>

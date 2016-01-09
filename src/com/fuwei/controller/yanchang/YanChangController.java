@@ -455,8 +455,8 @@ public class YanChangController extends BaseController {
 		WritableWorkbook wbook = Workbook.createWorkbook(os); //建立excel文件 
 		
 		WritableSheet wsheet = wbook.createSheet("Sheet1", 0); //工作表名称 
-		wsheet.setPageSetup(PageOrientation.LANDSCAPE);
-		wsheet.getSettings().setLeftMargin(0.4);
+		wsheet.setPageSetup(PageOrientation.LANDSCAPE);//设置打印横向
+		wsheet.getSettings().setLeftMargin(0.4);//设置打印边距
 		wsheet.getSettings().setRightMargin(0.4);
 		wsheet.getSettings().setTopMargin(1);
 		wsheet.getSettings().setBottomMargin(0.4);

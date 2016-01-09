@@ -67,11 +67,16 @@ public class ProducingOrder extends BaseTableOrder{
 	//2015-10-6 增加样品公司货号
 	private String company_productNumber;//样品的公司货号
 	
-	
-	
+	private Boolean inbill;//该生产单是否已对账
 	
 	
 
+	public Boolean getInbill() {
+		return inbill;
+	}
+	public void setInbill(Boolean inbill) {
+		this.inbill = inbill;
+	}
 	public String getCompany_productNumber() {
 		return company_productNumber;
 	}

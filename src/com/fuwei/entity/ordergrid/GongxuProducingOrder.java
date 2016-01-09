@@ -56,8 +56,16 @@ public class GongxuProducingOrder extends BaseTableOrder{
 	
 	private String memo;//备注
 	
+	private Boolean inbill;//该工序加工单是否已对账
+	
 	
 
+	public Boolean getInbill() {
+		return inbill;
+	}
+	public void setInbill(Boolean inbill) {
+		this.inbill = inbill;
+	}
 	public String getMemo() {
 		return memo;
 	}
