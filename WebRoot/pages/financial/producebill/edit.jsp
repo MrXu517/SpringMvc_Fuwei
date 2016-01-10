@@ -208,7 +208,7 @@
 											<td><%=detailist.get(0).getPlan_quantity()%></td>
 											<td><%=detailist.get(0).getQuantity()%></td>
 											<td><input class="quantity form-control require positive_int value"
-															type="text" value="<%=Math.min(detailist.get(0).getQuantity(),detailist.get(0).getQuantity())%>"></td>
+															type="text" value="<%=Math.min(detailist.get(0).getQuantity(),detailist.get(0).getPlan_quantity())%>"></td>
 											<%if(item.getGongxuId() == SystemCache.producing_GONGXU.getId()){ %>
 											<td price="<%=detailist.get(0).getPrice()%>" class="price"><%=detailist.get(0).getPrice()%>/个</td>
 											<%}else{ %>

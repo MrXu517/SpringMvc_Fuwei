@@ -1,5 +1,6 @@
 package com.fuwei.service.producesystem;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,10 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
+import com.fuwei.entity.DataCorrectRecord;
 import com.fuwei.entity.producesystem.FuliaoIn;
+import com.fuwei.entity.producesystem.FuliaoInDetail;
 import com.fuwei.entity.producesystem.FuliaoOut;
 import com.fuwei.entity.producesystem.FuliaoOutDetail;
 import com.fuwei.service.BaseService;
+import com.fuwei.service.DataCorrectRecordService;
 import com.fuwei.util.DateTool;
 
 @Component
@@ -32,6 +36,8 @@ public class FuliaoOutService extends BaseService {
 	FuliaoOutNoticeService fuliaoOutNoticeService;
 	@Autowired
 	LocationService locationService;
+	@Autowired
+	DataCorrectRecordService dataCorrectRecordService;
 	
 	// 获取列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,
@@ -215,86 +221,65 @@ public class FuliaoOutService extends BaseService {
 		}
 	}
 
-//	// 删除
-//	@Transactional
-//	public int remove(int id) throws Exception {
-//		try {
-//			FuliaoIn object = this.get(id);
-//			if(!object.isDeletable()){
-//				if(object.getStatus() == 6){
-//					throw new Exception("已执行入库，无法删除");
-//				}else if(object.getStatus() == -1){
-//					throw new Exception("已执行入库失败，无法删除");
-//				}
-//				
-//			}
-//			fuliaoInOutDetailService.deleteBatch(id);
-//			return dao.update("delete from tb_fuliaoin WHERE  id = ?", id);
-//		} catch (Exception e) {
-//			SQLException sqlException = (java.sql.SQLException) e.getCause();
-//			if (sqlException != null && sqlException.getErrorCode() == 1451) {// 外键约束
-//				log.error(e);
-//				throw new Exception("已被引用，无法删除，请先删除相关引用");
-//			}
-//			throw e;
-//		}
-//	}
-//	
+	// 数据纠正_删除
+	@Transactional(rollbackFor=Exception.class)
+	public int remove_datacorrect(FuliaoOut object,DataCorrectRecord datacorrect) throws Exception {
+		try {
+			int id = object.getId();
+			if(object.isDeletable()){
+				throw new Exception("该辅料出库单未执行，无需进行数据纠正");
+			}
+//			fuliaoInOutDetailService.deleteBatch(id);数据库会自动删除
+			//1.修改库位库存信息
+			for(FuliaoOutDetail detail : object.getDetaillist()){
+				//出库单删除后，设置相应的库位不为空
+				locationService.addQuantity(detail.getLocationId(),detail.getFuliaoId(),detail.getQuantity());
+			}
+			//2.修改辅料出库通知单为执行失败状态
+			fuliaoOutNoticeService.fail(object.getFuliaoout_noticeId());
+			//3.添加数据纠正记录
+			dataCorrectRecordService.add(datacorrect);
+			
+			return dao.update("delete from tb_fuliaoout WHERE  id = ?", id);
+		} catch (Exception e) {
+			SQLException sqlException = (java.sql.SQLException) e.getCause();
+			if (sqlException != null && sqlException.getErrorCode() == 1451) {// 外键约束
+				log.error(e);
+				throw new Exception("已被引用，无法删除，请先删除相关引用");
+			}
+			throw e;
+		}
+	}
 	
+	@Transactional(rollbackFor=Exception.class)
+	public int remove(FuliaoOut object) throws Exception {
+		try {
+			int id = object.getId();
+			if(!object.isDeletable()){
+				if(object.getStatus() == 6){
+					throw new Exception("已执行出库，无法删除");
+				}else if(object.getStatus() == -1){
+					throw new Exception("已执行出库失败，无法删除");
+				}
+				
+			}
+			//1.修改库位库存信息
+			for(FuliaoOutDetail detail : object.getDetaillist()){
+				//出库单删除后，设置相应的库位不为空
+				locationService.addQuantity(detail.getLocationId(),detail.getFuliaoId(),detail.getQuantity());
+			}
+			//2.修改辅料出库通知单为执行失败状态
+			fuliaoOutNoticeService.fail(object.getFuliaoout_noticeId());
+			
+			return dao.update("delete from tb_fuliaoout WHERE  id = ?", id);
+		} catch (Exception e) {
+			SQLException sqlException = (java.sql.SQLException) e.getCause();
+			if (sqlException != null && sqlException.getErrorCode() == 1451) {// 外键约束
+				log.error(e);
+				throw new Exception("已被引用，无法删除，请先删除相关引用");
+			}
+			throw e;
+		}
+	}
 
-//	// 编辑
-//	@Transactional
-//	public int update(FuliaoIn object) throws Exception {
-//		try {
-//			FuliaoIn temp = this.get(object.getId());
-//			if(!temp.isEditable()){
-//				if(temp.getStatus() == 6){
-//					throw new Exception("已执行入库，无法编辑");
-//				}else if(temp.getStatus() == -1){
-//					throw new Exception("已执行入库失败，无法编辑");
-//				}else{
-//					throw new Exception("未知原因，无法编辑");
-//				}
-//			}
-//			// 更新
-//			if(object.getDetaillist()==null || object.getDetaillist().size()<=0){
-//				throw new Exception("请至少填写一条入库明细");
-//			}
-//			fuliaoInOutDetailService.deleteBatch(object.getId());
-//			for(FuliaoInDetail detail : object.getDetaillist()){
-//				detail.setFuliaoInOutId(object.getId());
-//			}
-//			fuliaoInOutDetailService.addBatch(object.getDetaillist());
-//			this.update(object,"id","created_user,fuliaoin_noticeId,number,created_at,orderNumber,orderId,status,state,charge_employee",
-//								true);
-//			return object.getId();
-//		} catch (Exception e) {
-//			throw e;
-//		}
-//
-//	}
-
-//	@Transactional
-//	public int complete(int id) throws Exception {
-//		try {
-//			return dao
-//					.update(
-//							"UPDATE tb_fuliaoin SET status=?,state=? WHERE id = ?",
-//							6, "执行完成", id);
-//		} catch (Exception e) {
-//			throw e;
-//		}
-//	}
-	
-//	@Transactional
-//	public int fail(int id) throws Exception {
-//		try {
-//			return dao
-//					.update(
-//							"UPDATE tb_fuliaoin_notice SET status=?,state=? WHERE id = ?",
-//							-1, "执行失败", id);
-//		} catch (Exception e) {
-//			throw e;
-//		}
-//	}
 }

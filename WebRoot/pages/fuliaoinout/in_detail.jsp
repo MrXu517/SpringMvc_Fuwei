@@ -22,6 +22,8 @@
 		detaillist = new ArrayList<FuliaoInDetail>();
 	}
 	Boolean has_print = SystemCache.hasAuthority(session,"fuliaoinout/print");
+	Boolean has_datacorrect_delete = SystemCache.hasAuthority(session,"data/correct");//数据纠正
+
 %>
 <!DOCTYPE html>
 <html>
@@ -120,6 +122,11 @@ tr.disable{background:#ddd;}
 									}
 								%>
 								
+								<%
+									if(has_datacorrect_delete && !object.isDeletable()){
+								%>
+								<button data-cid="<%=object.getId()%>" type="button" class="btn btn-danger" id="deleteBtn_datacorrect">数据纠正：删除</button>
+								<%} %>
 								<form class="saveform">
 									<div class="clear"></div>
 									<div class="col-md-12 tablewidget">
@@ -263,6 +270,29 @@ tr.disable{background:#ddd;}
 			var id =$(this).attr("table_id");
 			$(this).barcode(id, "code128",{barWidth:2, barHeight:30,showHRI:true});
 		});	
+		//数据纠正：删除单据 -- 开始
+		$("#deleteBtn_datacorrect").click( function() {
+			var id = $(this).attr("data-cid");
+			if (!confirm("该辅料入库单已打印入库，请确保辅料实际未入库再进行删除操作， 您是否确定要进行数据纠正：删除？")) {
+				return false;
+			}
+			$.ajax( {
+				url :"fuliaoin/delete/" + id,
+				type :'POST'
+			}).done( function(result) {
+				if (result.success) {
+					Common.Tip("数据纠正成功", function() {
+						$("#breadcrumbs li.active").prev().find("a").click();
+					});
+				}
+			}).fail( function(result) {
+				Common.Error("数据纠正：删除辅料入库单失败：" + result.responseText);
+			}).always( function() {
+	
+			});
+			return false;
+		});
+		//数据纠正：删除单据  -- 结束
 	</script>
 	</body>
 </html>

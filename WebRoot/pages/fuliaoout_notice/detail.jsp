@@ -86,7 +86,14 @@ div.name{  width: 100px; display: inline-block;}
 .checkBtn{height:25px;width:25px;}
 tr.disable{background:#ddd;}
 #created_user{  margin-right: 50px;}
-
+#statusDiv{position: absolute;top: 0;right: 100px; width: 38px;font-size: 20px;font-style: oblique;
+    transform: rotate(15deg);
+    -o-transform: rotate(15deg);
+    -webkit-transform: rotate(15deg);
+    padding: 0 4px;}
+#statusDiv.success{border: 2px solid #47a447;color: #47a447;}
+#statusDiv.fail{border: 2px solid red;color: red;}
+#statusDiv.wait{border: 2px solid #eea236;color: #eea236;}
 </style>
 
 	</head>
@@ -139,6 +146,19 @@ tr.disable{background:#ddd;}
 										<table class="table">
 											<caption id="tablename">
 												桐庐富伟针织厂辅料出库通知单<div table_id="<%=notice.getNumber()%>" class="id_barcode"></div>
+											<%
+											int status = notice.getStatus();
+											String statusDivClass =  "";
+											if(status == 6){
+												statusDivClass = "success";
+											}else if(status == -1){
+												statusDivClass = "fail";
+											}else{
+												statusDivClass = "wait";
+											}
+											
+											 %>
+										<div id="statusDiv" class="<%=statusDivClass %>"><%=notice.getStateString() %></div>
 											</caption>
 										</table>
 										<table class="table table-responsive noborder">

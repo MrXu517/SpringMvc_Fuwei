@@ -267,7 +267,7 @@ public class FuliaoInService extends BaseService {
 		}
 	}
 	
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	public int remove(FuliaoIn object) throws Exception {
 		try {
 			int id = object.getId();

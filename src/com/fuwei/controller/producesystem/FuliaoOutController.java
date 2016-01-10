@@ -25,6 +25,7 @@ import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.controller.BaseController;
+import com.fuwei.entity.DataCorrectRecord;
 import com.fuwei.entity.Employee;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
@@ -428,22 +429,41 @@ public class FuliaoOutController extends BaseController {
 		request.setAttribute("fuliaoOut", fuliaoOut);
 		return new ModelAndView("fuliaoinout/out_tag_print");
 	}
-//	// 删除
-//	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
-//	@ResponseBody
-//	public Map<String, Object> delete(@PathVariable int id,
-//			HttpSession session, HttpServletRequest request,
-//			HttpServletResponse response) throws Exception {
-//		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
-//		String lcode = "fuliaoinout/delete";
-//		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
-//		if (!hasAuthority) {
-//			throw new PermissionDeniedDataAccessException("没有删除辅料入库单的权限", null);
-//		}
-//		FuliaoIn fuliaoIn = fuliaoInService.get(id);	
-//		int success = fuliaoInService.remove(fuliaoIn);
-//		return this.returnSuccess();
-//	}
+	
+	// 数据纠正：删除
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> delete(@PathVariable int id,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		FuliaoOut fuliaoOut = fuliaoOutService.get(id);	
+		if(fuliaoOut.isDeletable()){
+			String lcode = "fuliaoinout/delete";
+			Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+			if (!hasAuthority) {
+				throw new PermissionDeniedDataAccessException("没有删除辅料出库单的权限", null);
+			}
+			//删除
+			int success = fuliaoOutService.remove(fuliaoOut);
+			return this.returnSuccess();
+		}else{//若单据已打印
+			String lcode = "data/correct";//数据纠正权限
+			Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+			if (!hasAuthority) {
+				throw new PermissionDeniedDataAccessException("辅料出库单已打印，且没有数据纠正的权限，无法删除", null);
+			}
+			//删除
+			DataCorrectRecord dataCorrectRecord = new DataCorrectRecord();
+			dataCorrectRecord.setCreated_at(DateTool.now());
+			dataCorrectRecord.setCreated_user(user.getId());
+			dataCorrectRecord.setOperation("删除");
+			dataCorrectRecord.setTb_table("辅料出库单");
+			dataCorrectRecord.setDescription("辅料出库单" + fuliaoOut.getNumber()+"已打印，因数据错误进行数据纠正删除");
+			int success = fuliaoOutService.remove_datacorrect(fuliaoOut,dataCorrectRecord);
+			return this.returnSuccess();
+		}
+	}
 //	public List<Map<String,Object>> getInStoreQuantity(List<ProducingOrder> list , List<HalfStoreInOut> halfstoreInList , List<HalfStoreReturn> halfstoreReturnList,PlanOrder planOrder) throws Exception{	
 //		if(list == null){
 //			return null;
