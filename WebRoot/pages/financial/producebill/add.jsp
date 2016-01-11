@@ -53,6 +53,8 @@
 		<script src="js/plugins/bootstrap.min.js" type="text/javascript"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
 		<script src="js/financial/producebill/add.js" type="text/javascript"></script>
+		<script type='text/javascript' src='js/plugins/select2.min.js'></script>
+		<link rel="stylesheet" type="text/css" href="css/plugins/select2.min.css" />
 		<link href="css/store_in_out/index.css" rel="stylesheet" type="text/css" />
 		<style type="text/css">
 		.checkBtn{width: 20px;height: 20px;}

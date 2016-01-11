@@ -125,7 +125,7 @@ tr.disable{background:#ddd;}
 								<%
 									if(has_datacorrect_delete && !object.isDeletable()){
 								%>
-								<button data-cid="<%=object.getId()%>" type="button" class="btn btn-danger" id="deleteBtn_datacorrect">数据纠正：删除</button>
+								<button data-cid="<%=object.getId()%>" type="button" class="btn btn-danger pull-right" id="deleteBtn_datacorrect">数据纠正：删除</button>
 								<%} %>
 								<form class="saveform">
 									<div class="clear"></div>

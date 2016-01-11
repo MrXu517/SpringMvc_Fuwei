@@ -5,6 +5,8 @@ $(document).ready( function() {
 	$("#year").bind("click focus", function() {
 		WdatePicker({dateFmt:'yyyy'});
 	});
+	//加工方选择combobox	
+	$("#factoryId").select2();
 	var year = new Date(Common.addDay(new Date().toDateString(),-90)).getFullYear();
 	$("#year").val(year);
 	$("#factoryId").focus();
