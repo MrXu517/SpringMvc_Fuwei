@@ -57,7 +57,7 @@ $(document).ready( function() {
     });
     $(".scanform").submit(function(){
     	var formdata = $(this).serializeJson();
-    	var number =formdata.number;
+    	var number =formdata.number.toLocaleUpperCase();
     	var $tr = $("#contentTb tr.producingTr[number='" + number +"']");
     	$("tr.scanselected").removeClass("scanselected");
     	if($tr.length<=0){

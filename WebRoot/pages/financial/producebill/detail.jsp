@@ -7,6 +7,7 @@
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.entity.financial.ProduceBill"%>
+<%@page import="com.fuwei.util.NumberUtil"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -223,9 +224,9 @@
 									</tbody>
 									<tfoot><tr><td colspan="2">合计</td>
 									<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-									<td><%=produceBill.getQuantity() %></td><td></td><td><%=produceBill.getAmount() %></td>
+									<td><%=produceBill.getQuantity() %></td><td></td><td><%=NumberUtil.formateDouble(produceBill.getAmount(),2) %></td>
 									<td><%=produceBill.getDeduct() %></td><td></td></tr>
-									<tr><td colspan="17" style="text-align: left;padding-left: 30px;">总金额（减去扣款）： <%=produceBill.getAmount() - produceBill.getDeduct() %></td></tr>
+									<tr><td colspan="17" style="text-align: left;padding-left: 30px;">总金额（减去扣款）： <%=NumberUtil.formateDouble(produceBill.getAmount() - produceBill.getDeduct(),2) %></td></tr>
 									<tr><td colspan="17" style="text-align: left;padding-left: 30px;">地税扣款： <%=produceBill.getRate_deduct() %></td></tr>
 									<tr><td colspan="17" style="text-align: left;padding-left: 30px;">合计应付金额： <%=produceBill.getPayable_amount() %></td></tr>
 									</tfoot>

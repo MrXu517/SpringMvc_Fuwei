@@ -837,7 +837,7 @@ public class ProduceBillController extends BaseController {
 		}
 		
 		c = c+1;
-		double amounttemp = bill.getAmount() - bill.getDeduct();
+		double amounttemp = NumberUtil.formateDouble(bill.getAmount() - bill.getDeduct(),2);
 		wsheet.addCell(new Label(0, c, "总金额（减去扣款）： "+ amounttemp +"元", headFormat));
 		c = c+1;
 		wsheet.addCell(new Label(0, c, "地税扣款： "+ bill.getRate_deduct() +"元", headFormat));
