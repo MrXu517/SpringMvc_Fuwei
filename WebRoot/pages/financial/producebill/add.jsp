@@ -220,7 +220,10 @@
 												boolean even = i%2 == 0;
 												String classname = even?"even":"odd";
 												List<ProduceBillDetail_Detail> detailist = item.getDetaillist();
-												int detailsize = item.getDetaillist().size();
+												if(detailist == null){
+													detailist = new ArrayList<ProduceBillDetail_Detail>();
+												}
+												int detailsize = detailist.size();
 										%>
 										<tr number="<%=item.getProducingOrderNumber()%>" itemId="<%=item.getId()%>" class="producingTr tr EmptyTr disable <%=classname%>" data='<%=SerializeTool.serialize(detailist.get(0))%>' producebilldetail='<%=SerializeTool.serialize(item)%>' >
 											<td rowspan="<%=detailsize%>"><%=++i%> <input type="checkbox" name="checked" class="checkBtn"/></td>
