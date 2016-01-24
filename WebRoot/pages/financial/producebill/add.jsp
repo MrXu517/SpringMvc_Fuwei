@@ -19,6 +19,9 @@
 		resultlist = (List<ProduceBillDetail>)request.getAttribute("resultlist");
 		
 	}
+	if(resultlist == null){
+		resultlist = new ArrayList<ProduceBillDetail>();
+	}
 	if (factoryId == null) {
 		factoryId = -1;
 	}
@@ -215,15 +218,19 @@
 									</thead>
 									<tbody>
 										<%
-											int i = 0;
-											for (ProduceBillDetail item : resultlist) {
-												boolean even = i%2 == 0;
-												String classname = even?"even":"odd";
-												List<ProduceBillDetail_Detail> detailist = item.getDetaillist();
-												if(detailist == null){
-													detailist = new ArrayList<ProduceBillDetail_Detail>();
-												}
-												int detailsize = detailist.size();
+											if(resultlist.size()>0){
+												int i = 0;
+												for (ProduceBillDetail item : resultlist) {
+													boolean even = i%2 == 0;
+													String classname = even?"even":"odd";
+													List<ProduceBillDetail_Detail> detailist = item.getDetaillist();
+													if(detailist == null){
+														detailist = new ArrayList<ProduceBillDetail_Detail>();
+													}
+													int detailsize = detailist.size();
+													if(detailsize<=0){
+														continue;
+													}
 										%>
 										<tr number="<%=item.getProducingOrderNumber()%>" itemId="<%=item.getId()%>" class="producingTr tr EmptyTr disable <%=classname%>" data='<%=SerializeTool.serialize(detailist.get(0))%>' producebilldetail='<%=SerializeTool.serialize(item)%>' >
 											<td rowspan="<%=detailsize%>"><%=++i%> <input type="checkbox" name="checked" class="checkBtn"/></td>
@@ -260,7 +267,9 @@
 															type="text" value=""></td>				
 										</tr>
 										<%
-											detailist.remove(0);
+											if(detailist.size()>0){
+												detailist.remove(0);
+											}
 											for(ProduceBillDetail_Detail detail : detailist){
 										%>
 										<tr number="<%=item.getProducingOrderNumber()%>" class="tr EmptyTr disable <%=classname %>" data='<%=SerializeTool.serialize(detail)%>'>
@@ -281,8 +290,10 @@
 										<%} %>
 										<%
 											}
+											}else{
 										%>
-										
+											<tr><td colspan="16">没有相应的生产记录</td></tr>
+										<%} %>
 									</tbody>
 								</table>
 							</div>
