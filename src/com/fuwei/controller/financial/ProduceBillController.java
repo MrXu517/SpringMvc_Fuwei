@@ -293,7 +293,7 @@ public class ProduceBillController extends BaseController {
 							+ itemdetail.getPlanOrderDetailId());
 				}
 				// 设置明细-明细的金额
-				double amount = price * actual_in_quantity;
+				double amount = price * Math.min(actual_in_quantity, itemdetail.getPlan_quantity());;
 				//如果是工序加工单，由于单价是以打为单位，则应除以12
 				amount = NumberUtil.formateDouble(amount/12, 2);
 				
