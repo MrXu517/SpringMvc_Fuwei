@@ -154,8 +154,8 @@ public class ProduceBillService extends BaseService {
 			int produceBillId = bill.getId();
 			
 			//1.将原来的生产单inbill改为false
-			dao.update("update tb_producingOrder a, tb_producebilldetail b set a.inbill=0 where b.producebillId=? and a.id=b.producingOrderId", produceBillId);
-			dao.update("update tb_gongxu_producingOrder a, tb_producebilldetail b set a.inbill=0 where b.producebillId=? and a.id=b.producingOrderId", produceBillId);
+			dao.update("update tb_producingOrder a, tb_producebilldetail b set a.inbill=0 where b.producebillId=? and a.id=b.producingOrderId and b.gongxuId=?", produceBillId,SystemCache.producing_GONGXU.getId());
+			dao.update("update tb_gongxu_producingOrder a, tb_producebilldetail b set a.inbill=0 where b.producebillId=? and a.id=b.producingOrderId and b.gongxuId<>?", produceBillId,SystemCache.producing_GONGXU.getId());
 			//2.删除原来的明细
 			produceBillDetailService.deleteBatch(produceBillId);
 			//3.添加新的明细
@@ -173,8 +173,8 @@ public class ProduceBillService extends BaseService {
 				produceBillDetail_DetailService.addBatch(detail.getDetaillist());
 			}
 			//4.将新的生产单inbill改为true
-			dao.update("update tb_producingOrder a, tb_producebilldetail b set a.inbill=1 where b.producebillId=? and a.id=b.producingOrderId", produceBillId);
-			dao.update("update tb_gongxu_producingOrder a, tb_producebilldetail b set a.inbill=1 where b.producebillId=? and a.id=b.producingOrderId", produceBillId);
+			dao.update("update tb_producingOrder a, tb_producebilldetail b set a.inbill=1 where b.producebillId=? and a.id=b.producingOrderId and b.gongxuId=?", produceBillId,SystemCache.producing_GONGXU.getId());
+			dao.update("update tb_gongxu_producingOrder a, tb_producebilldetail b set a.inbill=1 where b.producebillId=? and a.id=b.producingOrderId and b.gongxuId<>?", produceBillId,SystemCache.producing_GONGXU.getId());
 			//5.修改对账单
 			return this.update(bill, "id", "factoryId,created_at,created_user", true);
 		} catch (Exception e) {
