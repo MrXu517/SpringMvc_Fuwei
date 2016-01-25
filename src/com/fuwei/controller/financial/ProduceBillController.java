@@ -241,7 +241,7 @@ public class ProduceBillController extends BaseController {
 							+ itemdetail.getPlanOrderDetailId());
 				}
 				// 设置明细-明细的金额
-				double amount = price * actual_in_quantity;
+				double amount = price * Math.min(actual_in_quantity, itemdetail.getPlan_quantity());
 				itemdetail.setAmount(amount);
 				
 				total_amount += amount;
