@@ -93,6 +93,11 @@
 												账单年份: <%=produceBill.getYear() %>
 											</label>
 										</div>
+										<div class="form-group salesgroup" style="width: 600px;">
+											<label class="control-label">
+												备注: <%=produceBill.getMemo()==null?"":produceBill.getMemo() %>
+											</label>
+										</div>
 										
 										</form>
 								<table class="table table-responsive table-bordered" id="contentTb">

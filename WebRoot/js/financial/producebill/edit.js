@@ -4,6 +4,7 @@ $(document).ready( function() {
 	setActiveLeft($a.parent("li"));
 	$("#number").focus();
 	$("#number").select();
+	$("#year").unbind("click focus");
 	$("#year").bind("click focus", function() {
 		WdatePicker({dateFmt:'yyyy'});
 	});

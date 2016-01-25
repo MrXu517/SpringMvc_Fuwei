@@ -184,28 +184,31 @@ tr.disable{background:#ddd;}
 										<table id="mainTb"
 											class="table table-responsive table-bordered detailTb">
 											<thead>
-												<tr><th width="5%">
+												<tr><th width="50px">
 														序号
 													</th>
-													<th width="8%">
+													<th width="75px">
 														辅料类型
-													</th><th width="15%">
+													</th><th width="150px">
 														图片
-													</th><th width="10%">
+													</th><th width="100px">
 														订单号
-													</th><th width="8%">
+													</th><th width="100px">
 														款号
-													</th><th width="8%">
+													</th><th width="70px">
 														国家
-													</th><th width="8%">
+													</th><th width="70px">
 														颜色
-													</th><th width="8%">
+													</th><th width="70px">
 														尺码
-													</th><th width="8%">
+													</th><th width="50px">
 														批次
 													</th>
-													<th width="20%">
+													<th width="120px">
 														预出库数量(个)
+													</th>
+													<th width="150px">
+														备注
 													</th>
 												</tr>
 											</thead>
@@ -229,6 +232,9 @@ tr.disable{background:#ddd;}
 													<td>
 														<input class="quantity form-control require positive_int value"
 															type="text" value="<%=detail.getQuantity()%>">
+													</td>
+													<td>
+														<input class="form-control memo value" type="text" value="<%=detail.getMemo()==null?"":detail.getMemo()%>">
 													</td>
 												</tr>
 												<%

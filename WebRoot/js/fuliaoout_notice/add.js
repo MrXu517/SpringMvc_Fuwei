@@ -24,6 +24,7 @@ $(document).ready( function() {
 		}else{
 			$(this).closest("tr").addClass("disable EmptyTr");
 			$(this).closest("tr").find(".quantity").attr("disabled",true);
+			$(this).closest("tr").find(".memo").attr("disabled",true);
 		}
 	});
 	
@@ -50,6 +51,10 @@ $(document).ready( function() {
 						{
 							name :'quantity',
 							colname :'数量',
+							width :'30%'
+						},{
+							name :'memo',
+							colname :'备注',
 							width :'30%'
 						}]
 			}

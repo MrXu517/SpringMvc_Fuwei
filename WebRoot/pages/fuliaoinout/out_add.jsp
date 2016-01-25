@@ -213,6 +213,9 @@ form .selectDiv.form-group{  width: 250px;display: inline-block;}
 														总数
 													</th>
 													<th colspan="3" width="180px">出库库位分布</th>
+													<th rowspan="2" width="100px">
+														备注
+													</th>
 													</tr>
 												<tr>
 													<th width="60px">
@@ -258,6 +261,9 @@ form .selectDiv.form-group{  width: 250px;display: inline-block;}
 													<td><%=first_stock_quantity%></td>
 													<td>
 														<input disabled class="form-control " type="text" value="<%=first_quantity%>">
+													</td>
+													<td>
+														<input disabled class="form-control " type="text" value="<%=detail.getMemo()==null?"":detail.getMemo()%>">
 													</td>
 												</tr>
 												<%

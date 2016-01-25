@@ -137,8 +137,11 @@ div.name{   margin-left: 15px; width: 100px; display: inline-block;}
 													</th><th width="8%">
 														批次
 													</th>
-													<th width="15%">
+													<th width="10%">
 														预出库数量(个)
+													</th>
+													<th width="20%">
+														备注
 													</th>
 												</tr>
 											</thead>
@@ -158,6 +161,7 @@ div.name{   margin-left: 15px; width: 100px; display: inline-block;}
 													<td><%=detail.getSize()%></td>
 													<td><%=detail.getBatch()%></td>
 													<td><%=detail.getQuantity()%></td>
+													<td><%=detail.getMemo() == null ? "" : detail.getMemo()%></td>
 												</tr>
 												<%
 													}

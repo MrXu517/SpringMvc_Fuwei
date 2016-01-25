@@ -4,6 +4,7 @@
 <%@page import="com.fuwei.commons.Pager"%>
 <%@page import="com.fuwei.entity.financial.ProduceBill"%>
 <%@page import="com.fuwei.util.DateTool"%>
+<%@page import="com.fuwei.util.NumberUtil"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -234,9 +235,9 @@
 											<td><%=SystemCache.getFactoryName(item.getFactoryId())%></td>
 											<td><%=item.getQuantity()%></td>
 											<td><%=item.getDeduct()%></td>
-											<td><%=item.getAmount() - item.getDeduct()%></td>
+											<td><%=NumberUtil.formateDouble(item.getAmount() - item.getDeduct(),2)%></td>
 											<td><%=item.getRate_deduct()%></td>
-											<td><%=item.getAmount() - item.getDeduct() - item.getRate_deduct()%></td>
+											<td><%=item.getPayable_amount()%></td>
 											<td><%=item.getYear()%></td>
 											<td><%=SystemCache.getUserName(item.getCreated_user())%></td>
 											<td><%=DateTool.formatDateYMD(item.getCreated_at())%></td>

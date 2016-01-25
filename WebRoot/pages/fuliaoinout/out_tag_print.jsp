@@ -133,6 +133,12 @@ table caption strong{width: 200px;display: inline-block;}
 								</tr>
 								<tr>
 									<td class="firsttd">
+										备注：
+									</td>
+									<td><%=detail.getMemo()==null?"":detail.getMemo()%></td>
+								</tr>				
+								<tr>
+									<td class="firsttd">
 										出库时间：
 									</td>
 									<td><%=date_string %></td>

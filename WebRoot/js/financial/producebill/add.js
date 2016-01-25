@@ -2,6 +2,7 @@ $(document).ready( function() {
 	/*设置当前选中的页*/
 	var $a = $("#left li a[href='producebill/index']");
 	setActiveLeft($a.parent("li"));
+	$("#year").unbind("click focus");
 	$("#year").bind("click focus", function() {
 		WdatePicker({dateFmt:'yyyy'});
 	});

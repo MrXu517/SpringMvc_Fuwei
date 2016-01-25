@@ -192,7 +192,7 @@ tr.disable{background:#ddd;}
 												<tr>
 													<th width="8%">
 														类型
-													</th><th width="20%">
+													</th><th width="15%">
 														图片
 													</th><th width="10%">
 														订单号
@@ -207,10 +207,12 @@ tr.disable{background:#ddd;}
 													</th><th width="8%">
 														批次
 													</th>
-													<th width="10%">
+													<th width="8%">
 														数量(个)
-													</th><th width="10%">
+													</th><th width="8%">
 														库位
+													</th><th width="15%">
+														备注
 													</th>
 												</tr>
 											</thead>
@@ -232,6 +234,7 @@ tr.disable{background:#ddd;}
 													<td><%=detail.getBatch()%></td>
 													<td><%=detail.getQuantity()%></td>
 													<td><%=SystemCache.getLocationNumber(detail.getLocationId())%></td>
+													<td><%=detail.getMemo()==null?"":detail.getMemo()%></td>
 												</tr>
 												<%
 													}

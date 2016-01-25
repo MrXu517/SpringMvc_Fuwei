@@ -160,152 +160,156 @@ public class ProduceBillController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有创建或编辑生产对账单的权限",
 					null);
 		}
-		try {
-			List<ProducingOrder> producingOrderlist = producingOrderService
-					.getByFactoryNoBill(factoryId);
-			// 去掉生产单为数量为0的行
-			for (ProducingOrder temp : producingOrderlist) {
-				Iterator iterator = temp.getDetaillist().iterator();
-				while (iterator.hasNext()) {
-					ProducingOrderDetail item = (ProducingOrderDetail) iterator
-							.next();
-					if (item.getQuantity() == 0) {
-						iterator.remove();
-					}
-				}
-			}
-			List<GongxuProducingOrder> gongxuProducingOrderlist = gongxuProducingOrderService
-					.getByFactoryNoBill(factoryId);
-			// 去掉工序加工单为数量为0的行
-			for (GongxuProducingOrder temp : gongxuProducingOrderlist) {
-				Iterator iterator = temp.getDetaillist().iterator();
-				while (iterator.hasNext()) {
-					GongxuProducingOrderDetail item = (GongxuProducingOrderDetail) iterator
-							.next();
-					if (item.getQuantity() == 0) {
-						iterator.remove();
-					}
-				}
-			}
+		try {		
 			// 1.获取某工厂各个订单的实际生产数量
 			// Map<订单ID_工序ID_planOrderDetailId，实际入库数量>
 			Map<String, Integer> actual_inMap = halfCurrentStockService
 					.factory_actual_in(factoryId);
-
-			// 2.
-			List<ProduceBillDetail> resultlist = new ArrayList<ProduceBillDetail>();
-			for (ProducingOrder temp : producingOrderlist) {
-				ProduceBillDetail item = new ProduceBillDetail();
-				item.setCharge_employee(temp.getCharge_employee());
-				item.setCompany_productNumber(temp.getCompany_productNumber());
-				item.setCompanyId(temp.getCompanyId());
-				item.setGongxuId(SystemCache.producing_GONGXU.getId());
-				item.setName(temp.getName());
-				item.setOrderId(temp.getOrderId());
-				item.setOrderNumber(temp.getOrderNumber());
-				item.setProducingOrder_created_at(temp.getCreated_at());
-				item.setProducingOrderId(temp.getId());
-				item.setProducingOrderNumber(temp.getNumber());
-				item.setSampleId(temp.getSampleId());
-				List<ProduceBillDetail_Detail> itemdetaillist = new ArrayList<ProduceBillDetail_Detail>();
-				double total_amount = 0;
-				String key = temp.getOrderId() + "_"
-						+ SystemCache.producing_GONGXU.getId() + "_";
-				for (ProducingOrderDetail tempDetail : temp.getDetaillist()) {
-					ProduceBillDetail_Detail itemdetail = new ProduceBillDetail_Detail();
-					itemdetail.setColor(tempDetail.getColor());
-					itemdetail.setPlanOrderDetailId(tempDetail
-							.getPlanOrderDetailId());
-					itemdetail
-							.setProduce_weight(tempDetail.getProduce_weight());
-					itemdetail.setSize(tempDetail.getSize());
-					itemdetail.setWeight(tempDetail.getWeight());
-					itemdetail.setYarn(tempDetail.getYarn());
-
-					double price = tempDetail.getPrice();
-					itemdetail.setPrice(price);
-					itemdetail.setPlan_quantity(tempDetail.getQuantity());
-					int actual_in_quantity = 0;
-					if (actual_inMap.containsKey(key
-							+ itemdetail.getPlanOrderDetailId())) {
-						actual_in_quantity = actual_inMap.get(key
-								+ itemdetail.getPlanOrderDetailId());
-					}
-					// 设置明细-明细的金额
-					double amount = price * actual_in_quantity;
-					itemdetail.setAmount(amount);
-					
-					total_amount += amount;
-					itemdetail.setQuantity(actual_in_quantity);
-					itemdetaillist.add(itemdetail);
-				}
-				item.setAmount(total_amount);
-				item.setDeduct(0);
-				item.setPayable_amount(total_amount);
-				item.setDetaillist(itemdetaillist);
-				resultlist.add(item);
-			}
-
-			for (GongxuProducingOrder temp : gongxuProducingOrderlist) {
-				ProduceBillDetail item = new ProduceBillDetail();
-				item.setCharge_employee(temp.getCharge_employee());
-				item.setCompany_productNumber(temp.getCompany_productNumber());
-				item.setCompanyId(temp.getCompanyId());
-				item.setGongxuId(temp.getGongxuId());
-				item.setName(temp.getName());
-				item.setOrderId(temp.getOrderId());
-				item.setOrderNumber(temp.getOrderNumber());
-				item.setProducingOrder_created_at(temp.getCreated_at());
-				item.setProducingOrderId(temp.getId());
-				item.setProducingOrderNumber(temp.getNumber());
-				item.setSampleId(temp.getSampleId());
-				List<ProduceBillDetail_Detail> itemdetaillist = new ArrayList<ProduceBillDetail_Detail>();
-				double total_amount = 0;
-				String key = temp.getOrderId() + "_" + temp.getGongxuId() + "_";
-				for (GongxuProducingOrderDetail tempDetail : temp
-						.getDetaillist()) {
-					ProduceBillDetail_Detail itemdetail = new ProduceBillDetail_Detail();
-					itemdetail.setColor(tempDetail.getColor());
-					itemdetail.setPlanOrderDetailId(tempDetail
-							.getPlanOrderDetailId());
-					itemdetail
-							.setProduce_weight(tempDetail.getProduce_weight());
-					itemdetail.setSize(tempDetail.getSize());
-					itemdetail.setWeight(tempDetail.getWeight());
-					itemdetail.setYarn(tempDetail.getYarn());
-
-					double price = tempDetail.getPrice();
-					itemdetail.setPrice(price);
-					itemdetail.setPlan_quantity(tempDetail.getQuantity());
-					int actual_in_quantity = 0;
-					if (actual_inMap.containsKey(key
-							+ itemdetail.getPlanOrderDetailId())) {
-						actual_in_quantity = actual_inMap.get(key
-								+ itemdetail.getPlanOrderDetailId());
-					}
-					// 设置明细-明细的金额
-					double amount = price * actual_in_quantity;
-					//如果是工序加工单，由于单价是以打为单位，则应除以12
-					amount = NumberUtil.formateDouble(amount/12, 2);
-					
-					
-					total_amount += amount;
-					itemdetail.setQuantity(actual_in_quantity);
-					itemdetail.setAmount(amount);
-					itemdetaillist.add(itemdetail);
-				}
-				item.setAmount(total_amount);
-				item.setDeduct(0);
-				item.setPayable_amount(total_amount);
-				item.setDetaillist(itemdetaillist);
-				resultlist.add(item);
-			}
+			List<ProduceBillDetail> resultlist = getByFactoryNoBill(factoryId,actual_inMap);
 			request.setAttribute("resultlist", resultlist);
 			request.setAttribute("factoryId", factoryId);
 			return new ModelAndView("financial/producebill/add");
 		} catch (Exception e) {
 			throw e;
 		}
+	}
+	
+	public List<ProduceBillDetail> getByFactoryNoBill(int factoryId,Map<String, Integer> actual_inMap) throws Exception{
+		List<ProducingOrder> producingOrderlist = producingOrderService.getByFactoryNoBill(factoryId);
+		// 去掉生产单为数量为0的行
+		for (ProducingOrder temp : producingOrderlist) {
+			Iterator iterator = temp.getDetaillist().iterator();
+			while (iterator.hasNext()) {
+				ProducingOrderDetail item = (ProducingOrderDetail) iterator
+						.next();
+				if (item.getQuantity() == 0) {
+					iterator.remove();
+				}
+			}
+		}
+		List<GongxuProducingOrder> gongxuProducingOrderlist = gongxuProducingOrderService
+				.getByFactoryNoBill(factoryId);
+		// 去掉工序加工单为数量为0的行
+		for (GongxuProducingOrder temp : gongxuProducingOrderlist) {
+			Iterator iterator = temp.getDetaillist().iterator();
+			while (iterator.hasNext()) {
+				GongxuProducingOrderDetail item = (GongxuProducingOrderDetail) iterator
+						.next();
+				if (item.getQuantity() == 0) {
+					iterator.remove();
+				}
+			}
+		}
+		
+		// 2.
+		List<ProduceBillDetail> resultlist = new ArrayList<ProduceBillDetail>();
+		for (ProducingOrder temp : producingOrderlist) {
+			ProduceBillDetail item = new ProduceBillDetail();
+			item.setCharge_employee(temp.getCharge_employee());
+			item.setCompany_productNumber(temp.getCompany_productNumber());
+			item.setCompanyId(temp.getCompanyId());
+			item.setGongxuId(SystemCache.producing_GONGXU.getId());
+			item.setName(temp.getName());
+			item.setOrderId(temp.getOrderId());
+			item.setOrderNumber(temp.getOrderNumber());
+			item.setProducingOrder_created_at(temp.getCreated_at());
+			item.setProducingOrderId(temp.getId());
+			item.setProducingOrderNumber(temp.getNumber());
+			item.setSampleId(temp.getSampleId());
+			List<ProduceBillDetail_Detail> itemdetaillist = new ArrayList<ProduceBillDetail_Detail>();
+			double total_amount = 0;
+			String key = temp.getOrderId() + "_"
+					+ SystemCache.producing_GONGXU.getId() + "_";
+			for (ProducingOrderDetail tempDetail : temp.getDetaillist()) {
+				ProduceBillDetail_Detail itemdetail = new ProduceBillDetail_Detail();
+				itemdetail.setColor(tempDetail.getColor());
+				itemdetail.setPlanOrderDetailId(tempDetail
+						.getPlanOrderDetailId());
+				itemdetail
+						.setProduce_weight(tempDetail.getProduce_weight());
+				itemdetail.setSize(tempDetail.getSize());
+				itemdetail.setWeight(tempDetail.getWeight());
+				itemdetail.setYarn(tempDetail.getYarn());
+		
+				double price = tempDetail.getPrice();
+				itemdetail.setPrice(price);
+				itemdetail.setPlan_quantity(tempDetail.getQuantity());
+				int actual_in_quantity = 0;
+				if (actual_inMap.containsKey(key
+						+ itemdetail.getPlanOrderDetailId())) {
+					actual_in_quantity = actual_inMap.get(key
+							+ itemdetail.getPlanOrderDetailId());
+				}
+				// 设置明细-明细的金额
+				double amount = price * actual_in_quantity;
+				itemdetail.setAmount(amount);
+				
+				total_amount += amount;
+				itemdetail.setQuantity(actual_in_quantity);
+				itemdetaillist.add(itemdetail);
+			}
+			item.setAmount(total_amount);
+			item.setDeduct(0);
+			item.setPayable_amount(total_amount);
+			item.setDetaillist(itemdetaillist);
+			resultlist.add(item);
+		}
+		
+		for (GongxuProducingOrder temp : gongxuProducingOrderlist) {
+			ProduceBillDetail item = new ProduceBillDetail();
+			item.setCharge_employee(temp.getCharge_employee());
+			item.setCompany_productNumber(temp.getCompany_productNumber());
+			item.setCompanyId(temp.getCompanyId());
+			item.setGongxuId(temp.getGongxuId());
+			item.setName(temp.getName());
+			item.setOrderId(temp.getOrderId());
+			item.setOrderNumber(temp.getOrderNumber());
+			item.setProducingOrder_created_at(temp.getCreated_at());
+			item.setProducingOrderId(temp.getId());
+			item.setProducingOrderNumber(temp.getNumber());
+			item.setSampleId(temp.getSampleId());
+			List<ProduceBillDetail_Detail> itemdetaillist = new ArrayList<ProduceBillDetail_Detail>();
+			double total_amount = 0;
+			String key = temp.getOrderId() + "_" + temp.getGongxuId() + "_";
+			for (GongxuProducingOrderDetail tempDetail : temp
+					.getDetaillist()) {
+				ProduceBillDetail_Detail itemdetail = new ProduceBillDetail_Detail();
+				itemdetail.setColor(tempDetail.getColor());
+				itemdetail.setPlanOrderDetailId(tempDetail
+						.getPlanOrderDetailId());
+				itemdetail
+						.setProduce_weight(tempDetail.getProduce_weight());
+				itemdetail.setSize(tempDetail.getSize());
+				itemdetail.setWeight(tempDetail.getWeight());
+				itemdetail.setYarn(tempDetail.getYarn());
+		
+				double price = tempDetail.getPrice();
+				itemdetail.setPrice(price);
+				itemdetail.setPlan_quantity(tempDetail.getQuantity());
+				int actual_in_quantity = 0;
+				if (actual_inMap.containsKey(key
+						+ itemdetail.getPlanOrderDetailId())) {
+					actual_in_quantity = actual_inMap.get(key
+							+ itemdetail.getPlanOrderDetailId());
+				}
+				// 设置明细-明细的金额
+				double amount = price * actual_in_quantity;
+				//如果是工序加工单，由于单价是以打为单位，则应除以12
+				amount = NumberUtil.formateDouble(amount/12, 2);
+				
+				
+				total_amount += amount;
+				itemdetail.setQuantity(actual_in_quantity);
+				itemdetail.setAmount(amount);
+				itemdetaillist.add(itemdetail);
+			}
+			item.setAmount(total_amount);
+			item.setDeduct(0);
+			item.setPayable_amount(total_amount);
+			item.setDetaillist(itemdetaillist);
+			resultlist.add(item);
+		}
+		return resultlist;
 	}
 
 	// 添加或保存
@@ -354,6 +358,8 @@ public class ProduceBillController extends BaseController {
 						//如果是工序加工单，由于单价是以打为单位，则应除以12
 						if(detail.getGongxuId() != SystemCache.producing_GONGXU.getId()){
 							amount = NumberUtil.formateDouble(amount/12, 2);
+						}else{
+							amount = NumberUtil.formateDouble(amount, 2);
 						}
 						detail_detail.setAmount(amount);
 						detail_quantity += detail_detail.getQuantity();
@@ -364,9 +370,7 @@ public class ProduceBillController extends BaseController {
 					// 设置生产单的总金额（未减去扣款）
 					detail.setAmount(detail_amount);
 					// 设置生产单的应付金额
-					detail
-							.setPayable_amount(detail_amount
-									- detail.getDeduct());
+					detail.setPayable_amount(NumberUtil.formateDouble(detail_amount - detail.getDeduct(),2));
 
 					total_amount += detail_amount;
 					total_deduct += detail.getDeduct();
@@ -376,7 +380,7 @@ public class ProduceBillController extends BaseController {
 				produceBill.setQuantity(total_quantity);// 总数量
 				produceBill.setAmount(total_amount);// 总金额，未扣款
 				produceBill.setDeduct(total_deduct);// 总扣款
-				double amount_actual = total_amount - total_deduct;
+				double amount_actual = NumberUtil.formateDouble(total_amount - total_deduct,2);
 				double rate_deduct = NumberUtil.formateDouble(amount_actual * SystemSettings.local_tax_rate, 2) ;
 				produceBill.setRate_deduct(rate_deduct);// 地税扣款
 				produceBill.setPayable_amount(NumberUtil.formateDouble(amount_actual - rate_deduct,2));// 最终应付金额
@@ -437,6 +441,30 @@ public class ProduceBillController extends BaseController {
 		if (bill == null) {
 			throw new Exception("找不到ID为" + id + "的生产对账单");
 		}
+		
+
+		int factoryId = bill.getFactoryId();
+		// 1.获取该工厂各个订单的实际生产数量
+		// Map<订单ID_工序ID_planOrderDetailId，实际入库数量>
+		Map<String, Integer> actual_inMap = halfCurrentStockService
+				.factory_actual_in(factoryId);
+		//2.获取还未对账的单据
+		List<ProduceBillDetail> resultlist = getByFactoryNoBill(factoryId,actual_inMap);
+		
+		if(bill.getDetaillist()!=null){
+			for(ProduceBillDetail detail : bill.getDetaillist()){
+				String key = detail.getOrderId()+"_" + detail.getGongxuId()+"_";
+				for(ProduceBillDetail_Detail detail_detail : detail.getDetaillist()){
+					String temp_key = key + detail_detail.getPlanOrderDetailId();
+					if(actual_inMap.containsKey(temp_key)){
+						detail_detail.setActual_in_quantity(actual_inMap.get(temp_key));
+					}else{
+						detail_detail.setActual_in_quantity(0);
+					}
+				}
+			}
+		}
+		request.setAttribute("resultlist", resultlist);
 		request.setAttribute("bill", bill);
 		return new ModelAndView("financial/producebill/edit");
 	}
@@ -476,6 +504,8 @@ public class ProduceBillController extends BaseController {
 					//如果是工序加工单，由于单价是以打为单位，则应除以12
 					if(detail.getGongxuId() != SystemCache.producing_GONGXU.getId()){
 						amount = NumberUtil.formateDouble(amount/12, 2);
+					}else{
+						amount = NumberUtil.formateDouble(amount, 2);
 					}
 					detail_detail.setAmount(amount);
 					detail_quantity += detail_detail.getQuantity();
@@ -486,7 +516,7 @@ public class ProduceBillController extends BaseController {
 				// 设置生产单的总金额（未减去扣款）
 				detail.setAmount(detail_amount);
 				// 设置生产单的应付金额
-				detail.setPayable_amount(detail_amount- detail.getDeduct());
+				detail.setPayable_amount(NumberUtil.formateDouble(detail_amount- detail.getDeduct(),2));
 				total_amount += detail_amount;
 				total_deduct += detail.getDeduct();
 				total_quantity += detail_quantity;
@@ -494,7 +524,7 @@ public class ProduceBillController extends BaseController {
 			produceBill.setQuantity(total_quantity);// 总数量
 			produceBill.setAmount(total_amount);// 总金额，未扣款
 			produceBill.setDeduct(total_deduct);// 总扣款
-			double amount_actual = total_amount - total_deduct;
+			double amount_actual = NumberUtil.formateDouble(total_amount - total_deduct,2);
 			double rate_deduct = NumberUtil.formateDouble(amount_actual * SystemSettings.local_tax_rate, 2) ;
 			produceBill.setRate_deduct(rate_deduct);// 地税扣款
 			produceBill.setPayable_amount(NumberUtil.formateDouble(amount_actual - rate_deduct,2));// 最终应付金额

@@ -115,7 +115,7 @@
 
 											<thead>
 												<tr>
-													<th width="8%">
+													<th width="10%">
 														辅料类型
 													</th><th width="10%">
 														订单号
@@ -134,6 +134,8 @@
 														数量(个)
 													</th><th width="10%">
 														库位
+													</th><th width="15%">
+														备注
 													</th>
 
 												</tr>
@@ -152,6 +154,7 @@
 													<td><%=detail.getBatch()%></td>
 													<td><%=detail.getQuantity()%></td>
 													<td><%=SystemCache.getLocationNumber(detail.getLocationId())%></td>
+													<td><%=detail.getMemo()==null?"":detail.getMemo()%></td>
 												</tr>
 												<%
 													}
@@ -161,6 +164,8 @@
 												<tr class="tr">
 													<td class="">
 														&nbsp;
+													</td>
+													<td class="">
 													</td>
 													<td class="">
 													</td>

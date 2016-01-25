@@ -137,6 +137,17 @@
 												<span class="input-group-addon">年</span>
 											</div>
 										</div>
+										<br>
+										<div class="form-group salesgroup" style="margin-top: 3px;margin-bottom: 3px;">
+											<label class="col-sm-3 control-label">
+												备&nbsp;&nbsp;&nbsp;&nbsp;注
+											</label>
+
+											<div class="col-md-9" style="width:460px;">
+												<input type="text" name="memo" id="memo"
+													class="form-control" value="" />
+											</div>
+										</div>       
 										
 										</form>
 							

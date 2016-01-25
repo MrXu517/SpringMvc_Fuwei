@@ -2,6 +2,7 @@ package com.fuwei.entity.financial;
 
 import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
+import net.keepsoft.commons.annotation.Temporary;
 
 //生产单对账单明细的明细
 @Table("tb_producebilldetail_detail")
@@ -12,6 +13,8 @@ public class ProduceBillDetail_Detail {
 	private int produceBillId;//生产对账单ID，外键
 	private int produceBillDetailId;//生产对账单明细ID
 	private int plan_quantity;//计划生产数量
+	@Temporary
+	private int actual_in_quantity;//计划生产数量
 	private int quantity;//实际生产数量
 	
 	private String color;//颜色
@@ -21,6 +24,13 @@ public class ProduceBillDetail_Detail {
 	private String size;//尺寸
 	private double price;//单价
 	private double amount;//金额
+	
+	public int getActual_in_quantity() {
+		return actual_in_quantity;
+	}
+	public void setActual_in_quantity(int actual_in_quantity) {
+		this.actual_in_quantity = actual_in_quantity;
+	}
 	public int getId() {
 		return id;
 	}
