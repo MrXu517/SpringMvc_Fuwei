@@ -349,15 +349,16 @@
 							</li>
 							<%} %><%if(h_has_order_progress){ %>
 							<li>
-								<a href="half_store_in/order_progress">半成品生产进度</a>
-							</li>
-							<li>
 								<a href="store_in/order_progress">原材料生产进度</a>
 							</li>
 							<%} %>
 							<%if(has_halfstoreorder_workspace){ %>
 							<li>
 								<a href="workspace/half_workspace">半成品工作台</a>
+							</li>
+							<%} %><%if(h_has_order_progress){ %>
+							<li>
+								<a href="half_store_in/order_progress">半成品生产进度</a>
 							</li>
 							<%} %>
 							<%if(has_order_producing_unprice_list){ %>

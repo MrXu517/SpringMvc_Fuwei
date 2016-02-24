@@ -12,8 +12,9 @@ import com.fuwei.util.SerializeTool;
 public class MaterialCurrentStock {
 	@IdentityId
 	private int id;
-	private int orderId;	
+	private Integer orderId;	
 	private Integer store_order_id;
+	private Integer coloring_order_id;
 	private int total_stock_quantity;
 	
 	private String detail_json;
@@ -41,9 +42,22 @@ public class MaterialCurrentStock {
 	@Temporary
 	private String company_productNumber;//样品的公司货号
 	
+	@Temporary
+	private String number;
 	
 	
-
+	public String getNumber() {
+		return number;
+	}
+	public void setNumber(String number) {
+		this.number = number;
+	}
+	public Integer getColoring_order_id() {
+		return coloring_order_id;
+	}
+	public void setColoring_order_id(Integer coloring_order_id) {
+		this.coloring_order_id = coloring_order_id;
+	}
 	public Integer getStore_order_id() {
 		return store_order_id;
 	}
@@ -112,15 +126,14 @@ public class MaterialCurrentStock {
 	}
 
 
-	public int getOrderId() {
+
+
+	public Integer getOrderId() {
 		return orderId;
 	}
-
-
-	public void setOrderId(int orderId) {
+	public void setOrderId(Integer orderId) {
 		this.orderId = orderId;
 	}
-
 	public int getTotal_stock_quantity() {
 		return total_stock_quantity;
 	}

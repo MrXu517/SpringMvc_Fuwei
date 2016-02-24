@@ -21,10 +21,13 @@ import com.fuwei.commons.SystemCache;
 import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Employee;
 import com.fuwei.entity.Order;
+import com.fuwei.entity.ordergrid.ColoringOrder;
 import com.fuwei.entity.ordergrid.StoreOrder;
+import com.fuwei.entity.producesystem.MaterialCurrentStock;
 import com.fuwei.entity.producesystem.MaterialInOut;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.OrderService;
+import com.fuwei.service.ordergrid.ColoringOrderService;
 import com.fuwei.service.ordergrid.StoreOrderService;
 import com.fuwei.service.producesystem.MaterialCurrentStockService;
 import com.fuwei.service.producesystem.StoreInOutService;
@@ -43,8 +46,11 @@ public class MaterialCurrentStockController extends BaseController {
 	@Autowired
 	OrderService orderService;
 	@Autowired
-	StoreOrderService storeOrderService;
+	StoreOrderService storeOrderService;	
+	@Autowired
+	ColoringOrderService coloringOrderService;
 	
+	//大货纱原材料库存
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView index(Integer page, Integer companyId, Integer charge_employee,
@@ -89,6 +95,53 @@ public class MaterialCurrentStockController extends BaseController {
 		request.setAttribute("orderNumber", orderNumber);
 		request.setAttribute("pager", pager);
 		return new ModelAndView("store_in_out/current_stock");
+	}
+	
+	//样纱原材料库存
+	@RequestMapping(value = "/index_coloring", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView index_coloring(Integer page, Integer companyId, Integer charge_employee,
+			String coloringOrderNumber, Boolean not_zero,String sortJSON, HttpSession session,
+			HttpServletRequest request) throws Exception {
+
+		String lcode = "material_current_stock/index";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有查看原材料库存列表的权限", null);
+		}
+
+		Pager pager = new Pager();
+		if (page != null && page > 0) {
+			pager.setPageNo(page);
+		}
+
+		List<Sort> sortList = null;
+		if (sortJSON != null) {
+			sortList = SerializeTool.deserializeList(sortJSON, Sort.class);
+		}
+		if (sortList == null) {
+			sortList = new ArrayList<Sort>();
+		}
+		Sort sort2 = new Sort();
+		sort2.setDirection("desc");
+		sort2.setProperty("id");
+		sortList.add(sort2);
+
+		pager = materialCurrentStockService.getList_coloring(pager, companyId, charge_employee, coloringOrderNumber,not_zero, sortList);
+		
+		request.setAttribute("companyId", companyId);
+		request.setAttribute("not_zero", not_zero);
+		request.setAttribute("charge_employee", charge_employee);
+		List<Employee> employeelist = new ArrayList<Employee>();
+		for (Employee temp : SystemCache.employeelist) {
+			if (temp.getIs_charge_employee()) {
+				employeelist.add(temp);
+			}
+		}
+		request.setAttribute("employeelist", employeelist);
+		request.setAttribute("coloringOrderNumber", coloringOrderNumber);
+		request.setAttribute("pager", pager);
+		return new ModelAndView("store_in_out/current_stock_coloring");
 	}
 	
 	@RequestMapping(value = "/report", method = RequestMethod.GET)
@@ -165,7 +218,40 @@ public class MaterialCurrentStockController extends BaseController {
 		request.setAttribute("order", order);
 		request.setAttribute("storeOrder", storeOrder);
 		request.setAttribute("detailInOutlist", detailInOutlist);
+		MaterialCurrentStock materialCurrentStock = materialCurrentStockService.get(orderId);
+		request.setAttribute("materialCurrentStock", materialCurrentStock);
+		
 		return new ModelAndView("store_in_out/order_in_out");	
+	}
+	
+	@RequestMapping(value = "/in_out_coloring/{coloringOrderId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView in_out_coloring(@PathVariable Integer coloringOrderId, HttpSession session,
+			HttpServletRequest request) throws Exception {
+		if (coloringOrderId == null) {
+			throw new Exception("缺少染色单ID");
+		}
+		String lcode = "material_current_stock/in_out";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		String lcode2 = "order/progress";
+		Boolean hasAuthority2 = SystemCache.hasAuthority(session, lcode2);
+		if (!hasAuthority && !hasAuthority2) {
+			throw new PermissionDeniedDataAccessException("没有查看订单原材料出入库记录的权限",
+					null);
+		}
+		ColoringOrder coloringOrder = coloringOrderService.get(coloringOrderId);
+		if(coloringOrder == null){
+			throw new Exception("找不到ID为" + coloringOrderId + "的染色单");
+		}
+		List<MaterialInOut> detailInOutlist = materialCurrentStockService.inOutdetail_coloring(coloringOrderId);
+		if (detailInOutlist == null) {
+			throw new Exception("找不到染色单ID为" + coloringOrderId + "的原材料出入库、退货记录");
+		}
+		MaterialCurrentStock materialCurrentStock = materialCurrentStockService.getByColoringOrder(coloringOrderId);
+		request.setAttribute("materialCurrentStock", materialCurrentStock);
+		request.setAttribute("coloringOrder", coloringOrder);
+		request.setAttribute("detailInOutlist", detailInOutlist);
+		return new ModelAndView("store_in_out/order_in_out_coloring");	
 	}
 	
 	@RequestMapping(value = "/in_out2/{orderId}", method = RequestMethod.GET)

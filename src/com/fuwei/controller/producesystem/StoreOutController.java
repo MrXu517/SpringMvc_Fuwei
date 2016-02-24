@@ -30,8 +30,11 @@ import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Employee;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
+import com.fuwei.entity.ordergrid.ColoringOrder;
+import com.fuwei.entity.ordergrid.ColoringOrderDetail;
 import com.fuwei.entity.ordergrid.StoreOrder;
 import com.fuwei.entity.ordergrid.StoreOrderDetail;
+import com.fuwei.entity.producesystem.MaterialCurrentStock;
 import com.fuwei.entity.producesystem.StoreInOut;
 import com.fuwei.entity.producesystem.StoreInOutDetail;
 import com.fuwei.entity.producesystem.StoreReturn;
@@ -39,7 +42,9 @@ import com.fuwei.entity.producesystem.StoreReturnDetail;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.MessageService;
 import com.fuwei.service.OrderService;
+import com.fuwei.service.ordergrid.ColoringOrderService;
 import com.fuwei.service.ordergrid.StoreOrderService;
+import com.fuwei.service.producesystem.MaterialCurrentStockService;
 import com.fuwei.service.producesystem.StoreInOutService;
 import com.fuwei.service.producesystem.StoreReturnService;
 import com.fuwei.util.DateTool;
@@ -61,6 +66,10 @@ public class StoreOutController extends BaseController {
 	MessageService messageService;
 	@Autowired
 	StoreReturnService storeReturnService;
+	@Autowired
+	ColoringOrderService coloringOrderService;
+	@Autowired
+	MaterialCurrentStockService materialCurrentStockService;
 	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
@@ -135,7 +144,12 @@ public class StoreOutController extends BaseController {
 			throw new Exception("找不到ID为" + id + "的原材料出库单");
 		}
 		request.setAttribute("storeInOut", storeInOut);
-		return new ModelAndView("store_in_out/out_detail");
+		if(storeInOut.getStore_order_id()==null){
+			return new ModelAndView("store_in_out/out_detail_coloring");
+		}else{
+			return new ModelAndView("store_in_out/out_detail");
+		}
+		
 	}
 
 	// 添加或保存
@@ -412,6 +426,11 @@ public class StoreOutController extends BaseController {
 			if(object == null){
 				throw new Exception("找不到ID为" + id + "的原材料出库单");
 			}
+			//若是样纱，则跳转method
+			if(object.getStore_order_id()==null && object.getColoring_order_id()!=null){
+				return put_coloring(object,session,request,response);
+			}
+			
 			if(factoryId == null){
 				factoryId = object.getFactoryId();
 			}
@@ -516,7 +535,11 @@ public class StoreOutController extends BaseController {
 		storeInOut.setHas_print(true);
 		storeInOutService.updatePrint(storeInOut);
 		request.setAttribute("storeInOut", storeInOut);
-		return new ModelAndView("store_in_out/out_print");
+		if(storeInOut.getStore_order_id()!=null){
+			return new ModelAndView("store_in_out/out_print");
+		}else{
+			return new ModelAndView("store_in_out/out_print_coloring");
+		}
 	}
 	
 	@RequestMapping(value = "/print_scan/{id}", method = RequestMethod.GET)
@@ -531,7 +554,11 @@ public class StoreOutController extends BaseController {
 			throw new Exception("找不到ID为" + id + "的原材料出库单");
 		}
 		request.setAttribute("storeInOut", storeInOut);
-		return new ModelAndView("store_in_out/out_print_scan");
+		if(storeInOut.getStore_order_id()!=null){
+			return new ModelAndView("store_in_out/out_print_scan");
+		}else{
+			return new ModelAndView("store_in_out/out_print_scan_coloring");
+		}
 	}
 	
 	@RequestMapping(value = "/print_scan_check", method = RequestMethod.POST)
@@ -567,9 +594,13 @@ public class StoreOutController extends BaseController {
 			throw new Exception("找不到ID为" + detailId + "的原材料明细");
 		}
 		
-		//判断订单号是否一致
-		if((int)storeIn.getOrderId() != (int)storeOut.getOrderId()){
-			throw new Exception("当前出库单 的订单号是 ：" +  storeOut.getOrderNumber() + " , 而这袋纱线属于订单：" + storeIn.getOrderNumber());
+		//若是大货纱，则判断订单号是否一致
+		Boolean isSampleYarn = true;
+		if(storeIn.getStore_order_id()!=null){
+			if((int)storeIn.getOrderId() != (int)storeOut.getOrderId()){
+				throw new Exception("当前出库单 的订单号是 ：" +  storeOut.getOrderNumber() + " , 而这袋纱线属于订单：" + storeIn.getOrderNumber());
+			}
+			isSampleYarn = false;
 		}
 		
 		//判断色号、材料、缸号是否一致
@@ -586,8 +617,14 @@ public class StoreOutController extends BaseController {
 		}else{//检测成功
 			JSONObject jsObject = new JSONObject();
 			jsObject.put("storeInId_detailId",storeInId_detailId);
-			jsObject.put("orderNumber",storeIn.getOrderNumber());
-			jsObject.put("orderId",storeIn.getOrderId());
+			if(isSampleYarn){
+				jsObject.put("coloring_order_id",storeIn.getColoring_order_id());
+				jsObject.put("coloring_order_number",storeIn.getColoring_order_number());
+			}else{
+				jsObject.put("orderNumber",storeIn.getOrderNumber());
+				jsObject.put("orderId",storeIn.getOrderId());
+			}
+			
 			jsObject.put("color",check_detail.getColor());
 			jsObject.put("material",check_detail.getMaterial());
 			jsObject.put("material_name",SystemCache.getMaterialName(check_detail.getMaterial()));
@@ -618,11 +655,23 @@ public class StoreOutController extends BaseController {
 	
 		for(Map<String,Object> check_detail : detaillist){
 			String storeInId_detailId = (String)check_detail.get("storeInId_detailId");
-			Integer orderId = (Integer) check_detail.get("orderId");
-			//判断订单号是否一致
-			if(orderId!=null && (int)orderId != (int)storeOut.getOrderId()){
-				throw new Exception("入库ID_明细ID = " + storeInId_detailId +"的订单号与出库单不一致");
+			//若是大货纱，则判断订单号是否一致
+			if(storeOut.getStore_order_id()!=null){
+				Integer orderId = (Integer) check_detail.get("orderId");
+				//判断订单号是否一致
+				if(orderId!=null && (int)orderId != (int)storeOut.getOrderId()){
+					throw new Exception("入库ID_明细ID = " + storeInId_detailId +"的订单号与出库单不一致");
+				}
+			}else{//若是样纱，则判断染色单号是否一致
+				Integer coloring_order_id = (Integer) check_detail.get("coloring_order_id");
+				//判断订单号是否一致
+				if(coloring_order_id!=null && (int)coloring_order_id != (int)storeOut.getColoring_order_id()){
+					throw new Exception("入库ID_明细ID = " + storeInId_detailId +"的染色单号与出库单不一致");
+				}
 			}
+			
+			
+			
 			//判断色号、材料、缸号是否一致
 			String color = String.valueOf(check_detail.get("color"));
 			Integer material = (Integer)check_detail.get("material");
@@ -832,5 +881,349 @@ public class StoreOutController extends BaseController {
 			}
 		}
 		
+	}
+	//获取各个缸号的库存量  和  某工厂未出库量  
+	public void getOutStoreQuantity(List<Map<String,Object>> lot_not_outlist, ColoringOrder coloringOrder , List<StoreInOut> storeInList ,List<StoreReturn> storeReturnList, List<StoreInOut> storeOutList) throws Exception{	
+		//根据 【色号】 和 【材料】  统计总数量 , key = material + : + color
+		HashMap<String, Double> totalmap = new HashMap<String, Double>();
+		for (ColoringOrderDetail coloringOrderDetail : coloringOrder.getDetaillist()) {
+			String key = coloringOrderDetail.getMaterial() + ":"+ coloringOrderDetail.getColor().trim(); 
+			if(totalmap.containsKey(key)){
+				double temp_total_quantity = totalmap.get(key);
+				totalmap.put(key, temp_total_quantity + coloringOrderDetail.getQuantity());
+			}else{
+				totalmap.put(key, coloringOrderDetail.getQuantity());
+			}
+		}
+			
+		//根据  【色号】 和 【材料】 和 【缸号】  统计入库总数量 , key = material + : + color + : + lot_no
+		HashMap<String, HashMap<String, Double>> total_inmap = new HashMap<String, HashMap<String, Double>>();
+		for (StoreInOut storeIn : storeInList) {
+			for (StoreInOutDetail temp : storeIn.getDetaillist()) {
+				String key = temp.getMaterial() + ":"+ temp.getColor().trim(); 
+				if(!totalmap.containsKey(key)){//色号、材料不一致的不需统计
+					continue;
+				}
+				if(total_inmap.containsKey(key)){
+					HashMap<String, Double> lotno_quantity = total_inmap.get(key);
+					String key_lotno = temp.getLot_no();
+					if(lotno_quantity.containsKey(key_lotno)){
+						double temp_total_quantity = lotno_quantity.get(key_lotno);
+						lotno_quantity.put(key_lotno, temp_total_quantity + temp.getQuantity());
+						total_inmap.put(key, lotno_quantity);
+					}else{
+						lotno_quantity.put(temp.getLot_no(), temp.getQuantity());
+						total_inmap.put(key, lotno_quantity);
+					}
+				}else{
+					HashMap<String, Double> lotno_quantity = new HashMap<String, Double>();
+					lotno_quantity.put(temp.getLot_no(), temp.getQuantity());
+					total_inmap.put(key, lotno_quantity);
+				}
+			}
+		}
+		
+		
+		//根据 【色号】 和 【材料】 和 【缸号】 统计已出库 数量+退货数量
+		HashMap<String, HashMap<String, Double>> outmap = new HashMap<String, HashMap<String, Double>>();
+		for (StoreInOut storeOut : storeOutList) {
+			for (StoreInOutDetail temp : storeOut.getDetaillist()) {
+				String key = temp.getMaterial() + ":"+ temp.getColor().trim(); 
+				if(outmap.containsKey(key)){
+					HashMap<String, Double> lotno_quantity = outmap.get(key);
+					String key_lotno = temp.getLot_no();
+					if(lotno_quantity.containsKey(key_lotno)){
+						double temp_total_quantity = lotno_quantity.get(key_lotno);
+						lotno_quantity.put(key_lotno, temp_total_quantity + temp.getQuantity());
+						outmap.put(key, lotno_quantity);
+					}else{
+						lotno_quantity.put(temp.getLot_no(), temp.getQuantity());
+						outmap.put(key, lotno_quantity);
+					}
+				}else{
+					HashMap<String, Double> lotno_quantity = new HashMap<String, Double>();
+					lotno_quantity.put(temp.getLot_no(), temp.getQuantity());
+					outmap.put(key, lotno_quantity);
+				}
+			}
+		}
+		for (StoreReturn storeReturn : storeReturnList) {
+			for (StoreReturnDetail temp : storeReturn.getDetaillist()) {
+				String key = temp.getMaterial() + ":"+ temp.getColor().trim(); 
+				if(outmap.containsKey(key)){
+					HashMap<String, Double> lotno_quantity = outmap.get(key);
+					String key_lotno = temp.getLot_no();
+					if(lotno_quantity.containsKey(key_lotno)){
+						double temp_total_quantity = lotno_quantity.get(key_lotno);
+						lotno_quantity.put(key_lotno, temp_total_quantity + temp.getQuantity());
+						outmap.put(key, lotno_quantity);
+					}else{
+						lotno_quantity.put(temp.getLot_no(), temp.getQuantity());
+						outmap.put(key, lotno_quantity);
+					}
+				}else{
+					HashMap<String, Double> lotno_quantity = new HashMap<String, Double>();
+					lotno_quantity.put(temp.getLot_no(), temp.getQuantity());
+					outmap.put(key, lotno_quantity);
+				}
+			}
+		}
+		
+		//获取 【色号】、【材料】、【缸号】未出库列表		
+		for(String key : total_inmap.keySet()){
+			//存色号、材料 、总数量
+			int indexOf = key.indexOf(":");
+			if(indexOf <= -1){
+				throw new Exception("分割色号与材料出错");
+			}
+			Integer material = Integer.parseInt(key.substring(0,indexOf));
+			String color = key.substring(indexOf+1);
+			
+			HashMap<String, Double> lot_outquantityMap = total_inmap.get(key);
+			for(String lot_no : lot_outquantityMap.keySet()){
+				Double total_quantity = lot_outquantityMap.get(lot_no);//获取已入库数量
+				double out_quantity = 0 ;
+				if(outmap.containsKey(key)){
+					if(outmap.get(key).containsKey(lot_no)){
+						out_quantity = outmap.get(key).get(lot_no);
+					}
+				}
+				double not_out_quantity = total_quantity - out_quantity;
+				
+				HashMap<String, Object> itemMap = new HashMap<String, Object>();
+				itemMap.put("material", material);
+				itemMap.put("color", color);
+				itemMap.put("lot_no", lot_no);
+				itemMap.put("total_quantity", total_quantity);
+				itemMap.put("out_quantity", out_quantity);
+				itemMap.put("not_out_quantity", not_out_quantity);
+				
+				lot_not_outlist.add(itemMap);
+			}
+		}
+		
+	}
+	
+	/*样纱出库*/
+	// 添加或保存
+	@RequestMapping(value = "/add_coloring", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView addbyorder_coloring(String coloringOrderNumber ,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		if(coloringOrderNumber == null || coloringOrderNumber.equals("")){
+			throw new Exception("染色单号不能为空");
+		}
+		ColoringOrder coloringOrder = coloringOrderService.getByNumber(coloringOrderNumber);
+		if(coloringOrder == null){
+			throw new Exception("找不到单号为" + coloringOrder + "的染色单");
+		}
+		if(coloringOrder.getOrderId() != null){
+			throw new Exception("大货纱线请扫描原材料仓库单出库");
+		}
+		return addbyorder_coloring(coloringOrder.getId(), session, request, response);
+	}
+	//样纱出库
+	@RequestMapping(value = "/{coloringOrderId}/add", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView addbyorder_coloring(@PathVariable Integer coloringOrderId ,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		if (coloringOrderId == null) {
+			throw new Exception("染色单ID不能为空");
+		}
+
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "store_in_out/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有创建或编辑原材料出库单的权限",
+					null);
+		}
+		try {
+			ColoringOrder coloringOrder = coloringOrderService.get(coloringOrderId);
+			if(coloringOrder == null){
+				throw new Exception("找不到单号为" + coloringOrder + "的染色单");
+			}
+			if (coloringOrder.getDetaillist() == null
+					|| coloringOrder.getDetaillist().size() <= 0) {
+				throw new Exception(
+						"染色单缺少材料列表，请先修改染色单的材料列表 ", null);
+			}
+			request.setAttribute("coloringOrder", coloringOrder);
+			
+			List<Map<String,Object>> lot_not_outlist = new ArrayList<Map<String,Object>>();
+			//获取已开的入库单
+			List<StoreInOut> storeInList = storeInOutService.getByColoringOrder(coloringOrderId,true);
+			//获取已开的出库单
+			List<StoreInOut> storeOutList = storeInOutService.getByColoringOrder(coloringOrderId,false);
+//			//获取已开的退货单
+//			List<StoreReturn> storeReturnList = storeReturnService.getByColoringOrder(coloringOrderId);
+			List<StoreReturn> storeReturnList = new ArrayList<StoreReturn>();//2016-2-23暂时没有样纱退货的功能
+			getOutStoreQuantity(lot_not_outlist,coloringOrder,storeInList,storeReturnList,storeOutList);
+			request.setAttribute("lot_not_outlist", lot_not_outlist);
+			return new ModelAndView("store_in_out/add_out_coloring");
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	//样纱出库
+	// 添加或保存
+	@RequestMapping(value = "/add_coloring", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> addbyorder_coloring(StoreInOut storeInOut,
+			String details, HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "store_in_out/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有创建或编辑原材料出库单的权限",
+					null);
+		}
+		try {
+			/* 判断有些数据不能为空 */
+			Integer coloring_order_id = storeInOut.getColoring_order_id();
+			if (coloring_order_id == null) {
+				throw new Exception("染色单ID不能为空");
+			}
+			if (storeInOut.getDate() == null) {
+				throw new Exception("出库日期不能为空", null);
+			}
+			ColoringOrder coloringOrder = coloringOrderService.get(coloring_order_id);
+			if (coloringOrder == null) {
+				throw new Exception(
+						"该染色单不存在或已被删除", null);
+			}
+			if(coloringOrder.getOrderId() != null){
+				throw new Exception("大货纱线请扫描原材料仓库单入库");
+			}
+			if (coloringOrder.getDetaillist() == null
+					|| coloringOrder.getDetaillist().size() <= 0) {
+				throw new Exception(
+						"染色单缺少材料列表，请先修改染色单的材料列表 ", null);
+			}
+			/* 判断有些数据不能为空 */
+
+			if (storeInOut.getId() == null) {// 添加原材料入库单
+				
+
+				storeInOut.setCreated_at(DateTool.now());// 设置创建时间
+				storeInOut.setUpdated_at(DateTool.now());// 设置更新时间
+				storeInOut.setCreated_user(user.getId());// 设置创建人
+
+				// 以下是coloringOrder的属性
+				storeInOut.setColoring_order_number(coloringOrder.getNumber());
+				storeInOut.setName(coloringOrder.getName());
+				storeInOut.setCompanyId(coloringOrder.getCompanyId());
+				storeInOut.setCustomerId(coloringOrder.getCustomerId());
+				storeInOut.setCharge_employee(coloringOrder.getCharge_employee());
+				storeInOut.setCompany_productNumber(coloringOrder.getCompany_productNumber());
+
+				List<StoreInOutDetail> detaillist = SerializeTool
+						.deserializeList(details, StoreInOutDetail.class);
+				
+				//判断是否有数量为0的明细项
+				Iterator<StoreInOutDetail> iter = detaillist.iterator();  
+				while(iter.hasNext()){  
+					StoreInOutDetail detail = iter.next();  
+				    if(detail.getQuantity() == 0){  
+				        iter.remove();  
+				    }  
+				}  
+				if(detaillist.size() <=0){
+					throw new Exception("本次出库数量均为0，无法创建出库单，请至少出库一种材料");
+				}
+				//判断是否有数量为0的明细项
+				
+				storeInOut.setDetaillist(detaillist);
+
+				storeInOut.setIn_out(false);
+				
+				/*判断出库量总和是否大于染色单计划总量*/
+
+				/*判断出库量总和是否大于染色单计划总量*/
+				
+				//自动判断出库量总和是否大于库存量
+				int tableOrderId = storeInOutService.add(storeInOut);
+				return this.returnSuccess("id", tableOrderId);
+			} else {// 编辑
+				storeInOut.setUpdated_at(DateTool.now());
+				List<StoreInOutDetail> detaillist = SerializeTool
+						.deserializeList(details, StoreInOutDetail.class);
+				//判断是否有数量为0的明细项
+				Iterator<StoreInOutDetail> iter = detaillist.iterator();  
+				while(iter.hasNext()){  
+					StoreInOutDetail detail = iter.next();  
+				    if(detail.getQuantity() == 0){  
+				        iter.remove();  
+				    }  
+				}  
+				if(detaillist.size() <=0){
+					throw new Exception("本次出库数量均为0，无法创建出库单，请至少出库一种材料");
+				}
+				//判断是否有数量为0的明细项
+				storeInOut.setDetaillist(detaillist);
+				storeInOut.setIn_out(false);
+				
+				/*判断出库量总和是否大于染色单计划总量*/
+
+				/*判断出库量总和是否大于染色单计划总量*/
+				
+				int tableOrderId = storeInOutService.update(storeInOut);
+				return this.returnSuccess("id", tableOrderId);
+			}
+
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+
+	//样纱出库编辑
+	public ModelAndView put_coloring(StoreInOut object,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		try {
+			if(object == null){
+				throw new Exception("找不到该原材料出库单");
+			}
+			//若是样纱，则跳转method
+			if(object.getStore_order_id()!=null){
+				throw new Exception("大货纱出库，不可进行样纱出库");
+			}
+			request.setAttribute("storeInOut", object);
+			int coloringOrderId = object.getColoring_order_id();
+			ColoringOrder coloringOrder = coloringOrderService.get(coloringOrderId);
+			request.setAttribute("coloringOrder", coloringOrder);
+			
+			List<Map<String,Object>> lot_not_outlist = new ArrayList<Map<String,Object>>();
+			//获取已开的入库单
+			List<StoreInOut> storeInList = storeInOutService.getByColoringOrder(coloringOrderId,true);
+			//获取已开的出库单
+			List<StoreInOut> storeOutList = storeInOutService.getByColoringOrder(coloringOrderId,false);
+//			//获取已开的退货单
+//			List<StoreReturn> storeReturnList = storeReturnService.getByColoringOrder(coloringOrderId);
+			List<StoreReturn> storeReturnList = new ArrayList<StoreReturn>();//2016-2-23暂时没有样纱退货的功能
+			getOutStoreQuantity(lot_not_outlist,coloringOrder,storeInList,storeReturnList,storeOutList);
+			
+			
+			List<Map<String,Object>> lot_outlist = new ArrayList<Map<String,Object>>();
+			for(Map<String,Object> not_outMap : lot_not_outlist){
+				not_outMap.put("quantity",0.0);
+				for(StoreInOutDetail detail : object.getDetaillist()){
+					if(detail.getColor().trim().equals(not_outMap.get("color")) && detail.getMaterial() == (Integer)not_outMap.get("material") && detail.getLot_no().trim().equals(not_outMap.get("lot_no"))){
+						not_outMap.put("quantity",detail.getQuantity());
+					}
+				}
+				lot_outlist.add(not_outMap);
+			}
+			
+			request.setAttribute("lot_outlist", lot_outlist);
+			return new ModelAndView("store_in_out/edit_out_coloring");
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 }

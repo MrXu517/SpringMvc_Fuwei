@@ -60,7 +60,7 @@
 							<a href="store_out/detail/<%=storeInOut.getId() %>">原材料出库单 -- 详情</a>
 						</li>
 						<li class="active">
-							出库扫描
+							样纱出库扫描
 						</li>
 					</ul>
 				</div>
@@ -101,7 +101,7 @@
 														入库ID_明细ID
 													</th>
 													<th>
-														订单号/染色单号
+														染色单号
 													</th>
 													<th>
 														色号
@@ -125,6 +125,7 @@
 										<caption id="tablename">
 											桐庐富伟针织厂原材料出库单
 											<div table_id="<%=storeInOut.getNumber() %>" class="id_barcode"></div>
+											<div style="text-align: center;font-size: 16px;">(样纱)</div>
 										</caption>
 									</table>
 
@@ -132,15 +133,7 @@
 										<tbody>
 											<tr>
 												<td>
-
-													领取单位：
-													<span><%=storeInOut == null ? ""
-						: (SystemCache.getFactoryName(storeInOut
-								.getFactoryId()))%></span>
-
-												</td>
-												<td>
-													业务员：
+													业务员/样纱领货人：
 													<span><%=storeInOut == null ? ""
 						: (SystemCache.getEmployeeName((storeInOut
 								.getCharge_employee())))%></span>
@@ -163,7 +156,7 @@
 													<table>
 														<tr>
 															<td class="center" width="10%">
-																订单号
+																染色单号
 															</td>
 															<td class="center" width="15%">
 																公司
@@ -180,7 +173,7 @@
 														</tr>
 														<tr>
 															<td class="center">
-																<span><%=storeInOut.getOrderNumber()%></span>
+																<span><%=storeInOut.getColoring_order_number()%></span>
 															</td>
 															<td class="center">
 																<span><%=SystemCache.getCompanyShortName(storeInOut
@@ -404,7 +397,7 @@
 							width :'15%'
 						},
 						{
-							name :'orderNumber',
+							name :'coloring_order_number',
 							colname :'订单号/染色单号',
 							width :'15%'
 						},{

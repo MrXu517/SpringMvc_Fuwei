@@ -10,9 +10,10 @@
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	//原材料入库单
+	//原材料出库单
 	StoreInOut storeInOut = (StoreInOut) request.getAttribute("storeInOut");
 	List<StoreInOutDetail> detaillist = storeInOut == null ? new ArrayList<StoreInOutDetail>() :storeInOut.getDetaillist();
+
 	//权限
 	Boolean has_delete = SystemCache.hasAuthority(session,"store_in_out/delete");
 	Boolean has_print = SystemCache.hasAuthority(session,"store_in_out/print");
@@ -22,7 +23,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>原材料入库单 -- 桐庐富伟针织厂</title>
+		<title>原材料出库单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -66,7 +67,7 @@
 							<a href="workspace/material_workspace">原材料工作台</a>
 						</li>
 						<li class="active">
-							原材料入库单 --- 详情
+							原材料出库单 --- 详情
 						</li>
 					</ul>
 				</div>
@@ -76,18 +77,18 @@
 				<div class="row">
 					<div class="col-md-12 tablewidget">
 						<%if(has_print){ %>
-						<a target="_blank" href="store_in/print/<%=storeInOut.getId() %>" type="button" class="btn btn-success">打印</a>
-						<a target="_blank" href="store_in/print/<%=storeInOut.getId() %>/tag" type="button" class="btn btn-success">打印纱线标签</a>
+						<a target="_blank" href="store_out/print_scan/<%=storeInOut.getId() %>" type="button" class="btn btn-success">出库打印</a>
 						<%} %>
 						<%if(has_edit){ %>
-						<a href="store_in/put/<%=storeInOut.getId() %>" type="button" class="btn btn-primary">编辑</a>					
+						<a href="store_out/put/<%=storeInOut.getId() %>" type="button" class="btn btn-primary">编辑</a>
 						<%} %>
 						<%if(has_delete){ %>
 						<button data-cid="<%=storeInOut.getId() %>" type="button" class="btn btn-danger" id="deleteBtn">删除</button>
 						<%} %>
-						<table class="table noborder">
-							<caption id="tablename">
-								桐庐富伟针织厂原材料入库单<div table_id="<%=storeInOut.getNumber() %>" class="id_barcode"></div>
+						<table class="table noborder" style="margin-bottom:0;">
+							<caption id="tablename" style="margin-bottom:0;">
+								桐庐富伟针织厂原材料出库单<div table_id="<%=storeInOut.getNumber() %>" class="id_barcode"></div>
+								<div style="text-align: center;font-size: 16px;">(样纱)</div>
 							</caption>
 						</table>
 
@@ -95,21 +96,13 @@
 							<tbody>
 								<tr>
 									<td>
-
-										染色单位：
-										<span><%=storeInOut == null ? ""
-						: (SystemCache.getFactoryName(storeInOut
-								.getFactoryId()))%></span>
-
-									</td>
-									<td>
-										业务员：
+										业务员/样纱领货人：
 										<span><%=storeInOut == null ? ""
 						: (SystemCache.getEmployeeName((storeInOut
 								.getCharge_employee())))%></span>
 									</td>
 									<td>
-										入库时间：
+										出库时间：
 										<span><%=storeInOut == null ? ""
 						: (DateTool.formatDateYMD(storeInOut.getDate()))%></span>
 									</td>
@@ -124,21 +117,13 @@
 								<tr>
 									<td colspan="4">
 										<table>
-											<tbody>
-																<tr>
-																	<td rowspan="4" width="30%">
-																		<a href="/<%=storeInOut.getImg()%>" class="thumbnail"
-																			target="_blank"> <img id="previewImg"
-																				alt="200 x 100%" src="/<%=storeInOut.getImg_s()%>">
-																		</a>
-																	</td>
-																</tr>
+												<tbody>
 																<tr>
 																	<td style="vertical-align: top;">
 																		<table>
 																			<tr>
 																				<th class="center" width="10%">
-																					订单号
+																					样纱染色单号
 																				</th>
 																				<th class="center" width="10%">
 																					公司
@@ -154,11 +139,8 @@
 																				</th>
 																			</tr>
 																			<tr>
-																				<td class="center"><%if(storeInOut.getOrderId()==null){ %>
-																					<span class="label label-danger">样纱<%=storeInOut.getColoring_order_number()%></span>
-																					<%}else{ %>
-																					<%=storeInOut.getOrderNumber()%>
-																					<%} %>
+																				<td class="center"><%=storeInOut.getColoring_order_number()%>
+
 																				</td>
 																				<td class="center"><%=SystemCache
 							.getCompanyShortName(storeInOut.getCompanyId())%>
@@ -204,12 +186,10 @@
 														材料
 													</td>
 													<td width="15%">
-														入库数量(kg)
+														出库数量(kg)
 													</td>
 													<td width="15%">
 														缸号
-													</td><td width="15%">
-														包数
 													</td>
 
 												</tr>
@@ -226,7 +206,6 @@
 													<td class="quantity"><%=detail.getQuantity()%>
 													</td>
 													<td class="lot_no"><%=detail.getLot_no()%>
-													</td><td class="packages"><%=detail.getPackages()%>
 													</td>
 												</tr>
 
@@ -242,8 +221,6 @@
 													<td class="quantity">
 													</td>
 													<td class="lot_no">
-													</td>
-													<td class="packages">
 													</td>
 												</tr>
 												<%
@@ -304,20 +281,20 @@
 		//删除单据 -- 开始
 		$("#deleteBtn").click( function() {
 			var id = $(this).attr("data-cid");
-			if (!confirm("确定要删除该原材料入库单吗？")) {
+			if (!confirm("确定要删除该原材料出库单吗？")) {
 				return false;
 			}
 			$.ajax( {
-				url :"store_in/delete/" + id,
+				url :"store_out/delete/" + id,
 				type :'POST'
 			}).done( function(result) {
 				if (result.success) {
-					Common.Tip("删除原材料入库单成功", function() {
+					Common.Tip("删除原材料出库单成功", function() {
 						$("#breadcrumbs li.active").prev().find("a").click();
 					});
 				}
 			}).fail( function(result) {
-				Common.Error("删除原材料入库单失败：" + result.responseText);
+				Common.Error("删除原材料出库单失败：" + result.responseText);
 			}).always( function() {
 	
 			});

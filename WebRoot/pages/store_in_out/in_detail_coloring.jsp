@@ -86,8 +86,9 @@
 						<button data-cid="<%=storeInOut.getId() %>" type="button" class="btn btn-danger" id="deleteBtn">删除</button>
 						<%} %>
 						<table class="table noborder">
-							<caption id="tablename">
+							<caption id="tablename" style="margin-bottom:0;">
 								桐庐富伟针织厂原材料入库单<div table_id="<%=storeInOut.getNumber() %>" class="id_barcode"></div>
+								<div style="text-align: center;font-size: 16px;">(样纱)</div>
 							</caption>
 						</table>
 
@@ -126,19 +127,11 @@
 										<table>
 											<tbody>
 																<tr>
-																	<td rowspan="4" width="30%">
-																		<a href="/<%=storeInOut.getImg()%>" class="thumbnail"
-																			target="_blank"> <img id="previewImg"
-																				alt="200 x 100%" src="/<%=storeInOut.getImg_s()%>">
-																		</a>
-																	</td>
-																</tr>
-																<tr>
 																	<td style="vertical-align: top;">
 																		<table>
 																			<tr>
 																				<th class="center" width="10%">
-																					订单号
+																					染色单号
 																				</th>
 																				<th class="center" width="10%">
 																					公司

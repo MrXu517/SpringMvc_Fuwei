@@ -18,6 +18,8 @@ public class StoreInOut {
 	private Integer id;
 	private String number;//出入库单编号
 	private Integer store_order_id;
+	private Integer coloring_order_id;//染色单ID，2016-2-20添加
+	private String coloring_order_number;//染色单ID，2016-2-20添加
 	private Integer orderId;
 	
 	private Boolean in_out ;//入库/出库 true:入库 , false：出库
@@ -68,6 +70,18 @@ public class StoreInOut {
 	
 	
 	
+	public String getColoring_order_number() {
+		return coloring_order_number;
+	}
+	public void setColoring_order_number(String coloring_order_number) {
+		this.coloring_order_number = coloring_order_number;
+	}
+	public Integer getColoring_order_id() {
+		return coloring_order_id;
+	}
+	public void setColoring_order_id(Integer coloring_order_id) {
+		this.coloring_order_id = coloring_order_id;
+	}
 	public Boolean getHas_print() {
 		return has_print;
 	}

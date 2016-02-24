@@ -1,8 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
-<%@page import="com.fuwei.entity.Order"%>
-<%@page import="com.fuwei.entity.OrderDetail"%>
 <%@page import="net.sf.json.JSONObject"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.util.NumberUtil"%>
@@ -11,8 +9,8 @@
 <%@page import="com.fuwei.entity.producesystem.StoreInOutDetail"%>
 <%@page import="com.fuwei.entity.producesystem.MaterialInOut"%>
 <%@page import="com.fuwei.entity.producesystem.MaterialInOutDetail"%>
-<%@page import="com.fuwei.entity.ordergrid.StoreOrder"%>
-<%@page import="com.fuwei.entity.ordergrid.StoreOrderDetail"%>
+<%@page import="com.fuwei.entity.ordergrid.ColoringOrder"%>
+<%@page import="com.fuwei.entity.ordergrid.ColoringOrderDetail"%>
 <%@page import="com.fuwei.entity.producesystem.MaterialCurrentStock"%>
 <%@page import="com.fuwei.entity.producesystem.MaterialCurrentStockDetail"%>
 <%
@@ -20,10 +18,9 @@
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	Order order = (Order) request.getAttribute("order");
-	StoreOrder storeOrder = (StoreOrder) request.getAttribute("storeOrder");
-	List<StoreOrderDetail> DetailList = storeOrder == null || storeOrder.getDetaillist() == null ? new ArrayList<StoreOrderDetail>()
-			: storeOrder.getDetaillist();
+	ColoringOrder coloringOrder = (ColoringOrder) request.getAttribute("coloringOrder");
+	List<ColoringOrderDetail> DetailList = coloringOrder == null || coloringOrder.getDetaillist() == null ? new ArrayList<ColoringOrderDetail>()
+			: coloringOrder.getDetaillist();
 	List<MaterialInOut> detailInOutlist = (List<MaterialInOut>)request.getAttribute("detailInOutlist");
 	MaterialCurrentStock materialCurrentStock = (MaterialCurrentStock)request.getAttribute("materialCurrentStock");
 	
@@ -32,7 +29,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>原材料出入库记录 -- 桐庐富伟针织厂</title>
+		<title>原材料样纱出入库记录 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -76,11 +73,9 @@
 							<a target="_blank" href="workspace/material_workspace">原材料工作台 </a>
 						</li>
 						<li>
-							<a href="order/detail/<%=order.getId()%>">订单详情</a>
+							<a href="coloring_order/detail/<%=coloringOrder.getId()%>">染色单详情</a>
 						</li>
-						<li class="active">
-							原材料出入库记录
-						</li>
+						<li class="active">原材料出入库记录 --样纱</li>
 					</ul>
 				</div>
 				<div class="body">
@@ -90,18 +85,10 @@
 								<div class="head">
 									<div class="pull-left">
 										<label class="control-label">
-											订单编号：
+											染色单号：
 										</label>
-										<span><%=order.getOrderNumber()%></span>
+										<span><%=coloringOrder.getNumber()%></span>
 									</div>
-									<div class="pull-left">
-										<label class="control-label">
-											订单状态：
-										</label>
-										<span><%=order.getCNState()%></span>
-									</div>
-								
-
 									<div class="clear"></div>
 
 								</div>
@@ -110,55 +97,36 @@
 								<div class="col-md-6" id="leftOrderInfo">
 									<table class="table table-responsive table-bordered">
 																<tbody>
-																	<tr>
-																		<td colspan="2">
-																			<a href="/<%=order.getImg()%>" class="thumbnail"
-																				target="_blank"> <img id="previewImg"
-																					alt="200 x 100%" src="/<%=order.getImg_s()%>">
-																			</a>
-																		</td></tr>
 																		<tr>
 																			<td>
 																				品名
 																			</td>
-																			<td><%=order.getName()%></td>
+																			<td><%=coloringOrder.getName()%></td>
 																		</tr>
 																	
 																	<tr>
 																		<td>
 																			公司
 																		</td>
-																		<td><%=SystemCache.getCompanyShortName(order.getCompanyId())%></td>
-																	</tr>
-																	<tr>
-																		<td>
-																			业务员
-																		</td>
-																		<td><%=SystemCache.getSalesmanName(order.getSalesmanId())%></td>
+																		<td><%=SystemCache.getCompanyShortName(coloringOrder.getCompanyId())%></td>
 																	</tr>
 																	<tr>
 																		<td>
 																			客户
 																		</td>
-																		<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
+																		<td><%=SystemCache.getCustomerName(coloringOrder.getCustomerId())%></td>
 																	</tr>
 																	<tr>
 																		<td>
 																			货号
 																		</td>
-																		<td><%=order.getCompany_productNumber()%></td>
+																		<td><%=coloringOrder.getCompany_productNumber()%></td>
 																	</tr>
 																	<tr>
 																		<td>
 																			跟单
 																		</td>
-																		<td><%=SystemCache.getEmployeeName(order.getCharge_employee())%></td>
-																	</tr>
-																	<tr>
-																		<td>
-																			发货时间
-																		</td>
-																		<td><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
+																		<td><%=SystemCache.getEmployeeName(coloringOrder.getCharge_employee())%></td>
 																	</tr>
 																</tbody>
 															</table>
@@ -166,7 +134,7 @@
 							<div class="" id="rightStoreInfo">
 								<fieldset id="orderDetail">
 									<legend>
-										计划材料列表
+										计划染色列表
 									</legend>
 									<table class="table table-responsive detailTb">
 										<caption>
@@ -183,16 +151,13 @@
 																			总数量(kg)
 																		</th>
 																		<th width="15%">
-																			领取人
-																		</th>
-																		<th width="15%">
 																			标准样纱
 																		</th>
 											</tr>
 										</thead>
 										<tbody>
 											<%
-												for (StoreOrderDetail detail : DetailList) {
+												for (ColoringOrderDetail detail : DetailList) {
 											%>
 											<tr class="tr">
 												<td class="color"><%=detail.getColor()%>
@@ -201,9 +166,7 @@
 																		</td>
 																		<td class="quantity"><%=detail.getQuantity()%>
 																		</td>
-																		<td class="factory_name"><%=SystemCache.getFactoryName(detail.getFactoryId())%>
-																		</td>
-																		<td class="yarn"><%=detail.getYarn()%>
+																		<td class="yarn"><%=detail.getStandardyarn()%>
 																		</td>
 											</tr>
 
@@ -306,6 +269,7 @@
 										</tbody>
 									</table>
 								</fieldset>
+
 								<fieldset id="stockDetail">
 									<legend>
 										当前库存

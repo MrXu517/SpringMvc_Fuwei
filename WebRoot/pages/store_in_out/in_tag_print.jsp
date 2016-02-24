@@ -90,7 +90,11 @@ body {
 									<td>
 										订单号：
 									</td>
-									<td><%=storeInOut.getOrderNumber() %></td>
+									<td><%if(storeInOut.getOrderId()==null){ %>
+											样纱<%=storeInOut.getColoring_order_number()%>
+											<%}else{ %>
+											<%=storeInOut.getOrderNumber()%>
+											<%} %></td>
 								</tr>
 								<tr>
 									<td>

@@ -301,6 +301,9 @@
 											<th width="50px">
 												染色单位
 											</th>
+											<th width="60px">
+												订单号
+											</th>
 											<th width="40px">
 												公司
 											</th>
@@ -342,6 +345,12 @@
 											<td rowspan="<%=detailsize %>"><%=++i%></td>
 											<td rowspan="<%=detailsize %>"><%=coloringOrder.getNumber() == null ? "" : coloringOrder.getNumber()%></td>
 											<td rowspan="<%=detailsize %>"><%=SystemCache.getFactoryName(coloringOrder.getFactoryId())%></td>
+											<td rowspan="<%=detailsize %>">
+											<%if(coloringOrder.getOrderId()==null){ %>
+											<span class="label label-warning">样纱</span>
+											<%}else{ %>
+											<%=coloringOrder.getOrderNumber()%>
+											<%} %></td>
 											<td rowspan="<%=detailsize %>"><%=SystemCache.getCompanyShortName(coloringOrder
 										.getCompanyId())%></td>
 											<td rowspan="<%=detailsize %>"><%=SystemCache.getCustomerName(coloringOrder.getCustomerId())%></td>

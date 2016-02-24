@@ -56,7 +56,7 @@ public class ColoringOrder extends BaseTableOrder{
 	
 	
 	
-	private Integer status;// 订单状态 -1刚创建  , 6执行完成 ， 7取消
+	private Integer status;// 订单状态 -1刚创建  , 6已入库 ， 7取消
 	private String state;// 订单状态描述
 	
 	

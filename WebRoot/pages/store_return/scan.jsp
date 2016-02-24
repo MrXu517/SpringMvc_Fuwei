@@ -66,7 +66,7 @@
 							<form action="store_return/add">
 								<div class="form-group col-md-12">
 									<label for="orderNumber" class="col-sm-3 control-label">
-										订单号
+										原材料仓库单上的订单号
 									</label>
 									<div class="input-group col-sm-9">
 										<input type="text" class="form-control" name="orderNumber" id="orderNumber" />

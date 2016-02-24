@@ -91,7 +91,7 @@ public class StoreReturnService extends BaseService {
 	}
 
 	// 添加
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	public int add(StoreReturn object) throws Exception {
 		try {
 			if (object.getDetaillist() == null
@@ -108,8 +108,15 @@ public class StoreReturnService extends BaseService {
 				object.setId(id);
 				object.setNumber(object.createNumber());
 				this.update(object, "id", null);
-				//更新原材料库存表
-				materialCurrentStockService.reStock(object.getOrderId());
+
+				//如果是样纱退库单
+				if(object.getColoring_order_id()!=null){
+					//更新样纱库存表
+					materialCurrentStockService.reStock_Coloring(object.getColoring_order_id());
+				}else{
+					//更新库存表
+					materialCurrentStockService.reStock(object.getOrderId());
+				}
 				return id;
 			}
 		} catch (Exception e) {
@@ -130,7 +137,7 @@ public class StoreReturnService extends BaseService {
 
 
 	// 编辑
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	public int update(StoreReturn object) throws Exception {
 		try {
 			object.setHas_print(false);
@@ -153,8 +160,15 @@ public class StoreReturnService extends BaseService {
 								"id",
 								"number,created_user,created_at,store_order_id,orderId,companyId,customerId,sampleId,name,img,img_s,img_ss,productNumber,orderNumber,charge_employee,company_productNumber",
 								true);
-				//更新原材料库存表
-				materialCurrentStockService.reStock(object.getOrderId());
+
+				//如果是样纱退库单
+				if(object.getColoring_order_id()!=null){
+					//更新样纱库存表
+					materialCurrentStockService.reStock_Coloring(object.getColoring_order_id());
+				}else{
+					//更新库存表
+					materialCurrentStockService.reStock(object.getOrderId());
+				}
 
 				return object.getId();
 			}
@@ -178,7 +192,7 @@ public class StoreReturnService extends BaseService {
 		}
 	}
 	
-	// 获取
+	// 根据原材料仓库单获取
 	public List<StoreReturn> getByStoreOrder(int store_order_id)
 			throws Exception {
 		try {
@@ -191,6 +205,19 @@ public class StoreReturnService extends BaseService {
 			throw e;
 		}
 	}
+//	// 根据染色单获取//2016-2-23暂时没有样纱退货的功能
+//	public List<StoreReturn> getByColoringOrder(int coloring_order_id)
+//			throws Exception {
+//		try {
+//			List<StoreReturn> orderlist = dao
+//					.queryForBeanList(
+//							"select * from tb_store_return where store_order_id is null and  coloring_order_id = ?",
+//							StoreReturn.class, coloring_order_id);
+//			return orderlist;
+//		} catch (Exception e) {
+//			throw e;
+//		}
+//	}
 	
 	// 获取
 	public List<StoreReturn> getByOrderDESC(int orderId)
@@ -243,6 +270,7 @@ public class StoreReturnService extends BaseService {
 	}
 
 	// 删除
+	@Transactional(rollbackFor=Exception.class)
 	public int remove(int id) throws Exception {
 		try {
 			StoreReturn temp = this.get(id);
@@ -253,8 +281,15 @@ public class StoreReturnService extends BaseService {
 				throw new Exception("单据已执行完成，无法删除 ");
 			}
 			int result = dao.update("delete from tb_store_return WHERE  id = ?", id);
-			//更新原材料库存表
-			materialCurrentStockService.reStock(temp.getOrderId());
+
+			//如果是样纱退库单
+			if(temp.getColoring_order_id()!=null){
+				//更新样纱库存表
+				materialCurrentStockService.reStock_Coloring(temp.getColoring_order_id());
+			}else{
+				//更新库存表
+				materialCurrentStockService.reStock(temp.getOrderId());
+			}
 			return result;
 		} catch (Exception e) {
 			SQLException sqlException = (java.sql.SQLException) e.getCause();
@@ -267,6 +302,7 @@ public class StoreReturnService extends BaseService {
 	}
 	
 	// 删除
+	@Transactional(rollbackFor=Exception.class)
 	public int remove(StoreReturn temp) throws Exception {
 		try {
 			if (temp.getHas_print()) {// 如果出库单已打印，
@@ -277,8 +313,14 @@ public class StoreReturnService extends BaseService {
 				throw new Exception("单据已执行完成，无法删除 ");
 			}
 			int result = dao.update("delete from tb_store_return WHERE  id = ?", temp.getId());
-			//更新原材料库存表
-			materialCurrentStockService.reStock(temp.getOrderId());
+			//如果是样纱退库单
+			if(temp.getColoring_order_id()!=null){
+				//更新样纱库存表
+				materialCurrentStockService.reStock_Coloring(temp.getColoring_order_id());
+			}else{
+				//更新库存表
+				materialCurrentStockService.reStock(temp.getOrderId());
+			}
 			return result;
 		} catch (Exception e) {
 			SQLException sqlException = (java.sql.SQLException) e.getCause();

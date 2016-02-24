@@ -20,6 +20,7 @@ public class StoreReturn {
 	private String number;//半成品退货单编号
 	private Integer orderId;
 	private Integer store_order_id;
+	private Integer coloring_order_id;
 	
 	private Date date;//退货日期
 	private Integer factoryId;//加工工厂
@@ -60,6 +61,12 @@ public class StoreReturn {
 	
 	
 	
+	public Integer getColoring_order_id() {
+		return coloring_order_id;
+	}
+	public void setColoring_order_id(Integer coloring_order_id) {
+		this.coloring_order_id = coloring_order_id;
+	}
 	public List<StoreReturnDetail> getDetaillist() {
 		return detaillist;
 	}

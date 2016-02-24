@@ -107,6 +107,18 @@ public class ColoringOrderService extends BaseService {
 			throw e;
 		}
 	}
+	
+	// 根据染色单号获取染色单
+	public ColoringOrder getByNumber(String number) throws Exception {
+		try {
+			ColoringOrder order = dao.queryForBean(
+					"select * from tb_coloringorder where number = ?",
+					ColoringOrder.class, number);
+			return order;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 
 	// 获取染色单列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,Integer companyId, Integer factoryId,String number,

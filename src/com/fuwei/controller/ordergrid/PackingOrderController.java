@@ -38,7 +38,7 @@ import com.fuwei.constant.Constants;
 import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
-import com.fuwei.entity.ordergrid.PackingOrder;
+import com.fuwei.entity.finishstore.PackingOrder;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.OrderService;
 import com.fuwei.service.ordergrid.PackingOrderService;

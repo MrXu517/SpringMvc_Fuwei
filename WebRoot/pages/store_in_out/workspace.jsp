@@ -70,7 +70,10 @@
 								<a href="#store_return" role="tab" data-toggle="tab">退货列表</a>
 							</li>
 							<li>
-								<a href="#current_stock" role="tab" data-toggle="tab">原材料库存报表</a>
+								<a href="#current_stock" role="tab" data-toggle="tab">大货纱库存报表</a>
+							</li>
+							<li>
+								<a href="#current_stock_coloring" role="tab" data-toggle="tab">样纱库存报表</a>
 							</li>
 						</ul>
 
@@ -88,6 +91,9 @@
 							</div>
 							<div class="tab-pane" id="current_stock">
 								<iframe id="current_stockIframe" name="current_stockIframe" border="0" furl="material_current_stock/index" > </iframe>
+							</div>
+							<div class="tab-pane" id="current_stock_coloring">
+								<iframe id="current_stockcoloringIframe" name="current_stockcoloringIframe" border="0" furl="material_current_stock/index_coloring" > </iframe>
 							</div>
 						</div>
 					</div>

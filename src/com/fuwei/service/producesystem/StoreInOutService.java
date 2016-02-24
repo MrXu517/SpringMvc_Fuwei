@@ -92,7 +92,7 @@ public class StoreInOutService extends BaseService {
 	}
 	
 	// 添加
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	public int add(StoreInOut object) throws Exception {
 		try {
 			if (object.getDetaillist() == null
@@ -110,8 +110,14 @@ public class StoreInOutService extends BaseService {
 				object.setId(id);
 				object.setNumber(object.createNumber());
 				this.update(object, "id", null);
-				//更新库存表
-				materialCurrentStockService.reStock(object.getOrderId());
+				//如果是样纱入、出库单
+				if(object.getColoring_order_id()!=null){
+					//更新样纱库存表
+					materialCurrentStockService.reStock_Coloring(object.getColoring_order_id());
+				}else{
+					//更新库存表
+					materialCurrentStockService.reStock(object.getOrderId());
+				}
 
 				return id;
 			}
@@ -139,7 +145,7 @@ public class StoreInOutService extends BaseService {
 		return object.getId();
 	}
 	// 编辑
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	public int update(StoreInOut object) throws Exception {
 		try {
 			object.setHas_print(false);
@@ -158,10 +164,15 @@ public class StoreInOutService extends BaseService {
 
 				// 更新表
 				this.update(object, "id",
-						"number,created_user,created_at,orderId,store_order_id,companyId,customerId,sampleId,name,img,img_s,img_ss,materialId,weight,size,productNumber,orderNumber,charge_employee,company_productNumber", true);
-
-				//更新库存表
-				materialCurrentStockService.reStock(temp.getOrderId());
+						"number,created_user,created_at,orderId,store_order_id,companyId,customerId,sampleId,name,img,img_s,img_ss,materialId,weight,size,productNumber,orderNumber,charge_employee,company_productNumber,coloring_order_id,coloring_order_number", true);
+				//如果是样纱入、出库单
+				if(temp.getColoring_order_id()!=null){
+					//更新样纱库存表
+					materialCurrentStockService.reStock_Coloring(temp.getColoring_order_id());
+				}else{
+					//更新库存表
+					materialCurrentStockService.reStock(temp.getOrderId());
+				}
 				return object.getId();
 			}
 		} catch (Exception e) {
@@ -181,12 +192,24 @@ public class StoreInOutService extends BaseService {
 			throw e;
 		}
 	}
-	// 获取
+	// 根据原材料仓库单获取
 	public List<StoreInOut> getByStoreOrder(int storeOrderId,Boolean in_out) throws Exception {
 		try {
 			List<StoreInOut> orderlist = dao.queryForBeanList(
 					"select * from tb_store_in_out where store_order_id = ? and in_out=?",
 					StoreInOut.class, storeOrderId,in_out);
+			return orderlist;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	// 根据染色单获取
+	public List<StoreInOut> getByColoringOrder(int coloringOrderId,Boolean in_out) throws Exception {
+		try {
+			List<StoreInOut> orderlist = dao.queryForBeanList(
+					"select * from tb_store_in_out where store_order_id is null and coloring_order_id = ? and in_out=?",
+					StoreInOut.class, coloringOrderId,in_out);
 			return orderlist;
 		} catch (Exception e) {
 			throw e;
@@ -265,6 +288,7 @@ public class StoreInOutService extends BaseService {
 	}
 	
 	// 删除
+	@Transactional(rollbackFor=Exception.class)
 	public int remove(int id) throws Exception {
 		try {
 			StoreInOut temp = this.get(id);
@@ -275,8 +299,14 @@ public class StoreInOutService extends BaseService {
 				throw new Exception("单据已执行完成，无法删除 ");
 			}
 			int result = dao.update("delete from tb_store_in_out WHERE  id = ?", id);
-			//更新库存表
-			materialCurrentStockService.reStock(temp.getOrderId());
+			//如果是样纱入、出库单
+			if(temp.getColoring_order_id()!=null){
+				//更新样纱库存表
+				materialCurrentStockService.reStock_Coloring(temp.getColoring_order_id());
+			}else{
+				//更新库存表
+				materialCurrentStockService.reStock(temp.getOrderId());
+			}
 			return result;
 		} catch (Exception e) {
 			SQLException sqlException = (java.sql.SQLException) e.getCause();

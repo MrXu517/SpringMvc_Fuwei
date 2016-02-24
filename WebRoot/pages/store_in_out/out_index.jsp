@@ -347,7 +347,13 @@
 											
 											<td rowspan="<%=detailsize%>"><a target="_top" href="store_out/detail/<%=item.getId()%>"><%=item.getNumber()%></a></td>
 											<td rowspan="<%=detailsize%>"><%=SystemCache.getFactoryName(item.getFactoryId())%></td>
-											<td rowspan="<%=detailsize%>"><a target="_top" href="order/detail/<%=item.getOrderId()%>"><%=item.getOrderNumber()%></a></td>
+											<td rowspan="<%=detailsize%>">
+											<%if(item.getOrderId()==null){ %>
+												<span class="label label-danger">样纱</span><br><a target="_blank" href="coloring_order/detail/<%=item.getColoring_order_id() %>"><%=item.getColoring_order_number()%></a>
+												<%}else{ %>
+												<a target="_blank" href="order/detail/<%=item.getOrderId() %>"><%=item.getOrderNumber() %></a>
+												<%} %>
+											</td>
 											<td rowspan="<%=detailsize%>"><%=SystemCache.getCompanyShortName(item.getCompanyId())%></td>
 											<td rowspan="<%=detailsize%>"><%=item.getCompany_productNumber()%></td>
 											<td rowspan="<%=detailsize%>"><%=item.getName()%></td>

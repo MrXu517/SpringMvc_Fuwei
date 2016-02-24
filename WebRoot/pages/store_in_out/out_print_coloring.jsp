@@ -10,7 +10,7 @@
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	//原材料入库单
+	//原材料出库单
 	StoreInOut storeInOut = (StoreInOut) request.getAttribute("storeInOut");
 	List<StoreInOutDetail> detaillist = storeInOut == null ? new ArrayList<StoreInOutDetail>() :storeInOut.getDetaillist();
 %>
@@ -18,7 +18,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>原材料入库单 -- 桐庐富伟针织厂</title>
+		<title>原材料出库单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -35,8 +35,9 @@
 				<div class="row">
 					<div class="col-md-12 tablewidget">
 						<table class="table noborder">
-							<caption id="tablename">
-								桐庐富伟针织厂原材料入库单<div table_id="<%=storeInOut.getNumber() %>" class="id_barcode"></div>
+							<caption id="tablename" style="margin-bottom:0;">
+								桐庐富伟针织厂原材料出库单<div table_id="<%=storeInOut.getNumber() %>" class="id_barcode"></div>
+								<div style="text-align: center;font-size: 16px;">(样纱)</div>
 							</caption>
 						</table>
 
@@ -44,21 +45,13 @@
 							<tbody>
 								<tr>
 									<td>
-
-										染色单位：
-										<span><%=storeInOut == null ? ""
-						: (SystemCache.getFactoryName(storeInOut
-								.getFactoryId()))%></span>
-
-									</td>
-									<td>
-										业务员：
+										业务员/领取人：
 										<span><%=storeInOut == null ? ""
 						: (SystemCache.getEmployeeName((storeInOut
 								.getCharge_employee())))%></span>
 									</td>
 									<td>
-										入库时间：
+										出库时间：
 										<span><%=storeInOut == null ? ""
 						: (DateTool.formatDateYMD(DateTool.getYanDate(storeInOut.getDate())))%></span>
 									</td>
@@ -73,10 +66,10 @@
 								<tr>
 									<td colspan="4">
 										<table>
-											<tr><td class="center" width="15%">
-													订单号
+											<tr><td class="center" width="10%">
+													染色单号
 												</td>
-												<td class="center" width="10%">
+												<td class="center" width="15%">
 													公司
 												</td>
 												<td class="center" width="15%">
@@ -90,11 +83,7 @@
 												</td>
 											</tr>
 											<tr><td class="center">
-													<span><%if(storeInOut.getOrderId()==null){ %>
-											样纱<%=storeInOut.getColoring_order_number()%>
-											<%}else{ %>
-											<%=storeInOut.getOrderNumber()%>
-											<%} %></span>
+													<span><%=storeInOut.getColoring_order_number()%></span>
 												</td>
 												<td class="center">
 													<span><%=SystemCache.getCompanyShortName(storeInOut
@@ -133,7 +122,7 @@
 														材料
 													</td>
 													<td width="15%">
-														入库数量(kg)
+														出库数量(kg)
 													</td>
 													<td width="15%">
 														缸号
@@ -201,9 +190,6 @@
 											</div>
 											<div class="tip_line">
 												3.不得含有偶氮、PCP、甲醛、APEO。不得有特殊气味，无致敏致癌物质。
-											</div>
-											<div class="tip_line">
-												4.贵单位须妥善保管此单据，结账时须提供此单据
 											</div>
 
 										</div>

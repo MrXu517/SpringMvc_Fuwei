@@ -13,6 +13,7 @@ public class MaterialInOut {
 	private String number;//原材料出入库单、退货单编号
 	private Integer orderId;
 	private Integer store_order_id;
+	private Integer coloring_order_id;
 	private Boolean in_out ;//入库/出库  ， true:入库 , false：出库
 
 	
@@ -29,6 +30,12 @@ public class MaterialInOut {
 	private String type;
 	
 	
+	public Integer getColoring_order_id() {
+		return coloring_order_id;
+	}
+	public void setColoring_order_id(Integer coloring_order_id) {
+		this.coloring_order_id = coloring_order_id;
+	}
 	public Integer getStore_order_id() {
 		return store_order_id;
 	}

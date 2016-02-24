@@ -1,4 +1,151 @@
-package com.fuwei.entity.ordergrid;
+//package com.fuwei.entity.finishstore;
+//
+//import java.util.Date;
+//
+//import net.keepsoft.commons.annotation.IdentityId;
+//import net.keepsoft.commons.annotation.Table;
+//@Table("tb_packingorder")
+//public class PackingOrder {
+//	@IdentityId
+//	private int id;
+//	private Integer orderId;//订单ID
+//	private Date created_at;// 创建时间
+//	private Date updated_at;// 最近更新时间
+//	private Integer created_user;//创建用户
+//	private Integer status;// 订单状态 -1刚创建  , 6执行完成 ， 7取消
+//	private String state;// 订单状态描述
+//	
+//	private String orderNumber;//订单号
+//	private String name;//样品名称
+//	private String company_productNumber;//样品的公司货号
+//	private Integer charge_employee;// 打样人 
+//	private Integer companyId;// 公司ID
+//	private String memo;
+//	
+//
+//	public int getId() {
+//		return id;
+//	}
+//
+//	public void setId(int id) {
+//		this.id = id;
+//	}
+//
+//	public Integer getOrderId() {
+//		return orderId;
+//	}
+//
+//	public void setOrderId(Integer orderId) {
+//		this.orderId = orderId;
+//	}
+//
+//	public Date getCreated_at() {
+//		return created_at;
+//	}
+//
+//	public void setCreated_at(Date created_at) {
+//		this.created_at = created_at;
+//	}
+//
+//	public Date getUpdated_at() {
+//		return updated_at;
+//	}
+//
+//	public void setUpdated_at(Date updated_at) {
+//		this.updated_at = updated_at;
+//	}
+//
+//	public Integer getCreated_user() {
+//		return created_user;
+//	}
+//
+//	public void setCreated_user(Integer created_user) {
+//		this.created_user = created_user;
+//	}
+//
+//	public Integer getStatus() {
+//		return status;
+//	}
+//
+//	public void setStatus(Integer status) {
+//		this.status = status;
+//	}
+//
+//	public String getState() {
+//		return state;
+//	}
+//
+//	public void setState(String state) {
+//		this.state = state;
+//	}
+//	
+//	public Boolean deletable(){
+//		if(this.status == null){
+//			return true;
+//		}
+//		return this.status != 6;
+//	}
+//
+//	public String getOrderNumber() {
+//		return orderNumber;
+//	}
+//
+//	public void setOrderNumber(String orderNumber) {
+//		this.orderNumber = orderNumber;
+//	}
+//
+//	public String getName() {
+//		return name;
+//	}
+//
+//	public void setName(String name) {
+//		this.name = name;
+//	}
+//
+//	public String getCompany_productNumber() {
+//		return company_productNumber;
+//	}
+//
+//	public void setCompany_productNumber(String company_productNumber) {
+//		this.company_productNumber = company_productNumber;
+//	}
+//
+//	public Integer getCharge_employee() {
+//		return charge_employee;
+//	}
+//
+//	public void setCharge_employee(Integer charge_employee) {
+//		this.charge_employee = charge_employee;
+//	}
+//
+//	public Integer getCompanyId() {
+//		return companyId;
+//	}
+//
+//	public void setCompanyId(Integer companyId) {
+//		this.companyId = companyId;
+//	}
+//
+//	public String getMemo() {
+//		return memo;
+//	}
+//
+//	public void setMemo(String memo) {
+//		this.memo = memo;
+//	}
+//
+//	// 是否可编辑
+//	public Boolean isEdit() {
+//		if(this.status == null){
+//			return true;
+//		}
+//		return this.status != 6 && this.status != 7;
+//	}
+//}
+
+
+
+package com.fuwei.entity.finishstore;
 
 import java.util.Date;
 
