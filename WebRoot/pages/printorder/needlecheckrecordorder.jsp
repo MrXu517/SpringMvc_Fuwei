@@ -14,7 +14,6 @@
 	if(DetailList == null){
 		DetailList = new ArrayList<OrderDetail>();
 	}
-	String productfactoryStr = (String)request.getAttribute("productfactoryStr");
 %>
 <!DOCTYPE html>
 <html>

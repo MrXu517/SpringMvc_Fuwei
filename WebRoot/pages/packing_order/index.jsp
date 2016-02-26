@@ -1,15 +1,14 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
-<%@page import="com.fuwei.entity.ordergrid.PackingOrder"%>
 <%@page import="com.fuwei.entity.Salesman"%>
 <%@page import="com.fuwei.entity.Company"%>
 <%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.entity.User"%>
 <%@page import="com.fuwei.commons.Pager"%>
 <%@page import="com.fuwei.util.DateTool"%>
-<%@page import="com.fuwei.constant.OrderStatus"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="net.sf.json.JSONObject"%>
+<%@page import="com.fuwei.entity.finishstore.PackingOrder"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -54,8 +53,6 @@
 	//权限相关
 	Boolean has_order_detail = SystemCache.hasAuthority(session,
 			"packing_order/detail");
-	Boolean has_order_delete = SystemCache.hasAuthority(session,
-			"packing_order/delete");
 	
 	//权限相关
 %>
@@ -81,6 +78,14 @@
 		<script src="js/common/common.js" type="text/javascript"></script>
 
 		<link href="css/order/index.css" rel="stylesheet" type="text/css" />
+		<style type="text/css">
+		.tablewidget>table th,.tablewidget>table td,.table>thead>tr>th{
+			 text-align: center;
+			 border: 1px solid #000;
+		}
+		.table>thead>tr>th{background: #AEADAD;}
+		.tablewidget>table{border: 1px solid #000;}
+		</style>
 	</head>
 	<body>
 		<%@ include file="../common/head.jsp"%>
@@ -110,7 +115,7 @@
 											value="<%=1%>" />
 										<div class="form-group salesgroup">
 											<label for="number" class="col-sm-3 control-label">
-												单号
+												订单号
 											</label>
 											<div class="col-sm-9">
 												<input class="form-control" type="text" name="orderNumber" id="orderNumber" value="<%=orderNumber %>" />
@@ -146,7 +151,7 @@
 
 										<div class="form-group timegroup">
 											<label class="col-sm-3 control-label">
-												上传时间
+												制单时间
 											</label>
 
 											<div class="input-group col-md-9">
@@ -222,35 +227,40 @@
 								<table class="table table-responsive">
 									<thead>
 										<tr>
-											<th>
+											<th width="30px">
 												序号
 											</th>
-											<th>
-												样品
+											<th width="100px">
+												图片
 											</th>
-											<th>
-												装箱单ID
+											<th width="80px">
+												品名
 											</th>
-											<th>
+											<th width="60px">
 												订单号
 											</th>
-											<th>
+											<th width="40px">
 												公司
 											</th>
-											<th>
-												业务员
-											</th>
-											<th>
+											<th width="60px">
 												公司货号
 											</th>
-											
-											<th>
-												上传用户
+											<th width="60px">
+												总数量
 											</th>
-											<th>
-												上传日期
+											<th width="60px">
+												总箱数
 											</th>
-											<th>
+											<th width="60px">
+												立方数
+											</th>
+											<th width="60px">
+												跟单人
+											</th>
+											<th width="60px">
+												制单人/日期
+											</th>
+											<th width="40px">
 												操作
 											</th>
 										</tr>
@@ -265,19 +275,22 @@
 											<td
 												style="max-width: 120px; height: 120px; max-height: 120px;">
 												<a target="_blank" class="cellimg"
-													href="/<%=item.getOrder().getImg()%>"><img
+													href="/<%=item.getImg()%>"><img
 														style="max-width: 120px; height: 120px; max-height: 120px;"
-														src="/<%=item.getOrder().getImg_ss()%>"> </a>
+														src="/<%=item.getImg_ss()%>"> </a>
 											</td>
-											<td><%=item.getId() %></td>
-											<td><%=item.getOrder() == null ? "":item.getOrder().getOrderNumber() %></td>
-											<td><%=SystemCache.getCompanyShortName(item.getOrder() == null ? null:item.getOrder().getCompanyId())%></td>
-											<td><%=SystemCache.getSalesmanName(item.getOrder() == null ? null:item.getOrder().getSalesmanId())%></td>
-											<td><%=item.getOrder() == null ? "":item.getOrder().getCompany_productNumber()%></td>
+											<td><%=item.getName() %></td>
+											<td><%=item.getOrderNumber() %></td>
+											<td><%=SystemCache.getCompanyShortName(item.getCompanyId())%></td>
+											<td><%=item.getCompany_productNumber()%></td>
+											<td><%=item.getQuantity()%></td>
+											<td><%=item.getCartons()%></td>
+											<td><%=item.getCapacity()%></td>
+											<td><%=SystemCache.getEmployeeName(item.getCharge_employee())%></td>
 											
 											<td><%=SystemCache.getUserName(item
-										.getCreated_user())%></td>
-											<td><%=DateTool.formatDateYMD(item.getCreated_at())%></td>
+										.getCreated_user())%><br>
+											<%=DateTool.formatDateYMD(item.getCreated_at())%></td>
 											<td>
 												<%
 													if (has_order_detail) {
@@ -287,19 +300,6 @@
 												<%
 													}
 												%>
-												
-												<%
-												
-													if (has_order_delete && item.deletable()) {
-												%>
-												|
-												<a href="#" data-cid="<%=item.getId() %>"
-													class="delete">删除</a>
-												<%
-														}
-													%>
-
-
 											</td>
 										</tr>
 										<%

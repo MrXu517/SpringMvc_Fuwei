@@ -20,6 +20,7 @@ import com.fuwei.entity.Role;
 import com.fuwei.entity.Salesman;
 import com.fuwei.entity.User;
 import com.fuwei.entity.financial.Subject;
+import com.fuwei.entity.finishstore.PackProperty;
 import com.fuwei.entity.producesystem.Location;
 import com.fuwei.service.CompanyService;
 import com.fuwei.service.CustomerService;
@@ -33,6 +34,7 @@ import com.fuwei.service.RoleService;
 import com.fuwei.service.SalesmanService;
 import com.fuwei.service.UserService;
 import com.fuwei.service.financial.SubjectService;
+import com.fuwei.service.finishstore.PackPropertyService;
 import com.fuwei.service.producesystem.LocationService;
 
 public class SystemCache {
@@ -62,6 +64,8 @@ public class SystemCache {
 	static FuliaoTypeService fuliaoTypeService;
 	
 	static LocationService locationService;
+	
+	static PackPropertyService packPropertyService;
 
 	public SystemCache() {
 		companyService = (CompanyService) SystemContextUtils
@@ -90,6 +94,8 @@ public class SystemCache {
 		.getBean(FuliaoTypeService.class);
 		locationService = (LocationService) SystemContextUtils
 		.getBean(LocationService.class);
+		packPropertyService = (PackPropertyService)SystemContextUtils
+		.getBean(PackPropertyService.class);
 
 	}
 
@@ -149,7 +155,8 @@ public class SystemCache {
 	public static List<Location> locationlist = new ArrayList<Location>();
 //	public static Map<Integer,String> locationMap = new HashMap<Integer, String>();
 
-	
+	//缓存装箱单中用的属性
+	public static List<PackProperty> packpropertylist = new ArrayList<PackProperty>();
 
 	public static void init() throws Exception {
 		companyService = (CompanyService) SystemContextUtils
@@ -178,6 +185,8 @@ public class SystemCache {
 		.getBean(FuliaoTypeService.class);
 		locationService = (LocationService) SystemContextUtils
 		.getBean(LocationService.class);
+		packPropertyService = (PackPropertyService)SystemContextUtils
+		.getBean(PackPropertyService.class);
 		initCompanyList();
 		initSalesmanList();
 		initGongxuList();
@@ -191,6 +200,7 @@ public class SystemCache {
 		initSubjectList();
 		initFuliaoTypeList();
 		initLocationList();
+		initPackPropertyList();
 	}
 
 	public static void reload() throws Exception {
@@ -343,6 +353,36 @@ public class SystemCache {
 //				locationMap.put(obj.getId(), obj.getNumber());
 //			}
 //		}
+	}
+	
+	public static void initPackPropertyList() throws Exception {
+		SystemCache.packpropertylist = packPropertyService.getList(); 
+	}
+	
+	public static String getPackPropertyName(Integer packPropertyId) {
+		if (packPropertyId == null) {
+			return "";
+		}
+		for (int i = 0; i < SystemCache.packpropertylist.size(); ++i) {
+			PackProperty temp = SystemCache.packpropertylist.get(i);
+			if (temp.getId() == packPropertyId) {
+				return temp.getName();
+			}
+		}
+		return "";
+	}
+	
+	public static PackProperty getPackProperty(Integer packPropertyId) {
+		if (packPropertyId == null) {
+			return null;
+		}
+		for (int i = 0; i < SystemCache.packpropertylist.size(); ++i) {
+			PackProperty temp = SystemCache.packpropertylist.get(i);
+			if (temp.getId() == packPropertyId) {
+				return temp;
+			}
+		}
+		return null;
 	}
 	
 	public static List<Subject> getSubjectList(Boolean in_out){

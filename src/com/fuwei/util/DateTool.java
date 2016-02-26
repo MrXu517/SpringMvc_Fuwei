@@ -11,11 +11,23 @@ import java.util.Calendar;
 
 public class DateTool {
 	
+	public static int nowYear() {
+		Calendar a=Calendar.getInstance();
+		return a.get(Calendar.YEAR);//得到年
+	}
 	public static Date now() {
 		return new Date();
 	}
 	public static Date nowDate() throws ParseException {
 		return parse(formatDateYMD(new Date())) ;
+	}
+	public static String getYear(Date date)throws ParseException {
+		if(date == null){
+			return "";
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+		String dateStr = sdf.format(date);
+		return dateStr;
 	}
 	public static String getYear2()throws ParseException {
 		String yearLast = new SimpleDateFormat("yy",Locale.CHINESE).format(Calendar.getInstance().getTime());

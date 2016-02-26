@@ -16,36 +16,6 @@ $(document).ready( function() {
 		_beforeSubmit:function(formEle){
 //			//去掉有值的行的emptyTr 类
 			$(grid.TableInstance.tableEle).find("tbody tr").removeClass("EmptyTr");
-//			var TableInstance = grid.TableInstance;
-//			var $trs = $(TableInstance.tableEle).find("tbody tr");
-//			for(var i=0;i<$trs.length; ++i){
-//				var flag = true;
-//				var trEle = $trs[i];
-//				var tempdata = TableInstance.getTrData(trEle);
-//				for(var property in tempdata){
-//					if(property == "No" || property == "_handle"){continue;}
-//					if(tempdata[property]!=""){//只要有一项不等于空，则可上传该行
-//						flag = false;
-//					}
-//				}
-//				if(!flag){
-//					//去掉EmptyTr的类
-//					$(trEle).removeClass("EmptyTr");
-//				}else{
-//					if(tempdata.color == ""){
-//						top.Common.Error("颜色不能为空");
-//						return false;
-//					}
-//					if(tempdata.quantity == ""){
-//						top.Common.Error("数量不能为空");
-//						return false;
-//					}
-//					if(tempdata.cartons == ""){
-//						top.Common.Error("箱数不能为空");
-//						return false;
-//					}
-//				}
-//			}
 			return true;
 		},
 		focusfunc : function($selectedTr) {
@@ -193,6 +163,12 @@ $(document).ready( function() {
 		
 	});
 	
+	//添加原有的行数据
+	$("#saveTb tbody tr").remove();
+	var temptabledata = $.parseJSON($("#saveTb tbody").attr("data"));
+	grid.TableInstance.data = temptabledata;
+	grid.TableInstance._fillTableData();
+	
 	//设置箱数的自动计算 , 箱数 = 数量/每箱数量
 	$(grid.TableInstance.tableEle).on("input propertychange","input.quantity,input.per_carton_quantity",function(event) {
 		$tr = $(this).closest("tr");
@@ -284,13 +260,15 @@ $(document).ready( function() {
         }
         // return false;
     });
-	$(".EmptyTr").removeClass("EmptyTr");
+	
+	
 	$(".addRow").unbind("click");
 	$(".addRow").click(function(){
 		var addedTr = grid.TableInstance.addEmptyRow();
 		$(".colable").change();
 		$(addedTr).removeClass("EmptyTr");
 	});
+	
 	
 	$(".colable").change(function(){
 		$th = $(this).closest("th");
@@ -311,42 +289,5 @@ $(document).ready( function() {
 	});
 	$(".colable").change();
 	
-//	$("#previewBtn").click(function(){
-//		var file = $(".form #file").val();
-//		if(file == ""){
-//			alert("请先填写 装箱EXCEL文件！");
-//			return false;
-//		}
-//		var $form = $(".form");
-//		$form.attr("target","previewContent");
-//		$form.attr("action","packing_order/preview");
-//		$form.submit();
-//	});
 	
-//	$("#uploadBtn").click(function(){
-//		var file = $(".form #file").val();
-//		if(file == ""){
-//			alert("请先填写 装箱EXCEL文件！");
-//			return false;
-//		}
-//		var $form = $(".form");	
-//		$submitBtn = $("#uploadBtn");
-//		$form.ajaxSubmit( {
-//			url :"packing_order/add",
-//			type :'POST',
-//			success : function(result) {
-//				if (result.success) {
-//					Common.Tip("上传成功", function() {
-//						location = "packing_order/detail/" + result.id;
-//					});
-//				}
-//				$submitBtn.button('reset');
-//			},
-//			error : function(result) {
-//				Common.Error("上传失败：" + result.responseText);
-//				$submitBtn.button('reset');
-//			}
-//
-//		});
-//	});
 });

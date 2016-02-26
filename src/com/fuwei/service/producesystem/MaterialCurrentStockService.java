@@ -292,7 +292,7 @@ public class MaterialCurrentStockService extends BaseService {
 			for (StoreInOutDetail temp : storeOut.getDetaillist()) {
 				String key = temp.getMaterial() + ":"+ temp.getColor().trim(); 
 				if(total_outmap.containsKey(key)){
-					double temp_total_quantity = total_inmap.get(key);
+					double temp_total_quantity = total_outmap.get(key);
 					total_outmap.put(key, temp_total_quantity + temp.getQuantity());
 				}else{
 					total_outmap.put(key, temp.getQuantity());

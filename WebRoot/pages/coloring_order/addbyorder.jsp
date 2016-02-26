@@ -21,7 +21,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>创建原材料采购单 -- 桐庐富伟针织厂</title>
+		<title>创建染色单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">

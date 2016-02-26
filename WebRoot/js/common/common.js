@@ -1387,6 +1387,10 @@ TableTools.defaultConfig._createRow = function(i, rowData, istotalRow) {
             inputEl.style.width = TdEle.style.width;
             inputEl.className = ValueClass;
             inputEl.className = inputEl.className + " " + property_name;
+
+            if (colOption.require == true) {
+                inputEl.className = inputEl.className + " require ";;
+            }
             inputEl.type = "text";
 
             //将内容设置到文本框里
@@ -1415,6 +1419,9 @@ TableTools.defaultConfig._createRow = function(i, rowData, istotalRow) {
             var inputEl = document.createElement('input');
             var class_value = ValueClass + " " + property_name;
             inputEl.className = class_value;
+            if (colOption.require == true) {
+                inputEl.className = inputEl.className + " require ";;
+            }
             inputEl.type = "text";
 
             //将内容设置到文本框里
@@ -1446,7 +1453,9 @@ TableTools.defaultConfig._createRow = function(i, rowData, istotalRow) {
             selectEle.style.width = TdEle.style.width;
             selectEle.className = ValueClass;
             selectEle.className = selectEle.className + " " + property_name;
-
+            if (colOption.require == true) {
+            	selectEle.className = selectEle.className + " require ";;
+            }
             //将内容设置到文本框里
             selectEle.innerHTML = property_value;
             //将内容设置到文本框里

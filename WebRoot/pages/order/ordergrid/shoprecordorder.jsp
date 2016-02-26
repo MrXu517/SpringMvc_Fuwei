@@ -10,14 +10,13 @@
 <%@page import="com.fuwei.entity.ordergrid.PlanOrder"%>
 <%
 	//车间记录单
-		//车缝记录单
 	Order order = (Order) request.getAttribute("order");
 	List<OrderDetail> DetailList = order == null ? new ArrayList<OrderDetail>()
 			: order.getDetaillist();
 	if(DetailList == null){
 		DetailList = new ArrayList<OrderDetail>();
 	}
-	String productfactoryStr = (String)request.getAttribute("productfactoryStr");
+
 %>
 <!DOCTYPE html>
 <html>

@@ -237,7 +237,10 @@
 						各加工单位：请严格按照此生产单信息进行相关生产。
 						<strong>生产前须由我厂质量管理封样，我方确认同意生产并签字后方可生产大货，否则一切后果由贵单位承担。</strong>此生产单一式两份，确认后请签字。此生产单妥善保管，结账以此单为准。
 					</p>
-
+					
+					<div style="padding-bottom: 5px;" class="tip_line">
+						<span style="font-weight: bold;text-decoration: underline;font-size: 18px;">请妥善保管此单，结账时须出具本生产单及相应半成品入库单方可结账。</span>
+					</div>
 					<p class="pull-right auto_bottom">
 						<span id="created_user">制单人：<%=SystemCache.getUserName(producingOrder.getCreated_user()) %></span>
 						<span id="date"> 日期：<%=DateTool.formatDateYMD(DateTool.getYanDate(producingOrder.getCreated_at())) %></span>

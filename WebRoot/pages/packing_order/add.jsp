@@ -1,29 +1,23 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
-<%@page import="com.fuwei.entity.OrderDetail"%>
-<%@page import="com.fuwei.entity.Order"%>
+<%@page import="com.fuwei.commons.SystemCache"%>
+<%@page import="com.fuwei.entity.Company"%>
 <%@page import="com.fuwei.entity.Material"%>
-
-<%@page import="com.fuwei.entity.ordergrid.HeadBankOrder"%>
-<%@page import="com.fuwei.entity.ordergrid.HeadBankOrderDetail"%>
-<%@page import="com.fuwei.entity.ordergrid.ProducingOrder"%>
-<%@page import="com.fuwei.entity.ordergrid.ProducingOrderDetail"%>
-<%@page import="com.fuwei.entity.ordergrid.ProducingOrderMaterialDetail"%>
-<%@page import="com.fuwei.entity.ordergrid.PlanOrder"%>
-<%@page import="com.fuwei.entity.ordergrid.PlanOrderDetail"%>
-<%@page import="com.fuwei.entity.ordergrid.PlanOrderProducingDetail"%>
+<%@page import="com.fuwei.entity.Customer"%>
+<%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
+<%@page import="com.fuwei.entity.ordergrid.MaterialPurchaseOrderDetail"%>
+<%@page import="com.fuwei.entity.finishstore.PackProperty"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	Order order = (Order) request.getAttribute("order");
-	List<OrderDetail> DetailList = order == null || order.getDetaillist() == null ? new ArrayList<OrderDetail>()
-			: order.getDetaillist();
+	List<PackProperty> propertylist = SystemCache.packpropertylist;
 %>
 <!DOCTYPE html>
 <html>
@@ -48,9 +42,26 @@
 		<script src="js/plugins/jquery.jqGrid.min.js" type="text/javascript"></script>
 		<link href="css/plugins/ui.jqgrid.css" rel="stylesheet"
 			type="text/css" />
-		<script src="js/plugins/jquery.form.js" type="text/javascript"></script>
-		<link href="css/packing_order/index.css" rel="stylesheet" type="text/css" />
+
+		<link href="css/order/bill.css" rel="stylesheet" type="text/css" />
+		<script src="js/order/ordergrid.js" type="text/javascript"></script>
 		<script src="js/packing_order/add.js" type="text/javascript"></script>
+		<style type="text/css">
+		#saveTb thead th, #mainTb tbody tr td {
+		    border-color: #000;
+		}
+		#saveTb thead th {
+		    background: #AEADAD;    border: 1px solid #000; text-align: center;padding: 0 3px;
+		}
+		#saveTb tbody td,#saveTb tfoot td {
+		     border: 1px solid #000; text-align: center;padding: 0;
+		}
+		select.colselect{padding:0;}
+		#saveTb tbody td [disabled],select[disabled]{cursor: not-allowed;background: #ccc;}
+		#saveTb{ border: 1px solid #000;    table-layout: fixed;}
+		.colable{width:20px;height:20px;}
+		#saveTb tbody td input{width:100%;}
+		</style>
 
 	</head>
 	<body>
@@ -66,179 +77,171 @@
 						<li>
 							<a href="order/detail/<%=order.getId()%>">订单详情</a>
 						</li>
+						<li>
+							<a href="packing_order/list/<%=order.getId()%>">订单 -- 装箱单</a>
+						</li>
 						<li class="active">
 							创建装箱单
 						</li>
 					</ul>
 				</div>
 				<div class="body">
-					<div class="container-fluid">
-						
+					<div class="container-fluid orderWidget">
 						<div class="row">
-							<div class="col-md-6 formwidget">
-								<div class="panel panel-primary">
-									<div class="panel-heading">
-										<h3 class="panel-title">
-											上传装箱文件
-										</h3>
-									</div>
-									<div class="panel-body">
+							<form class="saveform">
+								<input type="hidden" id="orderId" name="orderId"
+									value="<%=order.getId()%>" class="require" />
+								<button type="submit"
+									class="pull-right btn btn-danger saveTable"
+									data-loading-text="正在保存...">
+									创建装箱单
+								</button>
 
-										<form class="form-horizontal form" role="form" method="post"
-											enctype="multipart/form-data">
-											<!-- <input type="hidden" name="id" value="" /> -->
-											<input type="hidden" name="orderId"
-												value="<%=order.getId()%>" />
-											<div class="col-md-12">
-												<div class="form-group">
-													<label for="file" class="col-sm-3 control-label">
-														装箱excel
-													</label>
-													<div class="col-sm-8">
-														<input type="file" name="file" id="file"
-															class="form-control require" placeholder="请上传装箱文件" />
-
-													</div>
-													<div class="col-sm-1"></div>
-												</div>
-												<div class="form-group">
-													<label for="memo" class="col-sm-3 control-label">
-														备注
-													</label>
-													<div class="col-sm-8">
-														<input type="text" class="form-control" name="memo"
-															id="memo" placeholder="备注">
-													</div>
-													<div class="col-sm-1"></div>
-												</div>
-												<div class="form-group">
-													<div class="col-sm-offset-3 col-sm-5">
-														<button id="previewBtn" type="button" class="btn btn-primary">
-															预览
-														</button>
-														<button id="uploadBtn" type="button" class="btn btn-primary"
-															data-loading-text="正在上传...">
-															上传
-														</button>
-
-													</div>
-													<div class="col-sm-3">
-														<button type="reset" class="reset btn btn-default">
-															重置表单
-														</button>
-													</div>
-													<div class="col-sm-1"></div>
-												</div>
-											</div>
-											
-										</form>
-									</div>
-
-								</div>
-								<table class="table">
-								<thead>
-									<tr>
-										<td colspan="3" class="pull-right orderNumber">
-											№：<%=order.getOrderNumber()%></td>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>
-											<table class="table table-responsive table-bordered tableTb">
-												<tbody>
-													<tr>
-														<td rowspan="7" width="50%">
-															<a href="/<%=order.getImg()%>" class="thumbnail"
-																target="_blank"> <img id="previewImg"
-																	alt="200 x 100%" src="/<%=order.getImg_s()%>"> </a>
-														</td>
-														
-													</tr>
-													<tr>
-														<td>
-															公司
-														</td>
-														<td><%=SystemCache.getCompanyName(order.getCompanyId())%></td>
-													</tr>
-													<tr>
-														<td>
-															客户
-														</td>
-														<td><%=SystemCache.getCustomerName(order.getCustomerId())%></td>
-													</tr>
-													<tr>
-														<td>
-															公司货号
-														</td>
-														<td><%=order.getCompany_productNumber()%></td>
-													</tr>
-													<tr>
-														<td>
-															款名
-														</td>
-														<td><%=order.getName()%></td>
-													</tr>
-													<tr>
-														<td>
-															跟单
-														</td>
-														<td><%=SystemCache.getEmployeeName(order.getCharge_employee())%></td>
-													</tr>
-												</tbody>
-											</table>
-
-										</td>
-									</tr>
-								</tbody>
-							</table>
-								<table class="table table-responsive detailTb table-bordered">
-										<caption>
+								<div class="clear"></div>
+								<div class="col-md-12 tablewidget">
+									<table class="table">
+										<caption id="tablename">
+											桐庐富伟针织厂装箱单(<%=DateTool.nowYear() %>年,<%=order.getCompany_productNumber() %><%=order.getName() %>)
 										</caption>
-										<thead>
-											<tr>
-												<th width="15%">
-													颜色
-												</th>
-												<th width="15%">
-													生产数量
-												</th>
-											</tr>
-										</thead>
+									</table>
+									<table class="tableTb noborder">
 										<tbody>
-											<%
-												for (OrderDetail detail : DetailList) {
-											%>
-											<tr class="tr">
-												<td class="color"><%=detail.getColor()%>
+											<tr>
+												<td width="20%">
+														跟单人：<%=SystemCache.getEmployeeName(order.getCharge_employee())%>
 												</td>
-												<td class="quantity"><%=detail.getQuantity()%>
+												<td width="20%">
+														订单号：<%=order.getOrderNumber()%>
+												</td>
+												<td width="60%">
+													<div class="form-group" style="width: auto;">
+														备注：<input style="width: 350px;" type="text" class="form-control"
+																			name="memo" id="memo" placeholder="备注">
+													</div>
 												</td>
 											</tr>
+										</tbody>
+									</table>
+									<table>
+										<tbody>
+											<tr>
+												<td>
+													<table class="table table-responsive detailTb" id="saveTb">
+														<caption>
+															<button type="button"
+																class="btn btn-primary addRow pull-left">
+																添加一行
+															</button>
+														</caption>
+														<thead>
+										
+										<tr>
+											<th rowspan="2" width="80px">
+												<input type="checkbox" class="colable">
+												<select name="col1_id" class="colselect form-control" id="col1id">
+												<%for(int i = 0 ; i < propertylist.size();++i){ 
+													PackProperty item = propertylist.get(i);
+													if(i == 0){
+												%>
+												<option selected value="<%=item.getId() %>"><%=item.getName() %></option>
+												<%}else{ %>
+													<option value="<%=item.getId() %>"><%=item.getName() %></option>
+												<%} }%></select>
+											</th>
+											<th rowspan="2" width="80px">
+												<input type="checkbox" class="colable">
+												<select name="col2_id" class="colselect form-control"  id="col2id">
+												<%for(int i = 0 ; i < propertylist.size();++i){ 
+													PackProperty item = propertylist.get(i);
+													if(i == 1){
+												%>
+												<option selected value="<%=item.getId() %>"><%=item.getName() %></option>
+												<%}else{ %>
+													<option value="<%=item.getId() %>"><%=item.getName() %></option>
+												<%}}%></select>
+											</th><th rowspan="2" width="80px">
+												<input type="checkbox" class="colable">
+												<select name="col3_id" class="colselect form-control" id="col3id">
+												<%for(int i = 0 ; i < propertylist.size();++i){ 
+													PackProperty item = propertylist.get(i);
+													if(i == 2){
+												%>
+												<option selected value="<%=item.getId() %>"><%=item.getName() %></option>
+												<%}else{ %>
+													<option value="<%=item.getId() %>"><%=item.getName() %></option>
+												<%} }%></select>
+											</th>
+											<th rowspan="2" width="80px">
+												<input type="checkbox" class="colable">
+												<select name="col4_id" class="colselect form-control" id="col4id">
+												<%for(int i = 0 ; i < propertylist.size();++i){ 
+													PackProperty item = propertylist.get(i);
+													if(i == 3){
+												%>
+												<option selected value="<%=item.getId() %>"><%=item.getName() %></option>
+												<%}else{ %>
+													<option value="<%=item.getId() %>"><%=item.getName() %></option>
+												<%} }%></select>
+											</th>
+											<th rowspan="2" width="40px">
+												颜色
+											</th>
+											<th rowspan="2" width="40px">
+												数量
+											</th>
+											<th rowspan="2" width="40px">
+												每箱数量
+											</th><th colspan="3" width="120px">外箱尺寸</th>
+												<th colspan="2" width="80px">毛净重</th>
+											<th rowspan="2" width="60px">
+												箱数
+											</th>
+											<th colspan="2" width="100px">
+												箱号
+											</th>
+											<th rowspan="2" width="40px">
+												每包几件
+											</th>
+											<th rowspan="2" width="40px">
+												立方数
+											</th>
+											<th rowspan="2" width="40px">
+												操作
+											</th>
+										</tr><tr><th width="55px">
+												L
+											</th><th width="55px">
+												W
+											</th><th width="55px">
+												H
+											</th><th width="55px">
+												毛重
+											</th><th width="55px">
+												净重
+											</th><th width="60px">
+												开始
+											</th><th width="60px">
+												结束
+											</th></tr>
+									</thead>
+												
+														<tbody>
 
-											<%
-												}
-											%>
+														</tbody>
+													</table>
+													<div id="navigator"></div>
+												</td>
+											</tr>
 
 										</tbody>
 									</table>
-							</div>
-							<div class="col-md-6">
-								<p>预览装箱文件：</p>
-								<iframe name="previewContent" id="previewContent"></iframe>						</div>
-						
-							</div>
 
+								</div>
+							</form>
 						</div>
-
-						
+					</div>
 				</div>
 			</div>
-
-
-		</div>
-
-
 		</div>
 	</body>
 </html>

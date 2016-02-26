@@ -9,12 +9,13 @@
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.entity.ordergrid.PlanOrder"%>
 <%
-	Order order = (Order) request.getAttribute("order");
 	//车间记录单
-	PlanOrder planorder = (PlanOrder) request.getAttribute("planOrder");
-	List<PlanOrderDetail> planOrderDetailList = planorder == null ? new ArrayList<PlanOrderDetail>()
-			: planorder.getDetaillist();
-	String productfactoryStr = (String)request.getAttribute("productfactoryStr");
+	Order order = (Order) request.getAttribute("order");
+	List<OrderDetail> DetailList = order == null ? new ArrayList<OrderDetail>()
+			: order.getDetaillist();
+	if(DetailList == null){
+		DetailList = new ArrayList<OrderDetail>();
+	}
 %>
 <!DOCTYPE html>
 <html>
@@ -113,14 +114,14 @@
 													尺寸
 												</th>
 												<th width="15%">
-													生产数量
+													订单数量
 												</th>
 
 											</tr>
 										</thead>
 										<tbody>
 											<%
-												for (PlanOrderDetail detail : planOrderDetailList) {
+												for (OrderDetail detail : DetailList) {
 											%>
 											<tr class="tr">
 												<td class="color"><%=detail.getColor()%>
