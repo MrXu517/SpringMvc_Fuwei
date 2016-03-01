@@ -8,6 +8,7 @@ public class PackingOrderDetail {
 	@IdentityId
 	private int id;
 	private int packingOrderId;
+	private int orderId;
 	private String color;//颜色
 	private int quantity;//数量
 	private int per_carton_quantity;//每箱数量
@@ -29,6 +30,14 @@ public class PackingOrderDetail {
 	private String col3_value;//动态属性3的值
 	
 	private String col4_value;//动态属性4的值
+	
+	
+	public int getOrderId() {
+		return orderId;
+	}
+	public void setOrderId(int orderId) {
+		this.orderId = orderId;
+	}
 	public int getId() {
 		return id;
 	}

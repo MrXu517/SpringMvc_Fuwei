@@ -38,7 +38,7 @@ public class FuliaoInNoticeService extends BaseService {
 	}
 
 	// 添加,返回主键
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	public int add(FuliaoInNotice notice) throws Exception {
 		try {
 			
@@ -127,7 +127,7 @@ public class FuliaoInNoticeService extends BaseService {
 	
 
 	// 编辑
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	public int update(FuliaoInNotice notice) throws Exception {
 		try {
 			FuliaoInNotice temp = this.get(notice.getId());

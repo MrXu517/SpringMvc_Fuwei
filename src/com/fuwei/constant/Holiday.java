@@ -10,12 +10,16 @@ public class Holiday {
 		new MyDate(2014,10,1), new MyDate(2014,10,2),
 		new MyDate(2014,10,3),
 		new MyDate(2015, 1, 1),
-			new MyDate(2015,2,19), new MyDate(2015,2,20),
-			new MyDate(2015,2,21), new MyDate(2015,4,5),
-			new MyDate(2015,5,1), new MyDate(2015,6,20),
-			new MyDate(2015,9,3), new MyDate(2015,9,27),
-			new MyDate(2015,10,1), new MyDate(2015,10,2),
-			new MyDate(2015,10,3) };
+		new MyDate(2015,2,19), new MyDate(2015,2,20),
+		new MyDate(2015,2,21), new MyDate(2015,4,5),
+		new MyDate(2015,5,1), new MyDate(2015,6,20),
+		new MyDate(2015,9,3), new MyDate(2015,9,27),
+		new MyDate(2015,10,1), new MyDate(2015,10,2),
+		new MyDate(2015,10,3) ,
+		new MyDate(2016,1,1),new MyDate(2016,2,7),new MyDate(2016,2,8),new MyDate(2016,2,9),new MyDate(2016,2,10),new MyDate(2016,2,11),new MyDate(2016,2,12),new MyDate(2016,2,13),
+		new MyDate(2016,4,4),new MyDate(2016,5,1),new MyDate(2016,6,9),new MyDate(2016,9,15),
+		new MyDate(2016,10,1),new MyDate(2016,10,2),new MyDate(2016,10,3),new MyDate(2017,1,1)
+	};
 
 
 	public static int getHoliday(int year , int month) {

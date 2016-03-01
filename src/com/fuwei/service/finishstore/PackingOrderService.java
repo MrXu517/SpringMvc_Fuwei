@@ -99,6 +99,10 @@ public class PackingOrderService extends BaseService {
 			if(packingOrder.getDetaillist()==null || packingOrder.getDetaillist().size()<=0){
 				throw new Exception("请至少填写一条装箱单明细");
 			}
+			PackingOrder temp = this.getByOrder(packingOrder.getOrderId());
+			if(temp!=null){
+				throw new Exception("每个订单只能有一个装箱单");
+			}
 			packingOrder.setStatus(0);
 			packingOrder.setState("新建");
 			Integer packingOrderId = this.insert(packingOrder);
@@ -148,6 +152,8 @@ public class PackingOrderService extends BaseService {
 			PackingOrder order = dao.queryForBean(
 					"select * from tb_packingorder where orderId = ?",
 					PackingOrder.class, orderId);
+			List<PackingOrderDetail> detaillist = packingOrderDetailService.getList(order.getId());
+			order.setDetaillist(detaillist);
 			return order;
 		} catch (Exception e) {
 			throw e;
