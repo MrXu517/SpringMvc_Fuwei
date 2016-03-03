@@ -2,6 +2,9 @@
 	contentType="text/html; charset=utf-8"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.entity.Order"%>
+<%@page import="com.fuwei.commons.SystemCache"%>
+<%@page import="com.fuwei.entity.Order"%>
+<%@page import="com.fuwei.entity.producesystem.Fuliao"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.entity.Factory"%>
@@ -29,7 +32,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>创建成品入库单 -- 桐庐富伟针织厂</title>
+		<title>创建成品退货单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -49,7 +52,7 @@
 		<link href="css/plugins/ui.jqgrid.css" rel="stylesheet"
 			type="text/css" />
 		<script src="js/order/ordergrid.js" type="text/javascript"></script>
-		<script src="js/finishstore/in_add.js" type="text/javascript"></script>
+		<script src="js/finishstore/return_add.js" type="text/javascript"></script>
 		<style type="text/css">
 #tablename {
   font-weight: bold;
@@ -103,10 +106,10 @@ tr.disable{background:#ddd;}
 							<a href="order/detail/<%=order.getId()%>">订单详情</a>
 						</li>
 						<li>
-							<a target="_blank" href="finishstore_workspace/workspace">成品工作台 -- 入库</a>
+							<a target="_blank" href="finishstore_workspace/workspace">成品工作台 -- 退货</a>
 						</li>
 						<li class="active">
-							创建成品入库单
+							创建成品退货单
 						</li>
 					</ul>
 				</div>
@@ -124,11 +127,11 @@ tr.disable{background:#ddd;}
 									<div class="col-md-12 tablewidget">
 										<table class="table">
 											<caption id="tablename">
-												桐庐富伟针织厂成品入库单
+												桐庐富伟针织厂成品退货单
 												<button type="submit"
 													class="pull-right btn btn-danger saveTable"
 													data-loading-text="正在保存...">
-													创建成品入库单
+													创建成品退货单
 												</button>
 											</caption>
 										</table>
@@ -172,7 +175,7 @@ tr.disable{background:#ddd;}
 																<tr>
 																	<td colspan="2">
 																		<div class="form-group ">
-																入库时间：
+																退货时间：
 																<input type="text" class="form-control require date" style="width: 300px;display: inline-block;"
 																	name="date" id="out_in_date"
 																	value="<%=DateTool.formatDateYMD(DateTool.now())%>">
@@ -243,10 +246,10 @@ tr.disable{background:#ddd;}
 												已入库箱数
 											</th>
 											<th rowspan="2" width="80px">
-												本次入库数量
+												本次退货数量
 											</th>
 											<th rowspan="2" width="60px">
-												本次入库箱数
+												本次退货箱数
 											</th>
 										</tr>
 											</thead>
@@ -298,7 +301,7 @@ tr.disable{background:#ddd;}
 													<td>
 														<input disabled class="quantity form-control require positive_int value"
 															type="text" value="0"
-															placeholder="请输入入库数量">
+															placeholder="请输入退货数量">
 													</td>
 													<td class="cartons">
 														0

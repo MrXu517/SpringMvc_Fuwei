@@ -1,16 +1,13 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
-<%@page import="com.fuwei.entity.Salesman"%>
-<%@page import="com.fuwei.entity.Company"%>
 <%@page import="com.fuwei.entity.User"%>
-<%@page import="com.fuwei.entity.producesystem.HalfCurrentStock"%>
 <%@page import="com.fuwei.commons.Pager"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="net.sf.json.JSONObject"%>
-<%@page import="com.fuwei.entity.Factory"%>
 <%@page import="com.fuwei.entity.Employee"%>
-<%@page import="com.fuwei.entity.producesystem.HalfCurrentStockDetail"%>
+<%@page import="com.fuwei.entity.finishstore.FinishStoreStock"%>
+<%@page import="com.fuwei.entity.finishstore.FinishStoreStockDetail"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -20,22 +17,10 @@
 	if (pager == null) {
 		pager = new Pager();
 	}
-	List<HalfCurrentStock> currentStocklist = new ArrayList<HalfCurrentStock>();
+	List<FinishStoreStock> currentStocklist = new ArrayList<FinishStoreStock>();
 	if (pager != null & pager.getResult() != null) {
-		currentStocklist = (List<HalfCurrentStock>) pager.getResult();
+		currentStocklist = (List<FinishStoreStock>) pager.getResult();
 	}
-
-	Integer companyId = (Integer) request.getAttribute("companyId");
-	String company_str = "";
-	String salesman_str = "";	
-	if (companyId != null) {
-		company_str = String.valueOf(companyId);
-	}
-	
-	if (companyId == null) {
-		companyId = -1;
-	}
-
 
 	Integer charge_employee = (Integer) request.getAttribute("charge_employee");
 	String charge_employee_str = "";
@@ -50,12 +35,12 @@
 	if (orderNumber != null) {
 		orderNumber_str = String.valueOf(orderNumber);
 	}
-	
 	Boolean not_zero = (Boolean) request.getAttribute("not_zero");
 	String not_zero_str = "";
 	if(not_zero!=null){
 		not_zero_str = not_zero?"1":"0";
 	}
+	
 	List<Employee> employeelist = (List<Employee>) request.getAttribute("employeelist");
 %>
 <!DOCTYPE html>
@@ -63,7 +48,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>半成品当前库存列表 -- 桐庐富伟针织厂</title>
+		<title>成品当前库存列表 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -134,44 +119,17 @@
 												</select>
 											</div>
 										</div>
-									
-										<div class="form-group salesgroup">
-											<label for="companyId" class="col-sm-3 control-label">
-												公司
-											</label>
-											<div class="col-sm-9">
-												<select class="form-control" name="companyId" id="companyId"
-													placeholder="公司">
-													<option value="">
-														所有
-													</option>
-													<%
-														for (Company company : SystemCache.companylist) {
-																																					if (companyId != null && companyId == company.getId()) {
-													%>
-													<option value="<%=company.getId()%>" selected><%=company.getShortname()%></option>
-													<%
-														} else {
-													%>
-													<option value="<%=company.getId()%>"><%=company.getShortname()%></option>
-													<%
-														}
-																																				}
-													%>
-												</select>
-											</div>
-										</div>
-										
 										<%if(not_zero!=null && not_zero){ %><input checked name="not_zero" type="checkbox" value="1" style="margin-left:10px;">  不显示0库存
 											<%}else{ %>
 											<input name="not_zero" type="checkbox" value="1" style="margin-left:10px;">  不显示0库存<%} %>
+										
 									
 										</form>
 										
 									<ul class="pagination">
 										<li>
 											<a
-												href="half_current_stock/index?not_zero=<%=not_zero_str %>&orderNumber=<%=orderNumber_str%>&charge_employee=<%=charge_employee_str%>&companyId=<%=company_str%>&page=1">«</a>
+												href="finishstore_workspace/current_stock?not_zero=<%=not_zero_str %>&orderNumber=<%=orderNumber_str%>&charge_employee=<%=charge_employee_str%>&page=1">«</a>
 										</li>
 
 										<%
@@ -179,7 +137,7 @@
 										%>
 										<li class="">
 											<a
-												href="half_current_stock/index?not_zero=<%=not_zero_str %>&orderNumber=<%=orderNumber_str%>&charge_employee=<%=charge_employee_str%>&companyId=<%=company_str%>&page=<%=pager.getPageNo() - 1%>">上一页
+												href="finishstore_workspace/current_stock?not_zero=<%=not_zero_str %>&orderNumber=<%=orderNumber_str%>&charge_employee=<%=charge_employee_str%>&page=<%=pager.getPageNo() - 1%>">上一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -194,7 +152,7 @@
 
 										<li class="active">
 											<a
-												href="half_current_stock/index?not_zero=<%=not_zero_str %>&orderNumber=<%=orderNumber_str%>&charge_employee=<%=charge_employee_str%>&companyId=<%=company_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
+												href="finishstore_workspace/current_stock?not_zero=<%=not_zero_str %>&orderNumber=<%=orderNumber_str%>&charge_employee=<%=charge_employee_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
 												class="sr-only"></span> </a>
 										</li>
 										<li>
@@ -204,7 +162,7 @@
 										
 										<li class="">
 											<a
-												href="half_current_stock/index?not_zero=<%=not_zero_str %>&orderNumber=<%=orderNumber_str%>&charge_employee=<%=charge_employee_str%>&companyId=<%=company_str%>&page=<%=pager.getPageNo() + 1%>">下一页
+												href="finishstore_workspace/current_stock?not_zero=<%=not_zero_str %>&orderNumber=<%=orderNumber_str%>&charge_employee=<%=charge_employee_str%>&page=<%=pager.getPageNo() + 1%>">下一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -220,7 +178,7 @@
 										<li></li>
 										<li>
 											<a
-												href="half_current_stock/index?not_zero=<%=not_zero_str %>&orderNumber=<%=orderNumber_str%>&charge_employee=<%=charge_employee_str%>&companyId=<%=company_str%>&page=<%=pager.getTotalPage()%>">»</a>
+												href="finishstore_workspace/current_stock?not_zero=<%=not_zero_str %>&orderNumber=<%=orderNumber_str%>&charge_employee=<%=charge_employee_str%>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
 
@@ -230,12 +188,13 @@
 									<thead>
 										<tr style="height:0;">
 											<th style="width:20px"></th>
-    										<th style="width:55px"></th>
-    										<th style="width:40px"></th>
     										<th style="width:60px"></th>
-    										<th style="width:70px"></th>
-    										<th style="width:40px"></th>
-    										<th style="width:70px"></th>
+    										<th style="width:100px"></th>
+											<th style="width:40px"></th>
+    										<th style="width:55px"></th>
+    										<th style="width:55px"></th>
+    										<th style="width:55px"></th>
+    										<th style="width:55px"></th>
     										<th style="width:55px"></th>
     										<th style="width:60px"></th>
     										<th style="width:60px"></th>
@@ -247,65 +206,68 @@
 											</th>
 											<th rowspan="2" width="60px">
 												订单号
-											</th>
-											<th rowspan="2" width="40px">
-												公司
-											</th>
-											<th rowspan="2" width="60px">
-												公司货号
-											</th><th rowspan="2" width="70px">
+											</th><th rowspan="2" width="100px">
 												款名
 											</th>
 											<th rowspan="2" width="40px">
 												跟单人
-											</th><th rowspan="2" width="70px">
-												总库存
-											</th><th colspan="3" width="165px">颜色及数量库存列表</th>
-											
+											</th><th colspan="7" width="165px">入库列表</th>
 											<th rowspan="2" width="40px">
 												操作
 											</th>
 										</tr><tr><th width="55px">
+												列1
+											</th><th width="55px">
+												列2
+											</th><th width="55px">
+												列3
+											</th><th width="55px">
+												列4
+											</th><th width="55px">
 												颜色
 											</th><th  width="60px">
-												尺寸
-											</th><th  width="50px">
+												库存箱数
+											</th><th  width="60px">
 												库存数量
 											</th></tr>
 									</thead>
 									<tbody>
 										<%
 											int i = (pager.getPageNo()-1) * pager.getPageSize() + 0;
-																											for (HalfCurrentStock item : currentStocklist) {
-																												boolean even = i%2 == 0;
-																												String classname = even?"even":"odd";
-																												List<HalfCurrentStockDetail> detailist = item.getDetaillist();
-																												int detailsize = item.getDetaillist().size();
+												for (FinishStoreStock item : currentStocklist) {
+												boolean even = i%2 == 0;
+												String classname = even?"even":"odd";
+												List<FinishStoreStockDetail> detailist = item.getDetaillist();
+												if(detailist == null){detailist = new ArrayList<FinishStoreStockDetail>();}
+												int detailsize = detailist.size();
 										%>
 										<tr itemId="<%=item.getId()%>" class="<%=classname%>">
 											<td rowspan="<%=detailsize%>"><%=++i%></td>
-											
-											<td rowspan="<%=detailsize%>"><a target="_top" href="order/detail/<%=item.getOrderId()%>"><%=item.getOrderNumber()%></a></td>
-											<td rowspan="<%=detailsize%>"><%=SystemCache.getCompanyShortName(item.getCompanyId())%></td>
-											<td rowspan="<%=detailsize%>"><%=item.getCompany_productNumber()%></td>
+											<td rowspan="<%=detailsize%>"><a target="_blank" href="order/detail/<%=item.getOrderId()%>"><%=item.getOrderNumber()%></a></td>
 											<td rowspan="<%=detailsize%>"><%=item.getName()%></td>
 											<td rowspan="<%=detailsize%>"><%=SystemCache.getEmployeeName(item.getCharge_employee())%></td>
-											<td rowspan="<%=detailsize%>"><%=item.getTotal_stock_quantity()%></td>
-											
+											<td><%=detailist.get(0).getCol1_value() == null?"":detailist.get(0).getCol1_value()%></td>
+											<td><%=detailist.get(0).getCol2_value() == null?"":detailist.get(0).getCol2_value()%></td>
+											<td><%=detailist.get(0).getCol3_value() == null?"":detailist.get(0).getCol3_value()%></td>
+											<td><%=detailist.get(0).getCol4_value() == null?"":detailist.get(0).getCol4_value()%></td>
 											<td><%=detailist.get(0).getColor()%></td>
-											<td><%=detailist.get(0).getSize()%></td>
+											<td><%=detailist.get(0).getStock_cartons()%></td>
 											<td><%=detailist.get(0).getStock_quantity()%></td>
 											<td rowspan="<%=detailsize%>">
-												<a target="_top" href="half_current_stock/in_out/<%=item.getOrderId()%>">出入库记录</a>
+												<a target="_top" href="finishstore_workspace/in_out/<%=item.getOrderId()%>">出入库记录</a>
 											</td>
 										</tr>
 										<%
 											detailist.remove(0);
-																		for(HalfCurrentStockDetail detail : detailist){
+											for(FinishStoreStockDetail detail : detailist){
 										%>
 										<tr class="<%=classname %>">
+											<td><%=detail.getCol1_value() == null?"":detail.getCol1_value()%></td>
+											<td><%=detail.getCol2_value() == null?"":detail.getCol2_value()%></td>
+											<td><%=detail.getCol3_value() == null?"":detail.getCol3_value()%></td>
+											<td><%=detail.getCol4_value() == null?"":detail.getCol4_value()%></td>
 											<td><%=detail.getColor()%></td>
-											<td><%=detail.getSize()%></td>
+											<td><%=detail.getStock_cartons()%></td>
 											<td><%=detail.getStock_quantity()%></td>
 
 										</tr>

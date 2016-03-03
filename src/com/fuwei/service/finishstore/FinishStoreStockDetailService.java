@@ -23,7 +23,7 @@ public class FinishStoreStockDetailService extends BaseService {
 	public List<FinishStoreStockDetail> getList(int finishStoreStockId) throws Exception {
 		try {
 			List<FinishStoreStockDetail> List = dao.queryForBeanList(
-					"SELECT * FROM tb_finishstorestock_detail WHERE finishStoreStockId=?", FinishStoreStockDetail.class,finishStoreStockId);
+					"SELECT a.*,b.color,b.per_carton_quantity,b.per_pack_quantity,b.col1_value,b.col2_value,b.col3_value,b.col4_value FROM tb_finishstorestock_detail a,tb_packingorder_detail b WHERE a.finishStoreStockId=? and a.packingOrderDetailId=b.id", FinishStoreStockDetail.class,finishStoreStockId);
 			return List;
 		} catch (Exception e) {
 			throw e;
@@ -32,12 +32,13 @@ public class FinishStoreStockDetailService extends BaseService {
 	
 	@Transactional
 	public boolean addBatch(List<FinishStoreStockDetail> detailList) throws Exception {
-		String sql = "INSERT INTO tb_finishstorestock_detail(finishStoreStockId,packingOrderDetailId,stock_quantity,plan_quantity,in_quantity,out_quantity,return_quantity) VALUES(?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO tb_finishstorestock_detail(finishStoreStockId,packingOrderDetailId,stock_quantity,plan_quantity,in_quantity,out_quantity,return_quantity,stock_cartons,plan_cartons,in_cartons,return_cartons,out_cartons) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
 		List<Object[]> batchArgs = new ArrayList<Object[]>();
 		for (FinishStoreStockDetail item : detailList) {
 			batchArgs.add(new Object[] { 
 					item.getFinishStoreStockId(), item.getPackingOrderDetailId(),item.getStock_quantity(),item.getPlan_quantity(),
-					item.getIn_quantity(),item.getOut_quantity(),item.getReturn_quantity()
+					item.getIn_quantity(),item.getOut_quantity(),item.getReturn_quantity(),
+					item.getStock_cartons(),item.getPlan_cartons(),item.getIn_cartons(),item.getReturn_cartons(),item.getOut_cartons()
 			});
 		}
 		try {

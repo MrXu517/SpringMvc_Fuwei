@@ -11,7 +11,7 @@ import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
 import net.keepsoft.commons.annotation.Temporary;
 
-//成品出库
+//成品出入库
 @Table("tb_finishstore_out")
 public class FinishStoreOut {
 	@IdentityId
@@ -19,7 +19,15 @@ public class FinishStoreOut {
 	private String number;//成品出入库单编号
 	private Integer orderId;
 	private String orderNumber;
-	private int packingOrderId;//装箱单ID
+	private Integer packingOrderId;//装箱单ID
+	private String name;//样品名称
+	private int charge_employee;
+	private String company_productNumber;//样品的公司货号
+	private Integer companyId;// 公司ID
+	private Integer customerId;// 客户ID
+	private String img;// 图片
+	private String img_s;// 中等缩略图
+	private String img_ss;// 缩略图
 
 	
 	private Date date;//入库、出库日期
@@ -38,8 +46,40 @@ public class FinishStoreOut {
 	private Integer status;// 订单状态 -1刚创建  , 6执行完成 ， 7取消
 	private String state;// 订单状态描述
 	
+	@Temporary
+	private Integer col1_id;//装箱单中动态列1的列属性ID ， 根据ID可以在缓存中获取name
+	@Temporary
+	private Integer col2_id;//装箱单中动态列2的列属性ID ， 根据ID可以在缓存中获取name
+	@Temporary
+	private Integer col3_id;//装箱单中动态列3的列属性ID ， 根据ID可以在缓存中获取name
+	@Temporary
+	private Integer col4_id;//装箱单中动态列4的列属性ID ， 根据ID可以在缓存中获取name
 	
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getCharge_employee() {
+		return charge_employee;
+	}
+
+	public void setCharge_employee(int charge_employee) {
+		this.charge_employee = charge_employee;
+	}
+
+	public String getCompany_productNumber() {
+		return company_productNumber;
+	}
+
+	public void setCompany_productNumber(String company_productNumber) {
+		this.company_productNumber = company_productNumber;
+	}
+
 	public String getOrderNumber() {
 		return orderNumber;
 	}
@@ -64,11 +104,11 @@ public class FinishStoreOut {
 		this.orderId = orderId;
 	}
 
-	public int getPackingOrderId() {
+	public Integer getPackingOrderId() {
 		return packingOrderId;
 	}
 
-	public void setPackingOrderId(int packingOrderId) {
+	public void setPackingOrderId(Integer packingOrderId) {
 		this.packingOrderId = packingOrderId;
 	}
 
@@ -120,8 +160,6 @@ public class FinishStoreOut {
 		this.memo = memo;
 	}
 
-	
-
 	public List<FinishStoreOutDetail> getDetaillist() {
 		return detaillist;
 	}
@@ -154,6 +192,79 @@ public class FinishStoreOut {
 		this.state = state;
 	}
 
+	
+	public Integer getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(Integer companyId) {
+		this.companyId = companyId;
+	}
+
+	public Integer getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
+	}
+
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
+	public String getImg_s() {
+		return img_s;
+	}
+
+	public void setImg_s(String img_s) {
+		this.img_s = img_s;
+	}
+
+	public String getImg_ss() {
+		return img_ss;
+	}
+
+	public void setImg_ss(String img_ss) {
+		this.img_ss = img_ss;
+	}
+
+	public Integer getCol1_id() {
+		return col1_id;
+	}
+
+	public void setCol1_id(Integer col1_id) {
+		this.col1_id = col1_id;
+	}
+
+	public Integer getCol2_id() {
+		return col2_id;
+	}
+
+	public void setCol2_id(Integer col2_id) {
+		this.col2_id = col2_id;
+	}
+
+	public Integer getCol3_id() {
+		return col3_id;
+	}
+
+	public void setCol3_id(Integer col3_id) {
+		this.col3_id = col3_id;
+	}
+
+	public Integer getCol4_id() {
+		return col4_id;
+	}
+
+	public void setCol4_id(Integer col4_id) {
+		this.col4_id = col4_id;
+	}
+
 	// 是否可编辑
 	public Boolean isEdit() {
 		if(this.status == null){
@@ -172,6 +283,7 @@ public class FinishStoreOut {
 		return this.status != 6;
 	}
 	
+	
 	public String createNumber() throws ParseException{
 		return DateTool.getYear2() + "FCK" + NumberUtil.appendZero(this.id, 4);
 	}
@@ -181,6 +293,7 @@ public class FinishStoreOut {
 	public void setNumber(String number) {
 		this.number = number;
 	}
+	
 	
 	public String getType() throws ParseException{
 		return "出库";

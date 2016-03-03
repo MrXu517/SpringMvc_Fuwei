@@ -2,32 +2,32 @@
 	contentType="text/html; charset=utf-8"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.entity.Order"%>
-<%@page import="com.fuwei.commons.SystemCache"%>
-<%@page import="com.fuwei.entity.Order"%>
-<%@page import="com.fuwei.entity.producesystem.Fuliao"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
-<%@page import="com.fuwei.entity.producesystem.FuliaoInNotice"%>
 <%@page import="com.fuwei.entity.Factory"%>
-<%@page import="com.fuwei.entity.producesystem.FuliaoInNoticeDetail"%>
+<%@page import="net.sf.json.JSONObject"%>
+<%@page import="com.fuwei.entity.finishstore.FinishStoreStockDetail"%>
+<%@page import="com.fuwei.entity.finishstore.FinishStoreIn"%>
+<%@page import="com.fuwei.entity.finishstore.FinishStoreInDetail"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	Order order = (Order) request
-			.getAttribute("order");
-	FuliaoInNotice notice = (FuliaoInNotice)request.getAttribute("fuliaoInNotice");
-	List<FuliaoInNoticeDetail> detaillist = notice.getDetaillist();
+	FinishStoreIn finishStoreIn = (FinishStoreIn) request
+			.getAttribute("finishStoreIn");
+	List<FinishStoreInDetail> detaillist = finishStoreIn.getDetaillist();
 	if (detaillist == null) {
-		detaillist = new ArrayList<FuliaoInNoticeDetail>();
+		detaillist = new ArrayList<FinishStoreInDetail>();
 	}
+	Map<Integer,FinishStoreStockDetail> stockMap = (Map<Integer,FinishStoreStockDetail>) request
+			.getAttribute("stockMap");
 %>
 <!DOCTYPE html>
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>编辑辅料入库通知单 -- 桐庐富伟针织厂</title>
+		<title>编辑成品入库单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -47,7 +47,7 @@
 		<link href="css/plugins/ui.jqgrid.css" rel="stylesheet"
 			type="text/css" />
 		<script src="js/order/ordergrid.js" type="text/javascript"></script>
-		<script src="js/fuliaoin_notice/add.js" type="text/javascript"></script>
+		<script src="js/finishstore/in_add.js" type="text/javascript"></script>
 		<style type="text/css">
 #tablename {
   font-weight: bold;
@@ -88,7 +88,7 @@ tr.disable{background:#ddd;}
 
 	</head>
 	<body>
-		<%@ include file="../common/head.jsp"%>
+		<%@ include file="../../common/head.jsp"%>
 		<div id="Content">
 			<div id="main">
 				<div class="breadcrumbs" id="breadcrumbs">
@@ -98,13 +98,13 @@ tr.disable{background:#ddd;}
 							<a href="user/index">首页</a>
 						</li>
 						<li>
-							<a href="order/detail/<%=order.getId()%>">订单详情</a>
+							<a target="_blank" href="finishstore_workspace/workspace">成品工作台</a>
 						</li>
 						<li>
-							<a href="order/fuliao_progress/<%=order.getId()%>?tab=fuliaoinnotice">辅料列表及出入库情况</a>
+							<a target="_blank" href="finishstore_in/detail/<%=finishStoreIn.getId() %>">成品入库单详情</a>
 						</li>
 						<li class="active">
-							编辑辅料入库通知单
+							编辑成品入库单
 						</li>
 					</ul>
 				</div>
@@ -113,19 +113,20 @@ tr.disable{background:#ddd;}
 						<div class="row">
 							<div class="col-md-12">
 								<form class="saveform">
-									<input type="hidden" name="id" value="<%=notice.getId() %>" />
+									<input type="hidden" name="id" value="<%=finishStoreIn.getId()%>" />
+									<input type="hidden" name="packingOrderId" value="<%=finishStoreIn.getPackingOrderId()%>" />
 									<input type="hidden" name="orderId"
-										value="<%=notice.getOrderId()%>" />
+										value="<%=finishStoreIn.getOrderId()%>" />
 
 									<div class="clear"></div>
 									<div class="col-md-12 tablewidget">
 										<table class="table">
 											<caption id="tablename">
-												桐庐富伟针织厂辅料入库通知单
+												桐庐富伟针织厂成品入库单
 												<button type="submit"
 													class="pull-right btn btn-danger saveTable"
 													data-loading-text="正在保存...">
-													编辑辅料入库通知单
+													编辑成品入库单
 												</button>
 											</caption>
 										</table>
@@ -137,42 +138,47 @@ tr.disable{background:#ddd;}
 															<tbody>
 																<tr>
 																	<td rowspan="7" width="30%">
-																		<a href="/<%=order.getImg()%>" class="thumbnail"
+																		<a href="/<%=finishStoreIn.getImg()%>" class="thumbnail"
 																			target="_blank"> <img id="previewImg"
-																				alt="200 x 100%" src="/<%=order.getImg_s()%>">
+																				alt="200 x 100%" src="/<%=finishStoreIn.getImg_s()%>">
 																		</a>
 																	</td>
-																	<td width="100px">
-																		<div class="name">订单号：</div><span class="value"><%=order.getOrderNumber()%></span>
+																	<td width="30%">
+																		<div class="name">订单号：</div><span class="value"><%=finishStoreIn.getOrderNumber()%></span>
+																	</td>
+																	<td>
+																		<div class="name">公司：</div><span class="value"><%=SystemCache.getCompanyShortName(finishStoreIn.getCompanyId())%></span>
 																	</td>
 																</tr>
 																<tr>
 																	<td>
-																		<div class="name">公司：</div><span class="value"><%=SystemCache.getCompanyShortName(order.getCompanyId())%></span>
+																		<div class="name">货号：</div><span class="value"><%=finishStoreIn.getCompany_productNumber()%></span>
+																	</td>
+																	<td>
+																		<div class="name">客户：</div><span class="value"><%=SystemCache.getCustomerName(finishStoreIn.getCustomerId())%></span>
 																	</td>
 																</tr>
 																
 																<tr>
 																	<td>
-																		<div class="name">客户：</div><span class="value"><%=SystemCache.getCustomerName(order.getCustomerId())%></span>
+																		<div class="name">款名：</div><span class="value"><%=finishStoreIn.getName()%></span>
+																	</td>
+																	<td>
+																		<div class="name">跟单：</div><span class="value"><%=SystemCache.getEmployeeName(finishStoreIn.getCharge_employee())%></span>
 																	</td>
 																</tr>
 																<tr>
-																	<td>
-																		<div class="name">货号：</div><span class="value"><%=order.getCompany_productNumber()%></span>
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<div class="name">款名：</div><span class="value"><%=order.getName()%></span>
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<div class="name">跟单：</div><span class="value"><%=SystemCache.getEmployeeName(order.getCharge_employee())%></span>
+																	<td colspan="2">
+																		<div class="form-group ">
+																入库时间：
+																<input type="text" class="form-control require date" style="width: 300px;display: inline-block;"
+																	name="date" id="out_in_date"
+																	value="<%=DateTool.formatDateYMD(finishStoreIn.getDate())%>">
+															</div>
 																	</td>
 																	
 																</tr>
+																
 															</tbody>
 
 
@@ -185,67 +191,116 @@ tr.disable{background:#ddd;}
 										<table id="mainTb"
 											class="table table-responsive table-bordered detailTb">
 											<thead>
-												<tr><th width="5%">
+											<tr><th width="5%">
 														序号
 													</th>
-													<th width="8%">
-														类型
-													</th><th width="15%">
-														图片
-													</th><th width="8%">
-														订单号
-													</th><th width="8%">
-														款号
-													</th><th width="8%">
-														国家
-													</th><th width="8%">
-														颜色
-													</th><th width="8%">
-														尺码
-													</th><th width="8%">
-														批次
-													</th>
-													<th width="10%">
-														来源
-													</th>
-													<th width="20%">
-														数量(个)
-													</th>
-												</tr>
+											<%
+											int col = 0;
+											if(finishStoreIn.getCol1_id()!=null){
+											col++;
+											 %>
+											<th rowspan="2" width="80px">
+												<%=SystemCache.getPackPropertyName(finishStoreIn.getCol1_id()) %>
+											</th>
+											<%} %>
+											
+											<%if(finishStoreIn.getCol2_id()!=null){ 
+											col++;%>
+											<th rowspan="2" width="80px">
+												<%=SystemCache.getPackPropertyName(finishStoreIn.getCol2_id()) %>
+											</th>
+											<%} %>
+											<%if(finishStoreIn.getCol3_id()!=null){ 
+											col++;%>
+											<th rowspan="2" width="80px">
+												<%=SystemCache.getPackPropertyName(finishStoreIn.getCol3_id()) %>
+											</th>
+											<%} %>
+											<%if(finishStoreIn.getCol4_id()!=null){ 
+											col++;%>
+											<th rowspan="2" width="80px">
+												<%=SystemCache.getPackPropertyName(finishStoreIn.getCol4_id()) %>
+											</th>
+											<%} %>
+											<th rowspan="2" width="40px">
+												颜色
+											</th>
+											<th rowspan="2" width="40px">
+												每箱数量
+											</th>
+											<th rowspan="2" width="40px">
+												计划数量
+											</th>
+											<th rowspan="2" width="40px">
+												计划箱数
+											</th>
+											<th rowspan="2" width="40px">
+												已入库数量
+											</th>
+											<th rowspan="2" width="50px">
+												已入库箱数
+											</th>
+											<th rowspan="2" width="80px">
+												本次入库数量
+											</th>
+											<th rowspan="2" width="60px">
+												本次入库箱数
+											</th>
+										</tr>
 											</thead>
 											<tbody>
 												<%
-													for (FuliaoInNoticeDetail detail : detaillist) {
-														Integer fuliaoPurchaseFactoryId = (Integer)detail.getFuliaoPurchaseFactoryId();
+													for (FinishStoreInDetail detail : detaillist) {
+														FinishStoreStockDetail temp = stockMap.get(detail.getPackingOrderDetailId());
+														int actualIn_cartons = 0 ;
+														int actualIn_quantity = 0 ;
+														if(temp != null){
+															actualIn_cartons = temp.getIn_cartons() - temp.getReturn_cartons();
+															actualIn_quantity = temp.getIn_quantity() - temp.getReturn_quantity();
+														}
+														int plan_quantity = temp==null?0:temp.getPlan_quantity();
+														int plan_cartons = temp==null?0:temp.getPlan_cartons();
+														
+														JSONObject json = JSONObject.fromObject(detail);
+														json.remove("id");
 												%>
-												<tr class="tr" data='<%=SerializeTool.serialize(detail)%>'>
-													<td><input type="checkbox" name="checked" class="checkBtn" checked/></td>
-													<td><%=SystemCache.getFuliaoTypeName((Integer)detail.getFuliaoTypeId())%></td>
-													<td><a href="/<%=detail.getImg()%>" class=""
-																			target="_blank"> <img id="previewImg"
-																				alt="200 x 100%" src="/<%=detail.getImg_ss()%>">
-																		</a></td>
-													<td><%=detail.getCompany_orderNumber()%></td>
-													<td><%=detail.getCompany_productNumber()%></td>
-													<td><%=detail.getCountry()%></td>
+												<tr class="tr" data='<%=json.toString()%>'>
+													<td><input checked type="checkbox" name="checked" class="checkBtn"/></td>
+													<%if(finishStoreIn.getCol1_id()!=null){ %>
+										<td>
+											<%=detail.getCol1_value()==null?"":detail.getCol1_value() %>
+										</td>
+										<%} %>
+										<%if(finishStoreIn.getCol2_id()!=null){ %>
+										<td>
+											<%=detail.getCol2_value()==null?"":detail.getCol2_value() %>
+										</td>
+										<%} %>	
+										<%if(finishStoreIn.getCol3_id()!=null){ %>
+										<td>
+											<%=detail.getCol3_value()==null?"":detail.getCol3_value() %>
+										</td>
+										<%} %>
+										<%if(finishStoreIn.getCol4_id()!=null){ %>
+										<td>
+											<%=detail.getCol4_value()==null?"":detail.getCol4_value() %>
+										</td>
+										<%} %>
+
+
 													<td><%=detail.getColor()%></td>
-													<td><%=detail.getSize()%></td>
-													<td><%=detail.getBatch()%></td>
-													<td>
-														<select class="fuliaoPurchaseFactoryId form-control  value">
-															<option value="">未选择</option>
-															<%for(Factory factory : SystemCache.fuliao_factorylist){
-																if(fuliaoPurchaseFactoryId!=null && fuliaoPurchaseFactoryId == factory.getId()){
-															 %>
-															<option value="<%=factory.getId() %>" selected><%=factory.getName() %></option>
-															<%}else{ %>
-															<option value="<%=factory.getId() %>"><%=factory.getName() %></option>
-															<%}} %>
-														</select>
-													</td>
+													<td><%=detail.getPer_carton_quantity()%></td>
+													<td><%=plan_quantity%></td>
+													<td><%=plan_cartons%></td>
+													<td><%=actualIn_quantity%></td>
+													<td><%=actualIn_cartons%></td>
 													<td>
 														<input class="quantity form-control require positive_int value"
-															type="text" value="<%=detail.getQuantity()%>">
+															type="text" value="<%=detail.getQuantity() %>"
+															placeholder="请输入入库数量">
+													</td>
+													<td class="cartons">
+														<%=detail.getCartons() %>
 													</td>
 												</tr>
 												<%
@@ -258,10 +313,10 @@ tr.disable{background:#ddd;}
 										<div id="tip" class="auto_bottom">
 											
 										</div>
-
+								
+										
 										<p class="pull-right auto_bottom">
-											<span id="created_user">制单人：<%=SystemCache.getUserName(SystemContextUtils
-							.getCurrentUser(session).getLoginedUser().getId())%></span>
+											<span id="created_user">制单人：<%=SystemCache.getUserName(finishStoreIn.getCreated_user())%></span>
 											<span id="date"> 日期：<%=DateTool.formatDateYMD(DateTool.now())%></span>
 										</p>
 

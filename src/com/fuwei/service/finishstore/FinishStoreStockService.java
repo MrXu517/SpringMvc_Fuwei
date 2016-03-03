@@ -18,6 +18,7 @@ import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.finishstore.FinishInOut;
+import com.fuwei.entity.finishstore.FinishInOutDetail;
 import com.fuwei.entity.finishstore.FinishStoreIn;
 import com.fuwei.entity.finishstore.FinishStoreInDetail;
 import com.fuwei.entity.finishstore.FinishStoreReturn;
@@ -45,11 +46,15 @@ public class FinishStoreStockService extends BaseService {
 	@Autowired
 	JdbcTemplate jdbc;
 	@Autowired
-	FinishStoreInService finishStoreInOutService;
+	FinishStoreInService finishStoreInService;
+	@Autowired
+	FinishStoreInDetailService finishStoreInDetailService;
 	@Autowired
 	FinishStoreStockDetailService finishStoreStockDetailService;
 	@Autowired
 	FinishStoreReturnService finishStoreReturnService;
+	@Autowired
+	FinishStoreReturnDetailService finishStoreReturnDetailService;
 	
 	// 获取列表
 	public Pager getList(Pager pager,Integer companyId,Integer charge_employee,String orderNumber,Boolean not_zero, List<Sort> sortlist)
@@ -99,13 +104,110 @@ public class FinishStoreStockService extends BaseService {
 		}
 	}
 	
-	//获取某订单的半成品出入库记录
-	// 获取
-	public List<FinishInOut> halfDetail(int orderId)
+	// 获取列表
+	public Pager getListAndDetail(Pager pager,Integer companyId,Integer charge_employee,String orderNumber,Boolean not_zero, List<Sort> sortlist)
 			throws Exception {
 		try {
-			List<FinishInOut> list = dao.queryForBeanList("select * from (select created_at,created_user,'store' as type ,id ,number,orderId,orderNumber,date,sign,has_print,in_out,memo  from tb_finishstore_in_out where orderId = ? union all select created_at,created_user,'return' as type,id ,number, orderId,orderNumber,date,sign,has_print,null,memo  from tb_finishstore_return where orderId = ?)  c order by date desc,created_at desc",
-					FinishInOut.class,orderId,orderId);
+			StringBuffer sql = new StringBuffer();
+			String seq = " AND ";
+			sql.append("select a.*,b.companyId,b.name,b.img,b.img_s,b.img_ss,b.orderNumber,b.charge_employee,b.company_productNumber from tb_finishstorestock a, tb_order b where a.orderId=b.id ");
+
+			StringBuffer sql_condition = new StringBuffer();
+			if (companyId != null) {
+				sql_condition.append(seq + " b.companyId='" + companyId + "'");
+				seq = " AND ";
+			}
+			if (charge_employee != null) {
+				sql_condition.append(seq + " b.charge_employee='"
+						+ charge_employee + "'");
+				seq = " AND ";
+			}
+			if (orderNumber != null && !orderNumber.equals("")) {
+				sql_condition.append(seq + " b.orderNumber='" + orderNumber + "'");
+				seq = " AND ";
+			}
+			if (not_zero != null) {
+				sql_condition.append(seq + " a.total_stock_quantity>0 ");
+				seq = " AND ";
+			}
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql_condition.append(" order by "
+								+ sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					} else {
+						sql_condition.append(","
+								+ sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			
+			pager =  findPager_T(sql.append(sql_condition).toString(),
+					FinishStoreStock.class, pager);
+			
+			List<FinishStoreStock> list = (List<FinishStoreStock>)pager.getResult();
+			if(list==null || list.size()<=0){
+				return pager;
+			}else{
+				String ids = "";
+				for(FinishStoreStock in : list){
+					ids += in.getId()+ ",";
+				}
+				ids = ids.substring(0,ids.length()-1);
+				String tempsql = "SELECT a.*,b.color,b.col1_value,b.col2_value,b.col3_value,b.col4_value FROM tb_finishstorestock_detail a,tb_packingorder_detail b WHERE a.packingOrderDetailId=b.id and a.finishStoreStockId in (" + ids + ") ";
+				List<FinishStoreStockDetail> totaldetaillist = dao.queryForBeanList(tempsql, FinishStoreStockDetail.class, null);
+				Map<Integer,List<FinishStoreStockDetail>> map = new HashMap<Integer, List<FinishStoreStockDetail>>();
+				for(FinishStoreStockDetail detail : totaldetaillist){
+					int finishStoreStockId = detail.getFinishStoreStockId();
+					if(map.containsKey(finishStoreStockId)){
+						List<FinishStoreStockDetail> tempL = map.get(finishStoreStockId);
+						tempL.add(detail);
+						map.put(finishStoreStockId, tempL);
+					}else{
+						List<FinishStoreStockDetail> tempL = new ArrayList<FinishStoreStockDetail>();
+						tempL.add(detail);
+						map.put(finishStoreStockId, tempL);
+					}
+				}
+				
+				for(FinishStoreStock in : list){
+					in.setDetaillist(map.get(in.getId()));
+				}
+			}
+			return pager;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	//获取某订单的成品出入库记录
+	// 获取
+	public List<FinishInOut> inoutDetail(int orderId)
+			throws Exception {
+		try {
+			List<FinishInOut> list = dao.queryForBeanList("select * from (select created_at,created_user,'in' as type ,id ,number,orderId,orderNumber,date,sign,has_print,memo  from tb_finishstore_in where orderId = ? union all select created_at,created_user,'return' as type,id ,number, orderId,orderNumber,date,sign,has_print,memo  from tb_finishstore_return where orderId = ? union all select created_at,created_user,'out' as type,id ,number, orderId,orderNumber,date,sign,has_print,memo  from tb_finishstore_out where orderId = ?)  c order by date desc,created_at desc",
+					FinishInOut.class,orderId,orderId,orderId);
+			if(list==null || list.size()<=0){
+				return list;
+			}else{
+				
+				for(FinishInOut in : list){
+					if(in.getInt()==1){//入库
+						List<FinishInOutDetail> detaillist = finishStoreInDetailService.getListToFinishInOut(in.getId());
+						in.setDetaillist(detaillist);
+					}else if(in.getInt()==0){//出库
+						
+					}else if(in.getInt()==-1){//退货
+						List<FinishInOutDetail> detaillist = finishStoreReturnDetailService.getListToFinishInOut(in.getId());
+						in.setDetaillist(detaillist);
+					}
+				}
+				
+			}
 			return list;
 		} catch (Exception e) {
 			throw e;
@@ -220,6 +322,12 @@ public class FinishStoreStockService extends BaseService {
 			int return_cartons = Integer.valueOf(item.get("return_cartons").toString());
 			int stock_cartons = Integer.valueOf(item.get("stock_cartons").toString());
 			
+			if(stock_quantity<0){
+				throw new Exception("库存数量不足：入库=" + in_quantity + ",出库="+out_quantity + ",退货="+return_quantity +",库存="+stock_quantity);
+			}
+			if(stock_cartons<0){
+				throw new Exception("库存箱数不足：入库=" + in_cartons + ",出库="+out_cartons + ",退货="+return_cartons +",库存="+stock_cartons);
+			}
 			int packingOrderDetailId = Integer.valueOf(item.get("packingOrderDetailId").toString());
 			FinishStoreStockDetail detail = new FinishStoreStockDetail();
 			detail.setPackingOrderDetailId(packingOrderDetailId);
@@ -342,7 +450,7 @@ public class FinishStoreStockService extends BaseService {
 		FinishStoreStock finishStoreStock = this.getAndDetail(orderId);
 		//2、若没有，则需要通过sql语句得到数据
 		if(finishStoreStock == null){
-			List<Map<String,Object>> in_map = dao.queryForListMap("select f.id as packingOrderDetailId, IFNULL(newtable.in_quantity,0) as in_quantity ,IFNULL(newtable.in_cartons,0) as in_cartons  from tb_packingorder_detail f left join (select sum(quantity) in_quantity, sum(cartons) in_cartons ,packingOrderDetailId from tb_finishstore_in_detail group by packingOrderDetailId)  newtable on f.id = newtable.packingOrderDetailId where  f.orderId =?",orderId);
+			List<Map<String,Object>> in_map = dao.queryForListMap("select f.quantity,f.cartons,f.id as packingOrderDetailId, IFNULL(newtable.in_quantity,0) as in_quantity ,IFNULL(newtable.in_cartons,0) as in_cartons  from tb_packingorder_detail f left join (select sum(quantity) in_quantity, sum(cartons) in_cartons ,packingOrderDetailId from tb_finishstore_in_detail group by packingOrderDetailId)  newtable on f.id = newtable.packingOrderDetailId where  f.orderId =?",orderId);
 			List<Map<String,Object>> out_map = dao.queryForListMap("select sum(a.quantity) out_quantity,sum(a.cartons) out_cartons,packingOrderDetailId from tb_finishstore_out_detail a ,tb_packingorder_detail b where a.packingOrderDetailId=b.id and b.orderId=? group by packingOrderDetailId", orderId);
 			List<Map<String,Object>> in_return_map = dao.queryForListMap("select sum(a.quantity) return_quantity,sum(a.cartons) return_cartons,packingOrderDetailId from tb_finishstore_return_detail a ,tb_packingorder_detail b where a.packingOrderDetailId=b.id and b.orderId=? group by packingOrderDetailId", orderId);
 			for(Map<String,Object> item : in_map){

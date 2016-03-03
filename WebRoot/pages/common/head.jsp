@@ -153,6 +153,10 @@
 	Boolean h_has_producebill_index = SystemCache.hasAuthority(session,"producebill/index");//生产对账单列表
 	
 	Boolean h_has_packproperty_index = SystemCache.hasAuthority(session,"packproperty/index");//装箱单列属性
+
+	//成品工作台
+	Boolean h_has_finishstore_workspace = SystemCache.hasAuthority(session,"producesystem/finishstore_workspace");//装箱单列属性
+	
 %>
 <html>
 	<link href="css/common/head.css" rel="stylesheet" type="text/css" />
@@ -368,7 +372,12 @@
 								<a href="producing_order/unprice_list"><i class="fa fa-warning"></i>未划价生产单</a>
 							</li>
 							<%} %>
-
+							<%if(h_has_finishstore_workspace){ %>
+							<li>
+								<a href="finishstore_workspace/workspace">成品工作台</a>
+							</li>
+							<%} %>
+							
 							<%if(has_producing_order_index){ %>
 							<li>
 								<a href="producing_order/index">查询生产单</a>

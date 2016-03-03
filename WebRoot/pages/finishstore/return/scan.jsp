@@ -66,7 +66,7 @@
 				<div class="body">
 					<div class="container-fluid producingWidget">
 						<div class="row">
-							<form action="finishstore_in/add">
+							<form action="finishstore_return/add">
 								<div class="form-group col-md-12">
 									<label for="orderNumber" class="col-sm-3 control-label">
 										订单号

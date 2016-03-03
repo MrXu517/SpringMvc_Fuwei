@@ -109,6 +109,7 @@ public class PackingOrderService extends BaseService {
 			packingOrder.setId(packingOrderId);
 			for(PackingOrderDetail detail : packingOrder.getDetaillist()){
 				detail.setPackingOrderId(packingOrderId);
+				detail.setOrderId(packingOrder.getOrderId());
 			}
 			packingOrderDetailService.addBatch(packingOrder.getDetaillist());
 			return packingOrderId;
@@ -134,6 +135,7 @@ public class PackingOrderService extends BaseService {
 			packingOrderDetailService.deleteBatch(packingOrderId);
 			for(PackingOrderDetail detail : packingOrder.getDetaillist()){
 				detail.setPackingOrderId(packingOrderId);
+				detail.setOrderId(packingOrder.getOrderId());
 			}
 			packingOrderDetailService.addBatch(packingOrder.getDetaillist());
 			this.update(packingOrder, "id",
@@ -152,6 +154,23 @@ public class PackingOrderService extends BaseService {
 			PackingOrder order = dao.queryForBean(
 					"select * from tb_packingorder where orderId = ?",
 					PackingOrder.class, orderId);
+			if(order == null){
+				return null;
+			}
+			return order;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	public PackingOrder getByOrderAndDetail(int orderId) throws Exception {
+		try {
+			PackingOrder order = dao.queryForBean(
+					"select * from tb_packingorder where orderId = ?",
+					PackingOrder.class, orderId);
+			if(order == null){
+				return null;
+			}
 			List<PackingOrderDetail> detaillist = packingOrderDetailService.getList(order.getId());
 			order.setDetaillist(detaillist);
 			return order;

@@ -1,18 +1,16 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
-<%@page import="com.fuwei.entity.Order"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	Order order = (Order) request.getAttribute("order");
 %>
 <!DOCTYPE html>
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>订单生产进度 -- 桐庐富伟针织厂</title>
+		<title>成品工作台 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -26,7 +24,7 @@
 		<script src="js/plugins/jquery-1.10.2.min.js"></script>
 		<script src="js/plugins/bootstrap.min.js" type="text/javascript"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
-		<link href="css/order/progress.css" rel="stylesheet" type="text/css" />
+		<link href="css/store_in_out/index.css" rel="stylesheet" type="text/css" />
 	</head>
 
 	<body>
@@ -40,11 +38,8 @@
 							<i class="fa fa-home"></i>
 							<a href="user/index">首页</a>
 						</li>
-						<li>
-							<a href="order/detail/<%=order.getId()%>">订单详情</a>
-						</li>
 						<li class="active">
-							生产进度  -- <%=order.getName() %>
+							成品工作台
 						</li>
 					</ul>
 				</div>
@@ -53,7 +48,9 @@
 						<div class="row">
 							<div class="col-md-12 btnWidget">
 								
-								
+								<a href="finishstore_in/scan" type="button" class="btn btn-warning"><i class="fa fa-sign-in fa-lg"></i>入库</a>
+								<a href="finishstore_out/scan" type="button" class="btn btn-danger"><i class="fa fa-sign-out fa-lg"></i>发货</a>
+								<a href="finishstore_return/scan" type="button" class="btn btn-danger"><i class="fa fa-sign-out fa-lg"></i>退货</a>
 							</div>
 						</div>
 
@@ -63,38 +60,34 @@
 
 						<ul class="nav nav-tabs" role="tablist">
 							<li class="active">
-								<a href="#halfinout" role="tab" data-toggle="tab">半成品出入库记录</a>
+								<a href="#store_in" role="tab" data-toggle="tab">入库列表</a>
+							</li>
+
+							<li>
+								<a href="#store_out" role="tab" data-toggle="tab">发货列表</a>
 							</li>
 							<li>
-								<a href="#halfprogress" role="tab" data-toggle="tab">半成品生产进度</a>
+								<a href="#store_return" role="tab" data-toggle="tab">退货列表</a>
 							</li>
 							<li>
-								<a href="#materialprogress" role="tab" data-toggle="tab">原材料生产进度</a>
-							</li>
-							<li>
-								<a href="#finishstoreprogress" role="tab" data-toggle="tab">成品进度</a>
-							</li>
-							<li>
-								<a href="#coloringprocessorder" role="tab" data-toggle="tab">染色进度</a>
+								<a href="#current_stock" role="tab" data-toggle="tab">成品库存报表</a>
 							</li>
 						</ul>
 
 
 						<div class="tab-content auto_height">
-							<div class="tab-pane active" id="halfinout">
-								<iframe id="halfinoutIframe" name="halfinoutIframe" border="0" furl="half_current_stock/in_out2/<%=order.getId() %>" > </iframe>
+							<div class="tab-pane active" id="store_in">
+								<iframe id="store_inIframe" name="store_inIframe" border="0" furl="finishstore_in/index" > </iframe>
+
 							</div>
-							<div class="tab-pane" id="halfprogress">
-								<iframe id="halfprogressIframe" name="halfprogressIframe" border="0" furl="half_store_in/actual_in/<%=order.getId()%>" > </iframe>
+							<div class="tab-pane" id="store_out">
+								<iframe id="store_outIframe" name="store_outIframe" border="0" furl="finishstore_out/index" > </iframe>
 							</div>
-							<div class="tab-pane" id="materialprogress">
-								<iframe id="materialprogressIframe" name="materialprogressIframe" border="0" furl="store_in/actual_in/<%=order.getId()%>" > </iframe>
+							<div class="tab-pane" id="store_return">
+								<iframe id="store_returnIframe" name="store_returnIframe" border="0" furl="finishstore_return/index" > </iframe>
 							</div>
-							<div class="tab-pane" id="finishstoreprogress">
-								<iframe id="finishstoreprogressIframe" name="finishstoreprogressIframe" border="0" furl="finishstore_in/actual_in/<%=order.getId()%>" > </iframe>
-							</div>
-							<div class="tab-pane" id="coloringprocessorder">
-								<iframe id="coloringprocessorderIframe" name="coloringprocessorderIframe" border="0" furl="" > </iframe>
+							<div class="tab-pane" id="current_stock">
+								<iframe id="current_stockIframe" name="current_stockIframe" border="0" furl="finishstore_workspace/current_stock" > </iframe>
 							</div>
 						</div>
 					</div>
@@ -106,7 +99,7 @@
 		</div>
 	<script type="text/javascript">
 			/*设置当前选中的页*/
-			var $a = $("#left li a[href='order/index']");
+			var $a = $("#left li a[href='finishstore_workspace/workspace']");
 			setActiveLeft($a.parent("li"));
 			$("#tab ul.nav>li").click(function(){
 				var $a = $(this).find("a");

@@ -1,6 +1,7 @@
 package com.fuwei.controller.finishstore;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -18,9 +19,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fuwei.commons.Pager;
+import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.controller.BaseController;
+import com.fuwei.entity.Employee;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
 import com.fuwei.entity.finishstore.FinishStoreIn;
@@ -55,6 +59,51 @@ public class FinishStoreInController extends BaseController {
 	@Autowired
 	AuthorityService authorityService;
 
+	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView index(Integer page, String start_time, String end_time,
+			String orderNumber, String sortJSON, HttpSession session,
+			HttpServletRequest request) throws Exception {
+
+		String lcode = "finishstore/index";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有查看成品入库列表的权限", null);
+		}
+
+		Date start_time_d = DateTool.parse(start_time);
+		Date end_time_d = DateTool.parse(end_time);
+		Pager pager = new Pager();
+		if (page != null && page > 0) {
+			pager.setPageNo(page);
+		}
+
+		List<Sort> sortList = null;
+		if (sortJSON != null) {
+			sortList = SerializeTool.deserializeList(sortJSON, Sort.class);
+		}
+		if (sortList == null) {
+			sortList = new ArrayList<Sort>();
+		}
+		Sort sort = new Sort();
+		sort.setDirection("desc");
+		sort.setProperty("created_at");
+		sortList.add(sort);
+		Sort sort2 = new Sort();
+		sort2.setDirection("desc");
+		sort2.setProperty("id");
+		sortList.add(sort2);
+
+		pager = finishStoreInService.getListAndDetail(pager, start_time_d, end_time_d,
+				orderNumber,null,null, sortList);
+		
+		request.setAttribute("start_time", start_time_d);
+		request.setAttribute("end_time", end_time_d);
+		request.setAttribute("orderNumber", orderNumber);
+		request.setAttribute("pager", pager);
+		return new ModelAndView("finishstore/in/index");
+	}
+	
 	@RequestMapping(value = "/list/{OrderId}", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView listbyorder(@PathVariable Integer OrderId,
@@ -78,7 +127,7 @@ public class FinishStoreInController extends BaseController {
 	
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView add(@PathVariable String orderNumber, HttpSession session, HttpServletRequest request,
+	public ModelAndView add(String orderNumber, HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		Order order =  orderService.get(orderNumber);
 		 if(order == null){
@@ -93,7 +142,10 @@ public class FinishStoreInController extends BaseController {
 		}
 		request.setAttribute("order", order);
 		try {
-			PackingOrder packingOrder = packingOrderService.getByOrder(orderId);
+			PackingOrder packingOrder = packingOrderService.getByOrderAndDetail(orderId);
+			if(packingOrder == null){
+				throw new Exception("该订单没有创建装箱单，请先创建装箱单 点击此处创建 <a href='packing_order/add/"+ orderId + "'>添加装箱单</a>");
+			}
 			request.setAttribute("packingOrder", packingOrder);
 			Map<Integer,FinishStoreStockDetail> stockMap = finishStoreStockService.getStockMapByOrder(orderId);
 			request.setAttribute("stockMap", stockMap);
@@ -123,13 +175,23 @@ public class FinishStoreInController extends BaseController {
 			if(finishStoreIn.getPackingOrderId() == null){
 				throw new Exception("装箱单号不能为空");
 			}
-			if(finishStoreIn.getOrderNumber() == null){
-				throw new Exception("订单号不能为空");
-			}
 			finishStoreIn.setCreated_at(DateTool.now());// 设置创建时间
 			finishStoreIn.setUpdated_at(DateTool.now());// 设置更新时间
 			finishStoreIn.setCreated_user(user.getId());// 设置创建人
 			
+			Order order = orderService.get(finishStoreIn.getOrderId());
+			if(order == null){
+				throw new Exception("不存在ID="+finishStoreIn.getOrderId()+"的订单" );
+			}
+			finishStoreIn.setCharge_employee(order.getCharge_employee());
+			finishStoreIn.setCompany_productNumber(order.getCompany_productNumber());
+			finishStoreIn.setName(order.getName());
+			finishStoreIn.setOrderNumber(order.getOrderNumber());
+			finishStoreIn.setCompanyId(order.getCompanyId());
+			finishStoreIn.setCustomerId(order.getCustomerId());
+			finishStoreIn.setImg(order.getImg());
+			finishStoreIn.setImg_s(order.getImg_s());
+			finishStoreIn.setImg_ss(order.getImg_ss());
 			List<FinishStoreInDetail> detaillist = SerializeTool
 						.deserializeList(details,
 								FinishStoreInDetail.class);
@@ -143,19 +205,9 @@ public class FinishStoreInController extends BaseController {
 			if(detaillist==null || detaillist.size()<=0){
 				throw new Exception("请至少填写一条入库明细");
 			}
-			finishStoreIn.setDetaillist(detaillist);
-			if(finishStoreIn.getId() == 0){//添加
-//				Order order = orderService.get(finishStoreIn.getOrderId());
-//				fuliaoInOutNotice.setName(order.getName());
-//				fuliaoInOutNotice.setCompany_productNumber(order.getCompany_productNumber());
-//				fuliaoInOutNotice.setOrderNumber(order.getOrderNumber());
-//				fuliaoInOutNotice.setCharge_employee(order.getCharge_employee());
-				Integer tableOrderId = finishStoreInService.add(finishStoreIn);
-				return this.returnSuccess("id", tableOrderId);
-			}else{//编辑
-				Integer tableOrderId = finishStoreInService.update(finishStoreIn);
-				return this.returnSuccess("id", tableOrderId);
-			}
+			finishStoreIn.setDetaillist(detaillist);		
+			Integer tableOrderId = finishStoreInService.add(finishStoreIn);
+			return this.returnSuccess("id", tableOrderId);
 			
 		} catch (Exception e) {
 			throw e;
@@ -208,8 +260,6 @@ public class FinishStoreInController extends BaseController {
 		}	
 		FinishStoreIn finishStoreIn = finishStoreInService.getAndDetail(id);
 		request.setAttribute("finishStoreIn", finishStoreIn);
-		Order order = orderService.get(finishStoreIn.getOrderId());
-		request.setAttribute("order", order);
 		return new ModelAndView("finishstore/in/detail");
 	}
 	
@@ -222,14 +272,14 @@ public class FinishStoreInController extends BaseController {
 		String lcode = "finishstore/edit";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有添加成品入库单的权限", null);
+			throw new PermissionDeniedDataAccessException("没有编辑成品入库单的权限", null);
 		}
 		try {
 			if(finishStoreInId!=null){
 				FinishStoreIn finishStoreIn = finishStoreInService.getAndDetail(finishStoreInId);
 				request.setAttribute("finishStoreIn", finishStoreIn);
-				Order order = orderService.get(finishStoreIn.getOrderId());
-				request.setAttribute("order", order);
+				Map<Integer,FinishStoreStockDetail> stockMap = finishStoreStockService.getStockMapByOrder(finishStoreIn.getOrderId());
+				request.setAttribute("stockMap", stockMap);
 				return new ModelAndView("finishstore/in/edit");
 				
 			}
@@ -251,6 +301,21 @@ public class FinishStoreInController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有编辑成品入库单的权限", null);
 		}
 		finishStoreIn.setUpdated_at(DateTool.now());
+		
+		Order order = orderService.get(finishStoreIn.getOrderId());
+		if(order == null){
+			throw new Exception("不存在ID="+finishStoreIn.getOrderId()+"的订单" );
+		}
+		finishStoreIn.setCharge_employee(order.getCharge_employee());
+		finishStoreIn.setCompany_productNumber(order.getCompany_productNumber());
+		finishStoreIn.setName(order.getName());
+		finishStoreIn.setOrderNumber(order.getOrderNumber());
+		finishStoreIn.setCompanyId(order.getCompanyId());
+		finishStoreIn.setCustomerId(order.getCustomerId());
+		finishStoreIn.setImg(order.getImg());
+		finishStoreIn.setImg_s(order.getImg_s());
+		finishStoreIn.setImg_ss(order.getImg_ss());
+		
 		List<FinishStoreInDetail> detaillist = SerializeTool
 				.deserializeList(details,
 						FinishStoreInDetail.class);
@@ -284,8 +349,38 @@ public class FinishStoreInController extends BaseController {
 		}	
 		FinishStoreIn finishStoreIn = finishStoreInService.getAndDetail(id);
 		request.setAttribute("finishStoreIn", finishStoreIn);
-		Order order = orderService.get(finishStoreIn.getOrderId());
-		request.setAttribute("order", order);
 		return new ModelAndView("finishstore/in/print");
 	}
+
+	@RequestMapping(value = "/scan", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView scan(HttpSession session, HttpServletRequest request)
+			throws Exception {
+		return new ModelAndView("finishstore/in/scan");
+	}
+	
+	//某订单的成品生产进度
+	@RequestMapping(value = "/actual_in/{orderId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView actual_in(@PathVariable Integer orderId, HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		if(orderId == null){
+			throw new Exception("订单号不能为空");
+		}
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/progress";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有查看订单成品生产进度的权限", null);
+		}
+		try {
+			FinishStoreStock storeStock = finishStoreStockService.getAndDetail(orderId);
+			request.setAttribute("storeStock", storeStock);
+			return new ModelAndView("finishstore/in/actual_in");	
+			
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 }

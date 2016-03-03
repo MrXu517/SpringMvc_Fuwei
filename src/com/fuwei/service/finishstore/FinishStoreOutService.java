@@ -1,8 +1,11 @@
 package com.fuwei.service.finishstore;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
 import com.fuwei.entity.DataCorrectRecord;
+import com.fuwei.entity.finishstore.FinishStoreIn;
+import com.fuwei.entity.finishstore.FinishStoreInDetail;
 import com.fuwei.entity.finishstore.FinishStoreOut;
 import com.fuwei.entity.finishstore.FinishStoreOutDetail;
 import com.fuwei.service.BaseService;
@@ -30,12 +35,13 @@ public class FinishStoreOutService extends BaseService {
 	@Autowired
 	DataCorrectRecordService dataCorrectRecordService;
 	@Autowired
-	FinishStoreOutDetailService finishStoreInOutDetailService;
+	FinishStoreOutDetailService finishStoreOutDetailService;
 
 	// 获取列表
-	public Pager getList(Pager pager, Date start_time, Date end_time,
-			Integer companyId,  Integer charge_employee,
-			String orderNumber, Boolean in_out, List<Sort> sortlist)
+	// 获取列表
+	public Pager getListAndDetail(Pager pager, Date start_time, Date end_time,
+			String orderNumber, Integer charge_employee,
+			String number,List<Sort> sortlist)
 			throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
@@ -43,10 +49,93 @@ public class FinishStoreOutService extends BaseService {
 			sql.append("select * from tb_finishstore_out");
 
 			StringBuffer sql_condition = new StringBuffer();
-			if (companyId != null) {
-				sql_condition.append(seq + " companyId='" + companyId + "'");
+			if (start_time != null) {// 出入库时间
+				sql_condition.append(seq + " date>='"
+						+ DateTool.formateDate(start_time) + "'");
 				seq = " AND ";
 			}
+			if (end_time != null) {
+				sql_condition.append(seq + " date<'"
+						+ DateTool.formateDate(DateTool.addDay(end_time,1))
+						+ "'");
+				seq = " AND ";
+			}
+			if (charge_employee != null) {
+				sql_condition.append(seq + " charge_employee='"
+						+ charge_employee + "'");
+				seq = " AND ";
+			}
+			if (number != null && !number.equals("")) {
+				sql_condition.append(seq + " number='" + number + "'");
+				seq = " AND ";
+			}
+			if (orderNumber != null && !orderNumber.equals("")) {
+				sql_condition.append(seq + " orderNumber='" + orderNumber + "'");
+				seq = " AND ";
+			}
+
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql_condition.append(" order by "
+								+ sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					} else {
+						sql_condition.append(","
+								+ sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			pager = findPager_T(sql.append(sql_condition).toString(),
+					FinishStoreOut.class, pager);
+			List<FinishStoreOut> list = (List<FinishStoreOut>)pager.getResult();
+			if(list==null || list.size()<=0){
+				return pager;
+			}else{
+				String ids = "";
+				for(FinishStoreOut in : list){
+					ids += in.getId()+ ",";
+				}
+				ids = ids.substring(0,ids.length()-1);
+				String tempsql = "SELECT a.*,b.color,b.per_carton_quantity,b.per_pack_quantity,b.col1_value,b.col2_value,b.col3_value,b.col4_value FROM tb_finishstore_out_detail a,tb_packingorder_detail b WHERE a.packingOrderDetailId=b.id and  a.FinishStoreInOutId in (" + ids + ") ";
+				List<FinishStoreOutDetail> totaldetaillist = dao.queryForBeanList(tempsql, FinishStoreOutDetail.class, null);
+				Map<Integer,List<FinishStoreOutDetail>> map = new HashMap<Integer, List<FinishStoreOutDetail>>();
+				for(FinishStoreOutDetail detail : totaldetaillist){
+					int finishStoreId = detail.getFinishStoreInOutId();
+					if(map.containsKey(finishStoreId)){
+						List<FinishStoreOutDetail> tempL = map.get(finishStoreId);
+						tempL.add(detail);
+						map.put(finishStoreId, tempL);
+					}else{
+						List<FinishStoreOutDetail> tempL = new ArrayList<FinishStoreOutDetail>();
+						tempL.add(detail);
+						map.put(finishStoreId, tempL);
+					}
+				}
+				
+				for(FinishStoreOut in : list){
+					in.setDetaillist(map.get(in.getId()));
+				}
+			}
+			return pager;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	public Pager getList(Pager pager, Date start_time, Date end_time,
+			String orderNumber, List<Sort> sortlist)
+			throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			String seq = " WHERE ";
+			sql.append("select * from tb_finishstore_out");
+
+			StringBuffer sql_condition = new StringBuffer();
+			
 
 			if (start_time != null) {// 出入库时间
 				sql_condition.append(seq + " date>='"
@@ -59,16 +148,7 @@ public class FinishStoreOutService extends BaseService {
 						+ "'");
 				seq = " AND ";
 			}
-			if (in_out != null) {
-				sql_condition.append(seq + " in_out='"
-						+ (in_out == true ? "1" : 0) + "'");
-				seq = " AND ";
-			}
-			if (charge_employee != null) {
-				sql_condition.append(seq + " charge_employee='"
-						+ charge_employee + "'");
-				seq = " AND ";
-			}
+			
 			if (orderNumber != null && !orderNumber.equals("")) {
 				sql_condition.append(seq + " orderNumber='" + orderNumber + "'");
 				seq = " AND ";
@@ -97,13 +177,21 @@ public class FinishStoreOutService extends BaseService {
 		}
 	}
 
+	//获取某订单的成品出库单
+	public List<FinishStoreOut> getList(int orderId){
+		return dao.queryForBeanList("select * from tb_finishstore_out where orderId=? order by created_at desc", FinishStoreOut.class,orderId);
+	}
+	public List<FinishStoreOut> getList(String orderNumber){
+		return dao.queryForBeanList("select * from tb_finishstore_out where orderNumber=?", FinishStoreOut.class,orderNumber);
+	}
+	
 	// 添加
 	@Transactional(rollbackFor=Exception.class)
 	public int add(FinishStoreOut object) throws Exception {
 		try {
 			if (object.getDetaillist() == null
 					|| object.getDetaillist().size() <= 0) {
-				throw new Exception("成品出、入库单至少得有一条详情记录");
+				throw new Exception("成品出库单至少得有一条详情记录");
 			} else {
 				object.setStatus(0);
 				object.setState("新建");
@@ -118,7 +206,7 @@ public class FinishStoreOutService extends BaseService {
 				for(FinishStoreOutDetail detail : object.getDetaillist()){
 					detail.setFinishStoreInOutId(id);
 				}
-				finishStoreInOutDetailService.addBatch(object.getDetaillist());
+				finishStoreOutDetailService.addBatch(object.getDetaillist());
 				//更新成品库存表
 				finishStoreStockService.reStock(object.getOrderId());
 				return id;
@@ -153,13 +241,13 @@ public class FinishStoreOutService extends BaseService {
 				if (!temp.isEdit()) {
 					throw new Exception("单据已执行完成，或已被取消，无法编辑 ");
 				}
-				finishStoreInOutDetailService.deleteBatch(object.getId());
+				finishStoreOutDetailService.deleteBatch(object.getId());
 				for(FinishStoreOutDetail detail : object.getDetaillist()){
 					detail.setFinishStoreInOutId(object.getId());
 				}
-				finishStoreInOutDetailService.addBatch(object.getDetaillist());
+				finishStoreOutDetailService.addBatch(object.getDetaillist());
 				// 更新表
-				this.update(object,"id","number,packingOrderId,created_user,created_at,orderId,orderNumber,has_print,status,state",
+				this.update(object,"id","number,packingOrderId,created_user,created_at,orderId,has_print,status,state",
 								true);
 				//更新成品库存表
 				finishStoreStockService.reStock(object.getOrderId());
@@ -206,9 +294,23 @@ public class FinishStoreOutService extends BaseService {
 	public FinishStoreOut get(int id) throws Exception {
 		try {
 			FinishStoreOut order = dao.queryForBean(
-					"select * from tb_finishstore_out where id = ?",
+					"select a.*,b.col1_id,b.col2_id,b.col3_id,b.col4_id from tb_finishstore_out a,tb_packingorder b where a.packingOrderId=b.id and a.id = ?",
 					FinishStoreOut.class, id);
 			return order;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	// 获取
+	public FinishStoreOut getAndDetail(int id) throws Exception {
+		try {
+			FinishStoreOut finishStoreOut = this.get(id);
+			if(finishStoreOut == null){
+				return null;
+			}
+			List<FinishStoreOutDetail> detaillist = finishStoreOutDetailService.getList(finishStoreOut.getId());
+			finishStoreOut.setDetaillist(detaillist);
+			return finishStoreOut;
 		} catch (Exception e) {
 			throw e;
 		}
@@ -245,7 +347,7 @@ public class FinishStoreOutService extends BaseService {
 			int id = temp.getId();
 			//如果单据并未打印，且并未执行完成，则无需数据纠正，正常删除单据即可
 			if (!temp.getHas_print() && temp.deletable()) {// 
-				throw new Exception("成品入库单并未打印且并未执行完成，无需数据纠正，正常删除单据即可");
+				throw new Exception("成品出库单并未打印且并未执行完成，无需数据纠正，正常删除单据即可");
 			}
 			
 			int result = dao.update("delete from tb_finishstore_out WHERE  id = ?", id);

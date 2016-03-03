@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fuwei.entity.finishstore.FinishInOutDetail;
 import com.fuwei.entity.finishstore.FinishStoreInDetail;
 import com.fuwei.entity.finishstore.FinishStoreStockDetail;
 import com.fuwei.entity.finishstore.PackingOrderDetail;
@@ -24,7 +25,18 @@ public class FinishStoreInDetailService extends BaseService {
 	public List<FinishStoreInDetail> getList(int finishStoreInOutId) throws Exception {
 		try {
 			List<FinishStoreInDetail> List = dao.queryForBeanList(
-					"SELECT * FROM tb_finishstore_in_detail WHERE finishStoreInOutId=?", FinishStoreInDetail.class,finishStoreInOutId);
+					"SELECT a.*,b.color,b.per_carton_quantity,b.per_pack_quantity,b.col1_value,b.col2_value,b.col3_value,b.col4_value FROM tb_finishstore_in_detail a,tb_packingorder_detail b WHERE a.finishStoreInOutId=? and a.packingOrderDetailId=b.id", FinishStoreInDetail.class,finishStoreInOutId);
+			return List;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	// 获取详情列表
+	public List<FinishInOutDetail> getListToFinishInOut(int finishStoreInOutId) throws Exception {
+		try {
+			List<FinishInOutDetail> List = dao.queryForBeanList(
+					"SELECT a.*,b.color,b.per_carton_quantity,b.per_pack_quantity,b.col1_value,b.col2_value,b.col3_value,b.col4_value FROM tb_finishstore_in_detail a,tb_packingorder_detail b WHERE a.finishStoreInOutId=? and a.packingOrderDetailId=b.id", FinishInOutDetail.class,finishStoreInOutId);
 			return List;
 		} catch (Exception e) {
 			throw e;

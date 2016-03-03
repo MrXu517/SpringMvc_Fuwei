@@ -1,8 +1,11 @@
 package com.fuwei.service.finishstore;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +36,10 @@ public class FinishStoreInService extends BaseService {
 	FinishStoreInDetailService finishStoreInOutDetailService;
 
 	// 获取列表
-	public Pager getList(Pager pager, Date start_time, Date end_time,
-			Integer companyId,  Integer charge_employee,
-			String orderNumber, Boolean in_out, List<Sort> sortlist)
+	// 获取列表
+	public Pager getListAndDetail(Pager pager, Date start_time, Date end_time,
+			String orderNumber, Integer charge_employee,
+			String number,List<Sort> sortlist)
 			throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
@@ -43,10 +47,93 @@ public class FinishStoreInService extends BaseService {
 			sql.append("select * from tb_finishstore_in");
 
 			StringBuffer sql_condition = new StringBuffer();
-			if (companyId != null) {
-				sql_condition.append(seq + " companyId='" + companyId + "'");
+			if (start_time != null) {// 出入库时间
+				sql_condition.append(seq + " date>='"
+						+ DateTool.formateDate(start_time) + "'");
 				seq = " AND ";
 			}
+			if (end_time != null) {
+				sql_condition.append(seq + " date<'"
+						+ DateTool.formateDate(DateTool.addDay(end_time,1))
+						+ "'");
+				seq = " AND ";
+			}
+			if (charge_employee != null) {
+				sql_condition.append(seq + " charge_employee='"
+						+ charge_employee + "'");
+				seq = " AND ";
+			}
+			if (number != null && !number.equals("")) {
+				sql_condition.append(seq + " number='" + number + "'");
+				seq = " AND ";
+			}
+			if (orderNumber != null && !orderNumber.equals("")) {
+				sql_condition.append(seq + " orderNumber='" + orderNumber + "'");
+				seq = " AND ";
+			}
+
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql_condition.append(" order by "
+								+ sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					} else {
+						sql_condition.append(","
+								+ sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			pager = findPager_T(sql.append(sql_condition).toString(),
+					FinishStoreIn.class, pager);
+			List<FinishStoreIn> list = (List<FinishStoreIn>)pager.getResult();
+			if(list==null || list.size()<=0){
+				return pager;
+			}else{
+				String ids = "";
+				for(FinishStoreIn in : list){
+					ids += in.getId()+ ",";
+				}
+				ids = ids.substring(0,ids.length()-1);
+				String tempsql = "SELECT a.*,b.color,b.per_carton_quantity,b.per_pack_quantity,b.col1_value,b.col2_value,b.col3_value,b.col4_value FROM tb_finishstore_in_detail a,tb_packingorder_detail b WHERE a.packingOrderDetailId=b.id and  a.finishStoreInOutId in (" + ids + ") ";
+				List<FinishStoreInDetail> totaldetaillist = dao.queryForBeanList(tempsql, FinishStoreInDetail.class, null);
+				Map<Integer,List<FinishStoreInDetail>> map = new HashMap<Integer, List<FinishStoreInDetail>>();
+				for(FinishStoreInDetail detail : totaldetaillist){
+					int finishStoreId = detail.getFinishStoreInOutId();
+					if(map.containsKey(finishStoreId)){
+						List<FinishStoreInDetail> tempL = map.get(finishStoreId);
+						tempL.add(detail);
+						map.put(finishStoreId, tempL);
+					}else{
+						List<FinishStoreInDetail> tempL = new ArrayList<FinishStoreInDetail>();
+						tempL.add(detail);
+						map.put(finishStoreId, tempL);
+					}
+				}
+				
+				for(FinishStoreIn in : list){
+					in.setDetaillist(map.get(in.getId()));
+				}
+			}
+			return pager;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	public Pager getList(Pager pager, Date start_time, Date end_time,
+			String orderNumber, List<Sort> sortlist)
+			throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			String seq = " WHERE ";
+			sql.append("select * from tb_finishstore_in");
+
+			StringBuffer sql_condition = new StringBuffer();
+			
 
 			if (start_time != null) {// 出入库时间
 				sql_condition.append(seq + " date>='"
@@ -59,16 +146,7 @@ public class FinishStoreInService extends BaseService {
 						+ "'");
 				seq = " AND ";
 			}
-			if (in_out != null) {
-				sql_condition.append(seq + " in_out='"
-						+ (in_out == true ? "1" : 0) + "'");
-				seq = " AND ";
-			}
-			if (charge_employee != null) {
-				sql_condition.append(seq + " charge_employee='"
-						+ charge_employee + "'");
-				seq = " AND ";
-			}
+			
 			if (orderNumber != null && !orderNumber.equals("")) {
 				sql_condition.append(seq + " orderNumber='" + orderNumber + "'");
 				seq = " AND ";
@@ -167,7 +245,7 @@ public class FinishStoreInService extends BaseService {
 				}
 				finishStoreInOutDetailService.addBatch(object.getDetaillist());
 				// 更新表
-				this.update(object,"id","number,packingOrderId,created_user,created_at,orderId,orderNumber,has_print,status,state",
+				this.update(object,"id","number,packingOrderId,created_user,created_at,orderId,has_print,status,state",
 								true);
 				//更新成品库存表
 				finishStoreStockService.reStock(object.getOrderId());
@@ -214,7 +292,7 @@ public class FinishStoreInService extends BaseService {
 	public FinishStoreIn get(int id) throws Exception {
 		try {
 			FinishStoreIn order = dao.queryForBean(
-					"select * from tb_finishstore_in where id = ?",
+					"select a.*,b.col1_id,b.col2_id,b.col3_id,b.col4_id from tb_finishstore_in a,tb_packingorder b where a.packingOrderId=b.id and a.id = ?",
 					FinishStoreIn.class, id);
 			return order;
 		} catch (Exception e) {
@@ -224,9 +302,10 @@ public class FinishStoreInService extends BaseService {
 	// 获取
 	public FinishStoreIn getAndDetail(int id) throws Exception {
 		try {
-			FinishStoreIn finishStoreIn = dao.queryForBean(
-					"select * from tb_finishstore_in where id = ?",
-					FinishStoreIn.class, id);
+			FinishStoreIn finishStoreIn = this.get(id);
+			if(finishStoreIn == null){
+				return null;
+			}
 			List<FinishStoreInDetail> detaillist = finishStoreInOutDetailService.getList(finishStoreIn.getId());
 			finishStoreIn.setDetaillist(detaillist);
 			return finishStoreIn;

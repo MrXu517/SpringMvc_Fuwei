@@ -2,26 +2,28 @@
 	contentType="text/html; charset=utf-8"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.entity.Order"%>
+<%@page import="com.fuwei.commons.SystemCache"%>
+<%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
-<%@page import="com.fuwei.entity.finishstore.FinishStoreInDetail"%>
-<%@page import="com.fuwei.entity.finishstore.FinishStoreIn"%>
+<%@page import="com.fuwei.entity.finishstore.FinishStoreReturnDetail"%>
+<%@page import="com.fuwei.entity.finishstore.FinishStoreReturn"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	FinishStoreIn finishStoreIn = (FinishStoreIn)request.getAttribute("finishStoreIn");
-	List<FinishStoreInDetail> detaillist = finishStoreIn.getDetaillist();
+	FinishStoreReturn finishStoreReturn = (FinishStoreReturn)request.getAttribute("finishStoreReturn");
+	List<FinishStoreReturnDetail> detaillist = finishStoreReturn.getDetaillist();
 	if (detaillist == null) {
-		detaillist = new ArrayList<FinishStoreInDetail>();
+		detaillist = new ArrayList<FinishStoreReturnDetail>();
 	}
 %>
 <!DOCTYPE html>
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>打印成品入库单 -- 桐庐富伟针织厂</title>
+		<title>打印成品退货单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -55,7 +57,7 @@ div.name{   margin-left: 15px; width: 100px; display: inline-block;}
 									<div class="col-md-12 tablewidget">
 										<table class="table noborder">
 											<caption id="tablename">
-												桐庐富伟针织厂成品入库单<div table_id="<%=finishStoreIn.getNumber()%>" class="id_barcode"></div>
+												桐庐富伟针织厂成品退货单<div table_id="<%=finishStoreReturn.getNumber()%>" class="id_barcode"></div>
 											</caption>
 										</table>
 										<table class="table table-responsive noborder">
@@ -70,39 +72,39 @@ div.name{   margin-left: 15px; width: 100px; display: inline-block;}
 															<tbody>
 																<tr>
 																	<td rowspan="7" width="30%">
-																		<a href="/<%=finishStoreIn.getImg()%>" class="thumbnail"
+																		<a href="/<%=finishStoreReturn.getImg()%>" class="thumbnail"
 																			target="_blank"> <img id="previewImg"
-																				alt="200 x 100%" src="/<%=finishStoreIn.getImg_s()%>">
+																				alt="200 x 100%" src="/<%=finishStoreReturn.getImg_s()%>">
 																		</a>
 																	</td>
 																	<td width="100px">
-																		<div class="name">订单号：</div><span class="value"><%=finishStoreIn.getOrderNumber()%></span>
+																		<div class="name">订单号：</div><span class="value"><%=finishStoreReturn.getOrderNumber()%></span>
 																	</td>
 																</tr>
 																<tr>
 																	<td>
-																		<div class="name">公司：</div><span class="value"><%=SystemCache.getCompanyShortName(finishStoreIn.getCompanyId())%></span>
+																		<div class="name">公司：</div><span class="value"><%=SystemCache.getCompanyShortName(finishStoreReturn.getCompanyId())%></span>
 																	</td>
 																</tr>
 																
 																<tr>
 																	<td>
-																		<div class="name">客户：</div><span class="value"><%=SystemCache.getCustomerName(finishStoreIn.getCustomerId())%></span>
+																		<div class="name">客户：</div><span class="value"><%=SystemCache.getCustomerName(finishStoreReturn.getCustomerId())%></span>
 																	</td>
 																</tr>
 																<tr>
 																	<td>
-																		<div class="name">货号：</div><span class="value"><%=finishStoreIn.getCompany_productNumber()%></span>
+																		<div class="name">货号：</div><span class="value"><%=finishStoreReturn.getCompany_productNumber()%></span>
 																	</td>
 																</tr>
 																<tr>
 																	<td>
-																		<div class="name">款名：</div><span class="value"><%=finishStoreIn.getName()%></span>
+																		<div class="name">款名：</div><span class="value"><%=finishStoreReturn.getName()%></span>
 																	</td>
 																</tr>
 																<tr>
 																	<td>
-																		<div class="name">跟单：</div><span class="value"><%=SystemCache.getEmployeeName(finishStoreIn.getCharge_employee())%></span>
+																		<div class="name">跟单：</div><span class="value"><%=SystemCache.getEmployeeName(finishStoreReturn.getCharge_employee())%></span>
 																	</td>
 																	
 																</tr>
@@ -125,30 +127,30 @@ div.name{   margin-left: 15px; width: 100px; display: inline-block;}
 												<tr>
 													<%
 											int col = 0;
-											if(finishStoreIn.getCol1_id()!=null){
+											if(finishStoreReturn.getCol1_id()!=null){
 											col++;
 											 %>
 											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(finishStoreIn.getCol1_id()) %>
+												<%=SystemCache.getPackPropertyName(finishStoreReturn.getCol1_id()) %>
 											</th>
 											<%} %>
 											
-											<%if(finishStoreIn.getCol2_id()!=null){ 
+											<%if(finishStoreReturn.getCol2_id()!=null){ 
 											col++;%>
 											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(finishStoreIn.getCol2_id()) %>
+												<%=SystemCache.getPackPropertyName(finishStoreReturn.getCol2_id()) %>
 											</th>
 											<%} %>
-											<%if(finishStoreIn.getCol3_id()!=null){ 
+											<%if(finishStoreReturn.getCol3_id()!=null){ 
 											col++;%>
 											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(finishStoreIn.getCol3_id()) %>
+												<%=SystemCache.getPackPropertyName(finishStoreReturn.getCol3_id()) %>
 											</th>
 											<%} %>
-											<%if(finishStoreIn.getCol4_id()!=null){ 
+											<%if(finishStoreReturn.getCol4_id()!=null){ 
 											col++;%>
 											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(finishStoreIn.getCol4_id()) %>
+												<%=SystemCache.getPackPropertyName(finishStoreReturn.getCol4_id()) %>
 											</th>
 											<%} %>
 											<th rowspan="2" width="40px">
@@ -158,34 +160,34 @@ div.name{   margin-left: 15px; width: 100px; display: inline-block;}
 												每箱数量
 											</th>
 											<th rowspan="2" width="80px">
-												本次入库数量
+												本次退货数量
 											</th>
 											<th rowspan="2" width="60px">
-												本次入库箱数
+												本次退货箱数
 											</th>
 												</tr>
 											</thead>
 											<tbody>
 												<%
-													for (FinishStoreInDetail detail : detaillist) {
+													for (FinishStoreReturnDetail detail : detaillist) {
 												%>
 												<tr class="tr">
-													<%if(finishStoreIn.getCol1_id()!=null){ %>
+													<%if(finishStoreReturn.getCol1_id()!=null){ %>
 										<td>
 											<%=detail.getCol1_value()==null?"":detail.getCol1_value() %>
 										</td>
 										<%} %>
-										<%if(finishStoreIn.getCol2_id()!=null){ %>
+										<%if(finishStoreReturn.getCol2_id()!=null){ %>
 										<td>
 											<%=detail.getCol2_value()==null?"":detail.getCol2_value() %>
 										</td>
 										<%} %>	
-										<%if(finishStoreIn.getCol3_id()!=null){ %>
+										<%if(finishStoreReturn.getCol3_id()!=null){ %>
 										<td>
 											<%=detail.getCol3_value()==null?"":detail.getCol3_value() %>
 										</td>
 										<%} %>
-										<%if(finishStoreIn.getCol4_id()!=null){ %>
+										<%if(finishStoreReturn.getCol4_id()!=null){ %>
 										<td>
 											<%=detail.getCol4_value()==null?"":detail.getCol4_value() %>
 										</td>
@@ -209,8 +211,8 @@ div.name{   margin-left: 15px; width: 100px; display: inline-block;}
 										</div>
 
 										<p class="pull-right auto_bottom" style="padding-top: 15px;">
-											<span id="created_user">制单人：<%=SystemCache.getUserName(finishStoreIn.getCreated_user())%></span>
-											<span id="date"> 入库日期：<%=DateTool.formatDateYMD(finishStoreIn.getDate())%></span>
+											<span id="created_user">制单人：<%=SystemCache.getUserName(finishStoreReturn.getCreated_user())%></span>
+											<span id="date"> 退货日期：<%=DateTool.formatDateYMD(finishStoreReturn.getDate())%></span>
 										</p>
 
 										</table>

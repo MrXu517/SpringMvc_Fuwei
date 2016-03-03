@@ -16,7 +16,20 @@ public class FinishInOut {
 	private String orderNumber;
 	private int packingOrderId;//装箱单ID
 	private Boolean in_out ;//入库/出库  ， true:入库 , false：出库
-
+	
+	private String name;//样品名称
+	private int charge_employee;
+	private String company_productNumber;//样品的公司货号
+	private Integer companyId;// 公司ID
+	private Integer customerId;// 客户ID
+	private String img;// 图片
+	private String img_s;// 中等缩略图
+	private String img_ss;// 缩略图
+	private Integer col1_id;//装箱单中动态列1的列属性ID ， 根据ID可以在缓存中获取name
+	private Integer col2_id;//装箱单中动态列2的列属性ID ， 根据ID可以在缓存中获取name
+	private Integer col3_id;//装箱单中动态列3的列属性ID ， 根据ID可以在缓存中获取name
+	private Integer col4_id;//装箱单中动态列4的列属性ID ， 根据ID可以在缓存中获取name
+	
 	
 	private Date date;//入库、出库日期
 	private String sign;//领取人签字
@@ -122,13 +135,84 @@ public class FinishInOut {
 		this.type = type;
 	}
 	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getCharge_employee() {
+		return charge_employee;
+	}
+	public void setCharge_employee(int charge_employee) {
+		this.charge_employee = charge_employee;
+	}
+	public String getCompany_productNumber() {
+		return company_productNumber;
+	}
+	public void setCompany_productNumber(String company_productNumber) {
+		this.company_productNumber = company_productNumber;
+	}
+	public Integer getCompanyId() {
+		return companyId;
+	}
+	public void setCompanyId(Integer companyId) {
+		this.companyId = companyId;
+	}
+	public Integer getCustomerId() {
+		return customerId;
+	}
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
+	}
+	public String getImg() {
+		return img;
+	}
+	public void setImg(String img) {
+		this.img = img;
+	}
+	public String getImg_s() {
+		return img_s;
+	}
+	public void setImg_s(String img_s) {
+		this.img_s = img_s;
+	}
+	public String getImg_ss() {
+		return img_ss;
+	}
+	public void setImg_ss(String img_ss) {
+		this.img_ss = img_ss;
+	}
+	public Integer getCol1_id() {
+		return col1_id;
+	}
+	public void setCol1_id(Integer col1_id) {
+		this.col1_id = col1_id;
+	}
+	public Integer getCol2_id() {
+		return col2_id;
+	}
+	public void setCol2_id(Integer col2_id) {
+		this.col2_id = col2_id;
+	}
+	public Integer getCol3_id() {
+		return col3_id;
+	}
+	public void setCol3_id(Integer col3_id) {
+		this.col3_id = col3_id;
+	}
+	public Integer getCol4_id() {
+		return col4_id;
+	}
+	public void setCol4_id(Integer col4_id) {
+		this.col4_id = col4_id;
+	}
 	public String getTypeString(){
-		if(this.type.equals("store")){
-			if(this.in_out){
-				return "入库";
-			}else{
-				return "出库";
-			}
+		if(this.type.equals("in")){
+			return "入库";
+		}
+		else if(this.type.equals("out")){
+			return "出货";
 		}
 		else if(this.type.equals("return")){
 			return "退货";
@@ -138,12 +222,11 @@ public class FinishInOut {
 	}
 	
 	public Integer getInt(){
-		if(this.type.equals("store")){
-			if(this.in_out){
-				return 1;
-			}else{
-				return 0;
-			}
+		if(this.type.equals("in")){
+			return 1;
+		}
+		else if(this.type.equals("out")){
+			return 0;
 		}
 		else if(this.type.equals("return")){
 			return -1;
