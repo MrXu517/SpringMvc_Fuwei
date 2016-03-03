@@ -74,7 +74,7 @@
 	
 	
 	//2015-5-10添加人事系统
-	Boolean h_has_renshi = SystemCache.hasAuthority(session,"renshi");
+	//Boolean h_has_renshi = SystemCache.hasAuthority(session,"renshi");
 	Boolean h_has_renshi_employees = SystemCache.hasAuthority(session,"renshi/employees");//花名册
 	Boolean h_has_renshi_salarys = SystemCache.hasAuthority(session,"renshi/salarys");//工资表
 	
@@ -439,55 +439,7 @@
 
 						</ul>
 					</li>
-					<%} %>
-					<%if(h_has_financial){ %>
-					<li class="li_dropdown">
-						<a href="#"><i class="fa fa-list-alt"></i>财务<i
-							class="fa fa-angle-down"></i> </a>
-						<ul class="submenu">
-							<%if(h_has_financial_workspace){ %>
-							<li>
-								<a href="financial/workspace">财务工作台</a>
-							</li>
-							<%} %>
-							<%if(h_has_financial_invoice){ %>
-							<li>
-								<a href="purchase_invoice/add">进项发票</a>
-							</li>
-							<%} %>
-							<%if(h_has_financial_invoice){ %>
-							<li>
-								<a href="sale_invoice/add">销项发票</a>
-							</li>
-							<%} %>
-							<%if(h_has_financial_expense_income){ %>
-							<li>
-								<a href="expense/add">支出</a>
-							</li>
-							<%} %>
-							<%if(h_has_financial_expense_income){ %>
-							<li>
-								<a href="income/add">收入</a>
-							</li>
-							<%} %>
-							<%if(h_has_financial_bank){ %>
-							<li>
-								<a href="bank/index">对方银行账户</a>
-							</li>
-							<%} %>
-							<%if(h_has_financial_subject){ %>
-							<li>
-								<a href="subject/index">科目</a>
-							</li>
-							<%} %>
-							<%if(h_has_producebill_index){ %>
-							<li>
-								<a href="producebill/index">生产对账单</a>
-							</li>
-							<%} %>
-							
-						</ul>
-					</li>
+					
 					<%} %>
 					<%if(h_has_fuliaosystem){ %>
 					<li class="li_dropdown">
@@ -580,27 +532,55 @@
 						</ul>
 					</li>
 					<%} %>
-					
-
-					<%if(h_has_renshi){ %>
+					<%if(h_has_financial){ %>
 					<li class="li_dropdown">
-						<a href="#"><i class="fa fa-list-alt"></i>人事系统<i
+						<a href="#"><i class="fa fa-list-alt"></i>财务<i
 							class="fa fa-angle-down"></i> </a>
 						<ul class="submenu">
-							<%if(h_has_renshi_employees){ %>
+							<%if(h_has_financial_workspace){ %>
 							<li>
-								<a href="employee/list">花名册</a>
+								<a href="financial/workspace">财务工作台</a>
 							</li>
 							<%} %>
-							<%if(h_has_renshi_salarys){ %>
+							<%if(h_has_financial_invoice){ %>
 							<li>
-								<a href="employee/salarys">工资表</a>
+								<a href="purchase_invoice/add">进项发票</a>
 							</li>
 							<%} %>
+							<%if(h_has_financial_invoice){ %>
+							<li>
+								<a href="sale_invoice/add">销项发票</a>
+							</li>
+							<%} %>
+							<%if(h_has_financial_expense_income){ %>
+							<li>
+								<a href="expense/add">支出</a>
+							</li>
+							<%} %>
+							<%if(h_has_financial_expense_income){ %>
+							<li>
+								<a href="income/add">收入</a>
+							</li>
+							<%} %>
+							<%if(h_has_financial_bank){ %>
+							<li>
+								<a href="bank/index">对方银行账户</a>
+							</li>
+							<%} %>
+							<%if(h_has_financial_subject){ %>
+							<li>
+								<a href="subject/index">科目</a>
+							</li>
+							<%} %>
+							<%if(h_has_producebill_index){ %>
+							<li>
+								<a href="producebill/index">生产对账单</a>
+							</li>
+							<%} %>
+							
 						</ul>
 					</li>
-					<%}%>
-
+					<%} %>
 					<%if(h_has_yanchang){ %>
 					<li class="li_dropdown">
 						<a href="#"><i class="fa fa-list-alt"></i>验厂<i
@@ -609,6 +589,16 @@
 							<%if(h_has_yanchang_fake_salary){ %>
 							<li>
 								<a href="yanchang/yan_salarys">计时工资表</a>
+							</li>
+							<%} %>
+							<%if(h_has_renshi_employees){ %>
+							<li>
+								<a href="employee/list">花名册</a>
+							</li>
+							<%} %>
+							<%if(h_has_renshi_salarys){ %>
+							<li>
+								<a href="employee/salarys">工资表</a>
 							</li>
 							<%} %>
 						</ul>
