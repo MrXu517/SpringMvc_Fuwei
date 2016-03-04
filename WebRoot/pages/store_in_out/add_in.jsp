@@ -18,6 +18,8 @@
 			+ path + "/";
 	StoreOrder storeOrder = (StoreOrder) request
 			.getAttribute("storeOrder");
+	Integer factoryId = (Integer)request
+			.getAttribute("factoryId");
 	List<StoreOrderDetail> storeOrderDetailList = storeOrder == null ? new ArrayList<StoreOrderDetail>()
 			: storeOrder.getDetaillist();
 	List<Map<String, Object>> detaillist = (List<Map<String, Object>>) request
@@ -56,44 +58,18 @@
 		<script src="js/order/ordergrid.js" type="text/javascript"></script>
 		<script src="js/store_in_out/add_in.js" type="text/javascript"></script>
 		<style type="text/css">
-.saveform .form-group {
-	width: 250px;
-}
-
-.saveform .form-group input,.saveform .form-group select {
-	width: 150px;
-	padding: 0 12px;
-	height: 30px;
-}
-
-#out_in_date {
-	
-}
-
-.table>thead>tr>td {
-	padding: 3px 8px;
-}
-
-#mainTb {
-	margin-top: 0;
-}
-
-.table {
-	margin-bottom: 0;
-}
-
-caption {
-	font-weight: bold;
-}
-
-#previewImg {
-	max-width: 200px;
-	max-height: 150px;
-}
-#storeOrderWidget caption{
-	font-size:20px;
-	margin-top: 15px;
-}
+.saveform .form-group {width: 250px;}
+.saveform .form-group input,.saveform .form-group select {width: 150px;padding: 0 12px;height: 30px;}
+.table>thead>tr>td {padding: 3px 8px;}
+#mainTb {margin-top: 0;}
+.table {margin-bottom: 0;}
+caption {font-weight: bold;}
+#previewImg {max-width: 200px;max-height: 150px;}
+#storeOrderWidget caption{font-size:20px;margin-top: 15px;}
+.checkBtn{height:25px;width:25px;}
+tr.disable{background:#ddd;}
+#mainTb thead th{ background: #AEADAD;}
+#mainTb thead th,#mainTb tbody tr td{border-color:#000;}
 </style>
 
 	</head>
@@ -149,16 +125,7 @@ caption {
 															染色单位：
 															<select class="form-control require" name="factoryId"
 																id="factoryId">
-																<option value="">
-																	未选择
-																</option>
-																<%
-																	for (Factory factory : SystemCache.coloring_factorylist) {
-																%>
-																<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
-																<%
-																	}
-																%>
+																<option value="<%=factoryId%>"><%=SystemCache.getFactoryName(factoryId)%></option>
 															</select>
 														</div>
 														<div class="form-group ">
@@ -263,13 +230,16 @@ caption {
 											</caption>
 											<thead>
 												<tr>
+													<th width="5%">
+														序号
+													</th>
 													<th width="15%">
 														色号
 													</th>
 													<th width="15%">
 														材料
 													</th>
-													<th width="15%">
+													<th width="10%">
 														总数量(kg)
 													</th>
 													<th width="10%">
@@ -293,7 +263,8 @@ caption {
 												<%
 													for (Map<String, Object> item : detaillist) {
 												%>
-												<tr class="tr" data='<%=SerializeTool.serialize(item)%>'>
+												<tr class="tr EmptyTr disable"" data='<%=SerializeTool.serialize(item)%>'>
+													<td><input type="checkbox" name="checked" class="checkBtn"/></td>
 													<td><%=item.get("color")%></td>
 													<td><%=SystemCache.getMaterialName((Integer) item
 								.get("material"))%></td>
@@ -301,16 +272,16 @@ caption {
 													<td><%=item.get("in_quantity")%></td>
 													<td><%=item.get("not_in_quantity")%></td>
 													<td>
-														<input class="quantity form-control require double value"
+														<input disabled class="quantity form-control require double value"
 															type="text" value="0"
 															placeholder="小于等于<%=item.get("not_in_quantity")%>的数量">
 													</td>
 													<td>
-														<input class="lot_no form-control value"
+														<input disabled class="lot_no form-control value"
 															type="text">
 													</td>
 													<td>
-														<input class="packages form-control value"
+														<input disabled class="packages form-control value"
 															type="text" value="1">
 													</td>
 												</tr>

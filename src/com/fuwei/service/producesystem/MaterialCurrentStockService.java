@@ -244,7 +244,6 @@ public class MaterialCurrentStockService extends BaseService {
 		}
 	}
 	
-	
 	//重新计算某订单的原材料库存
 	@Transactional
 	public void reStock(int orderId) throws Exception{
@@ -370,6 +369,7 @@ public class MaterialCurrentStockService extends BaseService {
 			}
 		}
 	}
+	
 	
 	//重新计算某染色单的样纱库存
 	@Transactional

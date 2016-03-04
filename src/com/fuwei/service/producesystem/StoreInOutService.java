@@ -111,7 +111,7 @@ public class StoreInOutService extends BaseService {
 				object.setNumber(object.createNumber());
 				this.update(object, "id", null);
 				//如果是样纱入、出库单
-				if(object.getColoring_order_id()!=null){
+				if(object.getOrderId()==null){
 					//更新样纱库存表
 					materialCurrentStockService.reStock_Coloring(object.getColoring_order_id());
 				}else{
@@ -166,7 +166,7 @@ public class StoreInOutService extends BaseService {
 				this.update(object, "id",
 						"number,created_user,created_at,orderId,store_order_id,companyId,customerId,sampleId,name,img,img_s,img_ss,materialId,weight,size,productNumber,orderNumber,charge_employee,company_productNumber,coloring_order_id,coloring_order_number", true);
 				//如果是样纱入、出库单
-				if(temp.getColoring_order_id()!=null){
+				if(temp.getOrderId()==null){
 					//更新样纱库存表
 					materialCurrentStockService.reStock_Coloring(temp.getColoring_order_id());
 				}else{
@@ -208,7 +208,7 @@ public class StoreInOutService extends BaseService {
 	public List<StoreInOut> getByColoringOrder(int coloringOrderId,Boolean in_out) throws Exception {
 		try {
 			List<StoreInOut> orderlist = dao.queryForBeanList(
-					"select * from tb_store_in_out where store_order_id is null and coloring_order_id = ? and in_out=?",
+					"select * from tb_store_in_out where coloring_order_id = ? and in_out=?",
 					StoreInOut.class, coloringOrderId,in_out);
 			return orderlist;
 		} catch (Exception e) {
@@ -300,7 +300,7 @@ public class StoreInOutService extends BaseService {
 			}
 			int result = dao.update("delete from tb_store_in_out WHERE  id = ?", id);
 			//如果是样纱入、出库单
-			if(temp.getColoring_order_id()!=null){
+			if(temp.getOrderId()==null){
 				//更新样纱库存表
 				materialCurrentStockService.reStock_Coloring(temp.getColoring_order_id());
 			}else{

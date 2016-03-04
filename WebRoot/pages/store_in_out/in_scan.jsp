@@ -68,28 +68,11 @@
 				<div class="body">
 					<div class="container-fluid producingWidget">
 						<div class="row">
-							<p style="color:red;font-size:16px;margin-top: 10px;"><strong>大货纱线入库请扫描 【原材料采购单号】 进下面的空格中</strong></p>	
+							<p style="color:red;font-size:16px;margin-top: 10px;"><strong>请扫描 【染色单号】 进下面的空格中</strong></p>	
 							<form action="store_in/add">
 								<div class="form-group col-md-12">
-									<label for="orderNumber" class="col-sm-3 control-label">
-										原材料仓库单上的订单号
-									</label>
-									<div class="input-group col-sm-9">
-										<input type="text" class="form-control" name="orderNumber" id="orderNumber" />
-
-										<span class="input-group-btn">
-											<button type="submit" class="pull-right btn btn-primary">
-												搜索
-											</button> </span>
-									</div>
-
-								</div>
-						</form>
-							<p style="color:red;font-size:16px;margin-top: 100px;"><strong>样纱入库请将 【染色单号】 扫描进入下面的空格中</strong></p>	
-							<form action="store_in/add_coloring">
-								<div class="form-group col-md-12">
 									<label for="coloringOrderNumber" class="col-sm-3 control-label">
-										请扫描样纱染色单
+										请扫描染色单
 									</label>
 									<div class="input-group col-sm-9">
 										<input type="text" class="form-control" name="coloringOrderNumber" id="coloringOrderNumber" />
@@ -101,7 +84,8 @@
 									</div>
 
 								</div>
-							</form>
+						</form>
+						
 					</div>
 				</div>
 			</div>
@@ -111,19 +95,14 @@
 			/*设置当前选中的页*/
 			var $a = $("#left li a[href='workspace/material_workspace']");
 			setActiveLeft($a.parent("li"));
-			$("#orderNumber").focus();
+			$("#coloringOrderNumber").focus();
 			
 			$("form").submit(function(){
-				$("#orderNumber").focus();
-				$("#orderNumber").select();
+				$("#coloringOrderNumber").focus();
+				$("#coloringOrderNumber").select();
 				return true;
 			});
 			
-			$("#orderNumber").click(function(){
-				$("#orderNumber").focus();
-				$("#orderNumber").select();
-				return true;
-			});
 			$("#coloringOrderNumber").click(function(){
 				$("#coloringOrderNumber").focus();
 				$("#coloringOrderNumber").select();

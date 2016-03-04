@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
+import com.fuwei.entity.producesystem.StoreInOut;
 import com.fuwei.entity.producesystem.StoreReturn;
 import com.fuwei.service.BaseService;
 import com.fuwei.util.DateTool;
@@ -186,6 +187,18 @@ public class StoreReturnService extends BaseService {
 					.queryForBeanList(
 							"select * from tb_store_return where orderId = ?",
 							StoreReturn.class, orderId);
+			return orderlist;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	// 根据染色单获取
+	public List<StoreReturn> getByColoringOrder(int coloringOrderId) throws Exception {
+		try {
+			List<StoreReturn> orderlist = dao.queryForBeanList(
+					"select * from tb_store_return where coloring_order_id = ?",
+					StoreReturn.class, coloringOrderId);
 			return orderlist;
 		} catch (Exception e) {
 			throw e;

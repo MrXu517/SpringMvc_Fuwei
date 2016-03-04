@@ -19,6 +19,20 @@ $(document).ready( function() {
 			this.value = 1 ;
 		}
 	});
+	$(".checkBtn").change(function(){
+		var checked = this.checked;
+		if(checked){//若选中
+			var $tr = $(this).closest("tr");
+			$tr.removeClass("disable EmptyTr");
+			$tr.find("[disabled]").removeAttr("disabled");
+			$tr.find(".quantity").focus();
+			$tr.find(".quantity").select();
+		}else{
+			$(this).closest("tr").addClass("disable EmptyTr");
+			$(this).closest("tr").find(".quantity,.lot_no,.packages").attr("disabled",true);
+		}
+	});
+	
 		var storInGrid = new OrderGrid({
 			tipText:"原材料入库单",
 			url:"store_in/add",
