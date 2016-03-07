@@ -623,7 +623,7 @@ public class YanChangController extends BaseController {
 			int width6 = 8;//content6.getContents().getBytes().length;
 			int width7 = 5;//content7.getContents().getBytes().length;
 			int width8 = 5;//content8.getContents().getBytes().length;
-			int width9 = 5;//content9.getContents().getBytes().length;
+			int width9 = 6;//content9.getContents().getBytes().length;
 			int width10 = 8;//content10.getContents().getBytes().length;
 			int width11 = 8;//content11.getContents().getBytes().length;
 			int width12 = 8;//content12.getContents().getBytes().length;
