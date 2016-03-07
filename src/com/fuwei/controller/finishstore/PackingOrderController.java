@@ -1,6 +1,14 @@
 package com.fuwei.controller.finishstore;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -9,6 +17,15 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import jxl.Workbook;
+import jxl.format.PageOrientation;
+import jxl.format.VerticalAlignment;
+import jxl.write.Label;
+import jxl.write.WritableCellFormat;
+import jxl.write.WritableFont;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
 
 
 
@@ -27,7 +44,9 @@ import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.controller.BaseController;
+import com.fuwei.entity.Employee;
 import com.fuwei.entity.Order;
+import com.fuwei.entity.Salary;
 import com.fuwei.entity.User;
 import com.fuwei.entity.finishstore.PackingOrder;
 import com.fuwei.entity.finishstore.PackingOrderDetail;
@@ -339,6 +358,275 @@ public class PackingOrderController extends BaseController {
 		Integer tableOrderId = packingOrderService.update(packingOrder);
 		return this.returnSuccess("id", tableOrderId);
 		
+	}
+
+	//2015-5-10导出花名册
+	@RequestMapping(value = "/export/{packingOrderId}", method = RequestMethod.GET)
+	@ResponseBody
+	public void export(@PathVariable Integer packingOrderId, HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		if(packingOrderId == null){
+			throw new Exception("装箱单ID不能为空");
+		}
+		PackingOrder packingOrder = packingOrderService.getAndDetail(packingOrderId);
+		if(packingOrder == null){
+			throw new Exception("找不到ID为"+packingOrderId+"的装箱单");
+		}
+	    //填充数据	       
+	    ByteArrayOutputStream os = new ByteArrayOutputStream();
+	    try {
+	        	createPackingOrderFile(packingOrder,os);
+	        } catch (IOException e) {
+	            throw e;
+	        }
+	        String fileName= packingOrder.getCompany_productNumber() + packingOrder.getName() + "装箱单";
+	        byte[] content = os.toByteArray();
+	        InputStream is = new ByteArrayInputStream(content);
+	        // 设置response参数，可以打开下载页面
+	        response.reset();
+	        response.setContentType("application/vnd.ms-excel;charset=utf-8");
+	        response.setHeader("Content-Disposition", "attachment;filename="+ new String((fileName + ".xls").getBytes(), "iso-8859-1"));
+	        BufferedInputStream bis = null;
+	        BufferedOutputStream bos = null;
+	        try {
+	            bis = new BufferedInputStream(is);
+	            bos = new BufferedOutputStream(response.getOutputStream());
+	            byte[] buff = new byte[2048];
+	            int bytesRead;
+	            // Simple read/write loop.
+	            while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
+	                bos.write(buff, 0, bytesRead);
+	            }
+	        } catch (final IOException e) {
+	            throw e;
+	        } finally {
+	            if (bis != null)
+	                bis.close();
+	            if (bos != null)
+	                bos.close();
+	        }
+	}
+	
+	public void createPackingOrderFile(PackingOrder packingOrder, OutputStream os)throws Exception {	
+		WritableWorkbook wbook = Workbook.createWorkbook(os); //建立excel文件 
+		WritableSheet wsheet = wbook.createSheet("Sheet1", 0); //工作表名称 
+		wsheet.setPageSetup(PageOrientation.LANDSCAPE);//设置打印横向
+		wsheet.getSettings().setLeftMargin(0.4);//设置打印边距
+		wsheet.getSettings().setRightMargin(0.4);
+		wsheet.getSettings().setTopMargin(1);
+		wsheet.getSettings().setBottomMargin(0.4);
+		wsheet.getSettings().setTopMargin(0.4);
+		wsheet.getSettings().setFooterMargin(0);
+		wsheet.getSettings().setHeaderMargin(0);
+		//设置公司名
+		WritableFont companyfont = new WritableFont(WritableFont.createFont("宋体"), 22, 
+				WritableFont.NO_BOLD, false, 
+				jxl.format.UnderlineStyle.NO_UNDERLINE, 
+				jxl.format.Colour.BLACK); 
+		WritableCellFormat companyFormat = new WritableCellFormat(companyfont); 
+		companyFormat.setAlignment(jxl.format.Alignment.CENTRE);   
+		companyFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+		
+		String line0_text = "桐庐富伟针织厂" + DateTool.getYear(packingOrder.getCreated_at()) + "年  " + packingOrder.getCompany_productNumber()+ packingOrder.getName();
+		Label excelCompany = new Label(0, 0,line0_text , companyFormat); 
+		wsheet.addCell(excelCompany); 
+		wsheet.setRowView(0, 800);
+		
+		
+		
+		//设置Excel字体 
+		WritableFont wfont = new WritableFont(WritableFont.createFont("宋体"), 12, 
+		WritableFont.NO_BOLD, false, 
+		jxl.format.UnderlineStyle.NO_UNDERLINE, 
+		jxl.format.Colour.BLACK); 
+		WritableCellFormat titleFormat = new WritableCellFormat(wfont); 
+		titleFormat.setAlignment(jxl.format.Alignment.CENTRE);   
+		titleFormat.setBorder(jxl.format.Border.ALL, jxl.format.BorderLineStyle.THIN,jxl.format.Colour.BLACK); //BorderLineStyle边框
+		titleFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+		
+		//数字字体格式
+		jxl.write.NumberFormat nf_int = new jxl.write.NumberFormat("0");    //设置数字格式：整数
+		jxl.write.NumberFormat nf_double = new jxl.write.NumberFormat("0.00");    //设置数字格式：小数保留两位小数
+		jxl.write.WritableCellFormat wcfN_int = new jxl.write.WritableCellFormat(nf_int); //设置表单格式    
+		jxl.write.WritableCellFormat wcfN_double = new jxl.write.WritableCellFormat(nf_double); //设置表单格式    
+		wcfN_int.setAlignment(jxl.format.Alignment.CENTRE);  
+		wcfN_int.setBorder(jxl.format.Border.ALL, jxl.format.BorderLineStyle.THIN,jxl.format.Colour.BLACK); //BorderLineStyle边框
+		wcfN_int.setVerticalAlignment(VerticalAlignment.CENTRE);
+		wcfN_double.setAlignment(jxl.format.Alignment.CENTRE);  
+		wcfN_double.setBorder(jxl.format.Border.ALL, jxl.format.BorderLineStyle.THIN,jxl.format.Colour.BLACK); //BorderLineStyle边框
+		wcfN_double.setVerticalAlignment(VerticalAlignment.CENTRE);
+		wcfN_double.setFont(wfont);
+		wcfN_int.setFont(wfont);
+		
+		List<String> title = new ArrayList<String>();
+		int col = 0;
+		if(packingOrder.getCol1_id()!=null){
+			title.add(SystemCache.getPackPropertyName(packingOrder.getCol1_id()));
+			++col;
+		}
+		if(packingOrder.getCol2_id()!=null){
+			title.add(SystemCache.getPackPropertyName(packingOrder.getCol2_id()));
+			++col;
+		}
+		if(packingOrder.getCol3_id()!=null){
+			title.add(SystemCache.getPackPropertyName(packingOrder.getCol3_id()));
+			++col;
+		}
+		if(packingOrder.getCol4_id()!=null){
+			title.add(SystemCache.getPackPropertyName(packingOrder.getCol4_id()));
+			++col;
+		}
+		title.add("颜色");title.add("数量");title.add("每箱数量");
+		title.add("外箱尺寸");title.add("");title.add("");
+		title.add("毛净重");title.add("");title.add("箱数");title.add("箱号");title.add("每包几件");
+		
+		String []title2 = {"","","","L","W","H","毛重","净重","","",""};
+		//设置Excel表头 
+		int columnBestWidth[]= new int[title.size()];    //保存最佳列宽数据的数组
+		for (int i = 0; i < title.size(); i++) { 	
+			columnBestWidth[i] = title.get(i).getBytes().length;
+			Label excelTitle = new Label(i,1, title.get(i), titleFormat); 
+			wsheet.addCell(excelTitle); 
+		} 
+		for(int i = 0 ; i < col ; ++i){
+			Label excelTitle = new Label(i,2, "", titleFormat); 
+			wsheet.addCell(excelTitle); 
+		}
+		for (int i = 0; i < title2.length; i++) { 	
+			int tempLength = title2[i].getBytes().length;
+			int index = col + i;
+			if(tempLength>columnBestWidth[index]){
+				columnBestWidth[index] = tempLength;
+			}
+			Label excelTitle = new Label(index,2, title2[i], titleFormat); 
+			wsheet.addCell(excelTitle); 
+		} 
+		
+		wsheet.setRowView(1,400);
+		for(int i = 0 ; i < col ; ++i){
+			wsheet.mergeCells(i,1,i,2);//列号、行号、列号、行号
+		}
+		wsheet.mergeCells(col,1,col,2);//列号、行号、列号、行号
+		wsheet.mergeCells(col+1,1,col+1,2);
+		wsheet.mergeCells(col+2,1,col+2,2);
+		wsheet.mergeCells(col+3,1,col+5,1);
+		wsheet.mergeCells(col+6,1,col+7,1);
+		wsheet.mergeCells(col+8,1,col+8,2);
+		wsheet.mergeCells(col+9,1,col+9,2);
+		wsheet.mergeCells(col+10,1,col+10,2);
+		
+		wsheet.mergeCells(0,0,col+10,0);//合并标题行
+		
+		int c = 3; //用于循环时Excel的行号 			
+		
+		int count = 1 ;
+		for(PackingOrderDetail detail : packingOrder.getDetaillist()){
+			wsheet.setRowView(c,400);
+			++count;
+			int tempCol = 0;
+			if(packingOrder.getCol1_id()!=null){
+				Label content1 = new Label(tempCol, c, detail.getCol1_value(),titleFormat); 
+				wsheet.addCell(content1); 
+				int width1 = content1.getContents().getBytes().length;
+				if(columnBestWidth[tempCol] < width1){
+					columnBestWidth[tempCol] = width1;
+				}
+				++tempCol;
+			}
+			if(packingOrder.getCol2_id()!=null){
+				Label content2 = new Label(tempCol, c, detail.getCol2_value(),titleFormat); 
+				wsheet.addCell(content2); 
+				int width2 = content2.getContents().getBytes().length;
+				if(columnBestWidth[tempCol] < width2){
+					columnBestWidth[tempCol] = width2;
+				}
+				++tempCol;
+			}
+			if(packingOrder.getCol3_id()!=null){
+				Label content3 = new Label(tempCol, c, detail.getCol3_value(),titleFormat); 
+				wsheet.addCell(content3); 
+				int width3 = content3.getContents().getBytes().length;
+				if(columnBestWidth[tempCol] < width3){
+					columnBestWidth[tempCol] = width3;
+				}
+				++tempCol;
+			}
+			if(packingOrder.getCol4_id()!=null){
+				Label content4 = new Label(tempCol, c, detail.getCol4_value(),titleFormat); 
+				wsheet.addCell(content4); 
+				int width4 = content4.getContents().getBytes().length;
+				if(columnBestWidth[tempCol] < width4){
+					columnBestWidth[tempCol] = width4;
+				}
+				++tempCol;
+			}
+			Label content5 = new Label(tempCol, c, detail.getColor().trim(),titleFormat); 
+			jxl.write.Number content6 = new jxl.write.Number(tempCol+1, c, detail.getQuantity(),wcfN_int); 
+			jxl.write.Number content7 = new jxl.write.Number(tempCol+2, c, detail.getPer_carton_quantity(),wcfN_int); 
+			jxl.write.Number content8 = new jxl.write.Number(tempCol+3, c, detail.getBox_L(),wcfN_int); 
+			jxl.write.Number content9 = new jxl.write.Number(tempCol+4, c, detail.getBox_W(),wcfN_int); 
+			jxl.write.Number content10 = new jxl.write.Number(tempCol+5, c, detail.getBox_H(),wcfN_int); 
+			jxl.write.Number content11 = new jxl.write.Number(tempCol+6, c, detail.getGross_weight(),wcfN_double); 
+			jxl.write.Number content12 = new jxl.write.Number(tempCol+7, c, detail.getNet_weight(),wcfN_double); 
+			jxl.write.Number content13 = new jxl.write.Number(tempCol+8, c, detail.getCartons(),wcfN_int); 
+			Label content14 = new Label(tempCol+9, c, detail.getBox_number_start() + "-" + detail.getBox_number_end(),titleFormat); 
+			jxl.write.Number content15 = new jxl.write.Number(tempCol+10, c, detail.getPer_pack_quantity(),wcfN_int); 			
+			
+			wsheet.addCell(content5); 
+			wsheet.addCell(content6); 
+			wsheet.addCell(content7); 
+			wsheet.addCell(content8); 
+			wsheet.addCell(content9); 
+			wsheet.addCell(content10); 
+			wsheet.addCell(content11); 
+			wsheet.addCell(content12); 
+			wsheet.addCell(content13);
+			wsheet.addCell(content14);
+			wsheet.addCell(content15);
+			
+			
+			int width5 = content5.getContents().getBytes().length;
+			int width6 = content6.getContents().getBytes().length;
+			int width7 = content7.getContents().getBytes().length;
+			int width8 = content8.getContents().getBytes().length;
+			int width9 = content9.getContents().getBytes().length;
+			int width10 = content10.getContents().getBytes().length;
+			int width11 = content11.getContents().getBytes().length;
+			int width12 = content12.getContents().getBytes().length;
+			int width13 = content13.getContents().getBytes().length;
+			int width14 = content14.getContents().getBytes().length;
+			int width15 = content15.getContents().getBytes().length;
+			if(columnBestWidth[tempCol] < width5){
+				columnBestWidth[tempCol] = width5;
+			}if(columnBestWidth[tempCol+1] < width6){
+				columnBestWidth[tempCol+1] = width6;
+			}if(columnBestWidth[tempCol+2] < width7){
+				columnBestWidth[tempCol+2] = width7;
+			}if(columnBestWidth[tempCol+3] < width8){
+				columnBestWidth[tempCol+3] = width8;
+			}if(columnBestWidth[tempCol+4] < width9){
+				columnBestWidth[tempCol+4] = width9;
+			}if(columnBestWidth[tempCol+5] < width10){
+				columnBestWidth[tempCol+5] = width10;
+			}if(columnBestWidth[tempCol+6] < width11){
+				columnBestWidth[tempCol+6] = width11;
+			}if(columnBestWidth[tempCol+7] < width12){
+				columnBestWidth[tempCol+7] = width12;
+			}if(columnBestWidth[tempCol+8] < width13){
+				columnBestWidth[tempCol+8] = width13;
+			}if(columnBestWidth[tempCol+9] < width14){
+				columnBestWidth[tempCol+9] = width14;
+			}if(columnBestWidth[tempCol+10] < width15){
+				columnBestWidth[tempCol+10] = width15;
+			}
+			c++; 
+		} 
+		for(int p = 0 ; p < columnBestWidth.length ; ++p){
+			wsheet.setColumnView(p, columnBestWidth[p]+3);
+		}
+		wbook.write(); //写入文件 
+		wbook.close(); 
+		os.close(); 
 	}
 }
 

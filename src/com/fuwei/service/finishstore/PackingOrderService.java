@@ -194,6 +194,9 @@ public class PackingOrderService extends BaseService {
 	public PackingOrder getAndDetail(int id) throws Exception {
 		try {
 			PackingOrder packingOrder = dao.queryForBean("select * from tb_packingorder where id = ?", PackingOrder.class, id);
+			if(packingOrder == null){
+				return null;
+			}
 			List<PackingOrderDetail> detaillist = packingOrderDetailService.getList(id);
 			packingOrder.setDetaillist(detaillist);
 			return packingOrder;

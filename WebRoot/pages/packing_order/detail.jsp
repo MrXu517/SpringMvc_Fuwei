@@ -25,6 +25,7 @@
 	}
 	Boolean has_delete = SystemCache.hasAuthority(session,"packing_order/delete");
 	Boolean has_edit = SystemCache.hasAuthority(session,"packing_order/edit");
+	Boolean has_export = SystemCache.hasAuthority(session,"packing_order/export");
 	
 %>
 <!DOCTYPE html>
@@ -104,9 +105,16 @@
 									}
 								%>
 								<%
+									if(has_export){
+								%>
+								<a href="packing_order/export/<%=packingOrder.getId()%>" type="button" class="btn btn-primary">导出</a>
+								<%
+									}
+								%>
+								<%
 									if(has_delete){
 								%>
-								<button data-cid="<%=packingOrder.getId()%>" type="button" class="btn btn-danger" id="deleteBtn">删除</button>
+								<button data-cid="<%=packingOrder.getId()%>" type="button" class="btn btn-danger pull-right" id="deleteBtn">删除</button>
 								<%
 									}
 								%>

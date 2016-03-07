@@ -24,6 +24,7 @@ import jxl.Sheet;
 import jxl.Workbook;
 import jxl.format.PageOrientation;
 import jxl.format.VerticalAlignment;
+import jxl.write.Formula;
 import jxl.write.Label;
 import jxl.write.WritableCellFormat;
 import jxl.write.WritableFont;
@@ -458,7 +459,7 @@ public class YanChangController extends BaseController {
 		wsheet.setPageSetup(PageOrientation.LANDSCAPE);//设置打印横向
 		wsheet.getSettings().setLeftMargin(0.4);//设置打印边距
 		wsheet.getSettings().setRightMargin(0.4);
-		wsheet.getSettings().setTopMargin(1);
+		wsheet.getSettings().setTopMargin(0.4);
 		wsheet.getSettings().setBottomMargin(0.4);
 		wsheet.getSettings().setFooterMargin(0);
 		wsheet.getSettings().setHeaderMargin(0);
@@ -491,7 +492,7 @@ public class YanChangController extends BaseController {
 		titleFormat.setAlignment(jxl.format.Alignment.CENTRE);   
 		titleFormat.setBorder(jxl.format.Border.ALL, jxl.format.BorderLineStyle.THIN,jxl.format.Colour.BLACK); //BorderLineStyle边框
 		titleFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
-		
+		titleFormat.setWrap(true);
 		
 		//添加 工资发放日期
 		String salarytime = "";
@@ -557,27 +558,43 @@ public class YanChangController extends BaseController {
 		int c = 4; //用于循环时Excel的行号 			
 		
 		int count = 1 ;
+		//数字字体格式
+		jxl.write.NumberFormat nf_double = new jxl.write.NumberFormat("0.0");    //设置数字格式：小数保留两位小数
+		jxl.write.WritableCellFormat wcfN_double = new jxl.write.WritableCellFormat(nf_double); //设置表单格式    
+		wcfN_double.setAlignment(jxl.format.Alignment.CENTRE);  
+		wcfN_double.setBorder(jxl.format.Border.ALL, jxl.format.BorderLineStyle.THIN,jxl.format.Colour.BLACK); //BorderLineStyle边框
+		wcfN_double.setVerticalAlignment(VerticalAlignment.CENTRE);
+		wcfN_double.setFont(wfont2);
+		
+		WritableFont wfont_sign = new WritableFont(WritableFont.createFont("宋体"), 11, 
+				WritableFont.NO_BOLD, false, 
+				jxl.format.UnderlineStyle.NO_UNDERLINE, 
+				jxl.format.Colour.GREY_25_PERCENT); 
+		WritableCellFormat cellFot_sign = new WritableCellFormat(wfont_sign); 
+		cellFot_sign.setAlignment(jxl.format.Alignment.CENTRE);   
+		cellFot_sign.setBorder(jxl.format.Border.ALL, jxl.format.BorderLineStyle.THIN,jxl.format.Colour.BLACK); //BorderLineStyle边框
+		
 		for(Salary salary : salaryList){
 			wsheet.setRowView(c,400);
 			Label content1 = new Label(0, c, count+"",titleFormat2); 
 			++count;
 			Label content2 = new Label(1, c, salary.getName(),titleFormat2); 
 			Label content3 = new Label(2, c, SystemCache.getDepartmentName(salary.getDepartmentId()),titleFormat2); 
-			Label content4 = new Label(3, c, salary.getHour_salary().toString(),titleFormat2); 
-			Label content5 = new Label(4, c, salary.getWork_hour().toString(),titleFormat2); 
-			Label content6 = new Label(5, c, salary.getWork_money().toString(),titleFormat2); 
-			Label content7 = new Label(6, c, salary.getOver_normal().toString(),titleFormat2); 
-			Label content8 = new Label(7, c, salary.getOver_weekend().toString(),titleFormat2); 
-			Label content9 = new Label(8, c, salary.getOver_holiday().toString(),titleFormat2); 
-			Label content10 = new Label(9, c, salary.getOver_normal_money().toString(),titleFormat2); 
-			Label content11 = new Label(10, c, salary.getOver_weekend_money().toString(),titleFormat2); 
-			Label content12 = new Label(11, c, salary.getOver_holiday_money().toString(),titleFormat2); 
-			Label content13 = new Label(12, c, salary.getHoliday_reback().toString(),titleFormat2); 
-			Label content14 = new Label(13, c, salary.getPayable_salary().toString(),titleFormat2); 
-			Label content15 = new Label(14, c, salary.getInsurance_deduction().toString(),titleFormat2); 
-			Label content16 = new Label(15, c, salary.getPersonal_tax().toString(),titleFormat2); 
-			Label content17 = new Label(16, c, salary.getReal_salary().toString(),titleFormat2); 
-			Label content18 = new Label(17, c, "",titleFormat2); 
+			jxl.write.Number content4 = new jxl.write.Number(3, c, salary.getHour_salary(),wcfN_double); 
+			jxl.write.Number content5 = new jxl.write.Number(4, c, salary.getWork_hour(),wcfN_double); 
+			Formula content6 = new Formula(5, c, "D" +(c+1)+"*E"+(c+1),wcfN_double); 
+			jxl.write.Number content7 = new jxl.write.Number(6, c, salary.getOver_normal(),wcfN_double); 
+			jxl.write.Number content8 = new jxl.write.Number(7, c, salary.getOver_weekend(),wcfN_double); 
+			jxl.write.Number content9 = new jxl.write.Number(8, c, salary.getOver_holiday(),wcfN_double); 
+			Formula content10 = new Formula(9, c, "1.5*D" +(c+1)+"*G"+(c+1),wcfN_double); 
+			Formula content11 = new Formula(10, c, "2*D" +(c+1)+"*H"+(c+1),wcfN_double); 
+			Formula content12 = new Formula(11, c, "3*D" +(c+1)+"*I"+(c+1),wcfN_double); 
+			jxl.write.Number content13 = new jxl.write.Number(12, c, salary.getHoliday_reback(),wcfN_double); 
+			Formula content14 = new Formula(13, c, "F" +(c+1)+"+J"+(c+1)+"+K"+(c+1)+"+L"+(c+1)+"+M"+(c+1),wcfN_double); 
+			jxl.write.Number content15 = new jxl.write.Number(14, c, salary.getInsurance_deduction(),wcfN_double); 
+			jxl.write.Number content16 = new jxl.write.Number(15, c, salary.getPersonal_tax(),wcfN_double); 
+			Formula content17 = new Formula(16, c, "N" +(c+1)+"-O"+(c+1)+"-P"+(c+1),wcfN_double); 
+			Formula content18 = new Formula(17, c, "B" +(c+1),cellFot_sign); 
 			
 			wsheet.addCell(content1); 
 			wsheet.addCell(content2); 
@@ -602,20 +619,20 @@ public class YanChangController extends BaseController {
 			int width2 = content2.getContents().getBytes().length;
 			int width3 = content3.getContents().getBytes().length;
 			int width4 = content4.getContents().getBytes().length;
-			int width5 = content5.getContents().getBytes().length;
-			int width6 = content6.getContents().getBytes().length;
-			int width7 = content7.getContents().getBytes().length;
-			int width8 = content8.getContents().getBytes().length;
-			int width9 = content9.getContents().getBytes().length;
-			int width10 = content10.getContents().getBytes().length;
-			int width11 = content11.getContents().getBytes().length;
-			int width12 = content12.getContents().getBytes().length;
+			int width5 = 8;//content5.getContents().getBytes().length;
+			int width6 = 8;//content6.getContents().getBytes().length;
+			int width7 = 5;//content7.getContents().getBytes().length;
+			int width8 = 5;//content8.getContents().getBytes().length;
+			int width9 = 5;//content9.getContents().getBytes().length;
+			int width10 = 8;//content10.getContents().getBytes().length;
+			int width11 = 8;//content11.getContents().getBytes().length;
+			int width12 = 8;//content12.getContents().getBytes().length;
 			int width13 = content13.getContents().getBytes().length;
-			int width14 = content14.getContents().getBytes().length;
+			int width14 = 8;//content14.getContents().getBytes().length;
 			int width15 = content15.getContents().getBytes().length;
 			int width16 = content16.getContents().getBytes().length;
-			int width17 = content17.getContents().getBytes().length;
-			int width18 = content18.getContents().getBytes().length;
+			int width17 = 8;//content17.getContents().getBytes().length;
+			int width18 = 8;//content18.getContents().getBytes().length;
 			if(columnBestWidth[0] < width1){
 				columnBestWidth[0] = width1;
 			}if(columnBestWidth[1] < width2){
@@ -624,17 +641,21 @@ public class YanChangController extends BaseController {
 				columnBestWidth[2] = width3;
 			}if(columnBestWidth[3] < width4){
 				columnBestWidth[3] = width4;
-			}if(columnBestWidth[4] < width5){
+			}
+//			if(columnBestWidth[4] < width5){
 				columnBestWidth[4] = width5;
-			}if(columnBestWidth[5] < width6){
+//			}
+//			if(columnBestWidth[5] < width6){
 				columnBestWidth[5] = width6;
-			}if(columnBestWidth[6] < width7){
+//			}
+//			if(columnBestWidth[6] < width7){
 				columnBestWidth[6] = width7;
-			}if(columnBestWidth[7] < width8){
+//			}if(columnBestWidth[7] < width8){
 				columnBestWidth[7] = width8;
-			}if(columnBestWidth[8] < width9){
+//			}if(columnBestWidth[8] < width9){
 				columnBestWidth[8] = width9;
-			}if(columnBestWidth[9] < width10){
+//			}
+			if(columnBestWidth[9] < width10){
 				columnBestWidth[9] = width10;
 			}if(columnBestWidth[10] < width11){
 				columnBestWidth[10] = width11;
@@ -654,7 +675,25 @@ public class YanChangController extends BaseController {
 				columnBestWidth[17] = width18;
 			}
 			c++; 
-		} 
+		}
+		//合计行
+		jxl.write.NumberFormat nf_double_noborder = new jxl.write.NumberFormat("0.0");    //设置数字格式：小数保留两位小数
+		jxl.write.WritableCellFormat wcfN_double_noborder = new jxl.write.WritableCellFormat(nf_double_noborder); //设置表单格式    
+		wcfN_double_noborder.setAlignment(jxl.format.Alignment.CENTRE);  
+		wcfN_double_noborder.setVerticalAlignment(VerticalAlignment.CENTRE);
+		wcfN_double_noborder.setFont(wfont2);
+
+		Label content19 = new Label(15, c, "合计",timeFormat); 
+		Formula content20 = new Formula(16, c, "SUM(Q5:Q" +c+")",wcfN_double_noborder); 
+		wsheet.addCell(content19);
+		wsheet.addCell(content20);
+		int width19 = content19.getContents().getBytes().length;
+		int width20 = content20.getContents().getBytes().length;
+		if(columnBestWidth[15] < width19){
+			columnBestWidth[15] = width19;
+		}if(columnBestWidth[16] < width20){
+			columnBestWidth[16] = width20;
+		}
 		for(int p = 0 ; p < columnBestWidth.length ; ++p){
 			wsheet.setColumnView(p, columnBestWidth[p]+1);
 		}

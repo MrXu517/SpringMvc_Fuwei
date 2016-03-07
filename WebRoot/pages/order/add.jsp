@@ -53,6 +53,9 @@
 		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
 		<script src="js/order/add.js" type="text/javascript"></script>
 		<link href="css/order/index.css" rel="stylesheet" type="text/css" />
+		<style type="text/css">
+		#orderNumber,#company_productNumber{width:100%;}
+		</style>
 	</head>
 	<body>
 		<%@ include file="../common/head.jsp"%>

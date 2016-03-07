@@ -236,6 +236,14 @@ function OrderGrid(settings){
 		this.$content.find(".detailTb .addRow").click( function() {
 			Common.resetForm(Object.$form[0]);
 			Object.$dialog.find(".modal-title").text("添加一行");
+			//2016-3-7添加功能：复制样品的尺寸、材料、克重到默认的数据中
+			var formdata={};
+			formdata.weight = $("#sampleInfoWidget #weight").val();
+			formdata.size = $("#sampleInfoWidget #size").val();
+			formdata.yarn = $("#sampleInfoWidget #materialId").val();
+			Common.fillForm(Object.$form[0],formdata);
+			//2016-3-7添加功能：复制样品的尺寸、材料、克重到默认的数据中
+			
 			Object.$dialog.modal();
 
 			Object.$form.unbind("submit");
