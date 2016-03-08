@@ -22,7 +22,9 @@
 
 
 	String exeStr = OrderStatusUtil.get(order.getStatus()).getStepName();
-
+	
+	Boolean has_order_exestep = SystemCache.hasAuthority(session,"order/exestep");//执行步骤的权限
+			
 	List<OrderDetail> DetailList = order == null || order.getDetaillist() == null ? new ArrayList<OrderDetail>()
 			: order.getDetaillist();
 			
@@ -89,7 +91,7 @@
 										</label>
 										<span><%=order.getCNState()%></span>
 									</div>
-									<%if(exeStr!=null){ %>
+									<%if(exeStr!=null && has_order_exestep){ %>
 									<div class="pull-left">
 										<button orderId="<%=order.getId()%>" id="exeStep"
 											type="button" class="btn btn-danger">

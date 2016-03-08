@@ -66,6 +66,9 @@
 			"order/detail");
 	Boolean has_order_memo = SystemCache.hasAuthority(session,
 			"order/edit/memo");
+	//2016-3-8添加批量发货功能
+	Boolean has_order_batch_exe = SystemCache.hasAuthority(session,
+			"order/exestep_batch");
 	//权限相关
 	
 	List<Employee> employeelist = new ArrayList<Employee>();
@@ -304,13 +307,18 @@
 									</ul>
 
 								</div>
-
+								<%if(has_order_batch_exe){ %>
+								<button class="btn btn-primary" type="button" id="exeStep" >批量发货</button>
+								<%} %>
 								<table class="table table-responsive table-bordered" id="Tb">
 									<thead>
 										<tr>
 											<th width="20px">
+												<%if(has_order_batch_exe){ %>
+												<input type="checkbox" id="checkAll"/>
+												<%}else{ %>
 												No.
-											</th>
+												<%}%></th>
 											<th width="120px">
 												样品
 											</th>
@@ -364,7 +372,11 @@
 										%>
 									
 										<tr data='<%=order_json%>' orderId="<%=order.getId()%>" class="<%=ordertrclass %>">
-											<td rowspan="<%=detailsize %>"><%=++i%></td>
+											<td rowspan="<%=detailsize %>"><%=++i%>
+											<%if(has_order_batch_exe){ %>
+												<input orderId="<%=order.getId()%>" type="checkbox" class="checkbtn"/>
+												<%}%>
+											</td>
 											<td rowspan="<%=detailsize %>"
 												style="max-width: 120px; height: 120px; max-height: 120px;">
 												<a target="_blank" class="cellimg"
@@ -525,5 +537,50 @@
 						</div>
 					</div>
 					<!-- 修改备注对话框 -->
+					<!--执行步骤对话框 对话框 -->
+		<div class="modal fade" id="exeStepDialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+						</button>
+						<h4 class="modal-title">
+							请统一填写  发货日期
+
+						</h4>
+					</div>
+					<div class="modal-body">
+						<form class="form-horizontal exeform" role="form">
+							<div class="form-group col-md-12">
+								<label for="color" class="col-sm-3 control-label">
+									 发货日期
+								</label>
+								<div class="col-sm-8">
+									<input type="text" name="step_time" id="step_time"
+										class="form-control require date" value="<%=DateTool.formatDateYMD(DateTool.now()) %>"/>
+								</div>
+								<div class="col-sm-1"></div>
+							</div>
+						
+							<div class="modal-footer">
+								<button type="submit" class="btn btn-primary"
+									data-loading-text="正在执行...">
+									确定
+								</button>
+								<button type="button" class="btn btn-default"
+									data-dismiss="modal">
+									关闭
+								</button>
+							</div>
+						</form>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!--
+						 执行步骤对话框 -->
+			
 	</body>
 </html>

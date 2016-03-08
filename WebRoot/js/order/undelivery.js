@@ -48,6 +48,87 @@ $(document).ready(function(){
 		return false;
 	});
 	//修改订单备注 -- 结束
+	
+	//批量发货 -- 开始
+	//全选
+	$("#checkAll").click(function(){
+		var checked = this.checked;
+		$(".checkbtn").prop("checked",checked);
+	});
+	var $exeform = $("#exeStepDialog .exeform");
+	if($exeform.length>0){
+		$exeform.submit(function(){
+			if(!confirm("是否确定批量执行发货操作？")){
+				return false;
+			}
+			if (!Common.checkform(this)) {
+				return false;
+			}
+			var formdata = $(this).serializeJson();
+			var $checkedOrders = $(".checkbtn:checked");
+			formdata.ids = "";
+			for(var i = 0 ; i < $checkedOrders.length;++i){
+				var tempOrderId = $($checkedOrders[i]).attr("orderId");
+				formdata.ids+=tempOrderId+",";
+			}
+			formdata.ids = formdata.ids.substring(0,formdata.ids.length-1);
+			$.ajax({
+	            url: "order/exestep_batch",
+	            type: 'POST',
+	            data :$.param(formdata)
+	        })
+	            .done(function(result) {
+	            	if(result.success!=false){
+	            		Common.Tip("批量发货成功",function(){
+	            			location.reload();
+	            		});
+	            	}
+	            })
+	            .fail(function(result) {
+	            	Common.Error("批量发货失败：" + result.responseText);
+	            })
+	            .always(function() {
+	            	
+	            });
+			return false;
+		});
+	}
+	$('#exeStepDialog').on('shown.bs.modal', function () {
+		$exeform.find("#delivery_at").focus();
+		$exeform.find("#delivery_at").select();
+	});
+	$("#exeStep").click(function(){
+		//若是发货状态，则弹出对话框，填写执行步骤的时间
+		var $dialog = $("#exeStepDialog");
+		if($dialog.length>0){
+			$("#exeStepDialog").modal();
+		}else{
+			if(!confirm("是否确定执行？")){
+				return false;
+			}
+			var orderId = $(this).attr("orderid");
+			$.ajax({
+	            url: "order/exestep/"+orderId,
+	            type: 'POST'
+	        })
+	            .done(function(result) {
+	            	if(result.success!=false){
+	            		Common.Tip("执行步骤成功",function(){
+	            			location.reload();
+	            		});
+	            	}
+	            })
+	            .fail(function(result) {
+	            	Common.Error("执行步骤失败：" + result.responseText);
+	            })
+	            .always(function() {
+	            	
+	            });
+		}
+		
+		return false;
+	});
+	//批量发货 -- 结束
 });
 function changeCompany(companyId) {
 	var companyName = $("#companyId").val();

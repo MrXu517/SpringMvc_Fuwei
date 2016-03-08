@@ -91,7 +91,11 @@
 										<div class="col-md-12 tablewidget">
 											<table class="table">
 												<caption>
-													桐庐富伟针织厂生产单
+													桐庐富伟针织厂生产单	
+													<%if(producingOrder.getInbill()){ %>
+														<div id="statusDiv" class="inbill">已结账</div>
+													<%} %>
+										
 												</caption>
 												<thead>
 													<tr>

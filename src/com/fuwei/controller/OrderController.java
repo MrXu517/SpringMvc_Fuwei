@@ -991,7 +991,36 @@ public class OrderController extends BaseController {
 		return this.returnSuccess();
 	}
 
-	
+	// 执行订单步骤
+	@RequestMapping(value = "/exestep_batch", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> exestep_batch(String ids,Date step_time,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		if (ids == null) {
+			throw new Exception("缺少订单ID");
+		}
+		String lcode = "order/exestep_batch";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有批量执行订单的权限", null);
+		}
+
+		
+		// 修改订单信息
+		String[] tempids = ids.split(",");
+		int[] int_ids = new int[tempids.length];
+		
+		for(int i = 0 ;i < tempids.length ; ++i){
+			int_ids[i] = Integer.parseInt(tempids[i]);
+		}
+		orderService.exestep_batch(int_ids, step_time,user.getId());
+
+		return this.returnSuccess();
+	}
+
 
 
 	// 添加或保存半检记录单

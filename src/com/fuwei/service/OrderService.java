@@ -369,7 +369,7 @@ public class OrderService extends BaseService {
 	}
 
 	// 执行订单
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	public int exestep(int orderId,Date step_time, OrderHandle handle) throws Exception {
 		try {
 			// 获取当前步骤
@@ -458,6 +458,24 @@ public class OrderService extends BaseService {
 			}
 
 			orderHandleService.add(handle);
+			return 1;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	// 批量执行订单
+	@Transactional(rollbackFor=Exception.class)
+	public int exestep_batch(int[] orderIds,Date step_time, int userId) throws Exception {
+		try {
+			for(int orderId : orderIds){
+				// 添加操作记录
+				OrderHandle handle = new OrderHandle();
+				handle.setCreated_at(DateTool.now());
+				handle.setCreated_user(userId);
+				handle.setName("执行订单步骤");
+				exestep(orderId,step_time,handle);
+			}
 			return 1;
 		} catch (Exception e) {
 			throw e;

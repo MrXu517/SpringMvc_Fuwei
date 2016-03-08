@@ -139,6 +139,15 @@ input.printcheck{
 }
 .materialorderWidget .table th, .fuliaoorderWidget .table th, .coloringorderWidget .table th{
   border-color: #000;
-  }
-  input[type='text'],select.form-control{border-color: #8E8B8B;border-width: 2px;}
-  .tablewidget .thumbnail img{max-width: 250px;max-height: 200px;}
+ }
+input[type='text'],select.form-control{border-color: #8E8B8B;border-width: 2px;}
+.tablewidget .thumbnail img{max-width: 250px;max-height: 200px;}
+#statusDiv{position: absolute;top: 35px;right: 330px; width: 60px;font-size: 40px;font-style: oblique;
+    transform: rotate(15deg);
+    -o-transform: rotate(15deg);
+    -webkit-transform: rotate(15deg);
+    padding: 0 4px;}
+#statusDiv.success{border: 2px solid #47a447;color: #47a447;}
+#statusDiv.fail{border: 2px solid red;color: red;}
+#statusDiv.wait{border: 2px solid #eea236;color: #eea236;}
+#statusDiv.inbill{border: 2px solid #47a447;color: #47a447;}
