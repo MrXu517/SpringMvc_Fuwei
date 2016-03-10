@@ -12,12 +12,9 @@
 
 	//车缝记录单
 	Order order = (Order) request.getAttribute("order");
-	List<OrderDetail> DetailList = order == null ? new ArrayList<OrderDetail>()
-			: order.getDetaillist();
-	if(DetailList == null){
-		DetailList = new ArrayList<OrderDetail>();
-	}
-	String productfactoryStr = (String)request.getAttribute("productfactoryStr");
+	PlanOrder planorder = (PlanOrder) request.getAttribute("planOrder");
+	List<PlanOrderDetail> planOrderDetailList = planorder == null ? new ArrayList<PlanOrderDetail>()
+			: planorder.getDetaillist();
 %>
 <!DOCTYPE html>
 <html>
@@ -134,13 +131,13 @@
 																			尺寸
 																		</th>
 																		<th width="15%">
-																			订单数量
+																			生产数量
 																		</th>
 																	</tr>
 																</thead>
 																<tbody>
 																	<%
-																		for (OrderDetail detail : DetailList) {
+																		for (PlanOrderDetail detail : planOrderDetailList) {
 																	%>
 																	<tr class="tr"
 																		data='<%=SerializeTool.serialize(detail)%>'>

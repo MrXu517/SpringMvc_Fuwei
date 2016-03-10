@@ -6,14 +6,14 @@
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
+<%@page import="com.fuwei.entity.ordergrid.PlanOrderDetail"%>
+<%@page import="com.fuwei.entity.ordergrid.PlanOrder"%>
 <%
 	//车缝记录单
 	Order order = (Order) request.getAttribute("order");
-	List<OrderDetail> DetailList = order == null ? new ArrayList<OrderDetail>()
-			: order.getDetaillist();
-	if(DetailList == null){
-		DetailList = new ArrayList<OrderDetail>();
-	}
+	PlanOrder planorder = (PlanOrder) request.getAttribute("planOrder");
+	List<PlanOrderDetail> planOrderDetailList = planorder == null ? new ArrayList<PlanOrderDetail>()
+			: planorder.getDetaillist();
 %>
 <!DOCTYPE html>
 <html>
@@ -116,14 +116,14 @@
 												尺寸
 											</th>
 											<th width="15%">
-												订单数量
+												生产数量
 											</th>
 
 										</tr>
 									</thead>
 									<tbody>
 										<%
-											for (OrderDetail detail : DetailList) {
+											for (PlanOrderDetail detail : planOrderDetailList) {
 										%>
 										<tr class="tr">
 											<td class="color"><%=detail.getColor()%>
