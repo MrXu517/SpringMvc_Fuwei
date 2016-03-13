@@ -157,6 +157,7 @@
 	//成品工作台
 	Boolean h_has_finishstore_workspace = SystemCache.hasAuthority(session,"producesystem/finishstore_workspace");//装箱单列属性
 	
+	Boolean h_has_report_stockmuslin = SystemCache.hasAuthority(session,"report/stock_muslin");//装箱单列属性
 %>
 <html>
 	<link href="css/common/head.css" rel="stylesheet" type="text/css" />
@@ -469,6 +470,12 @@
 								<a href="report/material">材料库存报表</a>
 							</li>
 							<%} %>
+							<%if(h_has_report_stockmuslin){ %>
+							<li>
+								<a href="report/stock_muslin">未染色白胚报表</a>
+							</li>
+							<%} %>
+							
 							<%if(h_has_report_material_purchase){ %>
 							<li>
 								<a href="report/material_purchase">原材料采购汇总报表</a>

@@ -369,4 +369,104 @@ public class MaterialPurchaseOrderService extends BaseService {
 			throw e;
 		}
 	}
+	
+	// 获取白胚报表数据 //Map<染厂Id,Map<材料ID，数量和>>
+	//参数：开始时间、结束时间、染厂ID，排序顺序
+	public HashMap<Integer,HashMap<Integer,Double> > muslin(Date start_time, Date end_time, Integer factoryId,List<Sort> sortlist) throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			String seq = "WHERE ";
+
+			sql.append("select * from tb_materialpurchaseorder ");
+			
+			if (start_time != null) {
+				sql.append(seq + " created_at>='"
+						+ DateTool.formateDate(start_time) + "'");
+				seq = " AND ";
+			}
+			if (end_time != null) {
+				sql.append(seq + " created_at<'"
+						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
+						+ "'");
+				seq = " AND ";
+			}
+//			if (factoryId != null) {
+//				sql.append(seq + " factoryId='" + factoryId + "'");
+//				seq = " AND ";
+//			}
+		
+			
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql.append(" order by " + sortlist.get(i).getProperty()
+								+ " " + sortlist.get(i).getDirection() + " ");
+					} else {
+						sql.append("," + sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			
+			List<MaterialPurchaseOrder> materialPurchaseOrderList = dao.queryForBeanList(
+					sql.toString(), MaterialPurchaseOrder.class);
+			//Map<染厂Id,Map<材料ID，数量和>>
+			HashMap<Integer,HashMap<Integer,Double> > resultMap = new HashMap<Integer,HashMap<Integer,Double> >();
+			
+			for(MaterialPurchaseOrder materialPurchaseOrder : materialPurchaseOrderList){
+				if(materialPurchaseOrder.getDetail_json() == null || materialPurchaseOrder.getDetail_json().equals("")){
+					continue;
+				}
+				
+				List<MaterialPurchaseOrderDetail> detailList = SerializeTool
+				.deserializeList(materialPurchaseOrder.getDetail_json(),
+						MaterialPurchaseOrderDetail.class);;
+				
+				
+				for(MaterialPurchaseOrderDetail detail : detailList){
+					Integer temp_coloring_factoryId = detail.getFactoryId();
+					if(temp_coloring_factoryId == null){
+						continue;
+					}
+					Integer materialId = detail.getMaterial();
+					if(materialId==null){
+						continue;
+					}
+					if(factoryId!=null && factoryId!=temp_coloring_factoryId){
+						continue;
+					}
+					Double quantity = detail.getQuantity();
+					
+					if(resultMap.containsKey(temp_coloring_factoryId)){
+						HashMap<Integer,Double> factoryTemp = resultMap.get(temp_coloring_factoryId);
+						if(factoryTemp.containsKey(materialId)){
+							resultMap.get(temp_coloring_factoryId).put(materialId, quantity + resultMap.get(temp_coloring_factoryId).get(materialId));
+						}else{
+							resultMap.get(temp_coloring_factoryId).put(materialId, quantity);
+						}
+						
+					}else{
+						HashMap<Integer,Double> temp = new HashMap<Integer,Double>();
+						temp.put(materialId,quantity);
+						resultMap.put(temp_coloring_factoryId, temp);
+					}
+				}
+			}
+		
+			if(factoryId == null){
+				for(Factory factory : SystemCache.coloring_factorylist){
+					if(!resultMap.containsKey(factory.getId())){
+						resultMap.put(factory.getId(), new HashMap<Integer,Double>());
+					}
+					
+				}
+			}
+			return resultMap;
+			
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 }

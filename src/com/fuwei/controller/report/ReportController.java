@@ -1080,4 +1080,76 @@ public class ReportController extends BaseController {
 		os.close(); 
 	}
 	/*辅料采购单报表*/
+	
+	
+	/*未染色白胚报表 -- 开始*/
+	@RequestMapping(value = "/stock_muslin", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView stock_muslin(String start_time, String end_time,Integer factoryId,
+			String sortJSON, HttpSession session, HttpServletRequest request)
+			throws Exception {
+		
+		String lcode = "report/stock_muslin";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有查看未染色白胚报表的权限", null);
+		}
+		
+		try {
+			Date start_time_d = DateTool.parse(start_time);
+			Date end_time_d = DateTool.parse(end_time);
+			
+			List<Sort> sortList = null;
+			if (sortJSON != null) {
+				sortList = SerializeTool.deserializeList(sortJSON, Sort.class);
+			}
+			if (sortList == null) {
+				sortList = new ArrayList<Sort>();
+			}
+			Sort sort = new Sort();
+			sort.setDirection("desc");
+			sort.setProperty("created_at");
+			sortList.add(sort);
+			Sort sort_factory = new Sort();
+			sort_factory.setDirection("desc");
+			sort_factory.setProperty("factoryId");
+			sortList.add(sort_factory);
+			
+			
+			HashMap<Integer,HashMap<Integer,Double> > material_result = materialPurchaseOrderService.muslin(start_time_d, end_time_d,
+					factoryId, sortList);
+			
+			HashMap<Integer,HashMap<Integer,Double> > coloring_result = coloringOrderService.muslin(start_time_d, end_time_d,factoryId, sortList);
+			
+			HashMap<Integer,HashMap<Integer,Double> > result = new HashMap<Integer, HashMap<Integer,Double>>();
+			for(Integer tempfactoryId : material_result.keySet()){
+				HashMap<Integer,Double> tempMaterial = material_result.get(tempfactoryId);
+				HashMap<Integer,Double> tempColoring = coloring_result.get(tempfactoryId);
+				
+				HashMap<Integer,Double> result_item = new HashMap<Integer, Double>();
+				for(Integer tempMaterialId : tempMaterial.keySet()){
+					result_item.put(tempMaterialId, tempMaterial.get(tempMaterialId));
+				}
+				if(tempColoring!=null){
+					for(Integer tempMaterialId : tempColoring.keySet()){
+						if(result_item.containsKey(tempMaterialId)){
+							result_item.put(tempMaterialId, result_item.get(tempMaterialId) - tempColoring.get(tempMaterialId));
+						}else{
+							result_item.put(tempMaterialId, -tempColoring.get(tempMaterialId));
+						}
+					}
+				}
+				
+				result.put(tempfactoryId, result_item);
+			}
+			request.setAttribute("result", result);
+			request.setAttribute("start_time", start_time_d);
+			request.setAttribute("end_time", end_time_d);
+			request.setAttribute("factoryId", factoryId);
+			return new ModelAndView("report/stock_muslin");
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	/*未染色白胚报表 -- 结束*/
 }
