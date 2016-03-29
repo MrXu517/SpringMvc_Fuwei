@@ -17,6 +17,8 @@
 	Boolean has_delete = SystemCache.hasAuthority(session,"store_in_out/delete");
 	Boolean has_print = SystemCache.hasAuthority(session,"store_in_out/print");
 	Boolean has_edit = SystemCache.hasAuthority(session,"store_in_out/edit");
+	Boolean deletable = storeInOut.deletable();
+	Boolean has_datacorrect_delete = SystemCache.hasAuthority(session,"data/correct");//数据纠正
 %>
 <!DOCTYPE html>
 <html>
@@ -82,8 +84,14 @@
 						<%if(has_edit){ %>
 						<a href="store_in/put/<%=storeInOut.getId() %>" type="button" class="btn btn-primary">编辑</a>					
 						<%} %>
-						<%if(has_delete){ %>
-						<button data-cid="<%=storeInOut.getId() %>" type="button" class="btn btn-danger" id="deleteBtn">删除</button>
+						<%
+							if(has_delete && deletable){
+						%>
+						<button data-cid="<%=storeInOut.getId()%>" type="button" class="btn btn-danger" id="deleteBtn">删除</button>
+						<%
+							}else if(has_datacorrect_delete && !deletable){
+						%>
+						<button data-cid="<%=storeInOut.getId()%>" type="button" class="btn btn-danger" id="deleteBtn_datacorrect">数据纠正：删除</button>
 						<%} %>
 						<table class="table noborder">
 							<caption id="tablename" style="margin-bottom:0;">
@@ -317,6 +325,30 @@
 			return false;
 		});
 		//删除单据  -- 结束
+		
+		//数据纠正：删除单据 -- 开始
+		$("#deleteBtn_datacorrect").click( function() {
+			var id = $(this).attr("data-cid");
+			if (!confirm("该原材料入库单已打印入库， 您是否确定要进行数据纠正：删除？")) {
+				return false;
+			}
+			$.ajax( {
+				url :"store_in/delete/" + id,
+				type :'POST'
+			}).done( function(result) {
+				if (result.success) {
+					Common.Tip("数据纠正成功：" +  result.message, function() {
+						$("#breadcrumbs li.active").prev().find("a").click();
+					});
+				}
+			}).fail( function(result) {
+				Common.Error("数据纠正：删除原材料入库单失败：" + result.responseText);
+			}).always( function() {
+	
+			});
+			return false;
+		});
+		//数据纠正：删除单据 -- 结束
 	</script>
 	</body>
 </html>

@@ -12,9 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
+import com.fuwei.entity.DataCorrectRecord;
 import com.fuwei.entity.producesystem.StoreInOut;
 import com.fuwei.entity.producesystem.StoreReturn;
 import com.fuwei.service.BaseService;
+import com.fuwei.service.DataCorrectRecordService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
 
@@ -26,7 +28,8 @@ public class StoreReturnService extends BaseService {
 	JdbcTemplate jdbc;
 	@Autowired
 	MaterialCurrentStockService materialCurrentStockService;
-
+	@Autowired
+	DataCorrectRecordService dataCorrectRecordService;
 	// 获取列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,
 			Integer companyId, Integer factoryId, Integer charge_employee,
@@ -334,6 +337,37 @@ public class StoreReturnService extends BaseService {
 				//更新库存表
 				materialCurrentStockService.reStock(temp.getOrderId());
 			}
+			return result;
+		} catch (Exception e) {
+			SQLException sqlException = (java.sql.SQLException) e.getCause();
+			if (sqlException != null && sqlException.getErrorCode() == 1451) {// 外键约束
+				log.error(e);
+				throw new Exception("已被引用，无法删除，请先删除与原材料退货单有关的引用");
+			}
+			throw e;
+		}
+	}
+
+	// 删除
+	@Transactional(rollbackFor=Exception.class)
+	public int remove_datacorrect(StoreReturn temp,DataCorrectRecord datacorrect) throws Exception {
+		try {
+			int id = temp.getId();
+			//如果单据并未打印，且并未执行完成，则无需数据纠正，正常删除单据即可
+			if (!temp.getHas_print() && temp.deletable()) {// 
+				throw new Exception("原材料退货单并未打印且并未执行完成，无需数据纠正，正常删除单据即可");
+			}
+			int result = dao.update("delete from tb_store_return WHERE  id = ?", temp.getId());
+			//如果是样纱退库单
+			if(temp.getColoring_order_id()!=null){
+				//更新样纱库存表
+				materialCurrentStockService.reStock_Coloring(temp.getColoring_order_id());
+			}else{
+				//更新库存表
+				materialCurrentStockService.reStock(temp.getOrderId());
+			}
+			//3.添加数据纠正记录
+			dataCorrectRecordService.add(datacorrect);
 			return result;
 		} catch (Exception e) {
 			SQLException sqlException = (java.sql.SQLException) e.getCause();

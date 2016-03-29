@@ -12,8 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
+import com.fuwei.entity.DataCorrectRecord;
 import com.fuwei.entity.producesystem.StoreInOut;
 import com.fuwei.service.BaseService;
+import com.fuwei.service.DataCorrectRecordService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
 
@@ -27,7 +29,8 @@ public class StoreInOutService extends BaseService {
 	JdbcTemplate jdbc;
 	@Autowired
 	MaterialCurrentStockService materialCurrentStockService;
-
+	@Autowired
+	DataCorrectRecordService dataCorrectRecordService;
 	// 获取列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,
 			Integer companyId, Integer factoryId,Integer charge_employee,String number,Boolean in_out, List<Sort> sortlist) throws Exception {
@@ -307,6 +310,67 @@ public class StoreInOutService extends BaseService {
 				//更新库存表
 				materialCurrentStockService.reStock(temp.getOrderId());
 			}
+			return result;
+		} catch (Exception e) {
+			SQLException sqlException = (java.sql.SQLException) e.getCause();
+			if (sqlException != null && sqlException.getErrorCode() == 1451) {// 外键约束
+				log.error(e);
+				throw new Exception("已被引用，无法删除，请先删除与原材料出入库单有关的引用");
+			}
+			throw e;
+		}
+	}
+	
+	// 删除
+	@Transactional(rollbackFor=Exception.class)
+	public int remove(StoreInOut temp) throws Exception {
+		try {
+			if(temp.getHas_print()){//如果出库单已打印，则不能再删除
+				throw new Exception("单据已打印，无法删除 ");
+			}
+			if(!temp.deletable()){
+				throw new Exception("单据已执行完成，无法删除 ");
+			}
+			int result = dao.update("delete from tb_store_in_out WHERE  id = ?", temp.getId());
+			//如果是样纱入、出库单
+			if(temp.getOrderId()==null){
+				//更新样纱库存表
+				materialCurrentStockService.reStock_Coloring(temp.getColoring_order_id());
+			}else{
+				//更新库存表
+				materialCurrentStockService.reStock(temp.getOrderId());
+			}
+			return result;
+		} catch (Exception e) {
+			SQLException sqlException = (java.sql.SQLException) e.getCause();
+			if (sqlException != null && sqlException.getErrorCode() == 1451) {// 外键约束
+				log.error(e);
+				throw new Exception("已被引用，无法删除，请先删除与原材料出入库单有关的引用");
+			}
+			throw e;
+		}
+	}
+	
+	// 删除
+	@Transactional(rollbackFor=Exception.class)
+	public int remove_datacorrect(StoreInOut temp,DataCorrectRecord datacorrect) throws Exception {
+		try {
+			int id = temp.getId();
+			//如果单据并未打印，且并未执行完成，则无需数据纠正，正常删除单据即可
+			if (!temp.getHas_print() && temp.deletable()) {// 
+				throw new Exception("原材料入库单并未打印且并未执行完成，无需数据纠正，正常删除单据即可");
+			}
+			int result = dao.update("delete from tb_store_in_out WHERE  id = ?", temp.getId());
+			//如果是样纱入、出库单
+			if(temp.getOrderId()==null){
+				//更新样纱库存表
+				materialCurrentStockService.reStock_Coloring(temp.getColoring_order_id());
+			}else{
+				//更新库存表
+				materialCurrentStockService.reStock(temp.getOrderId());
+			}
+			//3.添加数据纠正记录
+			dataCorrectRecordService.add(datacorrect);
 			return result;
 		} catch (Exception e) {
 			SQLException sqlException = (java.sql.SQLException) e.getCause();

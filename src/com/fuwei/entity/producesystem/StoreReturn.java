@@ -245,6 +245,9 @@ public class StoreReturn {
 	}
 	
 	public Boolean deletable(){
+		if(this.has_print){
+			return false;
+		}
 		if(this.status == null){
 			return true;
 		}

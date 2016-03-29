@@ -364,7 +364,7 @@
 											
 											
 											<td rowspan="<%=detailsize%>">
-												<a target="_top" href="half_store_return/detail/<%=item.getId()%>">详情</a>
+												<a target="_top" href="store_return/detail/<%=item.getId()%>">详情</a>
 											</td>
 										</tr>
 										<%
