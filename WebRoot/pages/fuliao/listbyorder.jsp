@@ -33,6 +33,8 @@
 			"fuliao/add");
 	Boolean has_delete = SystemCache.hasAuthority(session,
 			"fuliao/delete");
+	Boolean has_card= SystemCache.hasAuthority(session,
+			"fuliao/card");
 	//权限相关
 %>
 <!DOCTYPE html>
@@ -92,6 +94,9 @@
 								<div clas="navbar navbar-default">
 								<%if(has_add){ %>
 									<a target="_blank"  id="addBtn" href="fuliao/<%=order.getId() %>/add" class="btn btn-primary" >添加辅料</a>
+								<%} %>
+								<%if(has_card){ %>
+									<a target="_blank"  id="addBtn" href="fuliao/card/<%=order.getId() %>" class="btn btn-primary" >打印辅料卡</a>
 								<%} %>
 								</div>
 

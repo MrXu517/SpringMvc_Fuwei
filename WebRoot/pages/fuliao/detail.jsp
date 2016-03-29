@@ -162,6 +162,12 @@
 																	</tr>
 																	<tr>
 																		<td>
+																			计划数量
+																		</td>
+																		<td><%=fuliao.getPlan_quantity()%></td>
+																	</tr>
+																	<tr>
+																		<td>
 																			库位容量
 																		</td>
 																		<td><%=fuliao.getLocationSizeString()%></td>

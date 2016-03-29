@@ -23,13 +23,20 @@ public class Fuliao {
 	private String img_s;//中等缩略图
 	private String img_ss;//缩略图
 	private int location_size;//库位容量大小
-	
+	private int plan_quantity;
 	private String memo;
 	private Integer created_user;//创建人
 	private Date created_at;
 	private Date updated_at;
 	
 	
+	
+	public int getPlan_quantity() {
+		return plan_quantity;
+	}
+	public void setPlan_quantity(int plan_quantity) {
+		this.plan_quantity = plan_quantity;
+	}
 	public String getSample_name() {
 		return sample_name;
 	}

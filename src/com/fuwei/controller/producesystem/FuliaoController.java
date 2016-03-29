@@ -86,6 +86,28 @@ public class FuliaoController extends BaseController {
 		
 		return new ModelAndView("fuliao/listbyorder");
 	}
+	
+	@RequestMapping(value = "/card/{OrderId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView card(@PathVariable Integer OrderId,
+			HttpSession session, HttpServletRequest request) throws Exception {
+		if (OrderId == null) {
+			throw new Exception("缺少订单ID");
+		}
+		String lcode = "fuliao/card";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有打印辅料卡的权限", null);
+		}
+		List<Fuliao> fuliaoList = fuliaoService.getList(OrderId);
+		if (fuliaoList == null) {
+			fuliaoList = new ArrayList<Fuliao>();
+		}
+		request.setAttribute("fuliaoList", fuliaoList);
+		Order order = orderService.get(OrderId);
+		request.setAttribute("order", order);	
+		return new ModelAndView("fuliao/card");
+	}
 
 	@RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
 	@ResponseBody
