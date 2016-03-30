@@ -323,4 +323,12 @@ public class HalfStoreInOut {
 			return "出库";
 		}
 	}
+	public String printStr(){
+		if(this.has_print!=null && this.has_print){
+			return "是";
+		}
+		else{
+			return "否";
+		}
+	}
 }

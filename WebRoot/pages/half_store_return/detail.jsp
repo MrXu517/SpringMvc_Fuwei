@@ -16,6 +16,8 @@
 	//权限
 	Boolean has_delete = SystemCache.hasAuthority(session,"half_store_return/delete");
 	Boolean has_print = SystemCache.hasAuthority(session,"half_store_return/print");
+	Boolean deletable = storeReturn.deletable();
+	Boolean has_datacorrect_delete = SystemCache.hasAuthority(session,"data/correct");//数据纠正
 %>
 <!DOCTYPE html>
 <html>
@@ -83,12 +85,14 @@
 						%>
 						
 						<%
-							if(has_delete){
+							if(has_delete && deletable){
 						%>
 						<button data-cid="<%=storeReturn.getId()%>" type="button" class="btn btn-danger" id="deleteBtn">删除</button>
 						<%
-							}
+							}else if(has_datacorrect_delete && !deletable){
 						%>
+						<button data-cid="<%=storeReturn.getId()%>" type="button" class="btn btn-danger" id="deleteBtn_datacorrect">数据纠正：删除</button>
+						<%} %>
 						<table class="table noborder">
 							<caption id="tablename">
 								桐庐富伟针织厂半成品退货单<div table_id="<%=storeReturn.getNumber()%>" class="id_barcode"></div>

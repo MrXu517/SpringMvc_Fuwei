@@ -103,6 +103,9 @@
 								<table class="table table-responsive table-bordered" id="Tb">
 									<thead>
 										<tr>
+											<th width="50px">
+												编号
+											</th>
 											<th width="120px">
 												图片
 											</th>
@@ -152,6 +155,7 @@
 										%>
 									
 										<tr itemId="<%=fuliao.getId()%>">
+											<td><%=fuliao.getFnumber()%></td>
 											<td style="max-width: 120px; height: 120px; max-height: 120px;">
 												<a target="_blank" class="cellimg"
 													href="/<%=fuliao.getImg()%>"><img

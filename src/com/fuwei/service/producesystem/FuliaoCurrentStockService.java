@@ -27,7 +27,7 @@ public class FuliaoCurrentStockService  extends BaseService {
 		try {
 			StringBuffer sql = new StringBuffer();
 			String seq = " AND ";
-			sql.append("select f.*,l.number,l.fuliaoId,l.quantity,l.size l_size from tb_location l,tb_fuliao f where l.fuliaoId=f.id ");
+			sql.append("select f.*,l.number as number,l.fuliaoId,l.quantity,l.size l_size from tb_location l,tb_fuliao f where l.fuliaoId=f.id ");
 
 			StringBuffer sql_condition = new StringBuffer();
 			if (charge_employee != null) {

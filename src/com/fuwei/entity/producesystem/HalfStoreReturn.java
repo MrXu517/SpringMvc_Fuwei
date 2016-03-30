@@ -258,6 +258,9 @@ public class HalfStoreReturn {
 	}
 	
 	public Boolean deletable(){
+		if(this.has_print){
+			return false;
+		}
 		if(this.status == null){
 			return true;
 		}
@@ -272,6 +275,14 @@ public class HalfStoreReturn {
 	}
 	public void setNumber(String number) {
 		this.number = number;
+	}
+	public String printStr(){
+		if(this.has_print!=null && this.has_print){
+			return "是";
+		}
+		else{
+			return "否";
+		}
 	}
 }
 

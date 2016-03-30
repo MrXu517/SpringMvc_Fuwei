@@ -315,6 +315,13 @@ public class StoreInOut {
 	public void setNumber(String number) {
 		this.number = number;
 	}
-	
+	public String printStr(){
+		if(this.has_print!=null && this.has_print){
+			return "是";
+		}
+		else{
+			return "否";
+		}
+	}
 	
 }

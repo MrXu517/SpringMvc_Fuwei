@@ -290,6 +290,7 @@
     										<th style="width:40px"></th>
     										<th style="width:40px"></th>
     										<th style="width:60px"></th>
+    										<th style="width:30px"></th>
     										<th style="width:40px"></th>
   										</tr>
 										<tr>
@@ -321,7 +322,9 @@
 											</th><th rowspan="2" width="60px">
 												入库时间
 											</th>
-											
+											<th rowspan="2" width="30px">
+												打印
+											</th>
 											<th rowspan="2" width="40px">
 												操作
 											</th>
@@ -360,7 +363,8 @@
 											<td><%=detailist.get(0).getQuantity()%></td>
 
 											<td rowspan="<%=detailsize%>"><%=SystemCache.getUserName(item.getCreated_user())%></td>				
-											<td rowspan="<%=detailsize%>"><%=DateTool.formatDateYMD(item.getDate())%></td>				
+											<td rowspan="<%=detailsize%>"><%=DateTool.formatDateYMD(item.getDate())%></td>					
+											<td rowspan="<%=detailsize%>"><%=item.printStr()%></td>				
 											
 											
 											<td rowspan="<%=detailsize%>">

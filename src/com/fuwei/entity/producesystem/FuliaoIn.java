@@ -143,6 +143,14 @@ public class FuliaoIn {
 		return DateTool.getYear2() + "FR" + NumberUtil.appendZero(this.id, 4);
 		
 	}
+	public String printStr(){
+		if(this.has_print!=null && this.has_print){
+			return "是";
+		}
+		else{
+			return "否";
+		}
+	}
 	
 	
 }

@@ -236,6 +236,7 @@
     										<th style="width:60px"></th>
     										<th style="width:50px"></th>
     										<th style="width:60px"></th>
+    										<th style="width:30px"></th>
     										<th style="width:40px"></th>
   										</tr>
 										<tr>
@@ -254,6 +255,9 @@
 											</th><th colspan="9" width="165px">辅料出库列表</th>
 											<th rowspan="2" width="60px">
 												出库时间
+											</th>
+											<th rowspan="2" width="30px">
+												打印
 											</th>
 											<th rowspan="2" width="40px">
 												操作
@@ -309,7 +313,7 @@
 
 										
 											<td rowspan="<%=detailsize%>"><%=DateTool.formatDateYMD(item.getCreated_at())%></td>				
-											
+											<td rowspan="<%=detailsize%>"><%=item.printStr()%></td>	
 											
 											<td rowspan="<%=detailsize%>">
 												<a target="_blank" href="fuliaoout/detail/<%=item.getId()%>">详情</a>

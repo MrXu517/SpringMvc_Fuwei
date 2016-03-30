@@ -179,7 +179,9 @@ th{font-size: 15px;}
 										%>
 									
 										<tr>
-											<td rowspan="6"><%=SystemCache.getFuliaoTypeName(fuliao.getFuliaoTypeId())%></td>
+											<td rowspan="6"><%=SystemCache.getFuliaoTypeName(fuliao.getFuliaoTypeId())%>
+											<br>
+											<%=fuliao.getFnumber()%></td>
 											<td rowspan="6" style="text-align:left; max-width: 120px; height: 120px; max-height: 120px;">
 												<img style="max-width: 120px; height: 120px; max-height: 120px;"
 														src="/<%=fuliao.getImg_ss()%>">

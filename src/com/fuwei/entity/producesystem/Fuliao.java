@@ -1,6 +1,10 @@
 package com.fuwei.entity.producesystem;
 
+import java.text.ParseException;
 import java.util.Date;
+
+import com.fuwei.util.DateTool;
+import com.fuwei.util.NumberUtil;
 
 import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
@@ -29,8 +33,16 @@ public class Fuliao {
 	private Date created_at;
 	private Date updated_at;
 	
+	private String fnumber;//辅料number
 	
 	
+	
+	public String getFnumber() {
+		return fnumber;
+	}
+	public void setFnumber(String fnumber) {
+		this.fnumber = fnumber;
+	}
 	public int getPlan_quantity() {
 		return plan_quantity;
 	}
@@ -163,6 +175,10 @@ public class Fuliao {
 		}else{
 			return "其他";
 		}
+	}
+	public String createNumber() throws ParseException{	
+		return DateTool.getYear2() + "FL" + NumberUtil.appendZero(this.id/9999, 4);
+		
 	}
 	
 }

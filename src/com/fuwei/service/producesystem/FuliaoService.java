@@ -36,6 +36,9 @@ public class FuliaoService extends BaseService {
 				throw new Exception("订单号不能为空");
 			} else {
 				Integer fuliaoId = this.insert(fuliao);
+				fuliao.setId(fuliaoId);
+				fuliao.setFnumber(fuliao.createNumber());
+				this.update(fuliao, "id", null);
 				return fuliaoId;
 			}
 		} catch (Exception e) {
@@ -74,7 +77,7 @@ public class FuliaoService extends BaseService {
 	public int update(Fuliao fuliao) throws Exception {
 		try {
 			// 更新
-			this.update(fuliao,"id","created_user,created_at,orderNumber,orderId",
+			this.update(fuliao,"id","created_user,created_at,orderNumber,orderId,fnumber",
 								true);
 			return fuliao.getId();
 		} catch (Exception e) {
