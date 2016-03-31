@@ -51,7 +51,7 @@ body {
 }
 .tagWidget{margin:auto;}
 table tr td.firsttd{width:75px;}
-table caption strong{width: 200px;display: inline-block;}
+table caption strong{width: 250px;display: inline-block;}
 </style>
 
 	</head>
@@ -67,8 +67,8 @@ table caption strong{width: 200px;display: inline-block;}
 							<table class="table noborder tagWidget">
 								<caption>
 									<div tag_string='<%=tag_string %>' class="id_barcode"></div>
-									<strong>入库辅料标签 -- <%=object.getNumber()%></strong>
-									<div><%=object.getOrderNumber() %> -- <%=employee_name %></div>
+									<strong>入库辅料标签 -- <%=detail.getFnumber()%></strong>
+									<div><%=object.getOrderNumber() %> -- <%=object.getNumber()%> -- <%=employee_name %></div>
 								</caption>
 								<tr>
 									<td class="firsttd">

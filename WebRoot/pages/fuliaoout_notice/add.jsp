@@ -185,7 +185,7 @@ tr.disable{background:#ddd;}
 														序号
 													</th>
 													<th width="75px">
-														辅料类型
+														类型
 													</th><th width="150px">
 														图片
 													</th><th width="100px">
@@ -220,7 +220,8 @@ tr.disable{background:#ddd;}
 												%>
 												<tr class="tr EmptyTr disable" data='<%=SerializeTool.serialize(detail)%>'>
 													<td><input type="checkbox" name="checked" class="checkBtn"/></td>
-													<td><%=SystemCache.getFuliaoTypeName((Integer)detail.get("fuliaoTypeId"))%></td>
+												
+													<td><%=SystemCache.getFuliaoTypeName((Integer)detail.get("fuliaoTypeId"))%><br><%=detail.get("fnumber")%></td>
 													<td><a href="/<%=detail.get("img")%>" class=""
 																			target="_blank"> <img id="previewImg"
 																				alt="200 x 100%" src="/<%=detail.get("img_ss")%>">

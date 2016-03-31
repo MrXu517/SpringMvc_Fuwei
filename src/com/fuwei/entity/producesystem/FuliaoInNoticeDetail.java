@@ -16,7 +16,7 @@ public class FuliaoInNoticeDetail {
 	private String company_productNumber;//公司货号
 	
 	private int fuliaoTypeId;//辅料类型
-	
+	private String fnumber;//辅料编号
 	private String color;//颜色
 	
 	private String size;//尺寸
@@ -33,6 +33,12 @@ public class FuliaoInNoticeDetail {
 	private String memo;
 	
 	
+	public String getFnumber() {
+		return fnumber;
+	}
+	public void setFnumber(String fnumber) {
+		this.fnumber = fnumber;
+	}
 	public String getCountry() {
 		return country;
 	}

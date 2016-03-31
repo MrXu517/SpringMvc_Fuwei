@@ -223,7 +223,7 @@ tr.disable{background:#ddd;}
 														List<Map<String,Object>> templist = locationMap.get(detail.getFuliaoId());
 												%>
 												<tr class="tr" data='<%=SerializeTool.serialize(detail)%>'>
-													<td><%=SystemCache.getFuliaoTypeName(detail.getFuliaoTypeId())%></td>
+													<td><%=SystemCache.getFuliaoTypeName(detail.getFuliaoTypeId())%><br><%=detail.getFnumber()%></td>
 													<td><a href="/<%=detail.getImg()%>" class=""
 																			target="_blank"> <img id="previewImg"
 																				alt="200 x 100%" src="/<%=detail.getImg_ss()%>">

@@ -73,7 +73,7 @@ input[name='location_size']{height:20px;width:20px;}
 								<div class="panel panel-primary">
 									<div class="panel-heading">
 										<h3 class="panel-title">
-											编辑辅料
+											编辑辅料, 编号： <%=fuliao.getFnumber() %>
 										</h3>
 									</div>
 									<div class="panel-body">

@@ -115,8 +115,11 @@
 
 											<thead>
 												<tr>
-													<th width="10%">
-														辅料类型
+													<th width="8%">
+														编号
+													</th>
+													<th width="8%">
+														类型
 													</th><th width="10%">
 														订单号
 													</th><th width="8%">
@@ -145,6 +148,7 @@
 													for (FuliaoOutDetail detail : detaillist) {
 												%>
 												<tr class="tr">
+													<td><%=detail.getFnumber()%></td>
 													<td><%=SystemCache.getFuliaoTypeName((Integer)detail.getFuliaoTypeId())%></td>
 													<td><%=detail.getCompany_orderNumber()%></td>
 													<td><%=detail.getCompany_productNumber()%></td>
@@ -164,6 +168,8 @@
 												<tr class="tr">
 													<td class="">
 														&nbsp;
+													</td>
+													<td class="">
 													</td>
 													<td class="">
 													</td>

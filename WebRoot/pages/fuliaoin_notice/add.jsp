@@ -186,7 +186,10 @@ tr.disable{background:#ddd;}
 												<tr><th width="5%">
 														序号
 													</th>
-													<th width="8%">
+													<th width="5%">
+														编号
+													</th>
+													<th width="5%">
 														类型
 													</th><th width="15%">
 														图片
@@ -220,6 +223,7 @@ tr.disable{background:#ddd;}
 												%>
 												<tr class="tr EmptyTr disable" data='<%=json.toString()%>'>
 													<td><input type="checkbox" name="checked" class="checkBtn"/></td>
+													<td><%=fuliao.getFnumber()%></td>
 													<td><%=SystemCache.getFuliaoTypeName(fuliao.getFuliaoTypeId())%></td>
 													<td><a href="/<%=fuliao.getImg()%>" class=""
 																			target="_blank"> <img id="previewImg"

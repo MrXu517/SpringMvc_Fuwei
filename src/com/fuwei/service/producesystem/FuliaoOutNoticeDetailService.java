@@ -32,7 +32,7 @@ public class FuliaoOutNoticeDetailService extends BaseService {
 	
 	@Transactional
 	public boolean addBatch(List<FuliaoOutNoticeDetail> detailList) throws Exception {
-		String sql = "INSERT INTO tb_fuliaoout_notice_detail(fuliaoInOutNoticeId,fuliaoId,quantity,img,img_s,img_ss,color,size,batch,fuliaoTypeId,company_orderNumber,company_productNumber,country,memo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO tb_fuliaoout_notice_detail(fuliaoInOutNoticeId,fuliaoId,quantity,img,img_s,img_ss,color,size,batch,fuliaoTypeId,company_orderNumber,company_productNumber,country,memo,fnumber) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		List<Object[]> batchArgs = new ArrayList<Object[]>();
 		for (FuliaoOutNoticeDetail item : detailList) {
@@ -41,7 +41,7 @@ public class FuliaoOutNoticeDetailService extends BaseService {
 					,item.getImg(),item.getImg_s(),item.getImg_ss()
 					,item.getColor(),item.getSize(),item.getBatch()
 					,item.getFuliaoTypeId(),item.getCompany_orderNumber(),item.getCompany_productNumber(),
-					item.getCountry(),item.getMemo()
+					item.getCountry(),item.getMemo(),item.getFnumber()
 					});
 		}
 		try {

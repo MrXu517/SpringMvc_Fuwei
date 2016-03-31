@@ -193,7 +193,7 @@ form .selectDiv.form-group{  width: 250px;display: inline-block;}
 											<thead>
 												
 												<tr>
-													<th rowspan="2" width="60px">
+													<th rowspan="2" width="70px">
 														辅料类型
 													</th><th rowspan="2" width="120px">
 														图片
@@ -245,7 +245,7 @@ form .selectDiv.form-group{  width: 250px;display: inline-block;}
 														json.putAll(templist.get(0));
 												%>
 												<tr data='<%=json.toString()%>' class="tr <%=classname%>">
-													<td rowspan="<%=detailsize%>"><%=SystemCache.getFuliaoTypeName((Integer)detail.getFuliaoTypeId())%></td>
+													<td rowspan="<%=detailsize%>"><%=SystemCache.getFuliaoTypeName((Integer)detail.getFuliaoTypeId())%><br><%=detail.getFnumber()%></td>
 													<td rowspan="<%=detailsize%>"><a href="/<%=detail.getImg()%>" class=""
 																			target="_blank"> <img id="previewImg"
 																				alt="200 x 100%" src="/<%=detail.getImg_ss()%>">

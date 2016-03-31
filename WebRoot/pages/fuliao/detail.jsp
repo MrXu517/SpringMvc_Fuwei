@@ -100,6 +100,12 @@
 										</label>
 										<span><%=order.getCNState()%></span>
 									</div>
+									<div class="pull-left">
+										<label class="control-label">
+											辅料编号：
+										</label>
+										<span><%=fuliao.getFnumber()%></span>
+									</div>
 								
 
 									<div class="clear"></div>

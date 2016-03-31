@@ -30,7 +30,16 @@ public class FuliaoOutNoticeDetail {
 	private String country;//国家/城市
 	private String memo;
 	
+	private String fnumber;
 	
+	
+	
+	public String getFnumber() {
+		return fnumber;
+	}
+	public void setFnumber(String fnumber) {
+		this.fnumber = fnumber;
+	}
 	public String getCountry() {
 		return country;
 	}

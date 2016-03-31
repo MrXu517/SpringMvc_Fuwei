@@ -235,7 +235,7 @@
 												图片
 											</th>
 											<th width="55px">
-												辅料类型
+												辅料类型/编号
 											</th>
 											<th width="70px">
 												公司订单号
@@ -282,7 +282,7 @@
 											<td><a href="/<%=detail.get("img")%>" class="" target="_blank"> <img id="previewImg"
 													alt="200 x 100%" src="/<%=detail.get("img_ss")%>">
 												</a></td>
-											<td><a target="_top" href="fuliao/detail/<%=detail.get("id")%>"><%=SystemCache.getFuliaoTypeName((Integer)detail.get("fuliaoTypeId"))%></a></td>
+											<td><a target="_top" href="fuliao/detail/<%=detail.get("id")%>"><%=SystemCache.getFuliaoTypeName((Integer)detail.get("fuliaoTypeId"))%></a><br><%=detail.get("fnumber")%></td>
 											<td><%=detail.get("company_orderNumber")%></td>
 											<td><%=detail.get("company_productNumber")%></td>
 											<td><%=detail.get("country")%></td>

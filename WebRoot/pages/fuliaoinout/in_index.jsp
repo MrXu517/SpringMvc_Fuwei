@@ -263,7 +263,7 @@
 												操作
 											</th>
 										</tr><tr><th width="55px">
-												辅料类型
+												类型
 											</th><th width="55px">
 												订单号
 											</th><th width="55px">

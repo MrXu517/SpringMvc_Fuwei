@@ -150,7 +150,7 @@ div.name{   margin-left: 15px; width: 100px; display: inline-block;}
 													for (FuliaoOutNoticeDetail detail : detaillist) {
 												%>
 												<tr class="tr">
-													<td><%=SystemCache.getFuliaoTypeName(detail.getFuliaoTypeId())%></td>
+													<td><%=SystemCache.getFuliaoTypeName(detail.getFuliaoTypeId())%><br><%=detail.getFnumber()%></td>
 													<td><a href="/<%=detail.getImg()%>" class="" target="_blank"> 
 														<img class="fuliaoImg" src="/<%=detail.getImg_ss()%>">
 																		</a></td>
