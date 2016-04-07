@@ -113,7 +113,7 @@
 													公司
 												</td>
 												<td class="center" width="15%">
-													货号
+													订单号
 												</td>
 												<td class="center" width="15%">
 													客户
@@ -128,7 +128,7 @@
 								.getCompanyId())%></span>
 												</td>
 												<td class="center">
-													<span><%=coloringOrder.getCompany_productNumber()%></span>
+													<span><%=coloringOrder.getOrderNumber()%></span>
 												</td>
 												<td class="center">
 													<span><%=SystemCache.getCustomerName(coloringOrder

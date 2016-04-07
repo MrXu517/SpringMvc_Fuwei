@@ -73,9 +73,15 @@
 												<td class="center" width="15%">
 													公司
 												</td>
+												<%if(coloringOrder.getOrderId()==null){ %>
 												<td class="center" width="15%">
 													货号
 												</td>
+												<%}else{ %>
+												<td class="center" width="15%">
+													订单号
+												</td>
+												<%} %>
 												<td class="center" width="15%">
 													客户
 												</td>
@@ -88,9 +94,16 @@
 													<span><%=SystemCache.getCompanyShortName(coloringOrder
 								.getCompanyId())%></span>
 												</td>
+												<%if(coloringOrder.getOrderId()==null){ %>
 												<td class="center">
 													<span><%=coloringOrder.getCompany_productNumber()%></span>
 												</td>
+												<%}else{ %>
+												<td class="center">
+													<span><%=coloringOrder.getOrderNumber()%></span>
+												</td>
+												<%} %>
+												
 												<td class="center">
 													<span><%=SystemCache.getCustomerName(coloringOrder
 								.getCustomerId())%></span>

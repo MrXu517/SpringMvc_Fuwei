@@ -177,7 +177,7 @@ public class Fuliao {
 		}
 	}
 	public String createNumber() throws ParseException{	
-		return DateTool.getYear2() + "FL" + NumberUtil.appendZero(this.id/9999, 4);
+		return DateTool.getYear2() + "FL" + NumberUtil.appendZero(this.id%9999, 4);
 		
 	}
 	

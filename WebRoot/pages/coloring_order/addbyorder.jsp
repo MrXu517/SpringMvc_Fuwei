@@ -134,7 +134,7 @@
 																公司
 															</td>
 															<td class="center" width="15%">
-																公司货号
+																订单号
 															</td>
 															<td class="center" width="15%">
 																客户
@@ -169,8 +169,8 @@
 															<td class="center">
 																<input readonly type="text" name="company_productNumber"
 																	id="company_productNumber" class="form-control"
-																	value="<%=order.getCompany_productNumber() == null ? "" : order
-					.getCompany_productNumber()%>" />
+																	value="<%=order.getOrderNumber() == null ? "" : order
+					.getOrderNumber()%>" />
 															</td>
 															<td class="center">
 																<select class="form-control" name="customerId"

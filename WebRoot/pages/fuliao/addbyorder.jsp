@@ -190,7 +190,7 @@ input[name='location_size']{height:20px;width:20px;}
 														数量
 													</label>
 													<div class="col-sm-8">
-														<input type="text" class="form-control positive_int"
+														<input type="text" class="form-control positive_int require"
 															name="plan_quantity" id="plan_quantity" placeholder="数量">
 													</div>
 													<div class="col-sm-1"></div>
