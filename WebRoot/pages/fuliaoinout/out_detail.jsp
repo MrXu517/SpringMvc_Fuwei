@@ -208,7 +208,7 @@ tr.disable{background:#ddd;}
 														批次
 													</th>
 													<th width="8%">
-														数量(个)
+														出库数量(个)
 													</th><th width="8%">
 														库位
 													</th><th width="15%">

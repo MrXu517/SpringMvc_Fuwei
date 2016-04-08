@@ -187,7 +187,7 @@ input[name='location_size']{height:20px;width:20px;}
 												</div>
 												<div class="form-group">
 													<label for="plan_quantity" class="col-sm-3 control-label">
-														数量
+														订单所需数量
 													</label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control positive_int require"

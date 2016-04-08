@@ -209,8 +209,8 @@ form .selectDiv.form-group{  width: 250px;display: inline-block;}
 														尺码
 													</th><th rowspan="2" width="55px">
 														批次
-													</th><th rowspan="2" width="60px">
-														总数
+													</th><th rowspan="2" width="70px">
+														出库总数
 													</th>
 													<th colspan="3" width="180px">出库库位分布</th>
 													<th rowspan="2" width="100px">
@@ -218,14 +218,14 @@ form .selectDiv.form-group{  width: 250px;display: inline-block;}
 													</th>
 													</tr>
 												<tr>
-													<th width="60px">
+													<th width="50px">
 														库位
 													</th>
-													<th width="60px">
+													<th width="65px">
 														库存(个)
 													</th>
-													<th width="60px">
-														数量(个)
+													<th width="70px">
+														出库数量(个)
 													</th>
 												</tr>
 											</thead>

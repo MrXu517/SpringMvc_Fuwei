@@ -160,7 +160,7 @@ th{font-size: 15px;}
 														区别属性
 													</th>
 													<th width="8%">
-														数量(个)
+														订单所需数量(个)
 													</th>
 													<th width="8%">
 														备注

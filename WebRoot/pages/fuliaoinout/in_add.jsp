@@ -209,7 +209,7 @@ tr.disable{background:#ddd;}
 														来源
 													</th>
 													<th width="10%">
-														数量(个)
+														入库数量(个)
 													</th>
 													<th width="15%">
 														库位

@@ -212,7 +212,7 @@ tr.disable{background:#ddd;}
 														来源
 													</th>
 													<th width="20%">
-														数量(个)
+														入库数量(个)
 													</th>
 												</tr>
 											</thead>
