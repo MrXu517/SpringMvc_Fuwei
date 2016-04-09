@@ -16,7 +16,7 @@ public class FuliaoOut {
 	@IdentityId
 	private int id;
 	private String number;//单号
-	private int fuliaoout_noticeId;
+	private Integer fuliaoout_noticeId;
 	private int orderId;
 	private String orderNumber;
 	private int charge_employee;
@@ -35,8 +35,16 @@ public class FuliaoOut {
 	private Boolean has_print;
 	private Boolean has_tagprint;
 	
+	private Boolean is_cleaning;//是否是手动清库存单据 2016-4-9添加
 	
 	
+	
+	public Boolean getIs_cleaning() {
+		return is_cleaning;
+	}
+	public void setIs_cleaning(Boolean is_cleaning) {
+		this.is_cleaning = is_cleaning;
+	}
 	public Boolean getHas_print() {
 		return has_print;
 	}
@@ -61,10 +69,10 @@ public class FuliaoOut {
 	public void setCompany_productNumber(String company_productNumber) {
 		this.company_productNumber = company_productNumber;
 	}
-	public int getFuliaoout_noticeId() {
+	public Integer getFuliaoout_noticeId() {
 		return fuliaoout_noticeId;
 	}
-	public void setFuliaoout_noticeId(int fuliaoout_noticeId) {
+	public void setFuliaoout_noticeId(Integer fuliaoout_noticeId) {
 		this.fuliaoout_noticeId = fuliaoout_noticeId;
 	}
 	

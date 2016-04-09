@@ -27,7 +27,7 @@ public class FuliaoCurrentStockService  extends BaseService {
 		try {
 			StringBuffer sql = new StringBuffer();
 			String seq = " AND ";
-			sql.append("select f.*,l.number as number,l.fuliaoId,l.quantity,l.size l_size from tb_location l,tb_fuliao f where l.fuliaoId=f.id ");
+			sql.append("select f.*,l.number as number,l.fuliaoId,l.quantity,l.size l_size,l.id as locationId from tb_location l,tb_fuliao f where l.fuliaoId=f.id ");
 
 			StringBuffer sql_condition = new StringBuffer();
 			if (charge_employee != null) {
@@ -67,8 +67,8 @@ public class FuliaoCurrentStockService  extends BaseService {
 	
 	//获取辅料出入库记录
 	public List<Map<String,Object>> inoutByFuliao(int fuliaoId){
-		List<Map<String,Object>> result = dao.queryForListMap("(select 'in' as type ,fuliaoId,quantity,fuliaoInOutId,locationId,fuliaoPurchaseFactoryId,b.number,b.created_at,b.created_user from tb_fuliaoin_detail a , tb_fuliaoin b where a.fuliaoId=? and a.fuliaoInOutId = b.id and b.status = 6 )"
-				+" union all (select 'out' as type ,fuliaoId,quantity,fuliaoInOutId,locationId,null,b.number,b.created_at,b.created_user from tb_fuliaoout_detail a , tb_fuliaoout b where a.fuliaoId=? and a.fuliaoInOutId = b.id and b.status = 6 ) order by created_at", fuliaoId,fuliaoId);
+		List<Map<String,Object>> result = dao.queryForListMap("(select 'in' as type ,fuliaoId,quantity,fuliaoInOutId,locationId,fuliaoPurchaseFactoryId,b.number,b.created_at,b.created_user,null as is_cleaning from tb_fuliaoin_detail a , tb_fuliaoin b where a.fuliaoId=? and a.fuliaoInOutId = b.id and b.status = 6 )"
+				+" union all (select 'out' as type ,fuliaoId,quantity,fuliaoInOutId,locationId,null,b.number,b.created_at,b.created_user,b.is_cleaning from tb_fuliaoout_detail a , tb_fuliaoout b where a.fuliaoId=? and a.fuliaoInOutId = b.id and b.status = 6 ) order by created_at", fuliaoId,fuliaoId);
 		return result;
 	}
 	

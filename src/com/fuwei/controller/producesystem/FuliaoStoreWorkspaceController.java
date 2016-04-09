@@ -1,6 +1,7 @@
 package com.fuwei.controller.producesystem;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -105,6 +106,80 @@ public class FuliaoStoreWorkspaceController extends BaseController {
 		return new ModelAndView("fuliaoinout/current_stock");
 	}
 	
+	//手动清辅料库存
+	@RequestMapping(value = "/cleaningstock", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView cleaningstock(Integer page,Integer charge_employee,String locationNumber,String orderNumber,String sortJSON, HttpSession session,
+			HttpServletRequest request) throws Exception {
+
+		String lcode = "fuliao_workspace/cleaningstock";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有手动清辅料库存的权限", null);
+		}
+
+		Pager pager = new Pager();
+		if (page != null && page > 0) {
+			pager.setPageNo(page);
+		}
+
+		List<Sort> sortList = null;
+		if (sortJSON != null) {
+			sortList = SerializeTool.deserializeList(sortJSON, Sort.class);
+		}
+		if (sortList == null) {
+			sortList = new ArrayList<Sort>();
+		}
+		Sort sort2 = new Sort();
+		sort2.setDirection("desc");
+		sort2.setProperty("id");
+		sortList.add(sort2);
+
+		pager = fuliaoCurrentStockService.getList(pager, charge_employee,locationNumber, orderNumber, sortList);
+		
+		request.setAttribute("locationNumber", locationNumber);
+		request.setAttribute("charge_employee", charge_employee);
+		List<Employee> employeelist = new ArrayList<Employee>();
+		for (Employee temp : SystemCache.employeelist) {
+			if (temp.getIs_charge_employee()) {
+				employeelist.add(temp);
+			}
+		}
+		request.setAttribute("employeelist", employeelist);
+		request.setAttribute("orderNumber", orderNumber);
+		request.setAttribute("pager", pager);
+		return new ModelAndView("fuliaoinout/cleaningstock");
+	}
+	// 执行订单步骤
+	@RequestMapping(value = "/cleaningstock", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> cleaningstock(String ids,Date step_time,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		if (ids == null) {
+			throw new Exception("缺少库位ID");
+		}
+		String lcode = "fuliao_workspace/cleaningstock";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有手动清辅料库存的权限", null);
+		}
+
+		
+		// 修改订单信息
+		String[] tempids = ids.split(",");
+		int[] int_ids = new int[tempids.length];
+		
+		for(int i = 0 ;i < tempids.length ; ++i){
+			int_ids[i] = Integer.parseInt(tempids[i]);
+		}
+		locationService.cleanstock_batch(int_ids, user.getId());
+
+		return this.returnSuccess();
+	}
+
 	
 	@RequestMapping(value = "/changelocation/scan", method = RequestMethod.GET)
 	@ResponseBody

@@ -6,6 +6,7 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	Boolean has_changelocation = SystemCache.hasAuthority(session,"fuliao/changelocation");
+	Boolean has_cleaningstock = SystemCache.hasAuthority(session,"fuliao/cleaningstock");
 %>
 <!DOCTYPE html>
 <html>
@@ -54,6 +55,9 @@
 							<!--	<a href="fuliaoreturn/scan" type="button" class="btn btn-danger"><i class="fa fa-sign-out fa-lg"></i>退货</a> -->
 								<%if(has_changelocation){ %>
 								<a target="_blank" href="fuliao_workspace/changelocation/scan" type="button" class="btn btn-primary"><i class=""></i>更改库位</a>
+								<%} %>
+								<%if(has_cleaningstock){ %>
+								<a target="_blank" href="fuliao_workspace/cleaningstock" type="button" class="btn btn-danger pull-right"><i class=""></i>手动清库存</a>
 								<%} %>
 							</div>
 						</div>

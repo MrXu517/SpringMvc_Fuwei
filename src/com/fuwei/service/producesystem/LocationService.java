@@ -24,6 +24,8 @@ public class LocationService extends BaseService {
 	FuliaoCurrentStockService fuliaoCurrentStockService;
 	@Autowired
 	FuliaoChangeLocationService fuliaoChangeLocationService;
+	@Autowired
+	FuliaoOutService fuliaoOutService;
 	// 库位存放辅料，修改库存数量
 	@Transactional
 	public synchronized int addQuantity(int locationId,int fuliaoId, int add_quantity) throws Exception {
@@ -178,6 +180,24 @@ public class LocationService extends BaseService {
 		dao.update("update tb_location a ,  (select sum(quantity) quantity from tb_location where fuliaoId=?) b set a.isempty=?,a.fuliaoId=?,a.quantity=b.quantity where a.id=?",fuliaoId,false,fuliaoId,locationId);
 		dao.update("update tb_location set isempty=? ,fuliaoId = ?,quantity=? where fuliaoId=? and id<>?", 1,null,0,fuliaoId,locationId);
 		fuliaoChangeLocationService.add(handle);
+		return true;
+	}
+	
+	//清空库位, locationId需清空的库位ID
+	@Transactional(rollbackFor=Exception.class)
+	public boolean cleanstock(int locationId,int userId) throws Exception{
+		//即创建一个与当前库存数量一致的辅料出库单即可
+		fuliaoOutService.addByLocationId(locationId, userId);
+		return true;
+	}
+	
+	//清空库位, locationId需清空的库位ID
+	@Transactional(rollbackFor=Exception.class)
+	public boolean cleanstock_batch(int[] locationIds,int userId) throws Exception{
+		for(int i = 0 ;i < locationIds.length ; ++i){
+			int locationId = locationIds[i];
+			fuliaoOutService.addByLocationId(locationId, userId);
+		}
 		return true;
 	}
 }

@@ -16,12 +16,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
 import com.fuwei.entity.DataCorrectRecord;
+import com.fuwei.entity.Order;
+import com.fuwei.entity.producesystem.Fuliao;
 import com.fuwei.entity.producesystem.FuliaoIn;
 import com.fuwei.entity.producesystem.FuliaoInDetail;
 import com.fuwei.entity.producesystem.FuliaoOut;
 import com.fuwei.entity.producesystem.FuliaoOutDetail;
+import com.fuwei.entity.producesystem.Location;
 import com.fuwei.service.BaseService;
 import com.fuwei.service.DataCorrectRecordService;
+import com.fuwei.service.OrderService;
 import com.fuwei.util.DateTool;
 
 @Component
@@ -38,6 +42,10 @@ public class FuliaoOutService extends BaseService {
 	LocationService locationService;
 	@Autowired
 	DataCorrectRecordService dataCorrectRecordService;
+	@Autowired
+	FuliaoService fuliaoService;
+	@Autowired
+	OrderService orderService;
 	
 	// 获取列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,
@@ -175,6 +183,76 @@ public class FuliaoOutService extends BaseService {
 				
 				return noticeId;
 			}
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	// 添加清库存的辅料出库单,返回主键
+	@Transactional(rollbackFor=Exception.class)
+	public Boolean addByLocationId(int locationId,int userId) throws Exception {
+		try {
+			Location location = locationService.get(locationId);
+			if(location.getFuliaoId()==null){
+				return true;
+			}
+			Fuliao fuliao = fuliaoService.get(location.getFuliaoId());
+			Order order = orderService.get(fuliao.getOrderId());
+			//1.添加辅料出库单
+			FuliaoOut fuliaoOut = new FuliaoOut();
+			fuliaoOut.setIs_cleaning(true);
+			fuliaoOut.setReceiver_employee(null);
+			fuliaoOut.setCreated_at(DateTool.now());// 设置创建时间
+			fuliaoOut.setCreated_user(userId);// 设置创建人
+			fuliaoOut.setFuliaoout_noticeId(null);
+			fuliaoOut.setStatus(6);
+			fuliaoOut.setState("执行完成");
+			if(order!=null){
+				fuliaoOut.setCharge_employee(order.getCharge_employee());
+				fuliaoOut.setOrderNumber(order.getOrderNumber());
+				fuliaoOut.setOrderId(order.getId());
+				fuliaoOut.setName(order.getName());
+				fuliaoOut.setCompany_productNumber(order.getCompany_productNumber());		
+				
+			}else{
+				fuliaoOut.setOrderNumber(fuliao.getOrderNumber());
+				fuliaoOut.setOrderId(fuliao.getOrderId());
+				fuliaoOut.setName(fuliao.getSample_name());
+				fuliaoOut.setCompany_productNumber(fuliao.getCompany_productNumber());
+			}
+			
+			Integer newFuliaoOutId = this.insert(fuliaoOut);
+			fuliaoOut.setId(newFuliaoOutId);
+			fuliaoOut.setNumber(fuliaoOut.createNumber());
+			this.update(fuliaoOut, "id", null);
+			
+			//2.添加出库单明细
+			List<FuliaoOutDetail> detaillist = new ArrayList<FuliaoOutDetail>();
+			FuliaoOutDetail detail = new FuliaoOutDetail();
+			detail.setBatch(fuliao.getBatch());
+			detail.setColor(fuliao.getColor());
+			detail.setCompany_orderNumber(fuliao.getCompany_orderNumber());
+			detail.setCompany_productNumber(fuliao.getCompany_productNumber());
+			detail.setCountry(fuliao.getCountry());
+			detail.setFnumber(fuliao.getFnumber());
+			detail.setFuliaoId(fuliao.getId());
+			detail.setFuliaoInOutId(newFuliaoOutId);
+			detail.setFuliaoTypeId(fuliao.getFuliaoTypeId());
+			detail.setImg(fuliao.getImg());
+			detail.setImg_s(fuliao.getImg_s());
+			detail.setImg_ss(fuliao.getImg_ss());
+			detail.setLocationId(locationId);
+			detail.setMemo("清空库存");
+			detail.setSize(fuliao.getSize());
+			//清空库存，将出库数量设为库位的库存数量
+			detail.setQuantity(location.getQuantity());
+			
+			detaillist.add(detail);
+					
+			//出库后，若库位内数量为0，则库位设为空库位
+			locationService.deleteQuantity(detail.getLocationId(),detail.getFuliaoId(),detail.getQuantity());
+			fuliaoInOutDetailService.addBatch(detaillist);		
+			return true;
 		} catch (Exception e) {
 			throw e;
 		}

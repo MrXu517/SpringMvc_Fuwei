@@ -77,7 +77,7 @@ public class FuliaoService extends BaseService {
 	public int update(Fuliao fuliao) throws Exception {
 		try {
 			// 更新
-			this.update(fuliao,"id","created_user,created_at,orderNumber,orderId,fnumber",
+			this.update(fuliao,"id","created_user,created_at,orderNumber,orderId,fnumber,sample_name",
 								true);
 			return fuliao.getId();
 		} catch (Exception e) {

@@ -320,11 +320,15 @@
 										<tbody>
 											<%for(Map<String,Object> item : storeInOutMap){ 
 												String type = item.get("type").toString();
+												Object is_cleaning = item.get("is_cleaning");
 											%>
 											<tr class="tr">
 												<td><%if(type.equals("in")){ %>入库
-												<%} else if(type.equals("out")){ %>出库
-												<%} %>
+												<%} else if(type.equals("out") && is_cleaning!=null && Boolean.parseBoolean(is_cleaning.toString())==true){ %>
+												清空库存
+												<%} else{%>
+												出库
+												<%}%>
 												</td>
 												<td>
 												<%if(type.equals("in")){ %><a href="fuliaoin/detail/<%=item.get("fuliaoInOutId") %>"><%=item.get("number")%></a>
