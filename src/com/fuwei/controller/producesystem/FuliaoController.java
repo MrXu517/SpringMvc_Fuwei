@@ -87,9 +87,10 @@ public class FuliaoController extends BaseController {
 		return new ModelAndView("fuliao/listbyorder");
 	}
 	
+	//若没有传参数ids， 则默认打印该订单的所有辅料
 	@RequestMapping(value = "/card/{OrderId}", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView card(@PathVariable Integer OrderId,
+	public ModelAndView card(@PathVariable Integer OrderId,String ids,
 			HttpSession session, HttpServletRequest request) throws Exception {
 		if (OrderId == null) {
 			throw new Exception("缺少订单ID");
@@ -99,7 +100,14 @@ public class FuliaoController extends BaseController {
 		if (!hasAuthority) {
 			throw new PermissionDeniedDataAccessException("没有打印辅料卡的权限", null);
 		}
-		List<Fuliao> fuliaoList = fuliaoService.getList(OrderId);
+		
+		if(ids!=null){
+			String[] tempids = ids.split(",");//若没有传参数ids， 则默认打印该订单的所有辅料
+			if(tempids.length<=0){
+				ids = null;
+			}
+		}
+		List<Fuliao> fuliaoList = fuliaoService.getList(OrderId,ids);
 		if (fuliaoList == null) {
 			fuliaoList = new ArrayList<Fuliao>();
 		}

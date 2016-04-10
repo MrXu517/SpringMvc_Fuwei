@@ -26,6 +26,14 @@ public class FuliaoService extends BaseService {
 	public List<Fuliao> getList(String orderNumber){
 		return dao.queryForBeanList("select * from tb_fuliao where orderNumber=?", Fuliao.class,orderNumber);
 	}
+	//获取某订单的指定辅料的辅料列表
+	public List<Fuliao> getList(int orderId,String fuliaoIds){
+		if(fuliaoIds == null){
+			return getList(orderId);
+		}else{
+			return dao.queryForBeanList("select * from tb_fuliao where orderId=? and id in("+fuliaoIds+")", Fuliao.class,orderId);
+		}
+	}
 
 	// 添加,返回主键
 	@Transactional

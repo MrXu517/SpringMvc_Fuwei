@@ -83,7 +83,10 @@
 .memoform #memo{
 	height:200px;
 }
-#addBtn,#addNoticeBtn{margin-bottom:10px;}
+#addBtn,#addNoticeBtn,#cardBtn{margin-bottom:10px;}
+.checkbtn,#checkAll{height: 20px;width: 20px;}
+.table tr.selected{background: #DCD773 !important;}
+#checkAll{margin-right: 3px;vertical-align: middle;}
 </style>
 	</head>
 	<body>
@@ -96,7 +99,7 @@
 									<a target="_blank"  id="addBtn" href="fuliao/<%=order.getId() %>/add" class="btn btn-primary" >添加辅料</a>
 								<%} %>
 								<%if(has_card){ %>
-									<a target="_blank"  id="addBtn" href="fuliao/card/<%=order.getId() %>" class="btn btn-primary" >打印辅料卡</a>
+									<a target="_blank" id="cardBtn" href="fuliao/card/<%=order.getId() %>" orderId="<%=order.getId() %>" class="btn btn-primary" onclick="return card(this);">打印辅料卡</a>
 								<%} %>
 								</div>
 
@@ -104,7 +107,7 @@
 									<thead>
 										<tr>
 											<th width="50px">
-												编号
+												<input type="checkbox" id="checkAll"/>编号
 											</th>
 											<th width="120px">
 												图片
@@ -155,7 +158,7 @@
 										%>
 									
 										<tr itemId="<%=fuliao.getId()%>">
-											<td><%=fuliao.getFnumber()%></td>
+											<td><%=fuliao.getFnumber()%><br><input fuliaoId="<%=fuliao.getId()%>" type="checkbox" class="checkbtn"/></td>
 											<td style="max-width: 120px; height: 120px; max-height: 120px;">
 												<a target="_blank" class="cellimg"
 													href="/<%=fuliao.getImg()%>"><img
