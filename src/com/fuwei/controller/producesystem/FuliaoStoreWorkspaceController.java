@@ -2,6 +2,7 @@ package com.fuwei.controller.producesystem;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ import com.fuwei.entity.Employee;
 import com.fuwei.entity.User;
 import com.fuwei.entity.producesystem.Fuliao;
 import com.fuwei.entity.producesystem.FuliaoChangeLocation;
+import com.fuwei.entity.producesystem.FuliaoOut;
 import com.fuwei.entity.producesystem.Location;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.producesystem.FuliaoCurrentStockService;
@@ -150,7 +152,7 @@ public class FuliaoStoreWorkspaceController extends BaseController {
 		request.setAttribute("pager", pager);
 		return new ModelAndView("fuliaoinout/cleaningstock");
 	}
-	// 执行订单步骤
+	// 清空辅料库存
 	@RequestMapping(value = "/cleaningstock", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> cleaningstock(String ids,Date step_time,
@@ -175,9 +177,12 @@ public class FuliaoStoreWorkspaceController extends BaseController {
 		for(int i = 0 ;i < tempids.length ; ++i){
 			int_ids[i] = Integer.parseInt(tempids[i]);
 		}
-		locationService.cleanstock_batch(int_ids, user.getId());
-
-		return this.returnSuccess();
+		String fuliaoOutIds = locationService.cleanstock_batch(int_ids, user.getId());
+		
+		//若成功，则返回显示此次清空生成的辅料出库单
+		Map<String,Object> data = new HashMap<String, Object>();
+		data.put("ids", fuliaoOutIds);
+		return this.returnSuccess(data);
 	}
 
 	

@@ -60,7 +60,7 @@ public class FuliaoOutController extends BaseController {
 	@Autowired
 	FuliaoOutNoticeDetailService fuliaoOutNoticeDetailService;
 
-	
+	 
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView index(Integer page, String start_time, String end_time,
@@ -137,6 +137,23 @@ public class FuliaoOutController extends BaseController {
 		request.setAttribute("order", order);
 		request.setAttribute("object", object);
 		return new ModelAndView("fuliaoinout/out_detail");	
+	}
+	
+	//查看多个辅料出库单的详情，参数为ID
+	@RequestMapping(value = "/detail_batch", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView detail_batch(String ids, HttpSession session,
+			HttpServletRequest request) throws Exception {
+		if (ids == null) {
+			throw new Exception("缺少辅料出库单ID");
+		}
+		List<FuliaoOut> result = fuliaoOutService.getListByIds(ids);
+		if (result == null) {
+			throw new Exception("找不到ID为" + ids + "的辅料出库单");
+		}
+		request.setAttribute("result", result);
+		request.setAttribute("ids", ids);
+		return new ModelAndView("fuliaoinout/out_detail_batch");	
 	}
 
 	// 添加或保存
@@ -412,6 +429,26 @@ public class FuliaoOutController extends BaseController {
 		request.setAttribute("fuliaoOut", fuliaoOut);
 		return new ModelAndView("fuliaoinout/out_print");
 	}
+	//批量打印出库单
+	@RequestMapping(value = "/print_batch", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView print_batch(String ids, HttpSession session,
+			HttpServletRequest request) throws Exception {	
+		if (ids == null) {
+			throw new Exception("缺少辅料出库单ID");
+		}
+		List<FuliaoOut> result = fuliaoOutService.getListByIds(ids);
+		if (result == null) {
+			throw new Exception("找不到ID为" + ids + "的辅料出库单");
+		}
+		for(FuliaoOut item : result){
+			item.setHas_print(true);
+		}
+		fuliaoOutService.updatePrint_batch(result);
+		request.setAttribute("result", result);
+		return new ModelAndView("fuliaoinout/out_print_batch");
+	}
+	
 	/*打印纱线标签*/
 	@RequestMapping(value = "/print/{id}/tag", method = RequestMethod.GET)
 	@ResponseBody
@@ -428,6 +465,26 @@ public class FuliaoOutController extends BaseController {
 		fuliaoOutService.updateTagPrint(fuliaoOut);
 		request.setAttribute("fuliaoOut", fuliaoOut);
 		return new ModelAndView("fuliaoinout/out_tag_print");
+	}
+	
+	/*批量打印纱线标签*/
+	@RequestMapping(value = "/print_batch/tag", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView print_tag(String ids, HttpSession session,
+			HttpServletRequest request) throws Exception {	
+		if (ids == null) {
+			throw new Exception("缺少辅料出库单ID");
+		}
+		List<FuliaoOut> result = fuliaoOutService.getListByIds(ids);
+		if (result == null) {
+			throw new Exception("找不到ID为" + ids + "的辅料出库单");
+		}
+		for(FuliaoOut item : result){
+			item.setHas_tagprint(true);
+		}
+		fuliaoOutService.updateTagPrint_batch(result);
+		request.setAttribute("result", result);
+		return new ModelAndView("fuliaoinout/out_tag_print_batch");
 	}
 	
 	// 数据纠正：删除

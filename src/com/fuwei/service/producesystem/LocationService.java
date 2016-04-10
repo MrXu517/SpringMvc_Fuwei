@@ -1,6 +1,7 @@
 package com.fuwei.service.producesystem;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.entity.producesystem.FuliaoChangeLocation;
+import com.fuwei.entity.producesystem.FuliaoOut;
 import com.fuwei.entity.producesystem.Location;
 import com.fuwei.service.BaseService;
 
@@ -191,13 +193,18 @@ public class LocationService extends BaseService {
 		return true;
 	}
 	
-	//清空库位, locationId需清空的库位ID
+	//清空库位, locationId需清空的库位ID ,返回清空生成的出库单列表
 	@Transactional(rollbackFor=Exception.class)
-	public boolean cleanstock_batch(int[] locationIds,int userId) throws Exception{
+	public String cleanstock_batch(int[] locationIds,int userId) throws Exception{
+		String ids = "";
 		for(int i = 0 ;i < locationIds.length ; ++i){
 			int locationId = locationIds[i];
-			fuliaoOutService.addByLocationId(locationId, userId);
+			int newfuliaoOutId = fuliaoOutService.addByLocationId(locationId, userId);
+			if(newfuliaoOutId > 0){
+				ids += newfuliaoOutId + ",";
+			}
 		}
-		return true;
+		ids = ids.substring(0, ids.length()-1);
+		return ids;
 	}
 }

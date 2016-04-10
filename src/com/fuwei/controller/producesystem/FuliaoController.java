@@ -220,6 +220,7 @@ public class FuliaoController extends BaseController {
 			fuliao.setImg_ss((String) jObject.get("img_ss"));
 			fuliao.setOrderNumber(order.getOrderNumber());
 			fuliao.setSample_name(order.getName());
+			fuliao.setCharge_employee(order.getCharge_employee());
 			int fuliaoId = fuliaoService.add(fuliao);
 
 			int orderId = fuliao.getOrderId();

@@ -149,6 +149,30 @@ public class FuliaoOutService extends BaseService {
 	public List<FuliaoOut> getList(String orderNumber){
 		return dao.queryForBeanList("select * from tb_fuliaoout where orderNumber=?", FuliaoOut.class,orderNumber);
 	}
+	//获取指定ID的多个辅料出库单
+	public List<FuliaoOut> getListByIds(String ids){
+		List<FuliaoOut> list = dao.queryForBeanList("select * from tb_fuliaoout where id in("+ids+")", FuliaoOut.class);
+		String tempsql = "select * from tb_fuliaoout_detail  where fuliaoInOutId in (" + ids + ") ";
+		List<FuliaoOutDetail> totaldetaillist = dao.queryForBeanList(tempsql, FuliaoOutDetail.class, null);
+		Map<Integer,List<FuliaoOutDetail>> map = new HashMap<Integer, List<FuliaoOutDetail>>();
+		for(FuliaoOutDetail detail : totaldetaillist){
+			int fuliaoInId = detail.getFuliaoInOutId();
+			if(map.containsKey(fuliaoInId)){
+				List<FuliaoOutDetail> tempL = map.get(fuliaoInId);
+				tempL.add(detail);
+				map.put(fuliaoInId, tempL);
+			}else{
+				List<FuliaoOutDetail> tempL = new ArrayList<FuliaoOutDetail>();
+				tempL.add(detail);
+				map.put(fuliaoInId, tempL);
+			}
+		}
+		
+		for(FuliaoOut in : list){
+			in.setDetaillist(map.get(in.getId()));
+		}
+		return list;
+	}
 
 	// 添加,返回主键
 	@Transactional(rollbackFor=Exception.class)
@@ -188,13 +212,13 @@ public class FuliaoOutService extends BaseService {
 		}
 	}
 	
-	// 添加清库存的辅料出库单,返回主键
+	// 添加清库存的辅料出库单,返回出库单主键
 	@Transactional(rollbackFor=Exception.class)
-	public Boolean addByLocationId(int locationId,int userId) throws Exception {
+	public int addByLocationId(int locationId,int userId) throws Exception {
 		try {
 			Location location = locationService.get(locationId);
 			if(location.getFuliaoId()==null){
-				return true;
+				return 0;
 			}
 			Fuliao fuliao = fuliaoService.get(location.getFuliaoId());
 			Order order = orderService.get(fuliao.getOrderId());
@@ -251,8 +275,9 @@ public class FuliaoOutService extends BaseService {
 					
 			//出库后，若库位内数量为0，则库位设为空库位
 			locationService.deleteQuantity(detail.getLocationId(),detail.getFuliaoId(),detail.getQuantity());
-			fuliaoInOutDetailService.addBatch(detaillist);		
-			return true;
+			fuliaoInOutDetailService.addBatch(detaillist);
+			fuliaoOut.setDetaillist(detaillist);
+			return newFuliaoOutId;
 		} catch (Exception e) {
 			throw e;
 		}
@@ -269,11 +294,53 @@ public class FuliaoOutService extends BaseService {
 	
 	//更新是否打印辅料标签属性
 	@Transactional
+	public Boolean updatePrint_batch(List<FuliaoOut> list) throws Exception {
+		if(list == null || list.size()<=0){
+			return true;
+		}
+		String sql = "update tb_fuliaoout set has_print=? where id=?";
+		List<Object[]> batchArgs = new ArrayList<Object[]>();
+		for (FuliaoOut item : list) {
+			batchArgs.add(new Object[] { 
+					item.getHas_print(),item.getId()
+			});
+		}
+		try {
+			int result[] = jdbc.batchUpdate(sql, batchArgs);
+			return true;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	//更新是否打印辅料标签属性
+	@Transactional
 	public int updateTagPrint(FuliaoOut object) throws Exception {
 		// 更新表
 		dao.update("update tb_fuliaoout set has_tagprint=? where id=?", object.getHas_tagprint(),object.getId());
 
 		return object.getId();
+	}
+	
+	//更新是否打印辅料标签属性
+	@Transactional
+	public Boolean updateTagPrint_batch(List<FuliaoOut> list) throws Exception {
+		if(list == null || list.size()<=0){
+			return true;
+		}
+		String sql = "update tb_fuliaoout set has_tagprint=? where id=?";
+		List<Object[]> batchArgs = new ArrayList<Object[]>();
+		for (FuliaoOut item : list) {
+			batchArgs.add(new Object[] { 
+					item.getHas_tagprint(),item.getId()
+			});
+		}
+		try {
+			int result[] = jdbc.batchUpdate(sql, batchArgs);
+			return true;
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 //	// 获取
 //	public FuliaoOut getAndDetail(int id) throws Exception {
@@ -314,7 +381,9 @@ public class FuliaoOutService extends BaseService {
 				locationService.addQuantity(detail.getLocationId(),detail.getFuliaoId(),detail.getQuantity());
 			}
 			//2.修改辅料出库通知单为执行失败状态
-			fuliaoOutNoticeService.fail(object.getFuliaoout_noticeId());
+			if(object.getFuliaoout_noticeId()!=null){
+				fuliaoOutNoticeService.fail(object.getFuliaoout_noticeId());
+			}
 			//3.添加数据纠正记录
 			dataCorrectRecordService.add(datacorrect);
 			

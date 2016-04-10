@@ -152,7 +152,7 @@
 									<ul class="pagination">
 										<li>
 											<a
-												href="fuliao_workspace/current_stock?orderNumber=<%=orderNumber_str%>&charge_employee=<%=charge_employee_str%>&locationNumber=<%=locationNumber_str%>&page=1">«</a>
+												href="fuliao_workspace/cleaningstock?orderNumber=<%=orderNumber_str%>&charge_employee=<%=charge_employee_str%>&locationNumber=<%=locationNumber_str%>&page=1">«</a>
 										</li>
 
 										<%
@@ -160,7 +160,7 @@
 										%>
 										<li class="">
 											<a
-												href="fuliao_workspace/current_stock?orderNumber=<%=orderNumber_str%>&charge_employee=<%=charge_employee_str%>&locationNumber=<%=locationNumber_str%>&page=<%=pager.getPageNo() - 1%>">上一页
+												href="fuliao_workspace/cleaningstock?orderNumber=<%=orderNumber_str%>&charge_employee=<%=charge_employee_str%>&locationNumber=<%=locationNumber_str%>&page=<%=pager.getPageNo() - 1%>">上一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -175,7 +175,7 @@
 
 										<li class="active">
 											<a
-												href="fuliao_workspace/current_stock?orderNumber=<%=orderNumber_str%>&charge_employee=<%=charge_employee_str%>&locationNumber=<%=locationNumber_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
+												href="fuliao_workspace/cleaningstock?orderNumber=<%=orderNumber_str%>&charge_employee=<%=charge_employee_str%>&locationNumber=<%=locationNumber_str%>&page=<%=pager.getPageNo()%>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
 												class="sr-only"></span> </a>
 										</li>
 										<li>
@@ -185,7 +185,7 @@
 										
 										<li class="">
 											<a
-												href="fuliao_workspace/current_stock?orderNumber=<%=orderNumber_str%>&charge_employee=<%=charge_employee_str%>&locationNumber=<%=locationNumber_str%>&page=<%=pager.getPageNo() + 1%>">下一页
+												href="fuliao_workspace/cleaningstock?orderNumber=<%=orderNumber_str%>&charge_employee=<%=charge_employee_str%>&locationNumber=<%=locationNumber_str%>&page=<%=pager.getPageNo() + 1%>">下一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -201,7 +201,7 @@
 										<li></li>
 										<li>
 											<a
-												href="fuliao_workspace/current_stock?orderNumber=<%=orderNumber_str%>&charge_employee=<%=charge_employee_str%>&locationNumber=<%=locationNumber_str%>&page=<%=pager.getTotalPage()%>">»</a>
+												href="fuliao_workspace/cleaningstock?orderNumber=<%=orderNumber_str%>&charge_employee=<%=charge_employee_str%>&locationNumber=<%=locationNumber_str%>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
 

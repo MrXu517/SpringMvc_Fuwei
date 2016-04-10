@@ -39,7 +39,9 @@ $(document).ready(function(){
 	            .done(function(result) {
 	            	if(result.success!=false){
 	            		Common.Tip("清空库存成功",function(){
-	            			location.reload();
+//	            			location.reload();
+	            			var ids = result.ids;//新生成的辅料出库单id
+	            			location.href="fuliaoout/detail_batch?ids="+ids;
 	            		});
 	            	}
 	            })

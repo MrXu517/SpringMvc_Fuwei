@@ -34,9 +34,15 @@ public class Fuliao {
 	private Date updated_at;
 	
 	private String fnumber;//辅料number
+	private Integer charge_employee;// 打样人 ，跟单人
 	
 	
-	
+	public Integer getCharge_employee() {
+		return charge_employee;
+	}
+	public void setCharge_employee(Integer charge_employee) {
+		this.charge_employee = charge_employee;
+	}
 	public String getFnumber() {
 		return fnumber;
 	}
