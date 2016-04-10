@@ -6,7 +6,7 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	Boolean has_changelocation = SystemCache.hasAuthority(session,"fuliao/changelocation");
-	Boolean has_cleaningstock = SystemCache.hasAuthority(session,"fuliao/cleaningstock");
+	Boolean has_cleaningstock = SystemCache.hasAuthority(session,"fuliao_workspace/cleaningstock");
 %>
 <!DOCTYPE html>
 <html>
