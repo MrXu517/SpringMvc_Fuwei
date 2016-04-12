@@ -39,6 +39,17 @@ public class PackingOrderService extends BaseService {
 		}
 		return packingOrderList;
 	}
+	//根据OrderId获取所有
+	public List<PackingOrder> getListByOrderNumber(String orderNumber) throws Exception{
+		List<PackingOrder> packingOrderList = dao.queryForBeanList("select * from tb_packingorder where orderNumber=?", PackingOrder.class,orderNumber);
+		if(packingOrderList!=null){
+			for(PackingOrder item : packingOrderList){
+				List<PackingOrderDetail> detaillist = packingOrderDetailService.getList(item.getId());
+				item.setDetaillist(detaillist);
+			}
+		}
+		return packingOrderList;
+	}
 	
 	// 获取列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,Integer companyId, String number,

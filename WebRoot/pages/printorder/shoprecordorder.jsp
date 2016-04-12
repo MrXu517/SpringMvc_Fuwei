@@ -198,6 +198,7 @@
 				</div>
 			</div>
 		</div>
+		<!-- 
 		<div style="page-break-after: always">
 			<div class="container-fluid gridTab auto_container">
 				<div class="row">
@@ -254,7 +255,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</body>
 	<script type="text/javascript">
 		$(".id_barcode").each(function(){

@@ -13,9 +13,16 @@ public class Location {
 	private Boolean isempty;
 	private Integer fuliaoId;
 	private int quantity ;
+	private int type;//库位类型， 通用辅料类型还是大货辅料类型的库位
 	
 	
 	
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
+	}
 	public int getQuantity() {
 		return quantity;
 	}
@@ -67,6 +74,15 @@ public class Location {
 			return "小";
 		}else{
 			return "其他";
+		}
+	}
+	public String typeString(){
+		if(this.type == 1){
+			return "大货库位";
+		}else if(this.type == 2){
+			return "通用辅料库位";
+		}else{
+			return "未知";
 		}
 	}
 }

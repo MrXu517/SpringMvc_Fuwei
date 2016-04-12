@@ -9,10 +9,12 @@
 <%@page import="com.fuwei.entity.ordergrid.PlanOrder"%>
 <%
 	Order order = (Order) request.getAttribute("order");
-	//成品仓库记录单 
-	PlanOrder planorder = (PlanOrder) request.getAttribute("planOrder");
-	List<PlanOrderDetail> planOrderDetailList = planorder == null ? new ArrayList<PlanOrderDetail>()
-			: planorder.getDetaillist();
+	//成品仓库记录单 ,显示订单数量
+	List<OrderDetail> DetailList = order == null ? new ArrayList<OrderDetail>()
+			: order.getDetaillist();
+	if(DetailList == null){
+		DetailList = new ArrayList<OrderDetail>();
+	}
 	String productfactoryStr = (String)request.getAttribute("productfactoryStr");
 %>
 <!DOCTYPE html>
@@ -46,23 +48,10 @@
 										src="/<%=order.getImg_s()%>">
 								</td>
 								<td width="20%">
-									生产单位
-								</td>
-								<td class="orderproperty"><%=productfactoryStr %></td>
-							
-							</tr>
-
-							<tr>
-								<td colspan="2" class="center">
-									订单信息
-								</td>
-								
-							</tr>
-							<tr>
-								<td>
 									公司
 								</td>
 								<td><%=SystemCache.getCompanyShortName(order.getCompanyId())%></td>
+							
 							</tr>
 							<tr>
 								<td>
@@ -124,7 +113,7 @@
 									</thead>
 									<tbody>
 										<%
-											for (PlanOrderDetail detail : planOrderDetailList) {
+											for (OrderDetail detail : DetailList) {
 										%>
 										<tr class="tr">
 											<td class="color"><%=detail.getColor()%>

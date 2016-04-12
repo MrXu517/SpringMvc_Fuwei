@@ -64,6 +64,34 @@ public class FuliaoStoreWorkspaceController extends BaseController {
 		return new ModelAndView("fuliaoinout/workspace");
 	}
 	
+	@RequestMapping(value = "/commonfuliao_workspace", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView commonfuliao_workspace(HttpSession session,HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "fuliao_workspace/commonfuliao_workspace";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有通用辅料工作台的权限",
+					null);
+		}
+		return new ModelAndView("commonfuliao/commonfuliao_workspace");
+	}
+	
+	@RequestMapping(value = "/commonfuliao", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView commonfuliao(HttpSession session,HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "fuliao_workspace/commonfuliao";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有通用辅料的权限",
+					null);
+		}
+		return new ModelAndView("commonfuliao/commonfuliao");
+	}
+	
 	@RequestMapping(value = "/current_stock", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView current_stock(Integer page,Integer charge_employee,String locationNumber,String orderNumber,String sortJSON, HttpSession session,
@@ -106,6 +134,41 @@ public class FuliaoStoreWorkspaceController extends BaseController {
 		request.setAttribute("orderNumber", orderNumber);
 		request.setAttribute("pager", pager);
 		return new ModelAndView("fuliaoinout/current_stock");
+	}
+	
+	@RequestMapping(value = "/current_stock_common", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView current_stock_common(Integer page,String locationNumber ,String sortJSON, HttpSession session,
+			HttpServletRequest request) throws Exception {
+
+		String lcode = "fuliao_workspace/commonfuliao_workspace";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有通用辅料工作台的权限", null);
+		}
+
+		Pager pager = new Pager();
+		if (page != null && page > 0) {
+			pager.setPageNo(page);
+		}
+
+		List<Sort> sortList = null;
+		if (sortJSON != null) {
+			sortList = SerializeTool.deserializeList(sortJSON, Sort.class);
+		}
+		if (sortList == null) {
+			sortList = new ArrayList<Sort>();
+		}
+		Sort sort2 = new Sort();
+		sort2.setDirection("desc");
+		sort2.setProperty("id");
+		sortList.add(sort2);
+
+		pager = fuliaoCurrentStockService.getList_common(pager,locationNumber, sortList);
+		
+		request.setAttribute("locationNumber", locationNumber);
+		request.setAttribute("pager", pager);
+		return new ModelAndView("fuliaoinout/current_stock_common");
 	}
 	
 	//手动清辅料库存

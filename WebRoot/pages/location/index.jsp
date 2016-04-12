@@ -101,6 +101,16 @@
 													<div class="col-sm-1"></div>
 												</div>
 												<div class="form-group">
+													<label for="type" class="col-sm-3 control-label">
+														类型
+													</label>
+													<div class="col-sm-8">
+														<select class="form-control require" name="type" id="type">
+														<option value="1">大货辅料库位</option><option value="2">通用辅料库位</option></select>
+													</div>
+													<div class="col-sm-1"></div>
+												</div>
+												<div class="form-group">
 													<div class="col-sm-offset-3 col-sm-5">
 														<button type="submit" class="btn btn-primary"
 															data-loading-text="正在保存...">
@@ -144,6 +154,9 @@
 														容量
 													</th>
 													<th>
+														类型
+													</th>
+													<th>
 														操作
 													</th>
 												</tr>
@@ -158,6 +171,7 @@
 													<td><%=temp.getNumber()%></td>
 													<td><%=temp.getLocation()%></td>
 													<td><%=temp.getSizeString()%></td>
+													<td><%=temp.typeString()%></td>
 													<td>
 														<a class="edit" href="#"
 															data-cid="<%=temp.getId()%>">编辑</a>

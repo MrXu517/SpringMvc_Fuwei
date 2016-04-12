@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.entity.producesystem.Fuliao;
 import com.fuwei.service.BaseService;
+import com.fuwei.util.DateTool;
 
 @Component
 public class FuliaoService extends BaseService {
@@ -34,6 +35,30 @@ public class FuliaoService extends BaseService {
 			return dao.queryForBeanList("select * from tb_fuliao where orderId=? and id in("+fuliaoIds+")", Fuliao.class,orderId);
 		}
 	}
+	//获取通用辅料列表
+	public List<Fuliao> getList_Common(Integer companyId,Integer salesmanId,Integer customerId,String memo){
+		StringBuffer sql = new StringBuffer();
+		String seq = " AND ";
+		sql.append("select * from tb_fuliao where orderId is null");
+
+		if (companyId != null) {// 
+			sql.append(seq + " companyId='"+companyId+ "'");
+			seq = " AND ";
+		}
+		if (salesmanId != null) {// 
+			sql.append(seq + " salesmanId='"+salesmanId+ "'");
+			seq = " AND ";
+		}
+		if (customerId != null) {// 
+			sql.append(seq + " customerId='"+customerId+ "'");
+			seq = " AND ";
+		}
+		if (memo != null) {// 出入库时间
+			sql.append(seq + " memo like '%"+memo+ "%'");
+			seq = " AND ";
+		}
+		return dao.queryForBeanList(sql.toString(), Fuliao.class);
+	}
 
 	// 添加,返回主键
 	@Transactional
@@ -49,6 +74,20 @@ public class FuliaoService extends BaseService {
 				this.update(fuliao, "id", null);
 				return fuliaoId;
 			}
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	// 添加,返回主键
+	@Transactional
+	public int add_common(Fuliao fuliao) throws Exception {
+		try {
+			Integer fuliaoId = this.insert(fuliao);
+			fuliao.setId(fuliaoId);
+			fuliao.setFnumber(fuliao.createNumber());
+			this.update(fuliao, "id", null);
+			return fuliaoId;
 		} catch (Exception e) {
 			throw e;
 		}

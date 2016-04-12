@@ -16,9 +16,9 @@ public class FuliaoInNotice {
 	@IdentityId
 	private int id;
 	private String number;//通知单号
-	private int orderId;
+	private Integer orderId;
 	private String orderNumber;
-	private int charge_employee;
+	private Integer charge_employee;
 	//当通知实际已出入库或已取消时，通知单不能修改，不能删除。  
 	//status != 6 && status !=-1 时 ， 可以修改，可以删除
 	private int status;//0创建，6表示已确认入库或出库,-1表示入库失败
@@ -70,10 +70,10 @@ public class FuliaoInNotice {
 	public void setNumber(String number) {
 		this.number = number;
 	}
-	public int getOrderId() {
+	public Integer getOrderId() {
 		return orderId;
 	}
-	public void setOrderId(int orderId) {
+	public void setOrderId(Integer orderId) {
 		this.orderId = orderId;
 	}
 	public String getOrderNumber() {
@@ -82,10 +82,11 @@ public class FuliaoInNotice {
 	public void setOrderNumber(String orderNumber) {
 		this.orderNumber = orderNumber;
 	}
-	public int getCharge_employee() {
+	
+	public Integer getCharge_employee() {
 		return charge_employee;
 	}
-	public void setCharge_employee(int charge_employee) {
+	public void setCharge_employee(Integer charge_employee) {
 		this.charge_employee = charge_employee;
 	}
 	public int getStatus() {

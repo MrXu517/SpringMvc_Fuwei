@@ -298,8 +298,8 @@ public class PrintOrderController extends BaseController {
 //				}	
 				grids += "productionscheduleorder,";
 			}
-			//获取成品仓库记录单
-			if(printAll || gridName.indexOf("finalstorerecordorder") > -1){
+			//获取半成品仓库记录单
+			if(printAll || gridName.indexOf("halfstorerecordorder") > -1){
 //				FinalStoreOrder finalStoreOrder = finalStoreOrderService.getByOrder(orderId);
 //				if(finalStoreOrder!=null){
 //					if(planOrder==null){
@@ -312,8 +312,12 @@ public class PrintOrderController extends BaseController {
 				if(planOrder==null){
 					planOrder = planOrderService.getByOrder(orderId);
 				}
-				grids += "finalstorerecordorder,";
+				grids += "halfstorerecordorder,";
 				request.setAttribute("planOrder", planOrder);
+			}
+			//获取成品仓库记录单
+			if(printAll || gridName.indexOf("finalstorerecordorder") > -1){
+				grids += "finalstorerecordorder,";
 			}
 			//2015-5-12添加获取成品检验记录单
 			if(printAll || gridName.indexOf("finalcheckrecordorder") > -1){		
@@ -325,11 +329,11 @@ public class PrintOrderController extends BaseController {
 			}
 			//2015-5-23添加获取检针记录表
 			if(printAll || gridName.indexOf("needlecheckrecordorder") > -1){		
-					if(planOrder==null){
-						planOrder = planOrderService.getByOrder(orderId);
-					}
+//					if(planOrder==null){
+//						planOrder = planOrderService.getByOrder(orderId);
+//					}
 					grids += "needlecheckrecordorder,";
-					request.setAttribute("planOrder", planOrder);
+//					request.setAttribute("planOrder", planOrder);
 			}
 			//获取车间记录单
 			if(printAll || gridName.indexOf("shoprecordorder") > -1){
@@ -343,11 +347,11 @@ public class PrintOrderController extends BaseController {
 //					request.setAttribute("shopRecordOrder", shopRecordOrder);
 //				}
 
-				if(planOrder==null){
-					planOrder = planOrderService.getByOrder(orderId);
-				}
+//				if(planOrder==null){
+//					planOrder = planOrderService.getByOrder(orderId);
+//				}
 				grids += "shoprecordorder,";
-				request.setAttribute("planOrder", planOrder);
+//				request.setAttribute("planOrder", planOrder);
 			}
 			//获取染色进度单
 			if(printAll || gridName.indexOf("coloringprocessorder") > -1){

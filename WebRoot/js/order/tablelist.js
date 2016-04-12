@@ -365,7 +365,10 @@ $(document).ready(function() {
 	var productionScheduleGrid = new OrderGrid({
 		$content:$("#productionscheduleorder")
 	});
-	
+	//半成品仓库记录单
+	var halfStoreGrid = new OrderGrid({
+		$content:$("#halfstorerecordorder")
+	});
 	//成品仓库记录单
 	var finalStoreGrid = new OrderGrid({
 		$content:$("#finalstorerecordorder")

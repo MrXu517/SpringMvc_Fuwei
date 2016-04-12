@@ -72,6 +72,22 @@ public class FuliaoOutNoticeController extends BaseController {
 		return new ModelAndView("fuliaoout_notice/listbyorder");
 	}
 	
+	//通用辅料入库通知单列表
+	@RequestMapping(value = "/list_common", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView list_common(HttpSession session, HttpServletRequest request) throws Exception {
+		String lcode = "fuliao_workspace/commonfuliao";		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有查看出库通知单列表的权限", null);
+		}
+		List<FuliaoOutNotice> resultlist = fuliaoOutNoticeService.getList_common();
+		if (resultlist == null) {
+			resultlist = new ArrayList<FuliaoOutNotice>();
+		}
+		request.setAttribute("resultlist", resultlist);
+		return new ModelAndView("fuliaoout_notice/list_common");
+	}
+	
 	@RequestMapping(value = "/add/{orderId}", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView add(@PathVariable Integer orderId, HttpSession session, HttpServletRequest request,

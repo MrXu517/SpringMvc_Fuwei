@@ -80,6 +80,27 @@ public class PackingOrderController extends BaseController {
 		return new ModelAndView("packing_order/order");
 		
 	}
+	
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView listbyorderNumber(String orderNumber ,HttpSession session, HttpServletRequest request)
+			throws Exception {
+		if(orderNumber == null){
+			throw new Exception("订单号不能为空");
+		}
+		request.setAttribute("orderNumber", orderNumber);
+		Order order = orderService.get(orderNumber);
+		if(order == null){
+			throw new Exception("找不到订单号为"+orderNumber +"的订单");
+		}
+		int orderId = order.getId();
+		request.setAttribute("orderId", orderId);
+		List<PackingOrder> packingOrderList = packingOrderService.getListByOrder(orderId);
+		request.setAttribute("packingOrderList", packingOrderList);
+		return new ModelAndView("packing_order/order");
+		
+	}
+	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView index(Integer page, String start_time, String end_time,Integer companyId, String orderNumber,
@@ -144,6 +165,13 @@ public class PackingOrderController extends BaseController {
 		} catch (Exception e) {
 			throw e;
 		}
+	}
+	
+	@RequestMapping(value = "/scan", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView scan(HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		return new ModelAndView("packing_order/scan");
 	}
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)

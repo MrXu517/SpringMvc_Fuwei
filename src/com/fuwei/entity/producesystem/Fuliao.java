@@ -13,7 +13,7 @@ import net.keepsoft.commons.annotation.Table;
 public class Fuliao {
 	@IdentityId
 	private int id;
-	private int orderId;//厂订单ID
+	private Integer orderId;//厂订单ID
 	private String orderNumber;//厂订单号
 	private String sample_name;//样品名称
 	private String company_orderNumber;//公司订单号
@@ -36,7 +36,30 @@ public class Fuliao {
 	private String fnumber;//辅料number
 	private Integer charge_employee;// 打样人 ，跟单人
 	
+	//2016-4-11 若是通用辅料，则添加下面3个属性
+	private Integer companyId;//外贸公司
+	private Integer salesmanId;//业务员
+	private Integer customerId;//客户
 	
+	
+	public Integer getCompanyId() {
+		return companyId;
+	}
+	public void setCompanyId(Integer companyId) {
+		this.companyId = companyId;
+	}
+	public Integer getSalesmanId() {
+		return salesmanId;
+	}
+	public void setSalesmanId(Integer salesmanId) {
+		this.salesmanId = salesmanId;
+	}
+	public Integer getCustomerId() {
+		return customerId;
+	}
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
+	}
 	public Integer getCharge_employee() {
 		return charge_employee;
 	}
@@ -67,10 +90,11 @@ public class Fuliao {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getOrderId() {
+	
+	public Integer getOrderId() {
 		return orderId;
 	}
-	public void setOrderId(int orderId) {
+	public void setOrderId(Integer orderId) {
 		this.orderId = orderId;
 	}
 	public String getOrderNumber() {

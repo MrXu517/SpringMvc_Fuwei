@@ -158,6 +158,9 @@
 	Boolean h_has_finishstore_workspace = SystemCache.hasAuthority(session,"producesystem/finishstore_workspace");//装箱单列属性
 	
 	Boolean h_has_report_stockmuslin = SystemCache.hasAuthority(session,"report/stock_muslin");//装箱单列属性
+	
+	Boolean h_has_commonfuliao = SystemCache.hasAuthority(session,"fuliao_workspace/commonfuliao");//通用辅料
+	Boolean h_has_commonfuliao_workspace = SystemCache.hasAuthority(session,"fuliao_workspace/commonfuliao_workspace");//通用辅料工作台
 %>
 <html>
 	<link href="css/common/head.css" rel="stylesheet" type="text/css" />
@@ -450,6 +453,16 @@
 							<%if(h_has_fuliao_workspace){ %>
 							<li>
 								<a href="fuliao_workspace/workspace">辅料工作台</a>
+							</li>
+							<%} %>
+							<%if(h_has_commonfuliao){ %>
+							<li>
+								<a href="fuliao_workspace/commonfuliao">通用辅料</a>
+							</li>
+							<%} %>
+							<%if(h_has_commonfuliao_workspace){ %>
+							<li>
+								<a href="fuliao_workspace/commonfuliao_workspace">通用辅料工作台</a>
 							</li>
 							<%} %>
 							<%if(h_has_location){ %>

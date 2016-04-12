@@ -47,7 +47,9 @@
 					<div class="container-fluid">
 						<div class="row">
 							<div class="col-md-12 btnWidget">
-								
+								<a href="packing_order/scan" type="button" class="btn btn-primary">制作装箱单</a>
+							</div>
+							<div class="col-md-12 btnWidget">
 								<a href="finishstore_in/scan" type="button" class="btn btn-warning"><i class="fa fa-sign-in fa-lg"></i>入库</a>
 								<a href="finishstore_out/scan" type="button" class="btn btn-danger"><i class="fa fa-sign-out fa-lg"></i>发货</a>
 								<a href="finishstore_return/scan" type="button" class="btn btn-danger"><i class="fa fa-sign-out fa-lg"></i>退货</a>

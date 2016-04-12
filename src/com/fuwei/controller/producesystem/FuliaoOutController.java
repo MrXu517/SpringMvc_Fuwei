@@ -115,6 +115,49 @@ public class FuliaoOutController extends BaseController {
 		request.setAttribute("pager", pager);
 		return new ModelAndView("fuliaoinout/out_index");
 	}
+	
+	@RequestMapping(value = "/index_common", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView index_common(Integer page, String start_time, String end_time,String number, String sortJSON, HttpSession session,
+			HttpServletRequest request) throws Exception {
+
+		String lcode = "fuliao_workspace/commonfuliao_workspace";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有查看通用辅料出库列表的权限", null);
+		}
+
+		Date start_time_d = DateTool.parse(start_time);
+		Date end_time_d = DateTool.parse(end_time);
+		Pager pager = new Pager();
+		if (page != null && page > 0) {
+			pager.setPageNo(page);
+		}
+
+		List<Sort> sortList = null;
+		if (sortJSON != null) {
+			sortList = SerializeTool.deserializeList(sortJSON, Sort.class);
+		}
+		if (sortList == null) {
+			sortList = new ArrayList<Sort>();
+		}
+		Sort sort = new Sort();
+		sort.setDirection("desc");
+		sort.setProperty("created_at");
+		sortList.add(sort);
+		Sort sort2 = new Sort();
+		sort2.setDirection("desc");
+		sort2.setProperty("id");
+		sortList.add(sort2);
+
+		pager = fuliaoOutService.getList_common(pager, start_time_d, end_time_d, number, sortList);
+		
+		request.setAttribute("start_time", start_time_d);
+		request.setAttribute("end_time", end_time_d);
+		request.setAttribute("number", number);
+		request.setAttribute("pager", pager);
+		return new ModelAndView("fuliaoinout/out_index_common");
+	}
 
 	@RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
 	@ResponseBody

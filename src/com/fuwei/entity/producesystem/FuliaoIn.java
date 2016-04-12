@@ -17,7 +17,7 @@ public class FuliaoIn {
 	private int id;
 	private String number;//单号
 	private int fuliaoin_noticeId;
-	private int orderId;
+	private Integer orderId;//若orderId为null，则表示是通用辅料的入库单
 	private String orderNumber;
 	private String name;// 样品名称
 	private String company_productNumber;//样品的公司货号
@@ -88,10 +88,11 @@ public class FuliaoIn {
 	public void setNumber(String number) {
 		this.number = number;
 	}
-	public int getOrderId() {
+	
+	public Integer getOrderId() {
 		return orderId;
 	}
-	public void setOrderId(int orderId) {
+	public void setOrderId(Integer orderId) {
 		this.orderId = orderId;
 	}
 	public String getOrderNumber() {

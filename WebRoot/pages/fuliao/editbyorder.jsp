@@ -200,7 +200,7 @@ input[name='location_size']{height:20px;width:20px;}
 													</label>
 													<div class="col-sm-8">
 														<input type="text" class="form-control positive_int require"
-															name="plan_quantity" id="plan_quantity" placeholder="数量">
+															name="plan_quantity" id="plan_quantity" placeholder="数量" value="<%=fuliao.getPlan_quantity() %>">
 													</div>
 													<div class="col-sm-1"></div>
 												</div>

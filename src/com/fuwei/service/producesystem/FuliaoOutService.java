@@ -54,8 +54,8 @@ public class FuliaoOutService extends BaseService {
 			throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
-			String seq = " WHERE ";
-			sql.append("select * from tb_fuliaoout");
+			String seq = " AND ";
+			sql.append("select * from tb_fuliaoout where orderId is not null ");
 
 			StringBuffer sql_condition = new StringBuffer();
 			if (start_time != null) {// 出入库时间
@@ -80,6 +80,84 @@ public class FuliaoOutService extends BaseService {
 			}
 			if (orderNumber != null && !orderNumber.equals("")) {
 				sql_condition.append(seq + " orderNumber='" + orderNumber + "'");
+				seq = " AND ";
+			}
+
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql_condition.append(" order by "
+								+ sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					} else {
+						sql_condition.append(","
+								+ sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			pager = findPager_T(sql.append(sql_condition).toString(),
+					FuliaoOut.class, pager);
+			List<FuliaoOut> list = (List<FuliaoOut>)pager.getResult();
+			if(list==null || list.size()<=0){
+				return pager;
+			}else{
+				String ids = "";
+				for(FuliaoOut in : list){
+					ids += in.getId()+ ",";
+				}
+				ids = ids.substring(0,ids.length()-1);
+				String tempsql = "select * from tb_fuliaoout_detail  where fuliaoInOutId in (" + ids + ") ";
+				List<FuliaoOutDetail> totaldetaillist = dao.queryForBeanList(tempsql, FuliaoOutDetail.class, null);
+				Map<Integer,List<FuliaoOutDetail>> map = new HashMap<Integer, List<FuliaoOutDetail>>();
+				for(FuliaoOutDetail detail : totaldetaillist){
+					int fuliaoInId = detail.getFuliaoInOutId();
+					if(map.containsKey(fuliaoInId)){
+						List<FuliaoOutDetail> tempL = map.get(fuliaoInId);
+						tempL.add(detail);
+						map.put(fuliaoInId, tempL);
+					}else{
+						List<FuliaoOutDetail> tempL = new ArrayList<FuliaoOutDetail>();
+						tempL.add(detail);
+						map.put(fuliaoInId, tempL);
+					}
+				}
+				
+				for(FuliaoOut in : list){
+					in.setDetaillist(map.get(in.getId()));
+				}
+			}
+			return pager;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	// 获取列表
+	public Pager getList_common(Pager pager, Date start_time, Date end_time,
+			String number,List<Sort> sortlist)
+			throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			String seq = " AND ";
+			sql.append("select * from tb_fuliaoout where orderId is null ");
+
+			StringBuffer sql_condition = new StringBuffer();
+			if (start_time != null) {// 出入库时间
+				sql_condition.append(seq + " created_at>='"
+						+ DateTool.formateDate(start_time) + "'");
+				seq = " AND ";
+			}
+			if (end_time != null) {
+				sql_condition.append(seq + " created_at<'"
+						+ DateTool.formateDate(DateTool.addDay(end_time,1))
+						+ "'");
+				seq = " AND ";
+			}
+			if (number != null && !number.equals("")) {
+				sql_condition.append(seq + " number='" + number + "'");
 				seq = " AND ";
 			}
 

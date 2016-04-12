@@ -87,6 +87,37 @@ public class FuliaoController extends BaseController {
 		return new ModelAndView("fuliao/listbyorder");
 	}
 	
+	@RequestMapping(value = "/list_common", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView list_common(Integer companyId,Integer salesmanId,Integer customerId,String memo, HttpSession session, HttpServletRequest request) throws Exception {
+		String lcode = "fuliao_workspace/commonfuliao";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有查看通用辅料列表的权限", null);
+		}
+		List<Fuliao> fuliaoList = fuliaoService.getList_Common(companyId,salesmanId,customerId,memo);
+		if (fuliaoList == null) {
+			fuliaoList = new ArrayList<Fuliao>();
+		}
+		request.setAttribute("fuliaoList", fuliaoList);
+		//获取某订单的各辅料总当前库存,只返回fuliaoId和stock_quantity
+		String ids = "";
+		for(Fuliao fuliao : fuliaoList){
+			ids += fuliao.getId()+",";
+		}
+		if(ids.length()>0){
+			ids = ids.substring(0,ids.length()-1);
+		}
+		
+		Map<Integer,Integer> stockMap = fuliaoCurrentStockService.getStockMapByOrder_Common(ids);
+		request.setAttribute("stockMap", stockMap);
+		request.setAttribute("companyId", companyId);
+		request.setAttribute("memo", memo);
+		request.setAttribute("customerId", customerId);
+		request.setAttribute("salesmanId", salesmanId);
+		return new ModelAndView("fuliao/list_common");
+	}
+	
 	//若没有传参数ids， 则默认打印该订单的所有辅料
 	@RequestMapping(value = "/card/{OrderId}", method = RequestMethod.GET)
 	@ResponseBody
@@ -148,11 +179,15 @@ public class FuliaoController extends BaseController {
 		Map<Integer,Integer> locationMap = fuliaoCurrentStockService.locationByFuliao(id);
 		request.setAttribute("locationMap", locationMap);
 		
-		Order order = orderService.get(fuliao.getOrderId());
 		request.setAttribute("fuliao", fuliao);
-		request.setAttribute("order", order);
-
-		return new ModelAndView("fuliao/detail");
+		
+		if(fuliao.getOrderId()!=null){//若是大货辅料
+			Order order = orderService.get(fuliao.getOrderId());
+			request.setAttribute("order", order);
+			return new ModelAndView("fuliao/detail");
+		}else{//若是通用辅料
+			return new ModelAndView("fuliao/detail_common");
+		}		
 	}
 
 	// 添加或保存
@@ -177,6 +212,66 @@ public class FuliaoController extends BaseController {
 		}
 	}
 
+	@RequestMapping(value = "/add_common", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView add_common(HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "fuliao/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有创建或编辑辅料的权限", null);
+		}
+		try {
+			return new ModelAndView("fuliao/add_common");
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	// 添加或保存
+	@RequestMapping(value = "/add_common", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> add_common(Fuliao fuliao,
+			@RequestParam("file") CommonsMultipartFile file,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "fuliao/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有创建或编辑辅料的权限", null);
+		}
+		try {
+			if (fuliao.getOrderId()!=null && fuliao.getOrderId()>0) {
+				throw new Exception("通用辅料无法指定订单号", null);
+			}
+			Integer location_size = fuliao.getLocation_size();
+			if (location_size == null || location_size == 0) {
+				throw new Exception("必须指定库位容量");
+			}
+			if (location_size != 1 && location_size != 2 && location_size != 3) {
+				throw new Exception("不存在的库位容量标志值");
+			}
+
+			fuliao.setCreated_at(DateTool.now());// 设置创建时间
+			fuliao.setCreated_user(user.getId());// 设置创建人
+
+			// 上传图片
+			JSONObject jObject = fileUpload(request, file);
+			fuliao.setImg((String) jObject.get("img"));
+			fuliao.setImg_s((String) jObject.get("img_s"));
+			fuliao.setImg_ss((String) jObject.get("img_ss"));
+			int fuliaoId = fuliaoService.add_common(fuliao);
+
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("id", fuliaoId);
+			return this.returnSuccess(data);
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+	
 	// 添加或保存
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
@@ -283,12 +378,12 @@ public class FuliaoController extends BaseController {
 		try {
 			if (fuliaoId != null) {
 				Fuliao fuliao = fuliaoService.get(fuliaoId);
-				if (fuliao.getOrderId() != 0) {
-					request.setAttribute("fuliao", fuliao);
+				request.setAttribute("fuliao", fuliao);
+				if (fuliao.getOrderId() != null && fuliao.getOrderId()!=0) {
 					return new ModelAndView("fuliao/editbyorder");
 				} else {
-					throw new Exception("发生错误：辅料缺少订单ID");
-					// return new ModelAndView("producing_order/edit");
+//					throw new Exception("发生错误：辅料缺少订单ID");
+					 return new ModelAndView("fuliao/edit_common");
 				}
 
 			}

@@ -6,6 +6,9 @@ $(document).ready(function(){
 	
 	//删除 -- 开始
 	$(".delete").click(function(){
+		if(!confirm("确定要删除该辅料吗？")){
+			return false;
+		}
 		var id= $(this).attr("data-cid");
 		$.ajax({
             url: "fuliao/delete/"+id,

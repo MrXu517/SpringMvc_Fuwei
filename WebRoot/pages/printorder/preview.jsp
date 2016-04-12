@@ -83,13 +83,20 @@
 	
 		<%
 		/*2015-3-23添加新表格*/
-		//获取成品仓库记录单
+		//获取半成品仓库记录单
+			if(gridName.indexOf("halfstorerecordorder") > -1){
+		 %>
+			<div style="page-break-after: always">
+			<%@ include file="halfstorerecordorder.jsp"%>
+			</div>
+		<%} %>
+		<%//获取成品仓库记录单
 			if(gridName.indexOf("finalstorerecordorder") > -1){
 		 %>
 			<div style="page-break-after: always">
 			<%@ include file="finalstoreorder.jsp"%>
 			</div>
-		<%} %>	
+		<%} %>
 	
 		<%
 		/*2015-5-12添加新表格*/

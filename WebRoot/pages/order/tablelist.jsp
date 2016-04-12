@@ -85,6 +85,9 @@
 								<a href="#coloringprocessorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>染色进度单</a>
 							</li>
 							<li>
+								<a href="#halfstorerecordorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>半成品仓库记录单</a>
+							</li>
+							<li>
 								<a href="#finalstorerecordorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>成品仓库记录单</a>
 							</li>
 							<li>
@@ -153,6 +156,11 @@
 							<div class="tab-pane" id="coloringprocessorder" role="tabpanel">
 								
 								<jsp:include flush="true" page="ordergrid/coloringprocessorder.jsp" />
+							</div>
+							<!-- 半成品仓库记录单 -->
+							<div class="tab-pane" id="halfstorerecordorder" role="tabpanel">
+								
+								<jsp:include flush="true" page="ordergrid/halfstorerecordorder.jsp" />
 							</div>
 							<!-- 成品仓库记录单 -->
 							<div class="tab-pane" id="finalstorerecordorder" role="tabpanel">

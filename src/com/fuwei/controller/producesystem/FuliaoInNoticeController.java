@@ -70,6 +70,23 @@ public class FuliaoInNoticeController extends BaseController {
 		return new ModelAndView("fuliaoin_notice/listbyorder");
 	}
 	
+	//通用辅料入库通知单列表
+	@RequestMapping(value = "/list_common", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView list_common(HttpSession session, HttpServletRequest request) throws Exception {
+		String lcode = "fuliao_workspace/commonfuliao";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有查看入库通知单列表的权限", null);
+		}
+		List<FuliaoInNotice> resultlist = fuliaoInOutNoticeService.getList_common();
+		if (resultlist == null) {
+			resultlist = new ArrayList<FuliaoInNotice>();
+		}
+		request.setAttribute("resultlist", resultlist);
+		return new ModelAndView("fuliaoin_notice/list_common");
+	}
+	
 	@RequestMapping(value = "/add/{orderId}", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView add(@PathVariable Integer orderId, HttpSession session, HttpServletRequest request,
@@ -101,6 +118,72 @@ public class FuliaoInNoticeController extends BaseController {
 		}
 	}
 	
+	//创建通用辅料入库通知单
+	@RequestMapping(value = "/add_common", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView add_common(Integer companyId,Integer salesmanId,Integer customerId,String memo,HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "fuliaoinout_notice/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有添加辅料预入库通知单的权限", null);
+		}
+		try {
+			List<Fuliao> fuliaolist = fuliaoService.getList_Common(companyId,salesmanId,customerId,memo);
+			if(fuliaolist == null){
+				fuliaolist = new ArrayList<Fuliao>();
+			}
+			request.setAttribute("fuliaolist", fuliaolist);
+			return new ModelAndView("fuliaoin_notice/add_common");	
+			
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	@RequestMapping(value = "/add_common", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> add_common(FuliaoInNotice fuliaoInOutNotice, String details,HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "fuliaoinout_notice/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有添加辅料预入库通知单的权限", null);
+		}
+		try {	
+			fuliaoInOutNotice.setCreated_at(DateTool.now());// 设置创建时间
+			fuliaoInOutNotice.setUpdated_at(DateTool.now());// 设置更新时间
+			fuliaoInOutNotice.setCreated_user(user.getId());// 设置创建人
+			
+			List<FuliaoInNoticeDetail> detaillist = SerializeTool
+						.deserializeList(details,
+								FuliaoInNoticeDetail.class);
+			Iterator<FuliaoInNoticeDetail> iter = detaillist.iterator();
+			while(iter.hasNext()){
+				FuliaoInNoticeDetail detail = iter.next();
+				if(detail.getQuantity() == 0){
+					iter.remove();
+				}
+			}
+			if(detaillist==null || detaillist.size()<=0){
+				throw new Exception("请至少填写一条入库明细");
+			}
+			fuliaoInOutNotice.setDetaillist(detaillist);
+			if(fuliaoInOutNotice.getId() == 0){//添加
+				Integer tableOrderId = fuliaoInOutNoticeService.add_common(fuliaoInOutNotice);
+				return this.returnSuccess("id", tableOrderId);
+			}else{//编辑
+				Integer fuliaoInOutNoticeId = fuliaoInOutNoticeService.update(fuliaoInOutNotice);
+				return this.returnSuccess("id", fuliaoInOutNoticeId);
+			}
+			
+		} catch (Exception e) {
+			throw e;
+		}
+		
+	}
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
@@ -196,9 +279,14 @@ public class FuliaoInNoticeController extends BaseController {
 		}	
 		FuliaoInNotice fuliaoInNotice = fuliaoInOutNoticeService.getAndDetail(id);
 		request.setAttribute("fuliaoInNotice", fuliaoInNotice);
-		Order order = orderService.get(fuliaoInNotice.getOrderId());
-		request.setAttribute("order", order);
-		return new ModelAndView("fuliaoin_notice/detail");
+		if(fuliaoInNotice.getOrderId()!=null && fuliaoInNotice.getOrderId()!=0){
+			Order order = orderService.get(fuliaoInNotice.getOrderId());
+			request.setAttribute("order", order);
+			return new ModelAndView("fuliaoin_notice/detail");
+		}else{
+			return new ModelAndView("fuliaoin_notice/detail_common");
+		}
+		
 	}
 	
 	@RequestMapping(value = "/put/{fuliaoInOutNoticeId}", method = RequestMethod.GET)
@@ -216,10 +304,13 @@ public class FuliaoInNoticeController extends BaseController {
 			if(fuliaoInOutNoticeId!=null){
 				FuliaoInNotice fuliaoInNotice = fuliaoInOutNoticeService.getAndDetail(fuliaoInOutNoticeId);
 				request.setAttribute("fuliaoInNotice", fuliaoInNotice);
-				Order order = orderService.get(fuliaoInNotice.getOrderId());
-				request.setAttribute("order", order);
-				return new ModelAndView("fuliaoin_notice/edit");
-				
+				if(fuliaoInNotice.getOrderId()!=null && fuliaoInNotice.getOrderId()!=0){
+					Order order = orderService.get(fuliaoInNotice.getOrderId());
+					request.setAttribute("order", order);
+					return new ModelAndView("fuliaoin_notice/edit");
+				}else{
+					return new ModelAndView("fuliaoin_notice/edit_common");
+				}
 			}
 			throw new Exception("缺少辅料预入库通知单ID");
 			
@@ -269,9 +360,13 @@ public class FuliaoInNoticeController extends BaseController {
 		}	
 		FuliaoInNotice fuliaoInNotice = fuliaoInOutNoticeService.getAndDetail(id);
 		request.setAttribute("fuliaoInNotice", fuliaoInNotice);
-		Order order = orderService.get(fuliaoInNotice.getOrderId());
-		request.setAttribute("order", order);
-		return new ModelAndView("fuliaoin_notice/print");
+		if(fuliaoInNotice.getOrderId()!=null && fuliaoInNotice.getOrderId()!=0){
+			Order order = orderService.get(fuliaoInNotice.getOrderId());
+			request.setAttribute("order", order);
+			return new ModelAndView("fuliaoin_notice/print");
+		}else{
+			return new ModelAndView("fuliaoin_notice/print_common");
+		}
 	}
 	
 //	@RequestMapping(value = "/index", method = RequestMethod.GET)

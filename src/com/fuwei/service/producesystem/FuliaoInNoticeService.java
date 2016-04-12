@@ -36,6 +36,10 @@ public class FuliaoInNoticeService extends BaseService {
 	public List<FuliaoInNotice> getList(String orderNumber){
 		return dao.queryForBeanList("select * from tb_fuliaoin_notice where orderNumber=?", FuliaoInNotice.class,orderNumber);
 	}
+	//获取通用辅料预入库通知单
+	public List<FuliaoInNotice> getList_common(){
+		return dao.queryForBeanList("select * from tb_fuliaoin_notice where orderId is null", FuliaoInNotice.class);
+	}
 
 	// 添加,返回主键
 	@Transactional(rollbackFor=Exception.class)
@@ -61,6 +65,31 @@ public class FuliaoInNoticeService extends BaseService {
 				
 				return noticeId;
 			}
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	// 添加,返回主键
+	@Transactional(rollbackFor=Exception.class)
+	public int add_common(FuliaoInNotice notice) throws Exception {
+		try {
+			if(notice.getDetaillist()==null || notice.getDetaillist().size()<=0){
+				throw new Exception("请至少填写一条入库明细");
+			}
+			notice.setStatus(0);
+			notice.setState("创建");
+			Integer noticeId = this.insert(notice);
+			notice.setId(noticeId);
+			notice.setNumber(notice.createNumber());
+			this.update(notice, "id", null);
+			for(FuliaoInNoticeDetail detail : notice.getDetaillist()){
+				detail.setFuliaoInOutNoticeId(noticeId);
+			}
+			fuliaoInOutNoticeDetailService.addBatch(notice.getDetaillist());
+				
+			return noticeId;
+		
 		} catch (Exception e) {
 			throw e;
 		}

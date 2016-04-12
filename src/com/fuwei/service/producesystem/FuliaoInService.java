@@ -39,15 +39,15 @@ public class FuliaoInService extends BaseService {
 	@Autowired
 	DataCorrectRecordService dataCorrectRecordService;
 	
-	// 获取列表
+	// 获取大货辅料入库列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,
 			String orderNumber, Integer charge_employee,
-			String number,List<Sort> sortlist)
+			String number, List<Sort> sortlist)
 			throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
-			String seq = " WHERE ";
-			sql.append("select * from tb_fuliaoin");
+			String seq = " AND ";
+			sql.append("select * from tb_fuliaoin where orderId is not null");
 
 			StringBuffer sql_condition = new StringBuffer();
 			if (start_time != null) {// 出入库时间
@@ -74,6 +74,85 @@ public class FuliaoInService extends BaseService {
 				sql_condition.append(seq + " orderNumber='" + orderNumber + "'");
 				seq = " AND ";
 			}
+
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql_condition.append(" order by "
+								+ sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					} else {
+						sql_condition.append(","
+								+ sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			pager = findPager_T(sql.append(sql_condition).toString(),
+					FuliaoIn.class, pager);
+			List<FuliaoIn> list = (List<FuliaoIn>)pager.getResult();
+			if(list==null || list.size()<=0){
+				return pager;
+			}else{
+				String ids = "";
+				for(FuliaoIn in : list){
+					ids += in.getId()+ ",";
+				}
+				ids = ids.substring(0,ids.length()-1);
+				String tempsql = "select * from tb_fuliaoin_detail  where fuliaoInOutId in (" + ids + ") ";
+				List<FuliaoInDetail> totaldetaillist = dao.queryForBeanList(tempsql, FuliaoInDetail.class, null);
+				Map<Integer,List<FuliaoInDetail>> map = new HashMap<Integer, List<FuliaoInDetail>>();
+				for(FuliaoInDetail detail : totaldetaillist){
+					int fuliaoInId = detail.getFuliaoInOutId();
+					if(map.containsKey(fuliaoInId)){
+						List<FuliaoInDetail> tempL = map.get(fuliaoInId);
+						tempL.add(detail);
+						map.put(fuliaoInId, tempL);
+					}else{
+						List<FuliaoInDetail> tempL = new ArrayList<FuliaoInDetail>();
+						tempL.add(detail);
+						map.put(fuliaoInId, tempL);
+					}
+				}
+				
+				for(FuliaoIn in : list){
+					in.setDetaillist(map.get(in.getId()));
+				}
+			}
+			return pager;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	// 获取通用辅料入库列表
+	public Pager getList_common(Pager pager, Date start_time, Date end_time,
+			String number, List<Sort> sortlist)
+			throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			String seq = " AND ";
+			sql.append("select * from tb_fuliaoin where orderId is null ");//orderId=null则是通用辅料
+
+			StringBuffer sql_condition = new StringBuffer();
+			if (start_time != null) {// 出入库时间
+				sql_condition.append(seq + " created_at>='"
+						+ DateTool.formateDate(start_time) + "'");
+				seq = " AND ";
+			}
+			if (end_time != null) {
+				sql_condition.append(seq + " created_at<'"
+						+ DateTool.formateDate(DateTool.addDay(end_time,1))
+						+ "'");
+				seq = " AND ";
+			}
+			if (number != null && !number.equals("")) {
+				sql_condition.append(seq + " number='" + number + "'");
+				seq = " AND ";
+			}
+			
 
 			if (sortlist != null && sortlist.size() > 0) {
 

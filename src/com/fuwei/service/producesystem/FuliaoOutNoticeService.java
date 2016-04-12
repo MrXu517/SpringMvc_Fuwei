@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fuwei.entity.producesystem.FuliaoInNotice;
 import com.fuwei.entity.producesystem.FuliaoOutNotice;
 import com.fuwei.entity.producesystem.FuliaoOutNoticeDetail;
 import com.fuwei.service.BaseService;
@@ -36,6 +37,10 @@ public class FuliaoOutNoticeService extends BaseService {
 	}
 	public List<FuliaoOutNotice> getList(String orderNumber){
 		return dao.queryForBeanList("select * from tb_fuliaoout_notice where orderNumber=?", FuliaoOutNotice.class,orderNumber);
+	}
+	//获取通用辅料预入库通知单
+	public List<FuliaoOutNotice> getList_common(){
+		return dao.queryForBeanList("select * from tb_fuliaoout_notice where orderId is null", FuliaoOutNotice.class);
 	}
 
 	// 添加,返回主键

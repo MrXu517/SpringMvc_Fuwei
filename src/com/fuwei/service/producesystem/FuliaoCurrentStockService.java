@@ -27,7 +27,7 @@ public class FuliaoCurrentStockService  extends BaseService {
 		try {
 			StringBuffer sql = new StringBuffer();
 			String seq = " AND ";
-			sql.append("select f.*,l.number as number,l.fuliaoId,l.quantity,l.size l_size,l.id as locationId from tb_location l,tb_fuliao f where l.fuliaoId=f.id ");
+			sql.append("select f.*,l.number as number,l.fuliaoId,l.quantity,l.size l_size,l.id as locationId from tb_location l,tb_fuliao f where l.fuliaoId=f.id and l.type=1 ");
 
 			StringBuffer sql_condition = new StringBuffer();
 			if (charge_employee != null) {
@@ -39,6 +39,41 @@ public class FuliaoCurrentStockService  extends BaseService {
 				sql_condition.append(seq + " f.orderNumber='" + orderNumber + "'");
 				seq = " AND ";
 			}
+			if (locationNumber != null && !locationNumber.equals("")) {
+				sql_condition.append(seq + " l.number='" + locationNumber + "'");
+				seq = " AND ";
+			}
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql_condition.append(" order by "
+								+ sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					} else {
+						sql_condition.append(","
+								+ sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			
+			return findPager_T_Map(sql.append(sql_condition).toString(), pager);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	// 获取通用辅料库存列表
+	public Pager getList_common(Pager pager ,String locationNumber, List<Sort> sortlist)
+			throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			String seq = " AND ";
+			sql.append("select f.*,l.number as number,l.fuliaoId,l.quantity,l.size l_size,l.id as locationId from tb_location l,tb_fuliao f where l.fuliaoId=f.id and l.type=2 ");
+
+			StringBuffer sql_condition = new StringBuffer();
 			if (locationNumber != null && !locationNumber.equals("")) {
 				sql_condition.append(seq + " l.number='" + locationNumber + "'");
 				seq = " AND ";
@@ -158,6 +193,38 @@ public class FuliaoCurrentStockService  extends BaseService {
 	public Map<Integer,Integer> getStockMapByOrder(int orderId){
 		Map<Integer,Integer> result = new HashMap<Integer,Integer>();
 		List<Map<String,Object>> maplist = dao.queryForListMap("select sum(quantity) stock_quantity,fuliaoId from tb_location a ,tb_fuliao b where b.orderId = ? and a.fuliaoId = b.id group by fuliaoId", orderId);
+			//这个list里的每一个map的fuliaoId都不相同
+		for(Map<String,Object> item : maplist){
+			int fuliaoId = Integer.valueOf(item.get("fuliaoId").toString());
+			if(!result.containsKey(fuliaoId)){
+				result.put(fuliaoId,Integer.valueOf(item.get("stock_quantity").toString()));
+			}
+		}
+	
+		return result;
+	}
+	
+	//获取各个通用辅料总当前库存,只返回fuliaoId和stock_quantity
+	public Map<Integer,Integer> getStockMapByOrder_Common(){
+		Map<Integer,Integer> result = new HashMap<Integer,Integer>();
+		List<Map<String,Object>> maplist = dao.queryForListMap("select sum(quantity) stock_quantity,fuliaoId from tb_location a ,tb_fuliao b where b.orderId is null  and a.fuliaoId = b.id group by fuliaoId");
+			//这个list里的每一个map的fuliaoId都不相同
+		for(Map<String,Object> item : maplist){
+			int fuliaoId = Integer.valueOf(item.get("fuliaoId").toString());
+			if(!result.containsKey(fuliaoId)){
+				result.put(fuliaoId,Integer.valueOf(item.get("stock_quantity").toString()));
+			}
+		}
+	
+		return result;
+	}
+	//获取各个通用辅料总当前库存,只返回fuliaoId和stock_quantity
+	public Map<Integer,Integer> getStockMapByOrder_Common(String ids){
+		if(ids.equals("")){
+			return new HashMap<Integer, Integer>();
+		}
+		Map<Integer,Integer> result = new HashMap<Integer,Integer>();
+		List<Map<String,Object>> maplist = dao.queryForListMap("select sum(quantity) stock_quantity,fuliaoId from tb_location a ,tb_fuliao b where b.orderId is null and a.fuliaoId = b.id and b.id in (" + ids + ") group by fuliaoId");
 			//这个list里的每一个map的fuliaoId都不相同
 		for(Map<String,Object> item : maplist){
 			int fuliaoId = Integer.valueOf(item.get("fuliaoId").toString());
