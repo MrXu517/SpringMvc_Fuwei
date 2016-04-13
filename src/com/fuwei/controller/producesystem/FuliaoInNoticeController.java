@@ -135,6 +135,10 @@ public class FuliaoInNoticeController extends BaseController {
 				fuliaolist = new ArrayList<Fuliao>();
 			}
 			request.setAttribute("fuliaolist", fuliaolist);
+			request.setAttribute("companyId", companyId);
+			request.setAttribute("salesmanId", salesmanId);
+			request.setAttribute("customerId", customerId);
+			request.setAttribute("memo", memo);
 			return new ModelAndView("fuliaoin_notice/add_common");	
 			
 		} catch (Exception e) {

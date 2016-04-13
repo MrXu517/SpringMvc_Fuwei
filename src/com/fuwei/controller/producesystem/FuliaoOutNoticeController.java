@@ -23,6 +23,7 @@ import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
+import com.fuwei.entity.producesystem.Fuliao;
 import com.fuwei.entity.producesystem.FuliaoOutNotice;
 import com.fuwei.entity.producesystem.FuliaoOutNoticeDetail;
 import com.fuwei.service.AuthorityService;
@@ -121,6 +122,84 @@ public class FuliaoOutNoticeController extends BaseController {
 		}
 	}
 	
+	@RequestMapping(value = "/add_common", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView add_common(Integer companyId,Integer salesmanId,Integer customerId,String memo, HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "fuliaoinout_notice/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有添加辅料预出库通知单的权限", null);
+		}
+		try {
+			List<Integer> fuliaoIdList = fuliaoService.getIdList_Common(companyId,salesmanId,customerId,memo);
+			if (fuliaoIdList == null) {
+				fuliaoIdList = new ArrayList<Integer>();
+			}
+			String ids = "";
+			for(Integer id : fuliaoIdList){
+				ids += id+",";
+			}
+			if(ids.length()>0){
+				ids = ids.substring(0,ids.length()-1);
+			}
+			//获取指定辅料id的属性和库存信息
+			List<Map<String,Object>> detaillist = fuliaoCurrentStockService.getByOrder_Common(ids);
+			request.setAttribute("detaillist", detaillist);
+			request.setAttribute("companyId", companyId);
+			request.setAttribute("salesmanId", salesmanId);
+			request.setAttribute("customerId", customerId);
+			request.setAttribute("memo", memo);
+			return new ModelAndView("fuliaoout_notice/add_common");	
+			
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	@RequestMapping(value = "/add_common", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> add_common(FuliaoOutNotice fuliaoOutNotice, String details,HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception{
+		
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "fuliaoinout_notice/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有添加辅料预出库通知单的权限", null);
+		}
+		try {	
+			fuliaoOutNotice.setCreated_at(DateTool.now());// 设置创建时间
+			fuliaoOutNotice.setUpdated_at(DateTool.now());// 设置更新时间
+			fuliaoOutNotice.setCreated_user(user.getId());// 设置创建人
+			
+			List<FuliaoOutNoticeDetail> detaillist = SerializeTool
+						.deserializeList(details,
+								FuliaoOutNoticeDetail.class);
+			Iterator<FuliaoOutNoticeDetail> iter = detaillist.iterator();
+			while(iter.hasNext()){
+				FuliaoOutNoticeDetail detail = iter.next();
+				if(detail.getQuantity() == 0){
+					iter.remove();
+				}
+			}
+			if(detaillist==null || detaillist.size()<=0){
+				throw new Exception("请至少填写一条出库明细");
+			}
+			fuliaoOutNotice.setDetaillist(detaillist);
+			if(fuliaoOutNotice.getId() == 0){//添加
+				Integer tableOrderId = fuliaoOutNoticeService.add(fuliaoOutNotice);
+				return this.returnSuccess("id", tableOrderId);
+			}else{//编辑
+				Integer fuliaoInOutNoticeId = fuliaoOutNoticeService.update(fuliaoOutNotice);
+				return this.returnSuccess("id", fuliaoInOutNoticeId);
+			}
+			
+		} catch (Exception e) {
+			throw e;
+		}
+		
+	}
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
@@ -216,9 +295,13 @@ public class FuliaoOutNoticeController extends BaseController {
 		}	
 		FuliaoOutNotice fuliaoOutNotice = fuliaoOutNoticeService.getAndDetail(id);
 		request.setAttribute("fuliaoOutNotice", fuliaoOutNotice);	
-		Order order = orderService.get(fuliaoOutNotice.getOrderId());
-		request.setAttribute("order", order);
-		return new ModelAndView("fuliaoout_notice/detail");
+		if(fuliaoOutNotice.getOrderId()!=null && fuliaoOutNotice.getOrderId()!=0){
+			Order order = orderService.get(fuliaoOutNotice.getOrderId());
+			request.setAttribute("order", order);
+			return new ModelAndView("fuliaoout_notice/detail");
+		}else{
+			return new ModelAndView("fuliaoout_notice/detail_common");
+		}
 	}
 	
 	@RequestMapping(value = "/put/{fuliaoInOutNoticeId}", method = RequestMethod.GET)
@@ -236,9 +319,14 @@ public class FuliaoOutNoticeController extends BaseController {
 			if(fuliaoInOutNoticeId!=null){
 				FuliaoOutNotice fuliaoOutNotice = fuliaoOutNoticeService.getAndDetail(fuliaoInOutNoticeId);
 				request.setAttribute("fuliaoOutNotice", fuliaoOutNotice);
-				Order order = orderService.get(fuliaoOutNotice.getOrderId());
-				request.setAttribute("order", order);
-				return new ModelAndView("fuliaoout_notice/edit");
+				if(fuliaoOutNotice.getOrderId()!=null && fuliaoOutNotice.getOrderId()!=0){
+					Order order = orderService.get(fuliaoOutNotice.getOrderId());
+					request.setAttribute("order", order);
+					return new ModelAndView("fuliaoout_notice/edit");
+				}else{
+					return new ModelAndView("fuliaoout_notice/edit_common");
+				}
+				
 				
 			}
 			throw new Exception("缺少辅料预出库通知单ID");
@@ -289,8 +377,12 @@ public class FuliaoOutNoticeController extends BaseController {
 		}	
 		FuliaoOutNotice fuliaoOutNotice = fuliaoOutNoticeService.getAndDetail(id);
 		request.setAttribute("fuliaoOutNotice", fuliaoOutNotice);
-		Order order = orderService.get(fuliaoOutNotice.getOrderId());
-		request.setAttribute("order", order);
-		return new ModelAndView("fuliaoout_notice/print");
+		if(fuliaoOutNotice.getOrderId()!=null && fuliaoOutNotice.getOrderId()!=0){
+			Order order = orderService.get(fuliaoOutNotice.getOrderId());
+			request.setAttribute("order", order);
+			return new ModelAndView("fuliaoout_notice/print");
+		}else{
+			return new ModelAndView("fuliaoout_notice/print_common");
+		}
 	}
 }

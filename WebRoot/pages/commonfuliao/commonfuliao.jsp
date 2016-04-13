@@ -116,7 +116,7 @@ div.name{margin-left: 20px;width: 100px; display: inline-block;}
 			});
 			
 			$("iframe").load(function(){
-				var mainheight = $(this).contents().find("body")[0].scrollHeight+10;
+				var mainheight = $(this).contents().find("body")[0].scrollHeight+20;
 				$(this).height(mainheight);
 			});
 			$("#tab ul.nav>li").first().click();

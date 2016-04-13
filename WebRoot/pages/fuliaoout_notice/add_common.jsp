@@ -7,19 +7,18 @@
 <%@page import="com.fuwei.entity.producesystem.Fuliao"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
-<%@page import="com.fuwei.entity.Factory"%>
-<%@page import="net.sf.json.JSONObject"%>
-<%@page import="com.fuwei.entity.Customer"%>
 <%@page import="com.fuwei.entity.Salesman"%>
+<%@page import="com.alibaba.fastjson.JSONObject"%>
 <%@page import="com.fuwei.entity.Company"%>
+<%@page import="com.fuwei.entity.Customer"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	List<Fuliao> fuliaolist = (List<Fuliao>) request.getAttribute("fuliaolist");
-	if (fuliaolist == null) {
-		fuliaolist = new ArrayList<Fuliao>();
+	List<Map<String,Object>> detaillist = (List<Map<String,Object>>)request.getAttribute("detaillist");
+	if (detaillist == null) {
+		detaillist = new ArrayList<Map<String,Object>>();
 	}
 	HashMap<String, List<Salesman>> companySalesmanMap = SystemCache
 			.getCompanySalesmanMap_ID();
@@ -52,7 +51,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>创建通用辅料入库通知单 -- 桐庐富伟针织厂</title>
+		<title>创建通用辅料出库通知单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -72,7 +71,7 @@
 		<link href="css/plugins/ui.jqgrid.css" rel="stylesheet"
 			type="text/css" />
 		<script src="js/order/ordergrid.js" type="text/javascript"></script>
-		<script src="js/fuliaoin_notice/add_common.js" type="text/javascript"></script>
+		<script src="js/fuliaoout_notice/add_common.js" type="text/javascript"></script>
 		<style type="text/css">
 #tablename {
   font-weight: bold;
@@ -128,7 +127,7 @@ tr.disable{background:#ddd;}
 							<a href="fuliao_workspace/commonfuliao?tab=fuliaoinnotice">通用辅料列表及出入库情况</a>
 						</li>
 						<li class="active">
-							创建通用辅料入库通知单
+							创建通用辅料出库通知单
 						</li>
 					</ul>
 				</div>
@@ -237,92 +236,83 @@ tr.disable{background:#ddd;}
 									<div class="col-md-12 tablewidget">
 										<table class="table">
 											<caption id="tablename">
-												桐庐富伟针织厂通用辅料入库通知单
+												桐庐富伟针织厂通用辅料出库通知单
 												<button type="submit"
 													class="pull-right btn btn-danger saveTable"
 													data-loading-text="正在保存...">
-													创建通用辅料入库通知单
+													创建通用辅料出库通知单
 												</button>
 											</caption>
 										</table>
 										<table id="mainTb"
 											class="table table-responsive table-bordered detailTb">
 											<thead>
-												<tr><th width="4%">
-														No.
+												<tr><th width="50px">
+														序号
 													</th>
-													<th width="5%">
-														编号
-													</th>
-													<th width="5%">
+													<th width="75px">
 														类型
-													</th><th width="15%">
+													</th><th width="150px">
 														图片
-													</th><th width="5%">
+													</th><th width="60px">
 														公司等
-													</th><th width="8%">
+													</th><th width="100px">
 														订单号
-													</th><th width="8%">
+													</th><th width="100px">
 														款号
-													</th><th width="6%">
+													</th><th width="70px">
 														国家
-													</th><th width="6%">
+													</th><th width="70px">
 														颜色
-													</th><th width="6%">
+													</th><th width="70px">
 														尺码
-													</th><th width="6%">
+													</th><th width="50px">
 														批次
 													</th>
-													<th width="6%">
+													<th width="100px">
+														当前库存(个)
+													</th>
+													<th width="120px">
+														预出库数量(个)
+													</th>
+													<th width="150px">
 														备注
-													</th>
-													<th width="10%">
-														来源
-													</th>
-													<th width="20%">
-														入库数量(个)
 													</th>
 												</tr>
 											</thead>
 											<tbody>
-												<%if(fuliaolist == null || fuliaolist.size()<=0){ %>
+												<%if(detaillist == null || detaillist.size()<=0){ %>
 													<tr><td colspan="13">找不到符合条件的通用辅料</td></tr>
 													<%} %>
 												<%
-													for (Fuliao fuliao : fuliaolist) {
-														JSONObject json = JSONObject.fromObject(fuliao);
-														json.put("fuliaoId",fuliao.getId());
-														json.remove("id");
+													for (Map<String,Object> detail : detaillist) {
+														detail.put("fuliaoId",detail.get("id"));
+														detail.remove("id");
 												%>
-												<tr class="tr EmptyTr disable" data='<%=json.toString()%>'>
+												<tr class="tr EmptyTr disable" data='<%=SerializeTool.serialize(detail)%>'>
 													<td><input type="checkbox" name="checked" class="checkBtn"/></td>
-													<td><%=fuliao.getFnumber()%></td>
-													<td><%=SystemCache.getFuliaoTypeName(fuliao.getFuliaoTypeId())%></td>
-													<td><a href="/<%=fuliao.getImg()%>" class=""
+												
+													<td><%=SystemCache.getFuliaoTypeName((Integer)detail.get("fuliaoTypeId"))%><br><%=detail.get("fnumber")%></td>
+													<td><a href="/<%=detail.get("img")%>" class=""
 																			target="_blank"> <img id="previewImg"
-																				alt="200 x 100%" src="/<%=fuliao.getImg_ss()%>">
+																				alt="200 x 100%" src="/<%=detail.get("img_ss")%>">
 																		</a></td>
-													<td><%=SystemCache.getCompanyShortName(fuliao.getCompanyId())%><br><%=SystemCache.getSalesmanName(fuliao.getSalesmanId())%>
-											<br><%=SystemCache.getCustomerName(fuliao.getCustomerId())%></td>
-													<td><%=fuliao.getCompany_orderNumber()%></td>
-													<td><%=fuliao.getCompany_productNumber()%></td>
-													<td><%=fuliao.getCountry()%></td>
-													<td><%=fuliao.getColor()%></td>
-													<td><%=fuliao.getSize()%></td>
-													<td><%=fuliao.getBatch()%></td>
-													<td><%=fuliao.getMemo()%></td>
-													<td>
-														<select disabled class="fuliaoPurchaseFactoryId form-control  value">
-															<option value="">未选择</option>
-															<%for(Factory factory : SystemCache.fuliao_factorylist){ %>
-															<option value="<%=factory.getId() %>"><%=factory.getName() %></option>
-															<%} %>
-														</select>
-													</td>
+													<td><%=SystemCache.getCompanyShortName((Integer)detail.get("companyId"))%><br><%=SystemCache.getSalesmanName((Integer)detail.get("salesmanId"))%>
+											<br><%=SystemCache.getCustomerName((Integer)detail.get("customerId"))%></td>
+													<td><%=detail.get("company_orderNumber")%></td>
+													<td><%=detail.get("company_productNumber")%></td>
+													<td><%=detail.get("country")%></td>
+													<td><%=detail.get("color")%></td>
+													<td><%=detail.get("size")%></td>
+													<td><%=detail.get("batch")%></td>
+													<td><%=detail.get("stock_quantity")%></td>
 													<td>
 														<input disabled class="quantity form-control require positive_int value"
 															type="text" value="0"
-															placeholder="请输入预入库数量">
+															placeholder="请输入预出库数量">
+													</td>
+													<td>
+														<input disabled class="form-control memo value" type="text" value="">
 													</td>
 												</tr>
 												<%

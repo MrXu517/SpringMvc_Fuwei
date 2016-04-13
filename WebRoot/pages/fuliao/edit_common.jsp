@@ -119,7 +119,7 @@ input[name='location_size']{height:20px;width:20px;}
 													</label>
 													<div class="col-sm-8">
 														<select data='<%=companySalesmanMap_str%>'
-															class="form-control require" name="companyId"
+															class="form-control" name="companyId"
 															id="companyId" placeholder="公司">
 															<option value="">
 																未选择
@@ -142,7 +142,7 @@ input[name='location_size']{height:20px;width:20px;}
 														业务员
 													</label>
 													<div class="col-sm-8">
-														<select class="form-control require" name="salesmanId"
+														<select class="form-control" name="salesmanId"
 															id="salesmanId" placeholder="业务员">
 															<option value="">
 																未选择

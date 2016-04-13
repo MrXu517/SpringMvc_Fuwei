@@ -28,12 +28,9 @@
 	}
 	
 	//权限相关
-	Boolean has_edit = SystemCache.hasAuthority(session,
-			"fuliao/edit");
+	
 	Boolean has_add = SystemCache.hasAuthority(session,
 			"fuliao/add");
-	Boolean has_delete = SystemCache.hasAuthority(session,
-			"fuliao/delete");
 	Boolean has_card= SystemCache.hasAuthority(session,
 			"fuliao/card");
 	//权限相关
@@ -85,7 +82,6 @@
 		<script src="js/plugins/bootstrap.min.js" type="text/javascript"></script>
 		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
-		<script src="js/fuliao/listbyorder.js" type="text/javascript"></script>
 		<link href="css/order/index.css" rel="stylesheet" type="text/css" />
 		<style type="text/css">
 .body {
@@ -161,31 +157,31 @@
 											</div>
 										</div>
 										<div class="form-group salesgroup">
-											<label for="salesmanId" class="col-sm-3 control-label">
-												业务员
-											</label>
-											<div class="col-sm-9">
-												<select class="form-control" name="salesmanId" id="salesmanId"
-													placeholder="业务员">
-													<option value="">
-														所有
-													</option>
-													<%
-														for (Salesman salesman : SystemCache.salesmanlist) {
-															if (salesmanId!=null&&salesmanId == salesman.getId()) {
-													%>
-													<option value="<%=salesman.getId()%>" selected><%=salesman.getName()%></option>
-													<%
-														} else {
-													%>
-													<option value="<%=salesman.getId()%>"><%=salesman.getName()%></option>
-													<%
-														}
-														}
-													%>
-												</select>
-											</div>
-										</div>
+													<label for="salesmanId" class="col-sm-3 control-label">
+														业务员
+													</label>
+													<div class="col-sm-9">
+														<select class="form-control" name="salesmanId"
+															id="salesmanId" placeholder="业务员">
+															<option value="">
+																未选择
+															</option>
+															<%if(companyId!=null){//若公司已选，则自动显示 %>
+																<%
+																for (Salesman salesman : companySalesmanMap.get(companyId.toString())) {
+																	if(salesmanId!=null && salesmanId==salesman.getId()){
+															%>
+															<option value="<%=salesman.getId()%>" selected><%=salesman.getName()%></option>
+															<%}else{ %>
+															<option value="<%=salesman.getId()%>"><%=salesman.getName()%></option>
+															<%
+																}}
+															%>
+															<%}%>
+															
+														</select>
+													</div>
+												</div>
 										<div class="form-group salesgroup">
 											<label for="customerId" class="col-sm-3 control-label">
 												客户
@@ -234,6 +230,9 @@
 											<th width="55px">
 												辅料类型
 											</th>
+											<th width="40px">
+												公司等
+											</th>
 											<th width="70px">
 												公司订单号
 											</th>
@@ -262,9 +261,6 @@
 											<th width="70px">
 												当前库存(个)
 											</th>
-											<th width="40px">
-												操作
-											</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -277,7 +273,7 @@
 										%>
 									
 										<tr itemId="<%=fuliao.getId()%>">
-											<td><%=fuliao.getFnumber()%></td>
+											<td><%=fuliao.getFnumber()%><br><a target="_blank" href="fuliao/detail/<%=fuliao.getId()%>">详情</a></td>
 											<td style="max-width: 120px; height: 120px; max-height: 120px;">
 												<a target="_blank" class="cellimg"
 													href="/<%=fuliao.getImg()%>"><img
@@ -285,6 +281,8 @@
 														src="/<%=fuliao.getImg_ss()%>"> </a>
 											</td>
 											<td><%=SystemCache.getFuliaoTypeName(fuliao.getFuliaoTypeId())%></td>
+											<td><%=SystemCache.getCompanyShortName(fuliao.getCompanyId())%><br><%=SystemCache.getSalesmanName(fuliao.getSalesmanId())%>
+											<br><%=SystemCache.getCustomerName(fuliao.getCustomerId())%></td>
 											<td><%=fuliao.getCompany_orderNumber()%></td>
 											<td><%=fuliao.getCompany_productNumber()%></td>
 											<td><%=fuliao.getColor()%></td>
@@ -295,25 +293,8 @@
 											<td><%=fuliao.getMemo()%></td>
 											<td><%=SystemCache.getUserName(fuliao.getCreated_user()) %> <br> <%=fuliao.getCreated_at() %></td>
 											<td><%=stockMap.containsKey(fuliao.getId())?stockMap.get(fuliao.getId()) : 0 %></td>
-											<td>
-												<a target="_blank" href="fuliao/detail/<%=fuliao.getId()%>">详情</a>
-												<%
-													if (has_edit) {
-												%><br><br>
-												<a target="_blank" href="fuliao/put/<%=fuliao.getId()%>">编辑</a>
-												<%
-													}
-												%>
-												<%
-													if (has_delete) {
-												%><br><br>
-												<a href="#" class="delete" data-cid="<%=fuliao.getId() %>">删除</a>
-												<%
-													}
-												}
-												%>
-											</td>
 										</tr>
+										<%} %>
 									</tbody>
 								</table>
 				</div>

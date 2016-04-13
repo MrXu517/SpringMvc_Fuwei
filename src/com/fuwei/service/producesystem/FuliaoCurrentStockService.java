@@ -1,5 +1,6 @@
 package com.fuwei.service.producesystem;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -176,19 +177,57 @@ public class FuliaoCurrentStockService  extends BaseService {
 		}
 		return result;
 	}
-//	//获取某订单的各辅料总当前库存，返回Map
-//	public Map<Integer,Map<String,Object>> getMapByOrder(int orderId){
-//		Map<Integer,Map<String,Object>> result = new HashMap<Integer, Map<String,Object>>();
-//		List<Map<String,Object>> maplist = getByOrder(orderId);//这个list里的每一个map的fuliaoId都不相同
-//		for(Map<String,Object> item : maplist){
-//			int fuliaoId = (Integer)item.get("id");
-//			if(!result.containsKey(fuliaoId)){
-//				result.put(fuliaoId,item);
-//			}
-//		}
-//	
-//		return result;
-//	}
+	
+	//同上类似，获取所有通用辅料的各辅料总当前库存数量、辅料各属性，只有数量，没有库位分布
+	public List<Map<String,Object>> getByOrder_Common(){
+		List<Map<String,Object>> result = dao.queryForListMap("select f.* ,newtable.in_quantity from tb_fuliao f left join (select sum(quantity) in_quantity,fuliaoId from tb_fuliaoin_detail group by fuliaoId)  newtable on f.id = newtable.fuliaoId where  f.orderId is null");
+		List<Map<String,Object>> out_map = dao.queryForListMap("select sum(quantity) out_quantity,fuliaoId from tb_fuliaoout_detail a ,tb_fuliao b where a.fuliaoId=b.id and b.orderId is null group by fuliaoId");
+		for(Map<String,Object> item : result){
+			int fuliaoId = (Integer)item.get("id");
+			int in_quantity = 0;
+			if(item.get("in_quantity")!=null){
+				in_quantity = Integer.valueOf(item.get("in_quantity").toString());
+			}
+			int out_quantity = 0;
+			for(Map<String,Object> temp_item : out_map){
+				int tempfuliaoId = (Integer)temp_item.get("fuliaoId");
+				if(tempfuliaoId == fuliaoId){
+					out_quantity = Integer.valueOf(temp_item.get("out_quantity").toString());
+				}
+			}
+			item.put("out_quantity",out_quantity);
+			int stock_quantity = in_quantity - out_quantity; //当前库存
+			item.put("stock_quantity",stock_quantity);
+		}
+		return result;
+	}
+	//同上类似，参数不同 ids：辅料的id
+	public List<Map<String,Object>> getByOrder_Common(String ids){
+		if(ids == null || ids.equals("")){
+			return new ArrayList<Map<String,Object>>();
+		}
+		List<Map<String,Object>> result = dao.queryForListMap("select f.* ,newtable.in_quantity from tb_fuliao f left join (select sum(quantity) in_quantity,fuliaoId from tb_fuliaoin_detail group by fuliaoId)  newtable on f.id = newtable.fuliaoId where f.orderId is null and f.id in (" + ids + ")");
+		List<Map<String,Object>> out_map = dao.queryForListMap("select sum(quantity) out_quantity,fuliaoId from tb_fuliaoout_detail a ,tb_fuliao b where a.fuliaoId=b.id and b.orderId is null and b.id in (" + ids + ") group by fuliaoId");
+		for(Map<String,Object> item : result){
+			int fuliaoId = (Integer)item.get("id");
+			int in_quantity = 0;
+			if(item.get("in_quantity")!=null){
+				in_quantity = Integer.valueOf(item.get("in_quantity").toString());
+			}
+			int out_quantity = 0;
+			for(Map<String,Object> temp_item : out_map){
+				int tempfuliaoId = (Integer)temp_item.get("fuliaoId");
+				if(tempfuliaoId == fuliaoId){
+					out_quantity = Integer.valueOf(temp_item.get("out_quantity").toString());
+				}
+			}
+			item.put("out_quantity",out_quantity);
+			int stock_quantity = in_quantity - out_quantity; //当前库存
+			item.put("stock_quantity",stock_quantity);
+		}
+		return result;
+	}
+	
 	//获取某订单的各辅料总当前库存,只返回fuliaoId和stock_quantity
 	public Map<Integer,Integer> getStockMapByOrder(int orderId){
 		Map<Integer,Integer> result = new HashMap<Integer,Integer>();

@@ -25,6 +25,10 @@
 	List<Map<String,Object>> outNoticeMap = (List<Map<String,Object>>)request.getAttribute("outNoticeMap");
 	List<Map<String,Object>> storeInOutMap = (List<Map<String,Object>>)request.getAttribute("storeInOutMap");
 	Map<Integer,Integer> locationMap = (Map<Integer,Integer>)request.getAttribute("locationMap");
+	Boolean has_edit = SystemCache.hasAuthority(session,
+			"fuliao/edit");
+	Boolean has_delete = SystemCache.hasAuthority(session,
+			"fuliao/delete");
 %>
 <!DOCTYPE html>
 <html>
@@ -89,8 +93,13 @@
 										</label>
 										<span><%=fuliao.getFnumber()%></span>
 									</div>
-								
-
+									<%if(has_delete){ %>
+									<button data-cid="<%=fuliao.getId() %>" class="btn btn-danger pull-right delete" style="margin-left:30px;">删除</button>
+									<%} %>
+									<%if(has_edit){ %>
+									<a href="fuliao/put/<%=fuliao.getId() %>" class="btn btn-primary pull-right" >编辑</a>
+									<%} %>
+									
 									<div class="clear"></div>
 
 								</div>
@@ -384,5 +393,32 @@
 				</div>
 			</div>
 		</div>
+		<script type="text/javascript">
+			//删除 -- 开始
+			$(".delete").click(function(){
+				if(!confirm("确定要删除该辅料吗？")){
+					return false;
+				}
+				var id= $(this).attr("data-cid");
+				$.ajax({
+		            url: "fuliao/delete/"+id,
+		            type: 'POST'
+		        })
+		            .done(function(result) {
+		            	if(result.success){
+		            		top.Common.Tip("删除成功",function(){
+		            			location.href="fuliao_workspace/commonfuliao";
+		            		});
+		            	}
+		            })
+		            .fail(function(result) {
+		            	top.Common.Error("删除失败：" + result.responseText);
+		            })
+		            .always(function() {
+		            });
+				return false;
+			});
+			//删除 -- 结束
+		</script>
 	</body>
 </html>

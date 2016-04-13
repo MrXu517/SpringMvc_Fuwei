@@ -1,7 +1,9 @@
 package com.fuwei.service.producesystem;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,11 +55,40 @@ public class FuliaoService extends BaseService {
 			sql.append(seq + " customerId='"+customerId+ "'");
 			seq = " AND ";
 		}
-		if (memo != null) {// 出入库时间
+		if (memo != null && !memo.equals("")) {// 出入库时间
 			sql.append(seq + " memo like '%"+memo+ "%'");
 			seq = " AND ";
 		}
 		return dao.queryForBeanList(sql.toString(), Fuliao.class);
+	}
+	//获取通用辅料列表
+	public List<Integer> getIdList_Common(Integer companyId,Integer salesmanId,Integer customerId,String memo){
+ 		StringBuffer sql = new StringBuffer();
+		String seq = " AND ";
+		sql.append("select id from tb_fuliao where orderId is null");
+
+		if (companyId != null) {// 
+			sql.append(seq + " companyId='"+companyId+ "'");
+			seq = " AND ";
+		}
+		if (salesmanId != null) {// 
+			sql.append(seq + " salesmanId='"+salesmanId+ "'");
+			seq = " AND ";
+		}
+		if (customerId != null) {// 
+			sql.append(seq + " customerId='"+customerId+ "'");
+			seq = " AND ";
+		}
+		if (memo != null && !memo.equals("")) {// 出入库时间
+			sql.append(seq + " memo like '%"+memo+ "%'");
+			seq = " AND ";
+		}
+		List<Integer> result = new ArrayList<Integer>();
+		List<Map<String,Object>> listmap = dao.queryForListMap(sql.toString());
+		for(Map<String,Object> item : listmap){
+			result.add((Integer)item.get("id"));
+		}
+		return result;
 	}
 
 	// 添加,返回主键
