@@ -83,11 +83,11 @@ public class LocationService extends BaseService {
 		}
 	}
 	
-	// 获取列表
-	public List<Location> getChangeLocationList(int fuliaoId) throws Exception {
+	// 获取列表 locationType是需要更改库位的原库位的类型
+	public List<Location> getChangeLocationList(int fuliaoId,int locationType) throws Exception {
 		try {
 			List<Location> locationList = dao.queryForBeanList(
-					"SELECT * FROM tb_location where (isempty=0 and fuliaoId=?)  or isempty=1", Location.class,fuliaoId);
+					"SELECT * FROM tb_location where (isempty=0 and fuliaoId=?)  or (isempty=1 and type=?)", Location.class,fuliaoId,locationType);
 			return locationList;
 		} catch (Exception e) {
 			throw e;

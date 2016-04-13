@@ -169,7 +169,7 @@ tr.disable{background:#ddd;}
 																		<div class="name">款名：</div><span class="value"><%=object.getName()%></span>
 																	</td>
 																	<td>
-																		<div class="name">跟单：</div><span class="value"><%=SystemCache.getEmployeeName(object.getCharge_employee())%></span>
+																		<div class="name">跟单：</div><span class="value"><%=SystemCache.getEmployeeName(object.getCharge_employee()) %></span>
 																	</td>
 																</tr>
 																<tr>

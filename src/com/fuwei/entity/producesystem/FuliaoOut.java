@@ -19,7 +19,7 @@ public class FuliaoOut {
 	private Integer fuliaoout_noticeId;
 	private Integer orderId;
 	private String orderNumber;
-	private int charge_employee;
+	private Integer charge_employee;
 	private int status;//一旦创建，status = 6
 	private String state;//状态描述
 	private Integer created_user;//创建人
@@ -119,10 +119,10 @@ public class FuliaoOut {
 	public void setOrderNumber(String orderNumber) {
 		this.orderNumber = orderNumber;
 	}
-	public int getCharge_employee() {
+	public Integer getCharge_employee() {
 		return charge_employee;
 	}
-	public void setCharge_employee(int charge_employee) {
+	public void setCharge_employee(Integer charge_employee) {
 		this.charge_employee = charge_employee;
 	}
 	public int getStatus() {

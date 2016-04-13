@@ -290,6 +290,42 @@ public class FuliaoOutService extends BaseService {
 		}
 	}
 	
+	// 添加,返回主键
+	@Transactional(rollbackFor=Exception.class)
+	public int add_common(FuliaoOut object) throws Exception {
+		try {
+			if (object.getFuliaoout_noticeId() == 0) {
+				throw new Exception("出库通知单ID不能为空");
+			} 
+			
+				if(object.getDetaillist()==null || object.getDetaillist().size()<=0){
+					throw new Exception("请至少填写一条出库明细");
+				}
+				object.setStatus(6);
+				object.setState("执行完成");
+				Integer noticeId = this.insert(object);
+				object.setId(noticeId);
+				object.setNumber(object.createNumber());
+				this.update(object, "id", null);
+				for(FuliaoOutDetail detail : object.getDetaillist()){
+					detail.setFuliaoInOutId(noticeId);
+					//出库后，若库位内数量为0，则库位设为空库位
+					locationService.deleteQuantity(detail.getLocationId(),detail.getFuliaoId(),detail.getQuantity());
+				}
+				fuliaoInOutDetailService.addBatch(object.getDetaillist());
+				
+				
+				//出库后，将出库通知单status设为6，表示执行完成，不可再进行删除或编辑
+				fuliaoOutNoticeService.complete(object.getFuliaoout_noticeId());
+				
+				
+				return noticeId;
+			
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 	// 添加清库存的辅料出库单,返回出库单主键
 	@Transactional(rollbackFor=Exception.class)
 	public int addByLocationId(int locationId,int userId) throws Exception {
@@ -299,7 +335,10 @@ public class FuliaoOutService extends BaseService {
 				return 0;
 			}
 			Fuliao fuliao = fuliaoService.get(location.getFuliaoId());
-			Order order = orderService.get(fuliao.getOrderId());
+			Order order = null;
+			if(fuliao.getOrderId()!=null && fuliao.getOrderId()!=0){
+				order = orderService.get(fuliao.getOrderId());
+			}
 			//1.添加辅料出库单
 			FuliaoOut fuliaoOut = new FuliaoOut();
 			fuliaoOut.setIs_cleaning(true);

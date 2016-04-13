@@ -12,13 +12,16 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	//辅料出库单
-	List<FuliaoOut> list = (List<FuliaoOut>) request.getAttribute("result");
+	FuliaoOut object = (FuliaoOut) request.getAttribute("fuliaoOut");
+	List<FuliaoOutDetail> detaillist = object == null ? new ArrayList<FuliaoOutDetail>() :object.getDetaillist();
+	String date_string = DateTool.formatDateYMD(object.getCreated_at());
+	String date_now = DateTool.formatDateYMD(DateTool.now());
 %>
 <!DOCTYPE html>
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>批量打印辅料标签 -- 桐庐富伟针织厂</title>
+		<title>打印通用辅料标签 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -56,28 +59,17 @@ table caption strong{width: 250px;display: inline-block;}
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-md-12 tablewidget">
-					<%for(FuliaoOut object : list){ 
-						String employee_name = SystemCache.getEmployeeName(object.getCharge_employee());//跟单人
-						List<FuliaoOutDetail> detaillist = object == null ? new ArrayList<FuliaoOutDetail>() :object.getDetaillist();
-						String date_string = DateTool.formatDateYMD(object.getCreated_at());
-						String date_now = DateTool.formatDateYMD(DateTool.now());
-						for(FuliaoOutDetail detail : object.getDetaillist()){
-							String tag_string = object.getId() + "_" + detail.getId();
+					<%for(FuliaoOutDetail detail : detaillist){
+						String tag_string = object.getId() + "_" + detail.getId();
 					%>
 					<div style="page-break-after: always">
 						<div class="gridTab auto_container">
 							<table class="table noborder tagWidget" style="border-spacing: 1px;">
 								<caption>
 									<div tag_string='<%=tag_string %>' class="id_barcode"></div>
-									<strong>出库辅料标签 -- <%=detail.getFnumber()%></strong>
-									<div><%=object.getOrderNumber() %> -- <%=object.getNumber() %> -- <%=employee_name %></div>
+									<strong>通用出库辅料标签 -- <%=detail.getFnumber()%></strong>
+									<div><%=object.getNumber() %></div>
 								</caption>
-								<tr>
-									<td class="firsttd">
-										款名：
-									</td>
-									<td><%=object.getName() %></td>
-								</tr>
 								<tr>
 									<td class="firsttd">
 										辅料类型：
@@ -156,7 +148,7 @@ table caption strong{width: 250px;display: inline-block;}
 						</div>
 					</div>
 				</div>
-				<%} }%>
+				<%} %>
 			</div>
 
 		</div>

@@ -215,6 +215,42 @@ public class FuliaoStoreWorkspaceController extends BaseController {
 		request.setAttribute("pager", pager);
 		return new ModelAndView("fuliaoinout/cleaningstock");
 	}
+	
+	//手动清辅料库存
+	@RequestMapping(value = "/cleaningstock_common", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView cleaningstock_common(Integer page,String locationNumber,String sortJSON, HttpSession session,
+			HttpServletRequest request) throws Exception {
+
+		String lcode = "fuliao_workspace/cleaningstock";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有手动清辅料库存的权限", null);
+		}
+
+		Pager pager = new Pager();
+		if (page != null && page > 0) {
+			pager.setPageNo(page);
+		}
+
+		List<Sort> sortList = null;
+		if (sortJSON != null) {
+			sortList = SerializeTool.deserializeList(sortJSON, Sort.class);
+		}
+		if (sortList == null) {
+			sortList = new ArrayList<Sort>();
+		}
+		Sort sort2 = new Sort();
+		sort2.setDirection("desc");
+		sort2.setProperty("id");
+		sortList.add(sort2);
+
+		pager = fuliaoCurrentStockService.getList_common(pager,locationNumber, sortList);
+		
+		request.setAttribute("locationNumber", locationNumber);
+		request.setAttribute("pager", pager);
+		return new ModelAndView("fuliaoinout/cleaningstock_common");
+	}
 	// 清空辅料库存
 	@RequestMapping(value = "/cleaningstock", method = RequestMethod.POST)
 	@ResponseBody
@@ -277,7 +313,7 @@ public class FuliaoStoreWorkspaceController extends BaseController {
 		request.setAttribute("fuliao", fuliao);
 		request.setAttribute("locationMap", locationMap);
 		//获取可以更改的库位,条件1.空或本身 
-		List<Location> locationlist = locationService.getChangeLocationList(fuliaoId);
+		List<Location> locationlist = locationService.getChangeLocationList(fuliaoId,location.getType());
 		request.setAttribute("locationlist", locationlist);
 		return new ModelAndView("fuliaoinout/changelocation/scan_confirm");
 	}

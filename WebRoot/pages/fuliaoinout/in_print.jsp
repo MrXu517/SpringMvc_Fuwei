@@ -58,7 +58,7 @@
 									<td>
 										业务员：
 										<span><%=fuliaoIn == null ? ""
-						: (SystemCache.getEmployeeName((fuliaoIn.getCharge_employee())))%></span>
+						: (SystemCache.getEmployeeName((fuliaoIn.getCharge_employee()))) %></span>
 									</td>
 									<td class="pull-right">
 

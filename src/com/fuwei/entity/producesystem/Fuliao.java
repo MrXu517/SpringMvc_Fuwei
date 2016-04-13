@@ -40,8 +40,15 @@ public class Fuliao {
 	private Integer companyId;//外贸公司
 	private Integer salesmanId;//业务员
 	private Integer customerId;//客户
+	private int type;//1表示大货辅料， 2表示通用辅料
 	
 	
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
+	}
 	public Integer getCompanyId() {
 		return companyId;
 	}
@@ -209,6 +216,15 @@ public class Fuliao {
 	public String createNumber() throws ParseException{	
 		return DateTool.getYear2() + "FL" + NumberUtil.appendZero(this.id%9999, 4);
 		
+	}
+	public String typeString(){
+		if(this.type==1){
+			return "大货辅料";
+		}else if(this.type==2){
+			return "通用辅料";
+		}else{
+			return "未知";
+		}
 	}
 	
 }

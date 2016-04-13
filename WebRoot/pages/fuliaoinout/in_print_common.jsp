@@ -7,26 +7,24 @@
 <%@page import="com.fuwei.entity.producesystem.Fuliao"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
-<%@page import="com.fuwei.entity.producesystem.FuliaoOut"%>
-<%@page import="com.fuwei.entity.producesystem.FuliaoOutDetail"%>
+<%@page import="com.fuwei.entity.producesystem.FuliaoIn"%>
+<%@page import="com.fuwei.entity.producesystem.FuliaoInDetail"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	Order order = (Order) request
-			.getAttribute("order");
-	FuliaoOut fuliaoOut = (FuliaoOut)request.getAttribute("fuliaoOut");
-	List<FuliaoOutDetail> detaillist = fuliaoOut.getDetaillist();
+	FuliaoIn fuliaoIn = (FuliaoIn)request.getAttribute("fuliaoIn");
+	List<FuliaoInDetail> detaillist = fuliaoIn.getDetaillist();
 	if (detaillist == null) {
-		detaillist = new ArrayList<FuliaoOutDetail>();
+		detaillist = new ArrayList<FuliaoInDetail>();
 	}
 %>
 <!DOCTYPE html>
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>打印辅料出库单 -- 桐庐富伟针织厂</title>
+		<title>打印通用辅料入库单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -44,81 +42,28 @@
 					<div class="col-md-12 tablewidget">
 						<table class="table noborder">
 							<caption id="tablename">
-								桐庐富伟针织厂辅料出库单<div table_id="<%=fuliaoOut.getNumber() %>" class="id_barcode"></div>
+								桐庐富伟针织厂通用辅料入库单<div table_id="<%=fuliaoIn.getNumber() %>" class="id_barcode"></div>
 							</caption>
 						</table>
 
 						<table id="orderTb" class="tableTb noborder">
 							<tbody>
-								<tr><td >
-										领取人：<span><%=fuliaoOut == null ? "": SystemCache.getEmployeeName(fuliaoOut.getReceiver_employee())%></span>
-									</td>
-									<td>
-										业务员：
-										<span><%=fuliaoOut == null ? ""
-						: (SystemCache.getEmployeeName((fuliaoOut.getCharge_employee()))) %></span>
-									</td>
-									<td class="pull-right">
-
-										№：<%=fuliaoOut.getNumber()%>
-
-									</td>
-									<td></td>
-								</tr>
-
 								<tr>
-									<td colspan="3">
-										<table>
-											<tr>
-												<td class="center" width="15%">
-													订单号
-												</td>
-												<td class="center" width="15%">
-													公司
-												</td>
-												<td class="center" width="15%">
-													货号
-												</td>
-												<td class="center" width="15%">
-													客户
-												</td>
-												<td class="center" width="15%">
-													品名
-												</td>
-											</tr>
-											<tr>
-												<td class="center">
-													<span><%=fuliaoOut.getOrderNumber()%></span>
-												</td>
-												<td class="center">
-													<span><%=SystemCache.getCompanyShortName(order
-								.getCompanyId())%></span>
-												</td>
-												<td class="center">
-													<span><%=fuliaoOut.getCompany_productNumber()%></span>
-												</td>
-												<td class="center">
-													<span><%=SystemCache.getCustomerName(order
-								.getCustomerId())%></span>
-												</td>
-												<td class="center">
-													<span><%=fuliaoOut.getName()%></span>
-												</td>
-											</tr>
-										</table>
+								<td class="pull-right">
+
+										№：<%=fuliaoIn.getNumber()%>
+
 									</td>
-									<td></td>
 								</tr>
 								<tr>
-									<td colspan="3">
+									<td colspan="1">
 										<table class="detailTb">
-
 											<thead>
 												<tr>
-													<th width="8%">
+													<th width="5%">
 														编号
 													</th>
-													<th width="8%">
+													<th width="5%">
 														类型
 													</th><th width="10%">
 														订单号
@@ -132,20 +77,20 @@
 														尺码
 													</th><th width="6%">
 														批次
+													</th><th width="8%">
+														来源
 													</th>
-													<th width="15%">
-														出库数量(个)
-													</th><th width="10%">
+													<th width="12%">
+														入库数量(个)
+													</th><th width="8%">
 														库位
-													</th><th width="15%">
-														备注
 													</th>
 
 												</tr>
 											</thead>
 											<tbody>
 											<%
-													for (FuliaoOutDetail detail : detaillist) {
+													for (FuliaoInDetail detail : detaillist) {
 												%>
 												<tr class="tr">
 													<td><%=detail.getFnumber()%></td>
@@ -156,9 +101,9 @@
 													<td><%=detail.getColor()%></td>
 													<td><%=detail.getSize()%></td>
 													<td><%=detail.getBatch()%></td>
+													<td><%=SystemCache.getFactoryName((Integer)detail.getFuliaoPurchaseFactoryId())%></td>
 													<td><%=detail.getQuantity()%></td>
 													<td><%=SystemCache.getLocationNumber(detail.getLocationId())%></td>
-													<td><%=detail.getMemo()==null?"":detail.getMemo()%></td>
 												</tr>
 												<%
 													}
@@ -199,22 +144,23 @@
 									<td></td>
 								</tr>
 								<tr>
-									<td colspan="3">
+									<td colspan="1">
 										<div id="tip" class="auto_bottom">
 											<div>
-												说明：1.此单说明了本次出库的相关内容，请充分阅读并理解，如有疑问及时联系我方
+												说明：1.此单说明了本次入库的相关内容，请充分阅读并理解，如有疑问及时联系我方
 											</div>
 										</div>
+										
 									</td>
 									<td></td>
 								</tr>
 							</tbody>
 						</table>
 						<p class="pull-right auto_bottom">
-							<span id="created_user">制单人：<%=SystemCache.getUserName(fuliaoOut
+							<span id="created_user">制单人：<%=SystemCache.getUserName(fuliaoIn
 								.getCreated_user())%></span>
-							<span id="receiver_user">收货人：</span>
-							<span id="date"> 日期：<%=DateTool.formatDateYMD(DateTool.getYanDate(fuliaoOut.getCreated_at()))%></span>
+							<span id="receiver_user">送货人：</span>
+							<span id="date"> 制单日期：<%=DateTool.formatDateYMD(DateTool.getYanDate(fuliaoIn.getCreated_at()))%></span>
 						</p>
 
 

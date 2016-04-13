@@ -177,10 +177,14 @@ public class FuliaoInController extends BaseController {
 		if (object == null) {
 			throw new Exception("找不到ID为" + id + "的辅料入库单");
 		}
-		Order order = orderService.get(object.getOrderId());
-		request.setAttribute("order", order);
 		request.setAttribute("object", object);
-		return new ModelAndView("fuliaoinout/in_detail");	
+		if(object.getOrderId()!=null && object.getOrderId()!=0){
+			Order order = orderService.get(object.getOrderId());
+			request.setAttribute("order", order);
+			return new ModelAndView("fuliaoinout/in_detail");
+		}else{
+			return new ModelAndView("fuliaoinout/in_detail_common");
+		}
 	}
 
 	// 添加或保存
@@ -196,7 +200,12 @@ public class FuliaoInController extends BaseController {
 		if(notice.getStatus() == 6){
 			throw new Exception("该通知单已入库，无法再入库");
 		}
-		 return addbyorder(notice.getId(), session, request, response);
+		if(notice.getOrderId()!=null && notice.getOrderId()!=0){
+			return addbyorder(notice.getId(), session, request, response);
+		}
+		else{
+			return addbyorder_common(notice.getId(), session, request, response);
+		}
 	}
 
 	@RequestMapping(value = "/{orderId}/add", method = RequestMethod.GET)
@@ -237,6 +246,49 @@ public class FuliaoInController extends BaseController {
 			request.setAttribute("locationMap", locationMap);
 			
 			return new ModelAndView("fuliaoinout/in_add");
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+//	@RequestMapping(value = "/{orderId}/add", method = RequestMethod.GET)
+//	@ResponseBody
+	public ModelAndView addbyorder_common(Integer fuliaoNoticeId,HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		if (fuliaoNoticeId == null) {
+			throw new Exception("辅料入库通知单ID不能为空");
+		}
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "fuliaoinout/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有创建或编辑辅料入库单的权限",
+					null);
+		}
+		try {
+			FuliaoInNotice notice = fuliaoInNoticeService.getAndDetail(fuliaoNoticeId);
+			if (notice == null) {
+				throw new Exception(
+						"该辅料入库通知单不存在或已被删除", null);
+			}
+			List<FuliaoInNoticeDetail> detaillist = notice.getDetaillist();
+			if (detaillist == null|| detaillist.size() <= 0) {
+				throw new Exception(
+						"入库通知单缺少入库列表，请先修改 ", null);
+			}
+			request.setAttribute("notice", notice);
+
+
+			//自动匹配库位locationId
+			Map<Integer,List<Map<String,Object>>> locationMap = new HashMap<Integer, List<Map<String,Object>>>();
+			for(FuliaoInNoticeDetail detail : detaillist){
+				List<Map<String,Object>> tempMap = fuliaoInService.matchlocation(detail.getFuliaoId());
+				locationMap.put(detail.getFuliaoId(), tempMap);
+			}
+			request.setAttribute("detaillist", detaillist);
+			request.setAttribute("locationMap", locationMap);
+			
+			return new ModelAndView("fuliaoinout/in_add_common");
 		} catch (Exception e) {
 			throw e;
 		}
@@ -317,6 +369,81 @@ public class FuliaoInController extends BaseController {
 
 	}
 
+	// 添加或保存
+	@RequestMapping(value = "/add_common", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> add_common(FuliaoIn fuliaoIn,
+			String details, HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "fuliaoinout/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有创建或编辑辅料入库单的权限",
+					null);
+		}
+		try {
+			/* 判断有些数据不能为空 */
+			Integer orderId = fuliaoIn.getOrderId();
+			if (orderId != null && orderId!=0) {
+				throw new Exception("订单ID必须为空");
+			}
+			Integer fuliaoin_noticeId = fuliaoIn.getFuliaoin_noticeId();
+			if (fuliaoin_noticeId == null|| fuliaoin_noticeId == 0) {
+				throw new Exception("辅料入库通知单ID不能为空", null);
+			}
+			FuliaoInNotice notice = fuliaoInNoticeService.get(fuliaoin_noticeId);
+			if(notice == null){
+				throw new Exception("找不到ID为" + fuliaoin_noticeId + "的辅料入库通知单，不存在或已被删除");
+			}
+			if(notice.getStatus() == 6){
+				throw new Exception("该通知单已入库，无法再入库");
+			}
+			/* 判断有些数据不能为空 */
+			
+
+			if (fuliaoIn.getId() == 0) {// 添加辅料入库单
+				Map<String,Object> data = new HashMap<String, Object>();
+				fuliaoIn.setCreated_at(DateTool.now());// 设置创建时间
+				fuliaoIn.setCreated_user(user.getId());// 设置创建人
+//				fuliaoIn.setCharge_employee(notice.getCharge_employee());
+//				fuliaoIn.setOrderNumber(notice.getOrderNumber());
+//				fuliaoIn.setOrderId(notice.getOrderId());
+//				fuliaoIn.setName(notice.getName());
+//				fuliaoIn.setCompany_productNumber(notice.getCompany_productNumber());
+
+				List<FuliaoInDetail> detaillist = SerializeTool
+						.deserializeList(details, FuliaoInDetail.class);
+				
+				//判断是否有数量为0的明细项
+				Iterator<FuliaoInDetail> iter = detaillist.iterator();  
+				while(iter.hasNext()){  
+					FuliaoInDetail detail = iter.next();  
+				    if(detail.getQuantity() == 0){  
+				        iter.remove();  
+				    }  
+				    if(detail.getLocationId() == 0){
+				    	throw new Exception("库位不能为空");
+				    }
+				}  
+				if(detaillist.size() <=0){
+					throw new Exception("本次入库数量均为0，无法创建辅料入库单");
+				}
+				//判断是否有数量为0的明细项			
+				fuliaoIn.setDetaillist(detaillist);			
+				int fuliaoInId = fuliaoInService.add_common(fuliaoIn);
+				data.put("id", fuliaoInId);
+				return this.returnSuccess(data);
+			} else{
+				throw new Exception("id错误，创建时id只能为空");
+			}
+
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+
 
 	@RequestMapping(value = "/scan", method = RequestMethod.GET)
 	@ResponseBody
@@ -350,10 +477,15 @@ public class FuliaoInController extends BaseController {
 		}
 		fuliaoIn.setHas_print(true);
 		fuliaoInService.updatePrint(fuliaoIn);
-		Order order = orderService.get(fuliaoIn.getOrderId());
-		request.setAttribute("order", order);
 		request.setAttribute("fuliaoIn", fuliaoIn);
-		return new ModelAndView("fuliaoinout/in_print");
+		if(fuliaoIn.getOrderId()!=null && fuliaoIn.getOrderId()!=0){
+			Order order = orderService.get(fuliaoIn.getOrderId());
+			request.setAttribute("order", order);
+			return new ModelAndView("fuliaoinout/in_print");
+		}else{
+			return new ModelAndView("fuliaoinout/in_print_common");
+		}
+		
 	}
 	
 	/*打印纱线标签*/
@@ -371,7 +503,11 @@ public class FuliaoInController extends BaseController {
 		fuliaoIn.setHas_tagprint(true);
 		fuliaoInService.updateTagPrint(fuliaoIn);
 		request.setAttribute("fuliaoIn", fuliaoIn);
-		return new ModelAndView("fuliaoinout/in_tag_print");
+		if(fuliaoIn.getOrderId()!=null && fuliaoIn.getOrderId()!=0){
+			return new ModelAndView("fuliaoinout/in_tag_print");
+		}else{
+			return new ModelAndView("fuliaoinout/in_tag_print_common");
+		}
 	}
 	
 	
@@ -403,7 +539,11 @@ public class FuliaoInController extends BaseController {
 			dataCorrectRecord.setCreated_at(DateTool.now());
 			dataCorrectRecord.setCreated_user(user.getId());
 			dataCorrectRecord.setOperation("删除");
-			dataCorrectRecord.setTb_table("辅料入库单");
+			if(fuliaoIn.getOrderId()!=null && fuliaoIn.getOrderId()!=0){
+				dataCorrectRecord.setTb_table("辅料入库单");
+			}else{
+				dataCorrectRecord.setTb_table("通用辅料入库单");
+			}
 			dataCorrectRecord.setDescription("辅料入库单" + fuliaoIn.getNumber()+"已打印，因数据错误进行数据纠正删除");
 			int success = fuliaoInService.remove_datacorrect(fuliaoIn,dataCorrectRecord);
 			return this.returnSuccess();

@@ -14,8 +14,6 @@
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	Order order = (Order) request
-			.getAttribute("order");
 	FuliaoIn object = (FuliaoIn)request.getAttribute("object");
 	List<FuliaoInDetail> detaillist = object.getDetaillist();
 	if (detaillist == null) {
@@ -29,7 +27,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>辅料入库单详情 -- 桐庐富伟针织厂</title>
+		<title>通用辅料入库单详情 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -102,10 +100,10 @@ tr.disable{background:#ddd;}
 							<a href="user/index">首页</a>
 						</li>
 						<li>
-							<a href="fuliao_workspace/workspace">辅料工作台</a>
+							<a href="fuliao_workspace/commonfuliao_workspace">通用辅料工作台</a>
 						</li>
 						<li class="active">
-							辅料入库单详情
+							通用辅料入库单详情
 						</li>
 					</ul>
 				</div>
@@ -132,62 +130,13 @@ tr.disable{background:#ddd;}
 									<div class="col-md-12 tablewidget">
 										<table class="table">
 											<caption id="tablename">
-												桐庐富伟针织厂辅料入库单<div table_id="<%=object.getNumber()%>" class="id_barcode"></div>
+												桐庐富伟针织厂通用辅料入库单<div table_id="<%=object.getNumber()%>" class="id_barcode"></div>
 											</caption>
 										</table>
-										<table class="table table-responsive noborder">
-											<tbody>
-												<tr>
-													<td colspan="2">
-														<table class="table table-responsive table-bordered">
-															<tbody>
-																<tr>
-																	<td rowspan="7" width="30%">
-																		<a href="/<%=order.getImg()%>" class="thumbnail"
-																			target="_blank"> <img id="previewImg"
-																				alt="200 x 100%" src="/<%=order.getImg_s()%>">
-																		</a>
-																	</td>
-																	<td width="100px">
-																		<div class="name">订单号：</div><span class="value"><%=object.getOrderNumber()%></span>
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<div class="name">公司：</div><span class="value"><%=SystemCache.getCompanyShortName(order.getCompanyId())%></span>
-																	</td>
-																</tr>
-																
-																<tr>
-																	<td>
-																		<div class="name">客户：</div><span class="value"><%=SystemCache.getCustomerName(order.getCustomerId())%></span>
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<div class="name">货号：</div><span class="value"><%=object.getCompany_productNumber()%></span>
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<div class="name">款名：</div><span class="value"><%=object.getName()%></span>
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<div class="name">跟单：</div><span class="value"><%=SystemCache.getEmployeeName(object.getCharge_employee()) %></span>
-																	</td>
-																	
-																</tr>
-															</tbody>
-
-
-														</table>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-					
+										<p class="auto_bottom" style="padding-top: 15px;">
+											<span id="created_user">制单人：<%=SystemCache.getUserName(object.getCreated_user())%></span>
+											<span id="date"> 制单日期：<%=DateTool.formatDateYMD(object.getCreated_at())%></span>
+										</p>
 										<table id="mainTb"
 											class="table table-responsive table-bordered detailTb">
 											<thead>
@@ -249,10 +198,7 @@ tr.disable{background:#ddd;}
 										
 										</div>
 
-										<p class="pull-right auto_bottom" style="padding-top: 15px;">
-											<span id="created_user">制单人：<%=SystemCache.getUserName(object.getCreated_user())%></span>
-											<span id="date"> 日期：<%=DateTool.formatDateYMD(object.getCreated_at())%></span>
-										</p>
+										
 
 										</table>
 

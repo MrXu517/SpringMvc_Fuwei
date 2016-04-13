@@ -122,6 +122,13 @@ tr.disable{background:#ddd;}
 													<td colspan="2">
 														<table class="table table-responsive table-bordered">
 															<tbody>
+																<%if(object.getOrderId()!=null && object.getOrderId()!=0){ %>
+																<tr>
+																	<td colspan="3">
+																		<div class="name">工厂订单号：</div><span class="value"><%=object.getOrderNumber()%></span>
+																	</td>
+																</tr>
+																<%} %>
 																<tr>
 																	<td rowspan="7" width="30%">
 																		<a href="/<%=object.getImg()%>" class="thumbnail"
@@ -130,7 +137,7 @@ tr.disable{background:#ddd;}
 																		</a>
 																	</td>
 																	<td width="200px">
-																		<div class="name">订单号：</div><span class="value"><%=object.getOrderNumber()%></span>
+																		<div class="name">辅料编号：</div><span class="value"><%=object.getFnumber()%></span>
 																	</td>
 																	<td>
 																		<div class="name">辅料类型：</div><span class="value"><%=SystemCache.getFuliaoTypeName(object.getFuliaoTypeId())%></span>

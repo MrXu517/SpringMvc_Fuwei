@@ -14,8 +14,6 @@
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	Order order = (Order) request
-			.getAttribute("order");
 	FuliaoOut fuliaoOut = (FuliaoOut)request.getAttribute("fuliaoOut");
 	List<FuliaoOutDetail> detaillist = fuliaoOut.getDetaillist();
 	if (detaillist == null) {
@@ -26,7 +24,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>打印辅料出库单 -- 桐庐富伟针织厂</title>
+		<title>打印通用辅料出库单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -44,19 +42,14 @@
 					<div class="col-md-12 tablewidget">
 						<table class="table noborder">
 							<caption id="tablename">
-								桐庐富伟针织厂辅料出库单<div table_id="<%=fuliaoOut.getNumber() %>" class="id_barcode"></div>
+								桐庐富伟针织厂通用辅料出库单<div table_id="<%=fuliaoOut.getNumber() %>" class="id_barcode"></div>
 							</caption>
 						</table>
 
 						<table id="orderTb" class="tableTb noborder">
 							<tbody>
-								<tr><td >
+								<tr><td>
 										领取人：<span><%=fuliaoOut == null ? "": SystemCache.getEmployeeName(fuliaoOut.getReceiver_employee())%></span>
-									</td>
-									<td>
-										业务员：
-										<span><%=fuliaoOut == null ? ""
-						: (SystemCache.getEmployeeName((fuliaoOut.getCharge_employee()))) %></span>
 									</td>
 									<td class="pull-right">
 
@@ -65,52 +58,8 @@
 									</td>
 									<td></td>
 								</tr>
-
 								<tr>
-									<td colspan="3">
-										<table>
-											<tr>
-												<td class="center" width="15%">
-													订单号
-												</td>
-												<td class="center" width="15%">
-													公司
-												</td>
-												<td class="center" width="15%">
-													货号
-												</td>
-												<td class="center" width="15%">
-													客户
-												</td>
-												<td class="center" width="15%">
-													品名
-												</td>
-											</tr>
-											<tr>
-												<td class="center">
-													<span><%=fuliaoOut.getOrderNumber()%></span>
-												</td>
-												<td class="center">
-													<span><%=SystemCache.getCompanyShortName(order
-								.getCompanyId())%></span>
-												</td>
-												<td class="center">
-													<span><%=fuliaoOut.getCompany_productNumber()%></span>
-												</td>
-												<td class="center">
-													<span><%=SystemCache.getCustomerName(order
-								.getCustomerId())%></span>
-												</td>
-												<td class="center">
-													<span><%=fuliaoOut.getName()%></span>
-												</td>
-											</tr>
-										</table>
-									</td>
-									<td></td>
-								</tr>
-								<tr>
-									<td colspan="3">
+									<td colspan="2">
 										<table class="detailTb">
 
 											<thead>
@@ -199,7 +148,7 @@
 									<td></td>
 								</tr>
 								<tr>
-									<td colspan="3">
+									<td colspan="2">
 										<div id="tip" class="auto_bottom">
 											<div>
 												说明：1.此单说明了本次出库的相关内容，请充分阅读并理解，如有疑问及时联系我方
@@ -214,7 +163,7 @@
 							<span id="created_user">制单人：<%=SystemCache.getUserName(fuliaoOut
 								.getCreated_user())%></span>
 							<span id="receiver_user">收货人：</span>
-							<span id="date"> 日期：<%=DateTool.formatDateYMD(DateTool.getYanDate(fuliaoOut.getCreated_at()))%></span>
+							<span id="date"> 制单日期：<%=DateTool.formatDateYMD(DateTool.getYanDate(fuliaoOut.getCreated_at()))%></span>
 						</p>
 
 

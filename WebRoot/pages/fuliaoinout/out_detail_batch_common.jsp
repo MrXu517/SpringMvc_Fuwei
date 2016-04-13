@@ -28,7 +28,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>清空生成的辅料出库单列表 -- 桐庐富伟针织厂</title>
+		<title>清空生成的通用辅料出库单列表 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -57,10 +57,10 @@
 							<a href="user/index">首页</a>
 						</li>
 						<li>
-							<a href="fuliao_workspace/workspace">辅料工作台</a>
+							<a href="fuliao_workspace/commonfuliao_workspace">通用辅料工作台</a>
 						</li>
 						<li class="active">
-							清空库存生成的辅料出库单列表
+							清空库存生成的通用辅料出库单列表
 						</li>
 					</ul>
 				</div>
@@ -75,8 +75,6 @@
 											<th style="width:20px"></th>
     										<th style="width:60px"></th>
     										<th style="width:60px"></th>
-    										<th style="width:100px"></th>
-											<th style="width:40px"></th>
     										<th style="width:55px"></th>
     										<th style="width:55px"></th>
     										<th style="width:55px"></th>
@@ -97,12 +95,7 @@
 											<th rowspan="2" width="60px">
 												出库单号
 											</th><th rowspan="2" width="60px">
-												订单号
-											</th><th rowspan="2" width="100px">
-												款名
-											</th>
-											<th rowspan="2" width="40px">
-												跟单人
+												领取人
 											</th><th colspan="9" width="165px">辅料出库列表</th>
 											<th rowspan="2" width="60px">
 												出库时间
@@ -147,9 +140,8 @@
 											<td rowspan="<%=detailsize%>"><%=++i%></td>
 											
 											<td rowspan="<%=detailsize%>"><a target="_blank" href="fuliaoout/detail/<%=item.getId()%>"><%=item.getNumber()%></a></td>
-											<td rowspan="<%=detailsize%>"><a target="_blank" href="order/detail/<%=item.getOrderId()%>"><%=item.getOrderNumber()%></a></td>
-											<td rowspan="<%=detailsize%>"><%=item.getName()%></td>
-											<td rowspan="<%=detailsize%>"><%=SystemCache.getEmployeeName(item.getCharge_employee()) %></td>
+											
+											<td rowspan="<%=detailsize%>"><%=SystemCache.getEmployeeName(item.getReceiver_employee()) %></td>
 											
 											
 											<td><%=SystemCache.getFuliaoTypeName(detailist.get(0).getFuliaoTypeId())%></td>

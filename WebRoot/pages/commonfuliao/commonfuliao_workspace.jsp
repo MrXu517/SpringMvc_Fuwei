@@ -57,7 +57,7 @@
 								<a target="_blank" href="fuliao_workspace/changelocation/scan" type="button" class="btn btn-primary"><i class=""></i>更改库位</a>
 								<%} %>
 								<%if(has_cleaningstock){ %>
-								<a target="_blank" href="fuliao_workspace/cleaningstock" type="button" class="btn btn-danger pull-right"><i class=""></i>手动清库存</a>
+								<a target="_blank" href="fuliao_workspace/cleaningstock_common" type="button" class="btn btn-danger pull-right"><i class=""></i>手动清库存</a>
 								<%} %>
 							</div>
 						</div>

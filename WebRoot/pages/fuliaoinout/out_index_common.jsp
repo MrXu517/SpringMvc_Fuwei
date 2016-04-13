@@ -175,6 +175,7 @@
     										<th style="width:60px"></th>
 											<th style="width:40px"></th>
     										<th style="width:55px"></th>
+    										<th style="width:40px"></th>
     										<th style="width:55px"></th>
     										<th style="width:55px"></th>
     										<th style="width:55px"></th>
@@ -183,6 +184,7 @@
     										<th style="width:40px"></th>
     										<th style="width:60px"></th>
     										<th style="width:50px"></th>
+    										<th style="width:60px"></th>
     										<th style="width:60px"></th>
     										<th style="width:30px"></th>
     										<th style="width:40px"></th>
@@ -196,7 +198,7 @@
 											</th>
 											<th rowspan="2" width="40px">
 												领取人
-											</th><th colspan="9" width="165px">通用辅料出库列表</th>
+											</th><th colspan="11" width="165px">通用辅料出库列表</th>
 											<th rowspan="2" width="60px">
 												出库时间
 											</th>
@@ -207,6 +209,8 @@
 												操作
 											</th>
 										</tr><tr><th width="55px">
+												编号
+											</th><th width="40px">
 												类型
 											</th><th width="55px">
 												订单号
@@ -224,6 +228,8 @@
 												数量(个)
 											</th><th  width="50px">
 												库位
+											</th><th  width="60px">
+												备注
 											</th></tr>
 									</thead>
 									<tbody>
@@ -243,6 +249,7 @@
 											<td rowspan="<%=detailsize%>"><%=SystemCache.getEmployeeName(item.getReceiver_employee())%></td>
 											
 											
+											<td><%=detailist.get(0).getFnumber()%></td>
 											<td><%=SystemCache.getFuliaoTypeName(detailist.get(0).getFuliaoTypeId())%></td>
 											<td><%=detailist.get(0).getCompany_orderNumber()%></td>
 											<td><%=detailist.get(0).getCompany_productNumber()%></td>
@@ -252,6 +259,7 @@
 											<td><%=detailist.get(0).getBatch()%></td>
 											<td><%=detailist.get(0).getQuantity()%></td>
 											<td><%=SystemCache.getLocationNumber(detailist.get(0).getLocationId())%></td>
+											<td><%=detailist.get(0).getMemo()%></td>
 
 										
 											<td rowspan="<%=detailsize%>"><%=DateTool.formatDateYMD(item.getCreated_at())%></td>				
@@ -267,6 +275,7 @@
 											for(FuliaoOutDetail detail : detailist){
 										%>
 										<tr class="<%=classname %>">
+											<td><%=detail.getFnumber()%></td>
 											<td><%=SystemCache.getFuliaoTypeName(detail.getFuliaoTypeId())%></td>
 											<td><%=detail.getCompany_orderNumber()%></td>
 											<td><%=detail.getCompany_productNumber()%></td>
@@ -276,6 +285,7 @@
 											<td><%=detail.getBatch()%></td>
 											<td><%=detail.getQuantity()%></td>
 											<td><%=SystemCache.getLocationNumber(detail.getLocationId())%></td>
+											<td><%=detail.getMemo()%></td>
 
 										</tr>
 										<%} %>

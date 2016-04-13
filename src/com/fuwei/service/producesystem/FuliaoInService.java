@@ -261,11 +261,49 @@ public class FuliaoInService extends BaseService {
 		}
 	}
 	
+	@Transactional(rollbackFor=Exception.class)
+	public int add_common(FuliaoIn object) throws Exception {
+		try {
+			if (object.getFuliaoin_noticeId() == 0) {
+				throw new Exception("入库通知单ID不能为空");
+			} 
+			
+				if(object.getDetaillist()==null || object.getDetaillist().size()<=0){
+					throw new Exception("请至少填写一条入库明细");
+				}
+				object.setHas_tagprint(false);
+				object.setHas_print(false);
+				object.setStatus(6);
+				object.setState("执行完成");
+				Integer fuliaoInId = this.insert(object);
+				object.setId(fuliaoInId);
+				object.setNumber(object.createNumber());
+				this.update(object, "id", null);
+				for(FuliaoInDetail detail : object.getDetaillist()){
+					detail.setFuliaoInOutId(fuliaoInId);
+					//入库后，设置相应的库位不为空
+					locationService.addQuantity(detail.getLocationId(),detail.getFuliaoId(),detail.getQuantity());
+				}
+				fuliaoInOutDetailService.addBatch(object.getDetaillist());
+				
+				
+				//入库后，将入库通知单status设为6，表示执行完成，不可再进行删除或编辑
+				fuliaoInNoticeService.complete(object.getFuliaoin_noticeId());
+				
+				
+				return fuliaoInId;
+			
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 	//匹配库位
 	public List<Map<String,Object>> matchlocation(int fuliaoId) throws Exception{
+		//辅料 的 type必须与location的type一致， 比如通用辅料type=2， 必须放在type=2的库位中
 		List<Map<String,Object>> locationMap = locationService.getMapByFuliao(fuliaoId);//找当前已存放的辅料
 		if(locationMap == null || locationMap.size()<=0){//辅料若之前未入库，则寻找一个新的空库位放置
-			locationMap = dao.queryForListMap("select b.id as fuliaoId,a.id as locationId from tb_location a, tb_fuliao b where a.size = b.location_size and b.id=? and a.isempty=1",fuliaoId);
+			locationMap = dao.queryForListMap("select b.id as fuliaoId,a.id as locationId from tb_location a, tb_fuliao b where a.size = b.location_size and b.id=? and a.isempty=1 and a.type=b.type",fuliaoId);
 			if(locationMap == null ||  locationMap.size()<=0){
 				throw new Exception("找不到已存放该辅料或空的库位");
 			}

@@ -99,6 +99,7 @@ public class FuliaoService extends BaseService {
 			if (fuliao.getOrderNumber() == null || fuliao.getOrderNumber().equals("")) {
 				throw new Exception("订单号不能为空");
 			} else {
+				fuliao.setType(1);
 				Integer fuliaoId = this.insert(fuliao);
 				fuliao.setId(fuliaoId);
 				fuliao.setFnumber(fuliao.createNumber());
@@ -114,6 +115,7 @@ public class FuliaoService extends BaseService {
 	@Transactional
 	public int add_common(Fuliao fuliao) throws Exception {
 		try {
+			fuliao.setType(2);//通用辅料
 			Integer fuliaoId = this.insert(fuliao);
 			fuliao.setId(fuliaoId);
 			fuliao.setFnumber(fuliao.createNumber());
@@ -155,7 +157,7 @@ public class FuliaoService extends BaseService {
 	public int update(Fuliao fuliao) throws Exception {
 		try {
 			// 更新
-			this.update(fuliao,"id","created_user,created_at,orderNumber,orderId,fnumber,sample_name,charge_employee",
+			this.update(fuliao,"id","created_user,created_at,orderNumber,orderId,fnumber,sample_name,charge_employee,type",
 								true);
 			return fuliao.getId();
 		} catch (Exception e) {

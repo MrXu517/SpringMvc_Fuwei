@@ -7,29 +7,27 @@
 <%@page import="com.fuwei.entity.producesystem.Fuliao"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
-<%@page import="com.fuwei.entity.producesystem.FuliaoIn"%>
-<%@page import="com.fuwei.entity.producesystem.FuliaoInDetail"%>
+<%@page import="com.fuwei.entity.producesystem.FuliaoOut"%>
+<%@page import="com.fuwei.entity.producesystem.FuliaoOutDetail"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	Order order = (Order) request
-			.getAttribute("order");
-	FuliaoIn object = (FuliaoIn)request.getAttribute("object");
-	List<FuliaoInDetail> detaillist = object.getDetaillist();
+	FuliaoOut object = (FuliaoOut)request.getAttribute("object");
+	List<FuliaoOutDetail> detaillist = object.getDetaillist();
 	if (detaillist == null) {
-		detaillist = new ArrayList<FuliaoInDetail>();
+		detaillist = new ArrayList<FuliaoOutDetail>();
 	}
 	Boolean has_print = SystemCache.hasAuthority(session,"fuliaoinout/print");
 	Boolean has_datacorrect_delete = SystemCache.hasAuthority(session,"data/correct");//数据纠正
-
+	
 %>
 <!DOCTYPE html>
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>辅料入库单详情 -- 桐庐富伟针织厂</title>
+		<title>通用辅料出库单详情 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -102,10 +100,10 @@ tr.disable{background:#ddd;}
 							<a href="user/index">首页</a>
 						</li>
 						<li>
-							<a href="fuliao_workspace/workspace">辅料工作台</a>
+							<a href="fuliao_workspace/commonfuliao_workspace">通用辅料工作台</a>
 						</li>
 						<li class="active">
-							辅料入库单详情
+							通用辅料出库单详情
 						</li>
 					</ul>
 				</div>
@@ -116,8 +114,8 @@ tr.disable{background:#ddd;}
 								<%
 									if(has_print){
 								%>
-								<a target="_blank" href="fuliaoin/print/<%=object.getId()%>" type="button" class="btn btn-success">打印</a>
-								<a target="_blank" href="fuliaoin/print/<%=object.getId() %>/tag" type="button" class="btn btn-success">打印辅料标签</a>
+								<a target="_blank" href="fuliaoout/print/<%=object.getId()%>" type="button" class="btn btn-success">打印</a>
+								<a target="_blank" href="fuliaoout/print/<%=object.getId() %>/tag" type="button" class="btn btn-success">打印辅料标签</a>
 								<%
 									}
 								%>
@@ -132,58 +130,16 @@ tr.disable{background:#ddd;}
 									<div class="col-md-12 tablewidget">
 										<table class="table">
 											<caption id="tablename">
-												桐庐富伟针织厂辅料入库单<div table_id="<%=object.getNumber()%>" class="id_barcode"></div>
+												桐庐富伟针织厂通用辅料出库单<div table_id="<%=object.getNumber()%>" class="id_barcode"></div>
 											</caption>
 										</table>
 										<table class="table table-responsive noborder">
 											<tbody>
 												<tr>
 													<td colspan="2">
-														<table class="table table-responsive table-bordered">
-															<tbody>
-																<tr>
-																	<td rowspan="7" width="30%">
-																		<a href="/<%=order.getImg()%>" class="thumbnail"
-																			target="_blank"> <img id="previewImg"
-																				alt="200 x 100%" src="/<%=order.getImg_s()%>">
-																		</a>
-																	</td>
-																	<td width="100px">
-																		<div class="name">订单号：</div><span class="value"><%=object.getOrderNumber()%></span>
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<div class="name">公司：</div><span class="value"><%=SystemCache.getCompanyShortName(order.getCompanyId())%></span>
-																	</td>
-																</tr>
-																
-																<tr>
-																	<td>
-																		<div class="name">客户：</div><span class="value"><%=SystemCache.getCustomerName(order.getCustomerId())%></span>
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<div class="name">货号：</div><span class="value"><%=object.getCompany_productNumber()%></span>
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<div class="name">款名：</div><span class="value"><%=object.getName()%></span>
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<div class="name">跟单：</div><span class="value"><%=SystemCache.getEmployeeName(object.getCharge_employee()) %></span>
-																	</td>
-																	
-																</tr>
-															</tbody>
-
-
-														</table>
+														<div class="name">领取人：</div><span class="value"><%=SystemCache.getEmployeeName(object.getReceiver_employee())%></span>
 													</td>
+															
 												</tr>
 											</tbody>
 										</table>
@@ -208,19 +164,19 @@ tr.disable{background:#ddd;}
 														尺码
 													</th><th width="8%">
 														批次
-													</th><th width="8%">
-														来源
 													</th>
-													<th width="10%">
-														入库数量(个)
-													</th><th width="10%">
+													<th width="8%">
+														出库数量(个)
+													</th><th width="8%">
 														库位
+													</th><th width="15%">
+														备注
 													</th>
 												</tr>
 											</thead>
 											<tbody>
 												<%
-													for (FuliaoInDetail detail : detaillist) {
+													for (FuliaoOutDetail detail : detaillist) {
 												%>
 												<tr class="tr">
 													<td><%=SystemCache.getFuliaoTypeName((Integer)detail.getFuliaoTypeId())%><br><%=detail.getFnumber()%></td>
@@ -234,9 +190,9 @@ tr.disable{background:#ddd;}
 													<td><%=detail.getColor()%></td>
 													<td><%=detail.getSize()%></td>
 													<td><%=detail.getBatch()%></td>
-													<td><%=SystemCache.getFactoryName(detail.getFuliaoPurchaseFactoryId())%></td>
 													<td><%=detail.getQuantity()%></td>
 													<td><%=SystemCache.getLocationNumber(detail.getLocationId())%></td>
+													<td><%=detail.getMemo()==null?"":detail.getMemo()%></td>
 												</tr>
 												<%
 													}
@@ -251,7 +207,7 @@ tr.disable{background:#ddd;}
 
 										<p class="pull-right auto_bottom" style="padding-top: 15px;">
 											<span id="created_user">制单人：<%=SystemCache.getUserName(object.getCreated_user())%></span>
-											<span id="date"> 日期：<%=DateTool.formatDateYMD(object.getCreated_at())%></span>
+											<span id="date"> 制单日期：<%=DateTool.formatDateYMD(object.getCreated_at())%></span>
 										</p>
 
 										</table>
@@ -273,11 +229,11 @@ tr.disable{background:#ddd;}
 		//数据纠正：删除单据 -- 开始
 		$("#deleteBtn_datacorrect").click( function() {
 			var id = $(this).attr("data-cid");
-			if (!confirm("该辅料入库单已打印入库，请确保辅料实际未入库再进行删除操作， 您是否确定要进行数据纠正：删除？")) {
+			if (!confirm("该辅料出库单已打印出库，请确保辅料实际未出库再进行删除操作， 您是否确定要进行数据纠正：删除？")) {
 				return false;
 			}
 			$.ajax( {
-				url :"fuliaoin/delete/" + id,
+				url :"fuliaoout/delete/" + id,
 				type :'POST'
 			}).done( function(result) {
 				if (result.success) {
@@ -286,7 +242,7 @@ tr.disable{background:#ddd;}
 					});
 				}
 			}).fail( function(result) {
-				Common.Error("数据纠正：删除辅料入库单失败：" + result.responseText);
+				Common.Error("数据纠正：删除辅料出库单失败：" + result.responseText);
 			}).always( function() {
 	
 			});

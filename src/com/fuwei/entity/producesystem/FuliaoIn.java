@@ -21,7 +21,7 @@ public class FuliaoIn {
 	private String orderNumber;
 	private String name;// 样品名称
 	private String company_productNumber;//样品的公司货号
-	private int charge_employee;
+	private Integer charge_employee;
 	private int status;//一旦创建，status = 6
 	private String state;//状态描述
 	private Integer created_user;//创建人
@@ -34,6 +34,12 @@ public class FuliaoIn {
 	
 	
 	
+	public Integer getCharge_employee() {
+		return charge_employee;
+	}
+	public void setCharge_employee(Integer charge_employee) {
+		this.charge_employee = charge_employee;
+	}
 	public Boolean getHas_print() {
 		return has_print;
 	}
@@ -100,12 +106,6 @@ public class FuliaoIn {
 	}
 	public void setOrderNumber(String orderNumber) {
 		this.orderNumber = orderNumber;
-	}
-	public int getCharge_employee() {
-		return charge_employee;
-	}
-	public void setCharge_employee(int charge_employee) {
-		this.charge_employee = charge_employee;
 	}
 	public int getStatus() {
 		return status;
