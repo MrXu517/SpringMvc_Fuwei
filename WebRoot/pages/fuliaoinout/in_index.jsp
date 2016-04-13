@@ -298,7 +298,7 @@
 											<td rowspan="<%=detailsize%>"><a target="_blank" href="fuliaoin/detail/<%=item.getId()%>"><%=item.getNumber()%></a></td>
 											<td rowspan="<%=detailsize%>"><a target="_blank" href="order/detail/<%=item.getOrderId()%>"><%=item.getOrderNumber()%></a></td>
 											<td rowspan="<%=detailsize%>"><%=item.getName()%></td>
-											<td rowspan="<%=detailsize%>"><%=SystemCache.getEmployeeName(item.getCharge_employee())%></td>
+											<td rowspan="<%=detailsize%>"><%=SystemCache.getEmployeeName(item.getCharge_employee()) %></td>
 											
 											
 											<td><%=SystemCache.getFuliaoTypeName(detailist.get(0).getFuliaoTypeId())%></td>

@@ -71,6 +71,30 @@ public class FuliaoOutNoticeService extends BaseService {
 			throw e;
 		}
 	}
+	
+	// 添加,返回主键
+	@Transactional
+	public int add_common(FuliaoOutNotice notice) throws Exception {
+		try {
+				if(notice.getDetaillist()==null || notice.getDetaillist().size()<=0){
+					throw new Exception("请至少填写一条出库明细");
+				}
+				notice.setStatus(0);
+				notice.setState("创建");
+				Integer noticeId = this.insert(notice);
+				notice.setId(noticeId);
+				notice.setNumber(notice.createNumber());
+				this.update(notice, "id", null);
+				for(FuliaoOutNoticeDetail detail : notice.getDetaillist()){
+					detail.setFuliaoInOutNoticeId(noticeId);
+				}
+				fuliaoOutNoticeDetailService.addBatch(notice.getDetaillist());
+				
+				return noticeId;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 
 	// 删除
 	@Transactional

@@ -188,7 +188,7 @@ public class FuliaoOutNoticeController extends BaseController {
 			}
 			fuliaoOutNotice.setDetaillist(detaillist);
 			if(fuliaoOutNotice.getId() == 0){//添加
-				Integer tableOrderId = fuliaoOutNoticeService.add(fuliaoOutNotice);
+				Integer tableOrderId = fuliaoOutNoticeService.add_common(fuliaoOutNotice);
 				return this.returnSuccess("id", tableOrderId);
 			}else{//编辑
 				Integer fuliaoInOutNoticeId = fuliaoOutNoticeService.update(fuliaoOutNotice);
