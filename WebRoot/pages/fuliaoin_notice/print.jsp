@@ -103,7 +103,7 @@ div.name{   margin-left: 15px; width: 100px; display: inline-block;}
 																</tr>
 																<tr>
 																	<td>
-																		<div class="name">跟单：</div><span class="value"><%=SystemCache.getEmployeeName(notice.getCharge_employee())%></span>
+																		<div class="name">跟单：</div><span class="value"><%=SystemCache.getEmployeeName(notice.getCharge_employee()) %></span>
 																	</td>
 																	
 																</tr>
