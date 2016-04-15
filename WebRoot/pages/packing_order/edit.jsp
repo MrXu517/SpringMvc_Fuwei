@@ -217,10 +217,10 @@
 												每箱数量
 											</th><th colspan="3" width="120px">外箱尺寸</th>
 												<th colspan="2" width="80px">毛净重</th>
-											<th rowspan="2" width="60px">
+											<th rowspan="2" width="40px">
 												箱数
 											</th>
-											<th colspan="2" width="100px">
+											<th colspan="2" width="80px">
 												箱号
 											</th>
 											<th rowspan="2" width="40px">
@@ -229,7 +229,7 @@
 											<th rowspan="2" width="40px">
 												立方数
 											</th>
-											<th rowspan="2" width="40px">
+											<th rowspan="2" width="70px">
 												操作
 											</th>
 										</tr><tr><th width="55px">

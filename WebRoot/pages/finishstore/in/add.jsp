@@ -236,10 +236,10 @@ tr.disable{background:#ddd;}
 											<th rowspan="2" width="40px">
 												计划箱数
 											</th>
-											<th rowspan="2" width="40px">
+											<th rowspan="2" width="50px">
 												已入库数量
 											</th>
-											<th rowspan="2" width="40px">
+											<th rowspan="2" width="50px">
 												已入库箱数
 											</th>
 											<th rowspan="2" width="80px">
@@ -295,13 +295,13 @@ tr.disable{background:#ddd;}
 													<td><%=detail.getCartons()%></td>
 													<td><%=actualIn_quantity%></td>
 													<td><%=actualIn_cartons%></td>
-													<td>
-														<input disabled class="quantity form-control require positive_int value"
-															type="text" value="0"
-															placeholder="请输入入库数量">
-													</td>
-													<td class="cartons">
+													<td class="quantity">
 														0
+													</td>
+													<td>
+														<input disabled class="cartons form-control require positive_int value"
+															type="text" value="0"
+															placeholder="请输入入库箱数">
 													</td>
 												</tr>
 												<%

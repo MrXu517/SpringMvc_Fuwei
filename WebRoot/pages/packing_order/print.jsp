@@ -191,7 +191,9 @@
 										<td colspan="<%=col+1 %>"><%=packingOrder.getQuantity() %></td>
 										<%} %>
 										<td colspan="7">总箱数：<%=packingOrder.getCartons() %></td><td colspan="4">总体积：<%=packingOrder.getCapacity() %></td>
-										</tr></tfoot>
+										</tr>
+										<tr><td colspan="<%=col+13 %>" style="text-align:left;padding-left: 20px;">备注：<%=packingOrder.getMemo()==null?"":packingOrder.getMemo() %></td></tr>
+										</tfoot>
 								</table>
 									</td>
 									<td></td>

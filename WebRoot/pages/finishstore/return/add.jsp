@@ -298,13 +298,13 @@ tr.disable{background:#ddd;}
 													<td><%=detail.getCartons()%></td>
 													<td><%=actualIn_quantity%></td>
 													<td><%=actualIn_cartons%></td>
-													<td>
-														<input disabled class="quantity form-control require positive_int value"
-															type="text" value="0"
-															placeholder="请输入退货数量">
-													</td>
-													<td class="cartons">
+													<td class="quantity">
 														0
+													</td>
+													<td>
+														<input disabled class="cartons form-control require positive_int value"
+															type="text" value="0"
+															placeholder="请输入退货箱数">
 													</td>
 												</tr>
 												<%

@@ -118,7 +118,7 @@ public class PackingOrderService extends BaseService {
 			packingOrder.setState("新建");
 			Integer packingOrderId = this.insert(packingOrder);
 			packingOrder.setId(packingOrderId);
-			packingOrder.setName(packingOrder.createNumber());
+			packingOrder.setNumber(packingOrder.createNumber());
 			this.update(packingOrder, "id", null);
 			for(PackingOrderDetail detail : packingOrder.getDetaillist()){
 				detail.setPackingOrderId(packingOrderId);

@@ -133,7 +133,7 @@ $(document).ready( function() {
 						name :'box_number_end',
 						colname :'箱数结束',
 						width :'15%',
-			        	className:"input positive_int",
+			        	className:"",
 			        	require:true
 					},
 					{
@@ -155,12 +155,21 @@ $(document).ready( function() {
 						colname :'操作',
 						width :'15%',
 						displayValue : function(value, rowdata) {
-							return "<a class='deleteRow' href='#'>删除</a>";
+							return "<a class='copyRow' href='#'>复制</a> | <a class='deleteRow' href='#'>删除</a>";
 						}
 					} ],
 					$dialog:$("#coloringDialog")
 		}
 		
+	});
+	//复制行
+	$(grid.TableInstance.tableEle).off("click",".copyRow");
+	$(grid.TableInstance.tableEle).on("click",".copyRow",function(event){
+		var $tr = $(this).closest("tr");
+		var rowdata = grid.TableInstance.getTrData($tr[0]);
+		delete rowdata.id;
+		grid.TableInstance.addRow(rowdata);
+		return false;
 	});
 	
 	//添加原有的行数据
@@ -168,6 +177,17 @@ $(document).ready( function() {
 	var temptabledata = $.parseJSON($("#saveTb tbody").attr("data"));
 	grid.TableInstance.data = temptabledata;
 	grid.TableInstance._fillTableData();
+	
+	//设置箱号结束号的自动计算，箱号结束号 = 开始号+箱数-1
+	$(grid.TableInstance.tableEle).on("input propertychange","input.box_number_start",function(event) {
+		$tr = $(this).closest("tr");
+		var $cartons = $tr.find(".cartons");
+		var cartons = Number($cartons.text());
+		//箱数改变时，自动修改箱号结束号
+		var box_number_start = Number($(this).val());
+		var box_number_end = box_number_start+cartons-1;
+		$tr.find(".box_number_end").text(box_number_end);
+	});
 	
 	//设置箱数的自动计算 , 箱数 = 数量/每箱数量
 	$(grid.TableInstance.tableEle).on("input propertychange","input.quantity,input.per_carton_quantity",function(event) {
@@ -183,6 +203,12 @@ $(document).ready( function() {
 			cartons = Math.ceil(quantity/per_carton_quantity);
 		}
 		$cartons.text(cartons);
+		//箱数改变时，自动修改箱号结束号
+		var box_number_start = Number($tr.find(".box_number_start").val());
+		if(box_number_start !=0){
+			var box_number_end = box_number_start+cartons-1;
+			$tr.find(".box_number_end").text(box_number_end);
+		}
 		grid.TableInstance.changeTotalRow();
 	});
 	

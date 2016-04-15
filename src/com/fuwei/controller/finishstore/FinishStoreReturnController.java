@@ -216,6 +216,10 @@ public class FinishStoreReturnController extends BaseController {
 			Iterator<FinishStoreReturnDetail> iter = detaillist.iterator();
 			while(iter.hasNext()){
 				FinishStoreReturnDetail detail = iter.next();
+				if(detail.getCartons() == 0){
+					iter.remove();
+				}
+				detail.setQuantity(detail.getCartons() * detail.getPer_carton_quantity());
 				if(detail.getQuantity() == 0){
 					iter.remove();
 				}
@@ -340,6 +344,10 @@ public class FinishStoreReturnController extends BaseController {
 		Iterator<FinishStoreReturnDetail> iter = detaillist.iterator();
 		while(iter.hasNext()){
 			FinishStoreReturnDetail detail = iter.next();
+			if(detail.getCartons() == 0){
+				iter.remove();
+			}
+			detail.setQuantity(detail.getCartons() * detail.getPer_carton_quantity());
 			if(detail.getQuantity() == 0){
 				iter.remove();
 			}

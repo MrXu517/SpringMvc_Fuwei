@@ -169,7 +169,7 @@ tr.disable{background:#ddd;}
 																<tr>
 																	<td colspan="2">
 																		<div class="form-group ">
-																入库时间：
+																退货时间：
 																<input type="text" class="form-control require date" style="width: 300px;display: inline-block;"
 																	name="date" id="out_in_date"
 																	value="<%=DateTool.formatDateYMD(finishStoreReturn.getDate())%>">
@@ -233,17 +233,17 @@ tr.disable{background:#ddd;}
 											<th rowspan="2" width="40px">
 												计划箱数
 											</th>
-											<th rowspan="2" width="40px">
-												已入库数量
+											<th rowspan="2" width="50px">
+												库存数量
 											</th>
 											<th rowspan="2" width="50px">
-												已入库箱数
-											</th>
-											<th rowspan="2" width="80px">
-												本次入库数量
+												库存箱数
 											</th>
 											<th rowspan="2" width="60px">
-												本次入库箱数
+												本次退货数量
+											</th>
+											<th rowspan="2" width="60px">
+												本次退货箱数
 											</th>
 										</tr>
 											</thead>
@@ -293,13 +293,13 @@ tr.disable{background:#ddd;}
 													<td><%=plan_cartons%></td>
 													<td><%=actualIn_quantity%></td>
 													<td><%=actualIn_cartons%></td>
-													<td>
-														<input class="quantity form-control require positive_int value"
-															type="text" value="<%=detail.getQuantity() %>"
-															placeholder="请输入退货数量">
+													<td class="quantity">
+														<%=detail.getQuantity() %>
 													</td>
-													<td class="cartons">
-														<%=detail.getCartons() %>
+													<td>
+														<input class="cartons form-control require positive_int value"
+															type="text" value="<%=detail.getCartons() %>"
+															placeholder="请输入入库箱数">
 													</td>
 												</tr>
 												<%

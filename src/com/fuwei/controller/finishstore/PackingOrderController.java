@@ -555,9 +555,7 @@ public class PackingOrderController extends BaseController {
 			int tempLength = title2[i].getBytes().length;
 			int index = col + i;
 			if(!title2[i].equals("")){
-				if(tempLength<columnBestWidth[index]){
-					columnBestWidth[index] = tempLength;
-				}
+				columnBestWidth[index] = tempLength;
 			}
 			Label excelTitle = new Label(index,3, title2[i], titleFormat); 
 			wsheet.addCell(excelTitle); 
@@ -685,14 +683,22 @@ public class PackingOrderController extends BaseController {
 			}
 			c++; 
 		} 
+		//添加备注
+		wsheet.setRowView(c,400);
+		WritableCellFormat memoFormat = new WritableCellFormat(wfont); 
+		memoFormat.setBorder(jxl.format.Border.ALL, jxl.format.BorderLineStyle.THIN,jxl.format.Colour.BLACK); //BorderLineStyle边框
+		memoFormat.setAlignment(jxl.format.Alignment.LEFT);   
+		memoFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+		wsheet.addCell(new Label(0, c, "备注："+(packingOrder.getMemo()==null?"":packingOrder.getMemo()),memoFormat)); 
+		wsheet.mergeCells(0,c,col+10,c);//合并备注
 		//添加制单人、制单日期
 		WritableCellFormat userFormat = new WritableCellFormat(wfont); 
 		userFormat.setAlignment(jxl.format.Alignment.RIGHT);   
 		userFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
-		wsheet.addCell(new Label(0, c,
+		wsheet.addCell(new Label(0, c+1,
 				"制单人："+SystemCache.getUserName(packingOrder.getCreated_user()) +"      "+
 				"制单日期："+DateTool.formatDateYMD(DateTool.getYanDate(packingOrder.getCreated_at())),userFormat)); 
-		wsheet.mergeCells(0,c,col+10,c);//合并日期
+		wsheet.mergeCells(0,c+1,col+10,c+1);//合并日期
 		
 		int temp_total8_length = 0;
 		for(int p = 0 ; p < columnBestWidth.length ; ++p){

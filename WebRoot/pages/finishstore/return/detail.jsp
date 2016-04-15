@@ -240,10 +240,10 @@ tr.disable{background:#ddd;}
 												每箱数量
 											</th>
 											<th rowspan="2" width="80px">
-												本次入库数量
+												本次退货数量
 											</th>
 											<th rowspan="2" width="60px">
-												本次入库箱数
+												本次退货箱数
 											</th>
 												</tr>
 											</thead>

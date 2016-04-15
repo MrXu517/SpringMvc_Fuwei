@@ -20,8 +20,8 @@ $(document).ready( function() {
 			var $tr = $(this).closest("tr");
 			$tr.removeClass("disable EmptyTr");
 			$tr.find("[disabled]").removeAttr("disabled");
-			$tr.find(".quantity").focus();
-			$tr.find(".quantity").select();
+			$tr.find(".cartons").focus();
+			$tr.find(".cartons").select();
 		}else{
 			$(this).closest("tr").addClass("disable EmptyTr");
 			$(this).closest("tr").find(".quantity,.cartons").attr("disabled",true);
@@ -61,21 +61,36 @@ $(document).ready( function() {
 			
 		});
 		
-		//设置箱数的自动计算 , 箱数 = 数量/每箱数量
-		$(storInGrid.TableInstance.tableEle).on("input propertychange","input.quantity",function(event) {
+//		//设置箱数的自动计算 , 箱数 = 数量/每箱数量
+//		$(storInGrid.TableInstance.tableEle).on("input propertychange","input.quantity",function(event) {
+//			$tr = $(this).closest("tr");
+//			var $quantity = $tr.find("input.quantity");
+//			var data = $.parseJSON($tr.attr("data"));
+//			var $cartons = $tr.find(".cartons");
+//			
+//			var quantity = Number($quantity.val());
+//			var per_carton_quantity =data.per_carton_quantity;
+//			
+//			var cartons = 0;
+//			if(per_carton_quantity != 0){
+//				cartons = Math.ceil(quantity/per_carton_quantity);
+//			}
+//			$cartons.text(cartons);
+//		});
+		
+		//设置数量的自动计算 , 数量 = 箱数*每箱数量
+		$(storInGrid.TableInstance.tableEle).on("input propertychange","input.cartons",function(event) {
 			$tr = $(this).closest("tr");
-			var $quantity = $tr.find("input.quantity");
+			var $quantity = $tr.find(".quantity");
 			var data = $.parseJSON($tr.attr("data"));
 			var $cartons = $tr.find(".cartons");
 			
-			var quantity = Number($quantity.val());
+			//var quantity = Number($quantity.val());
+			var cartons = Number($cartons.val());
 			var per_carton_quantity =data.per_carton_quantity;
 			
-			var cartons = 0;
-			if(per_carton_quantity != 0){
-				cartons = Math.ceil(quantity/per_carton_quantity);
-			}
-			$cartons.text(cartons);
+			var quantity = cartons * per_carton_quantity;
+			$quantity.text(quantity);
 		});
 		
 	});
