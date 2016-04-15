@@ -1,7 +1,11 @@
 package com.fuwei.entity.finishstore;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+
+import com.fuwei.util.DateTool;
+import com.fuwei.util.NumberUtil;
 
 import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
@@ -10,6 +14,7 @@ import net.keepsoft.commons.annotation.Temporary;
 public class PackingOrder {
 	@IdentityId
 	private int id;
+	private String number;//装箱单号
 	private Integer orderId;//订单ID
 	private Date created_at;// 创建时间
 	private Date updated_at;// 最近更新时间
@@ -22,6 +27,7 @@ public class PackingOrder {
 	private String company_productNumber;//样品的公司货号
 	private Integer charge_employee;// 打样人 
 	private Integer companyId;// 公司ID
+	private Integer customerId;// 公司ID
 	private String memo;
 	
 	private int quantity ;//总数量
@@ -44,6 +50,22 @@ public class PackingOrder {
 	
 	
 	
+	public Integer getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
+	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
+	}
+
 	public String getImg() {
 		return img;
 	}
@@ -249,6 +271,10 @@ public class PackingOrder {
 			return true;
 		}
 		return this.status != 6 && this.status != 7;
+	}
+	public String createNumber() throws ParseException{	
+		return DateTool.getYear2() + "PA" + NumberUtil.appendZero(this.id%9999, 4);
+		
 	}
 }
 

@@ -12,7 +12,7 @@
 	int orderId = (Integer)request.getAttribute("orderId");
 	List<PackingOrder> packingOrderlist = (List<PackingOrder>)request.getAttribute("packingOrderList");
 	Boolean has_packing_order_add = SystemCache.hasAuthority(session,"packing_order/add");
-
+	Boolean has_packing_print = SystemCache.hasAuthority(session,"packing_order/print");
 %>
 <!DOCTYPE html>
 <html>
@@ -105,6 +105,9 @@
 										<h3 class="panel-title">
 										<span>[<%=count %>/<%=size %>]</span>	<span>创建时间:<%=packingOrder.getCreated_at() %> </span> <span>创建用户:<%=SystemCache.getUserName(packingOrder.getCreated_user())%></span>   <span class="memoSpan">备注: <%=packingOrder.getMemo() %></span>
 										<a target="_blank" title="点击查看装箱单详细内容" class="detail pull-right" href="packing_order/detail/<%=packingOrder.getId() %>">详情</a>
+										<%if(has_packing_print){ %>
+										<a style="margin-right:20px;" target="_blank" title="点击打印装箱单" class="detail pull-right" href="packing_order/print/<%=packingOrder.getId() %>">打印</a>
+										<%} %>
 										</h3>
 									</div>
 									<div class="panel-body">
@@ -113,17 +116,27 @@
 											桐庐富伟针织厂装箱单(<%=DateTool.getYear(packingOrder.getCreated_at()) %>年,<%=packingOrder.getCompany_productNumber() %><%=packingOrder.getName() %>)
 										</caption>
 									</table>
-									<table class="tableTb noborder">
+									<table class="tableTb noborder" style="width:100%;">
 										<tbody>
 											<tr>
-												<td width="20%">
+												<td width="15%">
 														跟单人：<%=SystemCache.getEmployeeName(packingOrder.getCharge_employee())%>
 												</td>
-												<td width="20%">
+												<td width="15%">
 														订单号：<%=packingOrder.getOrderNumber()%>
 												</td>
-												<td width="60%">
+												
+												<td width="15%">
+														公司：<%=SystemCache.getCompanyShortName(packingOrder.getCompanyId())%>
+												</td>
+												<td width="15%">
+														客户：<%=SystemCache.getCustomerName(packingOrder.getCustomerId())%>
+												</td>
+												<td width="30%">
 														备注：<%=packingOrder.getMemo() %>
+												</td>
+												<td width="10%">
+													№：<%=packingOrder.getNumber()%>
 												</td>
 											</tr></tbody>
 									</table>

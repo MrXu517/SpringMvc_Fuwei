@@ -118,6 +118,8 @@ public class PackingOrderService extends BaseService {
 			packingOrder.setState("新建");
 			Integer packingOrderId = this.insert(packingOrder);
 			packingOrder.setId(packingOrderId);
+			packingOrder.setName(packingOrder.createNumber());
+			this.update(packingOrder, "id", null);
 			for(PackingOrderDetail detail : packingOrder.getDetaillist()){
 				detail.setPackingOrderId(packingOrderId);
 				detail.setOrderId(packingOrder.getOrderId());
@@ -150,7 +152,7 @@ public class PackingOrderService extends BaseService {
 			}
 			packingOrderDetailService.addBatch(packingOrder.getDetaillist());
 			this.update(packingOrder, "id",
-					"created_user,created_at,orderId,status,state,orderNumber,name,company_productNumber,charge_employee,companyId", true);
+					"number,customerId,created_user,created_at,orderId,status,state,orderNumber,name,company_productNumber,charge_employee,companyId", true);
 
 			return packingOrder.getId();
 		} catch (Exception e) {

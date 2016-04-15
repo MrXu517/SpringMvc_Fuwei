@@ -26,7 +26,7 @@
 	Boolean has_delete = SystemCache.hasAuthority(session,"packing_order/delete");
 	Boolean has_edit = SystemCache.hasAuthority(session,"packing_order/edit");
 	Boolean has_export = SystemCache.hasAuthority(session,"packing_order/export");
-	
+	Boolean has_print = SystemCache.hasAuthority(session,"packing_order/print");
 %>
 <!DOCTYPE html>
 <html>
@@ -105,6 +105,13 @@
 									}
 								%>
 								<%
+									if(has_print){
+								%>
+								<a href="packing_order/print/<%=packingOrder.getId()%>" type="button" class="btn btn-primary">打印</a>
+								<%
+									}
+								%>
+								<%
 									if(has_export){
 								%>
 								<a href="packing_order/export/<%=packingOrder.getId()%>" type="button" class="btn btn-primary">导出</a>
@@ -127,14 +134,23 @@
 									<table class="tableTb noborder">
 										<tbody>
 											<tr>
-												<td width="20%">
+												<td width="15%">
 														跟单人：<%=SystemCache.getEmployeeName(packingOrder.getCharge_employee())%>
 												</td>
-												<td width="20%">
+												<td width="15%">
 														订单号：<%=packingOrder.getOrderNumber()%>
 												</td>
-												<td width="60%">
+												<td width="15%">
+														公司：<%=SystemCache.getCompanyShortName(packingOrder.getCompanyId())%>
+												</td>
+												<td width="15%">
+														客户：<%=SystemCache.getCustomerName(packingOrder.getCustomerId())%>
+												</td>
+												<td width="30%">
 														备注：<%=packingOrder.getMemo()==null?"":packingOrder.getMemo() %>
+												</td>
+												<td width="10%">
+													№：<%=packingOrder.getNumber()%>
 												</td>
 											</tr></tbody>
 									</table>

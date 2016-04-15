@@ -206,6 +206,7 @@ public class PackingOrderController extends BaseController {
 			packingOrder.setCompanyId(order.getCompanyId());
 			packingOrder.setName(order.getName());
 			packingOrder.setOrderNumber(order.getOrderNumber());
+			packingOrder.setCustomerId(order.getCustomerId());
 			
 			//判断是否有数量为0的明细项 、 设置总数量、总箱数、总立方
 			int total_quantity = 0;
@@ -306,6 +307,24 @@ public class PackingOrderController extends BaseController {
 		request.setAttribute("packingOrder", packingOrder);
 		request.setAttribute("order", order);
 		return new ModelAndView("packing_order/detail");
+	}
+	
+	@RequestMapping(value = "/print/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView print(@PathVariable Integer id, HttpSession session,
+			HttpServletRequest request) throws Exception {
+		
+		if (id == null) {
+			throw new Exception("缺少装箱单ID");
+		}		
+		String lcode = "packing_order/print";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有打印装箱单的权限", null);
+		}	
+		PackingOrder packingOrder = packingOrderService.getAndDetail(id);
+		request.setAttribute("packingOrder", packingOrder);
+		return new ModelAndView("packing_order/print");
 	}
 	
 	@RequestMapping(value = "/put/{tableOrderId}", method = RequestMethod.GET)
@@ -454,7 +473,7 @@ public class PackingOrderController extends BaseController {
 		companyFormat.setAlignment(jxl.format.Alignment.CENTRE);   
 		companyFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
 		
-		String line0_text = "桐庐富伟针织厂" + DateTool.getYear(packingOrder.getCreated_at()) + "年  " + packingOrder.getCompany_productNumber()+ packingOrder.getName();
+		String line0_text = "桐庐富伟针织厂装箱单";
 		Label excelCompany = new Label(0, 0,line0_text , companyFormat); 
 		wsheet.addCell(excelCompany); 
 		wsheet.setRowView(0, 800);
@@ -470,6 +489,19 @@ public class PackingOrderController extends BaseController {
 		titleFormat.setAlignment(jxl.format.Alignment.CENTRE);   
 		titleFormat.setBorder(jxl.format.Border.ALL, jxl.format.BorderLineStyle.THIN,jxl.format.Colour.BLACK); //BorderLineStyle边框
 		titleFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+		
+		//添加厂订单号、公司、款名、客户等
+		WritableCellFormat orderFormat = new WritableCellFormat(wfont); 
+		orderFormat.setAlignment(jxl.format.Alignment.LEFT);   
+		orderFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+		String tempStr = "工厂订单号："+packingOrder.getOrderNumber() +"      "+
+		"款名："+packingOrder.getName()+"      "+
+		"公司："+SystemCache.getCompanyShortName(packingOrder.getCompanyId())+"      ";
+		if(packingOrder.getCustomerId()!=null){
+			tempStr+="客户："+SystemCache.getCustomerName(packingOrder.getCustomerId())+"      ";
+		}
+		wsheet.addCell(new Label(0, 1,tempStr, orderFormat)); 
+		int LENGTH = tempStr.getBytes().length+4;
 		
 		//数字字体格式
 		jxl.write.NumberFormat nf_int = new jxl.write.NumberFormat("0");    //设置数字格式：整数
@@ -512,39 +544,44 @@ public class PackingOrderController extends BaseController {
 		int columnBestWidth[]= new int[title.size()];    //保存最佳列宽数据的数组
 		for (int i = 0; i < title.size(); i++) { 	
 			columnBestWidth[i] = title.get(i).getBytes().length;
-			Label excelTitle = new Label(i,1, title.get(i), titleFormat); 
+			Label excelTitle = new Label(i,2, title.get(i), titleFormat); 
 			wsheet.addCell(excelTitle); 
 		} 
 		for(int i = 0 ; i < col ; ++i){
-			Label excelTitle = new Label(i,2, "", titleFormat); 
+			Label excelTitle = new Label(i,3, "", titleFormat); 
 			wsheet.addCell(excelTitle); 
 		}
 		for (int i = 0; i < title2.length; i++) { 	
 			int tempLength = title2[i].getBytes().length;
 			int index = col + i;
-			if(tempLength>columnBestWidth[index]){
-				columnBestWidth[index] = tempLength;
+			if(!title2[i].equals("")){
+				if(tempLength<columnBestWidth[index]){
+					columnBestWidth[index] = tempLength;
+				}
 			}
-			Label excelTitle = new Label(index,2, title2[i], titleFormat); 
+			Label excelTitle = new Label(index,3, title2[i], titleFormat); 
 			wsheet.addCell(excelTitle); 
 		} 
 		
 		wsheet.setRowView(1,400);
 		for(int i = 0 ; i < col ; ++i){
-			wsheet.mergeCells(i,1,i,2);//列号、行号、列号、行号
+			wsheet.mergeCells(i,2,i,3);//列号、行号、列号、行号
 		}
-		wsheet.mergeCells(col,1,col,2);//列号、行号、列号、行号
-		wsheet.mergeCells(col+1,1,col+1,2);
-		wsheet.mergeCells(col+2,1,col+2,2);
-		wsheet.mergeCells(col+3,1,col+5,1);
-		wsheet.mergeCells(col+6,1,col+7,1);
-		wsheet.mergeCells(col+8,1,col+8,2);
-		wsheet.mergeCells(col+9,1,col+9,2);
-		wsheet.mergeCells(col+10,1,col+10,2);
+		wsheet.mergeCells(col,2,col,3);//列号、行号、列号、行号
+		wsheet.mergeCells(col+1,2,col+1,3);
+		wsheet.mergeCells(col+2,2,col+2,3);
+		wsheet.mergeCells(col+3,2,col+5,2);
+		wsheet.mergeCells(col+6,2,col+7,2);
+		wsheet.mergeCells(col+8,2,col+8,3);
+		wsheet.mergeCells(col+9,2,col+9,3);
+		wsheet.mergeCells(col+10,2,col+10,3);
 		
 		wsheet.mergeCells(0,0,col+10,0);//合并标题行
+		wsheet.addCell(new Label(col+9, 1,"№："+packingOrder.getNumber(), orderFormat)); //添加单号
+		wsheet.mergeCells(0,1,col+8,1);//合并款名行
+		wsheet.mergeCells(col+9,1,col+10,1);//合并订单号
 		
-		int c = 3; //用于循环时Excel的行号 			
+		int c = 4; //用于循环时Excel的行号 			
 		
 		int count = 1 ;
 		for(PackingOrderDetail detail : packingOrder.getDetaillist()){
@@ -648,8 +685,28 @@ public class PackingOrderController extends BaseController {
 			}
 			c++; 
 		} 
+		//添加制单人、制单日期
+		WritableCellFormat userFormat = new WritableCellFormat(wfont); 
+		userFormat.setAlignment(jxl.format.Alignment.RIGHT);   
+		userFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+		wsheet.addCell(new Label(0, c,
+				"制单人："+SystemCache.getUserName(packingOrder.getCreated_user()) +"      "+
+				"制单日期："+DateTool.formatDateYMD(DateTool.getYanDate(packingOrder.getCreated_at())),userFormat)); 
+		wsheet.mergeCells(0,c,col+10,c);//合并日期
+		
+		int temp_total8_length = 0;
 		for(int p = 0 ; p < columnBestWidth.length ; ++p){
-			wsheet.setColumnView(p, columnBestWidth[p]+3);
+			columnBestWidth[p] = columnBestWidth[p] + 3;
+			wsheet.setColumnView(p, columnBestWidth[p]);
+			if(p<=col+8){
+				temp_total8_length +=columnBestWidth[p];
+			}
+		}
+		if(LENGTH > temp_total8_length){//则表示上面的信息不够放
+			double tempD = (double)LENGTH/temp_total8_length;
+			for(int p = 0 ; p <=col+8 ; ++p){
+				wsheet.setColumnView(p, (int)Math.ceil(columnBestWidth[p]*tempD));
+			}
 		}
 		wbook.write(); //写入文件 
 		wbook.close(); 
