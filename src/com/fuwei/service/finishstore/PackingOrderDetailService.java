@@ -31,7 +31,7 @@ public class PackingOrderDetailService extends BaseService {
 	
 	@Transactional
 	public boolean addBatch(List<PackingOrderDetail> detailList) throws Exception {
-		String sql = "INSERT INTO tb_packingorder_detail(packingOrderId,color,quantity,per_carton_quantity,box_L,box_W,box_H,gross_weight,net_weight,cartons,box_number_start,box_number_end,per_pack_quantity,capacity,col1_value,col2_value,col3_value,col4_value) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO tb_packingorder_detail(packingOrderId,color,quantity,per_carton_quantity,box_L,box_W,box_H,gross_weight,net_weight,cartons,box_number_start,box_number_end,per_pack_quantity,capacity,col1_value,col2_value,col3_value,col4_value,orderId) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		List<Object[]> batchArgs = new ArrayList<Object[]>();
 		for (PackingOrderDetail item : detailList) {
 			batchArgs.add(new Object[] { 
@@ -40,8 +40,8 @@ public class PackingOrderDetailService extends BaseService {
 					item.getGross_weight(),item.getNet_weight(),item.getCartons(),
 					item.getBox_number_start(),item.getBox_number_end(),
 					item.getPer_pack_quantity(),item.getCapacity(),
-					item.getCol1_value(),item.getCol2_value(),item.getCol3_value(),item.getCol4_value()
-					
+					item.getCol1_value(),item.getCol2_value(),item.getCol3_value(),item.getCol4_value(),
+					item.getOrderId()
 			});
 		}
 		try {

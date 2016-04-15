@@ -371,7 +371,6 @@ public class PackingOrderController extends BaseController {
 		    total_quantity += quantity;
 			total_cartons += cartons;
 			total_capacity += capacity;
-			detail.setOrderId(packingOrder.getOrderId());
 		}   
 		if(detaillist.size() <=0){
 			throw new Exception("本次装箱数量均为0，无法创建装箱单");

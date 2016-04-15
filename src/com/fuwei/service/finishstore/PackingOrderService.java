@@ -146,7 +146,7 @@ public class PackingOrderService extends BaseService {
 			packingOrderDetailService.deleteBatch(packingOrderId);
 			for(PackingOrderDetail detail : packingOrder.getDetaillist()){
 				detail.setPackingOrderId(packingOrderId);
-				detail.setOrderId(packingOrder.getOrderId());
+				detail.setOrderId(temp.getOrderId());
 			}
 			packingOrderDetailService.addBatch(packingOrder.getDetaillist());
 			this.update(packingOrder, "id",
