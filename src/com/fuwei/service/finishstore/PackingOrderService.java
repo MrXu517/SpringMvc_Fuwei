@@ -1,6 +1,7 @@
 package com.fuwei.service.finishstore;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -139,18 +140,54 @@ public class PackingOrderService extends BaseService {
 			if(packingOrder.getDetaillist()==null || packingOrder.getDetaillist().size()<=0){
 				throw new Exception("请至少填写一条装箱单明细");
 			}
-			PackingOrder temp = this.get(packingOrder.getId());
+			PackingOrder temp = this.getAndDetail(packingOrder.getId());
 			if (!temp.isEdit()) {
 				throw new Exception("单据已执行完成，或已被取消，无法编辑 ");
 			}
 			// 更新表
 			int packingOrderId = packingOrder.getId();
-			packingOrderDetailService.deleteBatch(packingOrderId);
+			//1.更新原有的id，删除删掉的id，添加新的id
+			int old_ids[]=new int[temp.getDetaillist().size()];
+			for(int i = 0 ; i <temp.getDetaillist().size();++i){
+				PackingOrderDetail detail = temp.getDetaillist().get(i);
+				old_ids[i] = detail.getId();
+			}
+			
+			//更新的列表
+			List<PackingOrderDetail>  to_updatelist = new ArrayList<PackingOrderDetail>();
+			//新增的列表
+			List<PackingOrderDetail>  to_addlist = new ArrayList<PackingOrderDetail>();
+			//删除的装箱单明细ids
+			List<Integer> to_deletelist = new ArrayList<Integer>();
+			
 			for(PackingOrderDetail detail : packingOrder.getDetaillist()){
 				detail.setPackingOrderId(packingOrderId);
 				detail.setOrderId(temp.getOrderId());
+				if(detail.getId() > 0){
+					to_updatelist.add(detail);
+				}else{
+					to_addlist.add(detail);
+				}
 			}
-			packingOrderDetailService.addBatch(packingOrder.getDetaillist());
+			
+			for(Integer id : old_ids){
+				boolean flag = false;
+				for(PackingOrderDetail detail :to_updatelist){
+					if(detail.getId() == id){
+						flag = true;//表示这个id只是更新，不是删除
+					}
+				}
+				if(!flag){//若是删除的id
+					to_deletelist.add(id);
+				}
+			}
+			//更新明细
+			packingOrderDetailService.updateBatch(to_updatelist);
+			//增加明细
+			packingOrderDetailService.addBatch(to_addlist);
+			//删除明细
+			packingOrderDetailService.deleteBatch(to_deletelist);
+			
 			this.update(packingOrder, "id",
 					"number,customerId,created_user,created_at,orderId,status,state,orderNumber,name,company_productNumber,charge_employee,companyId", true);
 

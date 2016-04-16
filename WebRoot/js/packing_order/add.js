@@ -4,7 +4,7 @@ $(document).ready( function() {
 	setActiveLeft($a.parent("li"));
 	/* 设置当前选中的页 */
 	
-	
+	var colors = $.parseJSON($(".detailTb").attr("colors"));
 	var grid = new OrderGrid({
 		tipText:"装箱单",
 		url:"packing_order/add",
@@ -16,36 +16,29 @@ $(document).ready( function() {
 		_beforeSubmit:function(formEle){
 //			//去掉有值的行的emptyTr 类
 			$(grid.TableInstance.tableEle).find("tbody tr").removeClass("EmptyTr");
-//			var TableInstance = grid.TableInstance;
-//			var $trs = $(TableInstance.tableEle).find("tbody tr");
-//			for(var i=0;i<$trs.length; ++i){
-//				var flag = true;
-//				var trEle = $trs[i];
-//				var tempdata = TableInstance.getTrData(trEle);
-//				for(var property in tempdata){
-//					if(property == "No" || property == "_handle"){continue;}
-//					if(tempdata[property]!=""){//只要有一项不等于空，则可上传该行
-//						flag = false;
-//					}
-//				}
-//				if(!flag){
-//					//去掉EmptyTr的类
-//					$(trEle).removeClass("EmptyTr");
-//				}else{
-//					if(tempdata.color == ""){
-//						top.Common.Error("颜色不能为空");
-//						return false;
-//					}
-//					if(tempdata.quantity == ""){
-//						top.Common.Error("数量不能为空");
-//						return false;
-//					}
-//					if(tempdata.cartons == ""){
-//						top.Common.Error("箱数不能为空");
-//						return false;
-//					}
-//				}
-//			}
+			var TableInstance = grid.TableInstance;
+			var $trs = $(TableInstance.tableEle).find("tbody tr");
+			for(var i=0;i<$trs.length; ++i){
+				//若数量/每箱数量 不能除尽，则返回错误。
+				var trEle = $trs[i];
+				var tempdata = TableInstance.getTrData(trEle);
+				var quantity = Number(tempdata.quantity);
+				var per_carton_quantity = Number(tempdata.per_carton_quantity);
+				if(per_carton_quantity===0){
+					$(trEle).find(".per_carton_quantity").addClass("checkerror");
+					$("#tip").text("每箱数量不能为0");
+					return false;
+				}else{
+					$(trEle).find(".per_carton_quantity").removeClass("checkerror");
+				}
+				if( quantity % per_carton_quantity===0){
+					$(trEle).find(".quantity").removeClass("checkerror");
+				}else{
+					$(trEle).find(".quantity").addClass("checkerror");
+					$("#tip").text("数量 除以 每箱数量 无法除尽，请确保可以除尽");
+					return false;
+				}
+			}
 			return true;
 		},
 		focusfunc : function($selectedTr) {
@@ -93,7 +86,19 @@ $(document).ready( function() {
 			        	name :'color',
 			        	colname :'颜色',
 			        	width :'15%',
-			        	className:"input",
+			        	className:"select",
+			        	displayValue:function(value, rowData, istotalRow){
+							var html = "";
+							for(var i = 0; i < colors.length;++i){
+								if(value == colors[i]){
+									html = html + "<option selected value='" + colors[i] + "'>" + colors[i] + "</option>";
+								}else{
+									html = html + "<option value='" + colors[i] + "'>" + colors[i] + "</option>";
+								}
+								
+							}
+							return html;
+						},
 			        	require:true
 			        },
 					{
@@ -201,6 +206,7 @@ $(document).ready( function() {
 		grid.TableInstance.addRow(rowdata);
 		return false;
 	});
+	
 	//设置箱号结束号的自动计算，箱号结束号 = 开始号+箱数-1
 	$(grid.TableInstance.tableEle).on("input propertychange","input.box_number_start",function(event) {
 		$tr = $(this).closest("tr");

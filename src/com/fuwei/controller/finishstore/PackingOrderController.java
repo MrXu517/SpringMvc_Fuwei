@@ -225,6 +225,9 @@ public class PackingOrderController extends BaseController {
 			    if(per_carton_quantity ==0){
 			    	iter.remove(); 
 			    }
+			    if(quantity%per_carton_quantity!=0){
+			    	throw new Exception("数量除以每箱数量无法除尽，请确保可以除尽");
+			    }
 			    int cartons = quantity%per_carton_quantity==0?quantity/per_carton_quantity:quantity/per_carton_quantity+1;;  
 				double L = detail.getBox_L();
 				double W = detail.getBox_W();
@@ -342,6 +345,8 @@ public class PackingOrderController extends BaseController {
 			if(tableOrderId!=null){
 				PackingOrder packingOrder = packingOrderService.getAndDetail(tableOrderId);
 				request.setAttribute("packingOrder", packingOrder);
+				Order order = orderService.get(packingOrder.getOrderId());
+				request.setAttribute("order", order);
 				return new ModelAndView("packing_order/edit");			
 			}
 			throw new Exception("缺少装箱单ID");
@@ -378,6 +383,9 @@ public class PackingOrderController extends BaseController {
 		    } 
 		    if(per_carton_quantity ==0){
 		    	iter.remove(); 
+		    }
+		    if(quantity%per_carton_quantity!=0){
+		    	throw new Exception("数量除以每箱数量无法除尽，请确保可以除尽");
 		    }
 		    int cartons = quantity%per_carton_quantity==0?quantity/per_carton_quantity:quantity/per_carton_quantity+1;;  
 			double L = detail.getBox_L();

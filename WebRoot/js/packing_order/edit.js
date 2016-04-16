@@ -4,7 +4,7 @@ $(document).ready( function() {
 	setActiveLeft($a.parent("li"));
 	/* 设置当前选中的页 */
 	
-	
+	var colors = $.parseJSON($(".detailTb").attr("colors"));
 	var grid = new OrderGrid({
 		tipText:"装箱单",
 		url:"packing_order/add",
@@ -16,6 +16,29 @@ $(document).ready( function() {
 		_beforeSubmit:function(formEle){
 //			//去掉有值的行的emptyTr 类
 			$(grid.TableInstance.tableEle).find("tbody tr").removeClass("EmptyTr");
+			var TableInstance = grid.TableInstance;
+			var $trs = $(TableInstance.tableEle).find("tbody tr");
+			for(var i=0;i<$trs.length; ++i){
+				//若数量/每箱数量 不能除尽，则返回错误。
+				var trEle = $trs[i];
+				var tempdata = TableInstance.getTrData(trEle);
+				var quantity = Number(tempdata.quantity);
+				var per_carton_quantity = Number(tempdata.per_carton_quantity);
+				if(per_carton_quantity===0){
+					$(trEle).find(".per_carton_quantity").addClass("checkerror");
+					$("#tip").text("每箱数量不能为0");
+					return false;
+				}else{
+					$(trEle).find(".per_carton_quantity").removeClass("checkerror");
+				}
+				if( quantity % per_carton_quantity===0){
+					$(trEle).find(".quantity").removeClass("checkerror");
+				}else{
+					$(trEle).find(".quantity").addClass("checkerror");
+					$("#tip").text("数量 除以 每箱数量 无法除尽，请确保可以除尽");
+					return false;
+				}
+			}
 			return true;
 		},
 		focusfunc : function($selectedTr) {
@@ -63,8 +86,19 @@ $(document).ready( function() {
 			        	name :'color',
 			        	colname :'颜色',
 			        	width :'15%',
-			        	className:"input",
-			        	require:true
+			        	className:"select",
+			        	displayValue:function(value, rowData, istotalRow){
+							var html = "";
+							for(var i = 0; i < colors.length;++i){
+								if(value == colors[i]){
+									html = html + "<option selected value='" + colors[i] + "'>" + colors[i] + "</option>";
+								}else{
+									html = html + "<option value='" + colors[i] + "'>" + colors[i] + "</option>";
+								}
+								
+							}
+							return html;
+						},
 			        },
 					{
 						name :'quantity',
@@ -169,6 +203,17 @@ $(document).ready( function() {
 		var rowdata = grid.TableInstance.getTrData($tr[0]);
 		delete rowdata.id;
 		grid.TableInstance.addRow(rowdata);
+		return false;
+	});
+	$(grid.TableInstance.tableEle).off("click",".deleteRow");
+	$(grid.TableInstance.tableEle).on("click", ".deleteRow", function() {
+		var rowdata = $.parseJSON($(this).closest("tr").attr("data"));
+		if(rowdata.id!=undefined && rowdata.id!=""){
+			if(!confirm("原有记录删除时，请确保该明细成品未入库出库过")){
+				return false;
+			}
+		}
+		$(this).closest("tr").remove();
 		return false;
 	});
 	

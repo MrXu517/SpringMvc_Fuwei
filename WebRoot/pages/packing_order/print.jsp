@@ -31,10 +31,19 @@
 		table tr>th{text-align:center;}
 		.gridTb_2{width:29.7cm;}
 		.detailTb tr td{text-align:center;}
+		tfoot>tr{height:25px;}
 		</style>
 	</head>
 	<body>
-
+		<%
+		//固定行数分页
+		int MAX_SIZE = 23;
+		int size = detaillist.size();
+		int total_page = (int)(Math.ceil((double)size/MAX_SIZE)) ;
+		if(total_page == 0){total_page = 1;}
+		int current_page = 1;
+		for(;current_page <= total_page;++current_page){
+		 %>
 		<div style="page-break-after: always">
 			<div class="container-fluid gridTb_2 auto_container">
 				<div class="row">
@@ -146,7 +155,12 @@
 											</th></tr>
 									</thead>
 									<tbody>
-										<%for(PackingOrderDetail detail : detaillist){ %>
+										<%
+										for (int i = 0 ; i < MAX_SIZE ; ++i) {
+											int temp_i = (current_page-1)*MAX_SIZE + i;
+											if(temp_i>=size){break;}
+											PackingOrderDetail detail = detaillist.get(temp_i);
+										%>
 										<tr>
 										<%if(packingOrder.getCol1_id()!=null){ %>
 										<td>
@@ -184,6 +198,7 @@
 										</tr>
 										<%} %>
 									</tbody>
+									<%if(current_page == total_page){ %>
 									<tfoot><tr><td>合计</td>	
 										<%if(col>0){ %>
 									<td colspan="<%=col+1 %>">总数量：<%=packingOrder.getQuantity() %></td>
@@ -194,6 +209,7 @@
 										</tr>
 										<tr><td colspan="<%=col+13 %>" style="text-align:left;padding-left: 20px;">备注：<%=packingOrder.getMemo()==null?"":packingOrder.getMemo() %></td></tr>
 										</tfoot>
+									<%} %>
 								</table>
 									</td>
 									<td></td>
@@ -206,19 +222,20 @@
 						</table>
 
 
-						<p class="pull-right auto_bottom">
+						<p class="pull-right auto_bottom" style="margin-top:0;margin-bottom:0;">
 							<span id="created_user">制单人：<%=SystemCache.getUserName(packingOrder
 								.getCreated_user())%></span>
 							<span id="date"> 制单日期：<%=DateTool.formatDateYMD(DateTool.getYanDate(packingOrder.getCreated_at()))%></span>
+							<span id="page"> 页码：<%=current_page+"/"+total_page%></span>
 						</p>
 
 
 
 					</div>
-
-				
-</div></div>
-		
+				</div>				
+			</div>
+		</div>
+<%} %>		
 	<script type="text/javascript">
 		$(".id_barcode").each(function(){
 			var id =$(this).attr("table_id");

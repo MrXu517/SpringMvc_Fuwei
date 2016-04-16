@@ -13,12 +13,18 @@
 <%@page import="com.fuwei.entity.finishstore.PackProperty"%>
 <%@page import="com.fuwei.entity.finishstore.PackingOrder"%>
 <%@page import="com.fuwei.entity.finishstore.PackingOrderDetail"%>
+<%@page import="com.fuwei.entity.OrderDetail"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	//Order order = (Order) request.getAttribute("order");
+	Order order = (Order) request.getAttribute("order");
+	//获取颜色的列表
+	List<String> colors = new ArrayList<String>();
+	for(OrderDetail detail : order.getDetaillist()){
+		colors.add(detail.getColor());
+	}
 	List<PackProperty> propertylist = SystemCache.packpropertylist;
 	PackingOrder packingOrder = (PackingOrder) request.getAttribute("packingOrder");
 	List<PackingOrderDetail> detaillist = packingOrder==null?new ArrayList<PackingOrderDetail>():packingOrder.getDetaillist();
@@ -68,6 +74,7 @@
 		#saveTb{ border: 1px solid #000;    table-layout: fixed;}
 		.colable{width:20px;height:20px;}
 		#saveTb tbody td input{width:100%;}
+		#tip{color: red;padding-left: 30px;margin-bottom: 0;font-size: 16px;}
 		</style>
 
 	</head>
@@ -133,12 +140,12 @@
 										<tbody>
 											<tr>
 												<td>
-													<table class="table table-responsive detailTb" id="saveTb">
+													<table class="table table-responsive detailTb" id="saveTb" colors='<%=SerializeTool.serialize(colors)%>'>
 														<caption>
 															<button type="button"
 																class="btn btn-primary addRow pull-left">
 																添加一行
-															</button>
+															</button><span class="pull-right" id="tip"></span>
 														</caption>
 														<thead>
 										
@@ -207,7 +214,7 @@
 													<option value="<%=item.getId() %>"><%=item.getName() %></option>
 												<%} }%></select>
 											</th>
-											<th rowspan="2" width="40px">
+											<th rowspan="2" width="60px">
 												颜色
 											</th>
 											<th rowspan="2" width="40px">
