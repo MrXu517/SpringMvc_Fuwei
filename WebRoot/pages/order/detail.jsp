@@ -91,14 +91,14 @@
 										</label>
 										<span><%=order.getCNState()%></span>
 									</div>
-									<%if(exeStr!=null && has_order_exestep){ %>
+								<!-- 	<%if(exeStr!=null && has_order_exestep){ %>
 									<div class="pull-left">
 										<button orderId="<%=order.getId()%>" id="exeStep"
 											type="button" class="btn btn-danger">
 											<%=exeStr%>
 										</button>
 									</div>
-									<%} %>
+									<%} %> -->
 
 
 									<div class="pull-right" style="margin-right: 0;">
@@ -236,7 +236,7 @@
 										<a href="order/progress/<%=order.getId() %>" target="_blank" type="button" class="btn btn-primary"
 						data-loading-text=""> 查看生产进度 </a>
 										<a target="_blank" href="order/fuliao_progress/<%=order.getId() %>" type="button" class="btn btn-primary">查看辅料</a>
-										
+										<a target="_blank" href="finishstoreout_notice/list/<%=order.getId() %>" type="button" class="btn btn-primary">成品发货</a>
 
 									</div>
 

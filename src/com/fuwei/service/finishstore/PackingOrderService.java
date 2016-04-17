@@ -189,7 +189,7 @@ public class PackingOrderService extends BaseService {
 			packingOrderDetailService.deleteBatch(to_deletelist);
 			
 			this.update(packingOrder, "id",
-					"number,customerId,created_user,created_at,orderId,status,state,orderNumber,name,company_productNumber,charge_employee,companyId", true);
+					"number,customerId,created_user,created_at,orderId,status,state,orderNumber,name,company_productNumber,charge_employee,companyId,customerId", false);
 
 			return packingOrder.getId();
 		} catch (Exception e) {

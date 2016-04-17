@@ -247,7 +247,7 @@ public class FinishStoreOutService extends BaseService {
 				}
 				finishStoreOutDetailService.addBatch(object.getDetaillist());
 				// 更新表
-				this.update(object,"id","number,packingOrderId,created_user,created_at,orderId,has_print,status,state",
+				this.update(object,"id","charge_employee,name,company_productNumber,companyId,customerId,img,img_s,img_ss,number,packingOrderId,created_user,created_at,orderId,has_print,status,state",
 								true);
 				//更新成品库存表
 				finishStoreStockService.reStock(object.getOrderId());

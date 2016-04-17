@@ -62,25 +62,41 @@ $(document).ready( function() {
 				name :'col1_value',
 				colname :'列1值',
 				width :'15%',
-				className:"input"
+				className:"input",
+				displayValue:function(value){
+					if(value == undefined){return "";}
+					else{return value;}
+				}
 			},
 			{
 				name :'col2_value',
 				colname :'列2值',
 				width :'15%',
-				className:"input"
+				className:"input",
+				displayValue:function(value){
+					if(value == undefined){return "";}
+					else{return value;}
+				}
 			},
 			{
 				name :'col3_value',
 				colname :'列3值',
 				width :'15%',
-				className:"input"
+				className:"input",
+				displayValue:function(value){
+					if(value == undefined){return "";}
+					else{return value;}
+				}
 			},
 			{
 				name :'col4_value',
 				colname :'列4值',
 				width :'15%',
-				className:"input"
+				className:"input",
+				displayValue:function(value){
+					if(value == undefined){return "";}
+					else{return value;}
+				}
 			},
 			        {
 			        	name :'color',

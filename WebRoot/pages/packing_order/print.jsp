@@ -129,7 +129,7 @@
 											<th rowspan="2" width="60px">
 												箱数
 											</th>
-											<th colspan="2" width="100px">
+											<th rowspan="2" width="80px">
 												箱号
 											</th>
 											<th rowspan="2" width="40px">
@@ -148,10 +148,6 @@
 												毛重
 											</th><th width="55px">
 												净重
-											</th><th width="60px">
-												开始
-											</th><th width="60px">
-												结束
 											</th></tr>
 									</thead>
 									<tbody>
@@ -191,8 +187,7 @@
 										<td><%=detail.getGross_weight() %></td>
 										<td><%=detail.getNet_weight() %></td>
 										<td><%=detail.getCartons() %></td>
-										<td><%=detail.getBox_number_start() %></td>
-										<td><%=detail.getBox_number_end() %></td>
+										<td><%=detail.getBox_number_start() %> - <%=detail.getBox_number_end() %></td>
 										<td><%=detail.getPer_pack_quantity() %></td>
 										<td><%=detail.getCapacity() %></td>
 										</tr>

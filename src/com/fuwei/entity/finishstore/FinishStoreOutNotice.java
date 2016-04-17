@@ -12,11 +12,10 @@ import net.keepsoft.commons.annotation.Table;
 import net.keepsoft.commons.annotation.Temporary;
 
 //成品出入库
-@Table("tb_finishstore_out")
-public class FinishStoreOut {
+@Table("tb_finishstore_out_notice")
+public class FinishStoreOutNotice {
 	@IdentityId
 	private Integer id;
-	private Integer finishStoreOutNoticeId;//发货通知单ID
 	private String number;//成品出入库单编号
 	private Integer orderId;
 	private String orderNumber;
@@ -39,7 +38,7 @@ public class FinishStoreOut {
 	private Integer created_user;//创建人
 	private String memo;//备注
 	@Temporary
-	private List<FinishStoreOutDetail> detaillist ;
+	private List<FinishStoreOutNoticeDetail> detaillist ;
 	
 	/*2015-7-8添加 是否打印、 是否打印属性*/
 	private Boolean has_print;
@@ -57,14 +56,6 @@ public class FinishStoreOut {
 	private Integer col4_id;//装箱单中动态列4的列属性ID ， 根据ID可以在缓存中获取name
 	
 	
-	public Integer getFinishStoreOutNoticeId() {
-		return finishStoreOutNoticeId;
-	}
-
-	public void setFinishStoreOutNoticeId(Integer finishStoreOutNoticeId) {
-		this.finishStoreOutNoticeId = finishStoreOutNoticeId;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -169,11 +160,11 @@ public class FinishStoreOut {
 		this.memo = memo;
 	}
 
-	public List<FinishStoreOutDetail> getDetaillist() {
+	public List<FinishStoreOutNoticeDetail> getDetaillist() {
 		return detaillist;
 	}
 
-	public void setDetaillist(List<FinishStoreOutDetail> detaillist) {
+	public void setDetaillist(List<FinishStoreOutNoticeDetail> detaillist) {
 		this.detaillist = detaillist;
 	}
 
@@ -279,22 +270,19 @@ public class FinishStoreOut {
 		if(this.status == null){
 			return true;
 		}
-		return this.status != 6 && this.status != 7;
+		return this.status != 6 && this.status != 7 && this.status != -1;
 	}
 	
 	public Boolean deletable(){
-		if(this.has_print){
-			return false;
-		}
 		if(this.status == null){
 			return true;
 		}
-		return this.status != 6;
+		return this.status != 6 && this.status != -1;
 	}
 	
 	
 	public String createNumber() throws ParseException{
-		return DateTool.getYear2() + "FCK" + NumberUtil.appendZero(this.id, 4);
+		return DateTool.getYear2() + "FNC" + NumberUtil.appendZero(this.id, 4);
 	}
 	public String getNumber() {
 		return number;
@@ -306,5 +294,14 @@ public class FinishStoreOut {
 	
 	public String getType() throws ParseException{
 		return "出库";
+	}
+	public String getStateString(){
+		if(this.status == 6){
+			return "已发货";
+		}else if(this.status == -1){
+			return "发货失败";
+		}else{
+			return "等待发货";
+		}
 	}
 }

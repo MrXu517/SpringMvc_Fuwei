@@ -217,6 +217,18 @@ public class PackingOrderController extends BaseController {
 			Iterator<PackingOrderDetail> iter = detaillist.iterator();  
 			while(iter.hasNext()){  
 				PackingOrderDetail detail = iter.next();  
+				if(packingOrder.getCol1_id()==null){
+					detail.setCol1_value(null);
+				}
+				if(packingOrder.getCol2_id()==null){
+					detail.setCol2_value(null);
+				}
+				if(packingOrder.getCol3_id()==null){
+					detail.setCol3_value(null);
+				}
+				if(packingOrder.getCol4_id()==null){
+					detail.setCol4_value(null);
+				}
 			    int quantity = detail.getQuantity();
 			    int per_carton_quantity = detail.getPer_carton_quantity();
 			    if(quantity == 0){  
@@ -376,6 +388,18 @@ public class PackingOrderController extends BaseController {
 		Iterator<PackingOrderDetail> iter = detaillist.iterator();  
 		while(iter.hasNext()){  
 			PackingOrderDetail detail = iter.next();  
+			if(packingOrder.getCol1_id()==null){
+				detail.setCol1_value(null);
+			}
+			if(packingOrder.getCol2_id()==null){
+				detail.setCol2_value(null);
+			}
+			if(packingOrder.getCol3_id()==null){
+				detail.setCol3_value(null);
+			}
+			if(packingOrder.getCol4_id()==null){
+				detail.setCol4_value(null);
+			}
 		    int quantity = detail.getQuantity();
 		    int per_carton_quantity = detail.getPer_carton_quantity();
 		    if(quantity == 0){  
