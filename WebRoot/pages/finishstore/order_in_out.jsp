@@ -346,6 +346,9 @@
 											</tr>
 										</thead>
 										<tbody>
+										<%if(detailInOutlist.size()==0){ %>	
+										<tr><td colspan="<%=col+7 %>">没有出入库记录！！！</td></tr>
+										<%} %>
 										<%
 											for (FinishInOut item : detailInOutlist) {
 												List<FinishInOutDetail> detailist = item.getDetaillist();
