@@ -47,7 +47,7 @@
     max-height: 120px;
 }
 div.name{   margin-left: 15px; width: 100px; display: inline-block;}
-#mainTb td{text-align:center;word-break: break-word;}
+#mainTb td{text-align:center;word-break: break-word;line-height:21px;}
 td.th{font-weight:bold;}
 th{font-size: 15px;}
 #mainTb{table-layout: fixed;}
