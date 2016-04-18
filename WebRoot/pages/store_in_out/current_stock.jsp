@@ -285,7 +285,7 @@
 										<tr itemId="<%=item.getId()%>" class="<%=classname%>">
 											<td rowspan="<%=detailsize%>"><%=++i%></td>
 											
-											<td rowspan="<%=detailsize%>"><a target="_top" href="order/detail/<%=item.getOrderId()%>"><%=item.getOrderNumber()%></a></td>
+											<td rowspan="<%=detailsize%>"><a target="_top" href="order/detail/<%=item.getOrderId() %>"><%=item.getOrderNumber()%></a></td>
 											<td rowspan="<%=detailsize%>"><%=SystemCache.getCompanyShortName(item.getCompanyId())%></td>
 											<td rowspan="<%=detailsize%>"><%=item.getCompany_productNumber()%></td>
 											<td rowspan="<%=detailsize%>"><%=item.getName()%></td>
@@ -296,7 +296,7 @@
 											<td><%=detailist.get(0).getColor()%></td>
 											<td><%=detailist.get(0).getStock_quantity()%></td>
 											<td rowspan="<%=detailsize%>">
-												<a target="_top" href="material_current_stock/in_out/<%=item.getOrderId()%>">出入库记录</a>
+												<a target="_top" href="material_current_stock/in_out/<%=item.getOrderId() %>">出入库记录</a>
 											</td>
 										</tr>
 										<%
