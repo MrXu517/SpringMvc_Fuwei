@@ -36,6 +36,8 @@ public class FinishStoreOutService extends BaseService {
 	DataCorrectRecordService dataCorrectRecordService;
 	@Autowired
 	FinishStoreOutDetailService finishStoreOutDetailService;
+	@Autowired
+	FinishStoreOutNoticeService finishStoreOutNoticeService;
 
 	// 获取列表
 	// 获取列表
@@ -207,6 +209,8 @@ public class FinishStoreOutService extends BaseService {
 					detail.setFinishStoreInOutId(id);
 				}
 				finishStoreOutDetailService.addBatch(object.getDetaillist());
+				//成品通知单执行完成
+				finishStoreOutNoticeService.complete(object.getFinishStoreOutNoticeId());
 				//更新成品库存表
 				finishStoreStockService.reStock(object.getOrderId());
 				return id;
@@ -221,8 +225,8 @@ public class FinishStoreOutService extends BaseService {
 	@Transactional
 	public int updatePrint(FinishStoreOut object) throws Exception {
 		// 更新表
-		dao.update("update tb_finishstore_out set has_print=? where id=?", object
-				.getHas_print(), object.getId());
+		dao.update("update tb_finishstore_out set has_print=?,status=6,state=? where id=?", object
+				.getHas_print(),"执行完成", object.getId());
 
 		return object.getId();
 	}
@@ -353,6 +357,10 @@ public class FinishStoreOutService extends BaseService {
 			int result = dao.update("delete from tb_finishstore_out WHERE  id = ?", id);
 			//更新成品库存表
 			finishStoreStockService.reStock(temp.getOrderId());
+			//2.修改成品发货通知单为执行失败状态
+			if(temp.getFinishStoreOutNoticeId()!=null){
+				finishStoreOutNoticeService.fail(temp.getFinishStoreOutNoticeId());
+			}
 			//3.添加数据纠正记录
 			dataCorrectRecordService.add(datacorrect);
 			return result;
@@ -385,6 +393,10 @@ public class FinishStoreOutService extends BaseService {
 				throw new Exception("单据已执行完成，无法删除 ");
 			}
 			int result = dao.update("delete from tb_finishstore_out WHERE  id = ?", id);
+			//2.修改成品发货通知单为执行失败状态
+			if(temp.getFinishStoreOutNoticeId()!=null){
+				finishStoreOutNoticeService.fail(temp.getFinishStoreOutNoticeId());
+			}
 			//更新成品库存表
 			finishStoreStockService.reStock(temp.getOrderId());
 			return result;
@@ -410,6 +422,10 @@ public class FinishStoreOutService extends BaseService {
 				throw new Exception("单据已执行完成，无法删除 ");
 			}
 			int result = dao.update("delete from tb_finishstore_out WHERE  id = ?", temp.getId());
+			//2.修改成品发货通知单为执行失败状态
+			if(temp.getFinishStoreOutNoticeId()!=null){
+				finishStoreOutNoticeService.fail(temp.getFinishStoreOutNoticeId());
+			}
 			//更新成品库存表
 			finishStoreStockService.reStock(temp.getOrderId());
 			return result;

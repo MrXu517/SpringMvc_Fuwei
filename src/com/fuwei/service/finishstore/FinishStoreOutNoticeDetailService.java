@@ -1,7 +1,10 @@
 package com.fuwei.service.finishstore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -25,6 +28,21 @@ public class FinishStoreOutNoticeDetailService extends BaseService {
 			List<FinishStoreOutNoticeDetail> List = dao.queryForBeanList(
 					"SELECT a.*,b.color,b.per_carton_quantity,b.per_pack_quantity,b.col1_value,b.col2_value,b.col3_value,b.col4_value FROM tb_finishstore_out_notice_detail a,tb_packingorder_detail b WHERE a.finishStoreOutNoticeId=? and a.packingOrderDetailId=b.id", FinishStoreOutNoticeDetail.class,finishStoreOutNoticeId);
 			return List;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	// 获取详情列表Map<packingOrderDetailId,FinishStoreOutNoticeDetail>
+	public Map<Integer,FinishStoreOutNoticeDetail> getMap(int finishStoreOutNoticeId) throws Exception {
+		try {
+			List<FinishStoreOutNoticeDetail> List = dao.queryForBeanList(
+					"SELECT a.*,b.color,b.per_carton_quantity,b.per_pack_quantity,b.col1_value,b.col2_value,b.col3_value,b.col4_value FROM tb_finishstore_out_notice_detail a,tb_packingorder_detail b WHERE a.finishStoreOutNoticeId=? and a.packingOrderDetailId=b.id", FinishStoreOutNoticeDetail.class,finishStoreOutNoticeId);
+			Map<Integer,FinishStoreOutNoticeDetail> map = new HashMap<Integer, FinishStoreOutNoticeDetail>();
+			for(FinishStoreOutNoticeDetail detail : List){
+				map.put(detail.getPackingOrderDetailId(), detail);
+			}
+			return map;
 		} catch (Exception e) {
 			throw e;
 		}

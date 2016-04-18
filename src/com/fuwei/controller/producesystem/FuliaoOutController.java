@@ -224,7 +224,7 @@ public class FuliaoOutController extends BaseController {
 		return addbyorder(notice.getId(), session, request, response);
 	}
 
-	@RequestMapping(value = "/{orderId}/add", method = RequestMethod.GET)
+	@RequestMapping(value = "/{fuliaoNoticeId}/add", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView addbyorder(@PathVariable Integer fuliaoNoticeId,HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {

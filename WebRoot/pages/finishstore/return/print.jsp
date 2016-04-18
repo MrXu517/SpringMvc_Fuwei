@@ -212,7 +212,8 @@ div.name{   margin-left: 15px; width: 100px; display: inline-block;}
 
 										<p class="pull-right auto_bottom" style="padding-top: 15px;">
 											<span id="created_user">制单人：<%=SystemCache.getUserName(finishStoreReturn.getCreated_user())%></span>
-											<span id="date"> 退货日期：<%=DateTool.formatDateYMD(finishStoreReturn.getDate())%></span>
+											<span id="date"> 制单日期：<%=DateTool.formatDateYMD(DateTool.getYanDate(finishStoreReturn.getCreated_at()))%></span>
+											<span id="date"> 退货日期：<%=DateTool.formatDateYMD(DateTool.getYanDate(finishStoreReturn.getDate()))%></span>
 										</p>
 
 										</table>

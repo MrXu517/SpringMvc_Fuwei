@@ -135,6 +135,20 @@ public class FinishStoreOutNoticeService extends BaseService {
 	}
 	
 	// 获取
+	public FinishStoreOutNotice getAndDetail(String number) throws Exception {
+		try {
+			FinishStoreOutNotice notice = this.get(number);
+			if(notice == null){
+				return null;
+			}
+			List<FinishStoreOutNoticeDetail> detaillist = finishStoreOutNoticeDetailService.getList(notice.getId());
+			notice.setDetaillist(detaillist);
+			return notice;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	// 获取
 	public FinishStoreOutNotice get(int id) throws Exception {
 		try {
 			FinishStoreOutNotice notice = dao.queryForBean(
@@ -147,7 +161,7 @@ public class FinishStoreOutNoticeService extends BaseService {
 	}
 	public FinishStoreOutNotice get(String number) throws Exception {
 		try {
-			FinishStoreOutNotice notice = dao.queryForBean("select * from tb_finishstore_out_notice where number = ?", FinishStoreOutNotice.class, number);
+			FinishStoreOutNotice notice = dao.queryForBean("select a.*,b.col1_id,b.col2_id,b.col3_id,b.col4_id from tb_finishstore_out_notice a,tb_packingorder b where a.packingOrderId=b.id and a.number = ?", FinishStoreOutNotice.class, number);
 			return notice;
 		} catch (Exception e) {
 			throw e;

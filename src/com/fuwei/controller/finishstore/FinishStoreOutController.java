@@ -2,6 +2,7 @@ package com.fuwei.controller.finishstore;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.controller.BaseController;
+import com.fuwei.entity.DataCorrectRecord;
 import com.fuwei.entity.Employee;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
@@ -31,13 +33,19 @@ import com.fuwei.entity.finishstore.FinishStoreIn;
 import com.fuwei.entity.finishstore.FinishStoreInDetail;
 import com.fuwei.entity.finishstore.FinishStoreOut;
 import com.fuwei.entity.finishstore.FinishStoreOutDetail;
+import com.fuwei.entity.finishstore.FinishStoreOutNotice;
+import com.fuwei.entity.finishstore.FinishStoreOutNoticeDetail;
 import com.fuwei.entity.finishstore.FinishStoreStock;
 import com.fuwei.entity.finishstore.FinishStoreStockDetail;
 import com.fuwei.entity.finishstore.PackingOrder;
 import com.fuwei.entity.finishstore.PackingOrderDetail;
+import com.fuwei.entity.producesystem.FuliaoOutNotice;
+import com.fuwei.entity.producesystem.FuliaoOutNoticeDetail;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.OrderService;
 import com.fuwei.service.finishstore.FinishStoreOutDetailService;
+import com.fuwei.service.finishstore.FinishStoreOutNoticeDetailService;
+import com.fuwei.service.finishstore.FinishStoreOutNoticeService;
 import com.fuwei.service.finishstore.FinishStoreOutService;
 import com.fuwei.service.finishstore.FinishStoreStockService;
 import com.fuwei.service.finishstore.PackingOrderService;
@@ -60,11 +68,16 @@ public class FinishStoreOutController extends BaseController {
 	OrderService orderService;
 	@Autowired
 	AuthorityService authorityService;
+	@Autowired
+	FinishStoreOutNoticeService finishStoreOutNoticeService;
+	@Autowired
+	FinishStoreOutNoticeDetailService finishStoreOutNoticeDetailService;
 
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView index(Integer page, String start_time, String end_time,
-			String orderNumber, String sortJSON, HttpSession session,
+			String orderNumber,Integer charge_employee,
+			String number,  String sortJSON, HttpSession session,
 			HttpServletRequest request) throws Exception {
 
 		String lcode = "finishstore/index";
@@ -97,59 +110,65 @@ public class FinishStoreOutController extends BaseController {
 		sortList.add(sort2);
 
 		pager = finishStoreOutService.getListAndDetail(pager, start_time_d, end_time_d,
-				orderNumber,null,null, sortList);
+				orderNumber,charge_employee,number, sortList);
 		
 		request.setAttribute("start_time", start_time_d);
 		request.setAttribute("end_time", end_time_d);
 		request.setAttribute("orderNumber", orderNumber);
+		request.setAttribute("charge_employee", charge_employee);
+		List<Employee> employeelist = new ArrayList<Employee>();
+		for (Employee temp : SystemCache.employeelist) {
+			if (temp.getIs_charge_employee()) {
+				employeelist.add(temp);
+			}
+		}
+		request.setAttribute("employeelist", employeelist);
+		request.setAttribute("number", number);
 		request.setAttribute("pager", pager);
 		return new ModelAndView("finishstore/out/index");
 	}
 	
-	@RequestMapping(value = "/list/{OrderId}", method = RequestMethod.GET)
-	@ResponseBody
-	public ModelAndView listbyorder(@PathVariable Integer OrderId,
-			HttpSession session, HttpServletRequest request) throws Exception {
-		if (OrderId == null) {
-			throw new Exception("缺少订单ID");
-		}
-		String lcode = "finishstore/index";
-		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
-		if (!hasAuthority) {
-			throw new PermissionDeniedDataAccessException("没有查看成品出库单列表的权限", null);
-		}
-		List<FinishStoreOut> resultlist = finishStoreOutService.getList(OrderId);
-		if (resultlist == null) {
-			resultlist = new ArrayList<FinishStoreOut>();
-		}
-		request.setAttribute("resultlist", resultlist);
-		request.setAttribute("orderId", OrderId);
-		return new ModelAndView("finishstore/in/listbyorder");
-	}
+//	@RequestMapping(value = "/list/{OrderId}", method = RequestMethod.GET)
+//	@ResponseBody
+//	public ModelAndView listbyorder(@PathVariable Integer OrderId,
+//			HttpSession session, HttpServletRequest request) throws Exception {
+//		if (OrderId == null) {
+//			throw new Exception("缺少订单ID");
+//		}
+//		String lcode = "finishstore/index";
+//		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+//		if (!hasAuthority) {
+//			throw new PermissionDeniedDataAccessException("没有查看成品出库单列表的权限", null);
+//		}
+//		List<FinishStoreOut> resultlist = finishStoreOutService.getList(OrderId);
+//		if (resultlist == null) {
+//			resultlist = new ArrayList<FinishStoreOut>();
+//		}
+//		request.setAttribute("resultlist", resultlist);
+//		request.setAttribute("orderId", OrderId);
+//		return new ModelAndView("finishstore/in/listbyorder");
+//	}
 	
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView add(String orderNumber, HttpSession session, HttpServletRequest request,
+	public ModelAndView add(String finishStoreOutNoticeNumber, HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		Order order =  orderService.get(orderNumber);
-		 if(order == null){
-			 throw new Exception("找不到订单号为" + orderNumber + "的订单");
-		 }
-		int orderId = order.getId();
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
 		String lcode = "finishstore/add";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if (!hasAuthority) {
 			throw new PermissionDeniedDataAccessException("没有添加成品出库单的权限", null);
 		}
-		request.setAttribute("order", order);
+		FinishStoreOutNotice notice = finishStoreOutNoticeService.getAndDetail(finishStoreOutNoticeNumber);
+		if(notice == null){
+			throw new Exception("找不到单号为" + finishStoreOutNoticeNumber + "的成品发货通知单");
+		}
+		if(notice.getStatus() == 6){
+			throw new Exception("该通知单已发货，无法再出库");
+		}
 		try {
-			PackingOrder packingOrder = packingOrderService.getByOrderAndDetail(orderId);
-			if(packingOrder == null){
-				throw new Exception("该订单没有创建装箱单，请先创建装箱单 点击此处创建 <a href='packing_order/add/"+ orderId + "'>添加装箱单</a>");
-			}
-			request.setAttribute("packingOrder", packingOrder);
-			Map<Integer,FinishStoreStockDetail> stockMap = finishStoreStockService.getStockMapByOrder(orderId);
+			request.setAttribute("notice", notice);
+			Map<Integer,FinishStoreStockDetail> stockMap = finishStoreStockService.getStockMapByOrder(notice.getOrderId());
 			request.setAttribute("stockMap", stockMap);
 			return new ModelAndView("finishstore/out/add");	
 			
@@ -177,6 +196,9 @@ public class FinishStoreOutController extends BaseController {
 			if(finishStoreOut.getPackingOrderId() == null){
 				throw new Exception("装箱单号不能为空");
 			}
+			if(finishStoreOut.getDate() == null){
+				throw new Exception("实际发货日期不能为空");
+			}
 			finishStoreOut.setCreated_at(DateTool.now());// 设置创建时间
 			finishStoreOut.setUpdated_at(DateTool.now());// 设置更新时间
 			finishStoreOut.setCreated_user(user.getId());// 设置创建人
@@ -197,15 +219,25 @@ public class FinishStoreOutController extends BaseController {
 			List<FinishStoreOutDetail> detaillist = SerializeTool
 						.deserializeList(details,
 								FinishStoreOutDetail.class);
+			//获得通知单的数量与箱数
+			Map<Integer,FinishStoreOutNoticeDetail>  noticeDetailMap = finishStoreOutNoticeDetailService.getMap(finishStoreOut.getFinishStoreOutNoticeId());
+			
 			Iterator<FinishStoreOutDetail> iter = detaillist.iterator();
 			while(iter.hasNext()){
 				FinishStoreOutDetail detail = iter.next();
 				if(detail.getCartons() == 0){
 					iter.remove();
 				}
-				detail.setQuantity(detail.getCartons() * detail.getPer_carton_quantity());
+//				detail.setQuantity(detail.getCartons() * detail.getPer_carton_quantity());
 				if(detail.getQuantity() == 0){
 					iter.remove();
+				}
+				if(noticeDetailMap.containsKey(detail.getPackingOrderDetailId())){
+					FinishStoreOutNoticeDetail temp = noticeDetailMap.get(detail.getPackingOrderDetailId());
+					detail.setNotice_cartons(temp.getCartons());
+					detail.setNotice_quantity(temp.getQuantity());
+				}else{
+					throw new Exception("发货单的装箱单明细与通知单不一致");
 				}
 			}
 			if(detaillist==null || detaillist.size()<=0){
@@ -220,6 +252,8 @@ public class FinishStoreOutController extends BaseController {
 		}
 		
 	}
+		
+
 	
 
 	
@@ -230,12 +264,35 @@ public class FinishStoreOutController extends BaseController {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
 		String lcode = "finishstore/delete";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
-		if(!hasAuthority){
-			throw new PermissionDeniedDataAccessException("没有删除成品出库单的权限", null);
+		String lcode_datacorrect = "data/correct";
+		Boolean hasAuthority_datacorrect = authorityService.checkLcode(user.getId(), lcode_datacorrect);
+		if (!hasAuthority && !hasAuthority_datacorrect) {
+			throw new PermissionDeniedDataAccessException("没有删除成品发货单的权限", null);
 		}
-		int success = finishStoreOutService.remove(id);
+		FinishStoreOut finishStoreOut = finishStoreOutService.get(id);
 		
-		return this.returnSuccess();
+		//若原材料入库单已打印或已执行完成(即不可正常删除)，则执行数据纠正，否则正常执行删除
+		Map<String,Object> data = new HashMap<String, Object>();
+		if(!finishStoreOut.deletable()){
+			//判断是否有数据纠正的权限
+			if(!hasAuthority_datacorrect){
+				throw new PermissionDeniedDataAccessException("成品发货单已打印或已执行完成，且没有数据纠正的权限，无法删除", null);
+			}
+			DataCorrectRecord dataCorrectRecord = new DataCorrectRecord();
+			dataCorrectRecord.setCreated_at(DateTool.now());
+			dataCorrectRecord.setCreated_user(user.getId());
+			dataCorrectRecord.setOperation("删除");
+			dataCorrectRecord.setTb_table("成品发货单");
+			dataCorrectRecord.setDescription("成品发货单" + finishStoreOut.getNumber()+"已打印或已执行完成，因数据错误进行数据纠正删除");
+			finishStoreOutService.remove_datacorrect(finishStoreOut,dataCorrectRecord);
+			data.put("message", "成品发货单" + finishStoreOut.getNumber() + " 数据纠正删除操作成功");
+		}else{
+			if (!hasAuthority) {
+				throw new PermissionDeniedDataAccessException("没有删除成品发货单的权限", null);
+			}
+			finishStoreOutService.remove(finishStoreOut);
+		}
+		return this.returnSuccess(data);
 		
 	}
 	
@@ -252,12 +309,13 @@ public class FinishStoreOutController extends BaseController {
 		return finishStoreOut;
 	}
 	
+	
 	@RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView detail(@PathVariable Integer id, HttpSession session,
 			HttpServletRequest request) throws Exception {
 		if (id == null) {
-			throw new Exception("缺少成品入库单ID");
+			throw new Exception("缺少成品出库单ID");
 		}
 		String lcode = "finishstore/index";
 		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
@@ -306,34 +364,30 @@ public class FinishStoreOutController extends BaseController {
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有编辑成品出库单的权限", null);
 		}
-		finishStoreOut.setUpdated_at(DateTool.now());
-		
-		Order order = orderService.get(finishStoreOut.getOrderId());
-		if(order == null){
-			throw new Exception("不存在ID="+finishStoreOut.getOrderId()+"的订单" );
-		}
-		finishStoreOut.setCharge_employee(order.getCharge_employee());
-		finishStoreOut.setCompany_productNumber(order.getCompany_productNumber());
-		finishStoreOut.setName(order.getName());
-		finishStoreOut.setOrderNumber(order.getOrderNumber());
-		finishStoreOut.setCompanyId(order.getCompanyId());
-		finishStoreOut.setCustomerId(order.getCustomerId());
-		finishStoreOut.setImg(order.getImg());
-		finishStoreOut.setImg_s(order.getImg_s());
-		finishStoreOut.setImg_ss(order.getImg_ss());
+		finishStoreOut.setUpdated_at(DateTool.now());	
 		
 		List<FinishStoreOutDetail> detaillist = SerializeTool
 				.deserializeList(details,
 						FinishStoreOutDetail.class);
+		//获得通知单的数量与箱数
+		Map<Integer,FinishStoreOutNoticeDetail>  noticeDetailMap = finishStoreOutNoticeDetailService.getMap(finishStoreOut.getFinishStoreOutNoticeId());
+		
 		Iterator<FinishStoreOutDetail> iter = detaillist.iterator();
 		while(iter.hasNext()){
 			FinishStoreOutDetail detail = iter.next();
 			if(detail.getCartons() == 0){
 				iter.remove();
 			}
-			detail.setQuantity(detail.getCartons() * detail.getPer_carton_quantity());
+//			detail.setQuantity(detail.getCartons() * detail.getPer_carton_quantity());
 			if(detail.getQuantity() == 0){
 				iter.remove();
+			}
+			if(noticeDetailMap.containsKey(detail.getPackingOrderDetailId())){
+				FinishStoreOutNoticeDetail temp = noticeDetailMap.get(detail.getPackingOrderDetailId());
+				detail.setNotice_cartons(temp.getCartons());
+				detail.setNotice_quantity(temp.getQuantity());
+			}else{
+				throw new Exception("发货单的装箱单明细与通知单不一致");
 			}
 		}
 		if(detaillist==null || detaillist.size()<=0){
@@ -358,6 +412,8 @@ public class FinishStoreOutController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有查看打印成品出库单的权限", null);
 		}	
 		FinishStoreOut finishStoreOut = finishStoreOutService.getAndDetail(id);
+		finishStoreOut.setHas_print(true);
+		finishStoreOutService.updatePrint(finishStoreOut);
 		request.setAttribute("finishStoreOut", finishStoreOut);
 		return new ModelAndView("finishstore/out/print");
 	}
@@ -372,7 +428,7 @@ public class FinishStoreOutController extends BaseController {
 	//某订单的成品生产进度
 	@RequestMapping(value = "/actual_out/{orderId}", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView actual_in(@PathVariable Integer orderId, HttpSession session, HttpServletRequest request,
+	public ModelAndView actual_out(@PathVariable Integer orderId, HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		if(orderId == null){
 			throw new Exception("订单号不能为空");

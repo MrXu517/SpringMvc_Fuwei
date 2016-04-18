@@ -22,7 +22,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>扫描订单 -- 桐庐富伟针织厂</title>
+		<title>扫描发货通知单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -56,23 +56,23 @@
 							<a href="user/index">首页</a>
 						</li>
 						<li>
-							<a target="_blank" href="workspace/finish_workspace">成品工作台 -- 入库</a>
+							<a target="_blank" href="workspace/finish_workspace">成品工作台 -- 发货</a>
 						</li>
 						<li class="active">
-							扫描订单
+							扫描发货通知单
 						</li>
 					</ul>
 				</div>
 				<div class="body">
 					<div class="container-fluid producingWidget">
 						<div class="row">
-							<form action="finishstore_in/add">
+							<form action="finishstore_out/add">
 								<div class="form-group col-md-12">
-									<label for="orderNumber" class="col-sm-3 control-label">
-										订单号
+									<label for="finishStoreOutNoticeNumber" class="col-sm-3 control-label">
+										请扫描发货通知单上的条形码
 									</label>
 									<div class="input-group col-sm-9">
-										<input type="text" class="form-control" name="orderNumber" id="orderNumber" />
+										<input type="text" class="form-control" name="finishStoreOutNoticeNumber" id="finishStoreOutNoticeNumber" />
 
 										<span class="input-group-btn">
 											<button type="submit" class="pull-right btn btn-primary">
@@ -92,11 +92,11 @@
 			/*设置当前选中的页*/
 			var $a = $("#left li a[href='finishstore_workspace/workspace']");
 			setActiveLeft($a.parent("li"));
-			$("#orderNumber").focus();
+			$("#finishStoreOutNoticeNumber").focus();
 			
 			$("form").submit(function(){
-				$("#orderNumber").focus();
-				$("#orderNumber").select();
+				$("#finishStoreOutNoticeNumber").focus();
+				$("#finishStoreOutNoticeNumber").select();
 				return true;
 			});
 		</script>

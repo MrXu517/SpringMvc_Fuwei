@@ -4,27 +4,29 @@
 <%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
-<%@page import="com.fuwei.entity.finishstore.FinishStoreIn"%>
-<%@page import="com.fuwei.entity.finishstore.FinishStoreInDetail"%>
+<%@page import="com.fuwei.entity.finishstore.FinishStoreOut"%>
+<%@page import="com.fuwei.entity.finishstore.FinishStoreOutDetail"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	FinishStoreIn finishStoreIn = (FinishStoreIn)request.getAttribute("finishStoreIn");
-	List<FinishStoreInDetail> detaillist = finishStoreIn.getDetaillist();
+	FinishStoreOut finishStoreOut = (FinishStoreOut)request.getAttribute("finishStoreOut");
+	List<FinishStoreOutDetail> detaillist = finishStoreOut.getDetaillist();
 	if (detaillist == null) {
-		detaillist = new ArrayList<FinishStoreInDetail>();
+		detaillist = new ArrayList<FinishStoreOutDetail>();
 	}
 	Boolean has_print = SystemCache.hasAuthority(session,"finishstore/print");
 	Boolean has_edit = SystemCache.hasAuthority(session,"finishstore/edit");
 	Boolean has_delete = SystemCache.hasAuthority(session,"finishstore/delete");
+	Boolean deletable = finishStoreOut.deletable();
+	Boolean has_datacorrect_delete = SystemCache.hasAuthority(session,"data/correct");//数据纠正
 %>
 <!DOCTYPE html>
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>成品入库单详情 -- 桐庐富伟针织厂</title>
+		<title>成品发货单详情 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -104,13 +106,13 @@ tr.disable{background:#ddd;}
 							<a href="user/index">首页</a>
 						</li>
 						<li>
-							<a href="order/detail/<%=finishStoreIn.getOrderId()%>">订单详情</a>
+							<a href="order/detail/<%=finishStoreOut.getOrderId()%>">订单详情</a>
 						</li>
 						<li>
 							<a target="_blank" href="finishstore_workspace/workspace">成品工作台</a>
 						</li>
 						<li class="active">
-							成品入库单详情
+							成品发货单详情
 						</li>
 					</ul>
 				</div>
@@ -119,23 +121,26 @@ tr.disable{background:#ddd;}
 						<div class="row">
 							<div class="col-md-12">
 								<%
-									if (has_delete) {
+									if(has_delete && deletable){
 								%>
-									<button id="deleteBtn" class="delete btn btn-danger pull-right" data-cid="<%=finishStoreIn.getId() %>">删除</button>
+								<button data-cid="<%=finishStoreOut.getId()%>" type="button" class="btn btn-danger pull-right" id="deleteBtn">删除</button>
 								<%
-									}
+									}else if(has_datacorrect_delete && !deletable){
 								%>
+								<button data-cid="<%=finishStoreOut.getId()%>" type="button" class="btn btn-danger pull-right" id="deleteBtn_datacorrect">数据纠正：删除</button>
+								<%} %>
+								
 								<%
 									if(has_print){
 								%>
-								<a target="_blank" href="finishstore_in/print/<%=finishStoreIn.getId()%>" type="button" class="btn btn-success">打印</a>
+								<a target="_blank" href="finishstore_out/print/<%=finishStoreOut.getId()%>" type="button" class="btn btn-success">打印</a>
 								<%
 									}
 								%>
 								<%
-									if(has_edit){
+									if(has_edit && finishStoreOut.isEdit()){
 								%>
-								<a target="_blank" href="finishstore_in/put/<%=finishStoreIn.getId()%>" type="button" class="btn btn-success">编辑</a>
+								<a target="_blank" href="finishstore_out/put/<%=finishStoreOut.getId()%>" type="button" class="btn btn-success">编辑</a>
 								<%
 									}
 								%>
@@ -145,7 +150,7 @@ tr.disable{background:#ddd;}
 									<div class="col-md-12 tablewidget">
 										<table class="table">
 											<caption id="tablename">
-												桐庐富伟针织厂成品入库单<div table_id="<%=finishStoreIn.getNumber()%>" class="id_barcode"></div>
+												桐庐富伟针织厂成品发货单<div table_id="<%=finishStoreOut.getNumber()%>" class="id_barcode"></div>
 											</caption>
 										</table>
 										<table class="table table-responsive noborder">
@@ -156,42 +161,35 @@ tr.disable{background:#ddd;}
 															<tbody>
 																<tr>
 																	<td rowspan="7" width="30%">
-																		<a href="/<%=finishStoreIn.getImg()%>" class="thumbnail"
+																		<a href="/<%=finishStoreOut.getImg()%>" class="thumbnail"
 																			target="_blank"> <img id="previewImg"
-																				alt="200 x 100%" src="/<%=finishStoreIn.getImg_s()%>">
+																				alt="200 x 100%" src="/<%=finishStoreOut.getImg_s()%>">
 																		</a>
 																	</td>
-																	<td width="100px">
-																		<div class="name">订单号：</div><span class="value"><%=finishStoreIn.getOrderNumber()%></span>
+																	<td width="300px">
+																		<div class="name">订单号：</div><span class="value"><%=finishStoreOut.getOrderNumber()%></span>
+																	</td>
+																	<td>
+																		<div class="name">公司：</div><span class="value"><%=SystemCache.getCompanyShortName(finishStoreOut.getCompanyId())%></span>
 																	</td>
 																</tr>
 																<tr>
 																	<td>
-																		<div class="name">公司：</div><span class="value"><%=SystemCache.getCompanyShortName(finishStoreIn.getCompanyId())%></span>
+																		<div class="name">货号：</div><span class="value"><%=finishStoreOut.getCompany_productNumber()%></span>
 																	</td>
-																</tr>
-																
-																<tr>
 																	<td>
-																		<div class="name">客户：</div><span class="value"><%=SystemCache.getCustomerName(finishStoreIn.getCustomerId())%></span>
+																		<div class="name">客户：</div><span class="value"><%=SystemCache.getCustomerName(finishStoreOut.getCustomerId())%></span>
 																	</td>
 																</tr>
 																<tr>
 																	<td>
-																		<div class="name">货号：</div><span class="value"><%=finishStoreIn.getCompany_productNumber()%></span>
+																		<div class="name">款名：</div><span class="value"><%=finishStoreOut.getName()%></span>
 																	</td>
-																</tr>
-																<tr>
 																	<td>
-																		<div class="name">款名：</div><span class="value"><%=finishStoreIn.getName()%></span>
+																		<div class="name">跟单：</div><span class="value"><%=SystemCache.getEmployeeName(finishStoreOut.getCharge_employee())%></span>
 																	</td>
 																</tr>
-																<tr>
-																	<td>
-																		<div class="name">跟单：</div><span class="value"><%=SystemCache.getEmployeeName(finishStoreIn.getCharge_employee())%></span>
-																	</td>
-																	
-																</tr>
+																<tr><td colspan="2"><div class="name">发货时间：</div><span class="value"><%=DateTool.formatDateYMD(finishStoreOut.getDate())%></span></td></tr>
 															</tbody>
 
 
@@ -207,30 +205,30 @@ tr.disable{background:#ddd;}
 												<tr>
 													<%
 											int col = 0;
-											if(finishStoreIn.getCol1_id()!=null){
+											if(finishStoreOut.getCol1_id()!=null){
 											col++;
 											 %>
 											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(finishStoreIn.getCol1_id()) %>
+												<%=SystemCache.getPackPropertyName(finishStoreOut.getCol1_id()) %>
 											</th>
 											<%} %>
 											
-											<%if(finishStoreIn.getCol2_id()!=null){ 
+											<%if(finishStoreOut.getCol2_id()!=null){ 
 											col++;%>
 											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(finishStoreIn.getCol2_id()) %>
+												<%=SystemCache.getPackPropertyName(finishStoreOut.getCol2_id()) %>
 											</th>
 											<%} %>
-											<%if(finishStoreIn.getCol3_id()!=null){ 
+											<%if(finishStoreOut.getCol3_id()!=null){ 
 											col++;%>
 											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(finishStoreIn.getCol3_id()) %>
+												<%=SystemCache.getPackPropertyName(finishStoreOut.getCol3_id()) %>
 											</th>
 											<%} %>
-											<%if(finishStoreIn.getCol4_id()!=null){ 
+											<%if(finishStoreOut.getCol4_id()!=null){ 
 											col++;%>
 											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(finishStoreIn.getCol4_id()) %>
+												<%=SystemCache.getPackPropertyName(finishStoreOut.getCol4_id()) %>
 											</th>
 											<%} %>
 											<th rowspan="2" width="40px">
@@ -239,35 +237,41 @@ tr.disable{background:#ddd;}
 											<th rowspan="2" width="40px">
 												每箱数量
 											</th>
-											<th rowspan="2" width="80px">
-												本次入库数量
+											<th rowspan="2" width="60px">
+												通知发货件数
 											</th>
 											<th rowspan="2" width="60px">
-												本次入库箱数
+												通知发货箱数
+											</th>
+											<th rowspan="2" width="60px">
+												实际发货件数
+											</th>
+											<th rowspan="2" width="60px">
+												实际发货箱数
 											</th>
 												</tr>
 											</thead>
 											<tbody>
 												<%
-													for (FinishStoreInDetail detail : detaillist) {
+													for (FinishStoreOutDetail detail : detaillist) {
 												%>
 												<tr class="tr">
-													<%if(finishStoreIn.getCol1_id()!=null){ %>
+													<%if(finishStoreOut.getCol1_id()!=null){ %>
 										<td>
 											<%=detail.getCol1_value()==null?"":detail.getCol1_value() %>
 										</td>
 										<%} %>
-										<%if(finishStoreIn.getCol2_id()!=null){ %>
+										<%if(finishStoreOut.getCol2_id()!=null){ %>
 										<td>
 											<%=detail.getCol2_value()==null?"":detail.getCol2_value() %>
 										</td>
 										<%} %>	
-										<%if(finishStoreIn.getCol3_id()!=null){ %>
+										<%if(finishStoreOut.getCol3_id()!=null){ %>
 										<td>
 											<%=detail.getCol3_value()==null?"":detail.getCol3_value() %>
 										</td>
 										<%} %>
-										<%if(finishStoreIn.getCol4_id()!=null){ %>
+										<%if(finishStoreOut.getCol4_id()!=null){ %>
 										<td>
 											<%=detail.getCol4_value()==null?"":detail.getCol4_value() %>
 										</td>
@@ -276,6 +280,8 @@ tr.disable{background:#ddd;}
 
 													<td><%=detail.getColor()%></td>
 													<td><%=detail.getPer_carton_quantity()%></td>
+													<td><%=detail.getNotice_quantity()%></td>
+													<td><%=detail.getNotice_cartons()%></td>
 													<td><%=detail.getQuantity()%></td>
 													<td><%=detail.getCartons()%></td>
 												</tr>
@@ -291,8 +297,8 @@ tr.disable{background:#ddd;}
 										</div>
 
 										<p class="pull-right auto_bottom" style="padding-top: 15px;">
-											<span id="created_user">制单人：<%=SystemCache.getUserName(finishStoreIn.getCreated_user())%></span>
-											<span id="date"> 入库日期：<%=DateTool.formatDateYMD(finishStoreIn.getDate())%></span>
+											<span id="created_user">制单人：<%=SystemCache.getUserName(finishStoreOut.getCreated_user())%></span>
+											<span id="date"> 制单日期：<%=DateTool.formatDateYMD(finishStoreOut.getCreated_at())%></span>
 										</p>
 
 										</table>
@@ -314,26 +320,50 @@ tr.disable{background:#ddd;}
 		//删除单据 -- 开始
 		$("#deleteBtn").click( function() {
 			var id = $(this).attr("data-cid");
-			if (!confirm("确定要删除该成品入库单吗？")) {
+			if (!confirm("确定要删除该成品发货单吗？")) {
 				return false;
 			}
 			$.ajax( {
-				url :"finishstore_in/delete/" + id,
+				url :"finishstore_out/delete/" + id,
 				type :'POST'
 			}).done( function(result) {
 				if (result.success) {
-					Common.Tip("删除成品入库单成功", function() {
+					Common.Tip("删除成品发货单成功", function() {
 						$("#breadcrumbs li.active").prev().find("a").click();
 					});
 				}
 			}).fail( function(result) {
-				Common.Error("删除成品入库单失败：" + result.responseText);
+				Common.Error("删除成品发货单失败：" + result.responseText);
 			}).always( function() {
 	
 			});
 			return false;
 		});
 		//删除单据  -- 结束
+		
+		//数据纠正：删除单据 -- 开始
+		$("#deleteBtn_datacorrect").click( function() {
+			var id = $(this).attr("data-cid");
+			if (!confirm("该成品发货单已打印发货， 您是否确定要进行数据纠正：删除？")) {
+				return false;
+			}
+			$.ajax( {
+				url :"finishstore_out/delete/" + id,
+				type :'POST'
+			}).done( function(result) {
+				if (result.success) {
+					Common.Tip("数据纠正成功：" +  result.message, function() {
+						$("#breadcrumbs li.active").prev().find("a").click();
+					});
+				}
+			}).fail( function(result) {
+				Common.Error("数据纠正：删除成品发货单失败：" + result.responseText);
+			}).always( function() {
+	
+			});
+			return false;
+		});
+		//数据纠正：删除单据  -- 结束
 	</script>
 	</body>
 </html>

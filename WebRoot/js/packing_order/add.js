@@ -206,6 +206,11 @@ $(document).ready( function() {
 		grid.TableInstance.addRow(rowdata);
 		return false;
 	});
+	$(grid.TableInstance.tableEle).off("click",".deleteRow");
+	$(grid.TableInstance.tableEle).on("click", ".deleteRow", function() {
+		grid.TableInstance.deleteRow($(this).closest("tr")[0]);
+		return false;
+	});
 	
 	//设置箱号结束号的自动计算，箱号结束号 = 开始号+箱数-1
 	$(grid.TableInstance.tableEle).on("input propertychange","input.box_number_start",function(event) {

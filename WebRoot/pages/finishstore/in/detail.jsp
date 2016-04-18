@@ -19,6 +19,8 @@
 	Boolean has_print = SystemCache.hasAuthority(session,"finishstore/print");
 	Boolean has_edit = SystemCache.hasAuthority(session,"finishstore/edit");
 	Boolean has_delete = SystemCache.hasAuthority(session,"finishstore/delete");
+	Boolean deletable = finishStoreIn.deletable();
+	Boolean has_datacorrect_delete = SystemCache.hasAuthority(session,"data/correct");//数据纠正
 %>
 <!DOCTYPE html>
 <html>
@@ -119,12 +121,14 @@ tr.disable{background:#ddd;}
 						<div class="row">
 							<div class="col-md-12">
 								<%
-									if (has_delete) {
+									if(has_delete && deletable){
 								%>
-									<button id="deleteBtn" class="delete btn btn-danger pull-right" data-cid="<%=finishStoreIn.getId() %>">删除</button>
+								<button data-cid="<%=finishStoreIn.getId()%>" type="button" class="btn btn-danger pull-right" id="deleteBtn">删除</button>
 								<%
-									}
+									}else if(has_datacorrect_delete && !deletable){
 								%>
+								<button data-cid="<%=finishStoreIn.getId()%>" type="button" class="btn btn-danger pull-right" id="deleteBtn_datacorrect">数据纠正：删除</button>
+								<%} %>
 								<%
 									if(has_print){
 								%>
@@ -133,7 +137,7 @@ tr.disable{background:#ddd;}
 									}
 								%>
 								<%
-									if(has_edit){
+									if(has_edit && finishStoreIn.isEdit()){
 								%>
 								<a target="_blank" href="finishstore_in/put/<%=finishStoreIn.getId()%>" type="button" class="btn btn-success">编辑</a>
 								<%
@@ -334,6 +338,30 @@ tr.disable{background:#ddd;}
 			return false;
 		});
 		//删除单据  -- 结束
+		
+			//数据纠正：删除单据 -- 开始
+		$("#deleteBtn_datacorrect").click( function() {
+			var id = $(this).attr("data-cid");
+			if (!confirm("该成品入库单已打印发货， 您是否确定要进行数据纠正：删除？")) {
+				return false;
+			}
+			$.ajax( {
+				url :"finishstore_in/delete/" + id,
+				type :'POST'
+			}).done( function(result) {
+				if (result.success) {
+					Common.Tip("数据纠正成功：" +  result.message, function() {
+						$("#breadcrumbs li.active").prev().find("a").click();
+					});
+				}
+			}).fail( function(result) {
+				Common.Error("数据纠正：删除成品入库单失败：" + result.responseText);
+			}).always( function() {
+	
+			});
+			return false;
+		});
+		//数据纠正：删除单据  -- 结束
 	</script>
 	</body>
 </html>

@@ -58,8 +58,8 @@ table caption strong{width: 250px;display: inline-block;}
 				<div class="col-md-12 tablewidget">
 					<%for(FuliaoOut object : list){ 
 						List<FuliaoOutDetail> detaillist = object == null ? new ArrayList<FuliaoOutDetail>() :object.getDetaillist();
-						String date_string = DateTool.formatDateYMD(object.getCreated_at());
-						String date_now = DateTool.formatDateYMD(DateTool.now());
+						String date_string = DateTool.formatDateYMD(DateTool.getYanDate(object.getCreated_at()));
+						//String date_now = DateTool.formatDateYMD(DateTool.now());
 						for(FuliaoOutDetail detail : object.getDetaillist()){
 							String tag_string = object.getId() + "_" + detail.getId();
 					%>

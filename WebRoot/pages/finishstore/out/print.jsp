@@ -1,118 +1,105 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"
 	contentType="text/html; charset=utf-8"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
-<%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
-<%@page import="com.fuwei.entity.finishstore.FinishStoreInDetail"%>
-<%@page import="com.fuwei.entity.finishstore.FinishStoreIn"%>
+<%@page import="com.fuwei.entity.finishstore.FinishStoreOut"%>
+<%@page import="com.fuwei.entity.finishstore.FinishStoreOutDetail"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	FinishStoreIn finishStoreIn = (FinishStoreIn)request.getAttribute("finishStoreIn");
-	List<FinishStoreInDetail> detaillist = finishStoreIn.getDetaillist();
+	FinishStoreOut finishStoreOut = (FinishStoreOut)request.getAttribute("finishStoreOut");
+	List<FinishStoreOutDetail> detaillist = finishStoreOut.getDetaillist();
 	if (detaillist == null) {
-		detaillist = new ArrayList<FinishStoreInDetail>();
+		detaillist = new ArrayList<FinishStoreOutDetail>();
 	}
 %>
 <!DOCTYPE html>
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>打印成品入库单 -- 桐庐富伟针织厂</title>
+		<title>打印成品发货单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!-- 为了让IE浏览器运行最新的渲染模式 -->
 		<link href="css/printorder/print.css" rel="stylesheet" type="text/css" />
 		<script src="js/plugins/jquery-1.10.2.min.js"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
 		<script src="js/plugins/jquery-barcode.min.js"></script>
-		
-<link href="css/plugins/ui.jqgrid.css" rel="stylesheet"
+		<link href="css/plugins/ui.jqgrid.css" rel="stylesheet"
 			type="text/css" />
 		
 		
 		<style type="text/css">
 #mainTb{  margin-top: 10px;}
-#previewImg,.fuliaoImg {
-	max-width: 200px;
-	max-height: 150px;
-}
+#previewImg {max-width: 200px;max-height: 150px;}
 div.name{   margin-left: 15px; width: 100px; display: inline-block;}
-#mainTb td{text-align:center;}
+#mainTb td,.noborder .table>tbody>tr>td[rowspan],#mainTb th{text-align:center;}
+body {
+  margin: auto;
+  font-family: "Microsoft Yahei", "Verdana", "Tahoma, Arial",
+ "Helvetica Neue", Helvetica, Sans-Serif,"SimSun";
+}
+#tablename{border: none;}
 </style>
 
 	</head>
 	<body>
-					<div class="container-fluid gridTab auto_container ">
+		<div class="container-fluid gridTab auto_container ">
 						<div class="row">
 							<div class="col-md-12">
 								<form class="saveform">
 									<div class="clear"></div>
 									<div class="col-md-12 tablewidget">
-										<table class="table noborder">
+										<table class="table">
 											<caption id="tablename">
-												桐庐富伟针织厂成品入库单<div table_id="<%=finishStoreIn.getNumber()%>" class="id_barcode"></div>
+												桐庐富伟针织厂成品发货单<div table_id="<%=finishStoreOut.getNumber()%>" class="id_barcode"></div>
 											</caption>
 										</table>
 										<table class="table table-responsive noborder">
 											<tbody>
 												<tr>
 													<td colspan="2">
-														<table class="table table-responsive noborder">
-															<tbody>
-												<tr>
-													<td colspan="2">
-														<table class="table table-responsive table-bordered">
+													<table class="table table-responsive table-bordered">
 															<tbody>
 																<tr>
 																	<td rowspan="7" width="30%">
-																		<a href="/<%=finishStoreIn.getImg()%>" class="thumbnail"
+																		<a class="thumbnail"
 																			target="_blank"> <img id="previewImg"
-																				alt="200 x 100%" src="/<%=finishStoreIn.getImg_s()%>">
+																				alt="200 x 100%" src="/<%=finishStoreOut.getImg_s()%>">
 																		</a>
 																	</td>
-																	<td width="100px">
-																		<div class="name">订单号：</div><span class="value"><%=finishStoreIn.getOrderNumber()%></span>
+																	<td width="300px">
+																		<div class="name">订单号：</div><span class="value"><%=finishStoreOut.getOrderNumber()%></span>
+																	</td>
+																	<td>
+																		<div class="name">公司：</div><span class="value"><%=SystemCache.getCompanyShortName(finishStoreOut.getCompanyId())%></span>
 																	</td>
 																</tr>
 																<tr>
 																	<td>
-																		<div class="name">公司：</div><span class="value"><%=SystemCache.getCompanyShortName(finishStoreIn.getCompanyId())%></span>
+																		<div class="name">货号：</div><span class="value"><%=finishStoreOut.getCompany_productNumber()%></span>
 																	</td>
-																</tr>
-																
-																<tr>
 																	<td>
-																		<div class="name">客户：</div><span class="value"><%=SystemCache.getCustomerName(finishStoreIn.getCustomerId())%></span>
+																		<div class="name">客户：</div><span class="value"><%=SystemCache.getCustomerName(finishStoreOut.getCustomerId())%></span>
 																	</td>
 																</tr>
 																<tr>
 																	<td>
-																		<div class="name">货号：</div><span class="value"><%=finishStoreIn.getCompany_productNumber()%></span>
+																		<div class="name">款名：</div><span class="value"><%=finishStoreOut.getName()%></span>
 																	</td>
-																</tr>
-																<tr>
 																	<td>
-																		<div class="name">款名：</div><span class="value"><%=finishStoreIn.getName()%></span>
+																		<div class="name">跟单：</div><span class="value"><%=SystemCache.getEmployeeName(finishStoreOut.getCharge_employee())%></span>
 																	</td>
 																</tr>
-																<tr>
-																	<td>
-																		<div class="name">跟单：</div><span class="value"><%=SystemCache.getEmployeeName(finishStoreIn.getCharge_employee())%></span>
-																	</td>
-																	
-																</tr>
+																<tr><td colspan="2" style="font-weight: bold;"><div class="name">发货时间：</div><span class="value"><%=DateTool.formatDateYMD(finishStoreOut.getDate())%></span></td></tr>
 															</tbody>
 
 
-														</table>
-													</td>
-												</tr>
-											</tbody>
 														</table>
 													</td>
 												</tr>
@@ -122,70 +109,77 @@ div.name{   margin-left: 15px; width: 100px; display: inline-block;}
 										<table id="mainTb"
 											class="table table-responsive table-bordered detailTb">
 											<thead>
-												<tr>
-													<%
+												<tr><th width="30px">
+														序号
+													</th>
+											<%
 											int col = 0;
-											if(finishStoreIn.getCol1_id()!=null){
+											if(finishStoreOut.getCol1_id()!=null){
 											col++;
 											 %>
-											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(finishStoreIn.getCol1_id()) %>
+											<th rowspan="2" width="70px">
+												<%=SystemCache.getPackPropertyName(finishStoreOut.getCol1_id()) %>
 											</th>
 											<%} %>
 											
-											<%if(finishStoreIn.getCol2_id()!=null){ 
+											<%if(finishStoreOut.getCol2_id()!=null){ 
 											col++;%>
-											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(finishStoreIn.getCol2_id()) %>
+											<th rowspan="2" width="70px">
+												<%=SystemCache.getPackPropertyName(finishStoreOut.getCol2_id()) %>
 											</th>
 											<%} %>
-											<%if(finishStoreIn.getCol3_id()!=null){ 
+											<%if(finishStoreOut.getCol3_id()!=null){ 
 											col++;%>
-											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(finishStoreIn.getCol3_id()) %>
+											<th rowspan="2" width="70px">
+												<%=SystemCache.getPackPropertyName(finishStoreOut.getCol3_id()) %>
 											</th>
 											<%} %>
-											<%if(finishStoreIn.getCol4_id()!=null){ 
+											<%if(finishStoreOut.getCol4_id()!=null){ 
 											col++;%>
-											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(finishStoreIn.getCol4_id()) %>
+											<th rowspan="2" width="70px">
+												<%=SystemCache.getPackPropertyName(finishStoreOut.getCol4_id()) %>
 											</th>
 											<%} %>
-											<th rowspan="2" width="40px">
+											<th rowspan="2" width="60px">
 												颜色
 											</th>
-											<th rowspan="2" width="40px">
-												每箱数量
-											</th>
-											<th rowspan="2" width="80px">
-												本次入库数量
+											<th rowspan="2" width="60px">
+												通知发货数量
 											</th>
 											<th rowspan="2" width="60px">
-												本次入库箱数
+												通知发货箱数
+											</th>
+											<th rowspan="2" width="60px">
+												本次发货数量
+											</th>
+											<th rowspan="2" width="60px">
+												本次发货箱数
 											</th>
 												</tr>
 											</thead>
 											<tbody>
 												<%
-													for (FinishStoreInDetail detail : detaillist) {
+													int i = 0 ;
+													for (FinishStoreOutDetail detail : detaillist) {
 												%>
 												<tr class="tr">
-													<%if(finishStoreIn.getCol1_id()!=null){ %>
-										<td>
+													<td><%=++i%></td>
+													<td>
+										<%if(finishStoreOut.getCol1_id()!=null){ %>
 											<%=detail.getCol1_value()==null?"":detail.getCol1_value() %>
 										</td>
 										<%} %>
-										<%if(finishStoreIn.getCol2_id()!=null){ %>
+										<%if(finishStoreOut.getCol2_id()!=null){ %>
 										<td>
 											<%=detail.getCol2_value()==null?"":detail.getCol2_value() %>
 										</td>
 										<%} %>	
-										<%if(finishStoreIn.getCol3_id()!=null){ %>
+										<%if(finishStoreOut.getCol3_id()!=null){ %>
 										<td>
 											<%=detail.getCol3_value()==null?"":detail.getCol3_value() %>
 										</td>
 										<%} %>
-										<%if(finishStoreIn.getCol4_id()!=null){ %>
+										<%if(finishStoreOut.getCol4_id()!=null){ %>
 										<td>
 											<%=detail.getCol4_value()==null?"":detail.getCol4_value() %>
 										</td>
@@ -193,7 +187,8 @@ div.name{   margin-left: 15px; width: 100px; display: inline-block;}
 
 
 													<td><%=detail.getColor()%></td>
-													<td><%=detail.getPer_carton_quantity()%></td>
+													<td><%=detail.getNotice_quantity()%></td>
+													<td><%=detail.getNotice_cartons()%></td>
 													<td><%=detail.getQuantity()%></td>
 													<td><%=detail.getCartons()%></td>
 												</tr>
@@ -209,23 +204,23 @@ div.name{   margin-left: 15px; width: 100px; display: inline-block;}
 										</div>
 
 										<p class="pull-right auto_bottom" style="padding-top: 15px;">
-											<span id="created_user">制单人：<%=SystemCache.getUserName(finishStoreIn.getCreated_user())%></span>
-											<span id="date"> 入库日期：<%=DateTool.formatDateYMD(finishStoreIn.getDate())%></span>
+											<span id="created_user">制单人：<%=SystemCache.getUserName(finishStoreOut.getCreated_user())%></span>
+											<span id="date"> 制单日期：<%=DateTool.formatDateYMD(DateTool.getYanDate(finishStoreOut.getCreated_at()))%></span>
 										</p>
 
 										</table>
+
 									</div>
 								</form>
 							</div>
 						</div>
 					</div>
-
-		<script type="text/javascript">
+	<script type="text/javascript">
 		$(".id_barcode").each(function(){
 			var id =$(this).attr("table_id");
 			$(this).barcode(id, "code128",{barWidth:2, barHeight:30,showHRI:true});
-		});		
-		window.print();
+		});	
+	window.print();
 	</script>
 	</body>
 </html>

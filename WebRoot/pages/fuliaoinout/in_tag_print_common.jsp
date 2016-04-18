@@ -14,8 +14,8 @@
 	//辅料入库单
 	FuliaoIn object = (FuliaoIn) request.getAttribute("fuliaoIn");
 	List<FuliaoInDetail> detaillist = object == null ? new ArrayList<FuliaoInDetail>() :object.getDetaillist();
-	String date_string = DateTool.formatDateYMD(object.getCreated_at());
-	String date_now = DateTool.formatDateYMD(DateTool.now());
+	String date_string = DateTool.formatDateYMD(DateTool.getYanDate(object.getCreated_at()));
+	//String date_now = DateTool.formatDateYMD(DateTool.now());
 %>
 <!DOCTYPE html>
 <html>

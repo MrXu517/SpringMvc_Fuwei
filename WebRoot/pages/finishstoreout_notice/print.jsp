@@ -197,7 +197,7 @@ body {
 
 										<p class="pull-right auto_bottom" style="padding-top: 15px;">
 											<span id="created_user">制单人：<%=SystemCache.getUserName(notice.getCreated_user())%></span>
-											<span id="date"> 制单日期：<%=DateTool.formatDateYMD(notice.getCreated_at())%></span>
+											<span id="date"> 制单日期：<%=DateTool.formatDateYMD(DateTool.getYanDate(notice.getCreated_at()))%></span>
 										</p>
 
 										</table>

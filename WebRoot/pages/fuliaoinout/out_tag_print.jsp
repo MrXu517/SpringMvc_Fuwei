@@ -15,8 +15,8 @@
 	FuliaoOut object = (FuliaoOut) request.getAttribute("fuliaoOut");
 	String employee_name = SystemCache.getEmployeeName(object.getCharge_employee());//跟单人
 	List<FuliaoOutDetail> detaillist = object == null ? new ArrayList<FuliaoOutDetail>() :object.getDetaillist();
-	String date_string = DateTool.formatDateYMD(object.getCreated_at());
-	String date_now = DateTool.formatDateYMD(DateTool.now());
+	String date_string = DateTool.formatDateYMD(DateTool.getYanDate(object.getCreated_at()));
+	//String date_now = DateTool.formatDateYMD(DateTool.now());
 %>
 <!DOCTYPE html>
 <html>

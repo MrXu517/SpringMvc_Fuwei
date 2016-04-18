@@ -227,7 +227,7 @@
 										<tr itemId="<%=item.getId()%>" class="<%=classname%>">
 											<td rowspan="<%=detailsize%>"><%=++i%></td>
 											
-											<td rowspan="<%=detailsize%>"><a target="_blank" href="finishstore_in/detail/<%=item.getId()%>"><%=item.getNumber()%></a></td>
+											<td rowspan="<%=detailsize%>"><a target="_blank" href="finishstore_out/detail/<%=item.getId()%>"><%=item.getNumber()%></a></td>
 											<td rowspan="<%=detailsize%>"><a target="_blank" href="order/detail/<%=item.getOrderId()%>"><%=item.getOrderNumber()%></a></td>
 											<td rowspan="<%=detailsize%>"><%=item.getName()%></td>
 											<td rowspan="<%=detailsize%>"><%=SystemCache.getEmployeeName(item.getCharge_employee())%></td>

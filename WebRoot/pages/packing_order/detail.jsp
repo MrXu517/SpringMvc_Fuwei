@@ -269,7 +269,7 @@
 								</table>
 								<p class="pull-right auto_bottom">
 									<span id="created_user">制单人：<%=SystemCache.getUserName(packingOrder.getCreated_user()) %></span>
-									<span id="date"> 日期：<%=DateTool.formatDateYMD(packingOrder.getCreated_at()) %></span>
+									<span id="date"> 制单日期：<%=DateTool.formatDateYMD(packingOrder.getCreated_at()) %></span>
 								</p>
 								</div>
 							</form>

@@ -175,9 +175,9 @@ div.name{margin-left: 20px;width: 100px; display: inline-block;}
 											<td rowspan="<%=detailsize%>"><%=++i%></td>
 											
 											<td rowspan="<%=detailsize%>"><a target="_blank" href="finishstoreout_notice/detail/<%=item.getId()%>"><%=item.getNumber()%></a></td>
-											<td rowspan="<%=detailsize %>"><%if(status == 6){ %><span class="label label-success">已入库</span>
-												<%} else if(status == -1){ %><span class="label label-danger">入库失败</span>
-												<%} else{ %><span class="label label-info">等待入库</span>
+											<td rowspan="<%=detailsize %>"><%if(status == 6){ %><span class="label label-success">已发货</span>
+												<%} else if(status == -1){ %><span class="label label-danger">发货失败</span>
+												<%} else{ %><span class="label label-info">等待发货</span>
 												<%} %></td>
 											<td><%=detailist.get(0).getCol1_value() == null?"":detailist.get(0).getCol1_value()%></td>
 											<td><%=detailist.get(0).getCol2_value() == null?"":detailist.get(0).getCol2_value()%></td>

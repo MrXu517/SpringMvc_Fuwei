@@ -2,6 +2,7 @@ package com.fuwei.controller.finishstore;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +25,13 @@ import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.controller.BaseController;
+import com.fuwei.entity.DataCorrectRecord;
 import com.fuwei.entity.Employee;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
 import com.fuwei.entity.finishstore.FinishStoreIn;
 import com.fuwei.entity.finishstore.FinishStoreInDetail;
+import com.fuwei.entity.finishstore.FinishStoreOut;
 import com.fuwei.entity.finishstore.FinishStoreReturn;
 import com.fuwei.entity.finishstore.FinishStoreReturnDetail;
 import com.fuwei.entity.finishstore.FinishStoreStock;
@@ -238,7 +241,6 @@ public class FinishStoreReturnController extends BaseController {
 	}
 	
 
-	
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> delete(@PathVariable int id,HttpSession session, HttpServletRequest request,
@@ -246,12 +248,35 @@ public class FinishStoreReturnController extends BaseController {
 		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
 		String lcode = "finishstore/delete";
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
-		if(!hasAuthority){
+		String lcode_datacorrect = "data/correct";
+		Boolean hasAuthority_datacorrect = authorityService.checkLcode(user.getId(), lcode_datacorrect);
+		if (!hasAuthority && !hasAuthority_datacorrect) {
 			throw new PermissionDeniedDataAccessException("没有删除成品退货单的权限", null);
 		}
-		int success = finishStoreReturnService.remove(id);
+		FinishStoreReturn finishStoreReturn = finishStoreReturnService.get(id);
 		
-		return this.returnSuccess();
+		//若原材料入库单已打印或已执行完成(即不可正常删除)，则执行数据纠正，否则正常执行删除
+		Map<String,Object> data = new HashMap<String, Object>();
+		if(!finishStoreReturn.deletable()){
+			//判断是否有数据纠正的权限
+			if(!hasAuthority_datacorrect){
+				throw new PermissionDeniedDataAccessException("成品退货单已打印或已执行完成，且没有数据纠正的权限，无法删除", null);
+			}
+			DataCorrectRecord dataCorrectRecord = new DataCorrectRecord();
+			dataCorrectRecord.setCreated_at(DateTool.now());
+			dataCorrectRecord.setCreated_user(user.getId());
+			dataCorrectRecord.setOperation("删除");
+			dataCorrectRecord.setTb_table("成品退货单");
+			dataCorrectRecord.setDescription("成品退货单" + finishStoreReturn.getNumber()+"已打印或已执行完成，因数据错误进行数据纠正删除");
+			finishStoreReturnService.remove_datacorrect(finishStoreReturn,dataCorrectRecord);
+			data.put("message", "成品退货单" + finishStoreReturn.getNumber() + " 数据纠正删除操作成功");
+		}else{
+			if (!hasAuthority) {
+				throw new PermissionDeniedDataAccessException("没有删除成品退货单的权限", null);
+			}
+			finishStoreReturnService.remove(finishStoreReturn);
+		}
+		return this.returnSuccess(data);
 		
 	}
 	
@@ -374,6 +399,8 @@ public class FinishStoreReturnController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有查看打印成品退货单的权限", null);
 		}	
 		FinishStoreReturn finishStoreReturn = finishStoreReturnService.getAndDetail(id);
+		finishStoreReturn.setHas_print(true);
+		finishStoreReturnService.updatePrint(finishStoreReturn);
 		request.setAttribute("finishStoreReturn", finishStoreReturn);
 		return new ModelAndView("finishstore/return/print");
 	}

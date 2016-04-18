@@ -43,11 +43,12 @@ public class FinishStoreOutDetailService extends BaseService {
 	
 	@Transactional
 	public boolean addBatch(List<FinishStoreOutDetail> detailList) throws Exception {
-		String sql = "INSERT INTO tb_finishstore_out_detail(finishStoreInOutId,packingOrderDetailId,quantity,cartons) VALUES(?,?,?,?)";
+		String sql = "INSERT INTO tb_finishstore_out_detail(finishStoreInOutId,packingOrderDetailId,quantity,cartons,notice_quantity,notice_cartons) VALUES(?,?,?,?,?,?)";
 		List<Object[]> batchArgs = new ArrayList<Object[]>();
 		for (FinishStoreOutDetail item : detailList) {
 			batchArgs.add(new Object[] { 
-					item.getFinishStoreInOutId(), item.getPackingOrderDetailId(),item.getQuantity(),item.getCartons()
+					item.getFinishStoreInOutId(), item.getPackingOrderDetailId(),item.getQuantity(),item.getCartons(),
+					item.getNotice_quantity(),item.getNotice_cartons()
 			});
 		}
 		try {

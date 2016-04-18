@@ -210,7 +210,8 @@ div.name{   margin-left: 15px; width: 100px; display: inline-block;}
 
 										<p class="pull-right auto_bottom" style="padding-top: 15px;">
 											<span id="created_user">制单人：<%=SystemCache.getUserName(finishStoreIn.getCreated_user())%></span>
-											<span id="date"> 入库日期：<%=DateTool.formatDateYMD(finishStoreIn.getDate())%></span>
+											<span id="date"> 制单日期：<%=DateTool.formatDateYMD(DateTool.getYanDate(finishStoreIn.getCreated_at()))%></span>
+											<span id="date"> 入库日期：<%=DateTool.formatDateYMD(DateTool.getYanDate(finishStoreIn.getDate()))%></span>
 										</p>
 
 										</table>

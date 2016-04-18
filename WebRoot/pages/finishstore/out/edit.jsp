@@ -7,18 +7,18 @@
 <%@page import="com.fuwei.entity.Factory"%>
 <%@page import="net.sf.json.JSONObject"%>
 <%@page import="com.fuwei.entity.finishstore.FinishStoreStockDetail"%>
-<%@page import="com.fuwei.entity.finishstore.FinishStoreIn"%>
-<%@page import="com.fuwei.entity.finishstore.FinishStoreInDetail"%>
+<%@page import="com.fuwei.entity.finishstore.FinishStoreOut"%>
+<%@page import="com.fuwei.entity.finishstore.FinishStoreOutDetail"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	FinishStoreIn finishStoreIn = (FinishStoreIn) request
-			.getAttribute("finishStoreIn");
-	List<FinishStoreInDetail> detaillist = finishStoreIn.getDetaillist();
+	FinishStoreOut finishStoreOut = (FinishStoreOut) request
+			.getAttribute("finishStoreOut");
+	List<FinishStoreOutDetail> detaillist = finishStoreOut.getDetaillist();
 	if (detaillist == null) {
-		detaillist = new ArrayList<FinishStoreInDetail>();
+		detaillist = new ArrayList<FinishStoreOutDetail>();
 	}
 	Map<Integer,FinishStoreStockDetail> stockMap = (Map<Integer,FinishStoreStockDetail>) request
 			.getAttribute("stockMap");
@@ -27,7 +27,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>编辑成品入库单 -- 桐庐富伟针织厂</title>
+		<title>编辑成品发货单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -47,7 +47,7 @@
 		<link href="css/plugins/ui.jqgrid.css" rel="stylesheet"
 			type="text/css" />
 		<script src="js/order/ordergrid.js" type="text/javascript"></script>
-		<script src="js/finishstore/in_add.js" type="text/javascript"></script>
+		<script src="js/finishstore/out_add.js" type="text/javascript"></script>
 		<style type="text/css">
 #tablename {
   font-weight: bold;
@@ -101,10 +101,10 @@ tr.disable{background:#ddd;}
 							<a target="_blank" href="finishstore_workspace/workspace">成品工作台</a>
 						</li>
 						<li>
-							<a target="_blank" href="finishstore_in/detail/<%=finishStoreIn.getId() %>">成品入库单详情</a>
+							<a target="_blank" href="finishstore_out/detail/<%=finishStoreOut.getId() %>">成品发货单详情</a>
 						</li>
 						<li class="active">
-							编辑成品入库单
+							编辑成品发货单
 						</li>
 					</ul>
 				</div>
@@ -113,20 +113,22 @@ tr.disable{background:#ddd;}
 						<div class="row">
 							<div class="col-md-12">
 								<form class="saveform">
-									<input type="hidden" name="id" value="<%=finishStoreIn.getId()%>" />
-									<input type="hidden" name="packingOrderId" value="<%=finishStoreIn.getPackingOrderId()%>" />
+									<input type="hidden" name="id" value="<%=finishStoreOut.getId()%>" />
+									<input type="hidden" name="packingOrderId" value="<%=finishStoreOut.getPackingOrderId()%>" />
 									<input type="hidden" name="orderId"
-										value="<%=finishStoreIn.getOrderId()%>" />
+										value="<%=finishStoreOut.getOrderId()%>" />
+									<input type="hidden" name="finishStoreOutNoticeId"
+										value="<%=finishStoreOut.getFinishStoreOutNoticeId()%>" />
 
 									<div class="clear"></div>
 									<div class="col-md-12 tablewidget">
 										<table class="table">
 											<caption id="tablename">
-												桐庐富伟针织厂成品入库单
+												桐庐富伟针织厂成品发货单
 												<button type="submit"
 													class="pull-right btn btn-danger saveTable"
 													data-loading-text="正在保存...">
-													编辑成品入库单
+													编辑成品发货单
 												</button>
 											</caption>
 										</table>
@@ -138,42 +140,42 @@ tr.disable{background:#ddd;}
 															<tbody>
 																<tr>
 																	<td rowspan="7" width="30%">
-																		<a href="/<%=finishStoreIn.getImg()%>" class="thumbnail"
+																		<a href="/<%=finishStoreOut.getImg()%>" class="thumbnail"
 																			target="_blank"> <img id="previewImg"
-																				alt="200 x 100%" src="/<%=finishStoreIn.getImg_s()%>">
+																				alt="200 x 100%" src="/<%=finishStoreOut.getImg_s()%>">
 																		</a>
 																	</td>
 																	<td width="30%">
-																		<div class="name">订单号：</div><span class="value"><%=finishStoreIn.getOrderNumber()%></span>
+																		<div class="name">订单号：</div><span class="value"><%=finishStoreOut.getOrderNumber()%></span>
 																	</td>
 																	<td>
-																		<div class="name">公司：</div><span class="value"><%=SystemCache.getCompanyShortName(finishStoreIn.getCompanyId())%></span>
+																		<div class="name">公司：</div><span class="value"><%=SystemCache.getCompanyShortName(finishStoreOut.getCompanyId())%></span>
 																	</td>
 																</tr>
 																<tr>
 																	<td>
-																		<div class="name">货号：</div><span class="value"><%=finishStoreIn.getCompany_productNumber()%></span>
+																		<div class="name">货号：</div><span class="value"><%=finishStoreOut.getCompany_productNumber()%></span>
 																	</td>
 																	<td>
-																		<div class="name">客户：</div><span class="value"><%=SystemCache.getCustomerName(finishStoreIn.getCustomerId())%></span>
+																		<div class="name">客户：</div><span class="value"><%=SystemCache.getCustomerName(finishStoreOut.getCustomerId())%></span>
 																	</td>
 																</tr>
 																
 																<tr>
 																	<td>
-																		<div class="name">款名：</div><span class="value"><%=finishStoreIn.getName()%></span>
+																		<div class="name">款名：</div><span class="value"><%=finishStoreOut.getName()%></span>
 																	</td>
 																	<td>
-																		<div class="name">跟单：</div><span class="value"><%=SystemCache.getEmployeeName(finishStoreIn.getCharge_employee())%></span>
+																		<div class="name">跟单：</div><span class="value"><%=SystemCache.getEmployeeName(finishStoreOut.getCharge_employee())%></span>
 																	</td>
 																</tr>
 																<tr>
 																	<td colspan="2">
 																		<div class="form-group ">
-																入库时间：
+																发货时间：
 																<input type="text" class="form-control require date" style="width: 300px;display: inline-block;"
 																	name="date" id="out_in_date"
-																	value="<%=DateTool.formatDateYMD(finishStoreIn.getDate())%>">
+																	value="<%=DateTool.formatDateYMD(finishStoreOut.getDate())%>">
 															</div>
 																	</td>
 																	
@@ -191,97 +193,85 @@ tr.disable{background:#ddd;}
 										<table id="mainTb"
 											class="table table-responsive table-bordered detailTb">
 											<thead>
-											<tr><th width="5%">
-														序号
-													</th>
+											<tr>
 											<%
 											int col = 0;
-											if(finishStoreIn.getCol1_id()!=null){
+											if(finishStoreOut.getCol1_id()!=null){
 											col++;
 											 %>
 											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(finishStoreIn.getCol1_id()) %>
+												<%=SystemCache.getPackPropertyName(finishStoreOut.getCol1_id()) %>
 											</th>
 											<%} %>
 											
-											<%if(finishStoreIn.getCol2_id()!=null){ 
+											<%if(finishStoreOut.getCol2_id()!=null){ 
 											col++;%>
 											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(finishStoreIn.getCol2_id()) %>
+												<%=SystemCache.getPackPropertyName(finishStoreOut.getCol2_id()) %>
 											</th>
 											<%} %>
-											<%if(finishStoreIn.getCol3_id()!=null){ 
+											<%if(finishStoreOut.getCol3_id()!=null){ 
 											col++;%>
 											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(finishStoreIn.getCol3_id()) %>
+												<%=SystemCache.getPackPropertyName(finishStoreOut.getCol3_id()) %>
 											</th>
 											<%} %>
-											<%if(finishStoreIn.getCol4_id()!=null){ 
+											<%if(finishStoreOut.getCol4_id()!=null){ 
 											col++;%>
 											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(finishStoreIn.getCol4_id()) %>
+												<%=SystemCache.getPackPropertyName(finishStoreOut.getCol4_id()) %>
 											</th>
 											<%} %>
 											<th rowspan="2" width="40px">
 												颜色
 											</th>
 											<th rowspan="2" width="40px">
-												每箱数量
+												每箱件数
 											</th>
 											<th rowspan="2" width="40px">
-												计划数量
+												库存件数
 											</th>
 											<th rowspan="2" width="40px">
-												计划箱数
-											</th>
-											<th rowspan="2" width="50px">
-												已入库数量
-											</th>
-											<th rowspan="2" width="50px">
-												已入库箱数
+												库存箱数
 											</th>
 											<th rowspan="2" width="60px">
-												本次入库数量
+												通知发货件数
 											</th>
 											<th rowspan="2" width="60px">
-												本次入库箱数
+												通知发货箱数
+											</th>
+											<th rowspan="2" width="60px">
+												实际发货件数
+											</th>
+											<th rowspan="2" width="60px">
+												实际发货箱数
 											</th>
 										</tr>
 											</thead>
 											<tbody>
 												<%
-													for (FinishStoreInDetail detail : detaillist) {
+													for (FinishStoreOutDetail detail : detaillist) {
 														FinishStoreStockDetail temp = stockMap.get(detail.getPackingOrderDetailId());
-														int actualIn_cartons = 0 ;
-														int actualIn_quantity = 0 ;
-														if(temp != null){
-															actualIn_cartons = temp.getIn_cartons() - temp.getReturn_cartons();
-															actualIn_quantity = temp.getIn_quantity() - temp.getReturn_quantity();
-														}
-														int plan_quantity = temp==null?0:temp.getPlan_quantity();
-														int plan_cartons = temp==null?0:temp.getPlan_cartons();
-														
 														JSONObject json = JSONObject.fromObject(detail);
 														json.remove("id");
 												%>
 												<tr class="tr" data='<%=json.toString()%>'>
-													<td><input checked type="checkbox" name="checked" class="checkBtn"/></td>
-													<%if(finishStoreIn.getCol1_id()!=null){ %>
+													<%if(finishStoreOut.getCol1_id()!=null){ %>
 										<td>
 											<%=detail.getCol1_value()==null?"":detail.getCol1_value() %>
 										</td>
 										<%} %>
-										<%if(finishStoreIn.getCol2_id()!=null){ %>
+										<%if(finishStoreOut.getCol2_id()!=null){ %>
 										<td>
 											<%=detail.getCol2_value()==null?"":detail.getCol2_value() %>
 										</td>
 										<%} %>	
-										<%if(finishStoreIn.getCol3_id()!=null){ %>
+										<%if(finishStoreOut.getCol3_id()!=null){ %>
 										<td>
 											<%=detail.getCol3_value()==null?"":detail.getCol3_value() %>
 										</td>
 										<%} %>
-										<%if(finishStoreIn.getCol4_id()!=null){ %>
+										<%if(finishStoreOut.getCol4_id()!=null){ %>
 										<td>
 											<%=detail.getCol4_value()==null?"":detail.getCol4_value() %>
 										</td>
@@ -290,17 +280,19 @@ tr.disable{background:#ddd;}
 
 													<td><%=detail.getColor()%></td>
 													<td><%=detail.getPer_carton_quantity()%></td>
-													<td><%=plan_quantity%></td>
-													<td><%=plan_cartons%></td>
-													<td><%=actualIn_quantity%></td>
-													<td><%=actualIn_cartons%></td>
-													<td class="quantity">
-														<%=detail.getQuantity() %>
+													<td><%=temp.getStock_quantity()%></td>
+													<td><%=temp.getStock_cartons()%></td>
+													<td><%=detail.getNotice_quantity()%></td>
+													<td><%=detail.getNotice_cartons()%></td>
+													<td>
+														<input class="quantity form-control require positive_int value"
+															type="text" value="<%=detail.getQuantity() %>"
+															placeholder="请输入发货数量">
 													</td>
 													<td>
 														<input class="cartons form-control require positive_int value"
 															type="text" value="<%=detail.getCartons() %>"
-															placeholder="请输入入库箱数">
+															placeholder="请输入发货箱数">
 													</td>
 												</tr>
 												<%
@@ -316,8 +308,8 @@ tr.disable{background:#ddd;}
 								
 										
 										<p class="pull-right auto_bottom">
-											<span id="created_user">制单人：<%=SystemCache.getUserName(finishStoreIn.getCreated_user())%></span>
-											<span id="date"> 日期：<%=DateTool.formatDateYMD(DateTool.now())%></span>
+											<span id="created_user">制单人：<%=SystemCache.getUserName(finishStoreOut.getCreated_user())%></span>
+											<span id="date"> 制单日期：<%=DateTool.formatDateYMD(finishStoreOut.getCreated_at())%></span>
 										</p>
 
 										</table>

@@ -18,9 +18,9 @@
 	String employee_name = SystemCache.getEmployeeName(storeInOut.getCharge_employee()) ;//跟单人
 	String coloring_factory_name = SystemCache.getFactoryName(storeInOut.getFactoryId());
 
-	String date_string = DateTool.formatDateYMD(storeInOut.getDate());
+	String date_string = DateTool.formatDateYMD(DateTool.getYanDate(storeInOut.getDate()));
 	
-	String date_now = DateTool.formatDateYMD(DateTool.now());
+	String date_now = DateTool.formatDateYMD(DateTool.getYanDate(DateTool.now()));
 %>
 <!DOCTYPE html>
 <html>

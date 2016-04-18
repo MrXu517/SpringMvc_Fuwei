@@ -219,8 +219,8 @@ public class FinishStoreInService extends BaseService {
 	@Transactional
 	public int updatePrint(FinishStoreIn object) throws Exception {
 		// 更新表
-		dao.update("update tb_finishstore_in set has_print=? where id=?", object
-				.getHas_print(), object.getId());
+		dao.update("update tb_finishstore_in set has_print=?,status=6,state=? where id=?", object
+				.getHas_print(),"执行完成", object.getId());
 
 		return object.getId();
 	}

@@ -15,8 +15,8 @@
 	FuliaoIn object = (FuliaoIn) request.getAttribute("fuliaoIn");
 	String employee_name = SystemCache.getEmployeeName(object.getCharge_employee())  ;//跟单人
 	List<FuliaoInDetail> detaillist = object == null ? new ArrayList<FuliaoInDetail>() :object.getDetaillist();
-	String date_string = DateTool.formatDateYMD(object.getCreated_at());
-	String date_now = DateTool.formatDateYMD(DateTool.now());
+	String date_string = DateTool.formatDateYMD(DateTool.getYanDate(object.getCreated_at()));
+	//String date_now = DateTool.formatDateYMD(DateTool.now());
 %>
 <!DOCTYPE html>
 <html>

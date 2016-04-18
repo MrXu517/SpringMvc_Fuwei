@@ -229,7 +229,7 @@ $(document).ready( function() {
 				return false;
 			}
 		}
-		$(this).closest("tr").remove();
+		grid.TableInstance.deleteRow($(this).closest("tr")[0]);
 		return false;
 	});
 	

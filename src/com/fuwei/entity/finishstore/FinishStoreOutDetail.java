@@ -10,6 +10,8 @@ public class FinishStoreOutDetail {
 	private int id;
 	private int finishStoreInOutId;
 	private int packingOrderDetailId;//装箱单明细ID
+	private int notice_quantity;//通知出库数量
+	private int notice_cartons;//通知出库箱数
 	private int quantity;//出库数量
 	private int cartons;//出库箱数
 	
@@ -29,6 +31,20 @@ public class FinishStoreOutDetail {
 	@Temporary
 	private String col4_value;//动态属性4的值
 	
+	
+	
+	public int getNotice_quantity() {
+		return notice_quantity;
+	}
+	public void setNotice_quantity(int notice_quantity) {
+		this.notice_quantity = notice_quantity;
+	}
+	public int getNotice_cartons() {
+		return notice_cartons;
+	}
+	public void setNotice_cartons(int notice_cartons) {
+		this.notice_cartons = notice_cartons;
+	}
 	public int getFinishStoreInOutId() {
 		return finishStoreInOutId;
 	}
