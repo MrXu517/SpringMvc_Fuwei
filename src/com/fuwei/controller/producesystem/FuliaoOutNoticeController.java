@@ -51,6 +51,8 @@ public class FuliaoOutNoticeController extends BaseController {
 	AuthorityService authorityService;
 	@Autowired
 	FuliaoCurrentStockService fuliaoCurrentStockService;
+	
+	int MAX_MEMO_LENGTH=48;
 
 	@RequestMapping(value = "/list/{OrderId}", method = RequestMethod.GET)
 	@ResponseBody
@@ -182,6 +184,13 @@ public class FuliaoOutNoticeController extends BaseController {
 				if(detail.getQuantity() == 0){
 					iter.remove();
 				}
+				//判断备注不能超过48个字符
+				if(detail.getMemo()!=null){
+					int length = detail.getMemo().getBytes().length;
+				    if(length>MAX_MEMO_LENGTH){
+				    	throw new Exception("备注的内容长度不能超过"+MAX_MEMO_LENGTH+"字符");
+				    }
+				 }
 			}
 			if(detaillist==null || detaillist.size()<=0){
 				throw new Exception("请至少填写一条出库明细");
@@ -226,6 +235,13 @@ public class FuliaoOutNoticeController extends BaseController {
 				if(detail.getQuantity() == 0){
 					iter.remove();
 				}
+				//判断备注不能超过48个字符
+				if(detail.getMemo()!=null){
+					int length = detail.getMemo().getBytes().length;
+				    if(length>MAX_MEMO_LENGTH){
+				    	throw new Exception("备注的内容长度不能超过"+MAX_MEMO_LENGTH+"字符");
+				    }
+				 }
 			}
 			if(detaillist==null || detaillist.size()<=0){
 				throw new Exception("请至少填写一条出库明细");
@@ -356,6 +372,13 @@ public class FuliaoOutNoticeController extends BaseController {
 			if(detail.getQuantity() == 0){
 				iter.remove();
 			}
+			//判断备注不能超过48个字符
+			if(detail.getMemo()!=null){
+				int length = detail.getMemo().getBytes().length;
+			    if(length>MAX_MEMO_LENGTH){
+			    	throw new Exception("备注的内容长度不能超过"+MAX_MEMO_LENGTH+"字符");
+			    }
+			 }
 		}
 		fuliaoInOutNotice.setDetaillist(detaillist);
 		Integer fuliaoInOutNoticeId = fuliaoOutNoticeService.update(fuliaoInOutNotice);

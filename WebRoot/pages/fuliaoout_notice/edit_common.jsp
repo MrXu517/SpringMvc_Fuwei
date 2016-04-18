@@ -126,6 +126,7 @@ tr.disable{background:#ddd;}
 							.getCurrentUser(session).getLoginedUser().getId())%></span>
 											<span id="date"> 日期：<%=DateTool.formatDateYMD(DateTool.now())%></span>
 										</p>
+										<p style="font-size:15px;" class="label label-warning">提示：【备注】不能超过24个中文字，包括标点符号</p>
 										<table id="mainTb"
 											class="table table-responsive table-bordered detailTb">
 											<thead>

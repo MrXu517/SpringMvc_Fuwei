@@ -192,7 +192,7 @@ tr.disable{background:#ddd;}
 													<td><%=detail.getBatch()%></td>
 													<td><%=detail.getQuantity()%></td>
 													<td><%=SystemCache.getLocationNumber(detail.getLocationId())%></td>
-													<td><%=detail.getMemo()==null?"":detail.getMemo()%></td>
+													<td style="word-break: break-all;"><%=detail.getMemo()==null?"":detail.getMemo()%></td>
 												</tr>
 												<%
 													}

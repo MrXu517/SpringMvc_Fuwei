@@ -166,7 +166,7 @@ table caption strong{width: 250px;display: inline-block;}
 		var id = $(this).attr("tag_string");
 		$(this).barcode(id, "code128", {
 			barWidth :2,
-			barHeight :30,
+			barHeight :15,
 			showHRI :false
 		});
 	});

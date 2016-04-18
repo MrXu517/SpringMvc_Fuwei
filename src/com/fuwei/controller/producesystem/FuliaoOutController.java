@@ -58,7 +58,7 @@ public class FuliaoOutController extends BaseController {
 	FuliaoOutNoticeService fuliaoOutNoticeService;
 	@Autowired
 	FuliaoOutNoticeDetailService fuliaoOutNoticeDetailService;
-
+	
 	 
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
@@ -348,6 +348,7 @@ public class FuliaoOutController extends BaseController {
 			if (orderId == null) {
 				throw new Exception("订单ID不能为空");
 			}
+			
 			Integer fuliaoout_noticeId = fuliaoOut.getFuliaoout_noticeId();
 			if (fuliaoout_noticeId == null|| fuliaoout_noticeId == 0) {
 				throw new Exception("辅料出库通知单ID不能为空", null);

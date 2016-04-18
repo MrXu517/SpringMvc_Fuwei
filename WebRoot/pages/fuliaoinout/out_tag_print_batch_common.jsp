@@ -129,7 +129,7 @@ table caption strong{width: 250px;display: inline-block;}
 									<td class="firsttd">
 										备注：
 									</td>
-									<td><%=detail.getMemo()==null?"":detail.getMemo()%></td>
+									<td style="word-break: break-all;"><%=detail.getMemo()==null?"":detail.getMemo()%></td>
 								</tr>				
 								<tr>
 									<td class="firsttd">

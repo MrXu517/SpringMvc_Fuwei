@@ -180,7 +180,7 @@ tr.disable{background:#ddd;}
 												</tr>
 											</tbody>
 										</table>
-					
+										<p style="font-size:15px;" class="label label-warning">提示：【备注】不能超过24个中文字，包括标点符号</p>
 										<table id="mainTb"
 											class="table table-responsive table-bordered detailTb">
 											<thead>

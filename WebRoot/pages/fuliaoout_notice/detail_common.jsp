@@ -203,7 +203,7 @@ tr.disable{background:#ddd;}
 													<td><%=detail.getSize()%></td>
 													<td><%=detail.getBatch()%></td>
 													<td><%=detail.getQuantity()%></td>
-													<td><%=detail.getMemo() == null ? "" : detail.getMemo()%></td>
+													<td  style="word-break: break-all;"><%=detail.getMemo() == null ? "" : detail.getMemo()%></td>
 												</tr>
 												<%
 													}
