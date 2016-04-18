@@ -209,16 +209,16 @@
 												颜色
 											</th>
 											<th rowspan="2" width="40px">
-												数量
+												件数
 											</th>
 											<th rowspan="2" width="40px">
-												每箱数量
+												每箱件数
 											</th><th colspan="3" width="120px">外箱尺寸</th>
 												<th colspan="2" width="80px">毛净重</th>
 											<th rowspan="2" width="60px">
 												箱数
 											</th>
-											<th colspan="2" width="100px">
+											<th rowspan="2" width="60px">
 												箱号
 											</th>
 											<th rowspan="2" width="40px">
@@ -237,10 +237,6 @@
 												毛重
 											</th><th width="55px">
 												净重
-											</th><th width="60px">
-												开始
-											</th><th width="60px">
-												结束
 											</th></tr>
 									</thead>
 									<tbody>
@@ -275,15 +271,19 @@
 										<td><%=detail.getGross_weight() %></td>
 										<td><%=detail.getNet_weight() %></td>
 										<td><%=detail.getCartons() %></td>
-										<td><%=detail.getBox_number_start() %></td>
-										<td><%=detail.getBox_number_end() %></td>
+										<td><%=detail.getBox_number_start() %> - <%=detail.getBox_number_end() %></td>
 										<td><%=detail.getPer_pack_quantity() %></td>
 										<td><%=detail.getCapacity() %></td>
 										</tr>
 										<%} %>
 									</tbody>
-									<tfoot><tr><td>合计</td><td colspan="<%=col+1 %>"><%=packingOrder.getQuantity() %></td>
-										<td colspan="7"><%=packingOrder.getCartons() %></td><td colspan="4"><%=packingOrder.getCapacity() %></td>
+									<tfoot><tr><td>合计</td>
+									<%if(col>0){ %>
+									<td colspan="<%=col+1 %>">总数量：<%=packingOrder.getQuantity() %></td>
+										<%}else{ %>
+										<td colspan="<%=col+1 %>"><%=packingOrder.getQuantity() %></td>
+										<%} %>
+										<td colspan="7">总箱数：<%=packingOrder.getCartons() %></td><td colspan="3">总立方：<%=packingOrder.getCapacity() %></td>
 										</tr></tfoot>
 								</table>
 								</fieldset>
@@ -338,7 +338,7 @@
 												颜色
 											</th>
 											<th width="60px">
-												数量
+												件数
 											</th>
 											<th width="60px">
 												箱数
@@ -419,7 +419,7 @@
 								</fieldset>
 								<fieldset id="stockDetail">
 									<legend>
-										出入库统计
+										库存统计
 									</legend>
 									<table class="table table-responsive detailTb">
 										<thead>
@@ -448,24 +448,22 @@
 											</th>
 											<%} %>
 
-											<th width="40px">
+											<th width="60px">
 												颜色
+											</th><th  width="60px">
+												总件数
 											</th>
 											<th width="60px">
-												计划箱数
+												总箱数
 											</th><th  width="60px">
-												计划数量
+												实际入库件数
 											</th><th  width="60px">
-												入库数量
+												发货件数
 											</th><th  width="60px">
-												退货数量
-											</th><th  width="60px">
-												发货数量
+												库存件数
 											</th>
 											<th width="60px">
 												库存箱数
-											</th><th  width="60px">
-												库存数量
 											</th>
 											
 										</tr>
@@ -498,17 +496,16 @@
 											</td>
 											<%} %>
 											<td><%=detail.getColor() %></td>
-											<td><%=detail.getPlan_cartons() %></td>
 											<td><%=detail.getPlan_quantity() %></td>
-											<td><%=detail.getIn_quantity() %></td>
-											<td><%=detail.getReturn_quantity() %></td>
+											<td><%=detail.getPlan_cartons() %></td>
+											<td><%=detail.getIn_quantity()-detail.getReturn_quantity() %></td>
 											<td><%=detail.getOut_quantity() %></td>
-											<td><%=detail.getStock_cartons() %></td>
 											<td><%=detail.getStock_quantity() %></td>
+											<td><%=detail.getStock_cartons() %></td>
 											</tr>
 										<%} }%>
 									</tbody>
-									<tfoot><tr><td>合计</td><td colspan="<%=col+7 %>">总库存箱数：<%=storeStock.getTotal_stock_cartons() %>
+									<tfoot><tr><td>合计</td><td colspan="<%=col+6 %>">总库存箱数：<%=storeStock.getTotal_stock_cartons() %>
 										，总库存数量：<%=storeStock.getTotal_stock_quantity() %></td>
 										</tr></tfoot>
 								</table>
