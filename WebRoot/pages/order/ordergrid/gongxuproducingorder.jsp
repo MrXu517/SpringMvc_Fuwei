@@ -20,6 +20,7 @@
 			.getAttribute("gongxuProducingOrderList");
 	gongxuProducingOrderList = gongxuProducingOrderList == null ? new ArrayList<GongxuProducingOrder>()
 			: gongxuProducingOrderList;
+	Boolean has_gongxu_producing_order_print = SystemCache.hasAuthority(session,"gongxu_producing_order/print");
 %>
 <!DOCTYPE html>
 <html>
@@ -42,10 +43,11 @@
 										class="btn btn-primary" id="createGongxuProducingorderBtn">创建工序加工单</a>
 								</div>
 								<%} %>
+								<%if(has_gongxu_producing_order_print){ %>
 								<a  href="printorder/print?orderId=<%=order.getId() %>&gridName=gongxuproduceorder" target="_blank" type="button"
-												class="printBtn btn btn-success"
+												class="printAllBtn btn btn-success"
 												data-loading-text="正在打印..."> 打印工序加工单 </a>
-								
+								<%} %>
 							
 								<%
 									for (GongxuProducingOrder gongxuProducingOrder : gongxuProducingOrderList) {
@@ -74,10 +76,11 @@
 													class="pull-right btn btn-default"
 													data-loading-text="正在跳转页面......"> 编辑 </a><%} %>
 											<%} %>
-											
+											<%if(has_gongxu_producing_order_print){ %>
 											<a href="gongxu_producing_order/print/<%=gongxuProducingOrder.getId()%>" target="_blank" type="button"
 												class="pull-right btn btn-success"
 												data-loading-text="正在打印..."> 打印 </a>
+											<%} %>
 										</form>
 
 										<div class="clear"></div>

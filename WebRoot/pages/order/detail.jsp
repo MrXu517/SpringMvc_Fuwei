@@ -124,11 +124,11 @@
 										<a href="order/tablelist?orderId=<%=order.getId()%>"
 											class="btn btn-default" type="button"> 进入生产系统 </a>
 									</div>
-									<div class="pull-right">
+								<!-- 	<div class="pull-right">
 										<a href="printorder/print?orderId=<%=order.getId()%>"
 											target="_blank" type="button" class="btn btn-success"
 											data-loading-text="正在打印..."> 打印表格 </a>
-									</div>
+									</div> -->
 
 
 									<div class="clear"></div>

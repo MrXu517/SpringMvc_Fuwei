@@ -107,7 +107,7 @@
 								<%
 									if(has_print){
 								%>
-								<a href="packing_order/print/<%=packingOrder.getId()%>" type="button" class="btn btn-primary">打印</a>
+								<a target="_blank" href="packing_order/print/<%=packingOrder.getId()%>" type="button" class="btn btn-primary">打印</a>
 								<%
 									}
 								%>

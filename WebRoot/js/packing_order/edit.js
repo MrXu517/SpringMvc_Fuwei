@@ -219,6 +219,7 @@ $(document).ready( function() {
 		var rowdata = grid.TableInstance.getTrData($tr[0]);
 		delete rowdata.id;
 		grid.TableInstance.addRow(rowdata);
+		$(".colable").change();
 		return false;
 	});
 	$(grid.TableInstance.tableEle).off("click",".deleteRow");

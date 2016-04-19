@@ -7,6 +7,35 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	Order order2 = (Order) request.getAttribute("order");
+	
+	Boolean has_order_tablelist_print = SystemCache.hasAuthority(session,
+			"order/tablelist/print");
+	//计划单
+	Boolean has_planorder = SystemCache.hasAuthority(session,
+		"order/plan");
+	//原材料仓库
+	Boolean has_storeorder = SystemCache.hasAuthority(session,
+		"order/store");
+	//半检记录单
+	Boolean has_halfcheckrecord = SystemCache.hasAuthority(session,
+		"order/halfcheckrecord");
+	//生产单
+	Boolean has_producing = SystemCache.hasAuthority(session,
+		"order/producing");
+	//原材料采购
+	Boolean has_materialpurchase = SystemCache.hasAuthority(session,
+		"order/materialpurchase");
+	//染色单
+	Boolean has_coloring = SystemCache.hasAuthority(session,
+		"order/coloring");
+	//辅料采购单
+	Boolean has_fuliaopurchase = SystemCache.hasAuthority(session,
+		"order/fuliaopurchase");
+	//工序加工单
+	Boolean has_gongxuproducing = SystemCache.hasAuthority(session,
+		"order/gongxu_producing_order");
+		
+		
 %>
 <!DOCTYPE html>
 <html>
@@ -56,28 +85,41 @@
 					</ul>
 				</div>
 				<div class="body">
+					<%if(has_order_tablelist_print){ %>
 					<a href="printorder/print?orderId=<%=order2.getId() %>" target="_blank" type="button" class="btn btn-success printAll"
 						data-loading-text="正在打印..."> 打印选中的表格 </a>
 					<a href="printorder/print?orderId=<%=order2.getId() %>" id="printAlla"  target="_blank" ><span></span></a>
+					<%} %>
 					<div class="clear"></div>
 
 					<div id="tab">
 						<ul class="nav nav-pills nav-stacked" role="tablist">
+							<%if(has_coloring){ %>
 							<li>
 								<a href="#coloringorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" disabled/>染色单</a>
 							</li>
+							<%} %>
+							<%if(has_materialpurchase){ %>
 							<li>
 								<a href="#materialpurchaseorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" disabled/>原材料采购单</a>
 							</li>
+							<%} %>
+							<%if(has_producing){ %>
 							<li>
 								<a href="#producingorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>生产单</a>
 							</li>
+							<%} %>
+							<%if(has_gongxuproducing){ %>
 							<li>
 								<a href="#gongxuproduceorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck"/>工序加工单</a>
 							</li>
+							<%} %>
+							<%if(has_storeorder){ %>
 							<li>
 								<a href="#storeorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>原材料仓库</a>
 							</li>
+							<%} %>
+							<%if(has_planorder){ %>
 							<li>
 								<a href="#planorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>计划单</a>
 							</li>
@@ -102,9 +144,13 @@
 							<li>
 								<a href="#checkrecordorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>抽检记录单</a>
 							</li>
+							<%} %>
+							<%if(has_halfcheckrecord){ %>
 							<li>
 								<a href="#halfcheckrecordorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>半检记录单</a>
 							</li>
+							<%} %>
+							<%if(has_planorder){ %>
 							<li>
 								<a href="#headbankorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>质量记录单</a>
 							</li>
@@ -114,39 +160,53 @@
 							<li>
 								<a href="#ironingrecordorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" checked/>整烫记录单</a>
 							</li>
-
+							<%} %>
+							<%if(has_fuliaopurchase){ %>
 							<li>
 								<a href="#fuliaopurchaseorder" role="tab" data-toggle="tab"><input type="checkbox" class="printcheck" disabled/>辅料采购单</a>
 							</li>
+							<%} %>
 						</ul>
 
 
 						<div class="tab-content">
+							<%if(has_coloring){ %>
 							<!-- 染色单 -->
 							<div class="tab-pane" id="coloringorder" role="tabpanel">
 								
 								<jsp:include flush="true" page="ordergrid/coloringorder.jsp" />
 							</div>
+							<%} %>
+							<%if(has_materialpurchase){ %>
 							<!-- 原材料采购单 -->
 							<div class="tab-pane" id="materialpurchaseorder" role="tabpanel">
 								
 								<jsp:include flush="true" page="ordergrid/materialpurchaseorder.jsp" />
 							</div>
+							
+							<%} %>
+							<%if(has_producing){ %>
 							<!-- 生产单 -->
 							<div class="tab-pane" id="producingorder" role="tabpanel">
 								
 								<jsp:include flush="true" page="ordergrid/producingorder.jsp" />
 							</div>
+							<%} %>
+							<%if(has_gongxuproducing){ %>
 							<!-- 工序加工单 -->
 							<div class="tab-pane" id="gongxuproduceorder" role="tabpanel">
 								
 								<jsp:include flush="true" page="ordergrid/gongxuproducingorder.jsp" />
 							</div>
+							<%} %>
+							<%if(has_storeorder){ %>
 							<!-- 原材料仓库 -->
 							<div class="tab-pane" id="storeorder" role="tabpanel">
 								
 								<jsp:include flush="true" page="ordergrid/storeorder.jsp" />
 							</div>
+							<%} %>
+							<%if(has_planorder){ %>
 							<!-- 计划单 -->
 							<div class="tab-pane" id="planorder" role="tabpanel">
 								
@@ -187,11 +247,15 @@
 								
 								<jsp:include flush="true" page="ordergrid/checkrecordorder.jsp" />
 							</div>
+							<%} %>
+							<%if(has_halfcheckrecord){ %>
 							<!-- 半检记录单 -->
 							<div class="tab-pane" id="halfcheckrecordorder" role="tabpanel">
 								
 								<jsp:include flush="true" page="ordergrid/halfcheckrecordorder.jsp" />
 							</div>
+							<%} %>
+							<%if(has_planorder){ %>
 							<!-- 质量记录单 -->
 							<div class="tab-pane" id="headbankorder" role="tabpanel">
 								
@@ -207,11 +271,14 @@
 								
 								<jsp:include flush="true" page="ordergrid/ironingrecordorder.jsp" />
 							</div>
+							<%} %>
+							<%if(has_fuliaopurchase){ %>
 							<!-- 辅料采购单 -->
 							<div class="tab-pane" id="fuliaopurchaseorder" role="tabpanel">
 								
 								<jsp:include flush="true" page="ordergrid/fuliaopurchaseorder.jsp" />
 							</div>
+							<%} %>
 						</div>
 
 
@@ -222,4 +289,10 @@
 			</div>
 		</div>
 	</body>
+	<%if(!has_order_tablelist_print){%>
+	
+	<script type="text/javascript">
+	$(".printBtn").hide();
+	</script>
+	<%}%>
 </html>

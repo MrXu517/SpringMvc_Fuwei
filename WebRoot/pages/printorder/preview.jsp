@@ -40,7 +40,7 @@
 			if(gridName.indexOf("producingorder") > -1){
 		 %>
 			<div style="page-break-after: always">
-			<%@ include file="producingorder.jsp"%>
+			<%@ include file="producingorder_detail.jsp"%>
 			</div>
 		<%} %>
 		<%

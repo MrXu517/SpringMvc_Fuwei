@@ -19,6 +19,8 @@
 			"order/coloring");
 	Boolean has_coloring_order_delete = SystemCache.hasAuthority(session,
 			"coloring_order/delete");
+	Boolean has_coloring_order_print = SystemCache.hasAuthority(session,
+			"coloring_order/print");
 %>
 <!DOCTYPE html>
 <html>
@@ -41,9 +43,11 @@
 										class="btn btn-primary" id="createProducingorderBtn">创建染色单</a>
 								</div>
 								<%} %>
+								<%if(has_coloring_order_print){ %>
 								<a  href="printorder/print?orderId=<%=order.getId() %>&gridName=coloringorder" target="_blank" type="button"
-												class="printBtn btn btn-success"
+												class="printAllBtn btn btn-success"
 												data-loading-text="正在打印..."> 打印染色单 </a>
+								<%} %>
 								<%
 									for (ColoringOrder coloringOrder : coloringOrderList) {
 										List<ColoringOrderDetail> coloringOrderDetailList = coloringOrder == null ? new ArrayList<ColoringOrderDetail>()
@@ -68,9 +72,11 @@
 													class="pull-right btn btn-default"
 													data-loading-text="正在跳转页面......"> 编辑 </a>
 											<%} %>
+											<%if(has_coloring_order_print){ %>
 											<a  href="coloring_order/print/<%=coloringOrder.getId() %>" target="_blank" type="button"
 												class="pull-right btn btn-success"
 												data-loading-text="正在打印..."> 打印 </a>
+											<%} %>
 											<div class="clear"></div>
 											<div class="col-md-12 tablewidget">
 												<table class="table noborder">

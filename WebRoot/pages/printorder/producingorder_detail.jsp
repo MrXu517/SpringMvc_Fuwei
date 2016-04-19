@@ -17,8 +17,6 @@
 	String productfactoryStr = (String)request.getAttribute("productfactoryStr");
 	Boolean has_order_producing_price = SystemCache.hasAuthority(session,
 			"order/producing/price");
-	Boolean has_order_producing_price_print = SystemCache.hasAuthority(session,
-			"order/producing/price/print");
 %>
 <!DOCTYPE html>
 <html>
@@ -127,7 +125,7 @@
 											<th width="15%">
 												生产数量
 											</th>
-											<%if(has_order_producing_price || has_order_producing_price_print){ %>
+											<%if(has_order_producing_price){ %>
 											<th width="15%">
 												价格(/个)
 											</th>
@@ -150,7 +148,7 @@
 											</td>
 											<td class="quantity"><%=detail.getQuantity()%>
 											</td>
-											<%if(has_order_producing_price|| has_order_producing_price_print){ %>
+											<%if(has_order_producing_price){ %>
 											<td class="price"><%=detail.getPrice()%>
 											</td>
 											<%} %>

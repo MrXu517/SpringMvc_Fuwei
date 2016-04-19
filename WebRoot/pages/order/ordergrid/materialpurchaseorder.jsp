@@ -19,6 +19,8 @@
 			"order/materialpurchase");
 	Boolean has_material_purchase_order_delete = SystemCache.hasAuthority(session,
 			"material_purchase_order/delete");
+	Boolean has_material_purchase_order_print = SystemCache.hasAuthority(session,
+			"material_purchase_order/print");
 %>
 <!DOCTYPE html>
 <html>
@@ -40,9 +42,11 @@
 										class="btn btn-primary" id="createProducingorderBtn">创建原材料采购单</a>
 								</div>
 								<%} %>
+								<%if(has_material_purchase_order_print){ %>
 								<a  href="printorder/print?orderId=<%=order.getId() %>&gridName=materialpurchaseorder" target="_blank" type="button"
-												class="printBtn btn btn-success"
+												class="printAllBtn btn btn-success"
 												data-loading-text="正在打印..."> 打印原材料采购单 </a>
+								<%} %>
 								<%
 									for (MaterialPurchaseOrder materialPurchaseOrder : materialPurchaseOrderList) {
 										List<MaterialPurchaseOrderDetail> materialPurchaseOrderDetailList = materialPurchaseOrder == null ? new ArrayList<MaterialPurchaseOrderDetail>()
@@ -68,10 +72,11 @@
 													data-loading-text="正在跳转页面......"> 编辑 </a>
 											<%} %>
 											
-											
+											<%if(has_material_purchase_order_print){ %>
 											<a href="material_purchase_order/print/<%=materialPurchaseOrder.getId() %>" target="_blank" type="button"
 												class="pull-right btn btn-success"
 												data-loading-text="正在打印..."> 打印 </a>
+											<%} %>
 											
 											<div class="clear"></div>
 											<div class="col-md-12 tablewidget">

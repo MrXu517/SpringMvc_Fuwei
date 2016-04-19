@@ -110,6 +110,8 @@ a.thumbnail{
 	margin-left:100px;
 	margin-top:30px;
 }
+.printAllBtn{margin-left:100px;
+	margin-top:30px;}
 .materialorderWidget .table,.fuliaoorderWidget .table,.coloringorderWidget .table{
 	margin-bottom:0;
 }

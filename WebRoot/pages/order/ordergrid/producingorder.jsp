@@ -19,6 +19,8 @@
 			"order/producing/price");
 	Boolean has_producing_order_edit = SystemCache.hasAuthority(session,
 			"order/producing");
+	Boolean has_producing_order_print = SystemCache.hasAuthority(session,
+			"order/producing/print");
 	Boolean has_producing_order_delete = SystemCache.hasAuthority(session,
 			"order/producing/delete");
 	Boolean has_order_producing_price_edit = SystemCache.hasAuthority(session,"order/producing/price_edit");
@@ -45,9 +47,11 @@
 										class="btn btn-primary" id="createProducingorderBtn">创建生产单</a>
 								</div>
 								<%} %>
+								<%if(has_producing_order_print){ %>
 								<a  href="printorder/print?orderId=<%=order.getId() %>&gridName=producingorder" target="_blank" type="button"
-												class="printBtn btn btn-success"
+												class="printAllBtn btn btn-success"
 												data-loading-text="正在打印..."> 打印生产单 </a>
+								<%} %>
 								<%if(has_order_producing_price_request){ %>
 								<button orderid="<%=order.getId() %>" ordernumber="<%=order.getOrderNumber() %>" type="button" class="priceRequestBtn btn btn-info" data-loading-text="正在请求划价..."> 请求划价  </button>
 								<%} %>
@@ -82,9 +86,11 @@
 											<%if(has_order_producing_price_edit){ %>
 												<a target="_blank" href="producing_order/price/<%=producingOrder.getId() %>" type="button" class="pull-right btn btn-success"> 开始划价  </a>
 											 <%} %>
+											<%if(has_producing_order_print){ %>
 											<a href="producing_order/print/<%=producingOrder.getId()%>" target="_blank" type="button"
 												class="pull-right btn btn-success"
 												data-loading-text="正在打印..."> 打印 </a>
+											<%} %>
 										</form>
 
 										<div class="clear"></div>

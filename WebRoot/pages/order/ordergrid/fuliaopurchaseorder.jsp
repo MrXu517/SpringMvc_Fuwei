@@ -19,6 +19,8 @@
 			"order/fuliaopurchase");
 	Boolean has_fuliao_purchase_order_delete = SystemCache.hasAuthority(session,
 			"fuliao_purchase_order/delete");
+	Boolean has_fuliao_purchase_order_print = SystemCache.hasAuthority(session,
+			"fuliao_purchase_order/print");
 %>
 <!DOCTYPE html>
 <html>
@@ -42,9 +44,11 @@
 										class="btn btn-primary" id="createProducingorderBtn">创建辅料采购单</a>
 								</div>
 								<%} %>
+								<%if(has_fuliao_purchase_order_print){ %>
 								<a  href="printorder/print?orderId=<%=order.getId() %>&gridName=fuliaopurchaseorder" target="_blank" type="button"
-												class="printBtn btn btn-success"
+												class="printAllBtn btn btn-success"
 												data-loading-text="正在打印..."> 打印辅料采购单 </a>
+								<%} %>
 								<%
 									for (FuliaoPurchaseOrder fuliaoPurchaseOrder : fuliaoPurchaseOrderList) {
 										List<FuliaoPurchaseOrderDetail> fuliaoPurchaseOrderDetailList = fuliaoPurchaseOrder == null ? new ArrayList<FuliaoPurchaseOrderDetail>()
@@ -68,9 +72,11 @@
 													class="pull-right btn btn-default"
 													data-loading-text="正在跳转页面......"> 编辑 </a>
 											<%} %>
+											<%if(has_fuliao_purchase_order_print){ %>
 											<a href="fuliao_purchase_order/print/<%=fuliaoPurchaseOrder.getId() %>" target="_blank" type="button"
 												class="pull-right btn btn-success"
 												data-loading-text="正在打印..."> 打印 </a>
+											<%} %>
 											<div class="clear"></div>
 											<div class="col-md-12 tablewidget">
 												<table class="table noborder">
