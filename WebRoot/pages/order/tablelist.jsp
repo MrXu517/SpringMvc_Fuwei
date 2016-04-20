@@ -33,7 +33,7 @@
 		"order/fuliaopurchase");
 	//工序加工单
 	Boolean has_gongxuproducing = SystemCache.hasAuthority(session,
-		"order/gongxu_producing_order");
+		"gongxu_producing_order");
 		
 		
 %>
