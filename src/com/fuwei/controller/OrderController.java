@@ -220,6 +220,7 @@ public class OrderController extends BaseController {
 		}
 		try {
 			Sample sample = sampleService.get(sampleId);
+			order.setFactoryId(sample.getFactoryId());
 			order.setCost(sample.getCost());
 			order.setImg(sample.getImg());
 			order.setImg_s(sample.getImg_s());

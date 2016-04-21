@@ -53,6 +53,7 @@ public class Order implements Serializable {
 
 	private double cost;// 成本
 	private String productNumber;// 产品编号
+	private Integer factoryId;
 	//private Integer machineId;// 机织
 //	private Integer charge_user;// 打样人 ，跟单人
 	private String detail;// 报价详情
@@ -82,6 +83,16 @@ public class Order implements Serializable {
 	//2015-5-2修改
 	private Integer charge_employee;// 打样人 ，跟单人
 	
+	
+	
+	public Integer getFactoryId() {
+		return factoryId;
+	}
+
+	public void setFactoryId(Integer factoryId) {
+		this.factoryId = factoryId;
+	}
+
 	public String getCompany_productNumber() {
 		return company_productNumber;
 	}

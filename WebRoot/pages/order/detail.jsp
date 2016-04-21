@@ -53,6 +53,12 @@
 		<script src="<%=basePath%>js/plugins/WdatePicker.js"></script>
 		<script src="js/order/detail.js" type="text/javascript"></script>
 		<link href="css/order/index.css" rel="stylesheet" type="text/css" />
+		<style type="text/css">
+		.sampleData td>span.name{width:70px;display:inline-block;}
+		.sampleData{width:600px;}
+		img#previewImg{max-height:200px;max-width:300px;}
+		.sampleImg{width:300px;}
+		</style>
 	</head>
 	<body>
 
@@ -353,55 +359,40 @@
 											<tbody>
 												<tr>
 													<td>
-														品名
+														<span class="name">品名：</span> <%=order.getName()%>
 													</td>
-													<td><%=order.getName()%></td>
-												</tr>
-												<tr>
 													<td>
-														公司货号
-													</td>
-													<td><%=order.getCompany_productNumber()%></td>
-												</tr>
-												<tr>
-													<td>
-														货号
-													</td>
-													<td><%=order.getProductNumber()%></td>
-												</tr>
-												<tr>
-													<td>
-														跟单人
-													</td>
-													<td><%=SystemCache.getEmployeeName(order.getCharge_employee())%></td>
-												</tr>
-												<tr>
-													<td>
-														材料
-													</td>
-													<td><%= SystemCache.getMaterialName(order
-					.getMaterialId())%></td>
-												</tr>
-												<tr>
-													<td>
-														克重
-													</td>
-													<td><%=order.getWeight()%>克
+														<span class="name">材料：</span> <%= SystemCache.getMaterialName(order
+					.getMaterialId())%>
 													</td>
 												</tr>
 												<tr>
 													<td>
-														尺寸
+														<span class="name">公司货号：</span> <%=order.getCompany_productNumber()%>
 													</td>
-													<td><%=order.getSize()%></td>
+													<td>
+														<span class="name">克重：</span> <%=order.getWeight()%>克
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<span class="name">工厂货号：</span> <%=order.getProductNumber()%>
+													</td>
+													<td>
+														<span class="name">尺寸：</span> <%=order.getSize()%>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<span class="name">跟单人：</span> <%=SystemCache.getEmployeeName(order.getCharge_employee())%>
+													</td>
+													<td><span class="name">机织：</span> <%=SystemCache.getFactoryName(order.getFactoryId())  %></td>
 												</tr>
 												<%if(has_order_detail_price){ %>
 												<tr>
-													<td>
-														成本
+													<td colspan="2">
+														<span class="name">成本：</span><span class="RMB">￥</span><%=order.getCost()%>
 													</td>
-													<td>
-														<span class="RMB">￥</span><%=order.getCost()%></td>
 												</tr>
 												<%} %>
 											
