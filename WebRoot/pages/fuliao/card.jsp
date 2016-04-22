@@ -56,7 +56,7 @@ th{font-size: 15px;}
 	</head>
 	<body>
 				<%
-				int MAX_SIZE = 6;
+				int MAX_SIZE = 5;
 				int size = fuliaoList.size();
 				int total_page = (int)(Math.ceil((double)size/MAX_SIZE)) ;
 				if(total_page == 0){total_page = 1;}
