@@ -226,12 +226,6 @@
 														类型
 													</th>
 													<th>
-														拼音
-													</th>
-													<th>
-														地址
-													</th>
-													<th>
 														验厂状态
 													</th>
 													<th>
@@ -248,8 +242,6 @@
 													<td><%=f_i%></td>
 													<td><%=factory.getName()%></td>
 													<td><%=factory.getTypeName()%></td>
-													<td><%=factory.getHelp_code()%></td>
-													<td><%=factory.getAddress()%></td>
 													<td><%if(factory.getIsyanchang()){%>	
 													<span class="label label-success">验厂时可见</span>
 													<%}%>
