@@ -328,9 +328,9 @@ public class FuliaoOutService extends BaseService {
 	
 	// 添加清库存的辅料出库单,返回出库单主键
 	@Transactional(rollbackFor=Exception.class)
-	public int addByLocationId(int locationId,int userId) throws Exception {
+	public int addByLocationId(Location location,int userId) throws Exception {
 		try {
-			Location location = locationService.get(locationId);
+			int locationId = location.getId();
 			if(location.getFuliaoId()==null){
 				return 0;
 			}

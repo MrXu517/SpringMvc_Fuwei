@@ -14,9 +14,15 @@ public class Location {
 	private Integer fuliaoId;
 	private int quantity ;
 	private int type;//库位类型， 通用辅料类型还是大货辅料类型的库位
+	private Integer fuliaoPurchaseOrderDetailId;//存放的辅料采购单明细ID
 	
 	
-	
+	public Integer getFuliaoPurchaseOrderDetailId() {
+		return fuliaoPurchaseOrderDetailId;
+	}
+	public void setFuliaoPurchaseOrderDetailId(Integer fuliaoPurchaseOrderDetailId) {
+		this.fuliaoPurchaseOrderDetailId = fuliaoPurchaseOrderDetailId;
+	}
 	public int getType() {
 		return type;
 	}

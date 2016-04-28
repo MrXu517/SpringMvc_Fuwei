@@ -35,9 +35,12 @@ public class HalfStoreInOutService extends BaseService {
 	// 获取列表
 	public Pager getList(Pager pager, Date start_time, Date end_time,
 			Integer companyId, Integer factoryId, Integer charge_employee,
-			String number, Boolean in_out, List<Sort> sortlist)
+			String number, Boolean in_out,Boolean isyanchang, List<Sort> sortlist)
 			throws Exception {
 		try {
+			if(isyanchang){//若是验厂状态
+				return getList_yanchang(pager, start_time, end_time, companyId, factoryId, charge_employee, number, in_out, sortlist);
+			}
 			StringBuffer sql = new StringBuffer();
 			String seq = " WHERE ";
 			sql.append("select * from tb_half_store_in_out");
@@ -87,6 +90,75 @@ public class HalfStoreInOutService extends BaseService {
 								+ sortlist.get(i).getDirection() + " ");
 					} else {
 						sql_condition.append(","
+								+ sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+
+			return findPager_T(sql.append(sql_condition).toString(),
+					HalfStoreInOut.class, pager);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	// 获取列表
+	public Pager getList_yanchang(Pager pager, Date start_time, Date end_time,
+			Integer companyId, Integer factoryId, Integer charge_employee,
+			String number, Boolean in_out, List<Sort> sortlist)
+			throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			String seq = " AND ";
+			sql.append("select a.* from tb_half_store_in_out a ,tb_factory b where a.factoryId=b.id and b.isyanchang=1  ");
+
+			StringBuffer sql_condition = new StringBuffer();
+			if (companyId != null) {
+				sql_condition.append(seq + " a.companyId='" + companyId + "'");
+				seq = " AND ";
+			}
+
+			if (start_time != null) {// 出入库时间
+				sql_condition.append(seq + " a.date>='"
+						+ DateTool.formateDate(start_time) + "'");
+				seq = " AND ";
+			}
+			if (end_time != null) {
+				sql_condition.append(seq + " a.date<'"
+						+ DateTool.formateDate(DateTool.addDay(end_time,1))
+						+ "'");
+				seq = " AND ";
+			}
+			if (factoryId != null) {
+				sql_condition.append(seq + " a.factoryId='" + factoryId + "'");
+				seq = " AND ";
+			}
+			if (in_out != null) {
+				sql_condition.append(seq + " a.in_out='"
+						+ (in_out == true ? "1" : 0) + "'");
+				seq = " AND ";
+			}
+			if (charge_employee != null) {
+				sql_condition.append(seq + " a.charge_employee='"
+						+ charge_employee + "'");
+				seq = " AND ";
+			}
+			if (number != null && !number.equals("")) {
+				sql_condition.append(seq + " a.number='" + number + "'");
+				seq = " AND ";
+			}
+
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql_condition.append(" order by a."
+								+ sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					} else {
+						sql_condition.append(",a."
 								+ sortlist.get(i).getProperty() + " "
 								+ sortlist.get(i).getDirection() + " ");
 					}
@@ -191,13 +263,60 @@ public class HalfStoreInOutService extends BaseService {
 //	}
 	
 	// 获取
-	public List<HalfStoreInOut> getByOrder(int orderId, Boolean in_out)
+	public List<HalfStoreInOut> getByOrder(int orderId, Boolean in_out,Boolean isyanchang)
 			throws Exception {
 		try {
+			if(isyanchang){//2016-4-27若是验厂状态，则不可见的工厂的明细也不能显示
+				return getByOrder_yanchang(orderId, in_out);
+			}
+			
 			List<HalfStoreInOut> orderlist = dao
 					.queryForBeanList(
 							"select * from tb_half_store_in_out where orderId = ? and in_out=?",
 							HalfStoreInOut.class, orderId, in_out);
+			return orderlist;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	// 获取
+	public List<HalfStoreInOut> getByOrder_yanchang(int orderId, Boolean in_out)
+			throws Exception {
+		try {
+			//2016-4-27若是验厂状态，则不可见的工厂的明细也不能显示
+			List<HalfStoreInOut> orderlist = dao.queryForBeanList(
+						"select a.* from tb_half_store_in_out a, tb_factory b where a.factoryId=b.id and b.isyanchang=? and  orderId = ? and in_out=?",
+						HalfStoreInOut.class, true,orderId, in_out);
+			return orderlist;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	// 获取
+	public List<HalfStoreInOut> getByOrderDESC(int orderId,Boolean isyanchang)
+			throws Exception {
+		try {
+			if(isyanchang){//2016-4-27若是验厂状态，则不可见的工厂的明细也不能显示
+				return getByOrderDESC_yanchang(orderId);
+			}
+			
+			List<HalfStoreInOut> orderlist = dao
+			.queryForBeanList(
+					"select * from tb_half_store_in_out a, tb_factory b where a.factoryId=b.id and b.isyanchang=? and orderId = ? order by date desc",
+					HalfStoreInOut.class, true,orderId);
+			return orderlist;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	// 获取
+	public List<HalfStoreInOut> getByOrderDESC_yanchang(int orderId)
+			throws Exception {
+		try {
+			List<HalfStoreInOut> orderlist = dao
+			.queryForBeanList(
+					"select a.* from tb_half_store_in_out a, tb_factory b where a.factoryId=b.id and b.isyanchang=? and orderId = ? order by date desc",
+					HalfStoreInOut.class, true,orderId);
 			return orderlist;
 		} catch (Exception e) {
 			throw e;
@@ -218,19 +337,6 @@ public class HalfStoreInOutService extends BaseService {
 		}
 	}
 	
-	// 获取
-	public List<HalfStoreInOut> getByOrderDESC(int orderId)
-			throws Exception {
-		try {
-			List<HalfStoreInOut> orderlist = dao
-					.queryForBeanList(
-							"select * from tb_half_store_in_out where orderId = ? order by date desc",
-							HalfStoreInOut.class, orderId);
-			return orderlist;
-		} catch (Exception e) {
-			throw e;
-		}
-	}
 
 	// 获取
 	public HalfStoreInOut get(int id, boolean in_out) throws Exception {

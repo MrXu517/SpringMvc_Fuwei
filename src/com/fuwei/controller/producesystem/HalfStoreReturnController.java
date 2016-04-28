@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fuwei.commons.LoginedUser;
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
+import com.fuwei.commons.SystemSettings;
 import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Employee;
 import com.fuwei.entity.Order;
@@ -74,7 +76,9 @@ public class HalfStoreReturnController extends BaseController {
 		if (!hasAuthority) {
 			throw new PermissionDeniedDataAccessException("没有查看半成品退货列表的权限", null);
 		}
-
+		LoginedUser loginUser = SystemContextUtils.getCurrentUser(session);
+		Boolean isyanchang = SystemSettings.yanchang && loginUser.getLoginedUser().getIsyanchang();
+		
 		Date start_time_d = DateTool.parse(start_time);
 		Date end_time_d = DateTool.parse(end_time);
 		Pager pager = new Pager();
@@ -99,7 +103,7 @@ public class HalfStoreReturnController extends BaseController {
 		sortList.add(sort2);
 
 		pager = halfStoreReturnService.getList(pager, start_time_d, end_time_d,
-				companyId, factoryId, charge_employee, number, sortList);
+				companyId, factoryId, charge_employee, number,isyanchang, sortList);
 		
 		request.setAttribute("start_time", start_time_d);
 		request.setAttribute("end_time", end_time_d);
@@ -113,6 +117,11 @@ public class HalfStoreReturnController extends BaseController {
 			}
 		}
 		request.setAttribute("employeelist", employeelist);
+		if(isyanchang){
+			request.setAttribute("factorylist", SystemCache.produce_factorylist_yachang);	
+		}else{
+			request.setAttribute("factorylist", SystemCache.produce_factorylist);	
+		}
 		request.setAttribute("number", number);
 		request.setAttribute("pager", pager);
 		return new ModelAndView("half_store_return/index");
@@ -167,6 +176,9 @@ public class HalfStoreReturnController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有创建或编辑半成品退货单的权限",
 					null);
 		}
+		
+		Boolean isyanchang = SystemSettings.yanchang && user.getIsyanchang();
+
 		try {
 			Order order = orderService.get(orderId);
 			if (order == null) {
@@ -177,7 +189,7 @@ public class HalfStoreReturnController extends BaseController {
 			
 			//找到可以半成品退货的工厂：该订单有过入库的工厂
 			Map<Integer,String> factoryMap = new HashMap<Integer, String>();
-			List<HalfStoreInOut> tempstoreInList = halfStoreInOutService.getByOrder(orderId, true);
+			List<HalfStoreInOut> tempstoreInList = halfStoreInOutService.getByOrder(orderId, true,isyanchang);
 			for(HalfStoreInOut temp : tempstoreInList){
 				int tempfactoryId = temp.getFactoryId();
 				if(!factoryMap.containsKey(tempfactoryId)){

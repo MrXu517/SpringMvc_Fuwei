@@ -44,13 +44,46 @@ import com.fuwei.commons.SystemCache;
 import com.fuwei.constant.Holiday;
 import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Employee;
+import com.fuwei.entity.Factory;
 import com.fuwei.entity.Salary;
+import com.fuwei.entity.User;
 import com.fuwei.util.FileUtil;
 
 @RequestMapping("/yanchang")
 @Controller
 public class YanChangController extends BaseController {
 	
+	@RequestMapping(value = "/systemstatus", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView systemstatus(HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		String lcode = "yanchang/systemstatus";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);		
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有当前验厂状态的权限", null);
+		}
+		List<User> users = SystemCache.userlist;
+		List<User> yanchangUserlist = new ArrayList<User>();
+		for(User user : users){
+			if(user.getIsyanchang()){
+				yanchangUserlist.add(user);
+			}
+		}
+		request.setAttribute("yanchangUserlist", yanchangUserlist);
+		
+
+		List<Factory> factorys = SystemCache.factorylist;
+		List<Factory> yanchangFactorylist = new ArrayList<Factory>();
+		for(Factory item : factorys){
+			if(item.getIsyanchang()){
+				yanchangFactorylist.add(item);
+			}
+		}
+		request.setAttribute("yanchangFactorylist", yanchangFactorylist);
+		
+		return new ModelAndView("yanchang/systemstatus");
+
+	}
 
 	@RequestMapping(value = "/yan_salarys", method = RequestMethod.GET)
 	@ResponseBody

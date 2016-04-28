@@ -161,6 +161,8 @@
 	
 	Boolean h_has_commonfuliao = SystemCache.hasAuthority(session,"fuliao_workspace/commonfuliao");//通用辅料
 	Boolean h_has_commonfuliao_workspace = SystemCache.hasAuthority(session,"fuliao_workspace/commonfuliao_workspace");//通用辅料工作台
+	Boolean h_has_workspace_purchase = SystemCache.hasAuthority(session,"fuliao_workspace/workspace_purchase");//自购辅料工作台
+	Boolean h_has_yanchang_systemstatus = SystemCache.hasAuthority(session,"yanchang/systemstatus");//当前验厂状态
 %>
 <html>
 	<link href="css/common/head.css" rel="stylesheet" type="text/css" />
@@ -455,6 +457,11 @@
 								<a href="fuliao_workspace/workspace">辅料工作台</a>
 							</li>
 							<%} %>
+							<%if(h_has_workspace_purchase){ %>
+							<li>
+								<a href="fuliao_workspace/workspace_purchase">自购辅料工作台</a>
+							</li>
+							<%} %>
 							<%if(h_has_commonfuliao){ %>
 							<li>
 								<a href="fuliao_workspace/commonfuliao">通用辅料</a>
@@ -621,6 +628,12 @@
 								<a href="employee/salarys">工资表</a>
 							</li>
 							<%} %>
+							<%if(h_has_yanchang_systemstatus){ %>
+							<li>
+								<a href="yanchang/systemstatus">当前验厂状态</a>
+							</li>
+							<%} %>
+					
 						</ul>
 					</li>
 					<%}%>

@@ -81,6 +81,23 @@ $(document).ready( function() {
 								width :'15%'
 							},
 							{
+								name :'location_size_str',
+								colname :'库位容量',
+								width :'15%',
+								displayValue:function(value,rowdata){
+								value = rowdata.location_size;
+								if(value == 3){
+									return "大";
+								}else if(value == 2){
+									return "中";
+								}else if(value == 1){
+									return "小";
+								}else{
+									return "其他";
+								}
+							}
+							},
+							{
 								name :'memo',
 								colname :'备注',
 								width :'30%'

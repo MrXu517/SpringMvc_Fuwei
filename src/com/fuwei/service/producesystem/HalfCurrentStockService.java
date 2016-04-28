@@ -92,10 +92,23 @@ public class HalfCurrentStockService extends BaseService {
 	
 	//获取某订单的半成品出入库记录
 	// 获取
-	public List<HalfInOut> halfDetail(int orderId)
+	public List<HalfInOut> halfDetail(int orderId,Boolean yanchang)
 			throws Exception {
 		try {
+			if(yanchang){
+				return halfDetail_yanchang(orderId);
+			}
 			List<HalfInOut> list = dao.queryForBeanList("select * from (select created_at,created_user,'store' as type ,id ,number, gongxuId, orderId,date,factoryId,sign,has_print,detail_json,in_out,memo  from tb_half_store_in_out where orderId = ? union all select created_at,created_user,'return' as type,id ,number, gongxuId, orderId,date,factoryId,sign,has_print,detail_json,null,memo  from tb_half_store_return where orderId = ?)  c order by date desc,created_at desc",
+					HalfInOut.class,orderId,orderId);
+			return list;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	public List<HalfInOut> halfDetail_yanchang(int orderId)
+		throws Exception {
+		try {
+			List<HalfInOut> list = dao.queryForBeanList("select c.* from (select created_at,created_user,'store' as type ,id ,number, gongxuId, orderId,date,factoryId,sign,has_print,detail_json,in_out,memo  from tb_half_store_in_out where orderId = ? union all select created_at,created_user,'return' as type,id ,number, gongxuId, orderId,date,factoryId,sign,has_print,detail_json,null,memo  from tb_half_store_return where orderId = ?)  c , tb_factory b where c.factoryId=b.id and b.isyanchang=1  order by date desc,created_at desc",
 					HalfInOut.class,orderId,orderId);
 			return list;
 		} catch (Exception e) {
@@ -178,11 +191,11 @@ public class HalfCurrentStockService extends BaseService {
 		List<HalfCurrentStockDetail> detaillist = new ArrayList<HalfCurrentStockDetail>();
 		
 		//获取已开的入库单
-		List<HalfStoreInOut> storeInList = halfStoreInOutService.getByOrder(orderId,true);
+		List<HalfStoreInOut> storeInList = halfStoreInOutService.getByOrder(orderId,true,false);
 		//获取已开的出库单
-		List<HalfStoreInOut> storeOutList = halfStoreInOutService.getByOrder(orderId,false);
+		List<HalfStoreInOut> storeOutList = halfStoreInOutService.getByOrder(orderId,false,false);
 		//获取已开的半成品退货单
-		List<HalfStoreReturn> storeReturnList = halfStoreReturnService.getByOrder(orderId);
+		List<HalfStoreReturn> storeReturnList = halfStoreReturnService.getByOrder(orderId,false);
 		
 		//根据  【planOrderDetailId】  统计入库总数量 , key = planOrderDetailId
 		HashMap<Integer, HalfStoreInOutDetail> tempMap = new HashMap<Integer, HalfStoreInOutDetail>();

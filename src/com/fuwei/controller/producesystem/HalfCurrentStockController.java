@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fuwei.commons.LoginedUser;
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
+import com.fuwei.commons.SystemContextUtils;
+import com.fuwei.commons.SystemSettings;
 import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Employee;
 import com.fuwei.entity.Order;
@@ -152,11 +155,14 @@ public class HalfCurrentStockController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有查看订单半成品出入库记录的权限",
 					null);
 		}
+		LoginedUser loginUser = SystemContextUtils.getCurrentUser(session);
+		Boolean isyanchang = SystemSettings.yanchang && loginUser.getLoginedUser().getIsyanchang();
+
 		Order order = orderService.get(orderId);
 		if(order == null){
 			throw new Exception("找不到ID为" + orderId + "的订单");
 		}
-		List<HalfInOut> detailInOutlist = halfCurrentStockService.halfDetail(orderId);
+		List<HalfInOut> detailInOutlist = halfCurrentStockService.halfDetail(orderId,isyanchang);
 		if (detailInOutlist == null) {
 			throw new Exception("找不到订单ID为" + orderId + "的半成品出入库、退货记录");
 		}
@@ -180,11 +186,14 @@ public class HalfCurrentStockController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有查看订单半成品出入库记录的权限",
 					null);
 		}
+		LoginedUser loginUser = SystemContextUtils.getCurrentUser(session);
+		Boolean isyanchang = SystemSettings.yanchang && loginUser.getLoginedUser().getIsyanchang();
+
 		Order order = orderService.get(orderId);
 		if(order == null){
 			throw new Exception("找不到ID为" + orderId + "的订单");
 		}
-		List<HalfInOut> detailInOutlist = halfCurrentStockService.halfDetail(orderId);
+		List<HalfInOut> detailInOutlist = halfCurrentStockService.halfDetail(orderId,isyanchang);
 		if (detailInOutlist == null) {
 			throw new Exception("找不到订单ID为" + orderId + "的半成品出入库、退货记录");
 		}

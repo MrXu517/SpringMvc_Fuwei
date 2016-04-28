@@ -132,7 +132,7 @@
 												<tr class="tr">
 													<td class="style_name"><%=SystemCache.getFuliaoTypeName(detail.getStyle())%>
 													</td>
-													<td class="quantity"><%=(int)detail.getQuantity()%>
+													<td class="quantity"><%=(int)detail.getQuantity() %>
 													</td>
 													<td class="memo"><%=detail.getMemo() == null ? "" : detail
 							.getMemo()%>

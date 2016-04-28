@@ -20,13 +20,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fuwei.commons.LoginedUser;
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
+import com.fuwei.commons.SystemSettings;
 import com.fuwei.controller.BaseController;
 import com.fuwei.entity.DataCorrectRecord;
 import com.fuwei.entity.Employee;
+import com.fuwei.entity.Factory;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
 import com.fuwei.entity.ordergrid.GongxuProducingOrder;
@@ -89,6 +92,8 @@ public class HalfStoreInController extends BaseController {
 		if (!hasAuthority) {
 			throw new PermissionDeniedDataAccessException("没有查看入库列表的权限", null);
 		}
+		LoginedUser loginUser = SystemContextUtils.getCurrentUser(session);
+		Boolean isyanchang = SystemSettings.yanchang && loginUser.getLoginedUser().getIsyanchang();
 
 		Date start_time_d = DateTool.parse(start_time);
 		Date end_time_d = DateTool.parse(end_time);
@@ -114,7 +119,7 @@ public class HalfStoreInController extends BaseController {
 		sortList.add(sort2);
 
 		pager = halfStoreInOutService.getList(pager, start_time_d, end_time_d,
-				companyId, factoryId, charge_employee, number, true, sortList);
+				companyId, factoryId, charge_employee, number, true,isyanchang, sortList);
 		
 		request.setAttribute("start_time", start_time_d);
 		request.setAttribute("end_time", end_time_d);
@@ -128,6 +133,11 @@ public class HalfStoreInController extends BaseController {
 			}
 		}
 		request.setAttribute("employeelist", employeelist);
+		if(isyanchang){
+			request.setAttribute("factorylist", SystemCache.produce_factorylist_yachang);	
+		}else{
+			request.setAttribute("factorylist", SystemCache.produce_factorylist);	
+		}
 		request.setAttribute("number", number);
 		request.setAttribute("pager", pager);
 		return new ModelAndView("half_store_in_out/in_index");
@@ -182,6 +192,8 @@ public class HalfStoreInController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有创建或编辑半成品入库单的权限",
 					null);
 		}
+		Boolean isyanchang = SystemSettings.yanchang && user.getIsyanchang();
+
 		try {
 			Order order = orderService.get(orderId);
 			if (order == null) {
@@ -203,7 +215,7 @@ public class HalfStoreInController extends BaseController {
 			
 			//找到可以半成品入库的工厂：生产单的工厂、工序加工单的工厂
 			Map<Integer,String> factoryMap = new HashMap<Integer, String>();
-			List<ProducingOrder> producingOrderlist = producingOrderService.getByOrder(orderId);		
+			List<ProducingOrder> producingOrderlist = producingOrderService.getByOrder(orderId,isyanchang);		
 			for(ProducingOrder temp : producingOrderlist){
 				int tempfactoryId = temp.getFactoryId();
 				if(!factoryMap.containsKey(tempfactoryId)){
@@ -211,7 +223,7 @@ public class HalfStoreInController extends BaseController {
 				}
 				
 			}
-			List<GongxuProducingOrder> gongxuProducingOrderlist = gongxuProducingOrderService.getByOrder(orderId);		
+			List<GongxuProducingOrder> gongxuProducingOrderlist = gongxuProducingOrderService.getByOrder(orderId,isyanchang);		
 			for(GongxuProducingOrder temp : gongxuProducingOrderlist){
 				int tempfactoryId = temp.getFactoryId();
 				if(!factoryMap.containsKey(tempfactoryId)){
@@ -636,6 +648,9 @@ public class HalfStoreInController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有查看订单半成品生产进度的权限",
 					null);
 		}
+		LoginedUser loginUser = SystemContextUtils.getCurrentUser(session);
+		Boolean isyanchang = SystemSettings.yanchang && loginUser.getLoginedUser().getIsyanchang();
+
 		Order order = orderService.get(orderId);
 		if(order == null){
 			throw new Exception("找不到ID为" + orderId + "的订单");
@@ -644,7 +659,7 @@ public class HalfStoreInController extends BaseController {
 		/*1.获取工序 以及 工序对应工厂 Map*/
 		//Map<工序，Map<工厂，入库进度数据>>
 		Map<Integer,Map<Integer,List<Map<String,Object>>>> resultMap = new HashMap<Integer, Map<Integer,List<Map<String,Object>>>>();
-		List<ProducingOrder> producingOrderlist = producingOrderService.getByOrder(orderId);		
+		List<ProducingOrder> producingOrderlist = producingOrderService.getByOrder(orderId,isyanchang);		
 		Map<Integer,Map<Integer,List<ProducingOrder>>> producingMap = new HashMap<Integer, Map<Integer,List<ProducingOrder>>>();
 		for(ProducingOrder temp : producingOrderlist){
 			int tempGongxuId = SystemCache.producing_GONGXU.getId();
@@ -684,7 +699,7 @@ public class HalfStoreInController extends BaseController {
 			
 		}
 		
-		List<GongxuProducingOrder> gongxuProducingOrderlist = gongxuProducingOrderService.getByOrder(orderId);		
+		List<GongxuProducingOrder> gongxuProducingOrderlist = gongxuProducingOrderService.getByOrder(orderId,isyanchang);		
 		Map<Integer,Map<Integer,List<GongxuProducingOrder>>> gongxuProducingMap = new HashMap<Integer, Map<Integer,List<GongxuProducingOrder>>>();
 		for(GongxuProducingOrder temp : gongxuProducingOrderlist){
 			int tempGongxuId = temp.getGongxuId();
@@ -727,7 +742,7 @@ public class HalfStoreInController extends BaseController {
 		/*2.对每一个工序+工厂的组合：获取计划单总量、实际入库数量*/
 		//获取工序-工厂-入库单
 		PlanOrder planOrder = planOrderService.getByOrder(orderId);
-		List<HalfStoreInOut> storeInList = halfStoreInOutService.getByOrder(orderId,true);
+		List<HalfStoreInOut> storeInList = halfStoreInOutService.getByOrder(orderId,true,isyanchang);
 		Map<Integer,Map<Integer,List<HalfStoreInOut>>> storeInMap = new HashMap<Integer, Map<Integer,List<HalfStoreInOut>>>();
 		for(HalfStoreInOut temp : storeInList){
 			int tempGongxuId = temp.getGongxuId();
@@ -755,7 +770,7 @@ public class HalfStoreInController extends BaseController {
 			
 		}
 		//获取工序-工厂-退货单
-		List<HalfStoreReturn> storeReturnList = halfStoreReturnService.getByOrder(orderId);
+		List<HalfStoreReturn> storeReturnList = halfStoreReturnService.getByOrder(orderId,isyanchang);
 		Map<Integer,Map<Integer,List<HalfStoreReturn>>> storeReturnMap = new HashMap<Integer, Map<Integer,List<HalfStoreReturn>>>();
 		for(HalfStoreReturn temp : storeReturnList){
 			int tempGongxuId = temp.getGongxuId();
@@ -876,6 +891,9 @@ public class HalfStoreInController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有查看订单半成品生产进度的权限",
 					null);
 		}
+		LoginedUser loginUser = SystemContextUtils.getCurrentUser(session);
+		Boolean isyanchang = SystemSettings.yanchang && loginUser.getLoginedUser().getIsyanchang();
+		
 		//Map<orderId,Map<String,Object>(包括工序id，计划数量、实际数量等)>
 		Map<Integer,Map<Integer,Map<String,Object>>> resultMap = new HashMap<Integer, Map<Integer,Map<String,Object>>>();
 		Pager pager = new Pager();
@@ -893,7 +911,7 @@ public class HalfStoreInController extends BaseController {
 			/*1.获取工序 Map*/
 			/*Map<工序，计划数量> -- 开始*/
 			Map<Integer,Integer> planMap_producing = new HashMap<Integer, Integer>();
-			List<ProducingOrder> producingOrderlist = producingOrderService.getByOrder(orderId);		
+			List<ProducingOrder> producingOrderlist = producingOrderService.getByOrder(orderId,isyanchang);		
 			for(ProducingOrder temp : producingOrderlist){
 				int tempGongxuId = SystemCache.producing_GONGXU.getId();
 				if(!planMap_producing.containsKey(tempGongxuId)){
@@ -905,7 +923,7 @@ public class HalfStoreInController extends BaseController {
 				}
 				planMap_producing.put(tempGongxuId, temp_total_quantity + planMap_producing.get(tempGongxuId));
 			}
-			List<GongxuProducingOrder> gongxuProducingOrderlist = gongxuProducingOrderService.getByOrder(orderId);		
+			List<GongxuProducingOrder> gongxuProducingOrderlist = gongxuProducingOrderService.getByOrder(orderId,isyanchang);		
 			Map<Integer,Integer> planMap_gongxu = new HashMap<Integer, Integer>();
 			for(GongxuProducingOrder temp : gongxuProducingOrderlist){
 				int tempGongxuId = temp.getGongxuId();
@@ -922,7 +940,7 @@ public class HalfStoreInController extends BaseController {
 			
 			/*2.对每一个工序的组合：获取计划单总量、实际入库数量*/
 			/*Map<工序，入库数量> -- 开始*/
-			List<HalfStoreInOut> storeInList = halfStoreInOutService.getByOrder(orderId,true);
+			List<HalfStoreInOut> storeInList = halfStoreInOutService.getByOrder(orderId,true,isyanchang);
 			Map<Integer,Integer> storeInMap = new HashMap<Integer, Integer>();
 			for(HalfStoreInOut temp : storeInList){
 				int tempGongxuId = temp.getGongxuId();
@@ -939,7 +957,7 @@ public class HalfStoreInController extends BaseController {
 			/*Map<工序，入库数量> -- 结束*/
 			
 			/*Map<工序，退货数量> -- 开始*/
-			List<HalfStoreReturn> storeReturnList = halfStoreReturnService.getByOrder(orderId);
+			List<HalfStoreReturn> storeReturnList = halfStoreReturnService.getByOrder(orderId,isyanchang);
 			Map<Integer,Integer> storeReturnMap = new HashMap<Integer,Integer>();
 			for(HalfStoreReturn temp : storeReturnList){
 				int tempGongxuId = temp.getGongxuId();

@@ -44,8 +44,18 @@ public class User implements Serializable {
 	@Temporary
 	private Boolean need_message_cache_update = false;//是否需要更新 消息缓存,暂时数据，不存放在数据库
 	
-	 
+	private Boolean isyanchang;//是否在验厂状态时需要做数据可见的调整
 	
+	
+	
+	public Boolean getIsyanchang() {
+		return isyanchang;
+	}
+
+	public void setIsyanchang(Boolean isyanchang) {
+		this.isyanchang = isyanchang;
+	}
+
 	public Boolean getNeed_message_cache_update() {
 		return need_message_cache_update;
 	}

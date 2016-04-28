@@ -548,7 +548,7 @@ public class OrderController extends BaseController {
 
 			// 获取生产单
 			List<ProducingOrder> producingOrderList = producingOrderService
-					.getByOrder(orderId);
+					.getByOrder(orderId,false);
 			if(producingOrderList != null){
 				for(ProducingOrder producingOrder : producingOrderList){
 					//去掉生产单为数量为0的行
@@ -645,7 +645,7 @@ public class OrderController extends BaseController {
 			
 			// 2015-10-18添加获取加工工序单
 			List<GongxuProducingOrder> gongxuProducingOrderList = gongxuProducingOrderService
-					.getByOrder(orderId);
+					.getByOrder(orderId,false);
 			if(gongxuProducingOrderList != null){
 				for(GongxuProducingOrder gongxuProducingOrder : gongxuProducingOrderList){
 					//去掉生产单为数量为0的行

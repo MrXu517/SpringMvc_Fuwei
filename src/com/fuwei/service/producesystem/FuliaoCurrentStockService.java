@@ -65,6 +65,49 @@ public class FuliaoCurrentStockService  extends BaseService {
 			throw e;
 		}
 	}
+	// 获取自购辅料库存列表
+	public Pager getList_purchase(Pager pager,Integer charge_employee,String locationNumber,String orderNumber, List<Sort> sortlist)
+			throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			String seq = " AND ";
+			sql.append("select a.style,a.memo,a.quantity as plan_quantity,b.charge_employee,b.orderId,b.orderNumber,b.name,l.quantity,l.size l_size, l.id as locationId,l.number  from tb_location l , tb_fuliaopurchaseorder_detail a ,tb_fuliaopurchaseorder b  where l.fuliaoPurchaseOrderDetailId=a.id and l.type=1 and a.fuliaoPurchaseOrderId=b.id");
+
+			StringBuffer sql_condition = new StringBuffer();
+			if (charge_employee != null) {
+				sql_condition.append(seq + " b.charge_employee='"
+						+ charge_employee + "'");
+				seq = " AND ";
+			}
+			if (orderNumber != null && !orderNumber.equals("")) {
+				sql_condition.append(seq + " b.orderNumber='" + orderNumber + "'");
+				seq = " AND ";
+			}
+			if (locationNumber != null && !locationNumber.equals("")) {
+				sql_condition.append(seq + " l.number='" + locationNumber + "'");
+				seq = " AND ";
+			}
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql_condition.append(" order by "
+								+ sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					} else {
+						sql_condition.append(","
+								+ sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			
+			return findPager_T_Map(sql.append(sql_condition).toString(), pager);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 	
 	// 获取通用辅料库存列表
 	public Pager getList_common(Pager pager ,String locationNumber, List<Sort> sortlist)
@@ -228,6 +271,40 @@ public class FuliaoCurrentStockService  extends BaseService {
 		return result;
 	}
 	
+	//获取某辅料采购单的各自购辅料总当前库存数量，只有数量，没有库位分布
+	public Map<Integer,Map<String,Object>> getByPurchaseOrder(int fuliaoPurchaseOrderId){
+		List<Map<String,Object>> in_map = dao.queryForListMap("select f.* ,newtable.in_quantity from tb_fuliaopurchaseorder_detail f left join (select sum(quantity) in_quantity,fuliaoPurchaseOrderDetailId from tb_selffuliaoin_detail group by fuliaoPurchaseOrderDetailId)  newtable on f.id = newtable.fuliaoPurchaseOrderDetailId where  f.fuliaoPurchaseOrderId = ?",fuliaoPurchaseOrderId);
+		List<Map<String,Object>> out_map = dao.queryForListMap("select sum(a.quantity) out_quantity,fuliaoPurchaseOrderDetailId from tb_selffuliaoout_detail a ,tb_fuliaopurchaseorder_detail b where a.fuliaoPurchaseOrderDetailId=b.id and b.fuliaoPurchaseOrderId=? group by fuliaoPurchaseOrderDetailId", fuliaoPurchaseOrderId);
+		//Map<采购单明细ID，出入库数据>
+		Map<Integer,Map<String,Object>> result = new HashMap<Integer, Map<String,Object>>();
+		for(Map<String,Object> item : in_map){
+			Map<String,Object> resultItem = new HashMap<String, Object>();
+			int fuliaoPurchaseOrderDetailId = (Integer)item.get("id");
+			int plan_quantity = (Integer)item.get("quantity");
+			int in_quantity = 0;
+			if(item.get("in_quantity")!=null){
+				in_quantity = Integer.valueOf(item.get("in_quantity").toString());
+			}
+			int out_quantity = 0;
+			for(Map<String,Object> temp_item : out_map){
+				int tempfuliaoPurchaseOrderDetailId = (Integer)temp_item.get("fuliaoPurchaseOrderDetailId");
+				if(tempfuliaoPurchaseOrderDetailId == fuliaoPurchaseOrderDetailId){
+					out_quantity = Integer.valueOf(temp_item.get("out_quantity").toString());
+				}
+			}
+			int stock_quantity = in_quantity - out_quantity; //当前库存		
+
+			resultItem.put("plan_quantity", plan_quantity);
+			resultItem.put("in_quantity", in_quantity);
+			resultItem.put("not_in_quantity", plan_quantity-in_quantity);
+			resultItem.put("out_quantity", out_quantity);
+			resultItem.put("not_out_quantity", plan_quantity-out_quantity);
+			resultItem.put("stock_quantity", stock_quantity);
+			result.put(fuliaoPurchaseOrderDetailId, resultItem);
+		}
+		return result;
+	}
+	
 	//获取某订单的各辅料总当前库存,只返回fuliaoId和stock_quantity
 	public Map<Integer,Integer> getStockMapByOrder(int orderId){
 		Map<Integer,Integer> result = new HashMap<Integer,Integer>();
@@ -302,4 +379,18 @@ public class FuliaoCurrentStockService  extends BaseService {
 		return result;
 	}
 	
+	//获取某自购辅料当前存放的 库位 以及各库位分别存放了多少
+	public Map<Integer,Integer> locationByPurchaseDetail(int fuliaoPurchaseOrderDetailId){	
+		List<Map<String,Object>> map = dao.queryForListMap(
+				"select quantity,id from tb_location where fuliaoPurchaseOrderDetailId=?", fuliaoPurchaseOrderDetailId);
+		if(map == null){
+			return new HashMap<Integer, Integer>();
+		}
+		//Map<locationId,stock_quantity>
+		Map<Integer,Integer> result = new HashMap<Integer, Integer>();
+		for(Map<String,Object> item : map){
+			result.put(Integer.valueOf(item.get("id").toString()), Integer.valueOf(item.get("quantity").toString()));
+		}
+		return result;
+	}
 }

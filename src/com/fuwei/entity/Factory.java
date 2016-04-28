@@ -18,7 +18,16 @@ public class Factory {
 	private Date updated_at;// 最近更新时间
 	private Integer created_user;//创建用户
 	private Integer type = 0 ;
+	private Boolean isyanchang;//是否在验厂状态下可见
 	
+	
+	
+	public Boolean getIsyanchang() {
+		return isyanchang;
+	}
+	public void setIsyanchang(Boolean isyanchang) {
+		this.isyanchang = isyanchang;
+	}
 	public Integer getType() {
 		return type;
 	}

@@ -37,6 +37,15 @@ public class SystemSettingService extends BaseService{
 					field.set(null, value);
 				}else if(className.equals("java.lang.Double")){
 					field.set(null, Double.parseDouble(value));
+				}else if(className.equals("java.lang.Boolean")){
+					if(value.equals("1") || value.toLowerCase().equals("true")){
+						field.set(null, true);
+					}else if(value.equals("0") || value.toLowerCase().equals("false")){
+						field.set(null, false);
+					}else{
+						field.set(null, null);
+					}
+					
 				}
 				
 			}

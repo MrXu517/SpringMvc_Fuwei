@@ -14,6 +14,7 @@
 	String start_at_str = SystemSettings.sample_display_start_at == null ? "" : SystemSettings.sample_display_start_at; 
 	String end_at_str = SystemSettings.sample_display_end_at == null ? "" : SystemSettings.sample_display_end_at; 
 	Double local_tax_rate = SystemSettings.local_tax_rate;
+	Boolean yanchang = SystemSettings.yanchang;
 %>
 <!DOCTYPE html>
 <html>
@@ -90,6 +91,31 @@
 														<input type="text" class="form-control"
 															name="local_tax_rate" id="local_tax_rate" 
 															value="<%=local_tax_rate %>" placeholder="请输入地税税率">
+													</div>
+													<div class="col-sm-1"></div>
+												</div>
+												<div class="form-group">
+													<label for="yanchang" class="col-sm-3 control-label">
+														验厂状态
+													</label>
+													<div class="col-sm-8">
+														<select class="form-control require" name="yanchang" id="yanchang">	
+															<%if(yanchang){ %>
+															<option value="0">
+																关闭
+															</option>
+															<option value="1" selected>
+																开启
+															</option>
+															<%}else{ %>
+															<option value="0" selected>
+																关闭
+															</option>
+															<option value="1" >
+																开启
+															</option>
+															<%} %>
+														</select>
 													</div>
 													<div class="col-sm-1"></div>
 												</div>

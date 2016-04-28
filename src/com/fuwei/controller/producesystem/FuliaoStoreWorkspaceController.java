@@ -26,11 +26,15 @@ import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Employee;
 import com.fuwei.entity.User;
+import com.fuwei.entity.ordergrid.FuliaoPurchaseOrder;
+import com.fuwei.entity.ordergrid.FuliaoPurchaseOrderDetail;
 import com.fuwei.entity.producesystem.Fuliao;
 import com.fuwei.entity.producesystem.FuliaoChangeLocation;
 import com.fuwei.entity.producesystem.FuliaoOut;
 import com.fuwei.entity.producesystem.Location;
 import com.fuwei.service.AuthorityService;
+import com.fuwei.service.ordergrid.FuliaoPurchaseOrderDetailService;
+import com.fuwei.service.ordergrid.FuliaoPurchaseOrderService;
 import com.fuwei.service.producesystem.FuliaoCurrentStockService;
 import com.fuwei.service.producesystem.FuliaoService;
 import com.fuwei.service.producesystem.LocationService;
@@ -48,6 +52,10 @@ public class FuliaoStoreWorkspaceController extends BaseController {
 	FuliaoCurrentStockService fuliaoCurrentStockService;
 	@Autowired
 	FuliaoService fuliaoService;
+	@Autowired
+	FuliaoPurchaseOrderService fuliaoPurchaseOrderService;
+	@Autowired
+	FuliaoPurchaseOrderDetailService fuliaoPurchaseOrderDetailService;
 	
 	
 	@RequestMapping(value = "/workspace", method = RequestMethod.GET)
@@ -62,6 +70,20 @@ public class FuliaoStoreWorkspaceController extends BaseController {
 					null);
 		}
 		return new ModelAndView("fuliaoinout/workspace");
+	}
+	
+	@RequestMapping(value = "/workspace_purchase", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView workspace_purchase(HttpSession session,HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "selffuliaoinout";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有自购辅料工作台的权限",
+					null);
+		}
+		return new ModelAndView("selffuliao/workspace");
 	}
 	
 	@RequestMapping(value = "/commonfuliao_workspace", method = RequestMethod.GET)
@@ -171,6 +193,50 @@ public class FuliaoStoreWorkspaceController extends BaseController {
 		return new ModelAndView("fuliaoinout/current_stock_common");
 	}
 	
+	@RequestMapping(value = "/current_stock_purchase", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView current_stock_purchase(Integer page,Integer charge_employee,String locationNumber,String orderNumber,String sortJSON, HttpSession session,
+			HttpServletRequest request) throws Exception {
+
+		String lcode = "selffuliaoinout";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有自购辅料工作台的权限", null);
+		}
+
+		Pager pager = new Pager();
+		if (page != null && page > 0) {
+			pager.setPageNo(page);
+		}
+
+		List<Sort> sortList = null;
+		if (sortJSON != null) {
+			sortList = SerializeTool.deserializeList(sortJSON, Sort.class);
+		}
+		if (sortList == null) {
+			sortList = new ArrayList<Sort>();
+		}
+		Sort sort2 = new Sort();
+		sort2.setDirection("desc");
+		sort2.setProperty("l.id");
+		sortList.add(sort2);
+
+		pager = fuliaoCurrentStockService.getList_purchase(pager, charge_employee,locationNumber, orderNumber, sortList);
+		
+		request.setAttribute("locationNumber", locationNumber);
+		request.setAttribute("charge_employee", charge_employee);
+		List<Employee> employeelist = new ArrayList<Employee>();
+		for (Employee temp : SystemCache.employeelist) {
+			if (temp.getIs_charge_employee()) {
+				employeelist.add(temp);
+			}
+		}
+		request.setAttribute("employeelist", employeelist);
+		request.setAttribute("orderNumber", orderNumber);
+		request.setAttribute("pager", pager);
+		return new ModelAndView("selffuliao/current_stock");
+	}
+	
 	//手动清辅料库存
 	@RequestMapping(value = "/cleaningstock", method = RequestMethod.GET)
 	@ResponseBody
@@ -216,7 +282,7 @@ public class FuliaoStoreWorkspaceController extends BaseController {
 		return new ModelAndView("fuliaoinout/cleaningstock");
 	}
 	
-	//手动清辅料库存
+	//手动清辅料库存 -- 通用
 	@RequestMapping(value = "/cleaningstock_common", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView cleaningstock_common(Integer page,String locationNumber,String sortJSON, HttpSession session,
@@ -250,6 +316,51 @@ public class FuliaoStoreWorkspaceController extends BaseController {
 		request.setAttribute("locationNumber", locationNumber);
 		request.setAttribute("pager", pager);
 		return new ModelAndView("fuliaoinout/cleaningstock_common");
+	}
+	
+	//手动清辅料库存 -- 自购
+	@RequestMapping(value = "/cleaningstock_purchase", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView cleaningstock_purchase(Integer page,Integer charge_employee,String locationNumber,String orderNumber,String sortJSON, HttpSession session,
+			HttpServletRequest request) throws Exception {
+
+		String lcode = "fuliao_workspace/cleaningstock";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有手动清辅料库存的权限", null);
+		}
+
+		Pager pager = new Pager();
+		if (page != null && page > 0) {
+			pager.setPageNo(page);
+		}
+
+		List<Sort> sortList = null;
+		if (sortJSON != null) {
+			sortList = SerializeTool.deserializeList(sortJSON, Sort.class);
+		}
+		if (sortList == null) {
+			sortList = new ArrayList<Sort>();
+		}
+		Sort sort2 = new Sort();
+		sort2.setDirection("desc");
+		sort2.setProperty("l.id");
+		sortList.add(sort2);
+
+		pager = fuliaoCurrentStockService.getList_purchase(pager, charge_employee,locationNumber, orderNumber, sortList);
+		
+		request.setAttribute("locationNumber", locationNumber);
+		request.setAttribute("charge_employee", charge_employee);
+		List<Employee> employeelist = new ArrayList<Employee>();
+		for (Employee temp : SystemCache.employeelist) {
+			if (temp.getIs_charge_employee()) {
+				employeelist.add(temp);
+			}
+		}
+		request.setAttribute("employeelist", employeelist);
+		request.setAttribute("orderNumber", orderNumber);
+		request.setAttribute("pager", pager);
+		return new ModelAndView("selffuliao/cleaningstock");
 	}
 	// 清空辅料库存
 	@RequestMapping(value = "/cleaningstock", method = RequestMethod.POST)
@@ -292,6 +403,13 @@ public class FuliaoStoreWorkspaceController extends BaseController {
 		return new ModelAndView("fuliaoinout/changelocation/scan");
 	}
 	
+	@RequestMapping(value = "/changelocation/scan_purchase", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView changelocation_scan_purchase(HttpSession session, HttpServletRequest request)
+			throws Exception {
+		return new ModelAndView("selffuliao/changelocation/scan");
+	}
+	
 	@RequestMapping(value = "/changelocation/scan_confirm", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView changelocation_scan_confirm(String locationNumber, HttpSession session, HttpServletRequest request)
@@ -304,18 +422,33 @@ public class FuliaoStoreWorkspaceController extends BaseController {
 		if(location == null){
 			throw new Exception("找不到编号为" + locationNumber + "的库位");
 		}
-		Integer fuliaoId = location.getFuliaoId();
-		if(fuliaoId == null){
+		if(location.getIsempty()){
 			throw new Exception("该库位是空库位，无法更改");
 		}
-		Map<Integer,Integer> locationMap = fuliaoCurrentStockService.locationByFuliao(fuliaoId);
-		Fuliao fuliao = fuliaoService.get(fuliaoId);
-		request.setAttribute("fuliao", fuliao);
-		request.setAttribute("locationMap", locationMap);
-		//获取可以更改的库位,条件1.空或本身 
-		List<Location> locationlist = locationService.getChangeLocationList(fuliaoId,location.getType());
-		request.setAttribute("locationlist", locationlist);
-		return new ModelAndView("fuliaoinout/changelocation/scan_confirm");
+		if(location.getFuliaoId()!=null && location.getFuliaoId()!=0){//大货辅料
+			Integer fuliaoId = location.getFuliaoId();
+			Map<Integer,Integer> locationMap = fuliaoCurrentStockService.locationByFuliao(fuliaoId);
+			Fuliao fuliao = fuliaoService.get(fuliaoId);
+			request.setAttribute("fuliao", fuliao);
+			request.setAttribute("locationMap", locationMap);
+			//获取可以更改的库位,条件1.空或本身 
+			List<Location> locationlist = locationService.getChangeLocationList(fuliaoId,location.getType());
+			request.setAttribute("locationlist", locationlist);
+			return new ModelAndView("fuliaoinout/changelocation/scan_confirm");
+		}else{//自购辅料
+			int fuliaoPurchaseOrderDetailId = location.getFuliaoPurchaseOrderDetailId();
+			Map<Integer,Integer> locationMap = fuliaoCurrentStockService.locationByPurchaseDetail(fuliaoPurchaseOrderDetailId);
+			request.setAttribute("locationMap", locationMap);
+			FuliaoPurchaseOrderDetail fuliaoPurchaseOrderDetail = fuliaoPurchaseOrderDetailService.get(fuliaoPurchaseOrderDetailId);
+			FuliaoPurchaseOrder fuliaoPurchaseOrder = fuliaoPurchaseOrderService.get(fuliaoPurchaseOrderDetail.getFuliaoPurchaseOrderId());
+			request.setAttribute("fuliaoPurchaseOrderDetail", fuliaoPurchaseOrderDetail);
+			request.setAttribute("fuliaoPurchaseOrder", fuliaoPurchaseOrder);
+			//获取可以更改的库位,条件1.空或本身 
+			List<Location> locationlist = locationService.getChangeLocationList_purchase(fuliaoPurchaseOrderDetailId,location.getType());
+			request.setAttribute("locationlist", locationlist);
+			return new ModelAndView("selffuliao/changelocation/scan_confirm_purchase");
+		}
+		
 	}
 	
 	@RequestMapping(value = "/changelocation", method = RequestMethod.POST)
@@ -339,6 +472,30 @@ public class FuliaoStoreWorkspaceController extends BaseController {
 		handle.setLocationId(locationId);
 		handle.setMemo("更改库位为【" + SystemCache.getLocationNumber(locationId) + "】");
 		locationService.changeLocation(fuliaoId, locationId,handle);
+		return this.returnSuccess();
+	}
+	
+	@RequestMapping(value = "/changelocation_purchase", method = RequestMethod.POST)
+	@ResponseBody
+	@Transactional
+	public Map<String,Object> changelocation_purchase(int fuliaoPurchaseOrderDetailId, Integer locationId, HttpSession session, HttpServletRequest request)
+			throws Exception {
+		if(locationId == null){
+			throw new Exception("更改库位ID不能为空");
+		}
+		String lcode = "selffuliaoinout/changelocation";
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有更改库位的权限", null);
+		}
+		FuliaoChangeLocation handle = new FuliaoChangeLocation();
+		handle.setCreated_at(DateTool.now());
+		handle.setCreated_user(user.getId());
+		handle.setFuliaoPurchaseOrderDetailId(fuliaoPurchaseOrderDetailId);
+		handle.setLocationId(locationId);
+		handle.setMemo("更改库位为【" + SystemCache.getLocationNumber(locationId) + "】");
+		locationService.changelocation_purchase(fuliaoPurchaseOrderDetailId, locationId,handle);
 		return this.returnSuccess();
 	}
 }

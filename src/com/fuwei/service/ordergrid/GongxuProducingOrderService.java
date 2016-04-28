@@ -94,9 +94,21 @@ public class GongxuProducingOrderService extends BaseService {
 	}
 
 	// 获取
-	public List<GongxuProducingOrder> getByOrder(int orderId) throws Exception {
+	public List<GongxuProducingOrder> getByOrder(int orderId,Boolean isyanchang) throws Exception {
 		try {
+			if(isyanchang){
+				return getByOrder_yanchang(orderId);
+			}
 			List<GongxuProducingOrder> list = dao.queryForBeanList("select * from tb_gongxu_producingorder where orderId = ?", GongxuProducingOrder.class, orderId);		
+			return list;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	// 获取
+	public List<GongxuProducingOrder> getByOrder_yanchang(int orderId) throws Exception {
+		try {
+			List<GongxuProducingOrder> list = dao.queryForBeanList("select a.* from tb_gongxu_producingorder a,tb_factory b where a.factoryId=b.id and b.isyanchang=1 and orderId = ?", GongxuProducingOrder.class, orderId);		
 			return list;
 		} catch (Exception e) {
 			throw e;

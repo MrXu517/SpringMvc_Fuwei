@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import com.fuwei.commons.SystemSettings;
 import com.fuwei.constant.Holiday;
 
 import java.util.Calendar;
@@ -34,6 +35,9 @@ public class DateTool {
 		return yearLast;
 	}
 	public static String formateDate(Date date) throws ParseException {
+		if(SystemSettings.yanchang){
+			date = getYanDate(date);
+		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return sdf.format(date);
 	}
@@ -75,6 +79,9 @@ public class DateTool {
 		if(date == null){
 			return "";
 		}
+		if(SystemSettings.yanchang){
+			date = getYanDate(date);
+		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 		String dateStr = sdf.format(date);
 		return dateStr;
@@ -82,6 +89,9 @@ public class DateTool {
 	public static String formatDateYMD(Date date,String sep) throws ParseException {
 		if(date == null){
 			return "";
+		}
+		if(SystemSettings.yanchang){
+			date = getYanDate(date);
 		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy"+sep+"MM"+sep+"dd");
 		return sdf.format(date);
@@ -91,12 +101,18 @@ public class DateTool {
 		if(date == null){
 			return "";
 		}
+		if(SystemSettings.yanchang){
+			date = getYanDate(date);
+		}
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		return sdf.format(date);
 	}
 	
 	//验厂日期：往前推找到 最近的 不是周六和节假日的 日子
-	public static Date getYanDate(Date date){		
+	public static Date getYanDate(Date date){	
+		if(date== null){
+			return null;
+		}
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		

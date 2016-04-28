@@ -187,6 +187,12 @@ function OrderGrid(settings){
 			});
 
 			this.$content.find(".detailTb").on("click", ".deleteRow", function() {
+				var rowdata = $.parseJSON($(this).closest("tr").attr("data"));
+				if(rowdata.id!=undefined && rowdata.id!=""){
+					if(!confirm("原有记录删除时，请确保该明细辅料未入库出库过")){
+						return false;
+					}
+				}
 				$(this).closest("tr").remove();
 				return false;
 			});

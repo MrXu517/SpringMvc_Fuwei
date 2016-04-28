@@ -108,7 +108,7 @@ public class PrintOrderController extends BaseController {
 			PlanOrder planOrder = null;
 			List<ColoringOrder> coloringOrderList = null;
 			
-			List<ProducingOrder> producingOrderList = producingOrderService.getByOrder(orderId);	
+			List<ProducingOrder> producingOrderList = producingOrderService.getByOrder(orderId,false);	
 			String productfactoryStr = "";
 			String seq = "";
 			if(producingOrderList!=null){
@@ -140,7 +140,7 @@ public class PrintOrderController extends BaseController {
 			
 			//获取工序加工单
 			if(printAll || gridName.indexOf("gongxuproduceorder") > -1){
-				List<GongxuProducingOrder> gongxuProducingOrderList = gongxuProducingOrderService.getByOrder(orderId);	
+				List<GongxuProducingOrder> gongxuProducingOrderList = gongxuProducingOrderService.getByOrder(orderId,false);	
 				if(producingOrderList!=null){
 					grids += "gongxuproduceorder,";
 					request.setAttribute("gongxuProducingOrderList", gongxuProducingOrderList);

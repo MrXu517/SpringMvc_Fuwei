@@ -205,6 +205,9 @@
 												<th width="15%">
 													数量(kg)
 												</th>
+												<th width="15%">
+													库位容量
+												</th>
 												<th width="30%">
 													备注
 												</th>
@@ -282,6 +285,17 @@
 												<input type="text" name="quantity" id="quantity"
 													class="form-control double require" />
 											</div>
+											<div class="col-sm-1"></div>
+										</div>
+										<div class="form-group col-md-12">
+											<label for="location_size" class="col-sm-3 control-label">
+												库位容量
+											</label>
+											<div class="col-sm-8">
+														<input type="radio" name="location_size" id="location_size_3" value="3"/><span class="location_size">大</span>
+														<input type="radio" name="location_size" id="location_size_2" value="2"/><span class="location_size">中</span>
+														<input type="radio" name="location_size" id="location_size_1" value="1" checked/><span class="location_size">小</span>
+													</div>
 											<div class="col-sm-1"></div>
 										</div>
 										<div class="form-group col-md-12">

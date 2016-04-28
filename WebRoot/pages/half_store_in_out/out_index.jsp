@@ -69,6 +69,7 @@
 		number_str = String.valueOf(number);
 	}
 	List<Employee> employeelist = (List<Employee>) request.getAttribute("employeelist");
+	List<Factory> factorylist = (List<Factory>)request.getAttribute("factorylist");
 %>
 <!DOCTYPE html>
 
@@ -129,7 +130,7 @@
 														未选择
 													</option>
 													<%
-														for (Factory factory : SystemCache.produce_factorylist) {
+														for (Factory factory : factorylist) {
 																																					if (factoryId != null && factoryId == factory.getId()) {
 													%>
 													<option value="<%=factory.getId()%>" selected><%=factory.getName()%></option>

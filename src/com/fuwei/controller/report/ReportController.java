@@ -782,7 +782,7 @@ public class ReportController extends BaseController {
 			sortList.add(sort_factory);
 			
 			
-			HashMap<Factory,HashMap<FuliaoType,Double> > result = fuliaoPurchaseOrderService.fuliao_purchase_report(start_time_d, end_time_d,
+			HashMap<Factory,HashMap<FuliaoType,Integer> > result = fuliaoPurchaseOrderService.fuliao_purchase_report(start_time_d, end_time_d,
 					factoryId, sortList);
 			request.setAttribute("result", result);
 			request.setAttribute("start_time", start_time_d);

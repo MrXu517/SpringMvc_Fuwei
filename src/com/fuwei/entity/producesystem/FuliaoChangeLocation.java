@@ -8,21 +8,31 @@ import net.keepsoft.commons.annotation.Table;
 public class FuliaoChangeLocation {
 	@IdentityId
 	private int id;
-	private int fuliaoId;
+	private Integer fuliaoId;
 	private int locationId;//新的库位
 	private String memo;
 	private int created_user;//操作用户
 	private Date created_at;//操作时间
+	private Integer fuliaoPurchaseOrderDetailId;
+	
+	
+	public Integer getFuliaoPurchaseOrderDetailId() {
+		return fuliaoPurchaseOrderDetailId;
+	}
+	public void setFuliaoPurchaseOrderDetailId(Integer fuliaoPurchaseOrderDetailId) {
+		this.fuliaoPurchaseOrderDetailId = fuliaoPurchaseOrderDetailId;
+	}
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getFuliaoId() {
+	
+	public Integer getFuliaoId() {
 		return fuliaoId;
 	}
-	public void setFuliaoId(int fuliaoId) {
+	public void setFuliaoId(Integer fuliaoId) {
 		this.fuliaoId = fuliaoId;
 	}
 	public int getLocationId() {

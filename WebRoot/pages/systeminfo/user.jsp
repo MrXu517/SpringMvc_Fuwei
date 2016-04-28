@@ -138,6 +138,22 @@
 													<div class="col-sm-1"></div>
 												</div>
 												<div class="form-group">
+													<label for="isyanchang" class="col-sm-3 control-label">
+														验厂状态
+													</label>
+													<div class="col-sm-8">
+														<select class="form-control require" name="isyanchang" id="isyanchang">	
+															<option value="false">
+																不需控制
+															</option>
+															<option value="true">
+																需控制
+															</option>
+														</select>
+													</div>
+													<div class="col-sm-1"></div>
+												</div>
+												<div class="form-group">
 													<div class="col-sm-offset-3 col-sm-5">
 														<button type="submit" class="btn btn-primary"
 															data-loading-text="正在保存...">
@@ -184,6 +200,9 @@
 														角色
 													</th>
 													<th>
+														验厂状态
+													</th>
+													<th>
 														操作
 													</th>
 												</tr>
@@ -200,6 +219,10 @@
 													<td><%=i_user.getHelp_code()%></td>
 													<td><%=i_user.getRoleId() == null ? "" : SystemCache
 						.getRole(i_user.getRoleId()).getDecription()%></td>
+													<td><%if(i_user.getIsyanchang()){%>	
+													<span class="label label-danger">验厂时数据有调整</span>
+													<%}%>
+													</td>
 													<td>
 														<a class="editUser" href="#"
 															data-cid="<%=i_user.getId()%>">编辑</a> |

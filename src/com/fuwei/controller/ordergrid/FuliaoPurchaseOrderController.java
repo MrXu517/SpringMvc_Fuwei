@@ -41,6 +41,7 @@ import com.fuwei.service.FuliaoTypeService;
 import com.fuwei.service.MaterialService;
 import com.fuwei.service.OrderService;
 import com.fuwei.service.SampleService;
+import com.fuwei.service.ordergrid.FuliaoPurchaseOrderDetailService;
 import com.fuwei.service.ordergrid.FuliaoPurchaseOrderService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.HanyuPinyinUtil;
@@ -52,6 +53,8 @@ public class FuliaoPurchaseOrderController extends BaseController {
 	
 	@Autowired
 	FuliaoPurchaseOrderService fuliaoPurchaseOrderService;
+	@Autowired
+	FuliaoPurchaseOrderDetailService fuliaoPurchaseOrderDetailService;
 	@Autowired
 	OrderService orderService;
 	@Autowired
@@ -397,6 +400,29 @@ public class FuliaoPurchaseOrderController extends BaseController {
 		Map<String,Object> data = new HashMap<String,Object>();  
 	    data.put("gridName","fuliaopurchaseorder");  
 		return new ModelAndView("printorder/print",data);
+	}
+	
+	//特殊用法，只在2016-4-24使用，其他时候请不要使用该方法
+	@RequestMapping(value = "/setdetail", method = RequestMethod.GET)
+	@ResponseBody
+	@Transactional
+	public Map<String, Object> setdetail() throws Exception{
+		List<FuliaoPurchaseOrder> list = fuliaoPurchaseOrderService.getAll();
+		for(FuliaoPurchaseOrder item : list){
+			List<FuliaoPurchaseOrderDetail> itemDetaillist = item.getDetaillist();
+			List<FuliaoPurchaseOrderDetail> dbdetaillist = fuliaoPurchaseOrderDetailService.getList(item.getId());
+			if(dbdetaillist!=null){//若数据库里没有
+				for(FuliaoPurchaseOrderDetail detail : item.getDetaillist()){
+					detail.setLocation_size(1);
+				}
+//				fuliaoPurchaseOrderDetailService.addBatch(itemDetaillist);
+//				List<FuliaoPurchaseOrderDetail> detaillist = fuliaoPurchaseOrderDetailService.getList(temp.getId());
+//				item.setDetail_json(SerializeTool.serialize(detaillist));
+				fuliaoPurchaseOrderService.update(item);
+			}
+		}
+		return this.returnSuccess();
+		
 	}
 	
 //	@RequestMapping(value = "/setwrong", method = RequestMethod.GET)

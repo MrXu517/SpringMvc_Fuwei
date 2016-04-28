@@ -293,7 +293,7 @@ public class FuliaoPurchaseOrder extends BaseTableOrder{
 	}
 	
 	public String createNumber() throws ParseException{
-		return DateTool.getYear2() + "FL" + NumberUtil.appendZero(this.id, 4);
+		return DateTool.getYear2() + "FCG" + NumberUtil.appendZero(this.id, 4);
 	}
 	
 }

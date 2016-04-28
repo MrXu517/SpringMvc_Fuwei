@@ -245,7 +245,7 @@ public class ProducingOrderController extends BaseController {
 						"计划单缺少颜色及数量明细，请先修改计划单 ", null);
 			}
 			List<ProducingOrder> producingOrderList = producingOrderService
-					.getByOrder(orderId);
+					.getByOrder(orderId,false);
 			
 			HashMap<Integer,Integer> hashmap = new HashMap<Integer,Integer>();
 			for (ProducingOrder producingorder : producingOrderList) {

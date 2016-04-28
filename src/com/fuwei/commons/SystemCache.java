@@ -157,6 +157,9 @@ public class SystemCache {
 
 	//缓存装箱单中用的属性
 	public static List<PackProperty> packpropertylist = new ArrayList<PackProperty>();
+//	
+	//验厂时的可见的加工工厂
+	public static List<Factory> produce_factorylist_yachang = new ArrayList<Factory>();
 
 	public static void init() throws Exception {
 		companyService = (CompanyService) SystemContextUtils
@@ -276,11 +279,15 @@ public class SystemCache {
 		coloring_factorylist = new ArrayList<Factory>();
 		produce_factorylist = new ArrayList<Factory>();
 		fuliao_factorylist = new ArrayList<Factory>();
+		produce_factorylist_yachang = new ArrayList<Factory>();
 		for (int i = 0; i < SystemCache.factorylist.size(); ++i) {
 			Factory temp = SystemCache.factorylist.get(i);
 			Integer type = temp.getType();
 			if (type == 0) {
 				SystemCache.produce_factorylist.add(temp);
+				if(temp.getIsyanchang()){
+					produce_factorylist_yachang.add(temp);
+				}
 			}
 			if (type == 1) {
 				SystemCache.purchase_factorylist.add(temp);

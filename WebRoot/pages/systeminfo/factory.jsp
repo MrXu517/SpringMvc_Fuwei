@@ -115,6 +115,22 @@
 													</div>
 													<div class="col-sm-1"></div>
 												</div>
+												<div class="form-group">
+													<label for="isyanchang" class="col-sm-3 control-label">
+														验厂状态
+													</label>
+													<div class="col-sm-8">
+														<select class="form-control require" name="isyanchang" id="isyanchang">	
+															<option value="false">
+																不可见
+															</option>
+															<option value="true">
+																可见
+															</option>
+														</select>
+													</div>
+													<div class="col-sm-1"></div>
+												</div>
 
 												<div class="form-group">
 													<div class="col-sm-offset-3 col-sm-5">
@@ -216,6 +232,9 @@
 														地址
 													</th>
 													<th>
+														验厂状态
+													</th>
+													<th>
 														操作
 													</th>
 												</tr>
@@ -231,6 +250,10 @@
 													<td><%=factory.getTypeName()%></td>
 													<td><%=factory.getHelp_code()%></td>
 													<td><%=factory.getAddress()%></td>
+													<td><%if(factory.getIsyanchang()){%>	
+													<span class="label label-success">验厂时可见</span>
+													<%}%>
+													</td>
 													<td>
 														<a class="editFactory" href="#"
 															data-cid="<%=factory.getId()%>">编辑</a>

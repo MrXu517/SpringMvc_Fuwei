@@ -1,6 +1,7 @@
 package com.fuwei.service.ordergrid;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import com.fuwei.commons.SystemCache;
 import com.fuwei.entity.Factory;
 import com.fuwei.entity.FuliaoType;
 import com.fuwei.entity.Material;
+import com.fuwei.entity.finishstore.PackingOrderDetail;
 import com.fuwei.entity.ordergrid.FuliaoPurchaseOrder;
 import com.fuwei.entity.ordergrid.FuliaoPurchaseOrderDetail;
 import com.fuwei.service.BaseService;
@@ -29,6 +31,8 @@ public class FuliaoPurchaseOrderService extends BaseService {
 			.getLogger(FuliaoPurchaseOrderService.class);
 	@Autowired
 	JdbcTemplate jdbc;
+	@Autowired
+	FuliaoPurchaseOrderDetailService fuliaoPurchaseOrderDetailService;
 
 	public List<FuliaoPurchaseOrder> getListFactory1() throws Exception {
 		try {
@@ -40,7 +44,7 @@ public class FuliaoPurchaseOrderService extends BaseService {
 	}
 	
 	// 添加辅料采购单
-	@Transactional
+	@Transactional(rollbackFor=Exception.class)
 	public int add(FuliaoPurchaseOrder tableOrder) throws Exception {
 		try {
 			if (tableOrder.getDetaillist() == null
@@ -49,15 +53,16 @@ public class FuliaoPurchaseOrderService extends BaseService {
 			} else {
 				tableOrder.setStatus(0);
 				tableOrder.setState("新建");
-				tableOrder.setDetail_json(SerializeTool.serialize(tableOrder
-						.getDetaillist()));
-
 				Integer tableOrderId = this.insert(tableOrder);
-				
-				tableOrder.setId(tableOrderId);
+				tableOrder.setId(tableOrderId);	
+				for(FuliaoPurchaseOrderDetail detail : tableOrder.getDetaillist()){
+					detail.setFuliaoPurchaseOrderId(tableOrderId);
+				}
+				fuliaoPurchaseOrderDetailService.addBatch(tableOrder.getDetaillist());
+				List<FuliaoPurchaseOrderDetail> newdetaillist = fuliaoPurchaseOrderDetailService.getList(tableOrderId);
+				tableOrder.setDetail_json(SerializeTool.serialize(newdetaillist));
 				tableOrder.setNumber(tableOrder.createNumber());
 				this.update(tableOrder, "id", null);
-
 				return tableOrderId;
 			}
 		} catch (Exception e) {
@@ -78,11 +83,55 @@ public class FuliaoPurchaseOrderService extends BaseService {
 				if (!temp.isEdit()) {
 					throw new Exception("单据已执行完成，或已被取消，无法编辑 ");
 				}
-				String details = SerializeTool.serialize(tableOrder
-						.getDetaillist());
-				tableOrder.setDetail_json(details);
-
+				
 				// 更新表
+				int fuliaoPurchaseOrderId = tableOrder.getId();
+				//1.更新原有的id，删除删掉的id，添加新的id
+				int old_ids[]=new int[temp.getDetaillist().size()];
+				for(int i = 0 ; i <temp.getDetaillist().size();++i){
+					FuliaoPurchaseOrderDetail detail = temp.getDetaillist().get(i);
+					old_ids[i] = detail.getId();
+				}
+				
+				//更新的列表
+				List<FuliaoPurchaseOrderDetail>  to_updatelist = new ArrayList<FuliaoPurchaseOrderDetail>();
+				//新增的列表
+				List<FuliaoPurchaseOrderDetail>  to_addlist = new ArrayList<FuliaoPurchaseOrderDetail>();
+				//删除的采购单明细ids
+				List<Integer> to_deletelist = new ArrayList<Integer>();
+				
+				for(FuliaoPurchaseOrderDetail detail : tableOrder.getDetaillist()){
+					detail.setFuliaoPurchaseOrderId(fuliaoPurchaseOrderId);
+					if(detail.getId() > 0){
+						to_updatelist.add(detail);
+					}else{
+						to_addlist.add(detail);
+					}
+				}
+				
+				for(Integer id : old_ids){
+					boolean flag = false;
+					for(FuliaoPurchaseOrderDetail detail :to_updatelist){
+						if(detail.getId() == id){
+							flag = true;//表示这个id只是更新，不是删除
+						}
+					}
+					if(!flag){//若是删除的id
+						to_deletelist.add(id);
+					}
+				}
+				//更新明细
+				fuliaoPurchaseOrderDetailService.updateBatch(to_updatelist);
+				//增加明细
+				fuliaoPurchaseOrderDetailService.addBatch(to_addlist);
+				//删除明细
+				fuliaoPurchaseOrderDetailService.deleteBatch(to_deletelist);
+				
+				List<FuliaoPurchaseOrderDetail> newdetaillist = fuliaoPurchaseOrderDetailService.getList(fuliaoPurchaseOrderId);
+				if(newdetaillist == null || newdetaillist.size()==0){
+					throw new Exception("明细为空，无法重置detail_json");
+				}
+				tableOrder.setDetail_json(SerializeTool.serialize(newdetaillist));
 				this.update(tableOrder, "id",
 						"created_user,created_at,orderId,number", true);
 
@@ -105,6 +154,18 @@ public class FuliaoPurchaseOrderService extends BaseService {
 			throw e;
 		}
 	}
+	
+	// 获取辅料采购单
+	public List<FuliaoPurchaseOrder> getAll() throws Exception {
+		try {
+			List<FuliaoPurchaseOrder> order = dao.queryForBeanList(
+					"select * from tb_fuliaopurchaseorder",
+					FuliaoPurchaseOrder.class);
+			return order;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 
 	// 获取辅料采购单
 	public FuliaoPurchaseOrder get(int id) throws Exception {
@@ -112,6 +173,16 @@ public class FuliaoPurchaseOrderService extends BaseService {
 			FuliaoPurchaseOrder order = dao.queryForBean(
 					"select * from tb_fuliaopurchaseorder where id = ?",
 					FuliaoPurchaseOrder.class, id);
+			return order;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	public FuliaoPurchaseOrder get(String number) throws Exception {
+		try {
+			FuliaoPurchaseOrder order = dao.queryForBean(
+					"select * from tb_fuliaopurchaseorder where number = ?",
+					FuliaoPurchaseOrder.class, number);
 			return order;
 		} catch (Exception e) {
 			throw e;
@@ -218,7 +289,7 @@ public class FuliaoPurchaseOrderService extends BaseService {
 	
 	
 	// 获取辅料采购报表数据
-	public HashMap<Factory,HashMap<FuliaoType,Double> > fuliao_purchase_report(Date start_time, Date end_time, Integer factoryId,List<Sort> sortlist) throws Exception {
+	public HashMap<Factory,HashMap<FuliaoType,Integer> > fuliao_purchase_report(Date start_time, Date end_time, Integer factoryId,List<Sort> sortlist) throws Exception {
 		try {
 			StringBuffer sql = new StringBuffer();
 			String seq = "WHERE ";
@@ -259,8 +330,8 @@ public class FuliaoPurchaseOrderService extends BaseService {
 			List<FuliaoPurchaseOrder> fuliaoPurchaseOrderList = dao.queryForBeanList(
 					sql.toString(), FuliaoPurchaseOrder.class);
 			
-			HashMap<Integer,HashMap<Integer,Double> > temp_hashmap = new HashMap<Integer,HashMap<Integer,Double> >();
-			HashMap<Integer,HashMap<Integer,Double> > temp_materialmap = new HashMap<Integer,HashMap<Integer,Double> >();
+			HashMap<Integer,HashMap<Integer,Integer> > temp_hashmap = new HashMap<Integer,HashMap<Integer,Integer> >();
+			HashMap<Integer,HashMap<Integer,Integer> > temp_materialmap = new HashMap<Integer,HashMap<Integer,Integer> >();
 			for(FuliaoPurchaseOrder fuliaoPurchaseOrder : fuliaoPurchaseOrderList){
 				if(fuliaoPurchaseOrder.getDetail_json() == null || fuliaoPurchaseOrder.getDetail_json().equals("")){
 					continue;
@@ -280,10 +351,10 @@ public class FuliaoPurchaseOrderService extends BaseService {
 					if(styleId==null){
 						continue;
 					}
-					Double quantity = detail.getQuantity();
+					int quantity = detail.getQuantity();
 					
 					if(temp_hashmap.containsKey(temp_factoryId)){
-						HashMap<Integer,Double> factoryTemp = temp_hashmap.get(temp_factoryId);
+						HashMap<Integer,Integer> factoryTemp = temp_hashmap.get(temp_factoryId);
 						if(factoryTemp.containsKey(styleId)){
 							temp_hashmap.get(temp_factoryId).put(styleId, quantity + temp_hashmap.get(temp_factoryId).get(styleId));
 						}else{
@@ -291,7 +362,7 @@ public class FuliaoPurchaseOrderService extends BaseService {
 						}
 						
 					}else{
-						HashMap<Integer,Double> temp = new HashMap<Integer,Double>();
+						HashMap<Integer,Integer> temp = new HashMap<Integer,Integer>();
 						temp.put(styleId,quantity);
 						temp_hashmap.put(fuliaoPurchaseOrder.getFactoryId(), temp);
 					}
@@ -300,10 +371,10 @@ public class FuliaoPurchaseOrderService extends BaseService {
 		
 			
 			
-			HashMap<Factory,HashMap<FuliaoType,Double> > result = new HashMap<Factory,HashMap<FuliaoType,Double> >();
+			HashMap<Factory,HashMap<FuliaoType,Integer> > result = new HashMap<Factory,HashMap<FuliaoType,Integer> >();
 			if(factoryId == null){
 				for(Factory factory : SystemCache.fuliao_factorylist){
-					result.put(factory, new HashMap<FuliaoType,Double>());
+					result.put(factory, new HashMap<FuliaoType,Integer>());
 					for(FuliaoType fuliaotype : SystemCache.fuliaotypelist){	
 						if(temp_hashmap.containsKey(factory.getId()) && temp_hashmap.get(factory.getId()).containsKey(fuliaotype.getId())){
 							result.get(factory).put(fuliaotype,temp_hashmap.get(factory.getId()).get(fuliaotype.getId()));
@@ -312,7 +383,7 @@ public class FuliaoPurchaseOrderService extends BaseService {
 				}
 			}else{
 				Factory factory = SystemCache.getFactory(factoryId);
-					result.put(factory, new HashMap<FuliaoType,Double>());
+					result.put(factory, new HashMap<FuliaoType,Integer>());
 					for(FuliaoType fuliaotype : SystemCache.fuliaotypelist){	
 						if(temp_hashmap.containsKey(factory.getId()) && temp_hashmap.get(factory.getId()).containsKey(fuliaotype.getId())){
 							result.get(factory).put(fuliaotype,temp_hashmap.get(factory.getId()).get(fuliaotype.getId()));

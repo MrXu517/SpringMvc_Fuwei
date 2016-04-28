@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fuwei.commons.LoginedUser;
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
+import com.fuwei.commons.SystemSettings;
 import com.fuwei.controller.BaseController;
 import com.fuwei.entity.DataCorrectRecord;
 import com.fuwei.entity.Employee;
@@ -83,6 +85,8 @@ public class HalfStoreOutController extends BaseController {
 		if (!hasAuthority) {
 			throw new PermissionDeniedDataAccessException("没有查看半成品出库列表的权限", null);
 		}
+		LoginedUser loginUser = SystemContextUtils.getCurrentUser(session);
+		Boolean isyanchang = SystemSettings.yanchang && loginUser.getLoginedUser().getIsyanchang();
 
 		Date start_time_d = DateTool.parse(start_time);
 		Date end_time_d = DateTool.parse(end_time);
@@ -107,7 +111,7 @@ public class HalfStoreOutController extends BaseController {
 		sort2.setProperty("id");
 		sortList.add(sort2);
 		pager = halfStoreInOutService.getList(pager, start_time_d, end_time_d,
-				companyId, factoryId,charge_employee, number,false, sortList);
+				companyId, factoryId,charge_employee, number,false,isyanchang, sortList);
 		request.setAttribute("start_time", start_time_d);
 		request.setAttribute("end_time", end_time_d);
 		request.setAttribute("companyId", companyId);
@@ -120,6 +124,11 @@ public class HalfStoreOutController extends BaseController {
 			}		
 		}
 		request.setAttribute("employeelist", employeelist);
+		if(isyanchang){
+			request.setAttribute("factorylist", SystemCache.produce_factorylist_yachang);	
+		}else{
+			request.setAttribute("factorylist", SystemCache.produce_factorylist);	
+		}
 		request.setAttribute("number", number);
 		request.setAttribute("pager", pager);
 		return new ModelAndView("half_store_in_out/out_index");
@@ -174,6 +183,8 @@ public class HalfStoreOutController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有创建或编辑半成品出库单的权限",
 					null);
 		}
+		Boolean isyanchang = SystemSettings.yanchang && user.getIsyanchang();
+
 		try {
 			Order order = orderService.get(orderId);
 			if (order == null) {
@@ -196,7 +207,7 @@ public class HalfStoreOutController extends BaseController {
 			
 			/*找到可以半成品入库的工厂：生产单的工厂、工序加工单的工厂*/
 			Map<Integer,String> factoryMap = new HashMap<Integer, String>();
-			List<ProducingOrder> producingOrderlist = producingOrderService.getByOrder(orderId);		
+			List<ProducingOrder> producingOrderlist = producingOrderService.getByOrder(orderId,isyanchang);		
 			for(ProducingOrder temp : producingOrderlist){
 				int tempfactoryId = temp.getFactoryId();
 				if(!factoryMap.containsKey(tempfactoryId)){
@@ -204,7 +215,7 @@ public class HalfStoreOutController extends BaseController {
 				}
 				
 			}
-			List<GongxuProducingOrder> gongxuProducingOrderlist = gongxuProducingOrderService.getByOrder(orderId);		
+			List<GongxuProducingOrder> gongxuProducingOrderlist = gongxuProducingOrderService.getByOrder(orderId,isyanchang);		
 			for(GongxuProducingOrder temp : gongxuProducingOrderlist){
 				int tempfactoryId = temp.getFactoryId();
 				if(!factoryMap.containsKey(tempfactoryId)){

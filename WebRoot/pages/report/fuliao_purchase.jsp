@@ -18,7 +18,7 @@
 	
 	
 	
-	HashMap<Factory,HashMap<FuliaoType,Double> > result = (HashMap<Factory,HashMap<FuliaoType,Double> >)request.getAttribute("result");
+	HashMap<Factory,HashMap<FuliaoType,Integer> > result = (HashMap<Factory,HashMap<FuliaoType,Integer> >)request.getAttribute("result");
 	Date start_time = (Date) request.getAttribute("start_time");
 	String start_time_str = "";
 	if (start_time != null) {

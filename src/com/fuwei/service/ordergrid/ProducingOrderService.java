@@ -99,24 +99,21 @@ public class ProducingOrderService extends BaseService {
 	}
 
 	// 获取生产单
-	public List<ProducingOrder> getByOrder(int orderId) throws Exception {
+	public List<ProducingOrder> getByOrder(int orderId,Boolean isyanchang) throws Exception {
 		try {
-			List<ProducingOrder> list = dao.queryForBeanList("select * from tb_producingorder where orderId = ?", ProducingOrder.class, orderId);
-//			if (order.getDetail_json() == null) {
-//				order.setDetaillist(new ArrayList<ProducingOrderDetail>());
-//				return order;
-//			}else{
-//				order.setDetaillist(SerializeTool.deserializeList(order
-//						.getDetail_json(), ProducingOrderDetail.class));
-//			}
-//			if (order.getDetail_material_json() == null) {
-//				order.setDetail_material_list(new ArrayList<ProducingOrderMaterialDetail>());
-//				return order;
-//			}else{
-//				order.setDetail_material_list(SerializeTool.deserializeList(order
-//						.getDetail_json(), ProducingOrderMaterialDetail.class));
-//			}
-			
+			if(isyanchang){
+				return getByOrder_yanchang(orderId);
+			}
+			List<ProducingOrder> list = dao.queryForBeanList("select * from tb_producingorder where orderId = ?", ProducingOrder.class, orderId);		
+			return list;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	// 获取生产单
+	public List<ProducingOrder> getByOrder_yanchang(int orderId) throws Exception {
+		try {
+			List<ProducingOrder> list = dao.queryForBeanList("select a.* from tb_producingorder a,tb_factory b where a.factoryId=b.id and b.isyanchang=1 and orderId = ?", ProducingOrder.class, orderId);		
 			return list;
 		} catch (Exception e) {
 			throw e;

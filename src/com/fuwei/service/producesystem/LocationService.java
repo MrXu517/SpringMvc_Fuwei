@@ -28,12 +28,14 @@ public class LocationService extends BaseService {
 	FuliaoChangeLocationService fuliaoChangeLocationService;
 	@Autowired
 	FuliaoOutService fuliaoOutService;
+	@Autowired
+	SelfFuliaoOutService selfFuliaoOutService;
 	// 库位存放辅料，修改库存数量
 	@Transactional
 	public synchronized int addQuantity(int locationId,int fuliaoId, int add_quantity) throws Exception {
 		try{
 			Location location = this.get(locationId);
-			if(location.getFuliaoId()!=null && location.getFuliaoId() != fuliaoId){
+			if(!location.getIsempty() && location.getFuliaoId() != fuliaoId){
 				throw new Exception("该库位已经有辅料，请选择另一个库位存放");
 			}
 			int quantity = location.getQuantity() + add_quantity ;
@@ -50,7 +52,7 @@ public class LocationService extends BaseService {
 	public synchronized int deleteQuantity(int locationId,int fuliaoId, int delete_quantity) throws Exception {
 		try{
 			Location location = this.get(locationId);
-			if(location.getFuliaoId() == null || location.getFuliaoId() != fuliaoId){
+			if(location.getIsempty() || location.getFuliaoId() != fuliaoId){
 				throw new Exception("该库位没有您需要出库的辅料");
 			}
 			int quantity = location.getQuantity() - delete_quantity ;
@@ -66,6 +68,50 @@ public class LocationService extends BaseService {
 			return dao.update(
 					"UPDATE tb_location SET isempty=?,fuliaoId=?,quantity=? WHERE id = ?",
 					isempty,temp_fuliaoId, quantity ,locationId);
+		}catch(Exception e){
+			throw e;
+		}
+
+	}
+	
+	// 库位存放采购单的自购辅料，修改库存数量
+	@Transactional
+	public synchronized int addQuantity_purchase(int locationId,int fuliaoPurchaseOrderDetailId, int add_quantity) throws Exception {
+		try{
+			Location location = this.get(locationId);
+			if(!location.getIsempty() && location.getFuliaoPurchaseOrderDetailId() != fuliaoPurchaseOrderDetailId){
+				throw new Exception("该库位已经有辅料，请选择另一个库位存放");
+			}
+			int quantity = location.getQuantity() + add_quantity ;
+			return dao.update(
+					"UPDATE tb_location SET isempty=?,fuliaoPurchaseOrderDetailId=?,quantity=? WHERE id = ?",
+					false,fuliaoPurchaseOrderDetailId, quantity ,locationId);
+		}catch(Exception e){
+			throw e;
+		}
+
+	}
+	
+	// 库位出库辅料，减少库存数量
+	public synchronized int deleteQuantity_purchase(int locationId,int fuliaoPurchaseOrderDetailId, int delete_quantity) throws Exception {
+		try{
+			Location location = this.get(locationId);
+			if(location.getIsempty() || location.getFuliaoPurchaseOrderDetailId() != fuliaoPurchaseOrderDetailId){
+				throw new Exception("该库位没有您需要出库的辅料");
+			}
+			int quantity = location.getQuantity() - delete_quantity ;
+			boolean isempty = false;
+			Integer temp_fuliaoPurchaseOrderDetailId = fuliaoPurchaseOrderDetailId;
+			if(quantity < 0){
+				throw new Exception("库位"+location.getNumber()+"库存不足");
+			}
+			if(quantity == 0){
+				isempty = true;
+				temp_fuliaoPurchaseOrderDetailId = null;
+			}
+			return dao.update(
+					"UPDATE tb_location SET isempty=?,fuliaoPurchaseOrderDetailId=?,quantity=? WHERE id = ?",
+					isempty,temp_fuliaoPurchaseOrderDetailId, quantity ,locationId);
 		}catch(Exception e){
 			throw e;
 		}
@@ -88,6 +134,16 @@ public class LocationService extends BaseService {
 		try {
 			List<Location> locationList = dao.queryForBeanList(
 					"SELECT * FROM tb_location where (isempty=0 and fuliaoId=?)  or (isempty=1 and type=?)", Location.class,fuliaoId,locationType);
+			return locationList;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	// 获取列表 locationType是需要更改库位的原库位的类型
+	public List<Location> getChangeLocationList_purchase(int fuliaoPurchaseOrderDetailId,int locationType) throws Exception {
+		try {
+			List<Location> locationList = dao.queryForBeanList(
+					"SELECT * FROM tb_location where (isempty=0 and fuliaoPurchaseOrderDetailId=?)  or (isempty=1 and type=?)", Location.class,fuliaoPurchaseOrderDetailId,locationType);
 			return locationList;
 		} catch (Exception e) {
 			throw e;
@@ -141,11 +197,34 @@ public class LocationService extends BaseService {
 		}
 	}
 	
+	// 获取自购辅料当前库存
+	public List<Location> getByPurchase(int fuliaoPurchaseOrderDetailId) throws Exception {
+		try {
+			List<Location> locationlist = dao.queryForBeanList(
+					"select * from tb_location where fuliaoPurchaseOrderDetailId = ?", Location.class,
+					fuliaoPurchaseOrderDetailId);
+			return locationlist;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 	// 获取材料
 	public List<Map<String,Object>> getMapByFuliao(int fuliaoId) throws Exception {
 		try {
 			List<Map<String,Object>> map = dao.queryForListMap(
 					"select fuliaoId,id locationId from tb_location where fuliaoId = ?",fuliaoId);
+			return map;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	// 获取自购辅料当前库存
+	public List<Map<String,Object>> getMapByPurchase(int fuliaoPurchaseOrderDetailId) throws Exception {
+		try {
+			List<Map<String,Object>> map = dao.queryForListMap(
+					"select fuliaoPurchaseOrderDetailId,id locationId from tb_location where fuliaoPurchaseOrderDetailId = ?",fuliaoPurchaseOrderDetailId);
 			return map;
 		} catch (Exception e) {
 			throw e;
@@ -185,13 +264,22 @@ public class LocationService extends BaseService {
 		return true;
 	}
 	
-	//清空库位, locationId需清空的库位ID
-	@Transactional(rollbackFor=Exception.class)
-	public boolean cleanstock(int locationId,int userId) throws Exception{
-		//即创建一个与当前库存数量一致的辅料出库单即可
-		fuliaoOutService.addByLocationId(locationId, userId);
+	//更改库位, fuliaoId需更改库位的辅料， locationId是更改后的库位
+	@Transactional
+	public boolean changelocation_purchase(int fuliaoPurchaseOrderDetailId, int locationId,FuliaoChangeLocation handle) throws Exception{
+		dao.update("update tb_location a ,  (select sum(quantity) quantity from tb_location where fuliaoPurchaseOrderDetailId=?) b set a.isempty=?,a.fuliaoPurchaseOrderDetailId=?,a.quantity=b.quantity where a.id=?",fuliaoPurchaseOrderDetailId,false,fuliaoPurchaseOrderDetailId,locationId);
+		dao.update("update tb_location set isempty=? ,fuliaoId = ?,fuliaoPurchaseOrderDetailId=?,quantity=? where fuliaoPurchaseOrderDetailId=? and id<>?", 1,null,null,0,fuliaoPurchaseOrderDetailId,locationId);
+		fuliaoChangeLocationService.add(handle);
 		return true;
 	}
+	
+//	//清空库位, locationId需清空的库位ID
+//	@Transactional(rollbackFor=Exception.class)
+//	public boolean cleanstock(int locationId,int userId) throws Exception{
+//		//即创建一个与当前库存数量一致的辅料出库单即可
+//		fuliaoOutService.addByLocationId(locationId, userId);
+//		return true;
+//	}
 	
 	//清空库位, locationId需清空的库位ID ,返回清空生成的出库单列表
 	@Transactional(rollbackFor=Exception.class)
@@ -199,10 +287,23 @@ public class LocationService extends BaseService {
 		String ids = "";
 		for(int i = 0 ;i < locationIds.length ; ++i){
 			int locationId = locationIds[i];
-			int newfuliaoOutId = fuliaoOutService.addByLocationId(locationId, userId);
-			if(newfuliaoOutId > 0){
-				ids += newfuliaoOutId + ",";
+			Location location = this.get(locationId);
+			if(location.getIsempty()){
+				continue;
+			}else{
+				if(location.getFuliaoId()!=null && location.getFuliaoId()!=0){//大货辅料清空库存
+					int newfuliaoOutId = fuliaoOutService.addByLocationId(location, userId);
+					if(newfuliaoOutId > 0){
+						ids += newfuliaoOutId + ",";
+					}
+				}else{//自购辅料清空库存
+					int newselffuliaoOutId = selfFuliaoOutService.addByLocationId(location, userId);
+					if(newselffuliaoOutId > 0){
+						ids += newselffuliaoOutId + ",";
+					}
+				}
 			}
+			
 		}
 		ids = ids.substring(0, ids.length()-1);
 		return ids;
