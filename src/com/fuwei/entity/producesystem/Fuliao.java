@@ -42,16 +42,16 @@ public class Fuliao {
 	private Integer customerId;//客户
 	private int type;//1表示大货辅料， 2表示通用辅料
 	
-	private Integer fuliaoPurchaseOrderDetailId;//采购单明细ID，创建采购单时自动创建辅料，删除时自动删除、编辑时同步编辑
+//	private Integer fuliaoPurchaseOrderDetailId;//采购单明细ID，创建采购单时自动创建辅料，删除时自动删除、编辑时同步编辑
 	
 	
 	
-	public Integer getFuliaoPurchaseOrderDetailId() {
-		return fuliaoPurchaseOrderDetailId;
-	}
-	public void setFuliaoPurchaseOrderDetailId(Integer fuliaoPurchaseOrderDetailId) {
-		this.fuliaoPurchaseOrderDetailId = fuliaoPurchaseOrderDetailId;
-	}
+//	public Integer getFuliaoPurchaseOrderDetailId() {
+//		return fuliaoPurchaseOrderDetailId;
+//	}
+//	public void setFuliaoPurchaseOrderDetailId(Integer fuliaoPurchaseOrderDetailId) {
+//		this.fuliaoPurchaseOrderDetailId = fuliaoPurchaseOrderDetailId;
+//	}
 	public int getType() {
 		return type;
 	}

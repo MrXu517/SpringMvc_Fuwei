@@ -24,24 +24,24 @@ public class FuliaoService extends BaseService {
 	
 	//获取某订单的辅料
 	public List<Fuliao> getList(int orderId){
-		return dao.queryForBeanList("select * from tb_fuliao where orderId=? and fuliaoPurchaseOrderDetailId is null", Fuliao.class,orderId);
+		return dao.queryForBeanList("select * from tb_fuliao where orderId=? ", Fuliao.class,orderId);
 	}
 	public List<Fuliao> getList(String orderNumber){
-		return dao.queryForBeanList("select * from tb_fuliao where orderNumber=? and fuliaoPurchaseOrderDetailId is null", Fuliao.class,orderNumber);
+		return dao.queryForBeanList("select * from tb_fuliao where orderNumber=? ", Fuliao.class,orderNumber);
 	}
 	//获取某订单的指定辅料的辅料列表
 	public List<Fuliao> getList(int orderId,String fuliaoIds){
 		if(fuliaoIds == null){
 			return getList(orderId);
 		}else{
-			return dao.queryForBeanList("select * from tb_fuliao where fuliaoPurchaseOrderDetailId is null and orderId=? and id in("+fuliaoIds+")", Fuliao.class,orderId);
+			return dao.queryForBeanList("select * from tb_fuliao where  orderId=? and id in("+fuliaoIds+")", Fuliao.class,orderId);
 		}
 	}
 	//获取通用辅料列表
 	public List<Fuliao> getList_Common(Integer companyId,Integer salesmanId,Integer customerId,String memo){
 		StringBuffer sql = new StringBuffer();
 		String seq = " AND ";
-		sql.append("select * from tb_fuliao where orderId is null and  and fuliaoPurchaseOrderDetailId is null ");
+		sql.append("select * from tb_fuliao where orderId is null ");
 
 		if (companyId != null) {// 
 			sql.append(seq + " companyId='"+companyId+ "'");
@@ -65,7 +65,7 @@ public class FuliaoService extends BaseService {
 	public List<Integer> getIdList_Common(Integer companyId,Integer salesmanId,Integer customerId,String memo){
  		StringBuffer sql = new StringBuffer();
 		String seq = " AND ";
-		sql.append("select id from tb_fuliao where orderId is null and  and fuliaoPurchaseOrderDetailId is null ");
+		sql.append("select id from tb_fuliao where orderId is null  ");
 
 		if (companyId != null) {// 
 			sql.append(seq + " companyId='"+companyId+ "'");
