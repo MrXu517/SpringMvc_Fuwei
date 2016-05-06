@@ -10,6 +10,7 @@ public class FinishStoreStockDetail {
 	private int id;
 	private int finishStoreStockId;//库存类ID
 	private int packingOrderDetailId;//装箱单明细ID
+	private int packingOrderId;//装箱单ID
 	private int stock_quantity;//库存数量
 	private int stock_cartons;//库存箱数
 	private int plan_quantity;//计划数量
@@ -38,6 +39,12 @@ public class FinishStoreStockDetail {
 	private String col4_value;//动态属性4的值
 	
 	
+	public int getPackingOrderId() {
+		return packingOrderId;
+	}
+	public void setPackingOrderId(int packingOrderId) {
+		this.packingOrderId = packingOrderId;
+	}
 	public String getColor() {
 		return color;
 	}

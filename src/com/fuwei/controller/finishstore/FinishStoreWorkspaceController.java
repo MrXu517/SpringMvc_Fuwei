@@ -1,7 +1,9 @@
 package com.fuwei.controller.finishstore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +28,7 @@ import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
 import com.fuwei.entity.finishstore.FinishInOut;
 import com.fuwei.entity.finishstore.FinishStoreStock;
+import com.fuwei.entity.finishstore.FinishStoreStockDetail;
 import com.fuwei.entity.finishstore.PackingOrder;
 import com.fuwei.entity.ordergrid.PlanOrder;
 import com.fuwei.entity.producesystem.HalfInOut;
@@ -126,19 +129,53 @@ public class FinishStoreWorkspaceController extends BaseController {
 		if(order == null){
 			throw new Exception("找不到ID为" + orderId + "的订单");
 		}
-		PackingOrder packingOrder = packingOrderService.getByOrderAndDetail(orderId);
-		if(packingOrder == null){
+		List<PackingOrder> packingOrderList = packingOrderService.getListByOrder(orderId);
+		if(packingOrderList == null || packingOrderList.size()<=0){
 			throw new Exception("该订单没有创建装箱单，请先创建装箱单 点击此处创建 <a href='packing_order/add/"+ orderId + "'>添加装箱单</a>");
 		}
+		request.setAttribute("packingOrderList", packingOrderList);
 		List<FinishInOut> detailInOutlist = finishStoreStockService.inoutDetail(orderId);
+		//Map<packingOrderId,List<FinishInOut>>
+		Map<Integer,List<FinishInOut>> detailInOutMap = new HashMap<Integer,List<FinishInOut>>();
+		for(FinishInOut temp : detailInOutlist){
+			int tempPackingOrderId = temp.getPackingOrderId();
+			if(detailInOutMap.containsKey(tempPackingOrderId)){
+				List<FinishInOut> templist = detailInOutMap.get(tempPackingOrderId);
+				templist.add(temp);
+				detailInOutMap.put(tempPackingOrderId, templist);
+			}else{
+				List<FinishInOut> templist = new ArrayList<FinishInOut>();
+				templist.add(temp);
+				detailInOutMap.put(tempPackingOrderId, templist);
+			}
+		}
+		
 		if (detailInOutlist == null) {
 			throw new Exception("找不到订单ID为" + orderId + "的成品出入库、退货记录");
 		}
 		FinishStoreStock storeStock = finishStoreStockService.getAndDetail(orderId);
-		request.setAttribute("packingOrder", packingOrder);
+		Map<Integer,List<FinishStoreStockDetail>> storeStockMap = new HashMap<Integer, List<FinishStoreStockDetail>>();
+		if(storeStock.getDetaillist()!=null && storeStock.getDetaillist().size()>0){
+			for(FinishStoreStockDetail temp : storeStock.getDetaillist()){
+				int tempPackingOrderId = temp.getPackingOrderId();
+				if(storeStockMap.containsKey(tempPackingOrderId)){
+					List<FinishStoreStockDetail> templist = storeStockMap.get(tempPackingOrderId);
+					templist.add(temp);
+					storeStockMap.put(tempPackingOrderId, templist);
+				}else{
+					List<FinishStoreStockDetail> templist = new ArrayList<FinishStoreStockDetail>();
+					templist.add(temp);
+					storeStockMap.put(tempPackingOrderId, templist);
+				}
+			}
+		}
+		
+		
 		request.setAttribute("order", order);
-		request.setAttribute("storeStock", storeStock);
-		request.setAttribute("detailInOutlist", detailInOutlist);
+//		request.setAttribute("storeStock", storeStock);
+		request.setAttribute("storeStockMap", storeStockMap);
+//		request.setAttribute("detailInOutlist", detailInOutlist);
+		request.setAttribute("detailInOutMap", detailInOutMap);
 		return new ModelAndView("finishstore/order_in_out");	
 	}
 

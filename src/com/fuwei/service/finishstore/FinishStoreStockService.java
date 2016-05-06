@@ -189,7 +189,7 @@ public class FinishStoreStockService extends BaseService {
 	public List<FinishInOut> inoutDetail(int orderId)
 			throws Exception {
 		try {
-			List<FinishInOut> list = dao.queryForBeanList("select * from (select created_at,created_user,'in' as type ,id ,number,orderId,orderNumber,date,sign,has_print,memo  from tb_finishstore_in where orderId = ? union all select created_at,created_user,'return' as type,id ,number, orderId,orderNumber,date,sign,has_print,memo  from tb_finishstore_return where orderId = ? union all select created_at,created_user,'out' as type,id ,number, orderId,orderNumber,date,sign,has_print,memo  from tb_finishstore_out where orderId = ?)  c order by date desc,created_at desc",
+			List<FinishInOut> list = dao.queryForBeanList("select * from (select packingOrderId, created_at,created_user,'in' as type ,id ,number,orderId,orderNumber,date,sign,has_print,memo  from tb_finishstore_in where orderId = ? union all select packingOrderId,created_at,created_user,'return' as type,id ,number, orderId,orderNumber,date,sign,has_print,memo  from tb_finishstore_return where orderId = ? union all select packingOrderId,created_at,created_user,'out' as type,id ,number, orderId,orderNumber,date,sign,has_print,memo  from tb_finishstore_out where orderId = ?)  c order by date desc,created_at desc",
 					FinishInOut.class,orderId,orderId,orderId);
 			if(list==null || list.size()<=0){
 				return list;
@@ -329,8 +329,10 @@ public class FinishStoreStockService extends BaseService {
 				throw new Exception("库存箱数不足：入库=" + in_cartons + ",出库="+out_cartons + ",退货="+return_cartons +",库存="+stock_cartons);
 			}
 			int packingOrderDetailId = Integer.valueOf(item.get("packingOrderDetailId").toString());
+			int packingOrderId = Integer.valueOf(item.get("packingOrderId").toString());
 			FinishStoreStockDetail detail = new FinishStoreStockDetail();
 			detail.setPackingOrderDetailId(packingOrderDetailId);
+			detail.setPackingOrderId(packingOrderId);
 			detail.setStock_quantity(stock_quantity);
 			detail.setStock_cartons(stock_cartons);
 			detail.setPlan_quantity(plan_quantity);
@@ -394,6 +396,8 @@ public class FinishStoreStockService extends BaseService {
 		for(Map<String,Object> item : in_map){
 			int packingOrderDetailId = (Integer)item.get("id");
 			item.put("packingOrderDetailId",packingOrderDetailId);
+			int packingOrderId = (Integer)item.get("packingOrderId");
+			item.put("packingOrderId",packingOrderId);
 			int plan_quantity = (Integer)item.get("quantity");
 			int plan_cartons = (Integer)item.get("cartons");
 			item.put("plan_quantity",plan_quantity);
@@ -457,6 +461,7 @@ public class FinishStoreStockService extends BaseService {
 				FinishStoreStockDetail detail = new FinishStoreStockDetail();
 				
 				int packingOrderDetailId = (Integer)item.get("packingOrderDetailId");
+				int packingOrderId = (Integer)item.get("packingOrderId");
 				int plan_quantity = (Integer)item.get("quantity");
 				int plan_cartons = (Integer)item.get("cartons");
 				int in_quantity = 0;
@@ -489,6 +494,7 @@ public class FinishStoreStockService extends BaseService {
 				int stock_cartons = in_cartons - out_cartons - return_cartons;
 				
 				detail.setPackingOrderDetailId(packingOrderDetailId);
+				detail.setPackingOrderId(packingOrderId);
 				detail.setStock_quantity(stock_quantity);
 				detail.setStock_cartons(stock_cartons);
 				detail.setPlan_quantity(plan_quantity);

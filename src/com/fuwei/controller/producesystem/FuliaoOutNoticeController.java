@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.controller.BaseController;
+import com.fuwei.entity.Employee;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
 import com.fuwei.entity.producesystem.Fuliao;
@@ -117,6 +118,14 @@ public class FuliaoOutNoticeController extends BaseController {
 //			request.setAttribute("fuliaolist", fuliaolist);
 			List<Map<String,Object>> detaillist = fuliaoCurrentStockService.getByOrder(orderId);
 			request.setAttribute("detaillist", detaillist);
+			//获取管理人员列表
+			List<Employee> employeelist = new ArrayList<Employee>();
+			for (Employee temp : SystemCache.employeelist) {
+				if (temp.getIsmanager()) {
+					employeelist.add(temp);
+				}
+			}
+			request.setAttribute("employeelist", employeelist);
 			return new ModelAndView("fuliaoout_notice/add");	
 			
 		} catch (Exception e) {
@@ -220,6 +229,9 @@ public class FuliaoOutNoticeController extends BaseController {
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有添加辅料预出库通知单的权限", null);
+		}
+		if (fuliaoOutNotice.getReceiver_employee() == null || fuliaoOutNotice.getReceiver_employee() == 0) {
+			throw new Exception("领取人不能为空");
 		}
 		try {	
 			fuliaoOutNotice.setCreated_at(DateTool.now());// 设置创建时间
@@ -338,6 +350,14 @@ public class FuliaoOutNoticeController extends BaseController {
 				if(fuliaoOutNotice.getOrderId()!=null && fuliaoOutNotice.getOrderId()!=0){
 					Order order = orderService.get(fuliaoOutNotice.getOrderId());
 					request.setAttribute("order", order);
+					//获取管理人员列表
+					List<Employee> employeelist = new ArrayList<Employee>();
+					for (Employee temp : SystemCache.employeelist) {
+						if (temp.getIsmanager()) {
+							employeelist.add(temp);
+						}
+					}
+					request.setAttribute("employeelist", employeelist);
 					return new ModelAndView("fuliaoout_notice/edit");
 				}else{
 					return new ModelAndView("fuliaoout_notice/edit_common");
@@ -361,6 +381,9 @@ public class FuliaoOutNoticeController extends BaseController {
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有编辑辅料预出库通知单的权限", null);
+		}
+		if (fuliaoInOutNotice.getReceiver_employee() == null || fuliaoInOutNotice.getReceiver_employee() == 0) {
+			throw new Exception("领取人不能为空");
 		}
 		fuliaoInOutNotice.setUpdated_at(DateTool.now());
 		List<FuliaoOutNoticeDetail> detaillist = SerializeTool

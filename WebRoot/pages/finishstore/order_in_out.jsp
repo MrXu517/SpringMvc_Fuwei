@@ -19,10 +19,12 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	Order order = (Order) request.getAttribute("order");
-	PackingOrder packingOrder = (PackingOrder) request.getAttribute("packingOrder");
-	FinishStoreStock storeStock = (FinishStoreStock) request.getAttribute("storeStock");
-	List<PackingOrderDetail> packingOrderDetaillist = packingOrder == null? new ArrayList<PackingOrderDetail>():packingOrder.getDetaillist();
-	List<FinishInOut> detailInOutlist = (List<FinishInOut>)request.getAttribute("detailInOutlist");
+	List<PackingOrder> packingOrderList = (List<PackingOrder>) request
+			.getAttribute("packingOrderList");
+	Map<Integer,List<FinishStoreStockDetail>> storeStockMap = (Map<Integer,List<FinishStoreStockDetail>>)request.getAttribute("storeStockMap");
+	//FinishStoreStock storeStock = (FinishStoreStock) request.getAttribute("storeStock");
+	//List<FinishInOut> detailInOutlist = (List<FinishInOut>)request.getAttribute("detailInOutlist");
+	Map<Integer,List<FinishInOut>> detailInOutMap = (Map<Integer,List<FinishInOut>>)request.getAttribute("detailInOutMap");
 %>
 <!DOCTYPE html>
 <html>
@@ -66,6 +68,7 @@
 			#packingOrderDetail table,#stockDetail table{ border: 1px solid #000;    table-layout: fixed;}
 			#packingOrderDetail table tfoot td{border: 1px solid #000;text-align: right;padding-top: 0;padding-bottom: 0;}
 			#stockDetail table tbody td,#stockDetail table tfoot td{border: 1px solid #000;}
+			.detailTb caption{text-align:left;}
 		</style>
 	</head>
 	<body>
@@ -169,39 +172,54 @@
 															</table>
 								</div>
 							<div class="" id="rightStoreInfo">
-								<fieldset id="packingOrderDetail">
+									<div id="tab">
+										<ul class="nav nav-tabs" role="tablist" style="height:50px;">
+											<%for(PackingOrder item : packingOrderList){
+												int packingOrderId = item.getId();
+								 			%><li class="">
+												<a href="#pack_<%=packingOrderId%>" role="tab" data-toggle="tab">装箱单 <%=item.getNumber()%>  </a>
+											</li>
+											<%}%>
+											
+										</ul>
+										<div class="tab-content auto_height">
+											<%for(PackingOrder item : packingOrderList){
+												int packingOrderId = item.getId();
+								 			%>
+											<div class="tab-pane" id="pack_<%=packingOrderId%>">
+												<fieldset id="packingOrderDetail">
 									<legend>
-										装箱单颜色及数量
+										颜色及数量
 									</legend>
 									<table class="table table-responsive detailTb">
 										<thead>
 										<tr>
 											<%
 											int col = 0;
-											if(packingOrder.getCol1_id()!=null){
+											if(item.getCol1_id()!=null){
 											col++;
 											 %>
 											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(packingOrder.getCol1_id()) %>
+												<%=SystemCache.getPackPropertyName(item.getCol1_id()) %>
 											</th>
 											<%} %>
 											
-											<%if(packingOrder.getCol2_id()!=null){ 
+											<%if(item.getCol2_id()!=null){ 
 											col++;%>
 											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(packingOrder.getCol2_id()) %>
+												<%=SystemCache.getPackPropertyName(item.getCol2_id()) %>
 											</th>
 											<%} %>
-											<%if(packingOrder.getCol3_id()!=null){ 
+											<%if(item.getCol3_id()!=null){ 
 											col++;%>
 											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(packingOrder.getCol3_id()) %>
+												<%=SystemCache.getPackPropertyName(item.getCol3_id()) %>
 											</th>
 											<%} %>
-											<%if(packingOrder.getCol4_id()!=null){ 
+											<%if(item.getCol4_id()!=null){ 
 											col++;%>
 											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(packingOrder.getCol4_id()) %>
+												<%=SystemCache.getPackPropertyName(item.getCol4_id()) %>
 											</th>
 											<%} %>
 
@@ -240,24 +258,24 @@
 											</th></tr>
 									</thead>
 									<tbody>
-										<%for(PackingOrderDetail detail : packingOrderDetaillist){ %>
+										<%for (PackingOrderDetail detail : item.getDetaillist()) {%>
 										<tr>
-										<%if(packingOrder.getCol1_id()!=null){ %>
+										<%if(item.getCol1_id()!=null){ %>
 										<td>
 											<%=detail.getCol1_value()==null?"":detail.getCol1_value() %>
 										</td>
 										<%} %>
-										<%if(packingOrder.getCol2_id()!=null){ %>
+										<%if(item.getCol2_id()!=null){ %>
 										<td>
 											<%=detail.getCol2_value()==null?"":detail.getCol2_value() %>
 										</td>
 										<%} %>	
-										<%if(packingOrder.getCol3_id()!=null){ %>
+										<%if(item.getCol3_id()!=null){ %>
 										<td>
 											<%=detail.getCol3_value()==null?"":detail.getCol3_value() %>
 										</td>
 										<%} %>
-										<%if(packingOrder.getCol4_id()!=null){ %>
+										<%if(item.getCol4_id()!=null){ %>
 										<td>
 											<%=detail.getCol4_value()==null?"":detail.getCol4_value() %>
 										</td>
@@ -279,11 +297,11 @@
 									</tbody>
 									<tfoot><tr><td>合计</td>
 									<%if(col>0){ %>
-									<td colspan="<%=col+1 %>">总数量：<%=packingOrder.getQuantity() %></td>
+									<td colspan="<%=col+1 %>">总数量：<%=item.getQuantity() %></td>
 										<%}else{ %>
-										<td colspan="<%=col+1 %>"><%=packingOrder.getQuantity() %></td>
+										<td colspan="<%=col+1 %>"><%=item.getQuantity() %></td>
 										<%} %>
-										<td colspan="7">总箱数：<%=packingOrder.getCartons() %></td><td colspan="3">总立方：<%=packingOrder.getCapacity() %></td>
+										<td colspan="7">总箱数：<%=item.getCartons() %></td><td colspan="3">总立方：<%=item.getCapacity() %></td>
 										</tr></tfoot>
 								</table>
 								</fieldset>
@@ -312,26 +330,26 @@
 											</tr>
 											<tr>
 											<%
-											if(packingOrder.getCol1_id()!=null){
+											if(item.getCol1_id()!=null){
 											 %>
 											<th width="80px">
-												<%=SystemCache.getPackPropertyName(packingOrder.getCol1_id()) %>
+												<%=SystemCache.getPackPropertyName(item.getCol1_id()) %>
 											</th>
 											<%} %>
 											
-											<%if(packingOrder.getCol2_id()!=null){%>
+											<%if(item.getCol2_id()!=null){%>
 											<th width="80px">
-												<%=SystemCache.getPackPropertyName(packingOrder.getCol2_id()) %>
+												<%=SystemCache.getPackPropertyName(item.getCol2_id()) %>
 											</th>
 											<%} %>
-											<%if(packingOrder.getCol3_id()!=null){%>
+											<%if(item.getCol3_id()!=null){%>
 											<th width="80px">
-												<%=SystemCache.getPackPropertyName(packingOrder.getCol3_id()) %>
+												<%=SystemCache.getPackPropertyName(item.getCol3_id()) %>
 											</th>
 											<%} %>
-											<%if(packingOrder.getCol4_id()!=null){%>
+											<%if(item.getCol4_id()!=null){%>
 											<th width="80px">
-												<%=SystemCache.getPackPropertyName(packingOrder.getCol4_id()) %>
+												<%=SystemCache.getPackPropertyName(item.getCol4_id()) %>
 											</th>
 											<%} %>
 											<th width="60px">
@@ -346,75 +364,76 @@
 											</tr>
 										</thead>
 										<tbody>
-										<%if(detailInOutlist.size()==0){ %>	
-										<tr><td colspan="<%=col+7 %>">没有出入库记录！！！</td></tr>
-										<%} %>
 										<%
-											for (FinishInOut item : detailInOutlist) {
-												List<FinishInOutDetail> detailist = item.getDetaillist();
+										List<FinishInOut> detailInOutlist = detailInOutMap.get(packingOrderId);
+										if(detailInOutlist == null || detailInOutlist.size()==0){ %>	
+										<tr><td colspan="<%=col+7 %>">没有出入库记录！！！</td></tr>
+										<%}else{
+											for (FinishInOut item_2 : detailInOutlist) {
+												List<FinishInOutDetail> detailist = item_2.getDetaillist();
 												if(detailist == null){detailist = new ArrayList<FinishInOutDetail>();}
 												int detailsize = detailist.size();
-												int type = item.getInt();
+												int type = item_2.getInt();
 										%>
-										<tr itemId="<%=item.getId()%>">
-											<td rowspan="<%=detailsize%>"><%=item.getTypeString()%></td>				
-											<td rowspan="<%=detailsize%>"><%=DateTool.formatDateYMD(item.getDate())%></td>
+										<tr itemId="<%=item_2.getId()%>">
+											<td rowspan="<%=detailsize%>"><%=item_2.getTypeString()%></td>				
+											<td rowspan="<%=detailsize%>"><%=DateTool.formatDateYMD(item_2.getDate())%></td>
 											<td rowspan="<%=detailsize%>">
 												<%if(type == 1){ %>
-													<a target="_top" href="finishstore_in/detail/<%=item.getId()%>"><%=item.getNumber()%></a>
+													<a target="_top" href="finishstore_in/detail/<%=item_2.getId()%>"><%=item_2.getNumber()%></a>
 												<%}else if(type==0){ %>
-													<a target="_top" href="finishstore_out/detail/<%=item.getId()%>"><%=item.getNumber()%></a>
+													<a target="_top" href="finishstore_out/detail/<%=item_2.getId()%>"><%=item_2.getNumber()%></a>
 												<%}else if(type==-1){ %>
-													<a target="_top" href="finishstore_return/detail/<%=item.getId()%>"><%=item.getNumber()%></a>
+													<a target="_top" href="finishstore_return/detail/<%=item_2.getId()%>"><%=item_2.getNumber()%></a>
 												<%} else{ %>
-													<%=item.getNumber()%>
+													<%=item_2.getNumber()%>
 												<%} %></td>
 											
 											
-											<%if(packingOrder.getCol1_id()!=null){%>
+											<%if(item.getCol1_id()!=null){%>
 											<td><%=detailist.get(0).getCol1_value() == null?"":detailist.get(0).getCol1_value()%></td>
 											<%} %>
-											<%if(packingOrder.getCol2_id()!=null){%>
+											<%if(item.getCol2_id()!=null){%>
 											<td><%=detailist.get(0).getCol2_value() == null?"":detailist.get(0).getCol2_value()%></td>
 											<%} %>
-											<%if(packingOrder.getCol3_id()!=null){%>
+											<%if(item.getCol3_id()!=null){%>
 											<td><%=detailist.get(0).getCol3_value() == null?"":detailist.get(0).getCol3_value()%></td>
 											<%} %>
-											<%if(packingOrder.getCol4_id()!=null){%>
+											<%if(item.getCol4_id()!=null){%>
 											<td><%=detailist.get(0).getCol4_value() == null?"":detailist.get(0).getCol4_value()%></td>
 											<%} %>
 											<td><%=detailist.get(0).getColor()%></td>
-											<td><%=detailist.get(0).getCartons()%></td>
 											<td><%=detailist.get(0).getQuantity()%></td>
+											<td><%=detailist.get(0).getCartons()%></td>
 
 										
-											<td rowspan="<%=detailsize%>"><%=DateTool.formatDateYMD(item.getDate())%></td>				
+											<td rowspan="<%=detailsize%>"><%=DateTool.formatDateYMD(item_2.getDate())%></td>				
 										</tr>
 										<%
 											detailist.remove(0);
 											for(FinishInOutDetail detail : detailist){
 										%>
 										<tr>
-											<%if(packingOrder.getCol1_id()!=null){%>
+											<%if(item.getCol1_id()!=null){%>
 											<td><%=detail.getCol1_value() == null?"":detail.getCol1_value()%></td>
 											<%} %>
-											<%if(packingOrder.getCol2_id()!=null){%>
+											<%if(item.getCol2_id()!=null){%>
 											<td><%=detail.getCol2_value() == null?"":detail.getCol2_value()%></td>
 											<%} %>
-											<%if(packingOrder.getCol3_id()!=null){%>
+											<%if(item.getCol3_id()!=null){%>
 											<td><%=detail.getCol3_value() == null?"":detail.getCol3_value()%></td>
 											<%} %>
-											<%if(packingOrder.getCol4_id()!=null){%>
+											<%if(item.getCol4_id()!=null){%>
 											<td><%=detail.getCol4_value() == null?"":detail.getCol4_value()%></td>
 											<%} %>
 											<td><%=detail.getColor()%></td>
-											<td><%=detail.getCartons()%></td>
 											<td><%=detail.getQuantity()%></td>
+											<td><%=detail.getCartons()%></td>
 
 										</tr>
 										<%} %>
 										<%
-											}
+											}}
 										%>
 										
 									</tbody>
@@ -428,26 +447,26 @@
 										<thead>
 										<tr>
 											<%
-											if(packingOrder.getCol1_id()!=null){
+											if(item.getCol1_id()!=null){
 											 %>
 											<th width="80px">
-												<%=SystemCache.getPackPropertyName(packingOrder.getCol1_id()) %>
+												<%=SystemCache.getPackPropertyName(item.getCol1_id()) %>
 											</th>
 											<%} %>
 											
-											<%if(packingOrder.getCol2_id()!=null){%>
+											<%if(item.getCol2_id()!=null){%>
 											<th width="80px">
-												<%=SystemCache.getPackPropertyName(packingOrder.getCol2_id()) %>
+												<%=SystemCache.getPackPropertyName(item.getCol2_id()) %>
 											</th>
 											<%} %>
-											<%if(packingOrder.getCol3_id()!=null){%>
+											<%if(item.getCol3_id()!=null){%>
 											<th width="80px">
-												<%=SystemCache.getPackPropertyName(packingOrder.getCol3_id()) %>
+												<%=SystemCache.getPackPropertyName(item.getCol3_id()) %>
 											</th>
 											<%} %>
-											<%if(packingOrder.getCol4_id()!=null){%>
+											<%if(item.getCol4_id()!=null){%>
 											<th width="80px">
-												<%=SystemCache.getPackPropertyName(packingOrder.getCol4_id()) %>
+												<%=SystemCache.getPackPropertyName(item.getCol4_id()) %>
 											</th>
 											<%} %>
 
@@ -472,28 +491,35 @@
 										</tr>
 									</thead>
 									<tbody>
-										<%if(storeStock == null){%>
+										<%
+										List<FinishStoreStockDetail> storeStockdetaillist = storeStockMap.get(packingOrderId);
+										int total_stock_cartons = 0;
+										int total_stock_quantitys = 0;
+										if(storeStockdetaillist == null || storeStockdetaillist.size()==0){%>
 										<p style="color:red;">库存为0，没有库存记录</p>
 										<%}else{%>
-											<%for(FinishStoreStockDetail detail : storeStock.getDetaillist()){ 
+											<%
+											for(FinishStoreStockDetail detail : storeStockdetaillist){ 
+												total_stock_cartons+=detail.getStock_cartons();
+												total_stock_quantitys+=detail.getStock_quantity();
 											%>
 											<tr>
-											<%if(packingOrder.getCol1_id()!=null){ %>
+											<%if(item.getCol1_id()!=null){ %>
 											<td>
 												<%=detail.getCol1_value()==null?"":detail.getCol1_value() %>
 											</td>
 											<%} %>
-											<%if(packingOrder.getCol2_id()!=null){ %>
+											<%if(item.getCol2_id()!=null){ %>
 											<td>
 												<%=detail.getCol2_value()==null?"":detail.getCol2_value() %>
 											</td>
 											<%} %>	
-											<%if(packingOrder.getCol3_id()!=null){ %>
+											<%if(item.getCol3_id()!=null){ %>
 											<td>
 												<%=detail.getCol3_value()==null?"":detail.getCol3_value() %>
 											</td>
 											<%} %>
-											<%if(packingOrder.getCol4_id()!=null){ %>
+											<%if(item.getCol4_id()!=null){ %>
 											<td>
 												<%=detail.getCol4_value()==null?"":detail.getCol4_value() %>
 											</td>
@@ -506,13 +532,18 @@
 											<td><%=detail.getStock_quantity() %></td>
 											<td><%=detail.getStock_cartons() %></td>
 											</tr>
-										<%} }%>
+										<%} 
+									}%>
 									</tbody>
-									<tfoot><tr><td>合计</td><td colspan="<%=col+6 %>">总库存箱数：<%=storeStock.getTotal_stock_cartons() %>
-										，总库存数量：<%=storeStock.getTotal_stock_quantity() %></td>
+									<tfoot><tr><td>合计</td><td colspan="<%=col+6 %>">总库存箱数：<%=total_stock_cartons %>
+										，总库存数量：<%=total_stock_quantitys %></td>
 										</tr></tfoot>
 								</table>
 								</fieldset>
+										
+											</div><%}%>
+										</div>
+									</div>
 								</div>
 								<div class="clear"></div>
 							</div>
@@ -525,4 +556,7 @@
 			</div>
 		</div>
 	</body>
+	<script type="text/javascript">
+	$("#rightStoreInfo #tab .nav li a").first().click();
+	</script>
 </html>

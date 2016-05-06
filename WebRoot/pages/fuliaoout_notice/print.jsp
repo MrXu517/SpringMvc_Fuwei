@@ -107,6 +107,11 @@ div.name{   margin-left: 15px; width: 100px; display: inline-block;}
 																	</td>
 																	
 																</tr>
+																<tr>
+																	<td colspan="2">
+																		<div class="name">领取人：</div><span class="value"><%=SystemCache.getEmployeeName(notice.getReceiver_employee())%></span>
+																	</td>
+																</tr>
 															</tbody>
 
 

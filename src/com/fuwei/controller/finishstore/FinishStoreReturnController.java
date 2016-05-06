@@ -150,11 +150,11 @@ public class FinishStoreReturnController extends BaseController {
 		request.setAttribute("order", order);
 		try {
 			
-			PackingOrder packingOrder = packingOrderService.getByOrderAndDetail(orderId);
-			if(packingOrder == null){
+			List<PackingOrder> packingOrderList = packingOrderService.getListByOrder(orderId);
+			if(packingOrderList == null || packingOrderList.size()<=0){
 				throw new Exception("该订单没有创建装箱单，请先创建装箱单 点击此处创建 <a href='packing_order/add/"+ orderId + "'>添加装箱单</a>");
 			}
-			request.setAttribute("packingOrder", packingOrder);
+			request.setAttribute("packingOrderList", packingOrderList);
 			Map<Integer,FinishStoreStockDetail> stockMap = finishStoreStockService.getStockMapByOrder(orderId);
 			boolean flag = true;
 			for(int packingOrderDetailId:stockMap.keySet()){

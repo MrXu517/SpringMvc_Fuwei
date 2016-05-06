@@ -205,6 +205,11 @@ tr.disable{background:#ddd;}
 																	</td>
 																	
 																</tr>
+																<tr>
+																	<td colspan="2">
+																		<div class="name">领取人：</div><span class="value"><%=SystemCache.getEmployeeName(notice.getReceiver_employee())%></span>
+																	</td>
+																</tr>
 															</tbody>
 
 

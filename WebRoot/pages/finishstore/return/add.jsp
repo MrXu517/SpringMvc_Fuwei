@@ -19,12 +19,8 @@
 			+ path + "/";
 	Order order = (Order) request
 			.getAttribute("order");
-	PackingOrder packingOrder = (PackingOrder) request
-			.getAttribute("packingOrder");
-	List<PackingOrderDetail> detaillist = packingOrder.getDetaillist();
-	if (detaillist == null) {
-		detaillist = new ArrayList<PackingOrderDetail>();
-	}
+	List<PackingOrder> packingOrderList = (List<PackingOrder>) request
+			.getAttribute("packingOrderList");
 	Map<Integer,FinishStoreStockDetail> stockMap = (Map<Integer,FinishStoreStockDetail>) request
 			.getAttribute("stockMap");
 %>
@@ -86,9 +82,13 @@ body {
 .noborder.table>tbody>tr>td{border:none;}
 .noborder.table{font-weight:bold;}
 div.name{  width: 100px; display: inline-block;}
-.checkBtn{height:25px;width:25px;}
+.checkBtn,.checkPackageBtn{height:25px;width:25px;}
 tr.disable{background:#ddd;}
 #created_user{  margin-right: 50px;}
+.detailTb caption{text-align:left;}
+.detailTb.unselected{opacity: 0.8;}
+i.tip_uncheck{color: red;font-size: 30px;}
+i.tip_check{color: green;font-size: 30px;}
 </style>
 
 	</head>
@@ -119,7 +119,6 @@ tr.disable{background:#ddd;}
 							<div class="col-md-12">
 								<form class="saveform">
 									<input type="hidden" name="id" value="" />
-									<input type="hidden" name="packingOrderId" value="<%=packingOrder.getId()%>" />
 									<input type="hidden" name="orderId"
 										value="<%=order.getId()%>" />
 
@@ -192,39 +191,43 @@ tr.disable{background:#ddd;}
 												</tr>
 											</tbody>
 										</table>
-					
+										<p class="alert alert-info">提示：只能选择一张装箱单进行入库</p>
+										<%for(PackingOrder item : packingOrderList){ %>
 										<table id="mainTb"
-											class="table table-responsive table-bordered detailTb">
+											class="unselected table table-responsive table-bordered detailTb">
+											<caption><input type="radio" name="packingOrderId" value="<%=item.getId()%>" class="checkPackageBtn"/> 装箱单 <%=item.getNumber()%>
+											<i class="fa fa-times tip_uncheck"></i><i class="fa fa-check tip_check"></i>
+											</caption>
 											<thead>
 											<tr><th width="5%">
 														序号
 													</th>
 											<%
 											int col = 0;
-											if(packingOrder.getCol1_id()!=null){
+											if(item.getCol1_id()!=null){
 											col++;
 											 %>
 											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(packingOrder.getCol1_id()) %>
+												<%=SystemCache.getPackPropertyName(item.getCol1_id()) %>
 											</th>
 											<%} %>
 											
-											<%if(packingOrder.getCol2_id()!=null){ 
+											<%if(item.getCol2_id()!=null){ 
 											col++;%>
 											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(packingOrder.getCol2_id()) %>
+												<%=SystemCache.getPackPropertyName(item.getCol2_id()) %>
 											</th>
 											<%} %>
-											<%if(packingOrder.getCol3_id()!=null){ 
+											<%if(item.getCol3_id()!=null){ 
 											col++;%>
 											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(packingOrder.getCol3_id()) %>
+												<%=SystemCache.getPackPropertyName(item.getCol3_id()) %>
 											</th>
 											<%} %>
-											<%if(packingOrder.getCol4_id()!=null){ 
+											<%if(item.getCol4_id()!=null){ 
 											col++;%>
 											<th rowspan="2" width="80px">
-												<%=SystemCache.getPackPropertyName(packingOrder.getCol4_id()) %>
+												<%=SystemCache.getPackPropertyName(item.getCol4_id()) %>
 											</th>
 											<%} %>
 											<th rowspan="2" width="40px">
@@ -255,7 +258,7 @@ tr.disable{background:#ddd;}
 											</thead>
 											<tbody>
 												<%
-													for (PackingOrderDetail detail : detaillist) {
+													for (PackingOrderDetail detail : item.getDetaillist()) {
 														FinishStoreStockDetail temp = stockMap.get(detail.getId());
 														int actualIn_cartons = 0 ;
 														int actualIn_quantity = 0 ;
@@ -266,26 +269,27 @@ tr.disable{background:#ddd;}
 														
 														JSONObject json = JSONObject.fromObject(detail);
 														json.put("packingOrderDetailId",detail.getId());
+														json.put("packingOrderId",detail.getPackingOrderId());
 														json.remove("id");
 												%>
 												<tr class="tr EmptyTr disable" data='<%=json.toString()%>'>
 													<td><input type="checkbox" name="checked" class="checkBtn"/></td>
-													<%if(packingOrder.getCol1_id()!=null){ %>
+													<%if(item.getCol1_id()!=null){ %>
 										<td>
 											<%=detail.getCol1_value()==null?"":detail.getCol1_value() %>
 										</td>
 										<%} %>
-										<%if(packingOrder.getCol2_id()!=null){ %>
+										<%if(item.getCol2_id()!=null){ %>
 										<td>
 											<%=detail.getCol2_value()==null?"":detail.getCol2_value() %>
 										</td>
 										<%} %>	
-										<%if(packingOrder.getCol3_id()!=null){ %>
+										<%if(item.getCol3_id()!=null){ %>
 										<td>
 											<%=detail.getCol3_value()==null?"":detail.getCol3_value() %>
 										</td>
 										<%} %>
-										<%if(packingOrder.getCol4_id()!=null){ %>
+										<%if(item.getCol4_id()!=null){ %>
 										<td>
 											<%=detail.getCol4_value()==null?"":detail.getCol4_value() %>
 										</td>
@@ -313,6 +317,9 @@ tr.disable{background:#ddd;}
 											</tbody>
 
 										</table>
+										<%
+											}
+										%>	
 											
 										<div id="tip" class="auto_bottom">
 											

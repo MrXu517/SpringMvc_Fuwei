@@ -9,6 +9,7 @@
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.entity.producesystem.FuliaoOutNotice"%>
 <%@page import="com.fuwei.entity.producesystem.FuliaoOutNoticeDetail"%>
+<%@page import="com.fuwei.entity.Employee"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -21,6 +22,7 @@
 	if (detaillist == null) {
 		detaillist = new ArrayList<FuliaoOutNoticeDetail>();
 	}
+	List<Employee> employeelist = (List<Employee>)request.getAttribute("employeelist");
 %>
 <!DOCTYPE html>
 <html>
@@ -83,6 +85,7 @@ div.name{  width: 100px; display: inline-block;}
 .checkBtn{height:25px;width:25px;}
 tr.disable{background:#ddd;}
 #created_user{  margin-right: 50px;}
+.form-group.selectDiv{width:200px;display: inline-block;}
 </style>
 
 	</head>
@@ -171,6 +174,21 @@ tr.disable{background:#ddd;}
 																		<div class="name">跟单：</div><span class="value"><%=SystemCache.getEmployeeName(order.getCharge_employee())%></span>
 																	</td>
 																	
+																</tr>
+																<tr>
+																	<td colspan="2">
+																		<div class="name">领取人：</div>
+																				<div class="form-group selectDiv"><select class="value require form-control" name="receiver_employee" id="receiver_employee">
+																					<option value="">未选择</option>
+																					<%for(Employee employee : employeelist){
+																						if(notice.getReceiver_employee()!=null && employee.getId() == notice.getReceiver_employee()){
+																					%>
+																						<option value="<%=employee.getId()%>" selected><%=employee.getName()%></option>
+																					<%}else{%>
+																						<option value="<%=employee.getId()%>"><%=employee.getName()%></option>
+																					<%}}%>
+																				</select> </div>
+																	</td>
 																</tr>
 															</tbody>
 

@@ -173,9 +173,13 @@ form .selectDiv.form-group{  width: 250px;display: inline-block;}
 																		<div class="name">领取人：</div>
 																				<div class="form-group selectDiv"><select class="value require form-control" name="receiver_employee" id="receiver_employee">
 																					<option value="">未选择</option>
-																					<%for(Employee employee : employeelist){%>
+																					<%for(Employee employee : employeelist){
+																						if(notice.getReceiver_employee()!=null && employee.getId() == notice.getReceiver_employee()){
+																					%>
+																						<option value="<%=employee.getId()%>" selected><%=employee.getName()%></option>
+																					<%}else{%>
 																						<option value="<%=employee.getId()%>"><%=employee.getName()%></option>
-																					<%}%>
+																					<%}}%>
 																				</select> </div>
 																	</td>
 																</tr>

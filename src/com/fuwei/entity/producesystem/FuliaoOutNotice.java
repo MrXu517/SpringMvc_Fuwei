@@ -32,8 +32,15 @@ public class FuliaoOutNotice {
 	
 	private String name;// 样品名称
 	private String company_productNumber;//样品的公司货号
+
+	private Integer receiver_employee;//领取人
 	
-	
+	public Integer getReceiver_employee() {
+		return receiver_employee;
+	}
+	public void setReceiver_employee(Integer receiver_employee) {
+		this.receiver_employee = receiver_employee;
+	}
 	public String getName() {
 		return name;
 	}
