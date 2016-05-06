@@ -31,6 +31,10 @@ $(document).ready( function() {
 							name :'locationId',
 							colname :'库位',
 							width :'30%'
+						},{
+							name :'quantity',
+							colname :'数量',
+							width :'30%'
 						}]
 			}
 			

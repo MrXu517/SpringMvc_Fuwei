@@ -10,6 +10,7 @@ public class FuliaoInDetail {
 	private int fuliaoId;
 	private int locationId;
 	private int quantity;
+	private int notice_quantity;
 	private Integer fuliaoPurchaseFactoryId;
 	
 	private String company_orderNumber;//公司订单号
@@ -36,6 +37,12 @@ public class FuliaoInDetail {
 	
 	
 	
+	public int getNotice_quantity() {
+		return notice_quantity;
+	}
+	public void setNotice_quantity(int notice_quantity) {
+		this.notice_quantity = notice_quantity;
+	}
 	public String getFnumber() {
 		return fnumber;
 	}

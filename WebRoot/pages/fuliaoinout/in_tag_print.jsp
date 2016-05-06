@@ -120,6 +120,12 @@ table caption strong{width: 250px;display: inline-block;}
 								</tr>
 								<tr>
 									<td class="firsttd">
+										预入数：
+									</td>
+									<td><%=detail.getNotice_quantity() %></td>
+								</tr>
+								<tr>
+									<td class="firsttd">
 										入库数量：
 									</td>
 									<td><%=detail.getQuantity() %></td>

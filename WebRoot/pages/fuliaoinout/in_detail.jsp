@@ -200,19 +200,22 @@ tr.disable{background:#ddd;}
 														订单号
 													</th><th width="8%">
 														款号
-													</th><th width="8%">
+													</th><th width="6%">
 														国家
-													</th><th width="8%">
+													</th><th width="6%">
 														颜色
-													</th><th width="8%">
+													</th><th width="6%">
 														尺码
-													</th><th width="8%">
+													</th><th width="6%">
 														批次
-													</th><th width="8%">
+													</th><th width="6%">
 														来源
 													</th>
+													<th width="6%">
+														预入数(个)
+													</th>
 													<th width="10%">
-														入库数量(个)
+														实际入库数量(个)
 													</th><th width="10%">
 														库位
 													</th>
@@ -235,6 +238,7 @@ tr.disable{background:#ddd;}
 													<td><%=detail.getSize()%></td>
 													<td><%=detail.getBatch()%></td>
 													<td><%=SystemCache.getFactoryName(detail.getFuliaoPurchaseFactoryId())%></td>
+													<td><%=detail.getNotice_quantity()%></td>
 													<td><%=detail.getQuantity()%></td>
 													<td><%=SystemCache.getLocationNumber(detail.getLocationId())%></td>
 												</tr>

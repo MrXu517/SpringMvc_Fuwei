@@ -243,6 +243,9 @@ public class FuliaoInService extends BaseService {
 				object.setNumber(object.createNumber());
 				this.update(object, "id", null);
 				for(FuliaoInDetail detail : object.getDetaillist()){
+					if(detail.getFuliaoPurchaseFactoryId()==0){
+						detail.setFuliaoPurchaseFactoryId(null);
+					}
 					detail.setFuliaoInOutId(fuliaoInId);
 					//入库后，设置相应的库位不为空
 					locationService.addQuantity(detail.getLocationId(),detail.getFuliaoId(),detail.getQuantity());

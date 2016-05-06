@@ -2,8 +2,6 @@
 	contentType="text/html; charset=utf-8"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.entity.Order"%>
-<%@page import="com.fuwei.commons.SystemCache"%>
-<%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.entity.producesystem.Fuliao"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
@@ -11,6 +9,7 @@
 <%@page import="com.fuwei.entity.producesystem.FuliaoInNotice"%>
 <%@page import="com.fuwei.entity.producesystem.FuliaoInNoticeDetail"%>
 <%@page import="com.fuwei.entity.producesystem.Location"%>
+<%@page import="net.sf.json.JSONObject"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -196,20 +195,23 @@ tr.disable{background:#ddd;}
 														订单号
 													</th><th width="8%">
 														款号
-													</th><th width="8%">
+													</th><th width="6%">
 														国家
-													</th><th width="8%">
+													</th><th width="6%">
 														颜色
-													</th><th width="8%">
+													</th><th width="6%">
 														尺码
-													</th><th width="8%">
+													</th><th width="6%">
 														批次
 													</th>
-													<th width="8%">
+													<th width="6%">
 														来源
 													</th>
+													<th width="6%">
+														预入数(个)
+													</th>
 													<th width="10%">
-														入库数量(个)
+														实际入库数量(个)
 													</th>
 													<th width="15%">
 														库位
@@ -221,8 +223,10 @@ tr.disable{background:#ddd;}
 													for (FuliaoInNoticeDetail detail : detaillist) {
 														boolean flag = false;
 														List<Map<String,Object>> templist = locationMap.get(detail.getFuliaoId());
+														JSONObject jsonObj = JSONObject.fromObject(detail);
+														jsonObj.put("notice_quantity",detail.getQuantity());
 												%>
-												<tr class="tr" data='<%=SerializeTool.serialize(detail)%>'>
+												<tr class="tr" data='<%=jsonObj.toString()%>'>
 													<td><%=SystemCache.getFuliaoTypeName(detail.getFuliaoTypeId())%><br><%=detail.getFnumber()%></td>
 													<td><a href="/<%=detail.getImg()%>" class=""
 																			target="_blank"> <img id="previewImg"
@@ -237,6 +241,9 @@ tr.disable{background:#ddd;}
 													<td><%=SystemCache.getFactoryName(detail.getFuliaoPurchaseFactoryId())%>
 													</td>
 													<td><%=detail.getQuantity()%></td>
+													<td><input class="quantity form-control require positive_int value"
+															type="text" value="<%=detail.getQuantity()%>"
+															placeholder="请输入实际入库数量"></td>
 													<td><select class="locationId form-control value require" name="locationId">
 														<%for(Map<String,Object> item: templist) {
 															Integer locationId = (Integer)item.get("locationId");
