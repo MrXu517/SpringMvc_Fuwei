@@ -94,8 +94,13 @@ public class FinishStoreOutNoticeController extends BaseController {
 				throw new Exception("订单不存在");
 			}
 			request.setAttribute("order", order);
-			PackingOrder packingOrder = packingOrderService.getByOrderAndDetail(orderId);
-			request.setAttribute("packingOrder", packingOrder);
+//			PackingOrder packingOrder = packingOrderService.getByOrderAndDetail(orderId);
+//			request.setAttribute("packingOrder", packingOrder);
+			List<PackingOrder> packingOrderList = packingOrderService.getListByOrder(orderId);
+			if(packingOrderList == null || packingOrderList.size()<=0){
+				throw new Exception("该订单没有创建装箱单，请先创建装箱单 点击此处创建 <a href='packing_order/add/"+ orderId + "'>添加装箱单</a>");
+			}
+			request.setAttribute("packingOrderList", packingOrderList);
 			Map<Integer,FinishStoreStockDetail> stockMap = finishStoreStockService.getStockMapByOrder(orderId);
 			request.setAttribute("stockMap", stockMap);
 			return new ModelAndView("finishstoreout_notice/add");	

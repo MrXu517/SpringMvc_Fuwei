@@ -101,6 +101,12 @@ public class FinishStoreInDetail {
 	public void setColor(String color) {
 		this.color = color;
 	}
+//	public Integer getPackingOrderId() {
+//		return packingOrderId;
+//	}
+//	public void setPackingOrderId(Integer packingOrderId) {
+//		this.packingOrderId = packingOrderId;
+//	}
 	
 	
 }

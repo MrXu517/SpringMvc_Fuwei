@@ -260,9 +260,9 @@ tr.disable{background:#ddd;}
 													for (FinishStoreOutNoticeDetail detail : detaillist) {
 												%>
 												<tr class="tr">
-													<td><%=++i%></td>
+													<td><%=++i%></td><%if(notice.getCol1_id()!=null){ %>
 													<td>
-										<%if(notice.getCol1_id()!=null){ %>
+										
 											<%=detail.getCol1_value()==null?"":detail.getCol1_value() %>
 										</td>
 										<%} %>

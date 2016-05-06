@@ -40,6 +40,21 @@ public class PackingOrderService extends BaseService {
 		}
 		return packingOrderList;
 	}
+//	public PackingOrder getByOrderAndDetail(int orderId) throws Exception {
+//		try {
+//			PackingOrder order = dao.queryForBean(
+//					"select * from tb_packingorder where orderId = ?",
+//					PackingOrder.class, orderId);
+//			if(order == null){
+//				return null;
+//			}
+//			List<PackingOrderDetail> detaillist = packingOrderDetailService.getList(order.getId());
+//			order.setDetaillist(detaillist);
+//			return order;
+//		} catch (Exception e) {
+//			throw e;
+//		}
+//	}
 	//根据OrderId获取所有
 	public List<PackingOrder> getListByOrderNumber(String orderNumber) throws Exception{
 		List<PackingOrder> packingOrderList = dao.queryForBeanList("select * from tb_packingorder where orderNumber=?", PackingOrder.class,orderNumber);
@@ -111,10 +126,11 @@ public class PackingOrderService extends BaseService {
 			if(packingOrder.getDetaillist()==null || packingOrder.getDetaillist().size()<=0){
 				throw new Exception("请至少填写一条装箱单明细");
 			}
-			PackingOrder temp = this.getByOrder(packingOrder.getOrderId());
-			if(temp!=null){
-				throw new Exception("每个订单只能有一个装箱单");
-			}
+			//2016-5-4修改 一个订单可以有多个装箱单
+//			PackingOrder temp = this.getByOrder(packingOrder.getOrderId());
+//			if(temp!=null){
+//				throw new Exception("每个订单只能有一个装箱单");
+//			}
 			packingOrder.setStatus(0);
 			packingOrder.setState("新建");
 			Integer packingOrderId = this.insert(packingOrder);
@@ -213,21 +229,7 @@ public class PackingOrderService extends BaseService {
 		}
 	}
 	
-	public PackingOrder getByOrderAndDetail(int orderId) throws Exception {
-		try {
-			PackingOrder order = dao.queryForBean(
-					"select * from tb_packingorder where orderId = ?",
-					PackingOrder.class, orderId);
-			if(order == null){
-				return null;
-			}
-			List<PackingOrderDetail> detaillist = packingOrderDetailService.getList(order.getId());
-			order.setDetaillist(detaillist);
-			return order;
-		} catch (Exception e) {
-			throw e;
-		}
-	}
+	
 
 	// 获取
 	public PackingOrder get(int id) throws Exception {

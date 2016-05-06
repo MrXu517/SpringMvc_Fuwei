@@ -49,7 +49,7 @@
 		<link href="css/plugins/ui.jqgrid.css" rel="stylesheet"
 			type="text/css" />
 		<script src="js/order/ordergrid.js" type="text/javascript"></script>
-		<script src="js/finishstoreout_notice/add.js" type="text/javascript"></script>
+		<script src="js/finishstoreout_notice/edit.js" type="text/javascript"></script>
 		<style type="text/css">
 #tablename {
   font-weight: bold;
