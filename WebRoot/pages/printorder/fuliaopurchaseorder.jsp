@@ -75,13 +75,16 @@
 									<td colspan="3">
 										<table>
 											<tr>
-												<td class="center" width="15%">
+												<td class="center" width="8%">
 													公司
+												</td>
+												<td class="center" width="10%">
+													订单号
 												</td>
 												<td class="center" width="15%">
 													货号
 												</td>
-												<td class="center" width="15%">
+												<td class="center" width="10%">
 													客户
 												</td>
 												<td class="center" width="15%">
@@ -92,6 +95,9 @@
 												<td class="center">
 													<span><%=SystemCache.getCompanyShortName(fuliaoPurchaseOrder
 								.getCompanyId())%></span>
+												</td>
+												<td class="center">
+													<span><%=fuliaoPurchaseOrder.getOrderNumber()%></span>
 												</td>
 												<td class="center">
 													<span><%=fuliaoPurchaseOrder.getCompany_productNumber()%></span>

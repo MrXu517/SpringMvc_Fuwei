@@ -144,13 +144,16 @@
 												<td colspan="2">
 													<table class="table table-responsive table-bordered">
 														<tr>
-															<td class="center" width="15%">
+															<td class="center" width="10%">
 																公司
+															</td>
+															<td class="center" width="10%">
+																订单号
 															</td>
 															<td class="center" width="15%">
 																公司货号
 															</td>
-															<td class="center" width="15%">
+															<td class="center" width="10%">
 																客户
 															</td>
 															<td class="center" width="15%">
@@ -180,6 +183,13 @@
 																		}
 																	%>
 																</select>
+															</td>
+															<td class="center">
+																<input readonly type="text" name="orderNumber"
+																	id="orderNumber" class="form-control"
+																	value="<%=fuliaoPurchaseOrder.getOrderNumber() == null ? "" : fuliaoPurchaseOrder
+					.getOrderNumber()%>" />
+
 															</td>
 															<td class="center">
 																<input readonly type="text" name="company_productNumber"

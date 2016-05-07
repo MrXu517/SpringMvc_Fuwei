@@ -129,7 +129,12 @@ public class FuliaoPurchaseOrderController extends BaseController {
 			throw e;
 		}
 	}
-	
+	@RequestMapping(value = "/scan", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView scan(HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		return new ModelAndView("fuliao_purchase_order/scan");	
+	}
 	
 	@RequestMapping(value = "/add/{orderId}", method = RequestMethod.GET)
 	@ResponseBody
@@ -145,6 +150,30 @@ public class FuliaoPurchaseOrderController extends BaseController {
 		try {
 			if(orderId!=null){
 				Order order = orderService.get(orderId);
+				request.setAttribute("order", order);
+				return new ModelAndView("fuliao_purchase_order/addbyorder");
+			}
+			throw new Exception("缺少订单ID");
+			
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	@RequestMapping(value = "/addbyorder", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView addproducingorder(String orderNumber,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "fuliao_purchase_order/add";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有添加辅料采购单的权限", null);
+		}
+		try {
+			if(orderNumber!=null){
+				Order order = orderService.get(orderNumber);
 				request.setAttribute("order", order);
 				return new ModelAndView("fuliao_purchase_order/addbyorder");
 			}

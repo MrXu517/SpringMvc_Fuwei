@@ -430,6 +430,9 @@
 							<li>
 								<a href="fuliao_purchase_order/add"><i class="fa fa-plus"></i>采购辅料</a>
 							</li>
+							<li>
+								<a href="fuliao_purchase_order/scan"><i class="fa fa-plus"></i>扫描采购辅料</a>
+							</li>
 							<%} %>
 
 							<%if(h_has_coloring_order_index){ %>
