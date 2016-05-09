@@ -457,7 +457,7 @@ public class PackingOrderController extends BaseController {
 	        } catch (IOException e) {
 	            throw e;
 	        }
-	        String fileName= packingOrder.getCompany_productNumber() + packingOrder.getName() + "装箱单";
+	        String fileName= packingOrder.getOrderNumber() + packingOrder.getName() + "装箱单";
 	        byte[] content = os.toByteArray();
 	        InputStream is = new ByteArrayInputStream(content);
 	        // 设置response参数，可以打开下载页面

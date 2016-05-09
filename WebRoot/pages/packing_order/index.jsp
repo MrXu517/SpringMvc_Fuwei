@@ -230,6 +230,9 @@
 											<th width="30px">
 												序号
 											</th>
+											<th width="60px">
+												装箱单号
+											</th>
 											<th width="100px">
 												图片
 											</th>
@@ -272,6 +275,7 @@
 										%>
 										<tr orderId="<%=item.getId()%>">
 											<td><%=++i%></td>
+											<td><%=item.getNumber() %></td>
 											<td
 												style="max-width: 120px; height: 120px; max-height: 120px;">
 												<a target="_blank" class="cellimg"
