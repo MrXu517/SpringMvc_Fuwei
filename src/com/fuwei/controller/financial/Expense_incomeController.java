@@ -135,7 +135,9 @@ public class Expense_incomeController extends BaseController {
 		}
 		return new ModelAndView("financial/expense_income/import");
 	}
-
+	
+	//银行账户对接
+	
 	// 批量导入账户
 	@RequestMapping(value = "/import", method = RequestMethod.POST)
 	@ResponseBody

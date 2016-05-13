@@ -1674,7 +1674,8 @@ TableTools.defaultConfig.deleteRow = function(selectedTr) {
         if (typeof(TableInstance.showNoOptions.displayValue) != "undefined") {
             no_value = TableInstance.showNoOptions.displayValue(data._No, data, false);
         }
-        NoEle.innerHTML = no_value;
+        if(NoEle!=undefined){NoEle.innerHTML = no_value;}
+        
 
         /*修改行data属性的值*/
         var row_dataJson = JSON.stringify(data);
