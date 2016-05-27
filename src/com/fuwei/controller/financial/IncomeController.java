@@ -29,6 +29,7 @@ import com.fuwei.entity.financial.Bank;
 import com.fuwei.entity.financial.Expense_income;
 import com.fuwei.entity.financial.Expense_income_invoice;
 import com.fuwei.entity.financial.Invoice;
+import com.fuwei.entity.financial.SelfAccount;
 import com.fuwei.entity.financial.Subject;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.financial.BankService;
@@ -138,6 +139,16 @@ public class IncomeController extends BaseController {
 		expense.setUpdated_at(DateTool.now());
 		expense.setCreated_user(user.getId());
 		expense.setIn_out(true);
+		Integer accountId = expense.getAccount_id();
+		if(accountId == null){
+			throw new Exception("收支帐号不能为空");
+		}
+		SelfAccount temp = SystemCache.getSelfAccount(accountId);
+		if(temp!=null && temp.getIspublic()){//公帐账号必须有交易流水好
+			if(expense.getBank_transaction_no()==null || expense.getBank_transaction_no().equals("")){
+				throw new Exception("公帐账号收支的交流流水号不能为空");
+			}
+		}
 		int id = expense_incomeService.add(expense);
 		
 		return this.returnSuccess("id",id);
@@ -208,6 +219,16 @@ public class IncomeController extends BaseController {
 		}
 		expense.setUpdated_at(DateTool.now());
 		expense.setIn_out(true);
+		Integer accountId = expense.getAccount_id();
+		if(accountId == null){
+			throw new Exception("收支帐号不能为空");
+		}
+		SelfAccount temp = SystemCache.getSelfAccount(accountId);
+		if(temp!=null && temp.getIspublic()){//公帐账号必须有交易流水好
+			if(expense.getBank_transaction_no()==null || expense.getBank_transaction_no().equals("")){
+				throw new Exception("公帐账号收支的交流流水号不能为空");
+			}
+		}
 		expense_incomeService.update(expense);
 		
 		return this.returnSuccess("id",expense.getId());

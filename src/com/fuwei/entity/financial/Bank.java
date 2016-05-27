@@ -36,6 +36,10 @@ public class Bank implements Serializable {
 	
 	private Integer created_user;//创建用户
 	
+//	private Integer partnerId;
+	
+	
+	
 //	private int company_id; //外贸公司id
 //	private String company_name; //外贸公司名称
 
@@ -58,9 +62,19 @@ public class Bank implements Serializable {
 //		this.company_name = company_name;
 //	}
 
+	
+
 	public int getId() {
 		return id;
 	}
+
+//	public Integer getPartnerId() {
+//		return partnerId;
+//	}
+//
+//	public void setPartnerId(Integer partnerId) {
+//		this.partnerId = partnerId;
+//	}
 
 	public void setId(int id) {
 		this.id = id;

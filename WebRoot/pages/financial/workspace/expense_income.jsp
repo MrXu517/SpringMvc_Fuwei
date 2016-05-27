@@ -324,6 +324,7 @@
 											搜索
 										</button>
 <a href="expense_income/import" class="btn btn-primary" target="_top">批量导入</a>
+<a href="expense_income/import_bank" class="btn btn-primary" target="_top">批量导入银行明细</a>
 									<ul class="pagination">
 										<li>
 											<a

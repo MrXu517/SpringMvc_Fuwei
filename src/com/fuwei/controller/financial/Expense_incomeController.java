@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,12 +46,14 @@ import com.fuwei.controller.BaseController;
 import com.fuwei.entity.User;
 import com.fuwei.entity.financial.Bank;
 import com.fuwei.entity.financial.Expense_income;
+import com.fuwei.entity.financial.SelfAccount;
 import com.fuwei.entity.financial.Subject;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.financial.BankService;
 import com.fuwei.service.financial.Expense_incomeService;
 import com.fuwei.service.financial.SubjectService;
 import com.fuwei.util.DateTool;
+import com.fuwei.util.SerializeTool;
 
 @RequestMapping("/expense_income")
 @Controller
@@ -136,7 +139,117 @@ public class Expense_incomeController extends BaseController {
 		return new ModelAndView("financial/expense_income/import");
 	}
 	
+	// 批量导入
+	@RequestMapping(value = "/import_bank", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView import_bank(HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "expense_income/import";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有批量导入收入支出的权限", null);
+		}
+		return new ModelAndView("financial/expense_income/import_bank");
+	}
+	
 	//银行账户对接
+	@RequestMapping(value = "/import_bank", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView import_bank(
+			@RequestParam("file") CommonsMultipartFile file,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "expense_income/import";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有批量导入收入支出的权限", null);
+		}
+		List<Expense_income> list = readFile_bank(file);
+		List<Bank> banklist = bankService.getList();
+		Map<String,Integer> bank_no_id_map = new HashMap<String, Integer>();
+		Map<Integer,String> bank_name_id_map = new HashMap<Integer,String>();
+		for(Bank item : banklist){
+			bank_no_id_map.put(item.getBank_no(), item.getId());
+			bank_name_id_map.put(item.getId(), item.getName());
+		}
+		
+		//判断是否重复导入 （根据流水号、帐号、金额、账户名、日期判断）
+		
+		
+		for (Expense_income item : list) {
+			//根据银行name,获取id
+			if(item.getOther_bank_no()!=null){
+				Integer bank_id = bank_no_id_map.get(item.getOther_bank_no());
+				if(bank_id != null){
+					item.setBank_id(bank_id);
+					item.setBank_name(bank_name_id_map.get(bank_id));
+				}else{
+//					throw new Exception("不存在的对方帐号：" + item.getOther_bank_no());
+					item.setBank_id(null);
+				}
+			}
+			item.setCreated_at(DateTool.now());
+			item.setUpdated_at(DateTool.now());
+			item.setCreated_user(user.getId());
+		}
+		if (list == null || list.size() <= 0) {
+			throw new Exception("请至少上传一条记录");
+		}
+		request.setAttribute("list", list);
+		return new ModelAndView("financial/expense_income/import_bank_list");
+//		expense_incomeService.batch_add(list);
+//		return this.returnSuccess();
+	}
+	
+	//银行账户对接
+	@RequestMapping(value = "/import_bank_list", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> import_bank_list(
+			String details,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "expense_income/import";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有批量导入收入支出的权限", null);
+		}	
+		//判断是否重复导入 （根据流水号、帐号、金额、账户名、日期判断）
+		
+		List<Expense_income> list = SerializeTool.deserializeList(details, Expense_income.class);
+		if (list == null || list.size() <= 0) {
+			throw new Exception("请至少上传一条记录");
+		}
+		for(Expense_income temp : list){
+			if(temp.getBank_id()==null || temp.getBank_id()==0){
+				throw new Exception("对方帐号不能为空");
+			}
+			if(temp.getSubject_id()==0){
+				throw new Exception("科目不能为空");
+			}else{
+				temp.setSubject_name(SystemCache.getSubjectName(temp.getSubject_id()));
+			}
+			if(temp.getExpense_at()==null){
+				throw new Exception("收付款日期不能为空");
+			}
+			if(temp.getAccount_id()==null){
+				throw new Exception("收支帐号不能为空");
+			}
+			SelfAccount tempAccount = SystemCache.getSelfAccount(temp.getAccount_id());
+			if(tempAccount!=null && tempAccount.getIspublic()){//公帐账号必须有交易流水好
+				if(temp.getBank_transaction_no()==null || temp.getBank_transaction_no().equals("")){
+					throw new Exception("公帐账号收支的交流流水号不能为空");
+				}
+			}
+		}
+		request.setAttribute("list", list);
+		expense_incomeService.batch_add(list);
+		return this.returnSuccess();
+	}
+	
 	
 	// 批量导入账户
 	@RequestMapping(value = "/import", method = RequestMethod.POST)
@@ -405,5 +518,143 @@ public class Expense_incomeController extends BaseController {
 		    str = str.replaceAll (regs[i], regs[i + regs.length / 2]);
 		}
 		return str;
+	}
+	
+	//从银行导出的账户明细读取数据
+	public List<Expense_income> readFile_bank(CommonsMultipartFile file) throws Exception {
+		String nameString = file.getOriginalFilename();
+		if (nameString.lastIndexOf(".") == -1
+				|| nameString.lastIndexOf(".") == 0) {
+			throw new Exception("请上传有效的97-2003版Excel文件，包括 以.xls为扩展名的文件");
+		} else {
+			String extString = nameString.substring(
+					nameString.lastIndexOf(".") + 1, nameString.length());
+			extString = extString.toLowerCase();
+			if (!extString.equals("xls") && !extString.equals("xlsx")) {
+				throw new Exception("请上传有效的97-2003版Excel文件，包括 以.xls为扩展名的文件");
+			}
+		}
+
+		InputStream is = file.getInputStream();
+		Workbook rb = Workbook.getWorkbook(is); // 从文件流中获取Excel工作区对象（WorkBook）
+		Sheet[] sheet = rb.getSheets();
+
+		List<Expense_income> list = new ArrayList<Expense_income>();
+
+		for (int i = 0; i < sheet.length; i++) {
+			Sheet rs = rb.getSheet(i);
+			int rows = rs.getRows();
+			for (int j = 2; j < rows; j++) {// 从第三行开始
+				Cell[] cells = rs.getRow(j);
+				// 每行增加一条记录
+				Expense_income expense_income = new Expense_income();
+				String bank_transaction_no = "";//银行流水号
+				if (cells[0].getType() == CellType.EMPTY) {
+					throw new Exception("银行交易流水号不能为空");
+				}else{
+					bank_transaction_no = cells[0].getContents().trim();
+					if (bank_transaction_no.equals("")) {
+						throw new Exception("银行交易流水号不能为空");
+					}
+					expense_income.setBank_transaction_no(bank_transaction_no);
+				}
+				
+				//交易时间
+				String date_string = "";
+				if (cells[2].getType() == CellType.EMPTY) {
+					continue;// 收款方名称为空的直接跳过
+				} else {
+					date_string = cells[2].getContents().trim();
+					if (date_string.equals("")) {
+						continue;// 收款方名称为空的直接跳过
+					}
+					Date tempD = DateTool.parse(date_string,"yyyyMMdd HH:mm:ss");
+					expense_income.setExpense_at(tempD);
+				}
+				
+				
+				//汇入金额
+				String incomeStr = "";
+				if (cells[3].getType() == CellType.EMPTY) {
+					//不是汇入
+				} else {
+					incomeStr = cells[3].getContents().trim();
+					if (incomeStr.equals("")) {
+						//不是汇入
+					}
+				}
+				//汇出金额
+				String expenseStr = "";
+				if (cells[4].getType() == CellType.EMPTY) {
+					//不是汇出
+				} else {
+					expenseStr = cells[4].getContents().trim();
+					if (expenseStr.equals("")) {
+						//不是汇出
+					}
+				}
+				if(incomeStr.equals("") && expenseStr.equals("")){//若既没有支出价格，也没有收入价格，则该行跳过
+					continue;
+				}
+				if(!incomeStr.equals("") && !expenseStr.equals("")){//若既有支出价格，也有收入价格，则该行跳过
+					continue;
+				}
+				if(!incomeStr.equals("")){//如果是收入
+					expense_income.setIn_out(true);
+					//金额
+					expense_income.setAmount(Double.valueOf(incomeStr.replaceAll(",", "")));
+					expense_income.setInvoice_amount(0);
+				}else{
+					expense_income.setIn_out(false);
+					expense_income.setAmount(Double.valueOf(expenseStr.replaceAll(",", "")));
+					expense_income.setInvoice_amount(0);
+				}
+				
+				//摘要
+				
+				//备注
+				String memo = "";
+				if (cells[7].getType() == CellType.EMPTY) {
+					//continue;// 收款方名称为空的直接跳过
+				} else {
+					memo = cells[7].getContents().trim();
+					if (memo.equals("")) {
+						//continue;// 收款方名称为空的直接跳过
+					}
+				}
+				expense_income.setMemo(memo);
+				
+				//对方帐号
+				String other_bank_number = "";
+				if (cells[8].getType() == CellType.EMPTY) {
+					continue;// 对方帐号
+				} else {
+					other_bank_number = cells[8].getContents();
+					if (other_bank_number.equals("")) {
+						continue;// 对方帐号
+					}
+				}
+				expense_income.setOther_bank_no(other_bank_number);
+				
+				//对方户名
+				String bank_name = "";
+				if (cells[9].getType() == CellType.EMPTY) {
+					continue;// 收款方名称为空的直接跳过
+				} else {
+					bank_name = chinese2English(cells[9].getContents().trim());
+					if (bank_name.equals("")) {
+						continue;// 收款方名称为空的直接跳过
+					}
+				}
+				expense_income.setBank_name(bank_name);
+				
+				
+
+				list.add(expense_income);
+			}
+		}
+		is.close();
+		return list;
+
 	}
 }

@@ -3,12 +3,13 @@ package com.fuwei.entity.financial;
 import java.util.Date;
 import net.keepsoft.commons.annotation.IdentityId;
 import net.keepsoft.commons.annotation.Table;
+import net.keepsoft.commons.annotation.Temporary;
 
 @Table("tb_expense_income")
 public class Expense_income {
 	@IdentityId
 	private int id;// 明细ID
-	
+	private String bank_transaction_no;//银行交易流水号
 	private int subject_id;//科目ID
 	
 	private String subject_name;
@@ -41,8 +42,35 @@ public class Expense_income {
 	
 	private double invoice_amount;//已收发票金额
 	
+	private Integer account_id;//本厂收支账户id
 	
-		 
+	@Temporary	 
+	private String other_bank_no;//对方帐号
+
+	public String getOther_bank_no() {
+		return other_bank_no;
+	}
+
+	public void setOther_bank_no(String other_bank_no) {
+		this.other_bank_no = other_bank_no;
+	}
+
+	public String getBank_transaction_no() {
+		return bank_transaction_no;
+	}
+
+	public void setBank_transaction_no(String bank_transaction_no) {
+		this.bank_transaction_no = bank_transaction_no;
+	}
+
+	public Integer getAccount_id() {
+		return account_id;
+	}
+
+	public void setAccount_id(Integer account_id) {
+		this.account_id = account_id;
+	}
+
 	public String getSubject_name() {
 		return subject_name;
 	}

@@ -283,7 +283,7 @@ public class Expense_incomeService extends BaseService {
 	// 编辑
 	public int update(Expense_income expense) throws Exception {
 		try{
-			return this.update(expense, "id", "created_at,created_user,amount,expense_at,bank_id,company_id,salesman_id",true);
+			return this.update(expense, "id", "created_at,created_user,amount,bank_id,company_id,salesman_id",true);
 		}catch(Exception e){
 			throw e;
 		}
@@ -304,7 +304,7 @@ public class Expense_incomeService extends BaseService {
 	
 	@Transactional
 	public boolean batch_add(List<Expense_income> list) throws Exception {
-		String sql = "INSERT INTO tb_expense_income(subject_id,subject_name,bank_id,bank_name,company_id,company_name,salesman_id,salesman_name,amount,memo,expense_at,created_at,updated_at,created_user,in_out,invoice_amount) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO tb_expense_income(subject_id,subject_name,bank_id,bank_name,company_id,company_name,salesman_id,salesman_name,amount,memo,expense_at,created_at,updated_at,created_user,in_out,invoice_amount,bank_transaction_no,account_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		List<Object[]> batchArgs = new ArrayList<Object[]>();
 		for (Expense_income item : list) {
@@ -315,7 +315,7 @@ public class Expense_incomeService extends BaseService {
 					item.getAmount(),item.getMemo(),item.getExpense_at(),
 					item.getCreated_at(),item.getUpdated_at(),
 					item.getCreated_user(),item.getIn_out(),
-					item.getInvoice_amount() });
+					item.getInvoice_amount(),item.getBank_transaction_no(),item.getAccount_id() });
 		}
 		try {
 			int result[] = jdbc.batchUpdate(sql, batchArgs);

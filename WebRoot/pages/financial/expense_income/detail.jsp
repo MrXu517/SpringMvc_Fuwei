@@ -112,22 +112,23 @@ legend span.label {
 										if (expense_income.getIn_out()) {
 									%>
 										<span class="label label-info">收入</span>
+										<a type="button" class="btn btn-danger pull-right" href="income/put/<%=expense_income.getId() %>">编辑</a>
 										<%
 											} else {
 										%>
 										<span class="label label-info">支出</span>
+										<a type="button" class="btn btn-danger pull-right" href="expense/put/<%=expense_income.getId() %>">编辑</a>
 										<%
 											}
 										%>
-										<a type="button" class="btn btn-danger pull-right" href="income/put/<%=expense_income.getId() %>">编辑</a>
+										
 									</legend>
 									<table class="table table-responsive table-bordered propertyTable">
 <tr><td class="property">公司</td><td><span ><%=SystemCache.getCompanyName(expense_income.getCompany_id()) %></span></td><td class="property">对方账户</td><td><span><%=expense_income.getBank_name()%></span></td></tr>
 <tr><td class="property">业务员</td><td><span ><%=SystemCache.getSalesmanName(expense_income.getSalesman_id())%></span></td><td class="property">科目</td><td><span><%=expense_income.getSubject_name()%></span></td></tr>
 <tr><td class="property">付款时间</td><td><span ><%=expense_income.getExpense_at()%></span></td><td class="property">金额</td><td><span><%=expense_income.getAmount()%></span></td></tr>
-<tr><td class="property">备注</td><td><span ><%=expense_income.getMemo()%></span></td><td class="property">已收金额</td><td><span><%=expense_income.getInvoice_amount()%></span></td></tr>
-<tr><td class="property"></td><td><span ></span></td><td class="property">未收金额</td>
-<td><span class="label label-danger"><%=expense_income.getAmount()-expense_income.getInvoice_amount()%></span>
+<tr><td class="property">收支方式</td><td><span ><%=SystemCache.getSelfAccountName(expense_income.getAccount_id())%></span></td><td class="property">已收金额</td><td><span><%=expense_income.getInvoice_amount()%></span></td></tr>
+<tr><td class="property">交易流水号</td><td><span><%=expense_income.getBank_transaction_no()==null?"":expense_income.getBank_transaction_no()%></span></td><td class="property">未收金额</td><td><span class="label label-danger"><%=expense_income.getAmount()-expense_income.getInvoice_amount()%></span>
 <%
 													if (!expense_income.isInvoiced() && expense_income.getIn_out()) {
 												%>
@@ -138,6 +139,9 @@ legend span.label {
 													}
 												%>
 </td></tr>
+<tr><td class="property">备注</td><td colspan="3"><span ><%=expense_income.getMemo()%></span></td></tr>
+
+
 </table>
 								</fieldset>
 

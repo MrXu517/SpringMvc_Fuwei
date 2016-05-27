@@ -26,7 +26,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>打印ASOS箱贴英国 -- 桐庐富伟针织厂</title>
+		<title>打印ASOS箱贴德国 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -100,9 +100,8 @@ table td {
 								<tr>
 									<td colspan="2">
 										<span class="to">To</span>
-										<span class="br">ASOS.com Ltd <br> Park spring
-											Road <br> Grimethorpe <br> Barnsley <br> S72
-											7GX <br>
+										<span class="br">Docdata Fulfilment GmbH <br> Mrkische Allee 204
+											<br> Grossbeeren,Germany <br> 14979 <br>
 										</span>
 
 									</td>

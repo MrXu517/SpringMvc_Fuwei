@@ -19,6 +19,7 @@ import com.fuwei.entity.Material;
 import com.fuwei.entity.Role;
 import com.fuwei.entity.Salesman;
 import com.fuwei.entity.User;
+import com.fuwei.entity.financial.SelfAccount;
 import com.fuwei.entity.financial.Subject;
 import com.fuwei.entity.finishstore.PackProperty;
 import com.fuwei.entity.producesystem.Location;
@@ -33,6 +34,7 @@ import com.fuwei.service.MaterialService;
 import com.fuwei.service.RoleService;
 import com.fuwei.service.SalesmanService;
 import com.fuwei.service.UserService;
+import com.fuwei.service.financial.SelfAccountService;
 import com.fuwei.service.financial.SubjectService;
 import com.fuwei.service.finishstore.PackPropertyService;
 import com.fuwei.service.producesystem.LocationService;
@@ -66,6 +68,8 @@ public class SystemCache {
 	static LocationService locationService;
 	
 	static PackPropertyService packPropertyService;
+	
+	static SelfAccountService selfAccountService;
 
 	public SystemCache() {
 		companyService = (CompanyService) SystemContextUtils
@@ -96,6 +100,8 @@ public class SystemCache {
 		.getBean(LocationService.class);
 		packPropertyService = (PackPropertyService)SystemContextUtils
 		.getBean(PackPropertyService.class);
+		selfAccountService = (SelfAccountService)SystemContextUtils
+		.getBean(SelfAccountService.class);
 
 	}
 
@@ -160,6 +166,9 @@ public class SystemCache {
 //	
 	//验厂时的可见的加工工厂
 	public static List<Factory> produce_factorylist_yachang = new ArrayList<Factory>();
+	
+	//缓存本厂支付、收入的帐号
+	public static List<SelfAccount> selfAccountlist = new ArrayList<SelfAccount>();
 
 	public static void init() throws Exception {
 		companyService = (CompanyService) SystemContextUtils
@@ -190,6 +199,8 @@ public class SystemCache {
 		.getBean(LocationService.class);
 		packPropertyService = (PackPropertyService)SystemContextUtils
 		.getBean(PackPropertyService.class);
+		selfAccountService = (SelfAccountService)SystemContextUtils
+		.getBean(SelfAccountService.class);
 		initCompanyList();
 		initSalesmanList();
 		initGongxuList();
@@ -204,38 +215,48 @@ public class SystemCache {
 		initFuliaoTypeList();
 		initLocationList();
 		initPackPropertyList();
+		initSelfAccountList();
 	}
 
 	public static void reload() throws Exception {
 		init();
 	}
+	public static void initSelfAccountList() throws Exception {
+		SystemCache.selfAccountlist = selfAccountService.getList(); 
+	}
+	public static String getSelfAccountName(Integer selfAccountId) {
+		if (selfAccountId == null) {
+			return "";
+		}
+		for (int i = 0; i < SystemCache.selfAccountlist.size(); ++i) {
+			SelfAccount temp = SystemCache.selfAccountlist.get(i);
+			if (temp.getId() == selfAccountId) {
+				return temp.getName();
+			}
+		}
+		return "";
+	}
+	public static SelfAccount getSelfAccount(Integer selfAccountId) {
+		if (selfAccountId == null) {
+			return null;
+		}
+		for (int i = 0; i < SystemCache.selfAccountlist.size(); ++i) {
+			SelfAccount temp = SystemCache.selfAccountlist.get(i);
+			if (temp.getId() == selfAccountId) {
+				return temp;
+			}
+		}
+		return null;
+	}
 	public static void initSubjectList() throws Exception {
 		SystemCache.subjectlist = subjectService.getList(); 
-//		SystemCache.subjectMap = new HashMap<Integer, String>();
-//		if(SystemCache.subjectlist != null){
-//			for(Subject obj : SystemCache.subjectlist){
-//				subjectMap.put(obj.getId(), obj.getName());
-//			}
-//		}
 	}
 	public static void initCompanyList() throws Exception {
 		SystemCache.companylist = companyService.getList(); // companylist;
-//		SystemCache.companyMap = new HashMap<Integer, String>();
-//		if(SystemCache.companylist != null){
-//			for(Company obj : SystemCache.companylist){
-//				companyMap.put(obj.getId(), obj.getShortname());
-//			}
-//		}
 	}
 
 	public static void initSalesmanList() throws Exception {
 		SystemCache.salesmanlist = salesmanService.getList();// salesmanlist;
-//		SystemCache.salesmanMap = new HashMap<Integer, String>();
-//		if(SystemCache.salesmanlist != null){
-//			for(Salesman obj : SystemCache.salesmanlist){
-//				salesmanMap.put(obj.getId(), obj.getName());
-//			}
-//		}
 	}
 
 	public static void initGongxuList() throws Exception {

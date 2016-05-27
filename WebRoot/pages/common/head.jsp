@@ -163,6 +163,7 @@
 	Boolean h_has_commonfuliao_workspace = SystemCache.hasAuthority(session,"fuliao_workspace/commonfuliao_workspace");//通用辅料工作台
 	Boolean h_has_workspace_purchase = SystemCache.hasAuthority(session,"selffuliaoinout");//自购辅料工作台
 	Boolean h_has_yanchang_systemstatus = SystemCache.hasAuthority(session,"yanchang/systemstatus");//当前验厂状态
+	Boolean h_has_selfaccount = SystemCache.hasAuthority(session,"selfaccount/index");//本厂收支帐号
 %>
 <html>
 	<link href="css/common/head.css" rel="stylesheet" type="text/css" />
@@ -597,6 +598,12 @@
 								<a href="bank/index">对方银行账户</a>
 							</li>
 							<%} %>
+							<%if(h_has_selfaccount){ %>
+							<li>
+								<a href="selfaccount/index">本厂收支帐号</a>
+							</li>
+							<%} %>
+							
 							<%if(h_has_financial_subject){ %>
 							<li>
 								<a href="subject/index">科目</a>

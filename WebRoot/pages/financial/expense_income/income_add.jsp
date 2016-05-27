@@ -8,6 +8,7 @@
 <%@page import="net.sf.json.JSONObject"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
+<%@page import="com.fuwei.entity.financial.SelfAccount"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -163,7 +164,6 @@
 												</div>
 												<div class="col-sm-1"></div>
 											</div>
-
 											<div class="form-group col-md-6">
 												<label for="expense_at" class="col-sm-3 control-label">
 													时间
@@ -173,6 +173,37 @@
 														id="expense_at"  class="date form-control require"
 															value="<%=DateTool.formatDateYMD(DateTool.now())%>" />
 
+												</div>
+												<div class="col-sm-1"></div>
+											</div>
+											<div class="form-group col-md-6">
+												<label for="bank_transaction_no" class="col-sm-3 control-label">
+													交易流水号
+												</label>
+												<div class="col-sm-8">
+													<input type="text" class="form-control "
+														name="bank_transaction_no" id="bank_transaction_no">
+												</div>
+												<div class="col-sm-1"></div>
+											</div>
+											<div class="form-group col-md-6">
+												<label for="account_id" class="col-sm-3 control-label">
+													收款帐号
+												</label>
+												<div class="col-sm-8">
+													<select class="form-control require" name="account_id"
+														id="account_id">
+														<option value="">
+															未选择
+														</option>
+														<%
+															for (SelfAccount account : SystemCache.selfAccountlist) {
+														%>
+														<option value="<%=account.getId()%>"><%=account.getName()%></option>
+														<%
+															}
+														%>
+													</select>
 												</div>
 												<div class="col-sm-1"></div>
 											</div>

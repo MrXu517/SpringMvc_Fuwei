@@ -29,6 +29,7 @@ import com.fuwei.entity.financial.Bank;
 import com.fuwei.entity.financial.Expense_income;
 import com.fuwei.entity.financial.Expense_income_invoice;
 import com.fuwei.entity.financial.Invoice;
+import com.fuwei.entity.financial.SelfAccount;
 import com.fuwei.entity.financial.Subject;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.financial.BankService;
@@ -138,6 +139,16 @@ public class ExpenseController extends BaseController {
 		expense.setUpdated_at(DateTool.now());
 		expense.setCreated_user(user.getId());
 		expense.setIn_out(false);
+		Integer accountId = expense.getAccount_id();
+		if(accountId == null){
+			throw new Exception("收支帐号不能为空");
+		}
+		SelfAccount temp = SystemCache.getSelfAccount(accountId);
+		if(temp!=null && temp.getIspublic()){//公帐账号必须有交易流水好
+			if(expense.getBank_transaction_no()==null || expense.getBank_transaction_no().equals("")){
+				throw new Exception("公帐账号收支的交流流水号不能为空");
+			}
+		}
 		int id = expense_incomeService.add(expense);
 		
 		return this.returnSuccess("id",id);
@@ -172,6 +183,30 @@ public class ExpenseController extends BaseController {
 		return expense;
 	}
 	
+	@RequestMapping(value = "/put/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView put(@PathVariable Integer id, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		if(id == null){
+			throw new Exception("ID不能为空");
+		}
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "expense_income/edit";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有编辑出纳的权限", null);
+		}
+		Expense_income expense_income = expense_incomeService.get(id);
+		if(expense_income == null || expense_income.getIn_out()!=false){
+			throw new Exception("找不到ID="+id + "的支出项");
+		}
+		List<Subject> subjectlist = SystemCache.getSubjectList(false);
+		request.setAttribute("subjectlist", subjectlist);	
+		request.setAttribute("expense_income", expense_income);	
+		
+		return new ModelAndView("financial/expense_income/expense_edit");
+	}
 	@RequestMapping(value = "/put", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> update(Expense_income expense,HttpSession session, HttpServletRequest request,
@@ -184,9 +219,19 @@ public class ExpenseController extends BaseController {
 		}
 		expense.setUpdated_at(DateTool.now());
 		expense.setIn_out(false);
+		Integer accountId = expense.getAccount_id();
+		if(accountId == null){
+			throw new Exception("收支帐号不能为空");
+		}
+		SelfAccount temp = SystemCache.getSelfAccount(accountId);
+		if(temp!=null && temp.getIspublic()){//公帐账号必须有交易流水好
+			if(expense.getBank_transaction_no()==null || expense.getBank_transaction_no().equals("")){
+				throw new Exception("公帐账号收支的交流流水号不能为空");
+			}
+		}
 		int success = expense_incomeService.update(expense);
 		
-		return this.returnSuccess();
+		return this.returnSuccess("id",expense.getId());
 		
 	}
 	

@@ -150,14 +150,24 @@
 
 												<div class="form-group">
 													<div class="col-sm-offset-3 col-sm-5">
-														<button type="submit" class="btn btn-primary"
+														<button id="engSubBtn" type="button" class="btn btn-primary"
 															data-loading-text="正在保存...">
-															生成
+															生成英国地址的箱贴
 														</button>
 													</div>
 													<div class="col-sm-3">
 														<button type="reset" class="btn btn-default">
 															重置表单
+														</button>
+													</div>
+													<div class="col-sm-1"></div>
+												</div>
+
+												<div class="form-group">
+													<div class="col-sm-offset-3 col-sm-5">
+														<button id="germanSubBtn" type="button" class="btn btn-primary"
+															data-loading-text="正在保存...">
+															生成德国地址的箱贴
 														</button>
 													</div>
 													<div class="col-sm-1"></div>
@@ -179,6 +189,14 @@
 				var $a = $("#left li a[href='util/box']");
 				setActiveLeft($a.parent("li"));
 				/* 设置当前选中的页 */
+				$("#engSubBtn").click(function(){
+					$("form").attr("action","util/box");
+					$("form").submit();
+				});
+				$("#germanSubBtn").click(function(){
+					$("form").attr("action","util/box_german");
+					$("form").submit();
+				});
 			</script>
 	</body>
 </html>

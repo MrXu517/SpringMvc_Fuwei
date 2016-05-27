@@ -61,4 +61,23 @@ public class UtilController extends BaseController {
 		return new ModelAndView("util/box_print");
 
 	}
+	
+	@RequestMapping(value = "/box_german", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView box_german_print(String ASOS_ORDER_NUMBER,String ASOS_MDA_NUMBER , String ASOS_Style_Number,String UNITS_PER_CARTON,String CARTON_NUMBER,String ASOS_SKU_Number,Integer total_number, HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		if(total_number == null){
+			throw new Exception("总箱数不能为空");
+		}
+		session.setAttribute("ASOS_ORDER_NUMBER", ASOS_ORDER_NUMBER);
+		session.setAttribute("ASOS_MDA_NUMBER", ASOS_MDA_NUMBER);
+		session.setAttribute("ASOS_Style_Number", ASOS_Style_Number);
+		session.setAttribute("UNITS_PER_CARTON", UNITS_PER_CARTON);
+		session.setAttribute("CARTON_NUMBER", CARTON_NUMBER);
+		session.setAttribute("ASOS_SKU_Number", ASOS_SKU_Number);
+		session.setAttribute("total_number", total_number);
+		
+		return new ModelAndView("util/box_print_german");
+
+	}
 }

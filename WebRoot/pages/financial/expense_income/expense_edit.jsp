@@ -26,7 +26,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>收入 -- 桐庐富伟针织厂</title>
+		<title>支出 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -43,7 +43,7 @@
 			type="text/javascript"></script>
 		<script src="js/common/common.js" type="text/javascript"></script>
 		<script src="js/plugins/jquery.form.js" type="text/javascript"></script>
-		<script src="js/financial/expense_income/income_edit.js" type="text/javascript"></script>
+		<script src="js/financial/expense_income/expense_edit.js" type="text/javascript"></script>
 	<script type='text/javascript' src='js/plugins/select2.min.js'></script>
 	<link rel="stylesheet" type="text/css" href="css/plugins/select2.min.css" />
 	</head>
@@ -61,7 +61,7 @@
 							财务
 						</li>
 						<li class="active">
-							收入
+							支出
 						</li>
 					</ul>
 				</div>
@@ -73,7 +73,7 @@
 								<div class="panel panel-primary">
 									<div class="panel-heading">
 										<h3 class="panel-title">
-											编辑收入
+											编辑支出
 										</h3>
 									</div>
 									<div class="panel-body">
@@ -126,7 +126,7 @@
 														</option>
 														<%
 															for (Subject subject : subjectlist) {
-																if(subject.getId() == expense_income.getSubject_id()){
+																if((int)subject.getId() == (int)expense_income.getSubject_id()){
 														%>
 															<option selected value="<%=subject.getId()%>"><%=subject.getName()%></option>
 														<%}else{ %>
@@ -140,7 +140,7 @@
 
 											<div class="form-group col-md-6">
 												<label for="amount" class="col-sm-3 control-label">
-													收入金额
+													支出金额
 												</label>
 												<div class="col-sm-8">
 													<input disabled type="text" class="form-control require double"
@@ -151,7 +151,7 @@
 
 											<div class="form-group col-md-6">
 												<label for="expense_at" class="col-sm-3 control-label">
-													时间
+													付款时间
 												</label>
 												<div class="col-sm-8">
 													<input disabled type="text" name="expense_at"
@@ -183,7 +183,7 @@
 														</option>
 														<%
 															for (SelfAccount account : SystemCache.selfAccountlist) {
-															if(expense_income.getAccount_id()!=null && expense_income.getAccount_id() == account.getId()){
+															if(expense_income.getAccount_id()!=null && (int)expense_income.getAccount_id() == (int)account.getId()){
 														%>
 														<option value="<%=account.getId()%>" selected><%=account.getName()%></option>
 														<%
