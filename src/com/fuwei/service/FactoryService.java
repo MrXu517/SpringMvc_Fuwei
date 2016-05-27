@@ -32,6 +32,7 @@ public class FactoryService extends BaseService{
 	@Transactional
 	public int add(Factory Factory) throws Exception {
 		try{
+			Factory.setInUse(true);
 			return this.insert(Factory);
 		}catch(Exception e){
 			throw e;
@@ -55,11 +56,28 @@ public class FactoryService extends BaseService{
 	// 编辑
 	public int update(Factory Factory) throws Exception {
 		try{
-			return this.update(Factory, "id", "created_at,created_user",true);
+			return this.update(Factory, "id", "created_at,created_user,inUse",true);
 		}catch(Exception e){
 			throw e;
 		}
 
+	}
+	
+	// 停用
+	public int disable(int factoryId) throws Exception {
+		try{
+			return dao.update("update tb_factory set inUse=0 WHERE  id = ?", factoryId);
+		}catch(Exception e){
+			throw e;
+		}
+	}
+	// 启用
+	public int enable(int factoryId) throws Exception {
+		try{
+			return dao.update("update tb_factory set inUse=1 WHERE  id = ?", factoryId);
+		}catch(Exception e){
+			throw e;
+		}
 	}
 	
 	// 获取

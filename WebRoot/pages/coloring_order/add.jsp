@@ -21,6 +21,7 @@
 			employeelist.add(temp);
 		}
 	}
+	List<Factory> coloring_factorylist = (List<Factory>)request.getAttribute("coloring_factorylist");
 %>
 <!DOCTYPE html>
 <html>
@@ -97,7 +98,7 @@
 																		未选择
 																	</option>
 																	<%
-																		for (Factory factory : SystemCache.coloring_factorylist) {
+																		for (Factory factory : coloring_factorylist) {
 																	%>
 																	<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
 																	<%

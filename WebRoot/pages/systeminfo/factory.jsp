@@ -13,9 +13,10 @@
 	String tabname = (String) request.getParameter("tab");
 	String typeStr = request.getParameter("type");
 	Integer type = null;
-	if(typeStr!=null && !typeStr.equals("")){
-		type =Integer.parseInt(typeStr);
+	if (typeStr != null && !typeStr.equals("")) {
+		type = Integer.parseInt(typeStr);
 	}
+	Boolean has_disable = SystemCache.hasAuthority(session,"factory/disable");
 %>
 <!DOCTYPE html>
 <html>
@@ -62,6 +63,11 @@
 				<div class="body">
 					<div id="factory">
 						<div class="container-fluid">
+							<p class="alert-warning">
+								提示：停用的工厂无法再 开相应的单据 ：【 加工工厂：生产加工单、工序加工单； 染厂：染色单； 纱线厂：原材料采购单；
+								辅料工厂：辅料采购单】
+							</p>
+
 							<div class="row">
 								<div class="col-md-4 formwidget">
 									<div class="panel panel-primary">
@@ -88,7 +94,7 @@
 														类型
 													</label>
 													<div class="col-sm-8">
-														<select class="form-control require" name="type" id="type">	
+														<select class="form-control require" name="type" id="type">
 															<option value="0">
 																机织、加工
 															</option>
@@ -120,7 +126,8 @@
 														验厂状态
 													</label>
 													<div class="col-sm-8">
-														<select class="form-control require" name="isyanchang" id="isyanchang">	
+														<select class="form-control require" name="isyanchang"
+															id="isyanchang">
 															<option value="false">
 																不可见
 															</option>
@@ -131,7 +138,6 @@
 													</div>
 													<div class="col-sm-1"></div>
 												</div>
-
 												<div class="form-group">
 													<div class="col-sm-offset-3 col-sm-5">
 														<button type="submit" class="btn btn-primary"
@@ -151,14 +157,14 @@
 										</div>
 									</div>
 								</div>
-
 								<div class="col-md-7 tablewidget">
 									<div class="panel panel-primary">
 										<!-- Default panel contents -->
 										<div class="panel-heading">
 											工厂列表
 										</div>
-										<form class="form-horizontal" role="form" id="filterform" action="factory/index">
+										<form class="form-horizontal" role="form" id="filterform"
+											action="factory/index">
 											<div class="form-group col-sm-6">
 												<label for="name" class="col-sm-3 control-label">
 													类型
@@ -168,52 +174,72 @@
 														<option value="">
 															所有
 														</option>
-														<%if(type!=null && type == 0){ %>
-															<option value="0" selected>
-																机织、加工
-															</option>
-														<%}else{ %>
-															<option value="0">
-																机织、加工
-															</option>
-														<%} %>
-														<%if(type!=null && type == 1){ %>
-															<option value="1" selected>
-																原材料采购
-															</option>
-														<%}else{ %>
-															<option value="1">
-																原材料采购
-															</option>
-														<%} %>
-														<%if(type!=null && type == 2){ %>
-															<option value="2" selected>
-																染色
-															</option>
-														<%}else{ %>
-															<option value="2">
-																染色
-															</option>
-														<%} %>
-														<%if(type!=null && type == 3){ %>
-															<option value="3" selected>
-																辅料采购
-															</option>
-														<%}else{ %>
-															<option value="3">
-																辅料采购
-															</option>
-														<%} %>
+														<%
+															if (type != null && type == 0) {
+														%>
+														<option value="0" selected>
+															机织、加工
+														</option>
+														<%
+															} else {
+														%>
+														<option value="0">
+															机织、加工
+														</option>
+														<%
+															}
+														%>
+														<%
+															if (type != null && type == 1) {
+														%>
+														<option value="1" selected>
+															原材料采购
+														</option>
+														<%
+															} else {
+														%>
+														<option value="1">
+															原材料采购
+														</option>
+														<%
+															}
+														%>
+														<%
+															if (type != null && type == 2) {
+														%>
+														<option value="2" selected>
+															染色
+														</option>
+														<%
+															} else {
+														%>
+														<option value="2">
+															染色
+														</option>
+														<%
+															}
+														%>
+														<%
+															if (type != null && type == 3) {
+														%>
+														<option value="3" selected>
+															辅料采购
+														</option>
+														<%
+															} else {
+														%>
+														<option value="3">
+															辅料采购
+														</option>
+														<%
+															}
+														%>
 													</select>
 												</div>
 												<div class="col-sm-1"></div>
 											</div>
-
-
 											<div class="clear"></div>
-										</form>
-										<!-- Table -->
-										<table class="table table-responsive">
+										</form><table class="table table-responsive">
 											<thead>
 												<tr>
 													<th>
@@ -224,6 +250,9 @@
 													</th>
 													<th>
 														类型
+													</th>
+													<th>
+														是否启用
 													</th>
 													<th>
 														验厂状态
@@ -242,13 +271,39 @@
 													<td><%=f_i%></td>
 													<td><%=factory.getName()%></td>
 													<td><%=factory.getTypeName()%></td>
-													<td><%if(factory.getIsyanchang()){%>	
-													<span class="label label-success">验厂时可见</span>
-													<%}%>
+													<td>
+														<%
+															if (factory.getInUse()) {
+														%>
+														<span class="label label-success">已启用</span>
+														<%
+															} else {
+														%><span class="label label-danger">已停用</span>
+														<%
+															}
+														%>
+													</td>
+													<td>
+														<%
+															if (factory.getIsyanchang()) {
+														%>
+														<span class="label label-success">验厂时可见</span>
+														<%
+															}
+														%>
 													</td>
 													<td>
 														<a class="editFactory" href="#"
 															data-cid="<%=factory.getId()%>">编辑</a>
+														<%if(has_disable){
+															if (factory.getInUse()) {
+														%>
+														<a href="#" data-cid="<%=factory.getId()%>" class="disableBtn">停用</a>
+														<%}else{ %>
+														<a href="#" data-cid="<%=factory.getId()%>" class="enableBtn">启用</a>
+														<%
+															}}
+														%>
 														<!-- | <a class="deleteFactory" href="#"
 															data-cid="<%=factory.getId()%>">删除</a> -->
 													</td>

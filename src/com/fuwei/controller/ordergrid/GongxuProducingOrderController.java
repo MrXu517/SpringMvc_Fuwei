@@ -25,6 +25,7 @@ import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.controller.BaseController;
+import com.fuwei.entity.Factory;
 import com.fuwei.entity.GongXu;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
@@ -197,6 +198,15 @@ public class GongxuProducingOrderController extends BaseController {
 				}		
 			}
 			request.setAttribute("gongxulist", gongxulist);
+			
+			List<Factory> produce_factorylist = new ArrayList<Factory>();
+			for(int i=0;i<SystemCache.produce_factorylist.size();++i){
+				Factory temp = SystemCache.produce_factorylist.get(i);
+				if(temp.getInUse()){
+					produce_factorylist.add(temp);
+				}
+			}
+			request.setAttribute("produce_factorylist", produce_factorylist);
 			return new ModelAndView("gongxu_producing_order/addbyorder");
 		} catch (Exception e) {
 			throw e;
@@ -230,7 +240,12 @@ public class GongxuProducingOrderController extends BaseController {
 						|| producingOrder.getFactoryId() == 0) {
 					throw new Exception(
 							"工序加工单必须指定生产单位", null);
-				} 
+				} else{
+					if(!SystemCache.getFactory(producingOrder.getFactoryId()).getInUse()){
+						throw new Exception(
+								"该生产单位已被停用", null);
+					}
+				}
 				if (producingOrder.getGongxuId() == 0) {
 					throw new Exception(
 							"工序加工单必须指定工序", null);

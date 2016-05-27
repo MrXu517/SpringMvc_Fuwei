@@ -22,6 +22,7 @@
 			employeelist.add(temp);
 		}
 	}
+	List<Factory> fuliao_factorylist = (List<Factory>)request.getAttribute("fuliao_factorylist");
 %>
 <!DOCTYPE html>
 <html>
@@ -101,7 +102,7 @@
 															未选择
 														</option>
 														<%
-															for (Factory factory : SystemCache.fuliao_factorylist) {
+															for (Factory factory : fuliao_factorylist) {
 														%>
 														<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
 														<%

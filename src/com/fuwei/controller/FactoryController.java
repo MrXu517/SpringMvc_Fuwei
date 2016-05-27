@@ -146,4 +146,59 @@ public class FactoryController extends BaseController {
 		return this.returnSuccess();
 
 	}
+	
+	//停用工厂
+	@RequestMapping(value = "/disable/{id}", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> disable(@PathVariable int id,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "factory/disable";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有停用/启用工厂的权限", null);
+		}
+		Factory factory = factoryService.get(id);
+		if(factory == null){
+			throw new Exception("找不到ID为"+ id+"的工厂");
+		}
+		if(!factory.getInUse()){
+			throw new Exception("已停用用，无需再停用");
+		}
+		int success = factoryService.disable(id);
+
+		// 更新缓存
+		SystemCache.initFactoryList();
+
+		return this.returnSuccess();
+
+	}
+	//启用工厂
+	@RequestMapping(value = "/enable/{id}", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> enable(@PathVariable int id,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "factory/disable";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有停用/启用工厂的权限", null);
+		}
+		Factory factory = factoryService.get(id);
+		if(factory == null){
+			throw new Exception("找不到ID为"+ id+"的工厂");
+		}
+		if(factory.getInUse()){
+			throw new Exception("已启用，无需再启用");
+		}
+		int success = factoryService.enable(id);
+
+		// 更新缓存
+		SystemCache.initFactoryList();
+
+		return this.returnSuccess();
+
+	}
 }

@@ -29,7 +29,7 @@
 	if (detaillist == null) {
 		detaillist = new ArrayList<ProducingOrderDetail>();
 	}
-	
+	List<Factory> produce_factorylist = (List<Factory>)request.getAttribute("produce_factorylist");
 	Boolean has_order_producing_price_edit = SystemCache.hasAuthority(session,"order/producing/price_edit");
 %>
 <!DOCTYPE html>
@@ -131,7 +131,7 @@
 																			未选择
 																		</option>
 																		<%
-																			for (Factory factory : SystemCache.produce_factorylist) {
+																			for (Factory factory : produce_factorylist) {
 																		%>
 																		<option value="<%=factory.getId()%>"><%=factory.getName()%></option>
 																		<%

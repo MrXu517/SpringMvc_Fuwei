@@ -26,6 +26,7 @@ import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.constant.Constants;
 import com.fuwei.constant.ERROR;
 import com.fuwei.controller.BaseController;
+import com.fuwei.entity.Factory;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
@@ -106,6 +107,14 @@ public class MaterialPurchaseOrderController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有添加原材料采购单的权限", null);
 		}
 		try {
+			List<Factory> purchase_factorylist = new ArrayList<Factory>();
+			for(int i=0;i<SystemCache.purchase_factorylist.size();++i){
+				Factory temp = SystemCache.purchase_factorylist.get(i);
+				if(temp.getInUse()){
+					purchase_factorylist.add(temp);
+				}
+			}
+			request.setAttribute("purchase_factorylist", purchase_factorylist);
 			return new ModelAndView("material_purchase_order/add");	
 			
 		} catch (Exception e) {
@@ -129,6 +138,14 @@ public class MaterialPurchaseOrderController extends BaseController {
 			if(orderId!=null){
 				Order order = orderService.get(orderId);
 				request.setAttribute("order", order);
+				List<Factory> purchase_factorylist = new ArrayList<Factory>();
+				for(int i=0;i<SystemCache.purchase_factorylist.size();++i){
+					Factory temp = SystemCache.purchase_factorylist.get(i);
+					if(temp.getInUse()){
+						purchase_factorylist.add(temp);
+					}
+				}
+				request.setAttribute("purchase_factorylist", purchase_factorylist);
 				return new ModelAndView("material_purchase_order/addbyorder");
 			}
 			throw new Exception("缺少订单ID");
@@ -150,6 +167,15 @@ public class MaterialPurchaseOrderController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有添加原材料采购单的权限", null);
 		}
 		try {	
+			if (materialPurchaseOrder.getFactoryId() == 0) {
+				throw new Exception(
+						"原材料采购单必须指定采购单位", null);
+			} else{
+				if(!SystemCache.getFactory(materialPurchaseOrder.getFactoryId()).getInUse()){
+					throw new Exception(
+							"该采购单位已被停用", null);
+				}
+			}
 			materialPurchaseOrder.setCreated_at(DateTool.now());// 设置创建时间
 			materialPurchaseOrder.setUpdated_at(DateTool.now());// 设置更新时间
 			materialPurchaseOrder.setCreated_user(user.getId());// 设置创建人
@@ -197,6 +223,15 @@ public class MaterialPurchaseOrderController extends BaseController {
 		try {
 			Integer tableOrderId = tableOrder.getId();
 
+			if (tableOrder.getFactoryId() == 0) {
+				throw new Exception(
+						"原材料采购单必须指定采购单位", null);
+			} else{
+				if(!SystemCache.getFactory(tableOrder.getFactoryId()).getInUse()){
+					throw new Exception(
+							"该采购单位已被停用", null);
+				}
+			}
 			if (tableOrderId == null || tableOrderId == 0) {
 				// 添加
 				if (tableOrder.getOrderId() == null
@@ -347,6 +382,15 @@ public class MaterialPurchaseOrderController extends BaseController {
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有编辑原材料采购单的权限", null);
+		}
+		if (materialPurchaseOrder.getFactoryId() == 0) {
+			throw new Exception(
+					"原材料采购单必须指定采购单位", null);
+		} else{
+			if(!SystemCache.getFactory(materialPurchaseOrder.getFactoryId()).getInUse()){
+				throw new Exception(
+						"该采购单位已被停用", null);
+			}
 		}
 		materialPurchaseOrder.setUpdated_at(DateTool.now());
 		List<MaterialPurchaseOrderDetail> detaillist = SerializeTool

@@ -15,21 +15,42 @@ $(document).ready(function(){
 	
 	//工厂 -- 开始
 	setAddFactory();
-	$(".deleteFactory").click(function(){
+	$(".disableBtn").click(function(){
 		var id= $(this).attr("data-cid");
 		$.ajax({
-            url: "factory/delete/"+id,
+            url: "factory/disable/"+id,
             type: 'POST'
         })
             .done(function(result) {
             	if(result.success){
-            		Common.Tip("删除成功",function(){
+            		Common.Tip("停用成功",function(){
             			reload();
             		});
             	}
             })
             .fail(function(result) {
-            	Common.Error("删除失败：" + result.responseText);
+            	Common.Error("停用失败：" + result.responseText);
+            })
+            .always(function() {
+            	
+            });
+		return false;
+	});
+	$(".enableBtn").click(function(){
+		var id= $(this).attr("data-cid");
+		$.ajax({
+            url: "factory/enable/"+id,
+            type: 'POST'
+        })
+            .done(function(result) {
+            	if(result.success){
+            		Common.Tip("启用成功",function(){
+            			reload();
+            		});
+            	}
+            })
+            .fail(function(result) {
+            	Common.Error("启用失败：" + result.responseText);
             })
             .always(function() {
             	

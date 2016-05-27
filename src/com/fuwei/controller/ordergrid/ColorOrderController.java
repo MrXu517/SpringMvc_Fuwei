@@ -26,6 +26,7 @@ import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.constant.Constants;
 import com.fuwei.constant.ERROR;
 import com.fuwei.controller.BaseController;
+import com.fuwei.entity.Factory;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.Sample;
 import com.fuwei.entity.User;
@@ -106,6 +107,14 @@ public class ColorOrderController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有添加染色单的权限", null);
 		}
 		try {
+			List<Factory> coloring_factorylist = new ArrayList<Factory>();
+			for(int i=0;i<SystemCache.coloring_factorylist.size();++i){
+				Factory temp = SystemCache.coloring_factorylist.get(i);
+				if(temp.getInUse()){
+					coloring_factorylist.add(temp);
+				}
+			}
+			request.setAttribute("coloring_factorylist", coloring_factorylist);
 			return new ModelAndView("coloring_order/add");	
 			
 		} catch (Exception e) {
@@ -129,6 +138,14 @@ public class ColorOrderController extends BaseController {
 			if(orderId!=null){
 				Order order = orderService.get(orderId);
 				request.setAttribute("order", order);
+				List<Factory> coloring_factorylist = new ArrayList<Factory>();
+				for(int i=0;i<SystemCache.coloring_factorylist.size();++i){
+					Factory temp = SystemCache.coloring_factorylist.get(i);
+					if(temp.getInUse()){
+						coloring_factorylist.add(temp);
+					}
+				}
+				request.setAttribute("coloring_factorylist", coloring_factorylist);
 				return new ModelAndView("coloring_order/addbyorder");
 			}
 			throw new Exception("缺少订单ID");
@@ -150,6 +167,15 @@ public class ColorOrderController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有添加染色单的权限", null);
 		}
 		try {	
+			if (coloringOrder.getFactoryId() == 0) {
+				throw new Exception(
+						"染色单必须指定染厂", null);
+			} else{
+				if(!SystemCache.getFactory(coloringOrder.getFactoryId()).getInUse()){
+					throw new Exception(
+							"该染厂已被停用", null);
+				}
+			}
 			coloringOrder.setCreated_at(DateTool.now());// 设置创建时间
 			coloringOrder.setUpdated_at(DateTool.now());// 设置更新时间
 			coloringOrder.setCreated_user(user.getId());// 设置创建人
@@ -196,7 +222,15 @@ public class ColorOrderController extends BaseController {
 		}
 		try {
 			Integer tableOrderId = tableOrder.getId();
-
+			if (tableOrder.getFactoryId() == 0) {
+				throw new Exception(
+						"染色单必须指定染厂", null);
+			} else{
+				if(!SystemCache.getFactory(tableOrder.getFactoryId()).getInUse()){
+					throw new Exception(
+							"该染厂已被停用", null);
+				}
+			}
 			if (tableOrderId == null || tableOrderId == 0) {
 				// 添加
 				if (tableOrder.getOrderId() == null
@@ -327,6 +361,14 @@ public class ColorOrderController extends BaseController {
 			if(tableOrderId!=null){
 				ColoringOrder coloringOrder = coloringOrderService.get(tableOrderId);
 				request.setAttribute("coloringOrder", coloringOrder);
+//				List<Factory> coloring_factorylist = new ArrayList<Factory>();
+//				for(int i=0;i<SystemCache.coloring_factorylist.size();++i){
+//					Factory temp = SystemCache.coloring_factorylist.get(i);
+//					if(temp.getInUse()){
+//						coloring_factorylist.add(temp);
+//					}
+//				}
+//				request.setAttribute("coloring_factorylist", coloring_factorylist);
 				if(coloringOrder.getOrderId()!=null){
 					return new ModelAndView("coloring_order/editbyorder");
 				}else{
@@ -350,6 +392,15 @@ public class ColorOrderController extends BaseController {
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有编辑染色单的权限", null);
+		}
+		if (coloringOrder.getFactoryId() == 0) {
+			throw new Exception(
+					"染色单必须指定染厂", null);
+		} else{
+			if(!SystemCache.getFactory(coloringOrder.getFactoryId()).getInUse()){
+				throw new Exception(
+						"该染厂已被停用", null);
+			}
 		}
 		coloringOrder.setUpdated_at(DateTool.now());
 		List<ColoringOrderDetail> detaillist = SerializeTool

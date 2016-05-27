@@ -26,6 +26,7 @@ import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.controller.BaseController;
+import com.fuwei.entity.Factory;
 import com.fuwei.entity.Message;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
@@ -277,6 +278,14 @@ public class ProducingOrderController extends BaseController {
 			}
 			request.setAttribute("order", order);
 			request.setAttribute("detaillist", detaillist);
+			List<Factory> produce_factorylist = new ArrayList<Factory>();
+			for(int i=0;i<SystemCache.produce_factorylist.size();++i){
+				Factory temp = SystemCache.produce_factorylist.get(i);
+				if(temp.getInUse()){
+					produce_factorylist.add(temp);
+				}
+			}
+			request.setAttribute("produce_factorylist", produce_factorylist);
 			return new ModelAndView("producing_order/addbyorder");
 		} catch (Exception e) {
 			throw e;
@@ -303,14 +312,19 @@ public class ProducingOrderController extends BaseController {
 				// 添加
 				if (producingOrder.getOrderId() == null
 						|| producingOrder.getOrderId() == 0) {
-					throw new PermissionDeniedDataAccessException(
+					throw new Exception(
 							"生产单必须属于一张订单", null);
 				}
 				if (producingOrder.getFactoryId() == null
 						|| producingOrder.getFactoryId() == 0) {
-					throw new PermissionDeniedDataAccessException(
+					throw new Exception(
 							"生产单必须指定生产单位", null);
-				} 
+				}else{
+					if(!SystemCache.getFactory(producingOrder.getFactoryId()).getInUse()){
+						throw new Exception(
+								"该生产单位已被停用", null);
+					}
+				}
 				Order order = orderService.get(producingOrder.getOrderId());
 				if(order == null){
 					throw new PermissionDeniedDataAccessException(

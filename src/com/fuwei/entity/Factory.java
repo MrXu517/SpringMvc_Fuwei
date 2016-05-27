@@ -19,9 +19,14 @@ public class Factory {
 	private Integer created_user;//创建用户
 	private Integer type = 0 ;
 	private Boolean isyanchang;//是否在验厂状态下可见
+	private Boolean inUse ; //是否启用
 	
-	
-	
+	public Boolean getInUse() {
+		return inUse;
+	}
+	public void setInUse(Boolean inUse) {
+		this.inUse = inUse;
+	}
 	public Boolean getIsyanchang() {
 		return isyanchang;
 	}

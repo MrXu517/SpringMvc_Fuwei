@@ -6,7 +6,6 @@
 <%@page import="com.fuwei.entity.Customer"%>
 <%@page import="com.fuwei.entity.Order"%>
 <%@page import="com.fuwei.entity.Factory"%>
-<%@page import="com.fuwei.commons.SystemCache"%>
 <%@page import="com.fuwei.util.SerializeTool"%>
 <%@page import="com.fuwei.util.DateTool"%>
 <%@page import="com.fuwei.entity.ordergrid.ProducingOrderMaterialDetail"%>

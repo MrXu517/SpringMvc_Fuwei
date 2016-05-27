@@ -123,6 +123,14 @@ public class FuliaoPurchaseOrderController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有添加辅料采购单的权限", null);
 		}
 		try {
+			List<Factory> fuliao_factorylist = new ArrayList<Factory>();
+			for(int i=0;i<SystemCache.fuliao_factorylist.size();++i){
+				Factory temp = SystemCache.fuliao_factorylist.get(i);
+				if(temp.getInUse()){
+					fuliao_factorylist.add(temp);
+				}
+			}
+			request.setAttribute("fuliao_factorylist", fuliao_factorylist);
 			return new ModelAndView("fuliao_purchase_order/add");	
 			
 		} catch (Exception e) {
@@ -151,6 +159,14 @@ public class FuliaoPurchaseOrderController extends BaseController {
 			if(orderId!=null){
 				Order order = orderService.get(orderId);
 				request.setAttribute("order", order);
+				List<Factory> fuliao_factorylist = new ArrayList<Factory>();
+				for(int i=0;i<SystemCache.fuliao_factorylist.size();++i){
+					Factory temp = SystemCache.fuliao_factorylist.get(i);
+					if(temp.getInUse()){
+						fuliao_factorylist.add(temp);
+					}
+				}
+				request.setAttribute("fuliao_factorylist", fuliao_factorylist);
 				return new ModelAndView("fuliao_purchase_order/addbyorder");
 			}
 			throw new Exception("缺少订单ID");
@@ -175,6 +191,14 @@ public class FuliaoPurchaseOrderController extends BaseController {
 			if(orderNumber!=null){
 				Order order = orderService.get(orderNumber);
 				request.setAttribute("order", order);
+				List<Factory> fuliao_factorylist = new ArrayList<Factory>();
+				for(int i=0;i<SystemCache.fuliao_factorylist.size();++i){
+					Factory temp = SystemCache.fuliao_factorylist.get(i);
+					if(temp.getInUse()){
+						fuliao_factorylist.add(temp);
+					}
+				}
+				request.setAttribute("fuliao_factorylist", fuliao_factorylist);
 				return new ModelAndView("fuliao_purchase_order/addbyorder");
 			}
 			throw new Exception("缺少订单ID");
@@ -196,7 +220,16 @@ public class FuliaoPurchaseOrderController extends BaseController {
 			throw new PermissionDeniedDataAccessException("没有添加辅料采购单的权限", null);
 		}
 		try {	
-			
+
+			if (fuliaoPurchaseOrder.getFactoryId() == 0) {
+				throw new Exception(
+						"辅料采购单必须指定采购单位", null);
+			} else{
+				if(!SystemCache.getFactory(fuliaoPurchaseOrder.getFactoryId()).getInUse()){
+					throw new Exception(
+							"该采购单位已被停用", null);
+				}
+			}
 			fuliaoPurchaseOrder.setCreated_at(DateTool.now());// 设置创建时间
 			fuliaoPurchaseOrder.setUpdated_at(DateTool.now());// 设置更新时间
 			fuliaoPurchaseOrder.setCreated_user(user.getId());// 设置创建人
@@ -244,6 +277,15 @@ public class FuliaoPurchaseOrderController extends BaseController {
 		try {
 			Integer tableOrderId = tableOrder.getId();
 
+			if (tableOrder.getFactoryId() == 0) {
+				throw new Exception(
+						"辅料采购单必须指定采购单位", null);
+			} else{
+				if(!SystemCache.getFactory(tableOrder.getFactoryId()).getInUse()){
+					throw new Exception(
+							"该采购单位已被停用", null);
+				}
+			}
 			if (tableOrderId == null || tableOrderId == 0) {
 				// 添加
 				if (tableOrder.getOrderId() == null
@@ -395,6 +437,16 @@ public class FuliaoPurchaseOrderController extends BaseController {
 		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
 		if(!hasAuthority){
 			throw new PermissionDeniedDataAccessException("没有编辑辅料采购单的权限", null);
+		}
+
+		if (fuliaoPurchaseOrder.getFactoryId() == 0) {
+			throw new Exception(
+					"辅料采购单必须指定采购单位", null);
+		} else{
+			if(!SystemCache.getFactory(fuliaoPurchaseOrder.getFactoryId()).getInUse()){
+				throw new Exception(
+						"该采购单位已被停用", null);
+			}
 		}
 		fuliaoPurchaseOrder.setUpdated_at(DateTool.now());
 		List<FuliaoPurchaseOrderDetail> detaillist = SerializeTool
