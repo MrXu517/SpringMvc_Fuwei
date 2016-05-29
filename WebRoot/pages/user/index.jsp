@@ -47,9 +47,12 @@
 							</h3>
 						</div>
 						<div class="panel-body">
-							<div><h1><%=announcement.getTopic() %></h1><div><%=announcement.getContent() %></div></div>
+							<div style="min-height:350px;">
+							<h1><%=announcement.getTopic() %></h1>
+							<hr style="height:1px;border:none;border-top:1px solid #0066CC;" />
+							<div><%=announcement.getContent() %></div></div>
 						</div>
-						<hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+						<hr style="height:1px;border:none;border-top:1px solid #0066CC;" />
 						<p><span style="padding-right: 40px;">发布人：<%=SystemCache.getUserName(announcement.getCreated_user()) %></span>
 						   <span style="padding-right: 30px;">发布时间：<%=DateTool.formateDate(announcement.getCreated_at(),"yyyy/MM/dd HH:mm:ss") %></span>
 						   <span style="padding-right: 30px;">最近修改时间：<%=DateTool.formateDate(announcement.getUpdated_at(),"yyyy/MM/dd HH:mm:ss") %></span></p>	
