@@ -8,7 +8,7 @@ String referer =  request.getParameter("referer");
 if(message == null){
 	message = "";
 }
-String login_redirect_url = "message/unread";
+String login_redirect_url = "user/index";
 if(referer != null && !referer.equals("")){
 	login_redirect_url = referer;
 }

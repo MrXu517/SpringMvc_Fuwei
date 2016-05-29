@@ -20,10 +20,13 @@ import javax.servlet.http.HttpSession;
 import com.fuwei.commons.LoginedUser;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
+import com.fuwei.commons.SystemSettings;
 import com.fuwei.constant.Constants;
+import com.fuwei.entity.Announcement;
 import com.fuwei.entity.Authority;
 import com.fuwei.entity.Role;
 import com.fuwei.entity.User;
+import com.fuwei.service.AnnouncementService;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.RoleService;
 import com.fuwei.service.UserService;
@@ -33,7 +36,8 @@ import com.fuwei.util.HanyuPinyinUtil;
 @RequestMapping("/user")
 @Controller
 public class UserController extends BaseController {
-	
+	@Autowired
+	AnnouncementService announcementService;
 	@Autowired
 	private UserService userService;
 	@Autowired
@@ -131,11 +135,20 @@ public class UserController extends BaseController {
 	}
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView Index (HttpSession session,HttpServletRequest request,
+	public ModelAndView Index (ModelAndView model,HttpSession session,HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		try{
 			LoginedUser user =  SystemContextUtils.getCurrentUser(session);
-			return new ModelAndView("user/index");
+			String lcode = "announcement";
+			Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+			if(hasAuthority && !SystemSettings.yanchang){
+				 Announcement announcement = announcementService.getHomePage();
+				 request.setAttribute("announcement", announcement);
+			     return new ModelAndView("user/index");
+			}else{
+				 model.setViewName("redirect:/message/unread");
+			     return model;
+			}
 		} catch (Exception e) {
 			throw e;
 		}
