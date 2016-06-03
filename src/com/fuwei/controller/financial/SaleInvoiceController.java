@@ -7,11 +7,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,6 +54,7 @@ import com.fuwei.entity.financial.Bank;
 import com.fuwei.entity.financial.Expense_income;
 import com.fuwei.entity.financial.Expense_income_invoice;
 import com.fuwei.entity.financial.Invoice;
+import com.fuwei.entity.financial.SelfAccount;
 import com.fuwei.entity.financial.Subject;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.financial.BankService;
@@ -373,6 +377,105 @@ public class SaleInvoiceController extends BaseController {
 		invoiceService.batch_add(list);
 		return this.returnSuccess();
 	}
+	
+	// 批量导入
+	@RequestMapping(value = "/import_new", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView batch_add_new(HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "invoice/import";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有批量导入销项发票的权限", null);
+		}
+		return new ModelAndView("financial/sale_invoice/import_new");
+	}
+
+	// 批量导入
+	@RequestMapping(value = "/import_new", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView batch_add_new(
+			@RequestParam("file") CommonsMultipartFile file,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "invoice/import";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有批量导入销项发票的权限", null);
+		}
+		List<Invoice> list = readFile_new(file);
+		List<Bank> banklist = bankService.getList();
+		Map<String,Integer> bank_name_id_map = new HashMap<String, Integer>();
+		for(Bank item : banklist){
+			bank_name_id_map.put(item.getName(), item.getId());
+		}
+		
+		
+		for (Invoice item : list) {
+			//根据银行name,获取id
+			if(item.getBank_name()!=null){
+				Integer bank_id = bank_name_id_map.get(item.getBank_name());
+				if(bank_id != null){
+					item.setBank_id(bank_id);
+				}else{
+					item.setBank_id(null);
+				}
+			}
+		}
+		if (list == null || list.size() <= 0) {
+			throw new Exception("请至少上传一条记录");
+		}
+		request.setAttribute("list", list);
+		return new ModelAndView("financial/sale_invoice/import_new_list");
+//		invoiceService.batch_add(list);
+//		return this.returnSuccess();
+	}
+	//银行账户对接
+	@RequestMapping(value = "/import_new_list", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> import_new_list(
+			String details,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "invoice/import";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有批量导入销项发票的权限", null);
+		}	
+		//判断是否重复导入 （根据流水号、帐号、金额、账户名、日期判断）
+		
+		List<Invoice> list = SerializeTool.deserializeList(details, Invoice.class);
+		if (list == null || list.size() <= 0) {
+			throw new Exception("请至少上传一条记录");
+		}
+		for(Invoice temp : list){
+			if(temp.getBank_id()==null || temp.getBank_id()==0){
+				throw new Exception("对方开票账户不能为空");
+			}
+			if(temp.getCompany_id()== null || temp.getCompany_id()==0){
+				throw new Exception("公司不能为空");
+			}
+			if(temp.getSubject_id()== null || temp.getSubject_id()==0){
+				throw new Exception("科目不能为空");
+			}
+			if(temp.getPrint_date()==null){
+				throw new Exception("开票日期不能为空");
+			}
+			temp.setIn_out(false);
+			temp.setMatch_amount(0);
+			temp.setCreated_at(DateTool.now());
+			temp.setUpdated_at(DateTool.now());
+			temp.setCreated_user(user.getId());
+			temp.setType(3);
+		}
+		request.setAttribute("list", list);
+		invoiceService.batch_add(list);
+		return this.returnSuccess();
+	}
 
 	public void createModuleFile(OutputStream os) throws Exception {
 		WritableWorkbook wbook = Workbook.createWorkbook(os); // 建立excel文件
@@ -543,6 +646,129 @@ public class SaleInvoiceController extends BaseController {
 				invoice.setMemo(memo);
 				
 
+				list.add(invoice);
+			}
+		}
+		is.close();
+		return list;
+
+	}
+	
+	public List<Invoice> readFile_new(CommonsMultipartFile file) throws Exception {
+		String nameString = file.getOriginalFilename();
+		if (nameString.lastIndexOf(".") == -1
+				|| nameString.lastIndexOf(".") == 0) {
+			throw new Exception("请上传有效的97-2003版Excel文件，包括 以.xls为扩展名的文件");
+		} else {
+			String extString = nameString.substring(
+					nameString.lastIndexOf(".") + 1, nameString.length());
+			extString = extString.toLowerCase();
+			if (!extString.equals("xls") && !extString.equals("xlsx")) {
+				throw new Exception("请上传有效的97-2003版Excel文件，包括 以.xls为扩展名的文件");
+			}
+		}
+
+		InputStream is = file.getInputStream();
+		Workbook rb = Workbook.getWorkbook(is); // 从文件流中获取Excel工作区对象（WorkBook）
+		Sheet[] sheet = rb.getSheets();
+
+		List<Invoice> list = new ArrayList<Invoice>();
+		
+		for (int i = 0; i < sheet.length; i++) {
+			Sheet rs = rb.getSheet(i);
+			int rows = rs.getRows();
+			for (int j = 1; j < rows; j++) {// 从第二行开始
+				Cell[] cells = rs.getRow(j);
+				// 每行增加一条记录
+				Invoice invoice = new Invoice();
+
+				//22作废标志
+				String canceld = "";
+				if (cells[22].getType() == CellType.EMPTY) {
+				} else {
+					canceld = chinese2English(cells[22].getContents().trim());
+					if (canceld.equals("是")) {
+						continue;// 已作废的记录不导入
+					}
+				}
+				
+				//2发票号码
+				String number = "";
+				if (cells[2].getType() == CellType.EMPTY) {
+					continue;
+				} else {
+					number = cells[2].getContents().trim();
+					if (number.equals("")) {
+						continue;
+					}
+					Integer numberd = Integer.parseInt(number);
+					number = String.format("%08d",numberd);
+				}
+				invoice.setNumber(number);
+				
+				//4对方账户名称
+				String bank_name = "";
+				if (cells[4].getType() == CellType.EMPTY) {
+					continue;// 收款方名称为空的直接跳过
+				} else {
+					bank_name = chinese2English(cells[4].getContents().trim());
+					if (bank_name.equals("")) {
+						continue;// 收款方名称为空的直接跳过
+					}
+				}
+				invoice.setBank_name(bank_name);
+				
+				//8开票日期
+				String print_date = "";
+				if (cells[8].getType() == CellType.EMPTY) {
+					continue;// 开票日期为空的直接跳过
+				} else {
+					print_date = cells[8].getContents().trim();
+					if (!print_date.equals("")) {
+						SimpleDateFormat sf = new SimpleDateFormat("MM/dd/yy HH:mm", Locale.CHINA); 
+						Date d = sf.parse(print_date);
+						invoice.setPrint_date(d);
+					}
+				}
+				
+				//12不含税价、14税额  ， 12+14=总金额
+				String unrax_amount_str = "";
+				BigDecimal unrax_amount = new BigDecimal(0);
+				if (cells[12].getType() == CellType.EMPTY) {
+					continue;// 直接跳过
+				} else {
+					unrax_amount_str = cells[12].getContents().trim();
+					if (unrax_amount_str.equals("")) {
+						continue;// 直接跳过
+					}
+					unrax_amount = new BigDecimal(unrax_amount_str);
+				}
+				String rax_amount_str = "";
+				BigDecimal rax_amount = new BigDecimal(0);
+				if (cells[14].getType() == CellType.EMPTY) {
+					continue;// 直接跳过
+				} else {
+					rax_amount_str = cells[14].getContents().trim();
+					if (rax_amount_str.equals("")) {
+						continue;// 直接跳过
+					}
+					rax_amount = new BigDecimal(rax_amount_str);
+				}
+				
+				invoice.setAmount((unrax_amount.add(rax_amount)).doubleValue());
+				
+				//17备注
+				String memo = "";
+				if(cells.length>=10){
+					if (cells[17].getType() == CellType.EMPTY) {
+						
+					} else {
+						memo = cells[17].getContents().trim();
+					}
+				}
+				invoice.setMemo(memo);
+				
+				
 				list.add(invoice);
 			}
 		}

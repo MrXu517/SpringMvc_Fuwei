@@ -244,6 +244,9 @@ public class Expense_incomeController extends BaseController {
 					throw new Exception("公帐账号收支的交流流水号不能为空");
 				}
 			}
+			temp.setCreated_at(DateTool.now());
+			temp.setUpdated_at(DateTool.now());
+			temp.setCreated_user(user.getId());
 		}
 		request.setAttribute("list", list);
 		expense_incomeService.batch_add(list);

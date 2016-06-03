@@ -367,7 +367,7 @@ public class InvoiceService extends BaseService {
 			SQLException sqlException = (java.sql.SQLException)e.getCause();
 			if(sqlException!=null && sqlException.getErrorCode() == 1062){//外键约束
 				log.error(e);
-				throw new Exception("发票号必须唯一");
+				throw new Exception("发票号必须唯一：" + sqlException.getMessage());
 			}
 			throw e;
 		}

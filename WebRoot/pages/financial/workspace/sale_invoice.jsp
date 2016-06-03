@@ -264,7 +264,7 @@
 												<button class="btn btn-primary" type="button" id="searchBtn">
 														搜索
 													</button>
-												<a href="sale_invoice/import" class="btn btn-primary" target="_top">批量导入</a>
+												<a href="sale_invoice/import_new" class="btn btn-primary" target="_top">批量导入</a>
 												<!-- <button class="btn btn-primary" type="button" id="matchBtn">
 														批量匹配
 													</button> -->

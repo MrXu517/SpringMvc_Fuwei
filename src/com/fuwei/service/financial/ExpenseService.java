@@ -35,6 +35,11 @@ public class ExpenseService extends BaseService {
 		try{
 			return this.insert(expense);
 		}catch(Exception e){
+			SQLException sqlException = (java.sql.SQLException)e.getCause();
+			if(sqlException!=null && sqlException.getErrorCode() == 1062){//外键约束
+				log.error(e);
+				throw new Exception("交易流水号必须唯一");
+			}
 			throw e;
 		}
 	}
@@ -59,6 +64,11 @@ public class ExpenseService extends BaseService {
 			expense.setIn_out(false);
 			return this.update(expense, "id", "created_at,created_user",true);
 		}catch(Exception e){
+			SQLException sqlException = (java.sql.SQLException)e.getCause();
+			if(sqlException!=null && sqlException.getErrorCode() == 1062){//外键约束
+				log.error(e);
+				throw new Exception("交易流水号必须唯一");
+			}
 			throw e;
 		}
 

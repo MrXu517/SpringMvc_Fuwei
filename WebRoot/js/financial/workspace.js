@@ -4,11 +4,14 @@ $(document).ready(function(){
 	setActiveLeft($a.parent("li"));
 	/*设置当前选中的页*/
 	
-	
 	$('#tab a').click(function (e) {
 		e.preventDefault();
 		$(this).tab('show');
 	});
+	var urlparams = Common.urlParams(location.search);
+	if(urlparams.tab!=undefined && urlparams.tab!=""){
+		$("#tab a[href='#"+urlparams.tab+"'").click();
+	}
 //	$('#tab a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 //		$iframe = $($(this).attr("href")).find("iframe");
 //		iFrameHeight($iframe[0]);
