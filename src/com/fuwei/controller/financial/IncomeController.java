@@ -143,6 +143,9 @@ public class IncomeController extends BaseController {
 		if(accountId == null){
 			throw new Exception("收支帐号不能为空");
 		}
+		if(expense.getBank_transaction_no()!=null && expense.getBank_transaction_no().equals("")){
+			expense.setBank_transaction_no(null);
+		}
 		SelfAccount temp = SystemCache.getSelfAccount(accountId);
 		if(temp!=null && temp.getIspublic()){//公帐账号必须有交易流水好
 			if(expense.getBank_transaction_no()==null || expense.getBank_transaction_no().equals("")){
@@ -222,6 +225,9 @@ public class IncomeController extends BaseController {
 		Integer accountId = expense.getAccount_id();
 		if(accountId == null){
 			throw new Exception("收支帐号不能为空");
+		}
+		if(expense.getBank_transaction_no()!=null && expense.getBank_transaction_no().equals("")){
+			expense.setBank_transaction_no(null);
 		}
 		SelfAccount temp = SystemCache.getSelfAccount(accountId);
 		if(temp!=null && temp.getIspublic()){//公帐账号必须有交易流水好
