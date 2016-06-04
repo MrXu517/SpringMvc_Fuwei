@@ -139,7 +139,7 @@
 													<%} %>
 													<td><%=item.getBank_name()%><br><%=item.getOther_bank_no()%></td>
 													<td>
-														<select data='<%=companySalesmanMap_str%>' class="companyId value" name="companyId"
+														<select data='<%=companySalesmanMap_str%>' class="company_id value" name="company_id"
 															 placeholder="公司">
 															<option value="">
 																未选择
@@ -154,7 +154,7 @@
 														</select>
 													</td>
 													<td>
-														<select class="salesmanId value" name="salesmanId"  placeholder="业务员">
+														<select class="salesman_id value" name="salesman_id"  placeholder="业务员">
 															<option value="">
 															未选择
 															</option>

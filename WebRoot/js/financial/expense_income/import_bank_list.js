@@ -7,12 +7,12 @@ $(document).ready(function(){
 			},
 			colnames : [
 			    {
-				name :'companyId',
+				name :'company_id',
 				colname :'公司',
 				width :'30%'
 			    }, 
 			    {
-				name :'salesmanId',
+				name :'salesman_id',
 				colname :'业务员',
 				width :'30%'
 				}, 
@@ -23,6 +23,10 @@ $(document).ready(function(){
 				}, {
 					name :'account_id',
 					colname :'本厂收支帐号',
+					width :'30%'
+				}, {
+					name :'memo',
+					colname :'备注',
 					width :'30%'
 				}]
 			};
@@ -93,7 +97,7 @@ $(document).ready(function(){
 	});
 	
 	// 公司-业务员级联
-	$(".companyId").change( function() {
+	$(".company_id").change( function() {
 		changeCompany(this,this.value);
 	});
 	// 公司-业务员级联
@@ -101,7 +105,7 @@ $(document).ready(function(){
 
 function changeCompany(companyIdEle,companyId) {
 	var $companyId = $(companyIdEle);
-	var $salesmanId = $companyId.closest("tr").find(".salesmanId");
+	var $salesmanId = $companyId.closest("tr").find(".salesman_id");
 	var companyName = $companyId.val();
 	var companySalesmanMap = $companyId.attr("data");
 	companySalesmanMap = $.parseJSON(companySalesmanMap).companySalesmanMap;
