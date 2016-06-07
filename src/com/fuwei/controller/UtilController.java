@@ -17,6 +17,34 @@ import com.fuwei.commons.SystemCache;
 @Controller
 public class UtilController extends BaseController {
 	
+	//打印快递单
+	@RequestMapping(value = "/express", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView express(HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		String lcode = "util/express";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有打印快递单的权限", null);
+		}
+		return new ModelAndView("util/express");
+
+	}
+	@RequestMapping(value = "/express", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView express_print(String destination , String company_name,String province,String city,String district,String address,HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		session.setAttribute("destination", destination);
+		session.setAttribute("company_name", company_name);
+		session.setAttribute("province", province);
+		session.setAttribute("city", city);
+		session.setAttribute("district", district);
+		session.setAttribute("address", address);
+		
+		return new ModelAndView("util/express_print");
+
+	}
+	
 	@RequestMapping(value = "/barcode", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView barcode(HttpSession session, HttpServletRequest request,

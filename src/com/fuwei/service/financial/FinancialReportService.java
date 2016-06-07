@@ -319,4 +319,40 @@ public class FinancialReportService extends BaseService {
 		}
 	}
 	
+
+	// 未收发票报表， 银行账户角度，除去个人
+	public Pager unreceivedinvoice(Pager pager,Integer bank_id ,List<Sort> sortlist) throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			String seq = " AND ";
+			sql.append("select bank_id,bank_name,IFNULL(sum(payable),0) as total_payable, IFNULL(sum(pay),0) as total_pay, IFNULL(sum(un_pay),0) as total_un_pay , IFNULL(sum(un_invoiced),0) as total_un_invoiced,(IFNULL(sum(pay),0)-IFNULL(sum(payable),0)) AS total_unreceivedinvoice_amount from report_payable where  is_enterprise=1  ");
+			
+			StringBuffer sql_condition = new StringBuffer();			
+			if (bank_id != null) {
+				sql_condition.append(seq + " bank_id='" + bank_id+ "'");
+				seq = " AND ";
+			}
+			sql_condition.append(" group by bank_id ");
+			
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql_condition.append(" order by " + sortlist.get(i).getProperty()
+								+ " " + sortlist.get(i).getDirection() + " ");
+					} else {
+						sql_condition.append("," + sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			
+			pager = findPager_T_Map(sql.append(sql_condition).toString(), pager);
+			return pager;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 }

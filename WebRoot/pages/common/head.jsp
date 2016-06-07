@@ -164,6 +164,8 @@
 	Boolean h_has_workspace_purchase = SystemCache.hasAuthority(session,"selffuliaoinout");//自购辅料工作台
 	Boolean h_has_yanchang_systemstatus = SystemCache.hasAuthority(session,"yanchang/systemstatus");//当前验厂状态
 	Boolean h_has_selfaccount = SystemCache.hasAuthority(session,"selfaccount/index");//本厂收支帐号
+	Boolean h_has_util_express = SystemCache.hasAuthority(session,"util/express");//打印快递单
+	Boolean h_has_report_financial_unreceivedinvoice = SystemCache.hasAuthority(session,"report/financial/unreceivedinvoice");//未收发票报表
 %>
 <html>
 	<link href="css/common/head.css" rel="stylesheet" type="text/css" />
@@ -555,6 +557,11 @@
 								<a href="report/financial/sale_invoice">销项发票报表</a>
 							</li>
 							<%} %>
+							<%if(h_has_report_financial_unreceivedinvoice){ %>
+							<li>
+								<a href="report/financial/unreceivedinvoice">未收发票报表</a>
+							</li>
+							<%} %>
 							<%if(h_has_half_current_stock){ %>
 							<li>
 								<a href="half_current_stock/report">半成品库存报表</a>
@@ -731,6 +738,11 @@
 							<%if(h_has_util_pantong_color){%>
 							<li>
 								<a href="pantongcolor/search">潘通色号</a>
+							</li>
+							<%} %>
+							<%if(h_has_util_express){%>
+							<li>
+								<a href="util/express">打印快递单</a>
 							</li>
 							<%} %>
 						</ul>

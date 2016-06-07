@@ -1514,4 +1514,43 @@ public class FinancialReportController extends BaseController {
 	}
 
 	/*销项发票报表 -- 导出*/
+	
+	
+	//未收发票报表，搜索条件：账户名称
+	@RequestMapping(value = "/unreceivedinvoice", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView unreceivedinvoice(Integer page,Integer bank_id, String sortJSON,
+			HttpSession session, HttpServletRequest request) throws Exception {
+		String lcode = "report/financial/unreceivedinvoice";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有查看未收发票报表的权限", null);
+		}
+		Pager pager = new Pager();
+		if (page != null && page > 0) {
+			pager.setPageNo(page);
+		}
+		pager.setPageSize(50);
+		List<Sort> sortList = null;
+		if (sortJSON != null) {
+			sortList = SerializeTool.deserializeList(sortJSON, Sort.class);
+		}
+		if (sortList == null) {
+			sortList = new ArrayList<Sort>();
+		}
+		Sort sort = new Sort();
+		sort.setDirection("desc");
+		sort.setProperty("total_unreceivedinvoice_amount");
+		sortList.add(sort);
+		pager = financialReportService.unreceivedinvoice(pager, bank_id, sortList);
+
+		request.setAttribute("pager", pager);
+		request.setAttribute("bank_id", bank_id);
+		List<Bank> banklist = bankService.getList(true);//企业银行账户
+		request.setAttribute("banklist", banklist);
+		return new ModelAndView("report/financial/unreceivedinvoice");
+
+	}
+	
+	//未收发票报表明细 ，必备条件：账户ID
 }
