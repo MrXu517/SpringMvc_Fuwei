@@ -17,6 +17,7 @@
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
+	User loginuser = SystemContextUtils.getCurrentUser(session).getLoginedUser();
 	Order order = (Order) request.getAttribute("order");
 
 	HashMap<String, List<Salesman>> companySalesmanMap = SystemCache
@@ -224,10 +225,14 @@
 													<option value="">未选择</option>
 													<%
 														for (Employee item : employeelist) {
+														if(loginuser.getEmployeeId()!=null && loginuser.getEmployeeId()==item.getId()){
 													%>
-													<option value="<%=item.getId()%>"><%=item.getName()%></option>
+													<option value="<%=item.getId()%>" selected><%=item.getName()%></option>
 													<%
-														}
+														}else{
+													%>
+													<option value="<%=item.getId()%>"><%=item.getName()%></option><%
+														}}
 													%>
 												</select>
 

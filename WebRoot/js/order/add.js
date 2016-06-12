@@ -152,6 +152,9 @@ $(document).ready( function() {
 							if(sample.charge_employee == null){
 								sample.charge_employee = "";
 							}
+							//2016-6-12添加  选择样品时，不用自动选择跟单人
+							delete sample.charge_employee;
+							//2016-6-12添加  选择样品时，不用自动选择跟单人
 							sample.company_productNumber = sample.productNumber;
 							Common.fillForm($(".orderform #sampleInfoWidget")[0], sample);
 							$("#sampleImgA").attr("href", "/" + sample.img);

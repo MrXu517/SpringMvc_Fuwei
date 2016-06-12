@@ -108,7 +108,10 @@
 													<div class="form-group">
 														业务员：
 													<select name="charge_employee" id="charge_employee"
-														class="form-control">
+														class="form-control require">
+														<option value="">
+															未选择
+														</option>
 														<%
 															for (Employee item : employeelist) {
 														%>

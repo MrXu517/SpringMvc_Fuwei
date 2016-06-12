@@ -7,7 +7,7 @@ $(document).ready(function(){
 	//2015-4-3 添加自动focus到第一个可输入input、select
 	$("form").find("input[type='text'],select").not("[readonly],[disabled]").first().focus();
 	//2015-4-3 添加自动focus到第一个可输入input、select
-	
+	$("#employeeId").select2();
 	//用户 -- 开始
 	setAddUser();
 	$(".deleteUser").click(function(){

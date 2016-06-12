@@ -46,8 +46,18 @@ public class User implements Serializable {
 	
 	private Boolean isyanchang;//是否在验厂状态时需要做数据可见的调整
 	
+	//2016-6-12添加用户对应员工
+	private Integer employeeId;
 	
 	
+	public Integer getEmployeeId() {
+		return employeeId;
+	}
+
+	public void setEmployeeId(Integer employeeId) {
+		this.employeeId = employeeId;
+	}
+
 	public Boolean getIsyanchang() {
 		return isyanchang;
 	}

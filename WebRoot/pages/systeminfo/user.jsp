@@ -3,6 +3,7 @@
 <%@page import="com.fuwei.entity.User"%>
 <%@page import="com.fuwei.entity.Role"%>
 <%@page import="com.fuwei.commons.SystemCache"%>
+<%@page import="com.fuwei.entity.Employee"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -34,6 +35,8 @@
 
 		<link href="css/systeminfo.css" rel="stylesheet" type="text/css" />
 		<script src="js/systeminfo/user.js" type="text/javascript"></script>
+		<script type='text/javascript' src='js/plugins/select2.min.js'></script>
+		<link rel="stylesheet" type="text/css" href="css/plugins/select2.min.css" />
 
 	</head>
 	<body>
@@ -80,6 +83,25 @@
 																for (Role role : rolelist) {
 															%>
 															<option value="<%=role.getId()%>"><%=role.getDecription()%></option>
+															<%
+																}
+															%>
+														</select>
+													</div>
+													<div class="col-sm-1"></div>
+												</div>
+												<div class="form-group">
+													<label for="employeeId" class="col-sm-3 control-label">
+														对应员工
+													</label>
+													<div class="col-sm-8">
+														<select class="form-control require" id="employeeId"
+															name="employeeId">
+															<option value="">未选择</option>
+															<%
+																for (Employee employee : SystemCache.employeelist) {
+															%>
+															<option value="<%=employee.getId()%>"><%=employee.getName()%></option>
 															<%
 																}
 															%>
@@ -194,10 +216,10 @@
 														姓名
 													</th>
 													<th>
-														拼音
+														角色
 													</th>
 													<th>
-														角色
+														对应员工
 													</th>
 													<th>
 														验厂状态
@@ -216,9 +238,10 @@
 													<td><%=u_i%></td>
 													<td><%=i_user.getUsername() %></td>
 													<td><%=i_user.getName()%></td>
-													<td><%=i_user.getHelp_code()%></td>
 													<td><%=i_user.getRoleId() == null ? "" : SystemCache
 						.getRole(i_user.getRoleId()).getDecription()%></td>
+													<td><%=i_user.getEmployeeId() == null ? "" : SystemCache
+						.getEmployeeName(i_user.getEmployeeId())%></td>
 													<td><%if(i_user.getIsyanchang()){%>	
 													<span class="label label-danger">验厂时数据有调整</span>
 													<%}%>

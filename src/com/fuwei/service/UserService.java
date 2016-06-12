@@ -148,8 +148,8 @@ public class UserService extends BaseService {
 			if(user2.getBuilt_in() && user2.getRoleId()!=user.getRoleId()){
 				throw new Exception("不能更改系统用户的角色");
 			}
-			return dao.update("UPDATE tb_user SET name=?,username=?,updated_at=?,help_code=?,roleId=?,tel=?,email=?,qq=?,isyanchang=? WHERE  id = ?",
-					user.getName(),user.getUsername(),user.getUpdated_at(),user.getHelp_code(),user.getRoleId(),user.getTel(),user.getEmail(),user.getQq(),user.getIsyanchang(),
+			return dao.update("UPDATE tb_user SET employeeId=?,name=?,username=?,updated_at=?,help_code=?,roleId=?,tel=?,email=?,qq=?,isyanchang=? WHERE  id = ?",
+					user.getEmployeeId(), user.getName(),user.getUsername(),user.getUpdated_at(),user.getHelp_code(),user.getRoleId(),user.getTel(),user.getEmail(),user.getQq(),user.getIsyanchang(),
 					user.getId());
 		}catch(Exception e){
 			throw e;
