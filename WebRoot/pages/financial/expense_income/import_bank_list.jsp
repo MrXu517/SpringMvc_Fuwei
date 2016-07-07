@@ -55,6 +55,8 @@
 		}
 		#mainTb thead{background: #9E9D9D;}
 		#mainTb select{padding-left: 0;padding-right: 0;}
+		.AllAccountId{width:150px;}
+		.AllAccountId.checkerror:focus{border-color: red !important;outline: none;}
 		</style>
 	</head>
 	<body>
@@ -93,6 +95,12 @@
 									<form class="form-horizontal form" role="form"
 										enctype="multipart/form-data" action="expense_income/import_bank"
 										method="post">
+											<p class="alert alert-warning">收支帐号全部选为：<select class="AllAccountId require value">
+															<option value="">未选择</option>
+															<%for(SelfAccount temp : SystemCache.selfAccountlist){ if(temp.getIspublic()){%>
+															<option value="<%=temp.getId() %>"><%=temp.getName() %></option>
+															<%}} %>
+														</select></p>
 											<button type="submit" class="btn btn-primary"
 														data-loading-text="正在加载...">
 														导入
@@ -118,8 +126,6 @@
 													</th><th width="8%">
 														科目
 													</th><th width="8%">
-														本厂收支帐号
-													</th><th width="8%">
 														备注
 													</th>
 												</tr>
@@ -137,7 +143,12 @@
 													<%}else{ %>
 													<td><%=item.getAmount()%><br><span class="label label-danger">支出</span></td>
 													<%} %>
-													<td><%=item.getBank_name()%><br><%=item.getOther_bank_no()%></td>
+													<td style="position: relative;"><%=item.getBank_name()%>
+													<br><%=item.getOther_bank_no()%>
+													<%if(item.getBank_id()==null || item.getBank_id()<=0){ %>
+													<span class="label label-default" style="position: absolute;right: 0;top: 0;">不存在</span>
+													<%} %>
+													</td>
 													<td>
 														<select data='<%=companySalesmanMap_str%>' class="company_id value" name="company_id"
 															 placeholder="公司">
@@ -172,7 +183,7 @@
 															<%} }%>
 														</select>
 													</td>
-													<td>
+													<td style="display:none;">
 														<select class="account_id require value">
 															<option value="">未选择</option>
 															<%for(SelfAccount temp : SystemCache.selfAccountlist){ %>

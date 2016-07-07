@@ -183,10 +183,17 @@ public class FuliaoCurrentStockService  extends BaseService {
 		
 		for(Map<String,Object> item : result){
 			int fuliaoId = (Integer)item.get("id");
+			int plan_quantity = 0;
+			if(item.get("plan_quantity")!=null){
+				plan_quantity = Integer.valueOf(item.get("plan_quantity").toString());
+			}
+			item.put("plan_quantity",plan_quantity);
+			
 			int in_quantity = 0;
 			if(item.get("in_quantity")!=null){
 				in_quantity = Integer.valueOf(item.get("in_quantity").toString());
 			}
+			item.put("in_quantity",in_quantity);
 			int out_quantity = 0;
 			for(Map<String,Object> temp_item : out_map){
 				int tempfuliaoId = (Integer)temp_item.get("fuliaoId");
@@ -195,6 +202,8 @@ public class FuliaoCurrentStockService  extends BaseService {
 				}
 			}
 			item.put("out_quantity",out_quantity);
+
+
 			
 //			int in_return_quantity = 0;
 //			for(Map<String,Object> temp_item : in_return_map){

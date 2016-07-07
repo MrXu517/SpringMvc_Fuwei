@@ -29,6 +29,7 @@
 			: order.getDetaillist();
 			
 	Boolean has_order_detail_price = SystemCache.hasAuthority(session,"order/detail/price");
+	Boolean has_order_editdetail = SystemCache.hasAuthority(session,"order/edit_detail");
 	//Boolean error_notification = order.getStatus() > OrderStatus.BEFOREPRODUCESAMPLE.ordinal() && order.getStart_produce() == null; //若已经进入生产阶段，但却没有生产单，则显示生成生产单按钮
 %>
 <!DOCTYPE html>
@@ -115,7 +116,11 @@
 											class="btn btn-info"> 编辑订单 </a>
 										<%
 											}
+											if(has_order_editdetail && order.isEdit()){
 										%>
+										<a href="order/put_detail/<%=order.getId()%>" type="button"
+											class="btn btn-info"> 修改订单明细 </a>
+										<%} %>
 									</div>
 									<!-- 
 									<div class="pull-right">

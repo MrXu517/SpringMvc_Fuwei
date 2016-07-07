@@ -36,8 +36,8 @@ $(document).ready(function(){
 	$submitBtn = $form.find("button[type='submit']");
 	$form.unbind("submit");
 	$form.submit( function() {
-		var requireles = $(".detailTb").find(
-		"tr.checkselected input.require,tr.checkselected select.require,tr.checkselected textarea.require");
+		var requireles = $(this).find(
+		"select.require,tr.checkselected input.require,tr.checkselected select.require,tr.checkselected textarea.require");
 		// 验证必须填的字段
 		for ( var i = 0; i < requireles.length; ++i) {
 			var requirele = requireles[i];
@@ -101,6 +101,12 @@ $(document).ready(function(){
 		changeCompany(this,this.value);
 	});
 	// 公司-业务员级联
+	
+	//批量选择公帐帐号
+	$(".AllAccountId").change( function() {
+		$(".account_id").val(this.value);
+	});
+	$(".AllAccountId").change();
 });
 
 function changeCompany(companyIdEle,companyId) {

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -510,6 +511,99 @@ public class OrderController extends BaseController {
 
 	}
 
+	/*修改订单明细*/
+	@RequestMapping(value = "/put_detail/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView updatedetail(@PathVariable int id, HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/edit_detail";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有修改订单明细的权限", null);
+		}
+		Order order = orderService.get(id);
+		request.setAttribute("order", order);
+		return new ModelAndView("order/edit_detail");
+
+	}
+
+	@RequestMapping(value = "/put_detail", method = RequestMethod.POST)
+	@ResponseBody
+	@Transactional(rollbackFor=Exception.class)
+	public Map<String, Object> update_detail(Integer orderId, String details,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/edit_detail";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有修改订单明细的权限", null);
+		}
+		try {
+			if(orderId==null){
+				throw new Exception("orderId不能为空");
+			}
+			Order db_order = orderService.get(orderId);
+			if (db_order.getStatus() >= OrderStatus.DELIVERED.ordinal()) {
+				throw new Exception("订单已进入发货阶段，无法编辑");
+			}
+			db_order.setUpdated_at(DateTool.now());// 设置订单更新时间
+			
+
+			// 添加操作记录
+			OrderHandle handle = new OrderHandle();
+			handle.setOrderId(db_order.getId());
+			handle.setName("修改订单明细");
+			handle.setState(db_order.getState());
+			handle.setStatus(db_order.getStatus());
+			handle.setCreated_at(DateTool.now());
+			handle.setCreated_user(user.getId());
+			
+			/*颜色及数量 -- 开始*/
+			List<OrderDetail> detaillist = SerializeTool.deserializeList(
+					details, OrderDetail.class);
+			//设置ID
+			double amount = 0;
+			int MAX_ID=0;
+			for(OrderDetail tempItem : detaillist){
+				if(tempItem.getId()>MAX_ID){
+					MAX_ID = tempItem.getId();
+				}
+				amount += tempItem.getPrice() * tempItem.getQuantity();
+			}
+			for(OrderDetail tempItem : detaillist){
+				if(tempItem.getId()<=0){//>0表示已设置ID，否则要设置ID
+					MAX_ID++ ;
+					tempItem.setId(MAX_ID);
+				}
+			}
+			String new_detail_json = SerializeTool.serialize(detaillist);
+			db_order.setAmount(NumberUtil.formateDouble(amount, 3));// 设置订单总金额
+			db_order.setDetail_json(new_detail_json);
+			db_order.setDetaillist(detaillist);			
+			/*颜色及数量 -- 结束*/
+			//修改订单
+			orderService.update(db_order, handle);
+			
+			// 修改订单明细时 自动修改计划单
+			PlanOrder planOrder = planOrderService.getByOrder(orderId);			
+			planOrder.setUpdated_at(DateTool.now());// 设置更新时间
+			
+			List<PlanOrderDetail> plandetaillist = SerializeTool
+					.deserializeList(new_detail_json, PlanOrderDetail.class);
+			planOrder.setDetaillist(plandetaillist);
+			int planOrderId = planOrderService.update(planOrder);
+			// 修改订单明细时 自动修改计划单
+			
+			return this.returnSuccess("id", orderId);
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+	/*修改订单明细*/
 	/* 2015-3-4添加取消订单 */
 	@RequestMapping(value = "/cancel/{id}", method = RequestMethod.POST)
 	@ResponseBody

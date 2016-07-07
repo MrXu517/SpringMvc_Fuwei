@@ -214,6 +214,10 @@ tr.disable{background:#ddd;}
 														尺码
 													</th><th width="50px">
 														批次
+													</th><th width="70px">
+														订单所需数量
+													</th><th width="70px">
+														已出库数
 													</th>
 													<th width="100px">
 														当前库存(个)
@@ -246,6 +250,8 @@ tr.disable{background:#ddd;}
 													<td><%=detail.get("color")%></td>
 													<td><%=detail.get("size")%></td>
 													<td><%=detail.get("batch")%></td>
+													<td><%=detail.get("plan_quantity")%></td>
+													<td><%=detail.get("out_quantity")%></td>
 													<td><%=detail.get("stock_quantity")%></td>
 													<td>
 														<input disabled class="quantity form-control require positive_int value"
