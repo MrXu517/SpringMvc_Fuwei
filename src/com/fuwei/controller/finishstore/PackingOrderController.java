@@ -721,6 +721,25 @@ public class PackingOrderController extends BaseController {
 			}
 			c++; 
 		} 
+		//添加合计行
+		wsheet.setRowView(c,400);
+		WritableCellFormat totalFormat = new WritableCellFormat(wfont); 
+		totalFormat.setBorder(jxl.format.Border.ALL, jxl.format.BorderLineStyle.THIN,jxl.format.Colour.BLACK); //BorderLineStyle边框
+		totalFormat.setAlignment(jxl.format.Alignment.CENTRE);   
+		totalFormat.setVerticalAlignment(VerticalAlignment.CENTRE);
+		wsheet.addCell(new Label(0, c, "合计",totalFormat)); 
+		String quantityString = String.valueOf(packingOrder.getQuantity());
+		if(col>0){
+			quantityString = "总数量："+quantityString;
+		}
+		wsheet.addCell(new Label(1, c, quantityString,totalFormat)); 
+		wsheet.mergeCells(1,c,col+1,c);//合并总数量
+		wsheet.addCell(new Label(col+2, c, "总箱数：" + packingOrder.getCartons(),totalFormat)); 
+		wsheet.mergeCells(col+2,c,col+8,c);//合并总箱数
+		wsheet.addCell(new Label(col+9, c, "总体积：" + packingOrder.getCapacity(),totalFormat)); 
+		wsheet.mergeCells(col+9,c,col+11,c);//合并总体积
+		c=c+1;
+		
 		//添加备注
 		wsheet.setRowView(c,400);
 		WritableCellFormat memoFormat = new WritableCellFormat(wfont); 

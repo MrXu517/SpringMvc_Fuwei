@@ -61,8 +61,8 @@ $(document).ready( function() {
 			{
 				name :'col1_value',
 				colname :'列1值',
-				width :'15%',
 				className:"input",
+				width:"80px",
 				displayValue:function(value){
 					if(value == undefined){return "";}
 					else{return value;}
@@ -71,8 +71,8 @@ $(document).ready( function() {
 			{
 				name :'col2_value',
 				colname :'列2值',
-				width :'15%',
 				className:"input",
+				width:"80px",
 				displayValue:function(value){
 					if(value == undefined){return "";}
 					else{return value;}
@@ -81,8 +81,8 @@ $(document).ready( function() {
 			{
 				name :'col3_value',
 				colname :'列3值',
-				width :'15%',
 				className:"input",
+				width:"80px",
 				displayValue:function(value){
 					if(value == undefined){return "";}
 					else{return value;}
@@ -91,8 +91,8 @@ $(document).ready( function() {
 			{
 				name :'col4_value',
 				colname :'列4值',
-				width :'15%',
 				className:"input",
+				width:"80px",
 				displayValue:function(value){
 					if(value == undefined){return "";}
 					else{return value;}
@@ -101,8 +101,8 @@ $(document).ready( function() {
 			        {
 			        	name :'color',
 			        	colname :'颜色',
-			        	width :'15%',
 			        	className:"select",
+						width:"60px",
 			        	displayValue:function(value, rowData, istotalRow){
 							var html = "";
 							for(var i = 0; i < colors.length;++i){
@@ -119,91 +119,91 @@ $(document).ready( function() {
 					{
 						name :'quantity',
 						colname :'数量',
-						width :'15%',
+						width:"40px",
 			        	className:"input positive_int",
 			        	require:true
 					},
 					{
 						name :'per_carton_quantity',
 						colname :'每箱数量',
-						width :'15%',
+						width:"40px",
 			        	className:"input positive_int",
 			        	require:true
 					},
 					{
 						name :'box_L',
 						colname :'外箱尺寸L',
-						width :'15%',
+						width:"40px",
 			        	className:"input double",
 			        	require:true
 					},
 					{
 						name :'box_W',
 						colname :'外箱尺寸W',
-						width :'15%',
+						width:"40px",
 			        	className:"input double",
 			        	require:true
 					},
 					{
 						name :'box_H',
 						colname :'外箱尺寸H',
-						width :'15%',
+						width:"40px",
 			        	className:"input double",
 			        	require:true
 					},
 					{
 						name :'gross_weight',
 						colname :'毛重',
-						width :'15%',
+						width:"40px",
 			        	className:"input double",
 			        	require:true
 					},
 					{
 						name :'net_weight',
 						colname :'净重',
-						width :'15%',
+						width:"40px",
 			        	className:"input double",
 			        	require:true
 					},
 					{
 						name :'cartons',
 						colname :'箱数',
-						width :'15%',
 			        	require:true,
+						width:"40px",
 			        	fixedPrecision:true
 					},
 					{
 						name :'box_number_start',
 						colname :'箱数开始',
-						width :'15%',
 			        	className:"input positive_int",
+						width:"40px",
 			        	require:true
 					},
 					{
 						name :'box_number_end',
 						colname :'箱数结束',
-						width :'15%',
+						width:"40px",
 			        	className:"",
 			        	require:true
 					},
 					{
 						name :'per_pack_quantity',
 						colname :'每包几件',
-						width :'15%',
 			        	className:"input positive_int",
+						width:"40px",
 			        	require:true
 					},
 					{
 						name :'capacity',
 						colname :'立方',
-						width :'15%',
+						width:"40px",
 			        	require:true,
 			        	fixedPrecision:true
 					},
 					{
 						name :'_handle',
 						colname :'操作',
-						width :'15%',
+						width:"70px",
 						displayValue : function(value, rowdata) {
 							return "<a class='copyRow' href='#'>复制</a> | <a class='deleteRow' href='#'>删除</a>";
 						}
@@ -376,6 +376,9 @@ $(document).ready( function() {
 		}
 	});
 	$(".colable").change();
-	
+	$( "#sortBody" ).sortable({
+		placeholder: "ui-state-highlight"
+	});
+    $( "#sortBody" ).disableSelection();
 	
 });

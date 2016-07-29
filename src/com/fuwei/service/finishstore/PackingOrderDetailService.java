@@ -98,7 +98,7 @@ public class PackingOrderDetailService extends BaseService {
 		}
 		strids = strids.substring(0,strids.length()-1);
 		try{
-			return dao.update("delete from tb_packingorder_detail WHERE id in('"+strids+"')");
+			return dao.update("delete from tb_packingorder_detail WHERE id in("+strids+")");
 		}catch(Exception e){
 			throw e;
 		}
