@@ -41,6 +41,9 @@
 			type="text/css" />
 		<link href="css/common/common.css" rel="stylesheet" type="text/css" />
 		<script src="js/plugins/jquery-1.10.2.min.js"></script>
+		<script src="js/plugins/jquery-ui.min.js"></script>
+		<link href="css/plugins/jquery-ui.min.css" rel="stylesheet"
+			type="text/css" />
 		<script src="js/plugins/bootstrap.min.js" type="text/javascript"></script>
 		<script src="<%=basePath%>js/plugins/WdatePicker.js"
 			type="text/javascript"></script>
@@ -68,6 +71,9 @@
 		.colable{width:20px;height:20px;}
 		#saveTb tbody td input{width:100%;}
 		#tip{color: red;padding-left: 30px;margin-bottom: 0;font-size: 16px;}
+		#sortBody tr{cursor:move;}
+		#sortBody tr.ui-sortable-helper,#sortBody tr.ui-sortable-helper input{background: #9A9999;}
+		#sortBody { list-style-type: none; margin: 0; padding: 0; width: 60%; }
 		</style>
 
 	</head>
@@ -215,24 +221,24 @@
 											<th rowspan="2" width="70px">
 												操作
 											</th>
-										</tr><tr><th width="55px">
+										</tr><tr><th width="40px">
 												L
-											</th><th width="55px">
+											</th><th width="40px">
 												W
-											</th><th width="55px">
+											</th><th width="40px">
 												H
-											</th><th width="55px">
+											</th><th width="40px">
 												毛重
-											</th><th width="55px">
+											</th><th width="40px">
 												净重
-											</th><th width="60px">
+											</th><th width="40px">
 												开始
-											</th><th width="60px">
+											</th><th width="40px">
 												结束
 											</th></tr>
 									</thead>
 												
-														<tbody>
+														<tbody id="sortBody">
 
 														</tbody>
 													</table>

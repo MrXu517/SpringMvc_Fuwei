@@ -137,9 +137,12 @@ public class PackingOrderService extends BaseService {
 			packingOrder.setId(packingOrderId);
 			packingOrder.setNumber(packingOrder.createNumber());
 			this.update(packingOrder, "id", null);
+			int sortnumber = 1;
 			for(PackingOrderDetail detail : packingOrder.getDetaillist()){
 				detail.setPackingOrderId(packingOrderId);
 				detail.setOrderId(packingOrder.getOrderId());
+				detail.setSortnumber(sortnumber);//设置在装箱单中的顺序ID
+				sortnumber++;
 			}
 			packingOrderDetailService.addBatch(packingOrder.getDetaillist());
 			return packingOrderId;
@@ -176,9 +179,12 @@ public class PackingOrderService extends BaseService {
 			//删除的装箱单明细ids
 			List<Integer> to_deletelist = new ArrayList<Integer>();
 			
+			int sortnumber = 1;
 			for(PackingOrderDetail detail : packingOrder.getDetaillist()){
 				detail.setPackingOrderId(packingOrderId);
 				detail.setOrderId(temp.getOrderId());
+				detail.setSortnumber(sortnumber);//设置在装箱单中的顺序ID
+				sortnumber++;
 				if(detail.getId() > 0){
 					to_updatelist.add(detail);
 				}else{

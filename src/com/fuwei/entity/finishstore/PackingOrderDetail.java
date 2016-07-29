@@ -31,7 +31,15 @@ public class PackingOrderDetail {
 	
 	private String col4_value;//动态属性4的值
 	
+	private int sortnumber;//该明细在装箱单中的顺序ID
 	
+	
+	public int getSortnumber() {
+		return sortnumber;
+	}
+	public void setSortnumber(int sortnumber) {
+		this.sortnumber = sortnumber;
+	}
 	public int getOrderId() {
 		return orderId;
 	}

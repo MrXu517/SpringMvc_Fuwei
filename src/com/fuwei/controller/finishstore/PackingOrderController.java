@@ -44,9 +44,7 @@ import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.controller.BaseController;
-import com.fuwei.entity.Employee;
 import com.fuwei.entity.Order;
-import com.fuwei.entity.Salary;
 import com.fuwei.entity.User;
 import com.fuwei.entity.finishstore.PackingOrder;
 import com.fuwei.entity.finishstore.PackingOrderDetail;
@@ -437,6 +435,7 @@ public class PackingOrderController extends BaseController {
 		return this.returnSuccess("id", tableOrderId);
 		
 	}
+
 
 	//2015-5-10导出花名册
 	@RequestMapping(value = "/export/{packingOrderId}", method = RequestMethod.GET)

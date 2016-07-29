@@ -22,7 +22,7 @@ public class PackingOrderDetailService extends BaseService {
 	public List<PackingOrderDetail> getList(int packingOrderId) throws Exception {
 		try {
 			List<PackingOrderDetail> List = dao.queryForBeanList(
-					"SELECT * FROM tb_packingorder_detail WHERE packingOrderId=?", PackingOrderDetail.class,packingOrderId);
+					"SELECT * FROM tb_packingorder_detail WHERE packingOrderId=? order by sortnumber asc", PackingOrderDetail.class,packingOrderId);
 			return List;
 		} catch (Exception e) {
 			throw e;
@@ -34,7 +34,7 @@ public class PackingOrderDetailService extends BaseService {
 		if(detailList == null || detailList.size()==0){
 			return true;
 		}
-		String sql = "INSERT INTO tb_packingorder_detail(packingOrderId,color,quantity,per_carton_quantity,box_L,box_W,box_H,gross_weight,net_weight,cartons,box_number_start,box_number_end,per_pack_quantity,capacity,col1_value,col2_value,col3_value,col4_value,orderId) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO tb_packingorder_detail(packingOrderId,color,quantity,per_carton_quantity,box_L,box_W,box_H,gross_weight,net_weight,cartons,box_number_start,box_number_end,per_pack_quantity,capacity,col1_value,col2_value,col3_value,col4_value,orderId,sortnumber) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		List<Object[]> batchArgs = new ArrayList<Object[]>();
 		for (PackingOrderDetail item : detailList) {
 			batchArgs.add(new Object[] { 
@@ -44,7 +44,7 @@ public class PackingOrderDetailService extends BaseService {
 					item.getBox_number_start(),item.getBox_number_end(),
 					item.getPer_pack_quantity(),item.getCapacity(),
 					item.getCol1_value(),item.getCol2_value(),item.getCol3_value(),item.getCol4_value(),
-					item.getOrderId()
+					item.getOrderId(),item.getSortnumber()
 			});
 		}
 		try {
@@ -57,7 +57,7 @@ public class PackingOrderDetailService extends BaseService {
 	
 	@Transactional
 	public boolean updateBatch(List<PackingOrderDetail> detailList) throws Exception {
-		String sql = "update tb_packingorder_detail set color=?,quantity=?,per_carton_quantity=?,box_L=?,box_W=?,box_H=?,gross_weight=?,net_weight=?,cartons=?,box_number_start=?,box_number_end=?,per_pack_quantity=?,capacity=?,col1_value=?,col2_value=?,col3_value=?,col4_value=? where id=?";
+		String sql = "update tb_packingorder_detail set color=?,quantity=?,per_carton_quantity=?,box_L=?,box_W=?,box_H=?,gross_weight=?,net_weight=?,cartons=?,box_number_start=?,box_number_end=?,per_pack_quantity=?,capacity=?,col1_value=?,col2_value=?,col3_value=?,col4_value=?,sortnumber=? where id=?";
 		List<Object[]> batchArgs = new ArrayList<Object[]>();
 		for (PackingOrderDetail item : detailList) {
 			batchArgs.add(new Object[] { 
@@ -67,7 +67,7 @@ public class PackingOrderDetailService extends BaseService {
 					item.getBox_number_start(),item.getBox_number_end(),
 					item.getPer_pack_quantity(),item.getCapacity(),
 					item.getCol1_value(),item.getCol2_value(),item.getCol3_value(),item.getCol4_value(),
-					item.getId()
+					item.getSortnumber(), item.getId()
 			});
 		}
 		try {
