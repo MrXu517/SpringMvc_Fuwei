@@ -37,7 +37,7 @@ $(document).ready(function(){
 	$form.unbind("submit");
 	$form.submit( function() {
 		var requireles = $(this).find(
-		"select.require,tr.checkselected input.require,tr.checkselected select.require,tr.checkselected textarea.require");
+		".AllAccountId.require,tr.checkselected input.require,tr.checkselected select.require,tr.checkselected textarea.require");
 		// 验证必须填的字段
 		for ( var i = 0; i < requireles.length; ++i) {
 			var requirele = requireles[i];
