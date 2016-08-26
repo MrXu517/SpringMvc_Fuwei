@@ -166,6 +166,7 @@
 	Boolean h_has_selfaccount = SystemCache.hasAuthority(session,"selfaccount/index");//本厂收支帐号
 	Boolean h_has_util_express = SystemCache.hasAuthority(session,"util/express");//打印快递单
 	Boolean h_has_report_financial_unreceivedinvoice = SystemCache.hasAuthority(session,"report/financial/unreceivedinvoice");//未收发票报表
+	Boolean gongxu_producing_order_editprice = SystemCache.hasAuthority(session,"gongxu_producing_order/editprice");//编辑工序加工单单价
 %>
 <html>
 	<link href="css/common/head.css" rel="stylesheet" type="text/css" />
@@ -402,6 +403,12 @@
 								<a href="gongxu_producing_order/index">查询工序加工单</a>
 							</li>
 							<%} %>
+							<%if(gongxu_producing_order_editprice){ %>
+							<li>
+								<a href="gongxu_producing_order/scan">编辑工序单单价</a>
+							</li>
+							<%} %>
+
 						</ul>
 					</li>
 					<%} %>

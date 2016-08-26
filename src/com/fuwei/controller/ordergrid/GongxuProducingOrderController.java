@@ -25,6 +25,7 @@ import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.controller.BaseController;
+import com.fuwei.entity.DataCorrectRecord;
 import com.fuwei.entity.Factory;
 import com.fuwei.entity.GongXu;
 import com.fuwei.entity.Order;
@@ -34,6 +35,7 @@ import com.fuwei.entity.ordergrid.GongxuProducingOrderDetail;
 import com.fuwei.entity.ordergrid.GongxuProducingOrderMaterialDetail;
 import com.fuwei.entity.ordergrid.PlanOrder;
 import com.fuwei.entity.ordergrid.PlanOrderDetail;
+import com.fuwei.entity.ordergrid.ProducingOrder;
 import com.fuwei.service.AuthorityService;
 import com.fuwei.service.OrderService;
 import com.fuwei.service.ordergrid.GongxuProducingOrderService;
@@ -393,12 +395,104 @@ public class GongxuProducingOrderController extends BaseController {
 	}
 	
 	
-//	@RequestMapping(value = "/scan", method = RequestMethod.GET)
-//	@ResponseBody
-//	public ModelAndView scan(HttpSession session,
-//			HttpServletRequest request) throws Exception {
-//		return new ModelAndView("gongxu_producing_order/scan");
-//	}
+	//2016.8.26修改工序加工单价格
+	@RequestMapping(value = "/editprice", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView editprice(String number,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		if (number == null || number.equals("")) {
+			throw new Exception("缺少工序加工单Number");
+		}
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "gongxu_producing_order/editprice";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有编辑工序加工单单价的权限", null);
+		}
+		try {
+			GongxuProducingOrder gongxuProducingOrder = gongxuProducingOrderService.getByNumber(number);
+			if(gongxuProducingOrder == null){
+				throw new Exception("找不到NUMBER为" + number + "的工序加工单");
+			}
+			//去掉工序加工单为数量为0的行
+			Iterator iterator = gongxuProducingOrder.getDetaillist().iterator();
+		    while(iterator.hasNext()){
+		    	GongxuProducingOrderDetail item = (GongxuProducingOrderDetail)iterator.next();
+		           if(item.getQuantity() == 0){
+		               iterator.remove();
+		            }
+		    }
+			request.setAttribute("gongxuProducingOrder",gongxuProducingOrder);	
+			return new ModelAndView("gongxu_producing_order/editprice");
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	// 添加或保存
+	@RequestMapping(value = "/editprice", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> editprice(GongxuProducingOrder producingOrder,
+			String details,  HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "gongxu_producing_order/editprice";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有编辑工序加工单单价的权限", null);
+		}
+		try {
+			Integer gongxuProducingOrderId = producingOrder.getId();	
+			if(gongxuProducingOrderId==null || gongxuProducingOrderId ==0){
+				throw new Exception("工序加工单ID不能为0");
+			}
+			GongxuProducingOrder orinailgongxuProducingOrder = gongxuProducingOrderService.get(gongxuProducingOrderId);
+			List<GongxuProducingOrderDetail> old_detaillist = orinailgongxuProducingOrder.getDetaillist();
+			
+			List<GongxuProducingOrderDetail> new_detaillist = SerializeTool
+						.deserializeList(details, GongxuProducingOrderDetail.class);
+			//将价格设置进去
+			for(GongxuProducingOrderDetail old_detail : old_detaillist){
+				int planOrderDetailId = old_detail.getPlanOrderDetailId();
+				boolean flag = false;
+				for(GongxuProducingOrderDetail new_detail : new_detaillist){
+					if(new_detail.getPlanOrderDetailId() == planOrderDetailId){
+						old_detail.setPrice(new_detail.getPrice());//价格设置为新的价格
+						flag = true;
+						break;
+					}
+				}
+				if(!flag){
+					throw new Exception("未知错误：找不到对应的planOrderDetailId的价格");
+				}
+			}
+			orinailgongxuProducingOrder.setDetaillist(old_detaillist);
+			//将价格设置进去
+			
+			orinailgongxuProducingOrder.setUpdated_at(DateTool.now());
+			//添加数据纠正记录
+			DataCorrectRecord dataCorrectRecord = new DataCorrectRecord();
+			dataCorrectRecord.setCreated_at(DateTool.now());
+			dataCorrectRecord.setCreated_user(user.getId());
+			dataCorrectRecord.setOperation("修改单价");
+			dataCorrectRecord.setTb_table("加工工序单");
+			dataCorrectRecord.setDescription("加工工序单" + producingOrder.getNumber()+"已执行，因数据错误进行数据纠正改价");
+			gongxuProducingOrderId = gongxuProducingOrderService.editprice_datacorrect(orinailgongxuProducingOrder,dataCorrectRecord);
+			return this.returnSuccess("id", gongxuProducingOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+	@RequestMapping(value = "/scan", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView scan(HttpSession session,
+			HttpServletRequest request) throws Exception {
+		return new ModelAndView("gongxu_producing_order/scan");
+	}
+	/*修改工序加工单单价*/
+	
 	@RequestMapping(value = "/detail", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView detail2(Integer id, HttpSession session,

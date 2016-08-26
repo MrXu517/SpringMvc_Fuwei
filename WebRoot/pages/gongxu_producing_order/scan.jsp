@@ -22,7 +22,7 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>扫描生产单 -- 桐庐富伟针织厂</title>
+		<title>扫描工序加工单 -- 桐庐富伟针织厂</title>
 		<meta charset="utf-8">
 		<meta http-equiv="keywords" content="针织厂,针织,富伟,桐庐">
 		<meta http-equiv="description" content="富伟桐庐针织厂">
@@ -57,24 +57,21 @@
 							<i class="fa fa-home"></i>
 							<a href="user/index">首页</a>
 						</li>
-						<li>
-							<a target="_blank" href="producing_order/index">生产单列表</a>
-						</li>
 						<li class="active">
-							扫描生产单
+							编辑工序加工单单价 -- 扫描工序加工单
 						</li>
 					</ul>
 				</div>
 				<div class="body">
 					<div class="container-fluid producingWidget">
 						<div class="row">
-							<form target="_blank" action="producing_order/detail">
+							<form target="_blank" action="gongxu_producing_order/editprice">
 								<div class="form-group col-md-12">
 									<label for="id" class="col-sm-3 control-label">
-										生产单ID
+										工序加工单number
 									</label>
 									<div class="input-group col-sm-9">
-										<input type="text" class="form-control" name="id" id="id" />
+										<input type="text" class="form-control" name="number" id="number" />
 
 										<span class="input-group-btn">
 											<button type="submit" class="pull-right btn btn-primary">
@@ -92,7 +89,7 @@
 		</div>
 		<script type="text/javascript">
 			/*设置当前选中的页*/
-			var $a = $("#left li a[href='producing_order/scan']");
+			var $a = $("#left li a[href='gongxu_producing_order/scan']");
 			setActiveLeft($a.parent("li"));
 			$("#id").focus();
 			

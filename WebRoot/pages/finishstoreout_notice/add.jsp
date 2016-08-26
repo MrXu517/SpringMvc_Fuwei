@@ -292,13 +292,13 @@ i.tip_check{color: green;font-size: 30px;}
 													<td><%=detail.getColor()%></td>
 													<td><%=detail.getQuantity()%></td>
 													<td><%=detail.getCartons()%></td>
-													<td><%=temp.getOut_quantity()%></td>
-													<td><%=temp.getOut_cartons()%></td>
-													<td><%=temp.getStock_cartons()%></td>
-													<td><%=temp.getPlan_cartons() - temp.getOut_cartons()%><%if(temp.getOut_quantity() == temp.getPlan_cartons()){ %>
+													<td><%=temp==null?0:temp.getOut_quantity()%></td>
+													<td><%=temp==null?0:temp.getOut_cartons()%></td>
+													<td><%=temp==null?0:temp.getStock_cartons()%></td>
+													<td><%=temp==null?0:(temp.getPlan_cartons() - temp.getOut_cartons())%><%if(temp!=null && temp.getOut_quantity() == temp.getPlan_cartons()){ %>
 														<span class="label label-warning">正发完</span>
 														<%} %>
-														<%if(temp.getOut_quantity() > temp.getPlan_cartons()){ %>
+														<%if(temp!=null &&temp.getOut_quantity() > temp.getPlan_cartons()){ %>
 														<span class="label label-danger">溢出</span>
 														<%} %></td>
 													<td class="quantity">

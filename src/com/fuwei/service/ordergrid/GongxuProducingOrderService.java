@@ -12,8 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
+import com.fuwei.entity.DataCorrectRecord;
 import com.fuwei.entity.ordergrid.GongxuProducingOrder;
 import com.fuwei.service.BaseService;
+import com.fuwei.service.DataCorrectRecordService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
 
@@ -23,6 +25,8 @@ public class GongxuProducingOrderService extends BaseService {
 			.getLogger(GongxuProducingOrderService.class);
 	@Autowired
 	JdbcTemplate jdbc;
+	@Autowired
+	DataCorrectRecordService dataCorrectRecordService;
 
 	// 添加
 	@Transactional
@@ -86,6 +90,40 @@ public class GongxuProducingOrderService extends BaseService {
 						"created_user,created_at,orderId,factoryId,gongxuId,number,inbill", true);
 
 				return producingOrder.getId();
+			}
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+	
+	// 数据纠正编辑单价
+	@Transactional(rollbackFor=Exception.class)
+	public int editprice_datacorrect(GongxuProducingOrder gongxuProducingOrder,DataCorrectRecord dataCorrectRecord) throws Exception {
+		try {
+			if (gongxuProducingOrder.isEdit()) {
+				return update(gongxuProducingOrder);
+			}else{//数据纠正
+				if (gongxuProducingOrder.getDetaillist() == null
+						|| gongxuProducingOrder.getDetaillist().size() <= 0) {
+					throw new Exception("工序加工单中至少得有一条颜色及数量详情记录");
+				} else {
+					if (gongxuProducingOrder.getDetail_2_list() == null
+							|| gongxuProducingOrder.getDetail_2_list().size() <= 0) {
+					} else {
+						gongxuProducingOrder.setDetail_2_json(SerializeTool
+								.serialize(gongxuProducingOrder
+										.getDetail_2_list()));
+					}
+					String details = SerializeTool.serialize(gongxuProducingOrder
+							.getDetaillist());
+					gongxuProducingOrder.setDetail_json(details);
+					// 更新表
+					this.update(gongxuProducingOrder, "id",
+							"created_user,created_at,orderId,factoryId,gongxuId,number,inbill", true);				
+					dataCorrectRecordService.add(dataCorrectRecord);
+					return gongxuProducingOrder.getId();			
+				}
 			}
 		} catch (Exception e) {
 			throw e;
