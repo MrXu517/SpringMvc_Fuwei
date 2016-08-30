@@ -12,8 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fuwei.commons.Pager;
 import com.fuwei.commons.Sort;
+import com.fuwei.entity.DataCorrectRecord;
+import com.fuwei.entity.ordergrid.GongxuProducingOrder;
 import com.fuwei.entity.ordergrid.ProducingOrder;
 import com.fuwei.service.BaseService;
+import com.fuwei.service.DataCorrectRecordService;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
 
@@ -23,6 +26,8 @@ public class ProducingOrderService extends BaseService {
 			.getLogger(ProducingOrderService.class);
 	@Autowired
 	JdbcTemplate jdbc;
+	@Autowired
+	DataCorrectRecordService dataCorrectRecordService;
 
 	// 添加生产单
 	@Transactional
@@ -92,6 +97,40 @@ public class ProducingOrderService extends BaseService {
 					return producingOrder.getId();
 				}
 			}
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+	
+	// 数据纠正编辑
+	@Transactional(rollbackFor=Exception.class)
+	public int editprice_datacorrect(ProducingOrder producingOrder,DataCorrectRecord dataCorrectRecord) throws Exception {
+		try {
+			//数据纠正
+				if (producingOrder.getDetaillist() == null
+						|| producingOrder.getDetaillist().size() <= 0) {
+					throw new Exception("生产单中至少得有一条颜色及数量详情记录");
+				} else {
+					if (producingOrder.getDetail_2_list() == null
+							|| producingOrder.getDetail_2_list().size() <= 0) {
+						throw new Exception("生产单中至少得有一条生产材料详情记录");
+					} else {
+						String details = SerializeTool.serialize(producingOrder
+								.getDetaillist());
+						producingOrder.setDetail_json(details);
+						
+						producingOrder.setDetail_2_json(SerializeTool
+								.serialize(producingOrder
+										.getDetail_2_list()));
+
+						// 更新表
+						this.update(producingOrder, "id",
+								"created_user,created_at,orderId,number,inbill", true);
+						dataCorrectRecordService.add(dataCorrectRecord);
+						return producingOrder.getId();
+					}
+				}
 		} catch (Exception e) {
 			throw e;
 		}

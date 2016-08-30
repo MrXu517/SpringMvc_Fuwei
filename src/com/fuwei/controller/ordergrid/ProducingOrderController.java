@@ -26,10 +26,13 @@ import com.fuwei.commons.Sort;
 import com.fuwei.commons.SystemCache;
 import com.fuwei.commons.SystemContextUtils;
 import com.fuwei.controller.BaseController;
+import com.fuwei.entity.DataCorrectRecord;
 import com.fuwei.entity.Factory;
 import com.fuwei.entity.Message;
 import com.fuwei.entity.Order;
 import com.fuwei.entity.User;
+import com.fuwei.entity.ordergrid.GongxuProducingOrder;
+import com.fuwei.entity.ordergrid.GongxuProducingOrderDetail;
 import com.fuwei.entity.ordergrid.PlanOrder;
 import com.fuwei.entity.ordergrid.PlanOrderDetail;
 import com.fuwei.entity.ordergrid.ProducingOrder;
@@ -570,5 +573,111 @@ public class ProducingOrderController extends BaseController {
 		data.put("gridName", "producingorder");
 		return new ModelAndView("printorder/print", data);
 	}
+	
+	//2016.8.26修改加工单价格
+	@RequestMapping(value = "/editprice", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView editprice(String number,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		if (number == null || number.equals("")) {
+			throw new Exception("缺少生产单Number");
+		}
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/producing/editprice";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有编辑生产单价的权限", null);
+		}
+		try {
+			ProducingOrder producingOrder = producingOrderService.getByNumber(number);
+			if(producingOrder == null){
+				throw new Exception("找不到NUMBER为" + number + "的生产单");
+			}
+			//去掉工序加工单为数量为0的行
+			Iterator iterator = producingOrder.getDetaillist().iterator();
+		    while(iterator.hasNext()){
+		    	ProducingOrderDetail item = (ProducingOrderDetail)iterator.next();
+		           if(item.getQuantity() == 0){
+		               iterator.remove();
+		            }
+		    }
+		    if(producingOrder.getOrderId()!=null){
+				Order order = orderService.get(producingOrder.getOrderId());
+				request.setAttribute("order", order);
+			}
+			request.setAttribute("producingOrder",producingOrder);	
+			return new ModelAndView("producing_order/editprice");
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	// 添加或保存
+	@RequestMapping(value = "/editprice", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> editprice(ProducingOrder producingOrder,
+			String details,  HttpSession session,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		User user = SystemContextUtils.getCurrentUser(session).getLoginedUser();
+		String lcode = "order/producing/editprice";
+		Boolean hasAuthority = authorityService.checkLcode(user.getId(), lcode);
+		if (!hasAuthority) {
+			throw new PermissionDeniedDataAccessException("没有编辑生产单单价的权限", null);
+		}
+		try {
+			Integer producingOrderId = producingOrder.getId();	
+			// 添加
+			if(producingOrderId==null || producingOrderId ==0){
+				throw new Exception("生产单ID不能为0");
+			}
+			if (producingOrder.getOrderId() == null
+					|| producingOrder.getOrderId() == 0) {
+				throw new Exception(
+						"生产单必须属于一张订单", null);
+			}
+			if (producingOrder.getFactoryId() == null
+					|| producingOrder.getFactoryId() == 0) {
+				throw new Exception(
+						"生产单必须指定生产单位", null);
+			}
+			ProducingOrder old_ProducingOrder = producingOrderService.get(producingOrderId);
+			//判断生产数量是否超出了计划数量
+			//判断生产数量是否超出了计划数量
+			
+			producingOrder.setUpdated_at(DateTool.now());
+			List<ProducingOrderDetail> detaillist = SerializeTool
+					.deserializeList(details, ProducingOrderDetail.class);
+			producingOrder.setDetaillist(detaillist);
+			
+			
+			producingOrder.setDetail_2_list(old_ProducingOrder.getDetail_2_list());
+			producingOrder.setDetail_2_json(old_ProducingOrder.getDetail_2_json());		
+			
+			if(old_ProducingOrder.isEdit()){
+				producingOrderService.update(producingOrder);
+			}else{
+				//添加数据纠正记录
+				DataCorrectRecord dataCorrectRecord = new DataCorrectRecord();
+				dataCorrectRecord.setCreated_at(DateTool.now());
+				dataCorrectRecord.setCreated_user(user.getId());
+				dataCorrectRecord.setOperation("修改单价");
+				dataCorrectRecord.setTb_table("生产单");
+				dataCorrectRecord.setDescription("生产单" + producingOrder.getNumber()+"已执行，因数据错误进行数据纠正改价或数量");
+				producingOrderId = producingOrderService.editprice_datacorrect(producingOrder,dataCorrectRecord);
+			}		
+			return this.returnSuccess("id", producingOrderId);
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+	@RequestMapping(value = "/scan_edit", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView scan_edit(HttpSession session,
+			HttpServletRequest request) throws Exception {
+		return new ModelAndView("producing_order/scan_edit");
+	}
+	/*修改工序加工单单价*/
 	
 }
