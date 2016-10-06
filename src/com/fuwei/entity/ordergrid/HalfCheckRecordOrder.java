@@ -20,7 +20,6 @@ public class HalfCheckRecordOrder extends BaseTableOrder{
 	
 	private Integer created_user;//创建用户
 	
-//	private String detail_json;
 	
 	private String detail_2_json;
 	
@@ -37,7 +36,50 @@ public class HalfCheckRecordOrder extends BaseTableOrder{
 	private String state;// 订单状态描述
 	
 	
+	@Temporary
+	private String detail_json;
+	@Temporary
+	private Integer companyId;// 公司ID
+	@Temporary
+	private Integer charge_employee;// 打样人 ，跟单人
+	@Temporary
+	private String orderNumber;
+	@Temporary
+	private String name;
 	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public Integer getCompanyId() {
+		return companyId;
+	}
+	public void setCompanyId(Integer companyId) {
+		this.companyId = companyId;
+	}
+	public Integer getCharge_employee() {
+		return charge_employee;
+	}
+	public void setCharge_employee(Integer charge_employee) {
+		this.charge_employee = charge_employee;
+	}
+	public String getOrderNumber() {
+		return orderNumber;
+	}
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
+	}
+	public String getDetail_json() {
+		return detail_json;
+	}
+	public void setDetail_json(String detail_json) throws Exception {
+		if(detail_json!=null && !detail_json.equals("")){
+			this.detaillist = SerializeTool.deserializeList(detail_json, PlanOrderDetail.class);
+		}
+		this.detail_json = detail_json;
+	}
 	public List<PlanOrderDetail> getDetaillist() {
 		return detaillist;
 	}

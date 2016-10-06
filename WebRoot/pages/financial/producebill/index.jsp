@@ -77,6 +77,8 @@
 							<div class="col-md-12 btnWidget">
 								
 								<a href="producebill/add" type="button" class="btn btn-danger"><i class="fa fa-sign-in fa-lg"></i>对账</a>
+
+								<a href="halfcheckbill/index" type="button" class="btn btn-danger"><i class="fa fa-sign-in fa-lg"></i>半检对账</a>
 							</div>
 						</div>
 

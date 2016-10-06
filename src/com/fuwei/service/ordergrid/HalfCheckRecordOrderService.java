@@ -1,14 +1,22 @@
 package com.fuwei.service.ordergrid;
 
+import java.util.Date;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fuwei.commons.Pager;
+import com.fuwei.commons.Sort;
+import com.fuwei.entity.Order;
 import com.fuwei.entity.ordergrid.HalfCheckRecordOrder;
 //import com.fuwei.entity.ProducingOrderMaterialDetail;
 import com.fuwei.service.BaseService;
+import com.fuwei.service.OrderService;
+import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
 
 @Component
@@ -17,7 +25,119 @@ public class HalfCheckRecordOrderService extends BaseService {
 			.getLogger(HalfCheckRecordOrderService.class);
 	@Autowired
 	JdbcTemplate jdbc;
+	@Autowired
+	OrderService orderService;
 
+	//获取所有，不含detail
+	public List<HalfCheckRecordOrder> getList(){
+		return dao.queryForBeanList("select * from tb_halfcheckrecordorder", HalfCheckRecordOrder.class);
+	}
+	// 获取订单列表,含detail
+	public Pager getList(Pager pager, Date start_time, Date end_time,
+			Integer companyId,Integer charge_employee,String orderNumber,
+			List<Sort> sortlist) throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			String seq = "AND ";
+			if (companyId != null) {
+				sql.append("select  a.*,c.name as name,c.companyId as companyId,c.charge_employee as charge_employee,c.orderNumber as orderNumber,  b.detail_json as detail_json  from tb_halfcheckrecordorder a,tb_planorder b,tb_order c where a.orderId=b.orderId and a.orderId=c.id and c.companyId='"
+						+ companyId + "'");
+				seq = " AND ";
+			} else {
+				sql.append("select  a.*,c.name as name,c.companyId as companyId,c.charge_employee as charge_employee,c.orderNumber as orderNumber,  b.detail_json as detail_json  from tb_halfcheckrecordorder a,tb_planorder b,tb_order c where a.orderId=b.orderId and a.orderId=c.id ");
+			}
+
+			if (start_time != null) {
+				sql.append(seq + " a.created_at>='"
+						+ DateTool.formateDate(start_time) + "'");
+				seq = " AND ";
+			}
+			if (end_time != null) {
+				sql.append(seq + " a.created_at<'"
+						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
+						+ "'");
+				seq = " AND ";
+			}
+			if (charge_employee != null) {
+				sql.append(seq + " c.charge_employee='" + charge_employee + "'");
+				seq = " AND ";
+			}
+			if (orderNumber != null && !orderNumber.equals("")) {
+				sql.append(seq + " c.orderNumber='" + orderNumber + "'");
+			}
+
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql.append(" order by a." + sortlist.get(i).getProperty()
+								+ " " + sortlist.get(i).getDirection() + " ");
+					} else {
+						sql.append(",a." + sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			return findPager_T(sql.toString(), HalfCheckRecordOrder.class, pager);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	// 获取订单列表,含detail
+	public List<HalfCheckRecordOrder> getList(Date start_time, Date end_time,
+			Integer companyId,Integer charge_employee,String orderNumber,
+			List<Sort> sortlist) throws Exception {
+		try {
+			StringBuffer sql = new StringBuffer();
+			String seq = "AND ";
+			if (companyId != null) {
+				sql.append("select a.*,c.name as name,c.companyId as companyId,c.charge_employee as charge_employee,c.orderNumber as orderNumber,  b.detail_json as detail_json  from tb_halfcheckrecordorder a,tb_planorder b,tb_order c where a.orderId=b.orderId and a.orderId=c.id and c.companyId='"
+						+ companyId + "'");
+				seq = " AND ";
+			} else {
+				sql.append("select a.*,c.name as name,c.companyId as companyId,c.charge_employee as charge_employee,c.orderNumber as orderNumber,  b.detail_json as detail_json  from tb_halfcheckrecordorder a,tb_planorder b,tb_order c where a.orderId=b.orderId and a.orderId=c.id ");
+			}
+
+			if (start_time != null) {
+				sql.append(seq + " a.created_at>='"
+						+ DateTool.formateDate(start_time) + "'");
+				seq = " AND ";
+			}
+			if (end_time != null) {
+				sql.append(seq + " a.created_at<'"
+						+ DateTool.formateDate(DateTool.addDay(end_time, 1))
+						+ "'");
+				seq = " AND ";
+			}
+			if (charge_employee != null) {
+				sql.append(seq + " c.charge_employee='" + charge_employee + "'");
+				seq = " AND ";
+			}
+			if (orderNumber != null && !orderNumber.equals("")) {
+				sql.append(seq + " c.orderNumber='" + orderNumber + "'");
+			}
+
+			if (sortlist != null && sortlist.size() > 0) {
+
+				for (int i = 0; i < sortlist.size(); ++i) {
+					if (i == 0) {
+						sql.append(" order by a." + sortlist.get(i).getProperty()
+								+ " " + sortlist.get(i).getDirection() + " ");
+					} else {
+						sql.append(",a." + sortlist.get(i).getProperty() + " "
+								+ sortlist.get(i).getDirection() + " ");
+					}
+
+				}
+			}
+			return dao.queryForBeanList(sql.toString(), HalfCheckRecordOrder.class);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 	// 添加半检记录单
 	@Transactional
 	public int add(HalfCheckRecordOrder halfCheckRecordOrder) throws Exception {
