@@ -667,6 +667,18 @@
 						</ul>
 					</li>
 					<%}%>
+
+					<%if(h_has_yanchang){ %>
+					<li class="li_dropdown">
+						<a href="#"><i class="fa fa-list-alt"></i>NEXT验厂<i
+							class="fa fa-angle-down"></i> </a>
+						<ul class="submenu">
+							<li>
+								<a href="yanchang/halfcheck_scan">半检记录单</a>
+							</li>
+						</ul>
+					</li>
+					<%}%>
 					
 					<%if(h_has_systeminfo){ %>
 					<li class="li_dropdown">

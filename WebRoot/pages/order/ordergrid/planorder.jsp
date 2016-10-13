@@ -15,6 +15,8 @@
 	String productfactoryStr = (String)request.getAttribute("productfactoryStr");
 	Boolean has_plan_order_save = SystemCache.hasAuthority(session,
 			"order/plan");
+	Boolean has_plan_export = SystemCache.hasAuthority(session,
+			"planorder/export");
 %>
 <!DOCTYPE html>
 <html>
@@ -45,6 +47,11 @@
 											<a target="_blank" type="button"
 												class="pull-right btn btn-success printBtn"
 												data-loading-text="正在打印..."> 打印 </a>
+											<%if( has_plan_export){ %>
+											<a href="planorder/export/<%=planOrder.getId() %>" target="_blank" type="button"
+												class="pull-right btn btn-success exportBtn"
+												data-loading-text="正在导出..."> 导出xls </a>
+											<%} %>
 										</form>
 
 										<div class="clear"></div>

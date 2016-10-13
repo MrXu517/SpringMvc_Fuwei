@@ -1,8 +1,10 @@
 package com.fuwei.service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import com.fuwei.entity.Order;
 import com.fuwei.entity.OrderHandle;
 import com.fuwei.entity.OrderProduceStatus;
 import com.fuwei.entity.ProductionNotification;
+import com.fuwei.entity.ordergrid.ProducingOrder;
 import com.fuwei.service.finishstore.PackingOrderService;
 import com.fuwei.service.ordergrid.ColoringOrderService;
 import com.fuwei.service.ordergrid.FuliaoPurchaseOrderService;
@@ -30,6 +33,7 @@ import com.fuwei.util.CreateNumberUtil;
 import com.fuwei.util.DateTool;
 import com.fuwei.util.SerializeTool;
 import com.fuwei.constant.OrderStatusUtil;
+import com.mysql.jdbc.Statement;
 
 @Component
 public class OrderService extends BaseService {
@@ -274,6 +278,20 @@ public class OrderService extends BaseService {
 			throw e;
 		}
 	}
+	//获取订单所开的生产单ID, List<工厂ID>
+	public List<Integer> getProducingOrderFactoryIds(int orderId) throws Exception {
+		try {
+			List<Integer> factoryIdlist = new ArrayList<Integer>();
+			List<ProducingOrder> producingOrderList = producingOrderService.getByOrder(orderId,false);	
+			for(ProducingOrder item : producingOrderList){
+				factoryIdlist.add(item.getFactoryId());
+			}
+			return factoryIdlist;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 	
 	// 根据orderNumber获取订单
 	public Order get(String orderNumber) throws Exception {

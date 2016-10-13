@@ -31,6 +31,7 @@ import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,13 +46,66 @@ import com.fuwei.constant.Holiday;
 import com.fuwei.controller.BaseController;
 import com.fuwei.entity.Employee;
 import com.fuwei.entity.Factory;
+import com.fuwei.entity.Order;
 import com.fuwei.entity.Salary;
 import com.fuwei.entity.User;
+import com.fuwei.entity.ordergrid.HalfCheckRecordOrder;
+import com.fuwei.entity.ordergrid.PlanOrder;
+import com.fuwei.service.OrderService;
+import com.fuwei.service.ordergrid.HalfCheckRecordOrderService;
+import com.fuwei.service.ordergrid.PlanOrderService;
 import com.fuwei.util.FileUtil;
 
 @RequestMapping("/yanchang")
 @Controller
 public class YanChangController extends BaseController {
+	@Autowired
+	OrderService orderService;
+	@Autowired
+	PlanOrderService planOrderService;
+	@Autowired
+	HalfCheckRecordOrderService halfCheckRecordOrderService;
+	
+	//半检记录单打印
+	@RequestMapping(value = "/halfcheck_scan", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView halcheck_scan(HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		String lcode = "yanchang";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);		
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有扫描半检记录单验厂的权限", null);
+		}
+		return new ModelAndView("yanchang/halfcheck_scan");
+
+	}
+	//半检记录单打印
+	@RequestMapping(value = "/halfcheck_print", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView halcheck_print(String number ,HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		if(number == null || number.equals("")){
+			throw new Exception("订单号不能为空");
+		}
+		String lcode = "yanchang";
+		Boolean hasAuthority = SystemCache.hasAuthority(session, lcode);		
+		if(!hasAuthority){
+			throw new PermissionDeniedDataAccessException("没有打印半检记录单验厂的权限", null);
+		}
+		Order order = orderService.get(number);
+		if(order == null){
+			throw new Exception("找不到相应的订单");
+		}
+		int orderId = order.getId();
+		PlanOrder planOrder = planOrderService.getByOrder(orderId);
+		HalfCheckRecordOrder halfCheckRecordOrder = halfCheckRecordOrderService.getByOrder(orderId);
+		halfCheckRecordOrder.setDetaillist(planOrder.getDetaillist());
+		request.setAttribute("order", order);
+		request.setAttribute("halfCheckRecordOrder", halfCheckRecordOrder);
+		return new ModelAndView("yanchang/halfcheck_print");
+
+	}
+	
 	
 	@RequestMapping(value = "/systemstatus", method = RequestMethod.GET)
 	@ResponseBody
