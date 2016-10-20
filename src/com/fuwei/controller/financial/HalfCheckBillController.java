@@ -233,7 +233,7 @@ public class HalfCheckBillController extends BaseController {
 		String line0_text = "桐庐富伟针织厂半检记录单列表";
 		Label excelCompany = new Label(0, 0, line0_text, companyFormat);
 		wsheet.addCell(excelCompany);
-		wsheet.mergeCells(0, 0, 8, 0);
+		wsheet.mergeCells(0, 0, 9, 0);
 		wsheet.setRowView(0, 800);
 
 		// 设置Excel字体
@@ -298,7 +298,6 @@ public class HalfCheckBillController extends BaseController {
 			wsheet.mergeCells(3, tempRow, 4, tempRow);
 			++tempRow;
 		}
-		
 		WritableFont wfont2 = new WritableFont(WritableFont.createFont("宋体"),
 				10, WritableFont.NO_BOLD, false,
 				jxl.format.UnderlineStyle.NO_UNDERLINE, jxl.format.Colour.BLACK);
@@ -307,9 +306,9 @@ public class HalfCheckBillController extends BaseController {
 		titleFormat2.setBorder(jxl.format.Border.ALL,
 				jxl.format.BorderLineStyle.THIN, jxl.format.Colour.BLACK); // BorderLineStyle边框
 
-		String[] title = { "序号",  "日期", "订单号", "公司", "跟单人",  "款名",
+		String[] title = { "序号",  "日期", "交货日期","订单号", "公司", "跟单人",  "款名",
 				"颜色及数量","","" };
-		String[] title2 = { "", "", "", "", "", "", "颜色", "尺寸", "生产数量"};
+		String[] title2 = { "", "", "","", "", "", "", "颜色", "尺寸", "生产数量"};
 		// 设置Excel表头
 		int columnBestWidth[] = new int[title.length]; // 保存最佳列宽数据的数组
 		for (int i = 0; i < title.length; i++) {
@@ -333,7 +332,8 @@ public class HalfCheckBillController extends BaseController {
 		wsheet.mergeCells(3, tempRow, 3, tempRow+1);
 		wsheet.mergeCells(4, tempRow, 4, tempRow+1);
 		wsheet.mergeCells(5, tempRow, 5, tempRow+1);
-		wsheet.mergeCells(6, tempRow, 8, tempRow);
+		wsheet.mergeCells(6, tempRow, 6, tempRow+1);
+		wsheet.mergeCells(7, tempRow, 9, tempRow);
 
 		int c = tempRow+2; // 用于循环时Excel的行号
 
@@ -347,19 +347,21 @@ public class HalfCheckBillController extends BaseController {
 			++count;
 			Label content2 = new Label(1, c,
 					DateTool.formatDateYMD(item.getCreated_at()) , titleFormat2);
-			Label content3 = new Label(2, c,item.getOrderNumber(),
+			Label content3 = new Label(2, c,
+					DateTool.formatDateYMD(item.getDelivery_at()) , titleFormat2);
+			Label content4 = new Label(3, c,item.getOrderNumber(),
 					titleFormat2);
-			Label content4 = new Label(3, c,SystemCache.getCompanyShortName(item.getCompanyId()),
+			Label content5 = new Label(4, c,SystemCache.getCompanyShortName(item.getCompanyId()),
 					titleFormat2);
-			Label content5 = new Label(4, c,SystemCache.getEmployeeName(item.getCharge_employee()),
+			Label content6 = new Label(5, c,SystemCache.getEmployeeName(item.getCharge_employee()),
 					titleFormat2);
-			Label content6 = new Label(5, c, item.getName(),
+			Label content7 = new Label(6, c, item.getName(),
 					titleFormat2);
 			
 			List<PlanOrderDetail> detail_detaillist = item.getDetaillist();
-			Label content7 = new Label(6, c, detail_detaillist.get(0).getColor(), titleFormat2);
-			Label content8 = new Label(7, c, detail_detaillist.get(0).getSize(), titleFormat2);
-			Label content9 = new Label(8, c, detail_detaillist.get(0).getQuantity()+"", titleFormat2);
+			Label content8 = new Label(7, c, detail_detaillist.get(0).getColor(), titleFormat2);
+			Label content9 = new Label(8, c, detail_detaillist.get(0).getSize(), titleFormat2);
+			Label content10 = new Label(9, c, detail_detaillist.get(0).getQuantity()+"", titleFormat2);
 			
 			wsheet.addCell(content1);
 			wsheet.addCell(content2);
@@ -370,23 +372,25 @@ public class HalfCheckBillController extends BaseController {
 			wsheet.addCell(content7);
 			wsheet.addCell(content8);
 			wsheet.addCell(content9);
+			wsheet.addCell(content10);
 			
 			c++;
 			
 			detail_detaillist.remove(0);
 			for(PlanOrderDetail detail_detail : detail_detaillist){
-				Label tempcontent7 = new Label(6, c, detail_detail.getColor(), titleFormat2);
-				Label tempcontent8 = new Label(7, c, detail_detail.getSize(), titleFormat2);
-				Label tempcontent9 = new Label(8, c, detail_detail.getQuantity()+"", titleFormat2);
+				Label tempcontent8 = new Label(7, c, detail_detail.getColor(), titleFormat2);
+				Label tempcontent9 = new Label(8, c, detail_detail.getSize(), titleFormat2);
+				Label tempcontent10 = new Label(9, c, detail_detail.getQuantity()+"", titleFormat2);
 				wsheet.addCell(new Label(0, c, "", titleFormat2));
 				wsheet.addCell(new Label(1, c, "", titleFormat2));
 				wsheet.addCell(new Label(2, c, "", titleFormat2));
 				wsheet.addCell(new Label(3, c, "", titleFormat2));
 				wsheet.addCell(new Label(4, c, "", titleFormat2));
 				wsheet.addCell(new Label(5, c, "", titleFormat2));
-				wsheet.addCell(tempcontent7);
+				wsheet.addCell(new Label(6, c, "", titleFormat2));
 				wsheet.addCell(tempcontent8);
 				wsheet.addCell(tempcontent9);
+				wsheet.addCell(tempcontent10);
 				c++;
 			}
 			
@@ -399,6 +403,7 @@ public class HalfCheckBillController extends BaseController {
 			int width7 = content7.getContents().getBytes().length;
 			int width8 = content8.getContents().getBytes().length;
 			int width9 = content9.getContents().getBytes().length;
+			int width10 = content10.getContents().getBytes().length;
 			
 			if (columnBestWidth[0] < width1) {
 				columnBestWidth[0] = width1;
@@ -426,6 +431,9 @@ public class HalfCheckBillController extends BaseController {
 			}
 			if (columnBestWidth[8] < width9) {
 				columnBestWidth[8] = width9;
+			}
+			if (columnBestWidth[9] < width10) {
+				columnBestWidth[9] = width10;
 			}
 		}
 		

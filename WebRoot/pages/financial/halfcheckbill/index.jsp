@@ -231,7 +231,7 @@
 									%>
 										<li class="">
 											<a
-												href="order/undelivery?charge_employee=<%=charge_employee_str %>&companyId=<%=company_str %>&orderNumber=<%=orderNumber_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
+												href="halfcheckbill/index?charge_employee=<%=charge_employee_str %>&companyId=<%=company_str %>&orderNumber=<%=orderNumber_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() - 1%>">上一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -246,7 +246,7 @@
 
 										<li class="active">
 											<a
-												href="order/undelivery?charge_employee=<%=charge_employee_str %>&companyId=<%=company_str %>&orderNumber=<%=orderNumber_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
+												href="halfcheckbill/index?charge_employee=<%=charge_employee_str %>&companyId=<%=company_str %>&orderNumber=<%=orderNumber_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() %>"><%=pager.getPageNo()%>/<%=pager.getTotalPage()%>，共<%=pager.getTotalCount()%>条<span
 												class="sr-only"></span> </a>
 										</li>
 										<li>
@@ -256,7 +256,7 @@
 										
 										<li class="">
 											<a
-												href="order/undelivery?charge_employee=<%=charge_employee_str %>&companyId=<%=company_str %>&orderNumber=<%=orderNumber_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
+												href="halfcheckbill/index?charge_employee=<%=charge_employee_str %>&companyId=<%=company_str %>&orderNumber=<%=orderNumber_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getPageNo() + 1%>">下一页
 												<span class="sr-only"></span> </a>
 										</li>
 										<%
@@ -272,7 +272,7 @@
 										</li>
 										<li>
 											<a
-												href="order/undelivery?charge_employee=<%=charge_employee_str %>&companyId=<%=company_str %>&orderNumber=<%=orderNumber_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
+												href="halfcheckbill/index?charge_employee=<%=charge_employee_str %>&companyId=<%=company_str %>&orderNumber=<%=orderNumber_str %>&start_time=<%=start_time_str %>&end_time=<%=end_time_str %>&page=<%=pager.getTotalPage()%>">»</a>
 										</li>
 									</ul>
 
@@ -296,6 +296,9 @@
 											</th>
 											<th width="50px">
 												日期
+											</th>
+											<th width="50px">
+												交货日期
 											</th>
 											<th width="90px">
 												名称
@@ -326,6 +329,7 @@
 											<td rowspan="<%=detailsize %>"><%=SystemCache.getEmployeeName(order
 										.getCharge_employee())%></td>
 											<td rowspan="<%=detailsize %>"><%=DateTool.formatDateYMD(order.getCreated_at())%></td>
+											<td rowspan="<%=detailsize %>"><%=DateTool.formatDateYMD(order.getDelivery_at())%></td>
 											<td rowspan="<%=detailsize %>"><%=order.getName()%></td>
 											<td><%=detailist.get(0).getColor() %></td>
 											<td><%=detailist.get(0).getSize() %></td>

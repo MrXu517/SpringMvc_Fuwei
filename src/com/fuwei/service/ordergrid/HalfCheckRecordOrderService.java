@@ -40,11 +40,11 @@ public class HalfCheckRecordOrderService extends BaseService {
 			StringBuffer sql = new StringBuffer();
 			String seq = "AND ";
 			if (companyId != null) {
-				sql.append("select  a.*,c.name as name,c.companyId as companyId,c.charge_employee as charge_employee,c.orderNumber as orderNumber,  b.detail_json as detail_json  from tb_halfcheckrecordorder a,tb_planorder b,tb_order c where a.orderId=b.orderId and a.orderId=c.id and c.companyId='"
+				sql.append("select  a.*,c.delivery_at as delivery_at, c.name as name,c.companyId as companyId,c.charge_employee as charge_employee,c.orderNumber as orderNumber,  b.detail_json as detail_json  from tb_halfcheckrecordorder a,tb_planorder b,tb_order c where a.orderId=b.orderId and a.orderId=c.id and c.companyId='"
 						+ companyId + "'");
 				seq = " AND ";
 			} else {
-				sql.append("select  a.*,c.name as name,c.companyId as companyId,c.charge_employee as charge_employee,c.orderNumber as orderNumber,  b.detail_json as detail_json  from tb_halfcheckrecordorder a,tb_planorder b,tb_order c where a.orderId=b.orderId and a.orderId=c.id ");
+				sql.append("select  a.*,c.delivery_at as delivery_at,c.name as name,c.companyId as companyId,c.charge_employee as charge_employee,c.orderNumber as orderNumber,  b.detail_json as detail_json  from tb_halfcheckrecordorder a,tb_planorder b,tb_order c where a.orderId=b.orderId and a.orderId=c.id ");
 			}
 
 			if (start_time != null) {
@@ -93,11 +93,11 @@ public class HalfCheckRecordOrderService extends BaseService {
 			StringBuffer sql = new StringBuffer();
 			String seq = "AND ";
 			if (companyId != null) {
-				sql.append("select a.*,c.name as name,c.companyId as companyId,c.charge_employee as charge_employee,c.orderNumber as orderNumber,  b.detail_json as detail_json  from tb_halfcheckrecordorder a,tb_planorder b,tb_order c where a.orderId=b.orderId and a.orderId=c.id and c.companyId='"
+				sql.append("select a.*,c.delivery_at as delivery_at,c.name as name,c.companyId as companyId,c.charge_employee as charge_employee,c.orderNumber as orderNumber,  b.detail_json as detail_json  from tb_halfcheckrecordorder a,tb_planorder b,tb_order c where a.orderId=b.orderId and a.orderId=c.id and c.companyId='"
 						+ companyId + "'");
 				seq = " AND ";
 			} else {
-				sql.append("select a.*,c.name as name,c.companyId as companyId,c.charge_employee as charge_employee,c.orderNumber as orderNumber,  b.detail_json as detail_json  from tb_halfcheckrecordorder a,tb_planorder b,tb_order c where a.orderId=b.orderId and a.orderId=c.id ");
+				sql.append("select a.*,c.delivery_at as delivery_at,c.name as name,c.companyId as companyId,c.charge_employee as charge_employee,c.orderNumber as orderNumber,  b.detail_json as detail_json  from tb_halfcheckrecordorder a,tb_planorder b,tb_order c where a.orderId=b.orderId and a.orderId=c.id ");
 			}
 
 			if (start_time != null) {

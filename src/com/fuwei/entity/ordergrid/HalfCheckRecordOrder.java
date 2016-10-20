@@ -46,7 +46,16 @@ public class HalfCheckRecordOrder extends BaseTableOrder{
 	private String orderNumber;
 	@Temporary
 	private String name;
+	@Temporary
+	private Date delivery_at;
 	
+	
+	public Date getDelivery_at() {
+		return delivery_at;
+	}
+	public void setDelivery_at(Date delivery_at) {
+		this.delivery_at = delivery_at;
+	}
 	public String getName() {
 		return name;
 	}
