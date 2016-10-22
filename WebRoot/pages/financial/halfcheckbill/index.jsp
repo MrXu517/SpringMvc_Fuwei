@@ -329,7 +329,7 @@
 											<td rowspan="<%=detailsize %>"><%=SystemCache.getEmployeeName(order
 										.getCharge_employee())%></td>
 											<td rowspan="<%=detailsize %>"><%=DateTool.formatDateYMD(order.getCreated_at())%></td>
-											<td rowspan="<%=detailsize %>"><%=DateTool.formatDateYMD(order.getDelivery_at())%></td>
+											<td rowspan="<%=detailsize %>"><%=DateTool.formatDateYMD(order.getEnd_at())%></td>
 											<td rowspan="<%=detailsize %>"><%=order.getName()%></td>
 											<td><%=detailist.get(0).getColor() %></td>
 											<td><%=detailist.get(0).getSize() %></td>

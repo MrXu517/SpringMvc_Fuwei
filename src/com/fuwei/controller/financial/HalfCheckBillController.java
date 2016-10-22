@@ -348,7 +348,7 @@ public class HalfCheckBillController extends BaseController {
 			Label content2 = new Label(1, c,
 					DateTool.formatDateYMD(item.getCreated_at()) , titleFormat2);
 			Label content3 = new Label(2, c,
-					DateTool.formatDateYMD(item.getDelivery_at()) , titleFormat2);
+					DateTool.formatDateYMD(item.getEnd_at()) , titleFormat2);
 			Label content4 = new Label(3, c,item.getOrderNumber(),
 					titleFormat2);
 			Label content5 = new Label(4, c,SystemCache.getCompanyShortName(item.getCompanyId()),
