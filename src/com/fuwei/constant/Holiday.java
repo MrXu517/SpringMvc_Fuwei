@@ -18,7 +18,9 @@ public class Holiday {
 		new MyDate(2015,10,3) ,
 		new MyDate(2016,1,1),new MyDate(2016,2,7),new MyDate(2016,2,8),new MyDate(2016,2,9),new MyDate(2016,2,10),new MyDate(2016,2,11),new MyDate(2016,2,12),new MyDate(2016,2,13),
 		new MyDate(2016,4,4),new MyDate(2016,5,1),new MyDate(2016,6,9),new MyDate(2016,9,15),
-		new MyDate(2016,10,1),new MyDate(2016,10,2),new MyDate(2016,10,3),new MyDate(2017,1,1)
+		new MyDate(2016,10,1),new MyDate(2016,10,2),new MyDate(2016,10,3),new MyDate(2017,1,1),new MyDate(2017,1,27),new MyDate(2017,1,28),new MyDate(2017,1,29),new MyDate(2017,1,30),
+		new MyDate(2017,1,31),new MyDate(2017,2,1),new MyDate(2017,2,2),new MyDate(2017,4,4),new MyDate(2017,5,1),new MyDate(2017,5,30),new MyDate(2017,10,1),new MyDate(2017,10,2),new MyDate(2017,10,3),new MyDate(2017,10,4),
+		new MyDate(2018,1,1)
 	};
 
 

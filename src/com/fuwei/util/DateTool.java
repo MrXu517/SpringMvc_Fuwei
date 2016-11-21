@@ -122,4 +122,19 @@ public class DateTool {
 		}
 		return cal.getTime();
 	}
+	
+	//验厂日期：往前推找到 最近的 不是周六和节假日的 日子
+	public static Date getNextDayNotHoliday(Date date){	
+		if(date== null){
+			return null;
+		}
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.DATE, 1);
+		while(Holiday.isHoliday(cal) || cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){//如果是节假日或周六
+			//则往前推一天，再进行判断
+			cal.add(Calendar.DAY_OF_MONTH, 1);
+		}
+		return cal.getTime();
+	}
 }
